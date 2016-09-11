@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+	.failed {
+		background-color: #f49d00;
+	}
+
+	.passed {
+		background-color: #77e922;
+	}
+</style>
+<title>j0 library</title>
+<link rel="stylesheet" href="//cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css">
+<div id="mocha"></div>
+<script src="//cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+<script src="/compiled-app.js"></script>
+<script>
+	(function(window) {
+		var wait = function() {
+			var io = window.io;
+			if (io) {
+				window.socket = io().on('reload', function(file) {
+					window.location.reload();
+				});
+			} else {
+				setTimeout(wait, 200);
+			}
+		};
+		wait();
+		window.document.head.appendChild(document.createElement('script')).setAttribute('src', '/socket.io/socket.io.js');
+	})(window);
+</script>

@@ -1,0 +1,24 @@
+{
+	"name": "j0",
+	"version": "0.0.1",
+	"description": "A library of wrappers and utility functions",
+	"author": "Kei Ito",
+	"license": "MIT",
+	"engines": {
+		"node": ">=6"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com:blogsjs/j0.git"
+	},
+	"keywords": [
+		"blogs",
+		"library",
+		"frontend"
+	],
+	"devDependencies": {
+		"browserify": "^13.1.0",
+		"chokidar": "^1.6.0",
+		"socket.io": "^1.4.8"
+	}
+}
