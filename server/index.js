@@ -68,7 +68,7 @@ require('http').createServer()
 				});
 			}, 200));
 	})
-	.on('error', (error) => {
+	.on('error', function (error) {
 		switch (error && error.code) {
 			case 'EADDRINUSE':
 			case 'EACCES':
