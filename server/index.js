@@ -65,6 +65,8 @@ require('http').createServer()
 					});
 				}).then(() => {
 					io.sockets.emit('reload');
+				}).catch((error) => {
+					console.error(error);
 				});
 			}, 200));
 	})
