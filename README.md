@@ -4,5 +4,6 @@
 
 ```
 $ npm install j0
-$ ln -s ./node_modules/j0/lib ./path/to/lib
+$ cd ./path/to/lib
+$ ln -s ../../../node_modules/j0/lib ./lib
 ```
