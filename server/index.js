@@ -5,32 +5,69 @@ require('http').createServer()
 		const url = require('url');
 		const chokidar = require('chokidar');
 		const io = require('socket.io')(this);
+
+		const debounce = require('./lib/debounce');
+		const callbackPromise = require('./lib/callbackPromise');
+		const readStream = require('./lib/readStream');
+		const ThrottledPipe = require('./lib/ThrottledPipe');
+
 		const compile = require('./compile');
-		const debounce = require('./debounce');
-		const callbackPromise = require('./callbackPromise');
 		const documentRoot = __dirname;
+
 		console.log('listening ' + this.address().port);
+
 		this.on('request', (req, res) => {
-			switch (req.method) {
-				case 'GET':
-					let reqPath = url.parse(req.url).pathname;
-					if (/\/$/.test(reqPath)) {
-						reqPath = path.join(reqPath, 'index.html');
+			let reqPath = url.parse(req.url).pathname;
+			if (/\/$/.test(reqPath)) {
+				reqPath = path.join(reqPath, 'index.html');
+			}
+			if (/socket\.io/.test(reqPath)) {
+				return;
+			} else if (/http-test/.test(reqPath)) {
+				readStream(req).then((buffer) => {
+					res.writeHead(200, {
+						'Content-Type': 'text/plain',
+						'Content-Length': buffer.length
+					});
+					new ThrottledPipe(1000)
+						.on('data', (chunk) => {
+							res.write(chunk);
+						})
+						.on('end', () => {
+							res.end();
+						})
+						.push(buffer)
+						.end();
+				});
+			} else {
+				reqPath = path.join(documentRoot, reqPath);
+				callbackPromise((callback) => {
+					fs.stat(reqPath, callback);
+				}).then((stat) => {
+					let type = {
+						'.html': 'text/html',
+						'.json': 'application/json',
+						'.js': 'application/javascript',
+						'.css': 'text/css',
+						'.jpg': 'image/jpeg',
+						'.jpeg': 'image/jpeg',
+						'.png': 'image/png',
+						'.svg': 'image/svg'
+					}[path.extname(reqPath)];
+					if (!type) {
+						type = 'text/plain';
 					}
-					if (/socket\.io/.test(reqPath)) {
-						return;
-					} else {
-						fs.createReadStream(path.join(documentRoot, reqPath))
-							.on('error', () => {
-								res.statusCode = 404;
-								res.end();
-							})
-							.pipe(res);
-					}
-					break;
-				default:
-					res.statusCode = 405;
-					res.end('405 Method Not Allowed: ' + req.method);
+					res.writeHead(200, {
+						'Content-Type': type,
+						'Content-Length': stat.size
+					});
+					fs.createReadStream(reqPath)
+						.on('error', () => {
+							res.statusCode = 404;
+							res.end();
+						})
+						.pipe(res);
+				});
 			}
 		});
 		chokidar
@@ -66,6 +103,9 @@ require('http').createServer()
 				}).then(() => {
 					io.sockets.emit('reload');
 				}).catch((error) => {
+					if (error && error.stream) {
+						error.stream = 'Removed by script';
+					}
 					console.error(error);
 				});
 			}, 200));

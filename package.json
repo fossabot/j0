@@ -1,24 +1,25 @@
 {
-	"name": "j0",
-	"version": "0.0.3",
-	"description": "A library of wrappers and utility functions",
-	"author": "Kei Ito",
-	"license": "MIT",
-	"engines": {
-		"node": ">=6"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/blogsjs/j0"
-	},
-	"keywords": [
-		"blogs",
-		"library",
-		"frontend"
-	],
-	"devDependencies": {
-		"browserify": "^13.1.0",
-		"chokidar": "^1.6.0",
-		"socket.io": "^1.4.8"
-	}
+  "name": "j0",
+  "version": "0.0.3",
+  "description": "A library of wrappers and utility functions",
+  "author": "Kei Ito",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blogsjs/j0"
+  },
+  "keywords": [
+    "blogs",
+    "library",
+    "frontend"
+  ],
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "chokidar": "^1.6.0",
+    "j1": "0.0.6",
+    "socket.io": "^1.4.8"
+  }
 }

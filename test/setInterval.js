@@ -21,7 +21,7 @@ describe('setInterval', function () {
 				assert.equal(timerId && 4 < count, true);
 				done();
 			}
-		}, 40);
+		}, 20);
 	});
 
 });
