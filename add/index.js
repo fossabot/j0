@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const callbackPromise = require('../server/callbackPromise');
+const callbackPromise = require('../server/lib/callbackPromise');
 const name = process.argv.pop();
 const add = (dest, body) => {
 	return callbackPromise((callback) => {
