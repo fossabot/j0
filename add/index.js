@@ -1,3 +1,4 @@
+/* global process, __dirname, console */
 const fs = require('fs');
 const path = require('path');
 const callbackPromise = require('../server/lib/callbackPromise');
