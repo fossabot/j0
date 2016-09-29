@@ -1,0 +1,110 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/ec2-user/.nvm/versions/node/v6.0.0/bin/node',
+1 verbose cli   '/home/ec2-user/.nvm/versions/node/v6.0.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.8.6
+3 info using node@v6.0.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/home/ec2-user/workspace/j0',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /home/ec2-user/.npm/j0/0.0.11/package.tgz not in flight; packing
+9 verbose correctMkdir /home/ec2-user/.npm correctMkdir not in flight; initializing
+10 info lifecycle j0@0.0.11~prepublish: j0@0.0.11
+11 silly lifecycle j0@0.0.11~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/home/ec2-user/.npm/j0/0.0.11/package.tgz',
+12 verbose tar pack   '/home/ec2-user/workspace/j0' ]
+13 verbose tarball /home/ec2-user/.npm/j0/0.0.11/package.tgz
+14 verbose folder /home/ec2-user/workspace/j0
+15 verbose addLocalTarball adding from inside cache /home/ec2-user/.npm/j0/0.0.11/package.tgz
+16 verbose correctMkdir /home/ec2-user/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd j0@0.0.11
+18 verbose afterAdd /home/ec2-user/.npm/j0/0.0.11/package/package.json not in flight; writing
+19 verbose correctMkdir /home/ec2-user/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /home/ec2-user/.npm/j0/0.0.11/package/package.json written
+21 silly publish { name: 'j0',
+21 silly publish   version: '0.0.11',
+21 silly publish   description: 'A library of wrappers and utility functions',
+21 silly publish   author: { name: 'Kei Ito' },
+21 silly publish   license: 'MIT',
+21 silly publish   engines: { node: '>=6' },
+21 silly publish   repository: { type: 'git', url: 'git+https://github.com/blogsjs/j0.git' },
+21 silly publish   keywords: [ 'blogs', 'library', 'frontend' ],
+21 silly publish   devDependencies:
+21 silly publish    { browserify: '^13.1.0',
+21 silly publish      chokidar: '^1.6.0',
+21 silly publish      j1: '0.0.6',
+21 silly publish      'socket.io': '^1.4.8' },
+21 silly publish   readme: '# j0\n\n## Usage\n\n```\n$ npm install j0\n$ cd ./path/to/lib\n$ ln -s ../../../node_modules/j0/lib ./lib\n```\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '64ddcb7ef94425bb4c21f1f5d329bffa0b04d39d',
+21 silly publish   bugs: { url: 'https://github.com/blogsjs/j0/issues' },
+21 silly publish   homepage: 'https://github.com/blogsjs/j0#readme',
+21 silly publish   _id: 'j0@0.0.11',
+21 silly publish   scripts: {},
+21 silly publish   _shasum: '9bcabd55d3bc7d1e005648ac1a6c3690a6bf629e',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name j0
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'j0',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   name: 'j0',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/j0
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /home/ec2-user/.npm/j0/0.0.11/package.tgz
+30 verbose request uri https://registry.npmjs.org/j0
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 11:12:33 AM
+33 verbose request using bearer token for auth
+34 verbose request id ede698b08e820854
+35 http request PUT https://registry.npmjs.org/j0
+36 http 403 https://registry.npmjs.org/j0
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '96',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Thu, 29 Sep 2016 02:12:34 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sin6923-SIN',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1475115153.846861,VS0,VE1076',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /home/ec2-user/.npm/registry.npmjs.org/j0 on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 0.0.11." : j0
+40 verbose stack     at makeError (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+40 verbose stack     at Request._callback (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+40 verbose stack     at Request.self.callback (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/request/request.js:199:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/request/request.js:1036:10)
+40 verbose stack     at emitOne (events.js:101:20)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/home/ec2-user/.nvm/versions/node/v6.0.0/lib/node_modules/npm/node_modules/request/request.js:963:12)
+41 verbose statusCode 403
+42 verbose pkgid j0
+43 verbose cwd /home/ec2-user/workspace/j0
+44 error Linux 4.4.8-20.46.amzn1.x86_64
+45 error argv "/home/ec2-user/.nvm/versions/node/v6.0.0/bin/node" "/home/ec2-user/.nvm/versions/node/v6.0.0/bin/npm" "publish"
+46 error node v6.0.0
+47 error npm  v3.8.6
+48 error code E403
+49 error "You cannot publish over the previously published version 0.0.11." : j0
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
