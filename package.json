@@ -17,9 +17,9 @@
     "frontend"
   ],
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "chokidar": "^1.6.0",
-    "j1": "0.0.6",
-    "socket.io": "^1.4.8"
+    "browserify": "*",
+    "chokidar": "*",
+	"socket.io": "*",
+    "j1": "*"
   }
 }

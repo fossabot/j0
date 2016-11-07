@@ -1,7 +1,7 @@
-describe('setContent', function () {
+describe('setTextContent', function () {
 
 	var assert = require('assert');
-	var setContent = require('../lib/setContent');
+	var setTextContent = require('../lib/setTextContent');
 
 	it('should do X', function () {
 		assert.equal(0, 1);
