@@ -37,7 +37,7 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 	const reload = debounce(() => {
 		log.info('reload');
 		io.sockets.emit('reload');
-	});
+	}, 100);
 	server.on('request', (req, res) => {
 		let reqPath = url.parse(req.url).pathname;
 		if (/\/$/.test(reqPath)) {

@@ -1,10 +1,15 @@
+var assert = require('assert');
+var Number = require('../lib/Number');
+var isFunction = require('../lib/isFunction');
+
 describe('Number', function () {
 
-	var assert = require('assert');
-	var Number = require('../lib/Number');
+	it('should have isFinite', function () {
+		assert.equal(isFunction(Number.isFinite), true);
+	});
 
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should have isNaN', function () {
+		assert.equal(isFunction(Number.isNaN), true);
 	});
 
 });
