@@ -16,11 +16,11 @@
 <script src="//cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
 <script src="/compiled-app.js"></script>
 <script>
-	(function(window) {
-		var wait = function() {
+	(function (window) {
+		var wait = function () {
 			var io = window.io;
 			if (io) {
-				window.socket = io().on('reload', function(file) {
+				window.socket = io().on('reload', function (file) {
 					window.location.reload();
 				});
 			} else {

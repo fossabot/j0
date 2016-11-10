@@ -5,7 +5,7 @@ var addScript = require('../lib/addScript');
 describe('addScript', function () {
 
 	it('should add a script', function (done) {
-		addScript('test.js', 'testJs').then(function () {
+		addScript('files/test.js', 'testJs').then(function () {
 			assert.equal(window.testJs, 'Laughing Grass');
 			done();
 		}).catch(done);
