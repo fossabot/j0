@@ -1,10 +1,10 @@
+var assert = require('assert');
+var String = require('../lib/String');
+
 describe('String', function () {
 
-	var assert = require('assert');
-	var String = require('../lib/String');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should create a string from character codes', function () {
+		assert.equal(String.fromCharCode(65, 66, 67, 68), 'ABCD');
 	});
 
 });
