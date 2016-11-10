@@ -1,10 +1,10 @@
+var assert = require('assert');
+var btoa = require('../lib/btoa');
+
 describe('btoa', function () {
 
-	var assert = require('assert');
-	var btoa = require('../lib/btoa');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should encode data', function () {
+		assert.equal(btoa('Lava Savage'), 'TGF2YSBTYXZhZ2U=');
 	});
 
 });
