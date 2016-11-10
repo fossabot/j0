@@ -1,10 +1,13 @@
+var assert = require('assert');
+var TypeError = require('../lib/TypeError');
+
 describe('TypeError', function () {
 
-	var assert = require('assert');
-	var TypeError = require('../lib/TypeError');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should create a new TypeError', function () {
+		assert.doesNotThrow(function () {
+			var error = new TypeError('This is an error');
+			error = null;
+		});
 	});
 
 });
