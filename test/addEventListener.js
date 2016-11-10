@@ -1,9 +1,9 @@
-describe('addEventListener', function () {
+var assert = require('assert');
+var createElement = require('../lib/createElement');
+var trigger = require('../lib/trigger');
+var addEventListener = require('../lib/addEventListener');
 
-	var assert = require('assert');
-	var createElement = require('../lib/createElement');
-	var trigger = require('../lib/trigger');
-	var addEventListener = require('../lib/addEventListener');
+describe('addEventListener', function () {
 
 	it('should add a new listener', function (done) {
 		var element = createElement({});

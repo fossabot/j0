@@ -1,10 +1,14 @@
+var assert = require('assert');
+var window = require('../lib/window');
+var addScript = require('../lib/addScript');
+
 describe('addScript', function () {
 
-	var assert = require('assert');
-	var addScript = require('../lib/addScript');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should add a script', function (done) {
+		addScript('test.js', 'testJs').then(function () {
+			assert.equal(window.testJs, 'Laughing Grass');
+			done();
+		}).catch(done);
 	});
 
 });

@@ -1,8 +1,8 @@
-describe('appendChild', function () {
+var assert = require('assert');
+var createElement = require('../lib/createElement');
+var appendChild = require('../lib/appendChild');
 
-	var assert = require('assert');
-	var createElement = require('../lib/createElement');
-	var appendChild = require('../lib/appendChild');
+describe('appendChild', function () {
 
 	it('should append an element', function () {
 		var parentElement = createElement({});

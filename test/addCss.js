@@ -4,9 +4,11 @@ var getElementById = require('../lib/getElementById');
 
 describe('addCss', function () {
 
-	it('should add a style sheet', function () {
-		addCss('test.css', 'testCss');
-		assert.equal(!!getElementById('testCss'), true);
+	it('should add a style sheet', function (done) {
+		addCss('test.css', 'testCss').then(function (cssElement) {
+			assert.equal(getElementById('testCss'), cssElement);
+			done();
+		}).catch(done);
 	});
 
 });
