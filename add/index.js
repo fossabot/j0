@@ -22,10 +22,10 @@ const add = (dest, body) => {
 if (/^[\w]+$/.test(name)) {
 	Promise.all([
 		add(path.join(__dirname, '..', 'lib', name + '.js'), Buffer.from('module.exports = function () {};')),
-		add(path.join(__dirname, '..', 'test', name + '.js'), Buffer.from(`describe('${name}', function () {
+		add(path.join(__dirname, '..', 'test', name + '.js'), Buffer.from(`var assert = require('assert');
+var ${name} = require('../lib/${name}');
 
-	var assert = require('assert');
-	var ${name} = require('../lib/${name}');
+describe('${name}', function () {
 
 	it('should do X', function () {
 		assert.equal(0, 1);
