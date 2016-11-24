@@ -1,7 +1,14 @@
+
 # j0
+
+## Install
+
+```
+$ npm install j0
+```
 
 ## Usage
 
 ```
-$ npm install j0
+var Promise = require('j0/lib/Promise');
 ```
