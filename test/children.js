@@ -1,10 +1,34 @@
+var assert = require('assert');
+var createElement = require('../lib/createElement');
+var children = require('../lib/children');
+var removeElement = require('../lib/removeElement');
+
 describe('children', function () {
 
-	var assert = require('assert');
-	var children = require('../lib/children');
+	it('should return a iterable of elements', function () {
+		var a = createElement('Octoleech');
+		var b = createElement({});
+		var c = createElement({
+			c: ['Ogre Head']
+		});
+		var element = createElement({
+			c: [a, b, c]
+		});
+		assert.deepEqual(children(element), [b, c]);
+	});
 
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should return an array which is not a live HTMLCollection', function () {
+		var a = createElement('Mystery Doll');
+		var b = createElement({});
+		var c = createElement({
+			c: ['Necrodain']
+		});
+		var element = createElement({
+			c: [a, b, c]
+		});
+		var result = children(element);
+		removeElement(c);
+		assert.deepEqual(result, [b, c]);
 	});
 
 });
