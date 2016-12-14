@@ -1,10 +1,46 @@
+var assert = require('assert');
+var cloneObject = require('../lib/cloneObject');
+
 describe('cloneObject', function () {
 
-	var assert = require('assert');
-	var cloneObject = require('../lib/cloneObject');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should clone everything except functions, Infinity, undefined', function () {
+		assert.deepEqual(cloneObject({
+			number: 1,
+			string: 'string',
+			array: [],
+			object: {
+				deep1: {
+					deep2: {
+						deep3: {
+							deep4: {
+								deep5: 6
+							}
+						}
+					}
+				}
+			},
+			null: null,
+			undefined: undefined,
+			function: function () {},
+			bigNumber: Infinity
+		}), {
+			number: 1,
+			string: 'string',
+			array: [],
+			object: {
+				deep1: {
+					deep2: {
+						deep3: {
+							deep4: {
+								deep5: 6
+							}
+						}
+					}
+				}
+			},
+			null: null,
+			bigNumber: null
+		});
 	});
 
 });

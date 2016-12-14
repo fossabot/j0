@@ -3,8 +3,8 @@ var confirm = require('../lib/confirm');
 
 describe('confirm', function () {
 
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should be a function', function () {
+		assert.equal(typeof confirm, 'function');
 	});
 
 });
