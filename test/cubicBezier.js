@@ -3,8 +3,15 @@ var cubicBezier = require('../lib/cubicBezier');
 
 describe('cubicBezier', function () {
 
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should be linear', function () {
+		var t;
+		var d;
+		var sum = 0;
+		for (t = 0; t <= 1; t += 0.1) {
+			d = cubicBezier(0, 0, 1, 1, t) - t;
+			sum += d * d;
+		}
+		assert.equal(sum < 0.0001, true);
 	});
 
 });
