@@ -1,10 +1,40 @@
+var assert = require('assert');
+var find = require('../lib/find');
+
 describe('find', function () {
 
-	var assert = require('assert');
-	var find = require('../lib/find');
+	it('should find an item', function () {
+		var target = [1];
+		assert.equal(find([
+			[],
+			[],
+			[],
+			[],
+			[],
+			target,
+			[],
+			[],
+			[],
+			[]
+		], function (item) {
+			return item[0];
+		}), target);
+	});
 
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should return null', function () {
+		assert.equal(find([
+			[],
+			[],
+			[],
+			[],
+			[],
+			[],
+			[],
+			[],
+			[]
+		], function (item) {
+			return item[0];
+		}), null);
 	});
 
 });

@@ -1,10 +1,10 @@
+var assert = require('assert');
+var encodeURIComponent = require('../lib/encodeURIComponent');
+
 describe('encodeURIComponent', function () {
 
-	var assert = require('assert');
-	var encodeURIComponent = require('../lib/encodeURIComponent');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should encode URI', function () {
+		assert.equal(encodeURIComponent('ピッキー'), '%E3%83%94%E3%83%83%E3%82%AD%E3%83%BC');
 	});
 
 });

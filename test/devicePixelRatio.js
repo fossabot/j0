@@ -1,10 +1,10 @@
+var assert = require('assert');
+var devicePixelRatio = require('../lib/devicePixelRatio');
+
 describe('devicePixelRatio', function () {
 
-	var assert = require('assert');
-	var devicePixelRatio = require('../lib/devicePixelRatio');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should be bigger than 0', function () {
+		assert.equal(0 < devicePixelRatio, true);
 	});
 
 });

@@ -1,10 +1,12 @@
+var assert = require('assert');
+var eventTargetElement = require('../lib/eventTargetElement');
+
 describe('eventTargetElement', function () {
 
-	var assert = require('assert');
-	var eventTargetElement = require('../lib/eventTargetElement');
-
-	it('should do X', function () {
-		assert.equal(0, 1);
+	it('should get a target of event', function () {
+		assert.equal(eventTargetElement({
+			target: 1
+		}), 1);
 	});
 
 });
