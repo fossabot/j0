@@ -18,8 +18,10 @@
   ],
   "devDependencies": {
     "browserify": "*",
-    "chokidar": "*",
+	"chokidar": "*",
+	"glob": "*",
 	"socket.io": "*",
+	"es6-promise": "*",
     "j1": "*"
   }
 }

@@ -5,14 +5,14 @@ var clearInterval = require('../lib/clearInterval');
 
 describe('debounce', function () {
 
-	it('should execute the function after the last call', (done) => {
+	it('should execute the function after the last call', function (done) {
 		var interval = 15;
-		var execute = debounce((result) => {
+		var execute = debounce(function (result) {
 			assert.equal(result, 1);
 			done();
 		}, interval * 2);
 		var count = 10;
-		const timer = setInterval(() => {
+		const timer = setInterval(function () {
 			if (0 < count) {
 				execute(count);
 				count -= 1;

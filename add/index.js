@@ -19,11 +19,11 @@ const add = (dest, body) => {
 		});
 	});
 };
-if (/^[\w]+$/.test(name)) {
+if (/^[\w\/]+$/.test(name)) {
 	Promise.all([
-		add(path.join(__dirname, '..', 'lib', name + '.js'), Buffer.from('module.exports = function () {};')),
+		add(path.join(__dirname, '..', name + '.js'), Buffer.from('module.exports = function () {};')),
 		add(path.join(__dirname, '..', 'test', name + '.js'), Buffer.from(`var assert = require('assert');
-var ${name} = require('../lib/${name}');
+var ${path.basename(name)} = require('../../${name}');
 
 describe('${name}', function () {
 

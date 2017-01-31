@@ -3,6 +3,7 @@ const path = require('path');
 const url = require('url');
 const http = require('http');
 
+const glob = require('glob');
 const chokidar = require('chokidar');
 
 const debounce = require('j1/lib/debounce');
@@ -82,6 +83,7 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 	chokidar
 		.watch([
 			path.join(documentRoot, '..', 'lib', '**', '*.js'),
+			path.join(documentRoot, '..', 'mod', '**', '*.js'),
 			path.join(documentRoot, '..', 'test', '**', '*.js')
 		])
 		.on('all', debounce(() => {
@@ -89,7 +91,7 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 			const tempFile = path.join(documentRoot, 'compiled-src.js');
 			Promise.all([
 				callbackPromise((callback) => {
-					fs.readdir(testDir, callback);
+					glob(path.join(testDir, '**', '*.js'), callback);
 				}),
 				callbackPromise((callback) => {
 					fs.readFile(path.join(documentRoot, 'src.js'), callback);
@@ -97,7 +99,7 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 			]).then((results) => {
 				var [files, template] = results;
 				return writeFile(tempFile, template.toString().replace('/* MODULES */', files.map((file) => {
-					return `require('../test/${file}');`;
+					return `require('../test/${path.relative(testDir, file)}');`;
 				}).join('\n')));
 			}).then(() => {
 				return compile({
