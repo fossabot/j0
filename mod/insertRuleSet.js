@@ -4,6 +4,6 @@ var compileRuleSet = require('./compileRuleSet');
 
 module.exports = function (styleSheet, ruleSets) {
 	forEach(unnestRuleSet(ruleSets), function (flattenedRuleSet) {
-		styleSheet.insertRule(compileRuleSet(flattenedRuleSet), 0);
+		styleSheet.insertRule(compileRuleSet(flattenedRuleSet), styleSheet.cssRules.length);
 	});
 };

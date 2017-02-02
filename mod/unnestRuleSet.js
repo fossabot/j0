@@ -31,11 +31,11 @@ var normalizePath = function (path) {
 		if (fragment.charAt(0) === '@') {
 			atRules[atRules[S_length]] = fragment;
 		} else {
-			selectors[selectors[S_length]] = fragment;
+			selectors[selectors[S_length]] = fragment.replace(/(^|[^\w])_/g, '$1._');
 		}
 	});
 	return concat(atRules, reduce(selectors, function (selectors, fragment) {
-		return selectors ? selectors + fragment.replace(/^./, function (firstChar) {
+		return selectors ? selectors + fragment.replace(/^&/, function (firstChar) {
 			return firstChar === '&' ? '' : ' ' + firstChar;
 		}) : fragment;
 	}));
@@ -53,7 +53,7 @@ module.exports = function (ruleSet) {
 			found[found[S_length]] = declaration;
 		} else {
 			found = results[results[S_length]] = concat(path, [[declaration]]);
-			found.id = path.id;
+			found.id = id;
 		}
 		return results;
 	}, []), function (ruleSet) {
