@@ -2,20 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const http = require('http');
+const Readable = require('stream').Readable;
 
-const glob = require('glob');
 const chokidar = require('chokidar');
 
-const debounce = require('j1/lib/debounce');
-const callbackPromise = require('j1/lib/callbackPromise');
-const readStream = require('j1/lib/readStream');
-const ThrottledPipe = require('j1/lib/ThrottledPipe');
-const onError = require('j1/lib/onError');
-const listen = require('j1/lib/listen');
+const debounce = require('j1/debounce');
+const promisify = require('j1/promisify');
+const readStream = require('j1/readStream');
+const Throttled = require('j1/Throttled');
+const onError = require('j1/onError');
+const listen = require('j1/listen');
 const args = require('j1/lib/args');
-const log = require('j1/lib/log')('server');
-const mimeType = require('j1/lib/mimeType');
-const writeFile = require('j1/lib/writeFile');
+const console = require('j1/console').create('server');
+const mime = require('j1/mime');
+const writeFile = require('j1/writeFile');
+const stat = promisify(fs.stat, fs);
+const readFile = promisify(fs.readFile, fs);
+const glob = promisify(require('glob'));
 
 const compile = require('./compile');
 const documentRoot = __dirname;
@@ -30,13 +33,13 @@ const documentRoot = __dirname;
 	['image/png', '.png'],
 	['image/svg', '.svg']
 ].forEach((type) => {
-	mimeType.register(...type);
+	mime.add(...type);
 });
 
 listen(http.createServer(), args.port || 3000).then((server) => {
 	const io = require('socket.io')(server);
 	const reload = debounce(() => {
-		log.info('reload');
+		console.info('reload');
 		io.sockets.emit('reload');
 	}, 100);
 	server.on('request', (req, res) => {
@@ -48,36 +51,39 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 			return;
 		} else if (/http-test/.test(reqPath)) {
 			readStream(req).then((buffer) => {
+				const stream = new Readable();
 				res.writeHead(200, {
 					'Content-Type': 'text/plain',
 					'Content-Length': buffer.length
 				});
-				new ThrottledPipe(1000)
-					.on('data', (chunk) => {
-						res.write(chunk);
-					})
-					.on('end', () => {
-						res.end();
-					})
-					.push(buffer)
+				stream.pipe(
+					new Throttled(1000)
+						.on('data', (chunk) => {
+							res.write(chunk);
+						})
+						.on('end', () => {
+							res.end();
+						})
+				);
+				stream
+					.write(buffer)
 					.end();
 			});
 		} else {
 			reqPath = path.join(documentRoot, reqPath);
-			callbackPromise((callback) => {
-				fs.stat(reqPath, callback);
-			}).then((stat) => {
-				res.writeHead(200, {
-					'Content-Type': mimeType(reqPath),
-					'Content-Length': stat.size
+			stat(reqPath)
+				.then((stat) => {
+					res.writeHead(200, {
+						'Content-Type': mime(reqPath),
+						'Content-Length': stat.size
+					});
+					fs.createReadStream(reqPath)
+						.on('error', () => {
+							res.statusCode = 404;
+							res.end();
+						})
+						.pipe(res);
 				});
-				fs.createReadStream(reqPath)
-					.on('error', () => {
-						res.statusCode = 404;
-						res.end();
-					})
-					.pipe(res);
-			});
 		}
 	});
 	chokidar
@@ -90,23 +96,24 @@ listen(http.createServer(), args.port || 3000).then((server) => {
 			const testDir = path.join(documentRoot, '..', 'test');
 			const tempFile = path.join(documentRoot, 'compiled-src.js');
 			Promise.all([
-				callbackPromise((callback) => {
-					glob(path.join(testDir, '**', '*.js'), callback);
-				}),
-				callbackPromise((callback) => {
-					fs.readFile(path.join(documentRoot, 'src.js'), callback);
+				glob(path.join(testDir, '**', '*.js')),
+				readFile(path.join(documentRoot, 'src.js'))
+			])
+				.then((results) => {
+					var [files, template] = results;
+					return writeFile(tempFile, template.toString().replace('/* MODULES */', files.map((file) => {
+						return `require('../test/${path.relative(testDir, file)}');`;
+					}).join('\n')));
 				})
-			]).then((results) => {
-				var [files, template] = results;
-				return writeFile(tempFile, template.toString().replace('/* MODULES */', files.map((file) => {
-					return `require('../test/${path.relative(testDir, file)}');`;
-				}).join('\n')));
-			}).then(() => {
-				return compile({
-					entries: [tempFile]
-				});
-			}).then((buffer) => {
-				return writeFile(path.join(documentRoot, 'compiled-app.js'), buffer);
-			}).then(reload).catch(onError);
+				.then(() => {
+					return compile({
+						entries: [tempFile]
+					});
+				})
+				.then((buffer) => {
+					return writeFile(path.join(documentRoot, 'compiled-app.js'), buffer);
+				})
+				.then(reload)
+				.catch(onError);
 		}, 200));
 }).catch(onError);

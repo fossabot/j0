@@ -1,23 +1,24 @@
 /* global process, __dirname, console */
 const fs = require('fs');
 const path = require('path');
-const callbackPromise = require('j1/lib/callbackPromise');
+const promisify = require('j1/promisify');
+const writeFile = require('j1/writeFile');
+const stat = promisify(fs.stat, fs);
 const name = process.argv.pop();
 const add = (dest, body) => {
-	return callbackPromise((callback) => {
-		fs.stat(dest, (error) => {
-			if (error) {
-				error = error.code === 'ENOENT' ? null : error;
-			} else {
-				error = new Error('File exists: ' + dest);
+	return stat(dest)
+		.then(() => {
+			throw new Error('File exists: ' + dest);
+		})
+		.catch((error) => {
+			if (error.code === 'ENOENT') {
+				return;
 			}
-			callback(error);
+			throw error;
+		})
+		.then(() => {
+			return writeFile(dest, body);
 		});
-	}).then(() => {
-		return callbackPromise(function (callback) {
-			fs.writeFile(dest, body, callback);
-		});
-	});
 };
 if (/^[\w\/]+$/.test(name)) {
 	Promise.all([
