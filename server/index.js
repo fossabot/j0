@@ -5,6 +5,7 @@ const http = require('http');
 const Readable = require('stream').Readable;
 
 const chokidar = require('chokidar');
+const args = require('minimist')(process.argv.slice(2));
 
 const debounce = require('j1/debounce');
 const promisify = require('j1/promisify');
@@ -12,7 +13,6 @@ const readStream = require('j1/readStream');
 const Throttled = require('j1/Throttled');
 const onError = require('j1/onError');
 const listen = require('j1/listen');
-const args = require('j1/lib/args');
 const console = require('j1/console').create('server');
 const mime = require('j1/mime');
 const writeFile = require('j1/writeFile');
