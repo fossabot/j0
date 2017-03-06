@@ -1,21 +1,26 @@
 {
   "name": "j0",
+  "license": "MIT",
   "version": "0.0.55",
   "description": "A library of wrappers and utility functions",
-  "author": "Kei Ito",
-  "license": "MIT",
+  "author": {
+    "name": "Kei Ito",
+    "email": "kei.itof@gmail.com",
+    "url": "https://github.com/kei-ito"
+  },
   "engines": {
     "node": ">=6"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/blogsjs/j0"
-  },
+  "repository": "kei-ito/j0",
   "keywords": [
     "blogs",
     "library",
     "frontend"
   ],
+  "scripts": {
+    "build_test": "node test/build",
+    "test": "npm run build_test && wdio wdio.conf.js"
+  },
   "devDependencies": {
     "browserify": "*",
     "chokidar": "*",
@@ -23,6 +28,17 @@
     "glob": "*",
     "j1": "*",
     "minimist": "^1.2.0",
-    "socket.io": "*"
+    "rollup": "^0.41.4",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-node-builtins": "^2.1.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "selenium-standalone": "^6.0.1",
+    "socket.io": "*",
+    "wdio-junit-reporter": "^0.2.0",
+    "wdio-mocha-framework": "^0.5.9",
+    "wdio-selenium-standalone-service": "0.0.8",
+    "wdio-spec-reporter": "0.0.5",
+    "webdriverio": "^4.6.2"
   }
 }
