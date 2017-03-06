@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="before_all_hook0" timestamp="2017-03-06T15:24:37" time="0.236" tests="0" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="37641bad59d1b1aca0fda088742fa105"/>
+      <property name="suiteName" value="&quot;before all&quot; hook0"/>
+      <property name="capabilities" value="phantomjs"/>
+    </properties>
+  </testsuite>
+  <testsuite name="abs2" timestamp="2017-03-06T15:24:37" time="0.015" tests="2" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="37641bad59d1b1aca0fda088742fa105"/>
+      <property name="suiteName" value="abs2"/>
+      <property name="capabilities" value="phantomjs"/>
+    </properties>
+    <testcase classname="phantomjs.abs2" name="should return 1003" time="0.006"/>
+    <testcase classname="phantomjs.abs2" name="should return 1006" time="0.003">
+      <system-out>
+        <![CDATA[
+COMMAND: DELETE http://127.0.0.1:4444/wd/hub/session/1565fc84-a114-4d63-ba57-ad7f2acce7c6 - {}
+RESULT: {"state":"success","sessionId":"1565fc84-a114-4d63-ba57-ad7f2acce7c6","hCode":545209357,"value":null,"class":"org.openqa.selenium.remote.Response","status":0}
+]]>
+      </system-out>
+    </testcase>
+  </testsuite>
+</testsuites>

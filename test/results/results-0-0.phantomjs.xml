@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="before_all_hook0" timestamp="2017-03-06T15:24:37" time="0.244" tests="0" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="244c90b693918fdf2f4a3d8af2693d7a"/>
+      <property name="suiteName" value="&quot;before all&quot; hook0"/>
+      <property name="capabilities" value="phantomjs"/>
+    </properties>
+  </testsuite>
+  <testsuite name="abs2" timestamp="2017-03-06T15:24:37" time="0.015" tests="2" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="244c90b693918fdf2f4a3d8af2693d7a"/>
+      <property name="suiteName" value="abs2"/>
+      <property name="capabilities" value="phantomjs"/>
+    </properties>
+    <testcase classname="phantomjs.abs2" name="should return the sign3" time="0.007"/>
+    <testcase classname="phantomjs.abs2" name="should return the sign6" time="0.003">
+      <system-out>
+        <![CDATA[
+COMMAND: DELETE http://127.0.0.1:4444/wd/hub/session/eca21899-ea7f-497c-975d-3a24399338ab - {}
+]]>
+      </system-out>
+    </testcase>
+  </testsuite>
+</testsuites>
