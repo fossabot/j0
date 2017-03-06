@@ -1,3 +1,5 @@
 node_modules
-server/compiled-*
 npm-debug.log
+server/compiled-*
+test/specs/**/*.js
+test/results

@@ -16,7 +16,7 @@ function transpile(file) {
 		entry: file,
 		plugins: [
 			builtins(),
-			nodeResolve(),
+			nodeResolve({extensions: ['.js', '.es', '.json']}),
 			commonjs(),
 			buble()
 		]
