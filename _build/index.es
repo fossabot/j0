@@ -5,9 +5,10 @@ const changeExt = require('j1/changeExt');
 const glob = promisify(require('glob'));
 const {config: {specs, exclude}} = require('../wdio.conf');
 
-const transpile = require('./transpile.mjs');
+const transpile = require('./transpile.es');
 
 Promise.all(specs.map((pattern) => {
+	console.debug(`glob: ${pattern}`);
 	return glob(changeExt(pattern, '.es'), {
 		nodir: true,
 		ignore: exclude

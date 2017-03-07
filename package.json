@@ -18,10 +18,12 @@
     "frontend"
   ],
   "scripts": {
-    "build_test": "node _build/index.es",
-    "test": "npm run build_test && wdio wdio.conf.js"
+    "build": "node _build/index.es",
+    "doc": "node _generateDocument/index.es",
+    "test": "npm run build && wdio wdio.conf.js"
   },
   "devDependencies": {
+    "acorn": "^4.0.11",
     "glob": "*",
     "j1": "*",
     "rollup": "^0.41.4",

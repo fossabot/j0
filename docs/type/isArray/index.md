@@ -1,6 +1,8 @@
-// # isArray
-// Check whether every arguments is an array or not.
+# isArray
 
+Check whether every arguments is an array or not.
+
+```javasript
 const {isArray: _isArray} = Array;
 
 function isArray(...args) {
@@ -8,3 +10,4 @@ function isArray(...args) {
 }
 
 export default isArray;
+```
