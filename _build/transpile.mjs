@@ -7,16 +7,14 @@ const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const buble = require('rollup-plugin-buble');
 
-const specPath = path.join(__dirname, '..', 'specs');
-
 function transpile(file) {
-	const relativePath = path.relative(specPath, file);
+	const relativePath = path.relative(__dirname, file);
 	console.debug(`transpile ${relativePath}`);
 	return rollup.rollup({
 		entry: file,
 		plugins: [
 			builtins(),
-			nodeResolve({extensions: ['.js', '.es', '.json']}),
+			nodeResolve({extensions: ['.mjs', '.js', '.json']}),
 			commonjs(),
 			buble()
 		]

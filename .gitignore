@@ -1,5 +1,4 @@
 node_modules
 npm-debug.log
-server/compiled-*
-test/specs/**/*.js
-test/results
+*.js
+__*

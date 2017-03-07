@@ -1,5 +1,5 @@
 import assert from 'assert';
-import isArray from '../../../../type/isArray';
+import isArray from '.';
 
 describe('isArray', function () {
 	it('should return true is the argument is an number', function () {

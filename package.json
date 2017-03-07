@@ -18,7 +18,7 @@
     "frontend"
   ],
   "scripts": {
-    "build_test": "node test/build",
+    "build_test": "node _build/index.es",
     "test": "npm run build_test && wdio wdio.conf.js"
   },
   "devDependencies": {
