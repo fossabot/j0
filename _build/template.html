@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>{{name}}</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
+<link href="{{cssPath}}" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+<script>
+	window.global = window;
+	mocha.setup('bdd');
+</script>
+<script src="index.test.js"></script>
+<h1>{{name}}</h1>
+<section>{{#blocks}}
+	{{#code}}<pre>{{&body}}</pre>{{/code}}{{#doc}}<p>{{&body}}</p>{{/doc}}{{/blocks}}
+</section>
+<h1>Test</h1>
+<section>{{#testBlocks}}
+	{{#code}}<pre>{{&body}}</pre>{{/code}}{{#doc}}<p>{{&body}}</p>{{/doc}}{{/testBlocks}}
+</section>
+<section id="mocha"></section>
+<script>
+	mocha.run();
+</script>

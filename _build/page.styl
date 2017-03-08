@@ -1,0 +1,94 @@
+$small = '(max-width: 500px)'
+
+*
+::before
+::after
+	position relative
+	box-sizing border-box
+	padding 0
+	margin 0
+	border none
+	background-repeat no-repeat
+	background-color transparent
+	background-position center
+	background-size cover
+	border-radius 0
+	border-width 1px
+	border-style none
+	outline 0
+	list-style none
+	appearance none
+	color inherit
+	min-width 0
+	min-height 0
+	max-width none
+	max-height none
+	text-decoration none
+	-webkit-appearance none
+	-webkit-overflow-scrolling touch
+
+body
+	font-size 14px
+	// font-family -apple-system, BlinkMacSystemFont, arial, sans-serif
+	font-family 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, arial, sans-serif
+	color #333
+	&>#mocha
+	&>*
+		max-width 94vw
+		margin 0 auto
+		&:first-child
+			padding-top 18px
+			@media $small
+				padding-top 58px
+		.suite
+			margin-left 0
+		h1
+			font-weight normal
+
+h1
+	font-weight normal
+
+$color1 = lightness(#ffb500, 85%)
+
+section
+	clear both
+	margin 20px auto
+	background-image linear-gradient(0deg, $color1, $color1)
+	background-position right
+	background-size 50% 100%
+	@media $small
+		background none
+
+#mocha
+	background none
+
+#mocha-stats
+	&>.duration
+		@media $small
+			display none
+
+pre
+	margin-left 50%
+	overflow-x auto
+	padding 0 10px
+	font-family Consolas, monospace
+	font-size 12px
+	line-height 20px
+	.const
+	.function
+	.export
+	.import
+		color blue
+	.name
+		color #790101
+	.string
+		color #127901
+	@media $small
+		margin-left auto
+
+p
+	float left
+	width 50%
+	@media $small
+		width auto
+		float none

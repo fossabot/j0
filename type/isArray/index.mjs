@@ -3,6 +3,7 @@
 
 const {isArray: _isArray} = Array;
 
+// @param {Number} args
 function isArray(...args) {
 	return args.every(_isArray);
 }
