@@ -1,5 +1,4 @@
-// # isArray
-// Check whether every arguments is an array or not.
+// # Checks whether every arguments is an array or not.
 
 const {isArray: _isArray} = Array;
 

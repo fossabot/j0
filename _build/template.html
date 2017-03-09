@@ -1,23 +1,31 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>{{name}}</title>
+<title>{{package.name}}/{{name}}</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
-<link href="{{cssPath}}" rel="stylesheet">
+<link href="{{root}}/page.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script>
 	window.global = window;
 	mocha.setup('bdd');
 </script>
 <script src="index.test.js"></script>
-<h1>{{name}}</h1>
-<section>{{#blocks}}
-	{{#code}}<pre>{{&body}}</pre>{{/code}}{{#doc}}<p>{{&body}}</p>{{/doc}}{{/blocks}}
+<h1 id="title">{{&titleHTML}}<span class="version">{{package.version}}</span></h1>
+<section class="Document">{{#blocks}}
+	{{#doc}}{{&body}}{{/doc}}{{/blocks}}
 </section>
-<h1>Test</h1>
-<section>{{#testBlocks}}
-	{{#code}}<pre>{{&body}}</pre>{{/code}}{{#doc}}<p>{{&body}}</p>{{/doc}}{{/testBlocks}}
+<h2>Source</h2>
+<section class="Code">{{#blocks}}
+	{{#code}}<pre>{{&body}}</pre>{{/code}}{{/blocks}}
 </section>
-<section id="mocha"></section>
-<script>
-	mocha.run();
-</script>
+<h2>Tests</h2>
+<section class="Test">{{#testBlocks}}
+	{{#code}}<pre>{{&body}}</pre>{{/code}}{{/testBlocks}}
+</section>
+<h2>Environment</h2>
+<table><tbody id="environment"></tbody></table>
+<h2>Result</h2>
+<div id="mocha"></div>
+<script src="{{root}}/page.js"></script>
+<footer>
+
+</footer>

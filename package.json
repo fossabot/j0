@@ -18,8 +18,7 @@
     "frontend"
   ],
   "scripts": {
-    "server": "sable docs & npm run watch & wait",
-    "watch": "node _build/index.es --watch",
+    "server": "node _build/index.es --watch",
     "build": "node _build/index.es",
     "doc": "node _generateDocument/index.es",
     "test": "npm run build && wdio wdio.conf.js"
@@ -30,7 +29,7 @@
     "chokidar": "^1.6.1",
     "glob": "*",
     "j1": "*",
-    "middleware-static-livereload": "0.0.2",
+    "marked": "^0.3.6",
     "mu2": "^0.5.21",
     "postcss": "^5.2.16",
     "rollup": "^0.41.4",
@@ -40,7 +39,6 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "sable": "0.0.5",
     "selenium-standalone": "^6.0.1",
-    "socket.io": "*",
     "stylus": "^0.54.5",
     "wdio-junit-reporter": "^0.2.0",
     "wdio-mocha-framework": "^0.5.9",

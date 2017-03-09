@@ -20,7 +20,6 @@ function compileCSS() {
 		return postcss([autoprefixer(autoprefixerOptions)]).process(cssCode);
 	})
 	.then(({css}) => {
-		console.log(css);
 		return writeFile(destPath, css);
 	});
 }

@@ -25,65 +25,77 @@
   text-decoration: none;
   -webkit-appearance: none;
   -webkit-overflow-scrolling: touch;
+  border-collapse: collapse;
+  -moz-tab-size: 2;
+       tab-size: 2;
 }
 body {
   font-size: 14px;
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, arial, sans-serif;
   color: #333;
 }
 body>#mocha,
 body>* {
-  max-width: 94vw;
-  margin: 0 auto;
+  width: 94vw;
+  max-width: 1280px;
+  margin: 12px auto;
 }
-body>#mocha:first-child,
-body>*:first-child {
-  padding-top: 18px;
+body>h1 {
+  margin: 24px auto 18px auto;
 }
-@media (max-width: 500px) {
-  body>#mocha:first-child,
-  body>*:first-child {
-    padding-top: 58px;
-  }
+body>h2 {
+  margin: 24px auto 12px auto;
 }
-body>#mocha .suite,
-body>* .suite {
-  margin-left: 0;
+body.passed>.PageTitle::after,
+body.failed>.PageTitle::after {
+  margin-left: 12px;
 }
-body>#mocha h1,
-body>* h1 {
-  font-weight: normal;
+body.failed>.PageTitle::after {
+  content: '✖';
+  color: #f00;
 }
-h1 {
-  font-weight: normal;
+body.passed>.PageTitle::after {
+  content: '✔';
+  color: #008000;
+}
+.version {
+  margin-left: 8px;
+  font-size: 12px;
+}
+.version::before {
+  content: 'v';
+}
+a {
+  text-decoration: underline;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
 }
 section {
-  clear: both;
-  margin: 20px auto;
-  background-image: linear-gradient(0deg, #ffe9b3, #ffe9b3);
-  background-position: right;
-  background-size: 50% 100%;
+  overflow-x: auto;
 }
-@media (max-width: 500px) {
-  section {
-    background: none;
-  }
+section>* {
+  margin-bottom: 8px;
+  line-height: 18px;
+  font-size: 14px;
 }
-#mocha {
-  background: none;
+section h1 {
+  font-size: 16px;
+  line-height: 22px;
 }
-@media (max-width: 500px) {
-  #mocha-stats>.duration {
-    display: none;
-  }
+section.Code,
+section.Test {
+  padding: 8px 16px;
+  background-color: #ebebeb;
 }
 pre {
-  margin-left: 50%;
-  overflow-x: auto;
-  padding: 0 10px;
   font-family: Consolas, monospace;
   font-size: 12px;
-  line-height: 20px;
 }
 pre .const,
 pre .function,
@@ -97,18 +109,47 @@ pre .name {
 pre .string {
   color: #127901;
 }
-@media (max-width: 500px) {
-  pre {
-    margin-left: auto;
-  }
+#environment {
+  font-family: Consolas, monospace;
+  font-size: 12px;
 }
-p {
-  float: left;
-  width: 50%;
+#environment>tr>* {
+  vertical-align: top;
+  padding: 2px 4px;
+  border: solid 1px #ddd;
 }
-@media (max-width: 500px) {
-  p {
-    width: auto;
-    float: none;
+#environment>tr>th {
+  text-align: left;
+}
+#environment>tr.object,
+#environment>tr.function {
+  display: none;
+}
+#mocha {
+  background: none;
+}
+#mocha>* {
+  width: 100%;
+}
+#mocha .suite {
+  margin-left: 0;
+}
+#mocha-stats {
+  width: auto;
+  top: 0;
+  right: 0;
+}
+#mocha-stats>li {
+  padding-top: 4px;
+}
+#mocha-stats>.progress {
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+@media (max-width: 300px) {
+  #mocha-stats>.duration,
+  #mocha-stats>.progress {
+    display: none;
   }
 }

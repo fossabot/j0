@@ -1,20 +1,17 @@
 const path = require('path');
-const console = require('j1/console').create('test/transpile');
-const changeExt = require('j1/changeExt');
 const rollup = require('rollup');
 const builtins = require('rollup-plugin-node-builtins');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const buble = require('rollup-plugin-buble');
+const console = require('j1/console').create('transpile');
 
 const projectRoot = path.join(__dirname, '..');
-const documentRoot = path.join(projectRoot, 'docs');
 
-function transpile(file) {
-	const relativePath = path.relative(projectRoot, file);
-	console.debug(`transpile ${relativePath}`);
+function transpile(src, dest) {
+	console.debug(`${path.relative(projectRoot, src)}\n -> ${path.relative(projectRoot, dest)}`);
 	return rollup.rollup({
-		entry: file,
+		entry: src,
 		plugins: [
 			builtins(),
 			nodeResolve({extensions: ['.mjs', '.js', '.json']}),
@@ -25,7 +22,7 @@ function transpile(file) {
 	.then(function (bundle) {
 		return bundle.write({
 			format: 'es',
-			dest: path.join(documentRoot, changeExt(relativePath, '.js'))
+			dest: dest
 		});
 	});
 }
