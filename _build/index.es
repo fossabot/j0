@@ -2,48 +2,93 @@ const path = require('path');
 const sable = require('sable');
 const console = require('j1/console').create('build');
 const promisify = require('j1/promisify');
-const debounce = require('j1/debounce');
-const changeExt = require('j1/changeExt');
 const rm = require('j1/rm');
 const chokidar = require('chokidar');
+const paze = require('paze');
 const glob = promisify(require('glob'));
 
 const transpile = require('./transpile.es');
-const generateDocument = require('./generateDocument.es');
 const compileCSS = require('./compileCSS.es');
+const packageJSON = require('../package');
 
 const projectRoot = path.join(__dirname, '..');
 const documentRoot = path.join(projectRoot, 'docs');
-const templatePath = path.join(__dirname, 'template.html');
 const stylusPath = path.join(__dirname, 'page.styl');
 const jsPath = path.join(__dirname, 'page.es');
+const templatePath = path.join(__dirname, 'template.html');
 
 const ignorePattern = /[/\\][._]|node_modules/;
 const targetExts = ['.es', '.mjs'];
 
-const COMPILE_DEBOUNCE = 300;
+const watchFlag = process.argv.includes('--watch');
+
+const processes = {};
 
 function buildFile(file) {
 	if (targetExts.includes(path.extname(file)) && !ignorePattern.test(file)) {
-		const testFilePath = file.replace(/\.[^/]+$/, '.test.es');
-		const relativePath = path.relative(projectRoot, testFilePath);
-		const destPath = changeExt(path.join(documentRoot, relativePath), '.js');
-		return transpile(testFilePath, destPath)
-		.catch(console.onError);
+		const dir = path.relative(projectRoot, file.replace(/\/(?:index|test).*$/, ''));
+		const scriptPath = path.join(projectRoot, dir, 'test', 'index.es');
+		const destPath = path.join(documentRoot, dir, 'index.test.js');
+		if (!processes[dir]) {
+			processes[dir] = transpile(scriptPath, destPath)
+			.catch(console.onError)
+			.then(() => {
+				delete processes[dir];
+			});
+		}
+		return processes[dir];
 	} else if (this && this.unwatch) {
 		this.unwatch(file);
 	}
 	return null;
 }
 
+function addLineNumbers(code) {
+	return code
+	.split(/\n/)
+	.map((line) => {
+		return `<span class="linenum"></span>${line}`;
+	})
+	.join('\n');
+}
+
 function buildDocument(file) {
 	if ((/\.test\.js$/).test(file) && !ignorePattern.test(file)) {
-		const relativePath = path.relative(documentRoot, file);
-		const testScriptPath = path.join(projectRoot, relativePath.replace(/\.test\.js$/, '.test.es'));
-		console.debug(`document ${relativePath}`);
-		return generateDocument(testScriptPath)
+		const dir = path.relative(documentRoot, path.join(file, '..'));
+		const scriptPath = path.join(projectRoot, dir, 'index.mjs');
+		const testScriptPath = path.join(projectRoot, dir, 'test', 'index.es');
+		const destPath = path.join(path.dirname(file), 'index.html');
+		console.debug(`document ${dir}`);
+		return paze({
+			src: scriptPath,
+			test: testScriptPath,
+			watch: watchFlag,
+			beforeRender: function (context) {
+				context.dest = destPath;
+				context.template = templatePath;
+				context.name = dir;
+				context.package = packageJSON;
+				context.titleHTML = `${packageJSON.name}/${context.name}`.split(/\s*\/\s*/)
+				.reverse()
+				.map((fragment, index) => {
+					let html = fragment;
+					if (0 < index) {
+						html = `<a href="${'../'.repeat(index)}">${fragment}</a>`;
+					}
+					return html;
+				})
+				.reverse()
+				.join('/');
+				context.root = `${context.name.split('/').map(() => {
+					return '..';
+				})
+				.join('/')}`;
+				context.code = addLineNumbers(context.code);
+				context.test.code = addLineNumbers(context.test.code);
+			}
+		})
 		.then(() => {
-			console.debug(`documented ${relativePath}`);
+			console.debug(`documented ${dir}`);
 		})
 		.catch(console.onError);
 	} else if (this && this.unwatch) {
@@ -52,63 +97,57 @@ function buildDocument(file) {
 	return null;
 }
 
-function buildAllDocuments() {
-	console.debug('all documents');
-	return glob(path.join(documentRoot, '**', '*.test.js'), {nodir: true})
+function buildCSS() {
+	return compileCSS(stylusPath, path.join(documentRoot, 'page.css'));
+}
+
+function buildJS() {
+	return transpile(jsPath, path.join(documentRoot, 'page.js'));
+}
+
+function startServer() {
+	return sable({documentRoot: documentRoot})
+	.then(() => {
+		return [
+			[projectRoot, buildFile, {ignored: ignorePattern}],
+			[documentRoot, buildDocument, {ignored: ignorePattern}],
+			[stylusPath, buildCSS],
+			[jsPath, buildJS]
+		].map(([pattern, fn, options = {}]) => {
+			options.awaitWriteFinish = {stabilityThreshold: 100};
+			return chokidar.watch(pattern, options)
+				.on('add', fn)
+				.on('change', fn);
+		});
+	});
+}
+
+function build() {
+	return glob(path.join(projectRoot, '**', '*.es'), {
+		nodir: true,
+		ignore: [
+			'**/node_modules'
+		]
+	})
+	.then((files) => {
+		return Promise.all([].concat(...files).map(buildFile));
+	})
+	.then(() => {
+		return glob(path.join(documentRoot, '**', '*.test.js'), {nodir: true});
+	})
 	.then((files) => {
 		return Promise.all([].concat(...files).map(buildDocument));
 	});
 }
 
-function buildCSS() {
-	compileCSS(stylusPath)
-	.catch(console.onError);
-}
-
-function buildJS() {
-	transpile(jsPath, path.join(documentRoot, 'page.js'))
-	.catch(console.onError);
-}
-
 rm(documentRoot)
 .then(() => {
-	if (process.argv.includes('--watch')) {
-		sable({documentRoot: documentRoot});
-		chokidar.watch(templatePath, {ignoreInitial: true})
-			.on('add', debounce(buildAllDocuments, COMPILE_DEBOUNCE))
-			.on('change', debounce(buildAllDocuments, COMPILE_DEBOUNCE));
-		chokidar.watch(stylusPath)
-			.on('add', debounce(buildCSS, COMPILE_DEBOUNCE))
-			.on('change', debounce(buildCSS, COMPILE_DEBOUNCE));
-		chokidar.watch(jsPath)
-			.on('add', debounce(buildJS, COMPILE_DEBOUNCE))
-			.on('change', debounce(buildJS, COMPILE_DEBOUNCE));
-		chokidar.watch(path.join(documentRoot), {
-			ignoreInitial: true,
-			ignored: ignorePattern
-		})
-			.on('add', buildDocument)
-			.on('change', buildDocument);
-		chokidar.watch(projectRoot, {ignored: ignorePattern})
-			.on('add', buildFile)
-			.on('change', buildFile);
-	} else {
-		glob(path.join(projectRoot, '**', '*.es'), {
-			nodir: true,
-			ignore: [
-				'**/node_modules'
-			]
-		})
-		.then((files) => {
-			return Promise.all([].concat(...files).map(buildFile));
-		})
-		.then(() => {
-			return buildAllDocuments();
-		})
-		.then(() => {
-			return compileCSS();
-		})
-		.catch(console.onError);
-	}
+	return Promise.all([
+		buildCSS(),
+		buildJS()
+	]);
+})
+.then(() => {
+	return watchFlag ? startServer() : build();
 })
 .catch(console.onError);

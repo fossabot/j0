@@ -30,6 +30,7 @@
        tab-size: 2;
 }
 body {
+  padding: 0 0 12px 0;
   font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, arial, sans-serif;
   color: #333;
@@ -37,14 +38,14 @@ body {
 body>#mocha,
 body>* {
   width: 94vw;
-  max-width: 1280px;
+  max-width: 720px;
   margin: 12px auto;
 }
 body>h1 {
   margin: 24px auto 18px auto;
 }
 body>h2 {
-  margin: 24px auto 12px auto;
+  margin: 32px auto 12px auto;
 }
 body.passed>.PageTitle::after,
 body.failed>.PageTitle::after {
@@ -76,38 +77,89 @@ h5,
 h6 {
   font-weight: 400;
 }
-section {
-  overflow-x: auto;
+ul {
+  padding-left: 24px;
 }
-section>* {
-  margin-bottom: 8px;
-  line-height: 18px;
+ul>li {
+  list-style: disc;
+}
+ol {
+  padding-left: 24px;
+}
+ol>li {
+  list-style: decimal;
+}
+footer>* {
+  margin: 8px auto;
+}
+section.Document {
   font-size: 14px;
-}
-section h1 {
-  font-size: 16px;
   line-height: 22px;
 }
-section.Code,
-section.Test {
-  padding: 8px 16px;
-  background-color: #ebebeb;
+section.Document>* {
+  margin: 8px auto;
+}
+section.Document>h1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+section.Document>h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+section.Document>h3 {
+  font-weight: bold;
+}
+section.Code>pre,
+section.TestCode>pre {
+  padding-left: 0;
 }
 pre {
+  padding: 8px 16px;
+  line-height: 18px;
   font-family: Consolas, monospace;
   font-size: 12px;
+  background-color: #eee;
+  overflow-x: auto;
 }
-pre .const,
-pre .function,
-pre .export,
-pre .import {
+span.const,
+span.function,
+span.export,
+span.import,
+span.default,
+span.class {
   color: #00f;
 }
-pre .name {
+span.name {
   color: #790101;
 }
-pre .string {
+span.string {
   color: #127901;
+}
+span.comment {
+  color: #777;
+}
+span.true,
+span.false,
+span.num {
+  color: #e28116;
+}
+span.linenum {
+  display: inline-block;
+  width: 36px;
+  margin-right: 10px;
+  padding-right: 8px;
+  counter-increment: line;
+  text-align: right;
+  border-right: solid 1px #ccc;
+  color: #999;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+span.linenum::before {
+  content: counter(line);
 }
 #environment {
   font-family: Consolas, monospace;
@@ -131,25 +183,34 @@ pre .string {
 #mocha>* {
   width: 100%;
 }
+#mocha li {
+  list-style: none;
+}
 #mocha .suite {
   margin-left: 0;
 }
 #mocha-stats {
-  width: auto;
-  top: 0;
-  right: 0;
-}
-#mocha-stats>li {
-  padding-top: 4px;
-}
-#mocha-stats>.progress {
   position: absolute;
   right: 0;
-  top: 100%;
+  top: auto;
+  bottom: 100%;
+  width: auto;
 }
-@media (max-width: 300px) {
-  #mocha-stats>.duration,
-  #mocha-stats>.progress {
+#mocha-stats>.progress {
+  margin-right: 0;
+}
+@media (max-width: 500px) {
+  #mocha-stats>.duration {
     display: none;
   }
+}
+.GitHubLink {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.GitHubLink>.fa-external-link {
+  margin-left: 2px;
 }

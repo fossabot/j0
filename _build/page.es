@@ -1,8 +1,7 @@
 /* global document, navigator */
+
 if (mocha) {
 	mocha.run().once('end', function () {
-		const stats = document.getElementById('mocha-stats');
-		stats.removeChild(stats.firstChild);
 		document.body.classList.add(0 < this.stats.failures ? 'failed' : 'passed');
 	});
 }

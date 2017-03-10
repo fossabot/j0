@@ -1,3 +1,7 @@
+$baseWidth = 94vw
+$maxWidth = 720px
+$baseMargin = 8px
+
 $small = '(max-width: 500px)'
 $tiny = '(max-width: 300px)'
 
@@ -31,18 +35,19 @@ $tiny = '(max-width: 300px)'
 	tab-size 2
 
 body
+	padding 0 0 12px 0
 	font-size 14px
 	font-family -apple-system, BlinkMacSystemFont, arial, sans-serif
 	color #333
 	&>#mocha
 	&>*
-		width 94vw
-		max-width 1280px
+		width $baseWidth
+		max-width $maxWidth
 		margin 12px auto
 	&>h1
 		margin 24px auto 18px auto
 	&>h2
-		margin 24px auto 12px auto
+		margin 32px auto 12px auto
 	&.passed
 	&.failed
 		&>.PageTitle
@@ -76,34 +81,79 @@ h5
 h6
 	font-weight 400
 
+ul
+	padding-left 24px
+	&>li
+		list-style disc
+
+ol
+	padding-left 24px
+	&>li
+		list-style decimal
+
 $color1 = lightness(#ffb500, 85%)
 
-section
-	overflow-x auto
+footer
 	&>*
-		margin-bottom 8px
-		line-height 18px
+		margin $baseMargin auto
+
+section
+	&.Document
 		font-size 14px
-	h1
-		font-size 16px
 		line-height 22px
+		&>*
+			margin $baseMargin auto
+		&>h1
+			font-size 20px
+			font-weight bold
+		&>h2
+			font-size 18px
+			font-weight bold
+		&>h3
+			font-weight bold
 	&.Code
-	&.Test
-		padding 8px 16px
-		background-color #ebebeb
+	&.TestCode
+		&>pre
+			padding-left 0
 
 pre
+	padding 8px 16px
+	line-height 18px
 	font-family Consolas, monospace
 	font-size 12px
-	.const
-	.function
-	.export
-	.import
+	background-color #eee
+	overflow-x auto
+
+span
+	&.const
+	&.function
+	&.export
+	&.import
+	&.default
+	&.class
 		color blue
-	.name
+	&.name
 		color #790101
-	.string
+	&.string
 		color #127901
+	&.comment
+		color #777
+	&.true
+	&.false
+	&.num
+		color #e28116
+	&.linenum
+		display inline-block
+		width 36px
+		margin-right 10px
+		padding-right 8px
+		counter-increment line
+		text-align right
+		border-right solid 1px #ccc
+		color #999
+		user-select none
+		&::before
+			content counter(line)
 
 #environment
 	font-family Consolas, monospace
@@ -123,20 +173,28 @@ pre
 	background none
 	&>*
 		width 100%
+	li
+		list-style none
 	.suite
 		margin-left 0
 
 #mocha-stats
-	width auto
-	top 0
+	position absolute
 	right 0
-	&>li
-		padding-top 4px
+	top auto
+	bottom 100%
+	width auto
 	&>.progress
-		position absolute
-		right 0
-		top 100%
-	@media $tiny
+		margin-right 0
+	@media $small
 		&>.duration
-		&>.progress
 			display none
+
+.GitHubLink
+	position absolute
+	right 0
+	bottom 0
+	padding 4px 8px
+	font-size 12px
+	&>.fa-external-link
+		margin-left 2px
