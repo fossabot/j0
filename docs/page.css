@@ -210,6 +210,10 @@ span.linenum::before {
   bottom: 0;
   padding: 4px 8px;
   font-size: 12px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .GitHubLink>.fa-external-link {
   margin-left: 2px;

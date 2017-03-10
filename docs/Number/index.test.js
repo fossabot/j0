@@ -2943,37 +2943,14 @@ function ifError(err) {
   if (err) throw err;
 }
 
-var Arr$1 = Array;
+var Num = Number;
 
-var _isArray = Arr$1.isArray;
+describe('Number', function () {
+  describe('isNaN', function () {
+    var isNaN = Num.isNaN;
 
-/**
- * @param  {...any}  args espressions to check its type
- * @return {Boolean} true or false
- */
-
-function isArray$2() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  return args.every(_isArray);
-}
-
-// Returns true if the argument is an array.
-//
-// Examples:
-//
-// ```javascript
-// isArray(1, 2, 3); // -> false
-// isArray([1], [2], [3]); // -> true
-// ```
-
-describe('isArray', function () {
-  it('should return true is the argument is an number', function () {
-    assert.equal(isArray$2(0), false);
-  });
-  it('should return true is the argument is an array', function () {
-    assert.equal(isArray$2([]), true);
+    it('should return true if the argument is not a number', function () {
+      assert.equal(isNaN(1), false);
+    });
   });
 });

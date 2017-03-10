@@ -1,3 +1,4 @@
+import Array from '../../Array';
 const {isArray: _isArray} = Array;
 
 /**
