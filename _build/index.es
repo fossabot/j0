@@ -1,6 +1,6 @@
 const path = require('path');
 const sable = require('sable');
-const console = require('j1/console').create('build');
+const console = require('j1/console').create('builder');
 const promisify = require('j1/promisify');
 const rm = require('j1/rm');
 const chokidar = require('chokidar');
@@ -106,19 +106,26 @@ function buildJS() {
 }
 
 function startServer() {
-	return sable({documentRoot: documentRoot})
-	.then(() => {
-		return [
-			[projectRoot, buildFile, {ignored: ignorePattern}],
-			[documentRoot, buildDocument, {ignored: ignorePattern}],
-			[stylusPath, buildCSS],
-			[jsPath, buildJS]
-		].map(([pattern, fn, options = {}]) => {
-			options.awaitWriteFinish = {stabilityThreshold: 100};
-			return chokidar.watch(pattern, options)
+	return Promise.all([
+		[projectRoot, buildFile, {ignored: ignorePattern}],
+		[documentRoot, buildDocument, {ignored: ignorePattern}],
+		[stylusPath, buildCSS],
+		[jsPath, buildJS]
+	].map(([pattern, fn, options = {}]) => {
+		options.awaitWriteFinish = {stabilityThreshold: 100};
+		return new Promise((resolve) => {
+			chokidar.watch(pattern, options)
 				.on('add', fn)
-				.on('change', fn);
+				.on('change', fn)
+				.on('error', console.onError)
+				.once('ready', function () {
+					resolve(this);
+				});
 		});
+	}))
+	.then(() => {
+		console.debug('starting sable server');
+		return sable({documentRoot: documentRoot});
 	});
 }
 
