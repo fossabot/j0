@@ -2943,16 +2943,35 @@ function ifError(err) {
   if (err) throw err;
 }
 
-describe('Array', function () {
+var _isArray = Array.isArray;
 
-  it('should be a constructor of an array', function () {
-    assert.equal([] instanceof Array, true);
+/**
+ * @param  {...any}  args espressions to check its type
+ * @return {Boolean} true or false
+ */
+
+function isArray$2() {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  return args.every(_isArray);
+}
+
+// Returns true if the argument is an array.
+//
+// Examples:
+//
+// ```javascript
+// isArray(1, 2, 3); // -> false
+// isArray([1], [2], [3]); // -> true
+// ```
+
+describe('isArray', function () {
+  it('should return true is the argument is an number', function () {
+    assert.equal(isArray$2(0), false);
   });
-
-  it('should create a new array', function () {
-    var length = 10;
-    var array = new Array(length);
-    assert.deepEqual(array, []);
-    assert.equal(array.length, length);
+  it('should return true is the argument is an array', function () {
+    assert.equal(isArray$2([]), true);
   });
 });

@@ -2943,16 +2943,15 @@ function ifError(err) {
   if (err) throw err;
 }
 
-describe('Array', function () {
+function concat() {
+  var _ref;
 
-  it('should be a constructor of an array', function () {
-    assert.equal([] instanceof Array, true);
-  });
+  return (_ref = []).concat.apply(_ref, arguments);
+}
 
-  it('should create a new array', function () {
-    var length = 10;
-    var array = new Array(length);
-    assert.deepEqual(array, []);
-    assert.equal(array.length, length);
+describe('concat', function () {
+
+  it('should concat the arguments', function () {
+    assert.deepEqual(concat(1, [2], [3, 4]), [1, 2, 3, 4]);
   });
 });

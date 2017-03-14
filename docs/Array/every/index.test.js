@@ -2943,16 +2943,54 @@ function ifError(err) {
   if (err) throw err;
 }
 
-describe('Array', function () {
+var noop$1 = function noop$1(x) {
+  return x;
+};
 
-  it('should be a constructor of an array', function () {
-    assert.equal([] instanceof Array, true);
+function every(array) {
+  var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop$1;
+  var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : array;
+  var length = array.length;
+
+  for (var i = 0; i < length; i += 1) {
+    if (!fn.call(thisArg, array[i], i, array)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+describe('every', function () {
+
+  it('should return true if items are truthy', function () {
+    assert.equal(every([-1, 1, [], {}]), true);
   });
 
-  it('should create a new array', function () {
-    var length = 10;
-    var array = new Array(length);
-    assert.deepEqual(array, []);
-    assert.equal(array.length, length);
+  it('should return false if the array have falthy value', function () {
+    assert.equal(every([-1, 1, [], {}, 0]), false);
+  });
+
+  it('should use given functions', function () {
+    function fn(x) {
+      return -3 < x && x < 3;
+    }
+    assert.equal(every([-2, -1, 0, 1, 2], fn), true);
+  });
+
+  it('should use given functions', function () {
+    function fn(x) {
+      return -3 < x && x < 3;
+    }
+    assert.equal(every([-2, -1, 0, 1, 2], fn), true);
+  });
+
+  it('should stop iteration at failure', function () {
+    var consumed = [];
+    function fn(x) {
+      consumed[consumed.length] = x;
+      return x < 3;
+    }
+    assert.equal(every([0, 1, 2, 3, 4, 5], fn), false);
+    assert.deepEqual(consumed, [0, 1, 2, 3]);
   });
 });

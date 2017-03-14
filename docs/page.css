@@ -47,15 +47,15 @@ body>h1 {
 body>h2 {
   margin: 32px auto 12px auto;
 }
-body.passed>.PageTitle::after,
-body.failed>.PageTitle::after {
+body.passed>#title::after,
+body.failed>#title::after {
   margin-left: 12px;
 }
-body.failed>.PageTitle::after {
+body.failed>#title::after {
   content: '✖';
   color: #f00;
 }
-body.passed>.PageTitle::after {
+body.passed#title::after {
   content: '✔';
   color: #008000;
 }
@@ -127,7 +127,8 @@ span.function,
 span.export,
 span.import,
 span.default,
-span.class {
+span.class,
+span.return {
   color: #00f;
 }
 span.name {

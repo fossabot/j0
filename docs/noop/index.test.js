@@ -2943,16 +2943,20 @@ function ifError(err) {
   if (err) throw err;
 }
 
-describe('Array', function () {
+var noop$1 = function noop$1(x) {
+  return x;
+};
 
-  it('should be a constructor of an array', function () {
-    assert.equal([] instanceof Array, true);
+describe('noop', function () {
+
+  it('should be callable', function () {
+    assert.doesNotThrow(function () {
+      noop$1();
+    });
   });
 
-  it('should create a new array', function () {
-    var length = 10;
-    var array = new Array(length);
-    assert.deepEqual(array, []);
-    assert.equal(array.length, length);
+  it('should return the first argument', function () {
+    var data = new Date();
+    assert.equal(noop$1(data), data);
   });
 });

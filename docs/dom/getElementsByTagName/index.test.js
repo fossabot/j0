@@ -2943,16 +2943,9 @@ function ifError(err) {
   if (err) throw err;
 }
 
-describe('Array', function () {
+describe('getElementsByTagName', function () {
 
-  it('should be a constructor of an array', function () {
-    assert.equal([] instanceof Array, true);
-  });
-
-  it('should create a new array', function () {
-    var length = 10;
-    var array = new Array(length);
-    assert.deepEqual(array, []);
-    assert.equal(array.length, length);
+  it('should do X', function () {
+    assert.equal(0, 1);
   });
 });
