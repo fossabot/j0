@@ -1,11 +1,12 @@
 import noop from '../../noop';
 
-function every(array, fn = noop, thisArg = array) {
-	const {length} = array;
-	for (let i = 0; i < length; i += 1) {
-		if (!fn.call(thisArg, array[i], i, array)) {
+function every(iterable, fn = noop, thisArg = iterable) {
+	let index = 0;
+	for (const value of iterable) {
+		if (!fn.call(thisArg, value, index, iterable)) {
 			return false;
 		}
+		index += 1;
 	}
 	return true;
 }

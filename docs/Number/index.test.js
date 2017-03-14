@@ -2943,11 +2943,9 @@ function ifError(err) {
   if (err) throw err;
 }
 
-var Num = Number;
-
 describe('Number', function () {
   describe('isNaN', function () {
-    var isNaN = Num.isNaN;
+    var isNaN = Number.isNaN;
 
     it('should return true if the argument is not a number', function () {
       assert.equal(isNaN(1), false);

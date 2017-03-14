@@ -1,2 +1,1 @@
-const Num = Number;
-export default Num;
+export default Number;

@@ -1,21 +1,6 @@
-import Array from '../Array';
-const {isArray: _isArray} = Array;
+import every from '../Array/every';
+import isArray from '../Array/isArray';
 
-/**
- * @param  {...any}  args espressions to check its type
- * @return {Boolean} true or false
- */
-function isArray(...args) {
-	return args.every(_isArray);
+export default function (...args) {
+	return every(args, isArray);
 }
-
-export default isArray;
-
-// Returns true if the argument is an array.
-//
-// Examples:
-//
-// ```javascript
-// isArray(1, 2, 3); // -> false
-// isArray([1], [2], [3]); // -> true
-// ```

@@ -32,7 +32,6 @@ $tiny = '(max-width: 300px)'
 	-webkit-appearance none
 	-webkit-overflow-scrolling touch
 	border-collapse collapse
-	tab-size 2
 
 body
 	padding 0 0 12px 0
@@ -48,27 +47,41 @@ body
 		margin 24px auto 18px auto
 	&>h2
 		margin 32px auto 12px auto
-	&.passed
 	&.failed
-		&>#title
+		&>.TestResult
+			background-color red
 			&::after
-				margin-left 12px
-	&.failed
-		&>#title
-			&::after
-				content '✖'
-				color red
+				content '✖ failed'
 	&.passed
-		&#title
+		&>.TestResult
+			background-color green
 			&::after
-				content '✔'
-				color green
+				content '✔ passed'
 
 .version
 	margin-left 8px
 	font-size 12px
 	&::before
 		content 'v'
+
+.Children
+	&[data-count='0']
+		display none
+
+.TestResult
+	z-index 1
+	position fixed
+	right 0
+	top 0
+	width auto
+	margin 0
+	padding 4px 8px
+	color #fff
+	font-size 12px
+	border-radius 0 0 0 3px
+	text-decoration none
+	&::after
+		color #fff
 
 a
 	text-decoration underline
@@ -117,14 +130,20 @@ section
 			padding-left 0
 
 pre
-	padding 8px 16px
 	line-height 18px
-	font-family Consolas, monospace
-	font-size 12px
+	padding 8px 12px 8px 0
 	background-color #eee
 	overflow-x auto
+	white-space pre
+	counter-reset line
+	tab-size 2
+	font-family Consolas, monospace
+	font-size 12px
 
 span
+	&.indent
+		display inline-block
+		border-left solid 1px #e0e0e0;
 	&.const
 	&.function
 	&.export
@@ -144,17 +163,15 @@ span
 	&.num
 		color #e28116
 	&.linenum
-		display inline-block
-		width 36px
-		margin-right 10px
-		padding-right 8px
 		counter-increment line
-		text-align right
-		border-right solid 1px #ccc
-		color #999
 		user-select none
 		&::before
 			content counter(line)
+			display inline-block
+			width 38px
+			padding-right 10px
+			text-align right
+			color #999
 
 #environment
 	font-family Consolas, monospace

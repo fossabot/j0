@@ -2943,9 +2943,9 @@ function ifError(err) {
   if (err) throw err;
 }
 
-var noop$1 = function noop$1(x) {
+function noop$1(x) {
   return x;
-};
+}
 
 describe('noop', function () {
 
