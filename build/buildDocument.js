@@ -6,7 +6,7 @@ const paze = require('paze');
 const readdir = promisify(fs.readdir, fs);
 const stat = promisify(fs.stat, fs);
 
-const {ignore, src, dest, watch, template} = require('./constants.es');
+const {ignore, src, dest, watch, template} = require('./constants');
 const packageJSON = require('../package/package');
 
 function wrapLine(line) {
@@ -45,12 +45,12 @@ function buildDocument(file) {
 	if ((/\.test\.js$/).test(file) && !ignore.test(file)) {
 		const dir = path.relative(dest, path.join(file, '..'));
 		const scriptPath = path.join(src, dir, 'index.mjs');
-		const testScriptPath = path.join(src, dir, 'test', 'index.es');
+		const testScriptPath = path.join(src, dir, 'test', 'index.js');
 		const destPath = path.join(path.dirname(file), 'index.html');
-		return readdir(dir)
+		return readdir(path.join(src, dir))
 		.then((files) => {
 			return Promise.all(files.map((name) => {
-				return name !== 'test' && stat(path.join(dir, name))
+				return name !== 'test' && stat(path.join(src, dir, name))
 				.then((stats) => {
 					if (stats.isDirectory()) {
 						return {childname: name};

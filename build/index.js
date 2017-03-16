@@ -6,12 +6,12 @@ const rm = require('j1/rm');
 const chokidar = require('chokidar');
 const glob = promisify(require('glob'));
 
-const constants = require('./constants.es');
-const buildModule = require('./buildModule.es');
-const buildDocument = require('./buildDocument.es');
-const buildIndexes = require('./buildIndexes.es');
-const transpile = require('./transpile.es');
-const compileCSS = require('./compileCSS.es');
+const constants = require('./constants');
+const buildModule = require('./buildModule');
+const buildDocument = require('./buildDocument');
+const buildIndexes = require('./buildIndexes');
+const transpile = require('./transpile');
+const compileCSS = require('./compileCSS');
 
 function buildCSS() {
 	return compileCSS(constants.styl, path.join(constants.dest, 'page.css'));
@@ -47,7 +47,7 @@ function startServer() {
 }
 
 function build() {
-	return glob(path.join(constants.src, '**', '*.es'), {
+	return glob(path.join(constants.src, '**', '*'), {
 		nodir: true,
 		ignore: [
 			'**/node_modules'

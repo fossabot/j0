@@ -1,5 +1,9 @@
 {
   "private": true,
+  "scripts": {
+    "server": "node build --watch",
+    "build": "node build"
+  },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
     "babel-core": "^6.23.1",

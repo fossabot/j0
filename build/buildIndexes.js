@@ -6,7 +6,10 @@ const writeFile = require('j1/writeFile');
 const promisify = require('j1/promisify');
 const glob = promisify(require('glob'));
 
-const {dest, indexTemplate} = require('./constants.es');
+const {
+	dest,
+	indexTemplate
+} = require('./constants');
 
 function buildIndexes() {
 	return glob(path.join(dest, '**', '*.test.js'), {nodir: true})
