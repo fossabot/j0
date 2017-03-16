@@ -6,6 +6,7 @@ module.exports = {
 	styl: path.join(__dirname, 'page.styl'),
 	js: path.join(__dirname, 'page.es'),
 	template: path.join(__dirname, 'template.html'),
+	indexTemplate: path.join(__dirname, 'indexTemplate.html'),
 	ignore: /[/\\][._]|node_modules/,
 	exts: ['.es', '.mjs'],
 	watch: process.argv.includes('--watch')

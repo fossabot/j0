@@ -47,7 +47,6 @@ function buildDocument(file) {
 		const scriptPath = path.join(src, dir, 'index.mjs');
 		const testScriptPath = path.join(src, dir, 'test', 'index.es');
 		const destPath = path.join(path.dirname(file), 'index.html');
-		console.debug(`document ${dir}`);
 		return readdir(dir)
 		.then((files) => {
 			return Promise.all(files.map((name) => {
@@ -93,9 +92,6 @@ function buildDocument(file) {
 					context.test.code = formatCode(context.test.code);
 				}
 			});
-		})
-		.then(() => {
-			console.debug(`documented ${dir}`);
 		})
 		.catch(console.onError);
 	} else if (this && this.unwatch) {

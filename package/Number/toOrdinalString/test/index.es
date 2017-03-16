@@ -1,4 +1,3 @@
-import equal from '../../../assert/equal';
 import toOrdinalString from '..';
 
 const tests = [
@@ -33,7 +32,7 @@ describe('toOrdinalString', function () {
 
 	for (const [n, expected] of tests) {
 		it(`should return ${expected} if the argument is ${n}`, function () {
-			equal(toOrdinalString(n), expected);
+			assert.equal(toOrdinalString(n), expected);
 		});
 	}
 

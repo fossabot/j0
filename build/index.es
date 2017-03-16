@@ -9,6 +9,7 @@ const glob = promisify(require('glob'));
 const constants = require('./constants.es');
 const buildModule = require('./buildModule.es');
 const buildDocument = require('./buildDocument.es');
+const buildIndexes = require('./buildIndexes.es');
 const transpile = require('./transpile.es');
 const compileCSS = require('./compileCSS.es');
 
@@ -38,6 +39,7 @@ function startServer() {
 				});
 		});
 	}))
+	.then(buildIndexes)
 	.then(() => {
 		console.debug('starting sable server');
 		return sable({documentRoot: constants.dest});
@@ -59,7 +61,8 @@ function build() {
 	})
 	.then((files) => {
 		return Promise.all([].concat(...files).map(buildDocument));
-	});
+	})
+	.then(buildIndexes);
 }
 
 rm(constants.dest)
