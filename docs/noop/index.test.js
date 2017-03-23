@@ -1,4 +1,8 @@
-'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(factory());
+}(this, (function () { 'use strict';
 
 function noop(x) {
 	return x;
@@ -13,7 +17,10 @@ describe('noop', function () {
 	});
 
 	it('should return the first argument', function () {
-		var data = new Date();
+		const data = new Date();
 		assert.equal(noop(data), data);
 	});
+
 });
+
+})));

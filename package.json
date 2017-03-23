@@ -2,7 +2,9 @@
   "private": true,
   "scripts": {
     "server": "node build --watch",
-    "build": "node build"
+    "build": "node build",
+    "test": "npm run build && wdio wdio.conf.js",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
@@ -21,6 +23,7 @@
     "rollup-plugin-commonjs": "^7.0.0",
     "rollup-plugin-node-builtins": "^2.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-watch": "^3.2.2",
     "sable": "0.0.5",
     "selenium-standalone": "^6.0.1",
     "stylus": "^0.54.5",

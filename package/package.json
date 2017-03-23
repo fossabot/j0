@@ -22,8 +22,5 @@
     "build": "node ../build",
     "test": "npm run build && wdio wdio.conf.js",
     "prepublish": "npm run build"
-  },
-  "dependencies": {
-    "es6-promise": "^4.1.0"
   }
 }

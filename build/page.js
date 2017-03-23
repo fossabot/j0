@@ -1,4 +1,5 @@
 /* global document, navigator */
+import '../package/polyfill';
 
 function startMocha() {
 	mocha.run().once('end', function () {

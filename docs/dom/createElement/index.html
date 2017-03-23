@@ -19,13 +19,43 @@
 </ul>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">document</span> <span class="name">from</span> <a href="../../document"><span class="string"><span class="string">'../../document'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">isString</span> <span class="name">from</span> <a href="../../isString"><span class="string"><span class="string">'../../isString'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">isNode</span> <span class="name">from</span> <a href="../../isNode"><span class="string"><span class="string">'../../isNode'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">noop</span> <span class="name">from</span> <a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">setAttribute</span> <span class="name">from</span> <a href="../setAttribute"><span class="string"><span class="string">'../setAttribute'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">appendChild</span> <span class="name">from</span> <a href="../appendChild"><span class="string"><span class="string">'../appendChild'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">addEventListener</span> <span class="name">from</span> <a href="../addEventListener"><span class="string"><span class="string">'../addEventListener'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">processTace</span><span class="_28">(</span><span class="name">tace</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="_7b">{</span><span class="name">t</span> <span class="_3d">=</span> <span class="string">'div'</span><span class="_2c">,</span> <span class="name">a</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_2c">,</span> <span class="name">c</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_2c">,</span> <span class="name">e</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_7d">}</span> <span class="_3d">=</span> <span class="name">tace</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">element</span> <span class="_3d">=</span> <span class="name">document</span><span class="_2e">.</span><span class="name">createElement</span><span class="_28">(</span><span class="name">t</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="name">args</span> <span class="name">of</span> <span class="name">a</span><span class="_2e">.</span><span class="name">filter</span><span class="_28">(</span><span class="name">noop</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">setAttribute</span><span class="_28">(</span><span class="name">element</span><span class="_2c">,</span> <span class="_2e_2e_2e">...</span><span class="name">args</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">appendChild</span><span class="_28">(</span><span class="name">element</span><span class="_2c">,</span> <span class="_2e_2e_2e">...</span><span class="name">c</span><span class="_2e">.</span><span class="name">filter</span><span class="_28">(</span><span class="name">noop</span><span class="_29">)</span><span class="_2e">.</span><span class="name">map</span><span class="_28">(</span><span class="name">createElement</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="name">args</span> <span class="name">of</span> <span class="name">e</span><span class="_2e">.</span><span class="name">filter</span><span class="_28">(</span><span class="name">noop</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">addEventListener</span><span class="_28">(</span><span class="name">element</span><span class="_2c">,</span> <span class="_2e_2e_2e">...</span><span class="name">args</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">element</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">createElement</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">isNode</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">data</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="if">if</span> <span class="_28">(</span><span class="name">isString</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">document</span><span class="_2e">.</span><span class="name">createTextNode</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">processTace</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">createElement</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/createElement/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">createElement</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/createElement/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>
