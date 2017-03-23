@@ -9,7 +9,6 @@ const glob = promisify(require('glob'));
 const constants = require('./constants');
 const buildModule = require('./buildModule');
 const buildDocument = require('./buildDocument');
-const buildIndexes = require('./buildIndexes');
 const compileJS = require('./compileJS');
 const compileCSS = require('./compileCSS');
 
@@ -50,7 +49,6 @@ function startServer() {
 			});
 		})
 	])
-	.then(buildIndexes)
 	.then(() => {
 		console.debug('starting sable server');
 		return sable({documentRoot: constants.dest});

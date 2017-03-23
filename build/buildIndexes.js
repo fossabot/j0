@@ -52,7 +52,7 @@ function buildIndexes() {
 			}
 			const destPath = path.join(dest, node.path, 'index.html');
 			const stream = mu.compileAndRender(indexTemplate, node);
-			console.info(`generate index of ${name}`);
+			console.info(`generate index of ${name || '/'}`);
 			return writeFile(destPath, stream);
 		}
 		rootTree.path = '';

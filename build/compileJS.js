@@ -7,9 +7,23 @@ const commonjs = require('rollup-plugin-commonjs');
 const babel = require('babel-core');
 const console = require('j1/console').create('compileJS');
 const writeFile = require('j1/writeFile');
+const fileSize = require('j1/fileSize');
 
 const {watch, format} = require('./constants');
 const projectRoot = path.join(__dirname, '..');
+
+function minify(src) {
+	return {
+		transformBundle: (code) => {
+			const {code: babeledCode} = babel.transform(code, {presets: ['latest']});
+			console.debug(`${src}\n${[
+				code.length,
+				babeledCode.length
+			].map(fileSize).join(' -> ')}`);
+			return babeledCode;
+		}
+	};
+}
 
 function compileJS(src, dest) {
 	console.debug(`${path.relative(projectRoot, src)}\n -> ${path.relative(projectRoot, dest)}`);
@@ -18,7 +32,8 @@ function compileJS(src, dest) {
 		plugins: [
 			builtins(),
 			nodeResolve({extensions: ['.mjs', '.js', '.json']}),
-			commonjs()
+			commonjs(),
+			minify(src)
 		]
 	};
 	if (watch) {
@@ -35,9 +50,8 @@ function compileJS(src, dest) {
 	}
 	return rollup.rollup(options)
 	.then((bundle) => {
-		const {code: esCode} = bundle.generate({format: format});
-		const {code: transpiledCode} = babel.transform(esCode, {presets: ['latest']});
-		return writeFile(dest, transpiledCode);
+		const {code} = bundle.generate({format: format});
+		return writeFile(dest, code);
 	});
 }
 

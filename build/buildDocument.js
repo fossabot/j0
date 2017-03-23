@@ -2,12 +2,15 @@ const path = require('path');
 const fs = require('fs');
 const console = require('j1/console').create('buildDocument');
 const promisify = require('j1/promisify');
+const debounce = require('j1/debounce');
 const paze = require('paze');
 const readdir = promisify(fs.readdir, fs);
 const stat = promisify(fs.stat, fs);
 
 const {ignore, src, dest, watch, template} = require('./constants');
 const packageJSON = require('../package/package');
+const buildIndexDebounce = 2000;
+const buildIndexes = debounce(require('./buildIndexes'), buildIndexDebounce);
 
 function wrapLine(line) {
 	return `<span class="linenum"></span>${line}`;
@@ -67,7 +70,7 @@ function buildDocument(file) {
 				src: scriptPath,
 				test: testScriptPath,
 				watch: watch,
-				beforeRender: function (context) {
+				beforeRender: function beforeRender(context) {
 					context.dest = destPath;
 					context.template = template;
 					context.name = dir;
@@ -90,6 +93,9 @@ function buildDocument(file) {
 					.join('/')}`;
 					context.code = formatCode(context.code);
 					context.test.code = formatCode(context.test.code);
+					if (watch) {
+						buildIndexes();
+					}
 				}
 			});
 		})
