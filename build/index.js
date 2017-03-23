@@ -22,11 +22,11 @@ function buildPageJS() {
 }
 
 function startServer() {
-	return Promise.all(
+	return Promise.all([
 		new Promise((resolve) => {
 			chokidar.watch(constants.src)
 				.on('add', function (file) {
-					this.unwatch();
+					this.unwatch(file);
 					buildModule(file);
 				})
 				.on('error', console.onError)
@@ -49,7 +49,7 @@ function startServer() {
 					});
 			});
 		})
-	)
+	])
 	.then(buildIndexes)
 	.then(() => {
 		console.debug('starting sable server');
