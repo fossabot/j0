@@ -184,9 +184,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return result;
 	}
 
+	function from() {
+		return Array.from.apply(Array, arguments);
+	}
+
+	function slice(iterable, start, end) {
+		return from(iterable).slice(start, end);
+	}
+
+	function of() {
+		return slice(arguments);
+	}
+
 	function polyfill$1() {
 		if (!Array.from) {
 			Array.from = map;
+		}
+		if (!Array.of) {
+			Array.of = of;
 		}
 		if (!Array.prototype.every) {
 			Array.prototype.every = every;

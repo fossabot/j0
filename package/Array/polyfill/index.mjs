@@ -1,11 +1,15 @@
 import Symbol from '../../Symbol';
 import Array from '..';
 import every from '../every/polyfill';
-import from from '../from/polyfill';
+import arrayFrom from '../from/polyfill';
+import arrayOf from '../of/polyfill';
 
 function polyfill() {
 	if (!Array.from) {
-		Array.from = from;
+		Array.from = arrayFrom;
+	}
+	if (!Array.of) {
+		Array.of = arrayOf;
 	}
 	if (!Array.prototype.every) {
 		Array.prototype.every = every;

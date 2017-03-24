@@ -1,19 +1,19 @@
-import from from '..';
+import Array from '../..';
 import isArray from '../../isArray';
 
-function fromArguments() {
-	return from(arguments);
+function createArrayFromArguments() {
+	return Array.from(arguments);
 }
 
 it('should create a new instance of array from arguments', function () {
-	const result = fromArguments(1, 2, 3);
+	const result = createArrayFromArguments(1, 2, 3);
 	assert.equal(isArray(result), true);
 	assert.deepEqual(result, [1, 2, 3]);
 });
 
 
 it('should create a new instance of array from an array-like object', function () {
-	const result = from({
+	const result = Array.from({
 		0: 1,
 		1: 2,
 		2: 3,
