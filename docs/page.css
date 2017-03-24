@@ -35,7 +35,7 @@ body {
 }
 body>#mocha,
 body>* {
-  width: 94vw;
+  width: 94%;
   max-width: 720px;
   margin: 12px auto;
 }
