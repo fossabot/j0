@@ -116,6 +116,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		assert.equal(actual, expected);
 	});
 
+	it('should find a character from a string', function () {
+		function matcher(x) {
+			return x === 'b';
+		}
+		var actual = find('abc', matcher);
+		var expected = 'b';
+		assert.equal(actual, expected);
+	});
+
 	it('should call matcher in a specified context', function () {
 		function matcher(x) {
 			this.sum += x;

@@ -98,6 +98,15 @@
 <span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should find a character from a string'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="function">function</span> <span class="name">matcher</span><span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">x</span> <span class="_3d_3d_2f_21_3d">===</span> <span class="string">'b'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">actual</span> <span class="_3d">=</span> <span class="name">find</span><span class="_28">(</span><span class="string">'abc'</span><span class="_2c">,</span> <span class="name">matcher</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="string">'b'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
 <span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should call matcher in a specified context'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="function">function</span> <span class="name">matcher</span><span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="this">this</span><span class="_2e">.</span><span class="name">sum</span> <span class="__3d">+=</span> <span class="name">x</span><span class="_3b">;</span>

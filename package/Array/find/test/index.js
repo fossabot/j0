@@ -47,6 +47,15 @@ it('should find an item from iterable', function () {
 	assert.equal(actual, expected);
 });
 
+it('should find a character from a string', function () {
+	function matcher(x) {
+		return x === 'b';
+	}
+	const actual = find('abc', matcher);
+	const expected = 'b';
+	assert.equal(actual, expected);
+});
+
 it('should call matcher in a specified context', function () {
 	function matcher(x) {
 		this.sum += x;
