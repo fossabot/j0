@@ -1,18 +1,33 @@
 import isArray from '..';
 
-const tests = [
-	[[undefined], false],
-	[[null], false],
-	[[NaN], false],
-	[[123], false],
-	[['123'], false],
-	[[{}], false],
-	[[[]], true],
-	[[function () {}], false]
-];
+it('should return false if the argument is undefined', function () {
+	assert.equal(isArray(), false);
+});
 
-for (const [args, expected] of tests) {
-	it(`should return ${expected} if the arguments are ${args}`, function () {
-		assert.equal(isArray(...args), expected);
-	});
-}
+it('should return false if the argument is null', function () {
+	assert.equal(isArray(null), false);
+});
+
+it('should return false if the argument is NaN', function () {
+	assert.equal(isArray(NaN), false);
+});
+
+it('should return false if the argument is a number', function () {
+	assert.equal(isArray(123), false);
+});
+
+it('should return false if the argument is a string', function () {
+	assert.equal(isArray('xyz'), false);
+});
+
+it('should return false if the argument is an object', function () {
+	assert.equal(isArray({}), false);
+});
+
+it('should return true if the argument is an array', function () {
+	assert.equal(isArray([]), true);
+});
+
+it('should return false if the argument is a function', function () {
+	assert.equal(isArray(function () {}), false);
+});

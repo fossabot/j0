@@ -196,12 +196,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return slice(arguments);
 	}
 
+	var toString = Object.prototype.toString;
+
+	function isArray(x) {
+		return toString.call(x) === '[object Array]';
+	}
+
 	function polyfill$1() {
 		if (!Array.from) {
 			Array.from = map;
 		}
 		if (!Array.of) {
 			Array.of = of;
+		}
+		if (!Array.isArray) {
+			Array.isArray = isArray;
 		}
 		if (!Array.prototype.every) {
 			Array.prototype.every = every;

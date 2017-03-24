@@ -1,7 +1,3 @@
-import toString from '../../Object/toString';
+import Array from '..';
 
-function isArray(x) {
-	return toString.call(x) === '[object Array]';
-}
-
-export default isArray;
+export default Array.isArray;

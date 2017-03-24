@@ -9,11 +9,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
-	var toString = Object.prototype.toString;
-
-	function isArray$1(x) {
-		return toString.call(x) === '[object Array]';
-	}
+	var isArray$1 = Array.isArray;
 
 	var tests = [[[[], 0, 1], false], [[[], [], []], true]];
 

@@ -3,6 +3,7 @@ import Array from '..';
 import every from '../every/polyfill';
 import arrayFrom from '../from/polyfill';
 import arrayOf from '../of/polyfill';
+import isArray from '../isArray/polyfill';
 
 function polyfill() {
 	if (!Array.from) {
@@ -10,6 +11,9 @@ function polyfill() {
 	}
 	if (!Array.of) {
 		Array.of = arrayOf;
+	}
+	if (!Array.isArray) {
+		Array.isArray = isArray;
 	}
 	if (!Array.prototype.every) {
 		Array.prototype.every = every;
