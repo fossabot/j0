@@ -1,4 +1,5 @@
 import noop from '../../noop';
+import forEach from '../forEach';
 import isFunction from '../../isFunction';
 
 function getMatcher(ref) {
@@ -7,17 +8,18 @@ function getMatcher(ref) {
 	};
 }
 
-function find(iterable, fn = noop) {
-	let index = 0;
+function find(iterable, fn = noop, thisArg) {
+	let result;
 	if (!isFunction(fn)) {
 		fn = getMatcher(fn);
 	}
-	for (const item of iterable) {
-		if (fn(item, index, iterable)) {
-			return item;
+	forEach(iterable, function (item, index) {
+		if (fn.call(thisArg, item, index, iterable)) {
+			result = item;
+			return true;
 		}
-		index += 1;
-	}
+	});
+	return result;
 }
 
 export default find;

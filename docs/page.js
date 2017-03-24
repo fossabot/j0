@@ -229,12 +229,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return typeof x === 'number';
 	}
 
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
 	function polyfill$2() {
 		if (!Object.prototype[Symbol$1.iterator]) {
 			Object.prototype[Symbol$1.iterator] = function () {
 				var _this3 = this;
 
-				if (isNumber(this.length)) {
+				if (isFunction(this.next)) {
+					return {
+						next: function next() {
+							return _this3.next();
+						}
+					};
+				} else if (isNumber(this.length)) {
 					var index = 0;
 					return {
 						next: function next() {
@@ -247,7 +257,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 					};
 				}
-				throw new TypeError('This object is not array-like');
+				throw new TypeError('This object is not iterable');
 			};
 		}
 	}
