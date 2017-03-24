@@ -1,5 +1,22 @@
 {
-  "private": true,
+  "name": "j0",
+  "license": "MIT",
+  "version": "0.0.56",
+  "description": "A library of wrappers and utility functions",
+  "author": {
+    "name": "Kei Ito",
+    "email": "kei.itof@gmail.com",
+    "url": "https://github.com/kei-ito"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "repository": "kei-ito/j0",
+  "keywords": [
+    "blogs",
+    "library",
+    "frontend"
+  ],
   "scripts": {
     "server": "node build --watch",
     "build": "node build",
