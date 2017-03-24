@@ -202,6 +202,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return toString.call(x) === '[object Array]';
 	}
 
+	function includes(searchElement) {
+		var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+		var index = fromIndex;
+		var length = this.length;
+
+		if (index < 0) {
+			index = length - index;
+		}
+		if (index < 0) {
+			index = 0;
+		}
+		for (; index < length; index += 1) {
+			if (this[index] === searchElement) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function polyfill$1() {
 		if (!Array.from) {
 			Array.from = map;
@@ -214,6 +234,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 		if (!Array.prototype.every) {
 			Array.prototype.every = every;
+		}
+		if (!Array.prototype.includes) {
+			Array.prototype.includes = includes;
 		}
 		if (!Array.prototype[Symbol$1.iterator]) {
 			Array.prototype[Symbol$1.iterator] = function () {
@@ -271,8 +294,124 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
+	var J0Promise = function () {
+		function J0Promise(fn) {
+			var _this4 = this;
+
+			_classCallCheck(this, J0Promise);
+
+			this.onFulfilled = [];
+			this.onRejected = [];
+			try {
+				fn(function (value) {
+					_this4.resolve(value);
+				}, function (error) {
+					_this4.reject(error);
+				});
+			} catch (error) {
+				this.reject(error);
+			}
+		}
+
+		_createClass(J0Promise, [{
+			key: 'resolve',
+			value: function resolve(value) {
+				var _this5 = this;
+
+				setTimeout(function () {
+					forEach(_this5.onFulfilled, function (onFulfilled) {
+						onFulfilled(value);
+					});
+				});
+			}
+		}, {
+			key: 'reject',
+			value: function reject(error) {
+				var _this6 = this;
+
+				setTimeout(function () {
+					forEach(_this6.onRejected, function (onRejected) {
+						onRejected(error);
+					});
+				});
+			}
+		}, {
+			key: 'then',
+			value: function then(onFulfilled, onRejected) {
+				var _this7 = this;
+
+				return new J0Promise(function (onFulfilled2, onRejected2) {
+					push(_this7.onFulfilled, isFunction(onFulfilled) ? function (value) {
+						console.log(value);
+						try {
+							var value2 = onFulfilled(value);
+							if (isThennable(value2)) {
+								value2.then(onFulfilled2, onRejected2);
+							} else {
+								onFulfilled2(value2);
+							}
+						} catch (error2) {
+							console.log(error2);
+							onRejected2(error2);
+						}
+					} : onFulfilled2);
+					push(_this7.onRejected, isFunction(onRejected) ? function (error) {
+						try {
+							var value2 = onRejected(error);
+							if (isThennable(value2)) {
+								value2.then(onFulfilled2, onRejected2);
+							} else {
+								onFulfilled2(value2);
+							}
+						} catch (error2) {
+							onRejected2(error2);
+						}
+					} : onRejected2);
+				});
+			}
+		}, {
+			key: 'catch',
+			value: function _catch(onRejected) {
+				return this.then(null, onRejected);
+			}
+		}], [{
+			key: 'resolve',
+			value: function resolve(value) {
+				return new J0Promise(function (onFulfilled) {
+					onFulfilled(value);
+				});
+			}
+		}, {
+			key: 'reject',
+			value: function reject(error) {
+				return new J0Promise(function () {
+					throw error;
+				});
+			}
+		}, {
+			key: 'race',
+			value: function race() {}
+		}, {
+			key: 'all',
+			value: function all() {}
+		}]);
+
+		return J0Promise;
+	}();
+
+	function isThennable(value) {
+		return value && isFunction(value.then) && isFunction(value.catch);
+	}
+
+	var polyfillPromise = function polyfillPromise() {
+		if (!window.Promise) {
+			window.Promise = J0Promise;
+		}
+	};
+
 	polyfill$2();
 	polyfill$1();
+	polyfillPromise();
 
 	/* global document, navigator */
 	function startMocha() {

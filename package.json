@@ -32,5 +32,8 @@
     "wdio-selenium-standalone-service": "0.0.8",
     "wdio-spec-reporter": "0.0.5",
     "webdriverio": "^4.6.2"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0"
   }
 }

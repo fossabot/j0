@@ -25,6 +25,7 @@
 <span class="linenum"></span><span class="import">import</span> <span class="name">arrayFrom</span> <span class="name">from</span> <a href="../from/polyfill"><span class="string"><span class="string">'../from/polyfill'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">arrayOf</span> <span class="name">from</span> <a href="../of/polyfill"><span class="string"><span class="string">'../of/polyfill'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">isArray</span> <span class="name">from</span> <a href="../isArray/polyfill"><span class="string"><span class="string">'../isArray/polyfill'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">includes</span> <span class="name">from</span> <a href="../includes/polyfill"><span class="string"><span class="string">'../includes/polyfill'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">polyfill</span><span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">Array</span><span class="_2e">.</span><span class="name">from</span><span class="_29">)</span> <span class="_7b">{</span>
@@ -38,6 +39,9 @@
 <span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
 <span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_2e">.</span><span class="name">every</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_2e">.</span><span class="name">every</span> <span class="_3d">=</span> <span class="name">every</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_2e">.</span><span class="name">includes</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_2e">.</span><span class="name">includes</span> <span class="_3d">=</span> <span class="name">includes</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
 <span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_5b">[</span><span class="name">Symbol</span><span class="_2e">.</span><span class="name">iterator</span><span class="_5d">]</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">Array</span><span class="_2e">.</span><span class="name">prototype</span><span class="_5b">[</span><span class="name">Symbol</span><span class="_2e">.</span><span class="name">iterator</span><span class="_5d">]</span> <span class="_3d">=</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
@@ -72,7 +76,7 @@
 
 <h2>About</h2>
 <footer>
-	<p>j0 is free and open source software released under an MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
+	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <script src="../../page.js"></script>
 <a class="TestResult" href="#mocha"></a>

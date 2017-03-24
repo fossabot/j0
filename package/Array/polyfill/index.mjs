@@ -4,6 +4,7 @@ import every from '../every/polyfill';
 import arrayFrom from '../from/polyfill';
 import arrayOf from '../of/polyfill';
 import isArray from '../isArray/polyfill';
+import includes from '../includes/polyfill';
 
 function polyfill() {
 	if (!Array.from) {
@@ -17,6 +18,9 @@ function polyfill() {
 	}
 	if (!Array.prototype.every) {
 		Array.prototype.every = every;
+	}
+	if (!Array.prototype.includes) {
+		Array.prototype.includes = includes;
 	}
 	if (!Array.prototype[Symbol.iterator]) {
 		Array.prototype[Symbol.iterator] = function () {
