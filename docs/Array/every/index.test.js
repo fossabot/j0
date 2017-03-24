@@ -11,40 +11,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return x;
 	}
 
+	function from() {
+		return Array.from.apply(Array, arguments);
+	}
+
 	function every(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
+		var thisArg = arguments[2];
 
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
-
-				if (!fn.call(thisArg, value, index, iterable)) {
-					return false;
-				}
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-
-		return true;
+		return from(iterable).every(fn, thisArg);
 	}
 
 	it('should return true if items are truthy', function () {

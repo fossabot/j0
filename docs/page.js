@@ -13,25 +13,41 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 })(undefined, function () {
 	'use strict';
 
+	function isString(x) {
+		return typeof x === 'string';
+	}
+
 	function noop(x) {
 		return x;
 	}
 
-	function every(iterable) {
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
+	function getMatcher(ref) {
+		return function (value) {
+			return ref === value;
+		};
+	}
+
+	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
 
 		var index = 0;
+		if (!isFunction(fn)) {
+			fn = getMatcher(fn);
+		}
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
 		var _iteratorError = undefined;
 
 		try {
 			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+				var item = _step.value;
 
-				if (!fn.call(thisArg, value, index, iterable)) {
-					return false;
+				if (fn(item, index, iterable)) {
+					return item;
 				}
 				index += 1;
 			}
@@ -46,74 +62,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			} finally {
 				if (_didIteratorError) {
 					throw _iteratorError;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	function isString(x) {
-		return typeof x === 'string';
-	}
-
-	var isString$1 = function isString$1() {
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
-
-		return every(args, isString);
-	};
-
-	function isFunction(x) {
-		return typeof x === 'function';
-	}
-
-	var isFunction$1 = function isFunction$1() {
-		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-			args[_key2] = arguments[_key2];
-		}
-
-		return every(args, isFunction);
-	};
-
-	function getMatcher(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
-	function find(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-
-		var index = 0;
-		if (!isFunction$1(fn)) {
-			fn = getMatcher(fn);
-		}
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var item = _step2.value;
-
-				if (fn(item, index, iterable)) {
-					return item;
-				}
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
 				}
 			}
 		}
@@ -139,7 +87,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'for',
 			value: function _for(key) {
-				if (isString$1(key)) {
+				if (isString(key)) {
 					return find(this.registry, function (_ref) {
 						var _ref2 = _slicedToArray(_ref, 2),
 						    symbolKey = _ref2[1];
@@ -210,7 +158,56 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	var Symbol$1 = _Symbol;
 
+	function forEach(iterable, fn) {
+		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
+
+		var index = 0;
+		var _iteratorNormalCompletion2 = true;
+		var _didIteratorError2 = false;
+		var _iteratorError2 = undefined;
+
+		try {
+			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var value = _step2.value;
+
+				if (fn.call(thisArg, value, index, iterable)) {
+					return;
+				}
+				index += 1;
+			}
+		} catch (err) {
+			_didIteratorError2 = true;
+			_iteratorError2 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion2 && _iterator2.return) {
+					_iterator2.return();
+				}
+			} finally {
+				if (_didIteratorError2) {
+					throw _iteratorError2;
+				}
+			}
+		}
+	}
+
+	function every(fn, thisArg) {
+		var result = true;
+		forEach(this, function () {
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+
+			result = fn.call.apply(fn, [thisArg].concat(args));
+			return !result;
+		});
+		return result;
+	}
+
 	function polyfill$1() {
+		if (!Array.prototype.every) {
+			Array.prototype.every = every;
+		}
 		if (!Array.prototype[Symbol$1.iterator]) {
 			Array.prototype[Symbol$1.iterator] = function () {
 				var _this2 = this;
@@ -230,6 +227,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
+	function isNumber(x) {
+		return typeof x === 'number';
+	}
+
+	function polyfill$2() {
+		if (!Object.prototype[Symbol$1.iterator]) {
+			Object.prototype[Symbol$1.iterator] = function () {
+				var _this3 = this;
+
+				if (isNumber(this.length)) {
+					var index = 0;
+					return {
+						next: function next() {
+							var result = {
+								value: _this3[index],
+								done: !(index < _this3.length)
+							};
+							index += 1;
+							return result;
+						}
+					};
+				}
+				throw new TypeError('This object is not array-like');
+			};
+		}
+	}
+
+	polyfill$2();
 	polyfill$1();
 
 	/* global document, navigator */

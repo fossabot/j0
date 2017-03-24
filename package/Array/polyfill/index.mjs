@@ -1,7 +1,11 @@
 import Symbol from '../../Symbol';
 import Array from '..';
+import every from '../every/polyfill';
 
 function polyfill() {
+	if (!Array.prototype.every) {
+		Array.prototype.every = every;
+	}
 	if (!Array.prototype[Symbol.iterator]) {
 		Array.prototype[Symbol.iterator] = function () {
 			let index = 0;

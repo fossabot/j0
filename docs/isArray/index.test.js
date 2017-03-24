@@ -9,27 +9,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
-	function noop(x) {
-		return x;
+	var toString = Object.prototype.toString;
+
+	function isArray$1(x) {
+		return toString.call(x) === '[object Array]';
 	}
 
-	function every(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
+	var tests = [[[[], 0, 1], false], [[[], [], []], true]];
 
-		var index = 0;
+	describe('isArray', function () {
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
 		var _iteratorError = undefined;
 
 		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
 
-				if (!fn.call(thisArg, value, index, iterable)) {
-					return false;
-				}
-				index += 1;
+			for (var _iterator = tests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var _step$value = _slicedToArray(_step.value, 2),
+				    args = _step$value[0],
+				    expected = _step$value[1];
+
+				it('should return ' + expected + ' if args is ' + args, function () {
+					assert.equal(isArray$1(0), false);
+				});
 			}
 		} catch (err) {
 			_didIteratorError = true;
@@ -42,56 +44,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			} finally {
 				if (_didIteratorError) {
 					throw _iteratorError;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	var toString = Object.prototype.toString;
-
-	function isArray$1(x) {
-		return toString.call(x) === '[object Array]';
-	}
-
-	var isArray = function isArray() {
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
-
-		return every(args, isArray$1);
-	};
-
-	var tests = [[[[], 0, 1], false], [[[], [], []], true]];
-
-	describe('isArray', function () {
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-
-			for (var _iterator2 = tests[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var _step2$value = _slicedToArray(_step2.value, 2),
-				    _args = _step2$value[0],
-				    expected = _step2$value[1];
-
-				it('should return ' + expected + ' if args is ' + _args, function () {
-					assert.equal(isArray(0), false);
-				});
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
 				}
 			}
 		}

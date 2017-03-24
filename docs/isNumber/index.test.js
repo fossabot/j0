@@ -11,89 +11,41 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function noop(x) {
-		return x;
-	}
-
-	function every(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
-
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
-
-				if (!fn.call(thisArg, value, index, iterable)) {
-					return false;
-				}
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-
-		return true;
-	}
-
 	function isNumber(x) {
 		return typeof x === 'number';
 	}
 
-	var isNumber$1 = function isNumber$1() {
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
-
-		return every(args, isNumber);
-	};
-
 	var tests = [[[undefined], false], [[null], false], [[NaN], true], [[123], true], [['123'], false], [[{}], false], [[[]], false], [[function () {}], false]];
 
-	var _iteratorNormalCompletion2 = true;
-	var _didIteratorError2 = false;
-	var _iteratorError2 = undefined;
+	var _iteratorNormalCompletion = true;
+	var _didIteratorError = false;
+	var _iteratorError = undefined;
 
 	try {
 		var _loop = function _loop() {
-			var _step2$value = _slicedToArray(_step2.value, 2),
-			    args = _step2$value[0],
-			    expected = _step2$value[1];
+			var _step$value = _slicedToArray(_step.value, 2),
+			    args = _step$value[0],
+			    expected = _step$value[1];
 
 			it('should return ' + expected + ' if the arguments are ' + args, function () {
-				assert.equal(isNumber$1.apply(undefined, _toConsumableArray(args)), expected);
+				assert.equal(isNumber.apply(undefined, _toConsumableArray(args)), expected);
 			});
 		};
 
-		for (var _iterator2 = tests[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+		for (var _iterator = tests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 			_loop();
 		}
 	} catch (err) {
-		_didIteratorError2 = true;
-		_iteratorError2 = err;
+		_didIteratorError = true;
+		_iteratorError = err;
 	} finally {
 		try {
-			if (!_iteratorNormalCompletion2 && _iterator2.return) {
-				_iterator2.return();
+			if (!_iteratorNormalCompletion && _iterator.return) {
+				_iterator.return();
 			}
 		} finally {
-			if (_didIteratorError2) {
-				throw _iteratorError2;
+			if (_didIteratorError) {
+				throw _iteratorError;
 			}
 		}
 	}

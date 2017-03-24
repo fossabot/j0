@@ -20,16 +20,10 @@
 <h2>Source</h2>
 <section class="Code">
 	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">noop</span> <span class="name">from</span> <a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">from</span> <span class="name">from</span> <a href="../from"><span class="string"><span class="string">'../from'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="function">function</span> <span class="name">every</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span> <span class="_3d">=</span> <span class="name">noop</span><span class="_2c">,</span> <span class="name">thisArg</span> <span class="_3d">=</span> <span class="name">iterable</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">index</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="name">value</span> <span class="name">of</span> <span class="name">iterable</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">fn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span> <span class="name">value</span><span class="_2c">,</span> <span class="name">index</span><span class="_2c">,</span> <span class="name">iterable</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="false">false</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">index</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="true">true</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">every</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span> <span class="_3d">=</span> <span class="name">noop</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">from</span><span class="_28">(</span><span class="name">iterable</span><span class="_29">)</span><span class="_2e">.</span><span class="name">every</span><span class="_28">(</span><span class="name">fn</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">every</span><span class="_3b">;</span></pre>

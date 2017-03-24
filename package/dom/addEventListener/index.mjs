@@ -20,13 +20,10 @@ function addListener(events, eventName, fn) {
 	}
 }
 
-function addEventListener(element, ...args) {
-	const fn = args.pop();
+function addEventListener(element, eventName, fn) {
 	const events = getEvents(element);
-	for (const eventName of args) {
-		element.addEventListener(eventName, fn);
-		addListener(events, eventName, fn);
-	}
+	element.addEventListener(eventName, fn);
+	addListener(events, eventName, fn);
 }
 
 export default addEventListener;

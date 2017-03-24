@@ -1,14 +1,8 @@
 import noop from '../../noop';
+import from from '../from';
 
-function every(iterable, fn = noop, thisArg = iterable) {
-	let index = 0;
-	for (const value of iterable) {
-		if (!fn.call(thisArg, value, index, iterable)) {
-			return false;
-		}
-		index += 1;
-	}
-	return true;
+function every(iterable, fn = noop, thisArg) {
+	return from(iterable).every(fn, thisArg);
 }
 
 export default every;

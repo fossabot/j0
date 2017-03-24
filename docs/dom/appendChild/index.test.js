@@ -40,27 +40,78 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	}
 
+	function isString(x) {
+		return typeof x === 'string';
+	}
+
+	function isNode(x) {
+		return x instanceof Node;
+	}
+
 	function noop(x) {
 		return x;
 	}
 
-	function every(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
+	function setAttribute(element, attrName) {
+		for (var _len2 = arguments.length, value = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+			value[_key2 - 2] = arguments[_key2];
+		}
 
-		var index = 0;
+		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	function getEvents(element) {
+		var j0ev = element.j0ev;
+
+		if (isUndefined(j0ev)) {
+			j0ev = {};
+			element.j0ev = j0ev;
+		}
+		return j0ev;
+	}
+
+	function addListener(events, eventName, fn) {
+		var listeners = events[eventName];
+		if (isUndefined(listeners)) {
+			listeners = [];
+			events[eventName] = listeners;
+		}
+		if (!listeners.includes(fn)) {
+			listeners.push(fn);
+		}
+	}
+
+	function addEventListener(element, eventName, fn) {
+		var events = getEvents(element);
+		element.addEventListener(eventName, fn);
+		addListener(events, eventName, fn);
+	}
+
+	function processTace() {
+		var tace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var _tace$t = tace.t,
+		    t = _tace$t === undefined ? 'div' : _tace$t,
+		    _tace$a = tace.a,
+		    a = _tace$a === undefined ? [] : _tace$a,
+		    _tace$c = tace.c,
+		    c = _tace$c === undefined ? [] : _tace$c,
+		    _tace$e = tace.e,
+		    e = _tace$e === undefined ? [] : _tace$e;
+
+		var element = document.createElement(t);
 		var _iteratorNormalCompletion2 = true;
 		var _didIteratorError2 = false;
 		var _iteratorError2 = undefined;
 
 		try {
-			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var value = _step2.value;
+			for (var _iterator2 = a.filter(noop)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var args = _step2.value;
 
-				if (!fn.call(thisArg, value, index, iterable)) {
-					return false;
-				}
-				index += 1;
+				setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
 			}
 		} catch (err) {
 			_didIteratorError2 = true;
@@ -77,89 +128,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			}
 		}
 
-		return true;
-	}
-
-	function isString(x) {
-		return typeof x === 'string';
-	}
-
-	var isString$1 = function isString$1() {
-		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-			args[_key2] = arguments[_key2];
-		}
-
-		return every(args, isString);
-	};
-
-	function isNode() {
-		for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-			args[_key3] = arguments[_key3];
-		}
-
-		return every(args, function (arg) {
-			return arg instanceof Node;
-		});
-	}
-
-	function setAttribute(element, attrName) {
-		for (var _len4 = arguments.length, value = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-			value[_key4 - 2] = arguments[_key4];
-		}
-
-		element.setAttribute(attrName, value.join(' '));
-	}
-
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
-
-	var isUndefined$1 = function isUndefined$1() {
-		for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-			args[_key5] = arguments[_key5];
-		}
-
-		return every(args, isUndefined);
-	};
-
-	function getEvents(element) {
-		var j0ev = element.j0ev;
-
-		if (isUndefined$1(j0ev)) {
-			j0ev = {};
-			element.j0ev = j0ev;
-		}
-		return j0ev;
-	}
-
-	function addListener(events, eventName, fn) {
-		var listeners = events[eventName];
-		if (isUndefined$1(listeners)) {
-			listeners = [];
-			events[eventName] = listeners;
-		}
-		if (!listeners.includes(fn)) {
-			listeners.push(fn);
-		}
-	}
-
-	function addEventListener(element) {
-		for (var _len6 = arguments.length, args = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-			args[_key6 - 1] = arguments[_key6];
-		}
-
-		var fn = args.pop();
-		var events = getEvents(element);
+		appendChild.apply(undefined, [element].concat(_toConsumableArray(c.filter(noop).map(createElement))));
 		var _iteratorNormalCompletion3 = true;
 		var _didIteratorError3 = false;
 		var _iteratorError3 = undefined;
 
 		try {
-			for (var _iterator3 = args[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var eventName = _step3.value;
+			for (var _iterator3 = e.filter(noop)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+				var _args = _step3.value;
 
-				element.addEventListener(eventName, fn);
-				addListener(events, eventName, fn);
+				addEventListener.apply(undefined, [element].concat(_toConsumableArray(_args)));
 			}
 		} catch (err) {
 			_didIteratorError3 = true;
@@ -175,70 +153,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				}
 			}
 		}
-	}
-
-	function processTace() {
-		var tace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-		var _tace$t = tace.t,
-		    t = _tace$t === undefined ? 'div' : _tace$t,
-		    _tace$a = tace.a,
-		    a = _tace$a === undefined ? [] : _tace$a,
-		    _tace$c = tace.c,
-		    c = _tace$c === undefined ? [] : _tace$c,
-		    _tace$e = tace.e,
-		    e = _tace$e === undefined ? [] : _tace$e;
-
-		var element = document.createElement(t);
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = a.filter(noop)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var _args = _step4.value;
-
-				setAttribute.apply(undefined, [element].concat(_toConsumableArray(_args)));
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
-		appendChild.apply(undefined, [element].concat(_toConsumableArray(c.filter(noop).map(createElement))));
-		var _iteratorNormalCompletion5 = true;
-		var _didIteratorError5 = false;
-		var _iteratorError5 = undefined;
-
-		try {
-			for (var _iterator5 = e.filter(noop)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-				var _args2 = _step5.value;
-
-				addEventListener.apply(undefined, [element].concat(_toConsumableArray(_args2)));
-			}
-		} catch (err) {
-			_didIteratorError5 = true;
-			_iteratorError5 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion5 && _iterator5.return) {
-					_iterator5.return();
-				}
-			} finally {
-				if (_didIteratorError5) {
-					throw _iteratorError5;
-				}
-			}
-		}
 
 		return element;
 	}
@@ -246,65 +160,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	function createElement(data) {
 		if (isNode(data)) {
 			return data;
-		} else if (isString$1(data)) {
+		} else if (isString(data)) {
 			return document.createTextNode(data);
 		}
 		return processTace(data);
 	}
 
-	function isFunction(x) {
-		return typeof x === 'function';
-	}
-
-	var isFunction$1 = function isFunction$1() {
-		for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-			args[_key7] = arguments[_key7];
-		}
-
-		return every(args, isFunction);
-	};
-
-	function clamp(x) {
-		var L = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -Infinity;
-		var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
-
-		if (H < L) {
-			var _ref = [H, L];
-			L = _ref[0];
-			H = _ref[1];
-		}
-		if (x < L) {
-			x = L;
-		} else if (H < x) {
-			x = H;
-		}
-		return x;
-	}
-
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	function toLength(value) {
-		var len = parseInt(value, 10);
-		return clamp(len, 0, MAX_SAFE_INTEGER);
-	}
-
-	function from(arrayLike, mapFn, thisArg) {
-		if (arrayLike === null) {
-			throw new TypeError('Array.from: requires an array-like object - not null or undefined');
-		}
-		if (!(isUndefined$1(mapFn) || isFunction$1(mapFn))) {
-			throw new TypeError('Array.from: when provided, the second argument must be a function');
-		}
-		var C = this;
-		var items = Object(arrayLike);
-		var length = toLength(items.length);
-		var A = isFunction$1(C) ? Object(new C(length)) : [];
-		for (var k = 0; k < length; k += 1) {
-			var value = items[k];
-			A[k] = mapFn ? mapFn.call(thisArg, value, k) : value;
-		}
-		A.length = length;
-		return A;
+	function from() {
+		return Array.from.apply(Array, arguments);
 	}
 
 	it('should append an element', function () {
