@@ -2,7 +2,6 @@ import Object from '../Object';
 import Date from '../Date';
 import isString from '../isString';
 import TypeError from '../TypeError';
-import find from '../Array/find';
 
 class SymbolRegistry {
 
@@ -19,17 +18,26 @@ class SymbolRegistry {
 
 	for(key) {
 		if (isString(key)) {
-			return find(this.registry, function ([, symbolKey]) {
-				return key === symbolKey;
-			}) || this.get(key);
+			const {length} = this.registry;
+			for (let i = 0; i < length; i += 1) {
+				const item = this.registry[i];
+				if (key === item[1]) {
+					return item[0];
+				}
+			}
+			return this.get(key);
 		}
 		throw new TypeError(`Symbol.for was called with non-string: ${key}`);
 	}
 
 	keyFor(sym) {
-		return find(this.registry, function ([symbol]) {
-			return sym === symbol;
-		});
+		const {length} = this.registry;
+		for (let i = 0; i < length; i += 1) {
+			const item = this.registry[i];
+			if (sym === item[0]) {
+				return item[1];
+			}
+		}
 	}
 
 	get Symbol() {

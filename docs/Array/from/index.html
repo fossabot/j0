@@ -31,11 +31,11 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">arrayFrom</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">from</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">isArray</span> <span class="name">from</span> <a href="../../isArray"><span class="string"><span class="string">'../../isArray'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">fromArguments</span><span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">arrayFrom</span><span class="_28">(</span><span class="name">arguments</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">from</span><span class="_28">(</span><span class="name">arguments</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should create a new instance of array from arguments'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
@@ -46,7 +46,12 @@
 <span class="linenum"></span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should create a new instance of array from an array-like object'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">result</span> <span class="_3d">=</span> <span class="name">arrayFrom</span><span class="_28">(</span><span class="_7b">{</span><span class="num">0</span><span class="_3a">:</span> <span class="num">1</span><span class="_2c">,</span> <span class="num">1</span><span class="_3a">:</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">2</span><span class="_3a">:</span> <span class="num">3</span><span class="_2c">,</span> <span class="name">length</span><span class="_3a">:</span> <span class="num">3</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">result</span> <span class="_3d">=</span> <span class="name">from</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">0</span><span class="_3a">:</span> <span class="num">1</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">1</span><span class="_3a">:</span> <span class="num">2</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">2</span><span class="_3a">:</span> <span class="num">3</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span><span class="_3a">:</span> <span class="num">3</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isArray</span><span class="_28">(</span><span class="name">result</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">result</span><span class="_2c">,</span> <span class="_5b">[</span><span class="num">1</span><span class="_2c">,</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">3</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>

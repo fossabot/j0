@@ -1,5 +1,3 @@
-function from() {
+import map from '../map';
 
-}
-
-export default
+export default map;

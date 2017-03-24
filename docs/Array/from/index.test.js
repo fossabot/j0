@@ -28,7 +28,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	});
 
 	it('should create a new instance of array from an array-like object', function () {
-		var result = from({ 0: 1, 1: 2, 2: 3, length: 3 });
+		var result = from({
+			0: 1,
+			1: 2,
+			2: 3,
+			length: 3
+		});
 		assert.equal(isArray(result), true);
 		assert.deepEqual(result, [1, 2, 3]);
 	});

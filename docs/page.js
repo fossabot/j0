@@ -1,7 +1,5 @@
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -15,56 +13,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function isString(x) {
 		return typeof x === 'string';
-	}
-
-	function noop(x) {
-		return x;
-	}
-
-	function isFunction(x) {
-		return typeof x === 'function';
-	}
-
-	function getMatcher(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
-	function find(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-
-		var index = 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher(fn);
-		}
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var item = _step.value;
-
-				if (fn(item, index, iterable)) {
-					return item;
-				}
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
 	}
 
 	var SymbolRegistry = function () {
@@ -88,24 +36,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'for',
 			value: function _for(key) {
 				if (isString(key)) {
-					return find(this.registry, function (_ref) {
-						var _ref2 = _slicedToArray(_ref, 2),
-						    symbolKey = _ref2[1];
+					var length = this.registry.length;
 
-						return key === symbolKey;
-					}) || this.get(key);
+					for (var i = 0; i < length; i += 1) {
+						var item = this.registry[i];
+						if (key === item[1]) {
+							return item[0];
+						}
+					}
+					return this.get(key);
 				}
 				throw new TypeError('Symbol.for was called with non-string: ' + key);
 			}
 		}, {
 			key: 'keyFor',
 			value: function keyFor(sym) {
-				return find(this.registry, function (_ref3) {
-					var _ref4 = _slicedToArray(_ref3, 1),
-					    symbol = _ref4[0];
+				var length = this.registry.length;
 
-					return sym === symbol;
-				});
+				for (var i = 0; i < length; i += 1) {
+					var item = this.registry[i];
+					if (sym === item[0]) {
+						return item[1];
+					}
+				}
 			}
 		}, {
 			key: 'Symbol',
@@ -158,17 +111,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	var Symbol$1 = _Symbol;
 
-	function forEach(iterable, fn) {
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
-
+	function forEach(iterable, fn, thisArg) {
 		var index = 0;
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
 
 		try {
-			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var value = _step2.value;
+			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var value = _step.value;
 
 				if (fn.call(thisArg, value, index, iterable)) {
 					return;
@@ -176,16 +127,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				index += 1;
 			}
 		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
+			_didIteratorError = true;
+			_iteratorError = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
 				}
 			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
+				if (_didIteratorError) {
+					throw _iteratorError;
 				}
 			}
 		}
@@ -204,7 +155,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return result;
 	}
 
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+			args[_key2 - 1] = arguments[_key2];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
+	function noop(x) {
+		return x;
+	}
+
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function () {
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
+			}
+
+			push(result, fn.call.apply(fn, [thisArg].concat(args)));
+		});
+		return result;
+	}
+
 	function polyfill$1() {
+		if (!Array.from) {
+			Array.from = map;
+		}
 		if (!Array.prototype.every) {
 			Array.prototype.every = every;
 		}
@@ -266,13 +249,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function showEnvironment() {
 		var environment = document.getElementById('environment');
-		var _iteratorNormalCompletion3 = true;
-		var _didIteratorError3 = false;
-		var _iteratorError3 = undefined;
+		var _iteratorNormalCompletion2 = true;
+		var _didIteratorError2 = false;
+		var _iteratorError2 = undefined;
 
 		try {
-			for (var _iterator3 = Object.keys(navigator.constructor.prototype)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var propertyName = _step3.value;
+			for (var _iterator2 = Object.keys(navigator.constructor.prototype)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var propertyName = _step2.value;
 
 				var tr = document.createElement('tr');
 				var th = document.createElement('th');
@@ -283,16 +266,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				environment.appendChild(tr).classList.add(typeof value === 'undefined' ? 'undefined' : _typeof(value));
 			}
 		} catch (err) {
-			_didIteratorError3 = true;
-			_iteratorError3 = err;
+			_didIteratorError2 = true;
+			_iteratorError2 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion3 && _iterator3.return) {
-					_iterator3.return();
+				if (!_iteratorNormalCompletion2 && _iterator2.return) {
+					_iterator2.return();
 				}
 			} finally {
-				if (_didIteratorError3) {
-					throw _iteratorError3;
+				if (_didIteratorError2) {
+					throw _iteratorError2;
 				}
 			}
 		}

@@ -7,9 +7,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
-	function forEach(iterable, fn) {
-		var thisArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : iterable;
-
+	function forEach(iterable, fn, thisArg) {
 		var index = 0;
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
