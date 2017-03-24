@@ -1,5 +1,7 @@
 /* global document, navigator */
 import '../package/polyfill';
+import getBody from '../package/getBody';
+import onError from '../package/onError';
 
 function startMocha() {
 	mocha.run().once('end', function () {
@@ -20,7 +22,11 @@ function showEnvironment() {
 	}
 }
 
-if (mocha) {
-	startMocha();
-}
-showEnvironment();
+getBody
+.then(function () {
+	if (mocha) {
+		startMocha();
+	}
+	showEnvironment();
+})
+.catch(onError);

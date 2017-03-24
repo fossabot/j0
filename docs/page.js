@@ -413,6 +413,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	polyfill$1();
 	polyfillPromise();
 
+	var INTERVAL = 100;
+
+	var getBody = new Promise(function (resolve) {
+		function get() {
+			var _document = document,
+			    body = _document.body;
+
+			if (body) {
+				resolve(body);
+			} else {
+				setTimeout(get, INTERVAL);
+			}
+		}
+		get();
+	});
+
+	function onError(error) {
+		onError.listener(error);
+	}
+
+	onError.listener = function (error) {
+		console.error(error);
+	};
+
 	/* global document, navigator */
 	function startMocha() {
 		mocha.run().once('end', function () {
@@ -454,8 +478,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
-	if (mocha) {
-		startMocha();
-	}
-	showEnvironment();
+	getBody.then(function () {
+		if (mocha) {
+			startMocha();
+		}
+		showEnvironment();
+	}).catch(onError);
 });

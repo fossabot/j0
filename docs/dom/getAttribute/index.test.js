@@ -64,6 +64,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return typeof x === 'undefined';
 	}
 
+	function includes(iterable, searchElement, fromIndex) {
+		return Array.from(iterable).includes(searchElement, fromIndex);
+	}
+
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+			args[_key3 - 1] = arguments[_key3];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
 	function getEvents(element) {
 		var j0ev = element.j0ev;
 
@@ -80,8 +94,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			listeners = [];
 			events[eventName] = listeners;
 		}
-		if (!listeners.includes(fn)) {
-			listeners.push(fn);
+		if (!includes(listeners, fn)) {
+			push(listeners, fn);
 		}
 	}
 

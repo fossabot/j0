@@ -1,4 +1,6 @@
 import isUndefined from '../../isUndefined';
+import includes from '../../Array/includes';
+import push from '../../Array/push';
 
 function getEvents(element) {
 	let {j0ev} = element;
@@ -15,8 +17,8 @@ function addListener(events, eventName, fn) {
 		listeners = [];
 		events[eventName] = listeners;
 	}
-	if (!listeners.includes(fn)) {
-		listeners.push(fn);
+	if (!includes(listeners, fn)) {
+		push(listeners, fn);
 	}
 }
 
