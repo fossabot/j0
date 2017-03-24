@@ -1,7 +1,7 @@
 import isFunction from '../../isFunction';
 import push from '../../Array/push';
 import forEach from '../../Array/forEach';
-import setTimeout from '../../setTimeout';
+import setImmediate from '../../setImmediate';
 
 class J0Promise {
 
@@ -39,7 +39,7 @@ class J0Promise {
 	static all() {}
 
 	resolve(value) {
-		setTimeout(() => {
+		setImmediate(() => {
 			forEach(this.onFulfilled, function (onFulfilled) {
 				onFulfilled(value);
 			});
@@ -47,7 +47,7 @@ class J0Promise {
 	}
 
 	reject(error) {
-		setTimeout(() => {
+		setImmediate(() => {
 			forEach(this.onRejected, function (onRejected) {
 				onRejected(error);
 			});
@@ -57,7 +57,6 @@ class J0Promise {
 	then(onFulfilled, onRejected) {
 		return new J0Promise((onFulfilled2, onRejected2) => {
 			push(this.onFulfilled, isFunction(onFulfilled) ? (value) => {
-				console.log(value);
 				try {
 					const value2 = onFulfilled(value);
 					if (isThennable(value2)) {
@@ -66,7 +65,6 @@ class J0Promise {
 						onFulfilled2(value2);
 					}
 				} catch (error2) {
-					console.log(error2);
 					onRejected2(error2);
 				}
 			} : onFulfilled2);

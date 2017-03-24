@@ -1,5 +1,7 @@
 'use strict';
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -294,6 +296,107 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	function includes$2(iterable, searchElement, fromIndex) {
+		return Array.from(iterable).includes(searchElement, fromIndex);
+	}
+
+	function getEvents(element) {
+		var j0ev = element.j0ev;
+
+		if (isUndefined(j0ev)) {
+			j0ev = {};
+			element.j0ev = j0ev;
+		}
+		return j0ev;
+	}
+
+	function addListener(events, eventName, fn) {
+		var listeners = events[eventName];
+		if (isUndefined(listeners)) {
+			listeners = [];
+			events[eventName] = listeners;
+		}
+		if (!includes$2(listeners, fn)) {
+			push(listeners, fn);
+		}
+	}
+
+	function addEventListener(element, eventName, fn) {
+		var events = getEvents(element);
+		element.addEventListener(eventName, fn);
+		addListener(events, eventName, fn);
+	}
+
+	var setImmediateAvailable = void 0;
+	var firstImmediate = true;
+	var immediateCount = 0;
+	var tasks = {};
+	var suffix = '_setImmediate';
+	var _window2 = window,
+	    setImmediateNative = _window2.setImmediate;
+
+
+	function setImmediatePostMessage(fn) {
+		if (firstImmediate) {
+			firstImmediate = false;
+			addEventListener(window, 'message', function (event) {
+				var _event$data$split = event.data.split(suffix),
+				    _event$data$split2 = _slicedToArray(_event$data$split, 1),
+				    key = _event$data$split2[0];
+
+				var task = tasks[key];
+				if (task) {
+					task();
+				}
+				delete tasks[key];
+			});
+		}
+		immediateCount += 1;
+		postMessage('' + immediateCount + suffix, '*');
+		tasks[immediateCount] = fn;
+		return immediateCount;
+	}
+
+	function setImmediateTimeout(fn) {
+		return setTimeout(fn);
+	}
+
+	function setImmediate(fn) {
+		return setImmediateAvailable(fn);
+	}
+
+	function testImmediate(fn, onSuccess) {
+		var value = 1;
+		var expected = (1 + 1) * 2;
+		fn(function () {
+			value *= 2;
+			if (value === expected) {
+				onSuccess();
+			}
+		});
+		value += 1;
+	}
+
+	setImmediateAvailable = setImmediateTimeout;
+	setTimeout(function () {
+		if (postMessage) {
+			testImmediate(setImmediatePostMessage, function () {
+				if (setImmediateAvailable !== setImmediateNative) {
+					setImmediateAvailable = setImmediatePostMessage;
+				}
+			});
+		}
+		if (setImmediateNative) {
+			testImmediate(setImmediateNative, function () {
+				setImmediateAvailable = setImmediateNative;
+			});
+		}
+	});
+
 	var J0Promise = function () {
 		function J0Promise(fn) {
 			var _this4 = this;
@@ -318,7 +421,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function resolve(value) {
 				var _this5 = this;
 
-				setTimeout(function () {
+				setImmediate(function () {
 					forEach(_this5.onFulfilled, function (onFulfilled) {
 						onFulfilled(value);
 					});
@@ -329,7 +432,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function reject(error) {
 				var _this6 = this;
 
-				setTimeout(function () {
+				setImmediate(function () {
 					forEach(_this6.onRejected, function (onRejected) {
 						onRejected(error);
 					});
@@ -342,7 +445,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				return new J0Promise(function (onFulfilled2, onRejected2) {
 					push(_this7.onFulfilled, isFunction(onFulfilled) ? function (value) {
-						console.log(value);
 						try {
 							var value2 = onFulfilled(value);
 							if (isThennable(value2)) {
@@ -351,7 +453,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								onFulfilled2(value2);
 							}
 						} catch (error2) {
-							console.log(error2);
 							onRejected2(error2);
 						}
 					} : onFulfilled2);
