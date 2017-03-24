@@ -3,3 +3,4 @@ npm-debug.log
 server/compiled-*
 test/specs/**/*.js
 test/results
+__results
