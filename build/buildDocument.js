@@ -16,12 +16,16 @@ function wrapLine(line) {
 	return `<span class="linenum"></span>${line}`;
 }
 
-function convertRelativeLinks(line) {
-	return line.replace(/<span class="string">('|")(\.[./\w-]+)\1<\/span>/g, (match, quote, relativePath) => {
+function convertRelativeLinks(line, linkSkip = 0) {
+	return line.replace(/<span class="string">('|")(\.[./\w-]+)\1<\/span>/g, (code, quote, relativePath) => {
 		if (relativePath === '..') {
-			return match;
+			return code;
 		}
-		return `<a href="${relativePath}"><span class="string">${match}</span></a>`;
+		return `<a href="${relativePath.replace(/^(?:\.\.\/)+/, (linkFragment) => {
+			return linkFragment.split('/')
+			.slice(linkSkip)
+			.join('/');
+		})}"><span class="string">${code}</span></a>`;
 	});
 }
 
@@ -29,17 +33,15 @@ function convertTabs(line) {
 	return line.replace(/\t/g, '<span class="indent">\t</span>');
 }
 
-function formatCode(code) {
+function formatCode(code, linkSkip) {
 	return code
 	.split(/\n/)
 	.map((line) => {
-		return [
-			convertRelativeLinks,
-			convertTabs,
-			wrapLine
-		].reduce((lineString, fn) => {
-			return fn(lineString);
-		}, line);
+		let result = line;
+		result = convertRelativeLinks(result, linkSkip);
+		result = convertTabs(result);
+		result = wrapLine(result);
+		return result;
 	})
 	.join('\n');
 }
@@ -92,7 +94,7 @@ function buildDocument(file) {
 					})
 					.join('/')}`;
 					context.code = formatCode(context.code);
-					context.test.code = formatCode(context.test.code);
+					context.test.code = formatCode(context.test.code, 1);
 					if (watch) {
 						buildIndexes();
 					}
