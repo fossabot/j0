@@ -1,0 +1,112 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>j0/Array/map</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
+<link href="../../page.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/9701068490.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
+<script>
+	window.global = window;
+	window.assert = chai.assert;
+	mocha.setup('bdd');
+</script>
+<script src="index.test.js"></script>
+<h1 id="title"><a href="../../">j0</a>/<a href="../">Array</a>/map<span class="version">0.0.55</span></h1>
+<ul class="Children" data-count="0">
+	
+</ul>
+<h2>Source</h2>
+<section class="Code">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">forEach</span> <span class="name">from</span> <a href="../forEach"><span class="string"><span class="string">'../forEach'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">push</span> <span class="name">from</span> <a href="../push"><span class="string"><span class="string">'../push'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">noop</span> <span class="name">from</span> <a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">map</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span> <span class="_3d">=</span> <span class="name">noop</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">result</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">forEach</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_2e_2e_2e">...</span><span class="name">args</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">push</span><span class="_28">(</span><span class="name">result</span><span class="_2c">,</span> <span class="name">fn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span> <span class="_2e_2e_2e">...</span><span class="name">args</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">result</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">map</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Array/map/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+
+<h2>Tests</h2>
+<section class="TestCode">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">map</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should iterate over an array'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">actual</span> <span class="_3d">=</span> <span class="name">map</span><span class="_28">(</span><span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="num">1</span><span class="_2c">,</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">3</span><span class="_5d">]</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">x</span> <span class="_2a">*</span> <span class="num">2</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">4</span><span class="_2c">,</span> <span class="num">6</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should iterate over an array-like'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">actual</span> <span class="_3d">=</span> <span class="name">map</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">0</span><span class="_3a">:</span> <span class="num">0</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">1</span><span class="_3a">:</span> <span class="num">1</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">2</span><span class="_3a">:</span> <span class="num">2</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="num">3</span><span class="_3a">:</span> <span class="num">3</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span><span class="_3a">:</span> <span class="num">4</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">x</span> <span class="_2a">*</span> <span class="num">2</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">4</span><span class="_2c">,</span> <span class="num">6</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should iterate over a string'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">actual</span> <span class="_3d">=</span> <span class="name">map</span><span class="_28">(</span><span class="string">'xyz'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">x</span> <span class="_2b_2f_2d">+</span> <span class="name">x</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="string">'xx'</span><span class="_2c">,</span> <span class="string">'yy'</span><span class="_2c">,</span> <span class="string">'zz'</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should iterate over an iterable'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">counter</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">iterable</span> <span class="_3d">=</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">next</span><span class="_3a">:</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">counter</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">value</span><span class="_3a">:</span> <span class="name">counter</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">done</span><span class="_3a">:</span> <span class="num">4</span> <span class="_3c_2f_3e">&lt;</span> <span class="name">counter</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">actual</span> <span class="_3d">=</span> <span class="name">map</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">x</span> <span class="_2a">*</span> <span class="num">2</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="num">2</span><span class="_2c">,</span> <span class="num">4</span><span class="_2c">,</span> <span class="num">6</span><span class="_2c">,</span> <span class="num">8</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">actual</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">it</span><span class="_28">(</span><span class="string">'should call fn in a specified context'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="function">function</span> <span class="name">fn</span><span class="_28">(</span><span class="name">value</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="this">this</span><span class="_2e">.</span><span class="name">sum</span> <span class="__3d">+=</span> <span class="name">value</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="this">this</span><span class="_2e">.</span><span class="name">sum</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">context</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="name">sum</span><span class="_3a">:</span> <span class="num">0</span><span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">result</span> <span class="_3d">=</span> <span class="name">map</span><span class="_28">(</span><span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="num">1</span><span class="_2c">,</span> <span class="num">2</span><span class="_2c">,</span> <span class="num">3</span><span class="_2c">,</span> <span class="num">4</span><span class="_2c">,</span> <span class="num">5</span><span class="_5d">]</span><span class="_2c">,</span> <span class="name">fn</span><span class="_2c">,</span> <span class="name">context</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">expected</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="num">1</span><span class="_2c">,</span> <span class="num">3</span><span class="_2c">,</span> <span class="num">6</span><span class="_2c">,</span> <span class="num">10</span><span class="_2c">,</span> <span class="num">15</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span><span class="name">result</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Array/map/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+<h2>Result</h2>
+<div id="mocha"></div>
+<h2>Your Environment</h2>
+<table><tbody id="environment"></tbody></table>
+
+<h2>About</h2>
+<footer>
+	<p>j0 is free and open source software released under an MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
+</footer>
+<script src="../../page.js"></script>
+<a class="TestResult" href="#mocha"></a>
