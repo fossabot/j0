@@ -1,7 +1,8 @@
-import Object from '../Object';
-import Date from '../Date';
-import isString from '../isString';
-import TypeError from '../TypeError';
+import Object from '../../Object';
+import Date from '../../Date';
+import isString from '../../isString';
+import TypeError from '../../TypeError';
+import window from '../../window';
 
 class SymbolRegistry {
 
@@ -72,4 +73,10 @@ class SymbolRegistry {
 
 }
 
-export default SymbolRegistry;
+function polyfill() {
+	if (!window.Symbol) {
+		window.Symbol = new SymbolRegistry().Symbol;
+	}
+}
+
+export default polyfill;
