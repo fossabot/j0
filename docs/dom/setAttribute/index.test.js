@@ -184,19 +184,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return element.getAttribute(attributeName);
 	}
 
-	it('should set an attribute to an element', function () {
-		var attributeName = 'a';
-		var attributeValue = 'b';
-		var element = createElement({});
-		setAttribute(element, attributeName, attributeValue);
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
+	describe('dom/setAttribute', function () {
 
-	it('should set a "data-" prefixed attribute to an element', function () {
-		var attributeName = 'data-a';
-		var attributeValue = 'b';
-		var element = createElement({});
-		setAttribute(element, attributeName, attributeValue);
-		assert.equal(getAttribute(element, attributeName), attributeValue);
+		it('should set an attribute to an element', function () {
+			var attributeName = 'a';
+			var attributeValue = 'b';
+			var element = createElement({});
+			setAttribute(element, attributeName, attributeValue);
+			assert.equal(getAttribute(element, attributeName), attributeValue);
+		});
+
+		it('should set a "data-" prefixed attribute to an element', function () {
+			var attributeName = 'data-a';
+			var attributeValue = 'b';
+			var element = createElement({});
+			setAttribute(element, attributeName, attributeValue);
+			assert.equal(getAttribute(element, attributeName), attributeValue);
+		});
 	});
 });

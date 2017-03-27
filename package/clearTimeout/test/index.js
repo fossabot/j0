@@ -1,21 +1,23 @@
 import assert from 'assert';
 import Promise from '../../Promise';
-import Date from '../../Date';
-import setTimeout from '..';
+import clearTimeout from '..';
+import setTimeout from '../../setTimeout';
 
 const WAIT = 100;
-const MARGIN = 0.9;
 
-describe('setTimeout', function () {
+describe('clearTimeout', function () {
 
-	it(`should call fn after ${WAIT}ms`, function () {
-		const start = Date.now();
+	it('should cancel calling', function () {
+		let count = 0;
 		return new Promise((resolve) => {
+			const timer = setTimeout(function () {
+				count += 1;
+			});
+			clearTimeout(timer);
 			setTimeout(resolve, WAIT);
 		})
 		.then(() => {
-			const elapsed = Date.now() - start;
-			assert.equal(WAIT * MARGIN < elapsed, true);
+			assert.equal(count, 0);
 		});
 	});
 

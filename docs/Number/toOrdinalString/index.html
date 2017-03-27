@@ -7,11 +7,7 @@
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script>
-	window.global = window;
-	window.assert = chai.assert;
-	mocha.setup('bdd');
-</script>
+<script src="../../polyfill.js"></script>
 <script src="../../page.js"></script>
 <h1 id="title"><a href="../../">j0</a>/<a href="../">Number</a>/toOrdinalString<span class="version">0.0.55</span></h1>
 <ul class="Children" data-count="0">
@@ -47,35 +43,35 @@
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">toOrdinalString</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="const">const</span> <span class="name">tests</span> <span class="_3d">=</span> <span class="_5b">[</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="string">'0th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">1</span><span class="_2c">,</span> <span class="string">'1st'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">2</span><span class="_2c">,</span> <span class="string">'2nd'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">3</span><span class="_2c">,</span> <span class="string">'3rd'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">4</span><span class="_2c">,</span> <span class="string">'4th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">5</span><span class="_2c">,</span> <span class="string">'5th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">6</span><span class="_2c">,</span> <span class="string">'6th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">7</span><span class="_2c">,</span> <span class="string">'7th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">8</span><span class="_2c">,</span> <span class="string">'8th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">9</span><span class="_2c">,</span> <span class="string">'9th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">10</span><span class="_2c">,</span> <span class="string">'10th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">11</span><span class="_2c">,</span> <span class="string">'11th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">12</span><span class="_2c">,</span> <span class="string">'12th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">13</span><span class="_2c">,</span> <span class="string">'13th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">14</span><span class="_2c">,</span> <span class="string">'14th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">15</span><span class="_2c">,</span> <span class="string">'15th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">16</span><span class="_2c">,</span> <span class="string">'16th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">17</span><span class="_2c">,</span> <span class="string">'17th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">18</span><span class="_2c">,</span> <span class="string">'18th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">19</span><span class="_2c">,</span> <span class="string">'19th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">20</span><span class="_2c">,</span> <span class="string">'20th'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">121</span><span class="_2c">,</span> <span class="string">'121st'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">122</span><span class="_2c">,</span> <span class="string">'122nd'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">123</span><span class="_2c">,</span> <span class="string">'123rd'</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5b">[</span><span class="num">124</span><span class="_2c">,</span> <span class="string">'124th'</span><span class="_5d">]</span>
-<span class="linenum"></span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'Number/toOrdinalString'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'toOrdinalString'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">tests</span> <span class="_3d">=</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">0</span><span class="_2c">,</span> <span class="string">'0th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">1</span><span class="_2c">,</span> <span class="string">'1st'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">2</span><span class="_2c">,</span> <span class="string">'2nd'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">3</span><span class="_2c">,</span> <span class="string">'3rd'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">4</span><span class="_2c">,</span> <span class="string">'4th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">5</span><span class="_2c">,</span> <span class="string">'5th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">6</span><span class="_2c">,</span> <span class="string">'6th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">7</span><span class="_2c">,</span> <span class="string">'7th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">8</span><span class="_2c">,</span> <span class="string">'8th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">9</span><span class="_2c">,</span> <span class="string">'9th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">10</span><span class="_2c">,</span> <span class="string">'10th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">11</span><span class="_2c">,</span> <span class="string">'11th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">12</span><span class="_2c">,</span> <span class="string">'12th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">13</span><span class="_2c">,</span> <span class="string">'13th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">14</span><span class="_2c">,</span> <span class="string">'14th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">15</span><span class="_2c">,</span> <span class="string">'15th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">16</span><span class="_2c">,</span> <span class="string">'16th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">17</span><span class="_2c">,</span> <span class="string">'17th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">18</span><span class="_2c">,</span> <span class="string">'18th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">19</span><span class="_2c">,</span> <span class="string">'19th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">20</span><span class="_2c">,</span> <span class="string">'20th'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">121</span><span class="_2c">,</span> <span class="string">'121st'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">122</span><span class="_2c">,</span> <span class="string">'122nd'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">123</span><span class="_2c">,</span> <span class="string">'123rd'</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="num">124</span><span class="_2c">,</span> <span class="string">'124th'</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_5d">]</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="_5b">[</span><span class="name">n</span><span class="_2c">,</span> <span class="name">expected</span><span class="_5d">]</span> <span class="name">of</span> <span class="name">tests</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="_60">`</span><span class="template">should return </span><span class="_24_7b">${</span><span class="name">expected</span><span class="_7d">}</span><span class="template"> if the argument is </span><span class="_24_7b">${</span><span class="name">n</span><span class="_7d">}</span><span class="_60">`</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>

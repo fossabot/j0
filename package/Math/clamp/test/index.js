@@ -1,14 +1,21 @@
 import clamp from '..';
 
-const tests = [
-	[[0, 1, 2], 1],
-	[[0, 2], 2],
-	[[2, 1, 3], 2],
-	[[2, 3, 1], 2]
-];
+describe('Math/clamp', function () {
 
-for (const [args, expected] of tests) {
-	it(`should return ${expected} if the arguments are ${args}`, function () {
-		assert.equal(clamp(...args), expected);
+	it('should return 1 if the arguments are [0, 1, 2]', function () {
+		assert.equal(clamp(0, 1, 2), 1);
 	});
-}
+
+	it('should return 2 if the arguments are [0, 2]', function () {
+		assert.equal(clamp(0, 2), 2);
+	});
+
+	it('should return 2 if the arguments are [2, 1, 3]', function () {
+		assert.equal(clamp(2, 1, 3), 2);
+	});
+
+	it('should return 2 if the arguments are [2, 3, 1]', function () {
+		assert.equal(clamp(2, 3, 1), 2);
+	});
+
+});

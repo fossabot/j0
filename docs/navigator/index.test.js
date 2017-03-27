@@ -6,4 +6,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
+
+	describe('navigator', function () {
+
+		it('should have userAgent', function () {
+			assert.equal(0 < navigator.userAgent.length, true);
+		});
+	});
 });

@@ -7,6 +7,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
+	function noopTrue() {
+		return true;
+	}
+
+	describe('noop/true', function () {
+
+		it('should return true', function () {
+			assert.equal(noopTrue(false), true);
+		});
+	});
+
 	function noop(x) {
 		return x;
 	}

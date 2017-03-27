@@ -4,6 +4,8 @@ import isString from '../../isString';
 import TypeError from '../../TypeError';
 import window from '../../window';
 
+const hex = 16;
+
 class SymbolRegistry {
 
 	constructor() {
@@ -11,9 +13,9 @@ class SymbolRegistry {
 		this.registry = [];
 	}
 
-	get(key = '') {
-		const symbol = `Symbol(${key})${(this.seed + this.registry.length)}`;
-		this.registry.push([symbol, key]);
+	get(key = '', salt = Date.now()) {
+		const symbol = `Symbol(${key})${(this.seed + this.registry.length).toString(hex)}`;
+		this.registry.push([symbol, `${key}${salt}`]);
 		return symbol;
 	}
 
@@ -26,7 +28,7 @@ class SymbolRegistry {
 					return item[0];
 				}
 			}
-			return this.get(key);
+			return this.get(key, '');
 		}
 		throw new TypeError(`Symbol.for was called with non-string: ${key}`);
 	}

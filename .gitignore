@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
 __results
+__errorShots
 test/results
 test/specs

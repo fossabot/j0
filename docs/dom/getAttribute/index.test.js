@@ -184,21 +184,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return element.getAttribute(attributeName);
 	}
 
-	it('should get an attribute from an element', function () {
-		var attributeName = 'a';
-		var attributeValue = 'b';
-		var element = createElement({
-			a: [[attributeName, attributeValue]]
-		});
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
+	describe('dom/getAttribute', function () {
 
-	it('should get a "data-" prefixed attribute from an element', function () {
-		var attributeName = 'data-a';
-		var attributeValue = 'b';
-		var element = createElement({
-			a: [[attributeName, attributeValue]]
+		it('should get an attribute from an element', function () {
+			var attributeName = 'a';
+			var attributeValue = 'b';
+			var element = createElement({
+				a: [[attributeName, attributeValue]]
+			});
+			assert.equal(getAttribute(element, attributeName), attributeValue);
 		});
-		assert.equal(getAttribute(element, attributeName), attributeValue);
+
+		it('should get a "data-" prefixed attribute from an element', function () {
+			var attributeName = 'data-a';
+			var attributeValue = 'b';
+			var element = createElement({
+				a: [[attributeName, attributeValue]]
+			});
+			assert.equal(getAttribute(element, attributeName), attributeValue);
+		});
 	});
 });

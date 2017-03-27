@@ -1,2 +1,7 @@
 import Object from '..';
-export default Object.prototype.toString;
+
+function toString(o) {
+	return Object.prototype.toString.call(o);
+}
+
+export default toString;

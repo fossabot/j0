@@ -9,6 +9,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
+	var postMessage = window.postMessage;
+
 	function isUndefined(x) {
 		return typeof x === 'undefined';
 	}
@@ -120,21 +122,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		}
 	});
 
-	it('should call the function at end of current processes', function (done) {
-		var order = 3;
-		var expected = 36;
-		setImmediate(function () {
-			order *= order;
-		});
-		order += order;
-		setTimeout(function () {
-			var error = null;
-			try {
+	describe('setImmediate', function () {
+
+		it('should call the function at end of current processes', function () {
+			var order = 3;
+			var expected = 36;
+			return new Promise(function (resolve) {
+				setImmediate(function () {
+					order *= order;
+				});
+				order += order;
+				setTimeout(resolve, 50);
+			}).then(function () {
 				assert.equal(order, expected);
-			} catch (err) {
-				error = err;
-			}
-			done(error);
-		}, 50);
+			});
+		});
 	});
 });

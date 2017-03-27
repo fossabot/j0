@@ -6,4 +6,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
+
+	describe('Object/polyfill', function () {
+
+		it('should make array-like iterable', function () {
+			var arrayLike = {
+				0: 1,
+				1: 2,
+				2: 3,
+				length: 3
+			};
+			var expected = [1, 2, 3];
+			assert.deepEqual(Array.from(arrayLike), expected);
+		});
+	});
 });

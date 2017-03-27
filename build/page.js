@@ -1,12 +1,16 @@
-/* global document, navigator */
-import '../package/polyfill';
+/* global chai */
+import window from '../package/window';
 import getBody from '../package/getBody';
 import onError from '../package/onError';
+import document from '../package/document';
+import navigator from '../package/navigator';
 
 function startMocha() {
-	mocha.run().once('end', function () {
-		document.body.classList.add(0 < this.stats.failures ? 'failed' : 'passed');
-	});
+	mocha.run()
+		.once('end', function () {
+			document.body.classList.add('done');
+			document.body.classList.add(0 < this.stats.failures ? 'failed' : 'passed');
+		});
 }
 
 function showEnvironment() {
@@ -22,6 +26,10 @@ function showEnvironment() {
 	}
 }
 
+if (mocha) {
+	window.assert = chai.assert;
+	mocha.setup('bdd');
+}
 getBody
 .then(function () {
 	if (mocha) {

@@ -67,62 +67,65 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return result;
 	}
 
-	it('should iterate over an array', function () {
-		var actual = map([0, 1, 2, 3], function (x) {
-			return x * 2;
-		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
+	describe('Array/map', function () {
 
-	it('should iterate over an array-like', function () {
-		var actual = map({
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
-		}, function (x) {
-			return x * 2;
+		it('should iterate over an array', function () {
+			var actual = map([0, 1, 2, 3], function (x) {
+				return x * 2;
+			});
+			var expected = [0, 2, 4, 6];
+			assert.deepEqual(actual, expected);
 		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
 
-	it('should iterate over a string', function () {
-		var actual = map('xyz', function (x) {
-			return x + x;
+		it('should iterate over an array-like', function () {
+			var actual = map({
+				0: 0,
+				1: 1,
+				2: 2,
+				3: 3,
+				length: 4
+			}, function (x) {
+				return x * 2;
+			});
+			var expected = [0, 2, 4, 6];
+			assert.deepEqual(actual, expected);
 		});
-		var expected = ['xx', 'yy', 'zz'];
-		assert.deepEqual(actual, expected);
-	});
 
-	it('should iterate over an iterable', function () {
-		var counter = 0;
-		var iterable = {
-			next: function next() {
-				counter += 1;
-				return {
-					value: counter,
-					done: 4 < counter
-				};
+		it('should iterate over a string', function () {
+			var actual = map('xyz', function (x) {
+				return x + x;
+			});
+			var expected = ['xx', 'yy', 'zz'];
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should iterate over an iterable', function () {
+			var counter = 0;
+			var iterable = {
+				next: function next() {
+					counter += 1;
+					return {
+						value: counter,
+						done: 4 < counter
+					};
+				}
+			};
+			var actual = map(iterable, function (x) {
+				return x * 2;
+			});
+			var expected = [2, 4, 6, 8];
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should call fn in a specified context', function () {
+			function fn(value) {
+				this.sum += value;
+				return this.sum;
 			}
-		};
-		var actual = map(iterable, function (x) {
-			return x * 2;
+			var context = { sum: 0 };
+			var result = map([0, 1, 2, 3, 4, 5], fn, context);
+			var expected = [0, 1, 3, 6, 10, 15];
+			assert.deepEqual(result, expected);
 		});
-		var expected = [2, 4, 6, 8];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should call fn in a specified context', function () {
-		function fn(value) {
-			this.sum += value;
-			return this.sum;
-		}
-		var context = { sum: 0 };
-		var result = map([0, 1, 2, 3, 4, 5], fn, context);
-		var expected = [0, 1, 3, 6, 10, 15];
-		assert.deepEqual(result, expected);
 	});
 });

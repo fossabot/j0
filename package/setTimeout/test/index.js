@@ -3,10 +3,10 @@ import Promise from '../../Promise';
 import Date from '../../Date';
 import setTimeout from '..';
 
-const WAIT = 100;
-const MARGIN = 0.9;
-
 describe('setTimeout', function () {
+
+	const WAIT = 100;
+	const MARGIN = 0.9;
 
 	it(`should call fn after ${WAIT}ms`, function () {
 		const start = Date.now();

@@ -184,24 +184,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return Array.from.apply(Array, arguments);
 	}
 
-	it('should append an element', function () {
-		var parent = createElement();
-		var child = createElement();
-		appendChild(parent, child);
-		assert.equal(child.parentNode, parent);
-	});
+	describe('dom/appendChild', function () {
 
-	it('should append a text element', function () {
-		var parent = createElement();
-		var child = createElement('text');
-		appendChild(parent, child);
-		assert.equal(child.parentNode, parent);
-	});
+		it('should append an element', function () {
+			var parent = createElement();
+			var child = createElement();
+			appendChild(parent, child);
+			assert.equal(child.parentNode, parent);
+		});
 
-	it('should append multiple elements', function () {
-		var parent = createElement();
-		var children = [{}, 'text', 'text2'].map(createElement);
-		appendChild.apply(undefined, [parent].concat(_toConsumableArray(children)));
-		assert.deepEqual(from(parent.childNodes), children);
+		it('should append a text element', function () {
+			var parent = createElement();
+			var child = createElement('text');
+			appendChild(parent, child);
+			assert.equal(child.parentNode, parent);
+		});
+
+		it('should append multiple elements', function () {
+			var parent = createElement();
+			var children = [{}, 'text', 'text2'].map(createElement);
+			appendChild.apply(undefined, [parent].concat(_toConsumableArray(children)));
+			assert.deepEqual(from(parent.childNodes), children);
+		});
 	});
 });

@@ -1,0 +1,1 @@
+describe('dom/trigger', function () {});

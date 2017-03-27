@@ -21,11 +21,15 @@ function convertRelativeLinks(line, linkSkip = 0) {
 		if (relativePath === '..') {
 			return code;
 		}
-		return `<a href="${relativePath.replace(/^(?:\.\.\/)+/, (linkFragment) => {
-			return linkFragment.split('/')
-			.slice(linkSkip)
-			.join('/');
-		})}"><span class="string">${code}</span></a>`;
+		return `<a href="${
+			relativePath
+			.replace(/^(?:\.\.\/)+/, (linkFragment) => {
+				return linkFragment.split('/')
+				.slice(linkSkip)
+				.join('/');
+			})
+			.replace(/\/test$/, '')
+		}"><span class="string">${code}</span></a>`;
 	});
 }
 
@@ -44,6 +48,33 @@ function formatCode(code, linkSkip) {
 		return result;
 	})
 	.join('\n');
+}
+
+function getContextGenerator(destPath, dir, children) {
+	function setupContext(context) {
+		context.dest = destPath;
+		context.template = template;
+		context.name = dir;
+		context.package = packageJSON;
+		context.children = children;
+		context.titleHTML = `${packageJSON.name}/${context.name}`.split(/\s*\/\s*/)
+		.reverse()
+		.map((fragment, index) => {
+			return 0 < index ? `<a href="${'../'.repeat(index)}">${fragment}</a>` : fragment;
+		})
+		.reverse()
+		.join('/');
+		context.root = `${context.name.split('/').map(() => {
+			return '..';
+		})
+		.join('/')}`;
+		context.code = formatCode(context.code);
+		context.test.code = formatCode(context.test.code, 1);
+		if (watch) {
+			buildIndexes();
+		}
+	}
+	return setupContext;
 }
 
 function buildDocument(file) {
@@ -72,33 +103,7 @@ function buildDocument(file) {
 				src: scriptPath,
 				test: testScriptPath,
 				watch: watch,
-				beforeRender: function beforeRender(context) {
-					context.dest = destPath;
-					context.template = template;
-					context.name = dir;
-					context.package = packageJSON;
-					context.children = children;
-					context.titleHTML = `${packageJSON.name}/${context.name}`.split(/\s*\/\s*/)
-					.reverse()
-					.map((fragment, index) => {
-						let html = fragment;
-						if (0 < index) {
-							html = `<a href="${'../'.repeat(index)}">${fragment}</a>`;
-						}
-						return html;
-					})
-					.reverse()
-					.join('/');
-					context.root = `${context.name.split('/').map(() => {
-						return '..';
-					})
-					.join('/')}`;
-					context.code = formatCode(context.code);
-					context.test.code = formatCode(context.test.code, 1);
-					if (watch) {
-						buildIndexes();
-					}
-				}
+				beforeRender: getContextGenerator(destPath, dir, children)
 			});
 		})
 		.catch(console.onError);

@@ -9,7 +9,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	var MAX_SAFE_INTEGER = 9007199254740991;
 
-	it('should evaluate to true', function () {
-		assert.equal(MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2);
+	describe('Number/MAX_SAFE_INTEGER', function () {
+
+		it('should evaluate to true', function () {
+			assert.equal(MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2);
+		});
 	});
 });

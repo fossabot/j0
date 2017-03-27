@@ -1,1 +1,2 @@
-export default postMessage;
+import window from '../window';
+export default window.postMessage;

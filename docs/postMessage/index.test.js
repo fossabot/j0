@@ -6,4 +6,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
+
+	var postMessage = window.postMessage;
+
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
+	describe('postMessage', function () {
+
+		it('should be a function', function () {
+			assert.equal(isFunction(postMessage), true);
+		});
+	});
 });

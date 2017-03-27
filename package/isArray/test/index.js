@@ -1,16 +1,13 @@
 import isArray from '..';
 
-const tests = [
-	[[[], 0, 1], false],
-	[[[], [], []], true]
-];
-
 describe('isArray', function () {
 
-	for (const [args, expected] of tests) {
-		it(`should return ${expected} if args is ${args}`, function () {
-			assert.equal(isArray(0), false);
-		});
-	}
+	it('should return false if the argument is a number', function () {
+		assert.equal(isArray(0), false);
+	});
+
+	it('should return true if the argument is an array', function () {
+		assert.equal(isArray([]), true);
+	});
 
 });

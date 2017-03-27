@@ -1,6 +1,17 @@
+const path = require('path');
+const console = require('j1/console').create('test');
+const sable = require('sable');
+const promisify = require('j1/promisify');
+const glob = promisify(require('glob'));
+
+const buildWebdriverScript = require('./build/buildWebdriverScript');
+const {dest} = require('./build/constants');
+
 /* eslint-disable no-process-env */
 const BROWSER = process.env.BROWSER ? process.env.BROWSER : 'phantomjs';
 /* eslint-enable no-process-env */
+
+let server;
 
 exports.config = {
 	//
@@ -13,7 +24,7 @@ exports.config = {
 	// directory is where your package.json resides, so `wdio` will be called from there.
 	//
 	specs: [
-		'docs/**/*test.js'
+		'docs/*/index.wdio.js'
 	],
 	// Patterns to exclude.
 	// exclude: [
@@ -36,7 +47,7 @@ exports.config = {
 	// and 30 processes will get spawned. The property handles how many capabilities
 	// from the same test should run tests.
 	//
-	maxInstances: 10,
+	maxInstances: 1,
 	//
 	// If you have trouble getting all important capabilities together, check out the
 	// Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -47,7 +58,7 @@ exports.config = {
 			// maxInstances can get overwritten per capability. So if you have an in-house Selenium
 			// grid with only 5 firefox instances available you can make sure that not more than
 			// 5 instances get started at a time.
-			maxInstances: 5,
+			maxInstances: 1,
 			browserName: BROWSER
 		}
 	],
@@ -145,8 +156,22 @@ exports.config = {
 	// resolved to continue.
 	//
 	// Gets executed once before all workers get launched.
-	// onPrepare: function () {
-	// },
+	onPrepare: function () {
+		return Promise.all([
+			sable({
+				documentRoot: dest,
+				noWatch: true
+			}),
+			glob(path.join(dest, '**', 'index.test.js'))
+		])
+		.then(([httpServer, files]) => {
+			const {port} = httpServer.address();
+			server = httpServer;
+			return Promise.all(files.map((file) => {
+				return buildWebdriverScript(file, port);
+			}));
+		});
+	},
 	//
 	// Gets executed just before initialising the webdriver session and test framework. It allows you
 	// to manipulate configurations depending on the capability or spec.
@@ -155,12 +180,13 @@ exports.config = {
 	//
 	// Gets executed before test execution begins. At this point you can access all global
 	// variables, such as `browser`. It is the perfect place to define custom commands.
-	// before: function (capabilities, specs) {
+	// before: function () {
 	// },
 	//
 	// Hook that gets executed before the suite starts
-	// beforeSuite: function (suite) {
-	// },
+	beforeSuite: function (suite) {
+		console.info(`${suite.type} ${suite.title}`);
+	},
 	//
 	// Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
 	// beforeEach in Mocha)
@@ -197,9 +223,10 @@ exports.config = {
 	// after: function (result, capabilities, specs) {
 	// },
 	//
-	// Gets executed right after terminating the webdriver session.
-	// afterSession: function (config, capabilities, specs) {
-	// },
+	// Gets executed right after terminating the webdriver session. [config, capabilities, specs]
+	afterSession: function () {
+		return server.close();
+	},
 	//
 	// Gets executed after all workers got shut down and the process is about to exit. It is not
 	// possible to defer the end of the process using a promise.

@@ -9,15 +9,22 @@ const glob = promisify(require('glob'));
 const constants = require('./constants');
 const buildModule = require('./buildModule');
 const buildDocument = require('./buildDocument');
+const buildIndexes = require('./buildIndexes');
 const compileJS = require('./compileJS');
 const compileCSS = require('./compileCSS');
 
 function buildCSS() {
-	return compileCSS(constants.styl, path.join(constants.dest, 'page.css'));
+	return Promise.all(constants.styl.map((file) => {
+		const relativePath = path.relative(__dirname, file);
+		return compileCSS(file, path.join(constants.dest, relativePath));
+	}));
 }
 
 function buildPageJS() {
-	return compileJS(constants.js, path.join(constants.dest, 'page.js'));
+	return Promise.all(constants.js.map((file) => {
+		const relativePath = path.relative(__dirname, file);
+		return compileJS(file, path.join(constants.dest, relativePath));
+	}));
 }
 
 function startServer() {
@@ -63,13 +70,33 @@ function build() {
 		]
 	})
 	.then((files) => {
-		return Promise.all([].concat(...files).map(buildModule));
+		const list = [].concat(...files);
+		const {length} = list;
+		function buildJS() {
+			const file = list.shift();
+			if (file) {
+				console.info(`buildModule: ${length - list.length}/${length}`);
+				const promise = buildModule(file);
+				return promise ? promise.then(buildJS) : buildJS();
+			}
+		}
+		return buildJS();
 	})
 	.then(() => {
 		return glob(path.join(constants.dest, '**', '*.test.js'), {nodir: true});
 	})
 	.then((files) => {
-		return Promise.all([].concat(...files).map(buildDocument));
+		const list = [].concat(...files);
+		const {length} = list;
+		function buildJS() {
+			const file = list.shift();
+			if (file) {
+				console.info(`buildModule: ${length - list.length}/${length}`);
+				return buildDocument(file)
+				.then(buildJS);
+			}
+		}
+		return buildJS();
 	})
 	.then(buildIndexes);
 }

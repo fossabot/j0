@@ -13,20 +13,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return Array.from(arguments);
 	}
 
-	it('should create a new instance of array from arguments', function () {
-		var result = createArrayFromArguments(1, 2, 3);
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3]);
-	});
+	describe('Array/from', function () {
 
-	it('should create a new instance of array from an array-like object', function () {
-		var result = Array.from({
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
+		it('should create a new instance of array from arguments', function () {
+			var result = createArrayFromArguments(1, 2, 3);
+			assert.equal(isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3]);
 		});
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3]);
+
+		it('should create a new instance of array from an array-like object', function () {
+			var result = Array.from({
+				0: 1,
+				1: 2,
+				2: 3,
+				length: 3
+			});
+			assert.equal(isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3]);
+		});
 	});
 });

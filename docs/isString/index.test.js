@@ -15,38 +15,41 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return typeof x === 'string';
 	}
 
-	var tests = [[[undefined], false], [[null], false], [[NaN], false], [[123], false], [['123'], true], [[{}], false], [[[]], false], [[function () {}], false]];
+	describe('isString', function () {
 
-	var _iteratorNormalCompletion = true;
-	var _didIteratorError = false;
-	var _iteratorError = undefined;
+		var tests = [[[undefined], false], [[null], false], [[NaN], false], [[123], false], [['123'], true], [[{}], false], [[[]], false], [[function () {}], false]];
 
-	try {
-		var _loop = function _loop() {
-			var _step$value = _slicedToArray(_step.value, 2),
-			    args = _step$value[0],
-			    expected = _step$value[1];
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
 
-			it('should return ' + expected + ' if the arguments are ' + args, function () {
-				assert.equal(isString.apply(undefined, _toConsumableArray(args)), expected);
-			});
-		};
-
-		for (var _iterator = tests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-			_loop();
-		}
-	} catch (err) {
-		_didIteratorError = true;
-		_iteratorError = err;
-	} finally {
 		try {
-			if (!_iteratorNormalCompletion && _iterator.return) {
-				_iterator.return();
+			var _loop = function _loop() {
+				var _step$value = _slicedToArray(_step.value, 2),
+				    args = _step$value[0],
+				    expected = _step$value[1];
+
+				it('should return ' + expected + ' if the arguments are ' + args, function () {
+					assert.equal(isString.apply(undefined, _toConsumableArray(args)), expected);
+				});
+			};
+
+			for (var _iterator = tests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				_loop();
 			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
 		} finally {
-			if (_didIteratorError) {
-				throw _iteratorError;
+			try {
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
 			}
 		}
-	}
+	});
 });

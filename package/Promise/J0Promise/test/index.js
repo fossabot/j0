@@ -2,44 +2,43 @@ import Promise from '..';
 import Error from '../../../Error';
 import setTimeout from '../../../setTimeout';
 
-function onUnexpectedFullfill(done) {
-	return function () {
-		done(new Error('onFulfilled was called unexpectedly'));
-	};
+function onUnexpectedFullfill() {
+	throw new Error('onFulfilled was called unexpectedly');
 }
 
-function onUnexpectedReject(done) {
-	return function (error) {
-		done(error || new Error('onRejected was called unexpectedly'));
-	};
+function onUnexpectedReject(error) {
+	throw error || new Error('onRejected was called unexpectedly');
 }
 
-describe('constructor', function () {
-	it('should call onFulfilled', function (done) {
+describe('J0Promise', function () {
+
+	it('should call onFulfilled', function () {
 		const expected = 123;
-		new Promise(function (resolve) {
+		return new Promise(function (resolve) {
 			resolve(expected);
 		})
 		.then(function (value) {
 			assert.equal(value, expected);
-			done();
-		}, onUnexpectedReject(done));
+		})
+		.catch(onUnexpectedReject);
 	});
 
-	it('should call onRejected', function (done) {
+	it('should call onRejected', function () {
 		const expected = 123;
-		new Promise(function (resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			reject(expected);
 		})
-		.then(onUnexpectedFullfill(done), function (error) {
-			assert.equal(error, expected);
-			done();
-		});
+		.then(
+			onUnexpectedFullfill,
+			function (error) {
+				assert.equal(error, expected);
+			}
+		);
 	});
 
-	it('should support chained thennables', function (done) {
+	it('should support chained thennables', function () {
 		const expected = 32;
-		new Promise(function (resolve) {
+		return new Promise(function (resolve) {
 			resolve(1);
 		})
 		.then(function (value) {
@@ -59,134 +58,118 @@ describe('constructor', function () {
 		})
 		.then(function (value) {
 			assert.equal(value, expected);
-			done();
 		})
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
 
-	it('should call onFulfilled immediately if the promise is finished', function (done) {
+	it('should call onFulfilled immediately if the promise is finished', function () {
 		const expected = 123;
 		const promise = new Promise(function (resolve) {
 			resolve(expected);
 		});
-		promise.then(function (value) {
+		return promise.then(function (value) {
 			assert.equal(value, expected);
-			promise
-			.then(function (value2) {
-				assert.equal(value2, expected);
-				done();
-			})
-			.catch(onUnexpectedReject(done));
 			return value;
 		})
-		.catch(onUnexpectedReject(done));
+		.then(function (value2) {
+			assert.equal(value2, expected);
+		})
+		.catch(onUnexpectedReject);
 	});
 
-	it('should call onFulfilled added on changing state', function (done) {
+	it('should call onFulfilled added on changing state', function () {
 		const expected = 123;
-		const promise = new Promise(function (resolve) {
+		return new Promise(function (resolve) {
 			resolve(expected);
 		})
 		.then(function (value) {
 			assert.equal(value, expected);
-			promise
-			.then(function (value2) {
-				assert.equal(value2, expected);
-				done();
-			})
-			.catch(onUnexpectedReject(done));
 			return value;
 		})
-		.catch(onUnexpectedReject(done));
+		.then(function (value2) {
+			assert.equal(value2, expected);
+		})
+		.catch(onUnexpectedReject);
 	});
-});
 
-describe('all', function () {
-	it('should return results of promises', function (done) {
+	it('should return results of promises', function () {
 		const expected = [1, 2, 3];
-		Promise.all([
+		return Promise.all([
 			Promise.resolve(1),
 			Promise.resolve(2),
 			Promise.resolve(3)
 		])
 		.then(function (results) {
 			assert.deepEqual(results, expected);
-			done();
 		})
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
 
-	it('should return an error of a rejected promise', function (done) {
+	it('should return an error of a rejected promise', function () {
 		const expected = 2;
-		Promise.all([
+		return Promise.all([
 			Promise.resolve(1),
-			Promise.reject(2),
+			Promise.reject(expected),
 			Promise.resolve(3)
 		])
 		.then(
-			onUnexpectedFullfill(done),
+			onUnexpectedFullfill,
 			function (error) {
 				assert.equal(error, expected);
-				done();
 			}
 		)
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
-});
 
-describe('race', function () {
-	it('should return a result of the first promise', function (done) {
+	it('should return a result of the first promise', function () {
 		const expected = 1;
-		Promise.race([
+		return Promise.race([
 			Promise.resolve(1),
 			Promise.reject(2),
 			Promise.resolve(3)
 		])
 		.then(function (result) {
 			assert.equal(result, expected);
-			done();
 		})
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
 
-	it('should return a result of the last promise', function (done) {
+	it('should return a result of the last promise', function () {
 		const expected = 3;
-		Promise.race([
+		return Promise.race([
 			new Promise(function (resolve) {
 				setTimeout(resolve, 100);
 			}),
 			new Promise(function (resolve) {
 				setTimeout(resolve, 100);
 			}),
-			Promise.resolve(3)
+			Promise.resolve(expected)
 		])
 		.then(function (result) {
 			assert.equal(result, expected);
-			done();
 		})
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
 
-	it('should return an error of the first promise', function (done) {
+	it('should return an error of the first promise', function () {
 		const expected = 1;
-		Promise.race([
+		return Promise.race([
 			Promise.reject(1),
 			Promise.reject(2),
 			Promise.resolve(3)
 		])
 		.then(
-			onUnexpectedFullfill(done),
+			onUnexpectedFullfill,
 			function (error) {
 				assert.equal(error, expected);
-				done();
 			}
 		)
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
 
-	it('should return an error of the last promise', function (done) {
+	it('should return an error of the last promise', function () {
 		const expected = 3;
-		Promise.race([
+		return Promise.race([
 			new Promise(function (resolve) {
 				setTimeout(resolve, 100);
 			}),
@@ -196,12 +179,12 @@ describe('race', function () {
 			Promise.reject(3)
 		])
 		.then(
-			onUnexpectedFullfill(done),
+			onUnexpectedFullfill,
 			function (error) {
 				assert.equal(error, expected);
-				done();
 			}
 		)
-		.catch(onUnexpectedReject(done));
+		.catch(onUnexpectedReject);
 	});
+
 });

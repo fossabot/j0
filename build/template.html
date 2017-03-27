@@ -7,11 +7,7 @@
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script>
-	window.global = window;
-	window.assert = chai.assert;
-	mocha.setup('bdd');
-</script>
+<script src="{{root}}/polyfill.js"></script>
 <script src="{{root}}/page.js"></script>
 <h1 id="title">{{&titleHTML}}<span class="version">{{package.version}}</span></h1>
 <ul class="Children" data-count="{{children.length}}">

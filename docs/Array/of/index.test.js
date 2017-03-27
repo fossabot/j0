@@ -7,9 +7,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
-	it('should create an array', function () {
-		var actual = Array.of(1, 2, 3);
-		var expected = [1, 2, 3];
-		assert.deepEqual(actual, expected);
+	describe('Array/from', function () {
+
+		it('should create an array', function () {
+			var actual = Array.of(1, 2, 3);
+			var expected = [1, 2, 3];
+			assert.deepEqual(actual, expected);
+		});
 	});
 });
