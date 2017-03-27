@@ -159,6 +159,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
+	var PENDING = 0;
+	var FULFILLED = 1;
+	var REJECTED = 2;
+
 	var J0Promise = function () {
 		function J0Promise(fn) {
 			var _this = this;
@@ -167,6 +171,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			this.onFulfilled = [];
 			this.onRejected = [];
+			this.state = PENDING;
 			try {
 				fn(function (value) {
 					_this.resolve(value);
@@ -183,10 +188,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function resolve(value) {
 				var _this2 = this;
 
+				this.state = FULFILLED;
+				this.value = value;
 				setImmediate(function () {
-					forEach(_this2.onFulfilled, function (onFulfilled) {
+					var functions = _this2.onFulfilled;
+					forEach(functions, function (onFulfilled) {
 						onFulfilled(value);
 					});
+					_this2.finish();
 				});
 			}
 		}, {
@@ -194,43 +203,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function reject(error) {
 				var _this3 = this;
 
+				this.state = REJECTED;
+				this.value = error;
 				setImmediate(function () {
-					forEach(_this3.onRejected, function (onRejected) {
+					var functions = _this3.onRejected;
+					forEach(functions, function (onRejected) {
 						onRejected(error);
 					});
+					_this3.finish();
 				});
+			}
+		}, {
+			key: 'finish',
+			value: function finish() {
+				this.onFulfilled = null;
+				this.onRejected = null;
 			}
 		}, {
 			key: 'then',
 			value: function then(onFulfilled, onRejected) {
 				var _this4 = this;
 
-				return new J0Promise(function (onFulfilled2, onRejected2) {
-					push(_this4.onFulfilled, isFunction(onFulfilled) ? function (value) {
-						try {
-							var value2 = onFulfilled(value);
-							if (isThennable(value2)) {
-								value2.then(onFulfilled2, onRejected2);
-							} else {
-								onFulfilled2(value2);
-							}
-						} catch (error2) {
-							onRejected2(error2);
-						}
-					} : onFulfilled2);
-					push(_this4.onRejected, isFunction(onRejected) ? function (error) {
-						try {
-							var value2 = onRejected(error);
-							if (isThennable(value2)) {
-								value2.then(onFulfilled2, onRejected2);
-							} else {
-								onFulfilled2(value2);
-							}
-						} catch (error2) {
-							onRejected2(error2);
-						}
-					} : onRejected2);
-				});
+				switch (this.state) {
+					case PENDING:
+						return new J0Promise(function (onFulfilled2, onRejected2) {
+							addThenFunction(_this4.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
+							addThenFunction(_this4.onRejected, onRejected, onFulfilled2, onRejected2);
+						});
+					case FULFILLED:
+						return Promise.resolve(this.value).then(onFulfilled, onRejected);
+					case REJECTED:
+						return Promise.reject(this.value).then(onFulfilled, onRejected);
+					default:
+						throw new Error('Unknown state: ' + this.state);
+				}
 			}
 		}, {
 			key: 'catch',
@@ -253,10 +259,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'race',
-			value: function race() {}
+			value: function race(promises) {
+				return new J0Promise(function (resolve, reject) {
+					var finished = false;
+					forEach(promises, function (promise) {
+						promise.then(function (result) {
+							if (!finished) {
+								finished = true;
+								resolve(result);
+							}
+						}, function (error) {
+							if (!finished) {
+								finished = true;
+								reject(error);
+							}
+						});
+					});
+				});
+			}
 		}, {
 			key: 'all',
-			value: function all() {}
+			value: function all(promises) {
+				return new J0Promise(function (resolve, reject) {
+					var results = [];
+					var goal = promises.length;
+					var finished = false;
+					var count = 0;
+					forEach(promises, function (promise, index) {
+						promise.then(function (result) {
+							if (!finished) {
+								results[index] = result;
+								count += 1;
+								if (count === goal) {
+									resolve(results);
+								}
+							}
+						}, function (error) {
+							finished = true;
+							reject(error);
+						});
+					});
+				});
+			}
 		}]);
 
 		return J0Promise;
@@ -264,6 +308,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function isThennable(value) {
 		return value && isFunction(value.then) && isFunction(value.catch);
+	}
+
+	function addThenFunction(list, fn, onFulfilled2, onRejected2) {
+		push(list, isFunction(fn) ? function (value) {
+			try {
+				var value2 = fn(value);
+				if (isThennable(value2)) {
+					value2.then(onFulfilled2, onRejected2);
+				} else {
+					onFulfilled2(value2);
+				}
+			} catch (error2) {
+				onRejected2(error2);
+			}
+		} : onFulfilled2);
 	}
 
 	function onUnexpectedFullfill(done) {
@@ -278,43 +337,134 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		};
 	}
 
-	it('should call onFulfilled', function (done) {
-		var expected = 123;
-		new J0Promise(function (resolve) {
-			resolve(expected);
-		}).then(function (value) {
-			assert.equal(value, expected);
-			done();
-		}, onUnexpectedReject(done));
-	});
+	describe('constructor', function () {
+		it('should call onFulfilled', function (done) {
+			var expected = 123;
+			new J0Promise(function (resolve) {
+				resolve(expected);
+			}).then(function (value) {
+				assert.equal(value, expected);
+				done();
+			}, onUnexpectedReject(done));
+		});
 
-	it('should call onRejected', function (done) {
-		var expected = 123;
-		new J0Promise(function (resolve, reject) {
-			reject(expected);
-		}).then(onUnexpectedFullfill(done), function (error) {
-			assert.equal(error, expected);
-			done();
+		it('should call onRejected', function (done) {
+			var expected = 123;
+			new J0Promise(function (resolve, reject) {
+				reject(expected);
+			}).then(onUnexpectedFullfill(done), function (error) {
+				assert.equal(error, expected);
+				done();
+			});
+		});
+
+		it('should support chained thennables', function (done) {
+			var expected = 32;
+			new J0Promise(function (resolve) {
+				resolve(1);
+			}).then(function (value) {
+				return value * 2;
+			}).then(function (value) {
+				return value * 2;
+			}).then(function (value) {
+				return value * 2;
+			}).then(function (value) {
+				return value * 2;
+			}).then(function (value) {
+				return value * 2;
+			}).then(function (value) {
+				assert.equal(value, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should call onFulfilled immediately if the promise is finished', function (done) {
+			var expected = 123;
+			var promise = new J0Promise(function (resolve) {
+				resolve(expected);
+			});
+			promise.then(function (value) {
+				assert.equal(value, expected);
+				promise.then(function (value2) {
+					assert.equal(value2, expected);
+					done();
+				}).catch(onUnexpectedReject(done));
+				return value;
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should call onFulfilled added on changing state', function (done) {
+			var expected = 123;
+			var promise = new J0Promise(function (resolve) {
+				resolve(expected);
+			}).then(function (value) {
+				assert.equal(value, expected);
+				promise.then(function (value2) {
+					assert.equal(value2, expected);
+					done();
+				}).catch(onUnexpectedReject(done));
+				return value;
+			}).catch(onUnexpectedReject(done));
 		});
 	});
 
-	it('should support chained thennables', function (done) {
-		var expected = 32;
-		new J0Promise(function (resolve) {
-			resolve(1);
-		}).then(function (value) {
-			return value * 2;
-		}).then(function (value) {
-			return value * 2;
-		}).then(function (value) {
-			return value * 2;
-		}).then(function (value) {
-			return value * 2;
-		}).then(function (value) {
-			return value * 2;
-		}).then(function (value) {
-			assert.equal(value, expected);
-			done();
-		}).catch(onUnexpectedReject(done));
+	describe('all', function () {
+		it('should return results of promises', function (done) {
+			var expected = [1, 2, 3];
+			J0Promise.all([J0Promise.resolve(1), J0Promise.resolve(2), J0Promise.resolve(3)]).then(function (results) {
+				assert.deepEqual(results, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should return an error of a rejected promise', function (done) {
+			var expected = 2;
+			J0Promise.all([J0Promise.resolve(1), J0Promise.reject(2), J0Promise.resolve(3)]).then(onUnexpectedFullfill(done), function (error) {
+				assert.equal(error, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+	});
+
+	describe('race', function () {
+		it('should return a result of the first promise', function (done) {
+			var expected = 1;
+			J0Promise.race([J0Promise.resolve(1), J0Promise.reject(2), J0Promise.resolve(3)]).then(function (result) {
+				assert.equal(result, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should return a result of the last promise', function (done) {
+			var expected = 3;
+			J0Promise.race([new J0Promise(function (resolve) {
+				setTimeout(resolve, 100);
+			}), new J0Promise(function (resolve) {
+				setTimeout(resolve, 100);
+			}), J0Promise.resolve(3)]).then(function (result) {
+				assert.equal(result, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should return an error of the first promise', function (done) {
+			var expected = 1;
+			J0Promise.race([J0Promise.reject(1), J0Promise.reject(2), J0Promise.resolve(3)]).then(onUnexpectedFullfill(done), function (error) {
+				assert.equal(error, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
+
+		it('should return an error of the last promise', function (done) {
+			var expected = 3;
+			J0Promise.race([new J0Promise(function (resolve) {
+				setTimeout(resolve, 100);
+			}), new J0Promise(function (resolve) {
+				setTimeout(resolve, 100);
+			}), J0Promise.reject(3)]).then(onUnexpectedFullfill(done), function (error) {
+				assert.equal(error, expected);
+				done();
+			}).catch(onUnexpectedReject(done));
+		});
 	});
 });

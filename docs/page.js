@@ -100,18 +100,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return SymbolRegistry;
 	}();
 
-	var _window = window,
-	    _Symbol = _window.Symbol;
-
-
-	if (typeof _Symbol !== 'function') {
-		/* eslint-disable prefer-destructuring */
-		_Symbol = new SymbolRegistry().Symbol;
-		/* eslint-enable prefer-destructuring */
-		window.Symbol = _Symbol;
+	function polyfill$1() {
+		if (!window.Symbol) {
+			window.Symbol = new SymbolRegistry().Symbol;
+		}
 	}
-
-	var Symbol$1 = _Symbol;
 
 	function forEach(iterable, fn, thisArg) {
 		var index = 0;
@@ -224,7 +217,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return false;
 	}
 
-	function polyfill$1() {
+	function polyfill$2() {
 		if (!Array.from) {
 			Array.from = map;
 		}
@@ -240,8 +233,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		if (!Array.prototype.includes) {
 			Array.prototype.includes = includes;
 		}
-		if (!Array.prototype[Symbol$1.iterator]) {
-			Array.prototype[Symbol$1.iterator] = function () {
+		if (!Array.prototype[Symbol.iterator]) {
+			Array.prototype[Symbol.iterator] = function () {
 				var _this2 = this;
 
 				var index = 0;
@@ -267,9 +260,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return typeof x === 'function';
 	}
 
-	function polyfill$2() {
-		if (!Object.prototype[Symbol$1.iterator]) {
-			Object.prototype[Symbol$1.iterator] = function () {
+	function polyfill$3() {
+		if (!Object.prototype[Symbol.iterator]) {
+			Object.prototype[Symbol.iterator] = function () {
 				var _this3 = this;
 
 				if (isFunction(this.next)) {
@@ -336,8 +329,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var immediateCount = 0;
 	var tasks = {};
 	var suffix = '_setImmediate';
-	var _window2 = window,
-	    setImmediateNative = _window2.setImmediate;
+	var _window = window,
+	    setImmediateNative = _window.setImmediate;
 
 
 	function setImmediatePostMessage(fn) {
@@ -397,6 +390,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
+	var PENDING = 0;
+	var FULFILLED = 1;
+	var REJECTED = 2;
+
 	var J0Promise = function () {
 		function J0Promise(fn) {
 			var _this4 = this;
@@ -405,6 +402,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			this.onFulfilled = [];
 			this.onRejected = [];
+			this.state = PENDING;
 			try {
 				fn(function (value) {
 					_this4.resolve(value);
@@ -421,10 +419,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function resolve(value) {
 				var _this5 = this;
 
+				this.state = FULFILLED;
+				this.value = value;
 				setImmediate(function () {
-					forEach(_this5.onFulfilled, function (onFulfilled) {
+					var functions = _this5.onFulfilled;
+					forEach(functions, function (onFulfilled) {
 						onFulfilled(value);
 					});
+					_this5.finish();
 				});
 			}
 		}, {
@@ -432,43 +434,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function reject(error) {
 				var _this6 = this;
 
+				this.state = REJECTED;
+				this.value = error;
 				setImmediate(function () {
-					forEach(_this6.onRejected, function (onRejected) {
+					var functions = _this6.onRejected;
+					forEach(functions, function (onRejected) {
 						onRejected(error);
 					});
+					_this6.finish();
 				});
+			}
+		}, {
+			key: 'finish',
+			value: function finish() {
+				this.onFulfilled = null;
+				this.onRejected = null;
 			}
 		}, {
 			key: 'then',
 			value: function then(onFulfilled, onRejected) {
 				var _this7 = this;
 
-				return new J0Promise(function (onFulfilled2, onRejected2) {
-					push(_this7.onFulfilled, isFunction(onFulfilled) ? function (value) {
-						try {
-							var value2 = onFulfilled(value);
-							if (isThennable(value2)) {
-								value2.then(onFulfilled2, onRejected2);
-							} else {
-								onFulfilled2(value2);
-							}
-						} catch (error2) {
-							onRejected2(error2);
-						}
-					} : onFulfilled2);
-					push(_this7.onRejected, isFunction(onRejected) ? function (error) {
-						try {
-							var value2 = onRejected(error);
-							if (isThennable(value2)) {
-								value2.then(onFulfilled2, onRejected2);
-							} else {
-								onFulfilled2(value2);
-							}
-						} catch (error2) {
-							onRejected2(error2);
-						}
-					} : onRejected2);
-				});
+				switch (this.state) {
+					case PENDING:
+						return new J0Promise(function (onFulfilled2, onRejected2) {
+							addThenFunction(_this7.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
+							addThenFunction(_this7.onRejected, onRejected, onFulfilled2, onRejected2);
+						});
+					case FULFILLED:
+						return Promise.resolve(this.value).then(onFulfilled, onRejected);
+					case REJECTED:
+						return Promise.reject(this.value).then(onFulfilled, onRejected);
+					default:
+						throw new Error('Unknown state: ' + this.state);
+				}
 			}
 		}, {
 			key: 'catch',
@@ -491,10 +490,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'race',
-			value: function race() {}
+			value: function race(promises) {
+				return new J0Promise(function (resolve, reject) {
+					var finished = false;
+					forEach(promises, function (promise) {
+						promise.then(function (result) {
+							if (!finished) {
+								finished = true;
+								resolve(result);
+							}
+						}, function (error) {
+							if (!finished) {
+								finished = true;
+								reject(error);
+							}
+						});
+					});
+				});
+			}
 		}, {
 			key: 'all',
-			value: function all() {}
+			value: function all(promises) {
+				return new J0Promise(function (resolve, reject) {
+					var results = [];
+					var goal = promises.length;
+					var finished = false;
+					var count = 0;
+					forEach(promises, function (promise, index) {
+						promise.then(function (result) {
+							if (!finished) {
+								results[index] = result;
+								count += 1;
+								if (count === goal) {
+									resolve(results);
+								}
+							}
+						}, function (error) {
+							finished = true;
+							reject(error);
+						});
+					});
+				});
+			}
 		}]);
 
 		return J0Promise;
@@ -504,14 +541,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return value && isFunction(value.then) && isFunction(value.catch);
 	}
 
+	function addThenFunction(list, fn, onFulfilled2, onRejected2) {
+		push(list, isFunction(fn) ? function (value) {
+			try {
+				var value2 = fn(value);
+				if (isThennable(value2)) {
+					value2.then(onFulfilled2, onRejected2);
+				} else {
+					onFulfilled2(value2);
+				}
+			} catch (error2) {
+				onRejected2(error2);
+			}
+		} : onFulfilled2);
+	}
+
 	var polyfillPromise = function polyfillPromise() {
 		if (!window.Promise) {
 			window.Promise = J0Promise;
 		}
 	};
 
-	polyfill$2();
 	polyfill$1();
+	polyfill$3();
+	polyfill$2();
 	polyfillPromise();
 
 	var INTERVAL = 100;
