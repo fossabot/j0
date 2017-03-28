@@ -58,48 +58,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
+	function shift(iterable) {
+		return iterable.shift();
+	}
+
 	var postMessage = window.postMessage;
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
+	var key = Symbol('events');
 
-	function includes(iterable, searchElement, fromIndex) {
-		return Array.from(iterable).includes(searchElement, fromIndex);
-	}
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-	function getEvents(element) {
-		var j0ev = element.j0ev;
-
-		if (isUndefined(j0ev)) {
-			j0ev = {};
-			element.j0ev = j0ev;
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
 		}
-		return j0ev;
-	}
-
-	function addListener(events, eventName, fn) {
-		var listeners = events[eventName];
-		if (isUndefined(listeners)) {
-			listeners = [];
-			events[eventName] = listeners;
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents[eventName] = events;
+			}
+			return events;
 		}
-		if (!includes(listeners, fn)) {
-			push(listeners, fn);
-		}
+		return allEvents;
 	}
 
 	function addEventListener(element, eventName, fn) {
-		var events = getEvents(element);
 		element.addEventListener(eventName, fn);
-		addListener(events, eventName, fn);
+		getEventListeners(element, eventName).add(fn);
 	}
 
+	if (!window.immediateId) {
+		window.immediateId = 0;
+	}
+	window.immediateId += 1;
 	var setImmediateAvailable = void 0;
 	var firstImmediate = true;
 	var immediateCount = 0;
 	var tasks = {};
-	var suffix = '_setImmediate';
+	var suffix = '_setImmediate' + window.immediateId;
 	var _window = window,
 	    setImmediateNative = _window.setImmediate;
 
@@ -127,10 +127,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function setImmediateTimeout(fn) {
 		return setTimeout(fn);
-	}
-
-	function setImmediate(fn) {
-		return setImmediateAvailable(fn);
 	}
 
 	function testImmediate(fn, onSuccess) {
@@ -161,6 +157,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
+	var setImmediate = function setImmediate(fn) {
+		return setImmediateAvailable(fn);
+	};
+
 	var PENDING = 0;
 	var FULFILLED = 1;
 	var REJECTED = 2;
@@ -187,17 +187,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(J0Promise, [{
 			key: 'resolve',
-			value: function resolve(value) {
+			value: function resolve() {
 				var _this2 = this;
+
+				var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.value;
 
 				this.state = FULFILLED;
 				this.value = value;
 				setImmediate(function () {
 					var functions = _this2.onFulfilled;
-					forEach(functions, function (onFulfilled) {
-						onFulfilled(value);
-					});
-					_this2.finish();
+					while (functions[0]) {
+						shift(functions)(value);
+					}
 				});
 			}
 		}, {
@@ -209,36 +210,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.value = error;
 				setImmediate(function () {
 					var functions = _this3.onRejected;
-					forEach(functions, function (onRejected) {
-						onRejected(error);
-					});
-					_this3.finish();
+					while (functions[0]) {
+						shift(functions)(error);
+					}
 				});
-			}
-		}, {
-			key: 'finish',
-			value: function finish() {
-				this.onFulfilled = null;
-				this.onRejected = null;
 			}
 		}, {
 			key: 'then',
 			value: function then(onFulfilled, onRejected) {
 				var _this4 = this;
 
+				var promise = new J0Promise(function (onFulfilled2, onRejected2) {
+					addThenFunction(_this4.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
+					addThenFunction(_this4.onRejected, onRejected, onFulfilled2, onRejected2);
+				});
 				switch (this.state) {
 					case PENDING:
-						return new J0Promise(function (onFulfilled2, onRejected2) {
-							addThenFunction(_this4.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
-							addThenFunction(_this4.onRejected, onRejected, onFulfilled2, onRejected2);
-						});
+						break;
 					case FULFILLED:
-						return Promise.resolve(this.value).then(onFulfilled, onRejected);
+						this.resolve();
+						break;
 					case REJECTED:
-						return Promise.reject(this.value).then(onFulfilled, onRejected);
+						this.reject();
+						break;
 					default:
 						throw new Error('Unknown state: ' + this.state);
 				}
+				return promise;
 			}
 		}, {
 			key: 'catch',

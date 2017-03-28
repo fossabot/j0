@@ -4,11 +4,10 @@
 <title>j0/isNumber</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../page.css" rel="stylesheet">
+<script src="../polyfill.js"></script>
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script src="../polyfill.js"></script>
-<script src="../page.js"></script>
 <h1 id="title"><a href="../">j0</a>/isNumber<span class="version">0.0.55</span></h1>
 <ul class="Children" data-count="0">
 	
@@ -29,22 +28,37 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'isNumber'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">tests</span> <span class="_3d">=</span> <span class="_5b">[</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="name">undefined</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="null">null</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="name">NaN</span><span class="_5d">]</span><span class="_2c">,</span> <span class="true">true</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="num">123</span><span class="_5d">]</span><span class="_2c">,</span> <span class="true">true</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="string">'123'</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="_7b">{</span><span class="_7d">}</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="_5b">[</span><span class="_5d">]</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="_5b">[</span><span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_5d">]</span><span class="_2c">,</span> <span class="false">false</span><span class="_5d">]</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are []'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="_5b">[</span><span class="name">args</span><span class="_2c">,</span> <span class="name">expected</span><span class="_5d">]</span> <span class="name">of</span> <span class="name">tests</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="_60">`</span><span class="template">should return </span><span class="_24_7b">${</span><span class="name">expected</span><span class="_7d">}</span><span class="template"> if the arguments are </span><span class="_24_7b">${</span><span class="name">args</span><span class="_7d">}</span><span class="_60">`</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="_2e_2e_2e">...</span><span class="name">args</span><span class="_29">)</span><span class="_2c">,</span> <span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [null]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="null">null</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return true if the arguments are [NaN]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="name">NaN</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return true if the arguments are [123]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="num">123</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [\'abc\']'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="string">'abc'</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [{}]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [[]]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="_5b">[</span><span class="_5d">]</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [function () {}]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isNumber</span><span class="_28">(</span><span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/isNumber/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
@@ -59,4 +73,6 @@
 	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <a class="TestResult" href="#mocha"></a>
+<script src="../page.js"></script>
 <script src="index.test.js"></script>
+<script>start()</script>

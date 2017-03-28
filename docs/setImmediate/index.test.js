@@ -11,56 +11,42 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	var postMessage = window.postMessage;
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
+	var key = Symbol('events');
 
-	function includes(iterable, searchElement, fromIndex) {
-		return Array.from(iterable).includes(searchElement, fromIndex);
-	}
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
 		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
-
-	function getEvents(element) {
-		var j0ev = element.j0ev;
-
-		if (isUndefined(j0ev)) {
-			j0ev = {};
-			element.j0ev = j0ev;
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents[eventName] = events;
+			}
+			return events;
 		}
-		return j0ev;
-	}
-
-	function addListener(events, eventName, fn) {
-		var listeners = events[eventName];
-		if (isUndefined(listeners)) {
-			listeners = [];
-			events[eventName] = listeners;
-		}
-		if (!includes(listeners, fn)) {
-			push(listeners, fn);
-		}
+		return allEvents;
 	}
 
 	function addEventListener(element, eventName, fn) {
-		var events = getEvents(element);
 		element.addEventListener(eventName, fn);
-		addListener(events, eventName, fn);
+		getEventListeners(element, eventName).add(fn);
 	}
 
+	if (!window.immediateId) {
+		window.immediateId = 0;
+	}
+	window.immediateId += 1;
 	var setImmediateAvailable = void 0;
 	var firstImmediate = true;
 	var immediateCount = 0;
 	var tasks = {};
-	var suffix = '_setImmediate';
+	var suffix = '_setImmediate' + window.immediateId;
 	var _window = window,
 	    setImmediateNative = _window.setImmediate;
 
@@ -90,10 +76,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return setTimeout(fn);
 	}
 
-	function setImmediate(fn) {
-		return setImmediateAvailable(fn);
-	}
-
 	function testImmediate(fn, onSuccess) {
 		var value = 1;
 		var expected = (1 + 1) * 2;
@@ -121,6 +103,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			});
 		}
 	});
+
+	var setImmediate = function setImmediate(fn) {
+		return setImmediateAvailable(fn);
+	};
 
 	describe('setImmediate', function () {
 

@@ -3,11 +3,15 @@ import addEventListner from '../dom/addEventListener';
 import window from '../window';
 import setTimeout from '../setTimeout';
 
+if (!window.immediateId) {
+	window.immediateId = 0;
+}
+window.immediateId += 1;
 let setImmediateAvailable;
 let firstImmediate = true;
 let immediateCount = 0;
 const tasks = {};
-const suffix = '_setImmediate';
+const suffix = `_setImmediate${window.immediateId}`;
 const {setImmediate: setImmediateNative} = window;
 
 function setImmediatePostMessage(fn) {
@@ -30,10 +34,6 @@ function setImmediatePostMessage(fn) {
 
 function setImmediateTimeout(fn) {
 	return setTimeout(fn);
-}
-
-function setImmediate(fn) {
-	return setImmediateAvailable(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -65,4 +65,6 @@ setTimeout(function () {
 });
 
 
-export default setImmediate;
+export default function (fn) {
+	return setImmediateAvailable(fn);
+}

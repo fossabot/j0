@@ -1,6 +1,7 @@
 import isFunction from '../../isFunction';
 import push from '../../Array/push';
 import forEach from '../../Array/forEach';
+import shift from '../../Array/shift';
 import setImmediate from '../../setImmediate';
 import Error from '../../Error';
 
@@ -88,15 +89,14 @@ class J0Promise {
 		});
 	}
 
-	resolve(value) {
+	resolve(value = this.value) {
 		this.state = FULFILLED;
 		this.value = value;
 		setImmediate(() => {
 			const functions = this.onFulfilled;
-			forEach(functions, function (onFulfilled) {
-				onFulfilled(value);
-			});
-			this.finish();
+			while (functions[0]) {
+				shift(functions)(value);
+			}
 		});
 	}
 
@@ -105,34 +105,30 @@ class J0Promise {
 		this.value = error;
 		setImmediate(() => {
 			const functions = this.onRejected;
-			forEach(functions, function (onRejected) {
-				onRejected(error);
-			});
-			this.finish();
+			while (functions[0]) {
+				shift(functions)(error);
+			}
 		});
 	}
 
-	finish() {
-		this.onFulfilled = null;
-		this.onRejected = null;
-	}
-
 	then(onFulfilled, onRejected) {
+		const promise = new J0Promise((onFulfilled2, onRejected2) => {
+			addThenFunction(this.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
+			addThenFunction(this.onRejected, onRejected, onFulfilled2, onRejected2);
+		});
 		switch (this.state) {
 		case PENDING:
-			return new J0Promise((onFulfilled2, onRejected2) => {
-				addThenFunction(this.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
-				addThenFunction(this.onRejected, onRejected, onFulfilled2, onRejected2);
-			});
+			break;
 		case FULFILLED:
-			return Promise.resolve(this.value)
-			.then(onFulfilled, onRejected);
+			this.resolve();
+			break;
 		case REJECTED:
-			return Promise.reject(this.value)
-			.then(onFulfilled, onRejected);
+			this.reject();
+			break;
 		default:
 			throw new Error(`Unknown state: ${this.state}`);
 		}
+		return promise;
 	}
 
 	catch(onRejected) {

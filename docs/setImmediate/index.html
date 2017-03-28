@@ -4,11 +4,10 @@
 <title>j0/setImmediate</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../page.css" rel="stylesheet">
+<script src="../polyfill.js"></script>
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script src="../polyfill.js"></script>
-<script src="../page.js"></script>
 <h1 id="title"><a href="../">j0</a>/setImmediate<span class="version">0.0.55</span></h1>
 <ul class="Children" data-count="0">
 	
@@ -20,11 +19,15 @@
 <span class="linenum"></span><span class="import">import</span> <span class="name">window</span> <span class="name">from</span> <a href="../window"><span class="string"><span class="string">'../window'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">setTimeout</span> <span class="name">from</span> <a href="../setTimeout"><span class="string"><span class="string">'../setTimeout'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
+<span class="linenum"></span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="name">let</span> <span class="name">setImmediateAvailable</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="name">let</span> <span class="name">firstImmediate</span> <span class="_3d">=</span> <span class="true">true</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="name">let</span> <span class="name">immediateCount</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="const">const</span> <span class="name">tasks</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="const">const</span> <span class="name">suffix</span> <span class="_3d">=</span> <span class="string">'_setImmediate'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">suffix</span> <span class="_3d">=</span> <span class="_60">`</span><span class="template">_setImmediate</span><span class="_24_7b">${</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span><span class="_7d">}</span><span class="_60">`</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="const">const</span> <span class="_7b">{</span><span class="name">setImmediate</span><span class="_3a">:</span> <span class="name">setImmediateNative</span><span class="_7d">}</span> <span class="_3d">=</span> <span class="name">window</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">setImmediatePostMessage</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
@@ -47,10 +50,6 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">setImmediateTimeout</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">setTimeout</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="_7d">}</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="function">function</span> <span class="name">setImmediate</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">setImmediateAvailable</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">testImmediate</span><span class="_28">(</span><span class="name">fn</span><span class="_2c">,</span> <span class="name">onSuccess</span><span class="_29">)</span> <span class="_7b">{</span>
@@ -82,7 +81,9 @@
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">setImmediate</span><span class="_3b">;</span></pre>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="function">function</span> <span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">setImmediateAvailable</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/setImmediate/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
@@ -122,4 +123,6 @@
 	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <a class="TestResult" href="#mocha"></a>
+<script src="../page.js"></script>
 <script src="index.test.js"></script>
+<script>start()</script>

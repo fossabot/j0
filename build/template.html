@@ -4,11 +4,10 @@
 <title>{{package.name}}/{{name}}</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="{{root}}/page.css" rel="stylesheet">
+<script src="{{root}}/polyfill.js"></script>
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script src="{{root}}/polyfill.js"></script>
-<script src="{{root}}/page.js"></script>
 <h1 id="title">{{&titleHTML}}<span class="version">{{package.version}}</span></h1>
 <ul class="Children" data-count="{{children.length}}">
 	{{#children}}<li><a href="{{&childname}}/">{{package.name}}/{{&name}}/{{&childname}}</a></li>{{/children}}
@@ -34,4 +33,6 @@
 	<p>j0 is free and open source software released under MIT license. The latest version is {{package.version}}. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <a class="TestResult" href="#mocha"></a>
+<script src="{{root}}/page.js"></script>
 <script src="index.test.js"></script>
+<script>start()</script>

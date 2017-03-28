@@ -186,6 +186,100 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
+	function getMatcher$1(ref) {
+		return function (value) {
+			return ref === value;
+		};
+	}
+
+	function find$2(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = void 0;
+		if (!isFunction(fn)) {
+			fn = getMatcher$1(fn);
+		}
+		forEach(iterable, function (item, index) {
+			if (fn.call(thisArg, item, index, iterable)) {
+				result = index;
+				return true;
+			}
+		});
+		return result;
+	}
+
+	function getArguments$1() {
+		return arguments;
+	}
+
+	describe('Array/findIndex', function () {
+
+		it('should find an index an item', function () {
+			function matcher(x) {
+				return x === 3;
+			}
+			var actual = find$2([0, 1, 2, 3], matcher);
+			var expected = 3;
+			assert.equal(actual, expected);
+		});
+
+		it('should find an index the first truthy item', function () {
+			var actual = find$2([0, false, null, 1]);
+			var expected = 3;
+			assert.equal(actual, expected);
+		});
+
+		it('should find an index an item from arguments', function () {
+			function matcher(x) {
+				return x === 3;
+			}
+			var actual = find$2(getArguments$1(0, 1, 2, 3), matcher);
+			var expected = 3;
+			assert.equal(actual, expected);
+		});
+
+		it('should find an index an item from iterable', function () {
+			var count = 0;
+			var iterator = {
+				next: function next() {
+					count += 1;
+					return {
+						value: count,
+						done: 20 < count
+					};
+				}
+			};
+			function matcher(x) {
+				return 10 <= x;
+			}
+			var actual = find$2(iterator, matcher);
+			var expected = 9;
+			assert.equal(actual, expected);
+		});
+
+		it('should find an index a character from a string', function () {
+			function matcher(x) {
+				return x === 'b';
+			}
+			var actual = find$2('abc', matcher);
+			var expected = 1;
+			assert.equal(actual, expected);
+		});
+
+		it('should call matcher in a specified context', function () {
+			function matcher(x) {
+				this.sum += x;
+				return 4 < x;
+			}
+			var context = { sum: 0 };
+			var actual = find$2([0, 1, 2, 3, 4, 5, 6], matcher, context);
+			var expected = 5;
+			assert.equal(actual, expected);
+			assert.deepEqual(context, { sum: 15 });
+		});
+	});
+
 	function push(arrayLike) {
 		var _Array$prototype$push;
 
@@ -497,6 +591,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			var actual = Array.of(1, 2, 3);
 			var expected = [1, 2, 3];
 			assert.deepEqual(actual, expected);
+		});
+	});
+
+	describe('Array/polyfill', function () {
+
+		it('should have from', function () {
+			assert.deepEqual(Array.from('abc'), ['a', 'b', 'c']);
 		});
 	});
 

@@ -75,10 +75,6 @@ class SymbolRegistry {
 
 }
 
-function polyfill() {
-	if (!window.Symbol) {
-		window.Symbol = new SymbolRegistry().Symbol;
-	}
+if (!window.Symbol) {
+	window.Symbol = new SymbolRegistry().Symbol;
 }
-
-export default polyfill;

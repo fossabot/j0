@@ -3,12 +3,15 @@ const chalk = require('chalk');
 const console = require('j1/console').create('wdio');
 
 const lengthToRemoveArrowMark = -2;
-const waitBody = 3000;
+const waitBody = 1000;
+const retry = 8;
 
 describe('{{name}}', function () {
 
+	browser.url('{{url}}');
+
 	before(function () {
-		browser.url('{{url}}');
+		this.retries(retry);
 		browser.waitForExist('body.done', waitBody);
 	});
 

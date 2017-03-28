@@ -64,49 +64,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	}
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
+	var key = Symbol('events');
 
-	function includes(iterable, searchElement, fromIndex) {
-		return Array.from(iterable).includes(searchElement, fromIndex);
-	}
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			args[_key3 - 1] = arguments[_key3];
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
 		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
-
-	function getEvents(element) {
-		var j0ev = element.j0ev;
-
-		if (isUndefined(j0ev)) {
-			j0ev = {};
-			element.j0ev = j0ev;
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents[eventName] = events;
+			}
+			return events;
 		}
-		return j0ev;
-	}
-
-	function addListener(events, eventName, fn) {
-		var listeners = events[eventName];
-		if (isUndefined(listeners)) {
-			listeners = [];
-			events[eventName] = listeners;
-		}
-		if (!includes(listeners, fn)) {
-			push(listeners, fn);
-		}
+		return allEvents;
 	}
 
 	function addEventListener(element, eventName, fn) {
-		var events = getEvents(element);
 		element.addEventListener(eventName, fn);
-		addListener(events, eventName, fn);
+		getEventListeners(element, eventName).add(fn);
 	}
 
 	function processTace() {

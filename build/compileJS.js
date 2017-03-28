@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const rollup = require('rollup');
 const rollupWatch = require('rollup-watch');
@@ -8,7 +7,6 @@ const babel = require('babel-core');
 const console = require('j1/console').create('compileJS');
 const writeFile = require('j1/writeFile');
 const fileSize = require('j1/fileSize');
-const promisify = require('j1/promisify');
 const glob = require('glob');
 
 const {watch, format} = require('./constants');

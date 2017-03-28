@@ -1,4 +1,3 @@
-import assert from 'assert';
 import Promise from '../../Promise';
 import clearTimeout from '..';
 import setTimeout from '../../setTimeout';

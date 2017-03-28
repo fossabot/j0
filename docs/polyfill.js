@@ -103,13 +103,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return SymbolRegistry;
 	}();
 
-	function polyfill$1() {
-		if (!window.Symbol) {
-			window.Symbol = new SymbolRegistry().Symbol;
-		}
+	if (!window.Symbol) {
+		window.Symbol = new SymbolRegistry().Symbol;
 	}
 
-	function forEach(iterable, fn, thisArg) {
+	function _forEach(iterable, fn, thisArg) {
 		var index = 0;
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
@@ -142,7 +140,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function every(fn, thisArg) {
 		var result = true;
-		forEach(this, function () {
+		_forEach(this, function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 				args[_key] = arguments[_key];
 			}
@@ -172,7 +170,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		var thisArg = arguments[2];
 
 		var result = [];
-		forEach(iterable, function () {
+		_forEach(iterable, function () {
 			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
 				args[_key3] = arguments[_key3];
 			}
@@ -222,39 +220,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return false;
 	}
 
-	function polyfill$2() {
-		if (!Array.from) {
-			Array.from = map;
-		}
-		if (!Array.of) {
-			Array.of = of;
-		}
-		if (!Array.isArray) {
-			Array.isArray = isArray;
-		}
-		if (!Array.prototype.every) {
-			Array.prototype.every = every;
-		}
-		if (!Array.prototype.includes) {
-			Array.prototype.includes = includes;
-		}
-		if (!Array.prototype[Symbol.iterator]) {
-			Array.prototype[Symbol.iterator] = function () {
-				var _this2 = this;
+	if (!Array.from) {
+		Array.from = map;
+	}
+	if (!Array.of) {
+		Array.of = of;
+	}
+	if (!Array.isArray) {
+		Array.isArray = isArray;
+	}
+	if (!Array.prototype.every) {
+		Array.prototype.every = every;
+	}
+	if (!Array.prototype.includes) {
+		Array.prototype.includes = includes;
+	}
+	if (!Array.prototype[Symbol.iterator]) {
+		Array.prototype[Symbol.iterator] = function () {
+			var _this2 = this;
 
-				var index = 0;
-				return {
-					next: function next() {
-						var result = {
-							value: _this2[index],
-							done: !(index < _this2.length)
-						};
-						index += 1;
-						return result;
-					}
-				};
+			var index = 0;
+			return {
+				next: function next() {
+					var result = {
+						value: _this2[index],
+						done: !(index < _this2.length)
+					};
+					index += 1;
+					return result;
+				}
 			};
-		}
+		};
 	}
 
 	function isNumber(x) {
@@ -265,33 +261,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return typeof x === 'function';
 	}
 
-	function polyfill$3() {
-		if (!Object.prototype[Symbol.iterator]) {
-			Object.prototype[Symbol.iterator] = function () {
-				var _this3 = this;
+	if (!Object.prototype[Symbol.iterator]) {
+		Object.prototype[Symbol.iterator] = function () {
+			var _this3 = this;
 
-				if (isFunction(this.next)) {
-					return {
-						next: function next() {
-							return _this3.next();
-						}
-					};
-				} else if (isNumber(this.length)) {
-					var index = 0;
-					return {
-						next: function next() {
-							var result = {
-								value: _this3[index],
-								done: !(index < _this3.length)
-							};
-							index += 1;
-							return result;
-						}
-					};
-				}
-				throw new TypeError('This object is not iterable');
-			};
-		}
+			if (isFunction(this.next)) {
+				return {
+					next: function next() {
+						return _this3.next();
+					}
+				};
+			} else if (isNumber(this.length)) {
+				var index = 0;
+				return {
+					next: function next() {
+						var result = {
+							value: _this3[index],
+							done: !(index < _this3.length)
+						};
+						index += 1;
+						return result;
+					}
+				};
+			}
+			throw new TypeError('This object is not iterable');
+		};
 	}
 
 	function join(iterable) {
@@ -309,54 +303,52 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return join(results, '');
 	}
 
-	function polyfill$4() {
-		if (!String.prototype.repeat) {
-			String.prototype.repeat = repeat;
-		}
+	if (!String.prototype.repeat) {
+		String.prototype.repeat = repeat;
+	}
+
+	function shift(iterable) {
+		return iterable.shift();
 	}
 
 	var postMessage = window.postMessage;
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
+	var key = Symbol('events');
 
-	function includes$2(iterable, searchElement, fromIndex) {
-		return Array.from(iterable).includes(searchElement, fromIndex);
-	}
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-	function getEvents(element) {
-		var j0ev = element.j0ev;
-
-		if (isUndefined(j0ev)) {
-			j0ev = {};
-			element.j0ev = j0ev;
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
 		}
-		return j0ev;
-	}
-
-	function addListener(events, eventName, fn) {
-		var listeners = events[eventName];
-		if (isUndefined(listeners)) {
-			listeners = [];
-			events[eventName] = listeners;
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents[eventName] = events;
+			}
+			return events;
 		}
-		if (!includes$2(listeners, fn)) {
-			push(listeners, fn);
-		}
+		return allEvents;
 	}
 
 	function addEventListener(element, eventName, fn) {
-		var events = getEvents(element);
 		element.addEventListener(eventName, fn);
-		addListener(events, eventName, fn);
+		getEventListeners(element, eventName).add(fn);
 	}
 
+	if (!window.immediateId) {
+		window.immediateId = 0;
+	}
+	window.immediateId += 1;
 	var setImmediateAvailable = void 0;
 	var firstImmediate = true;
 	var immediateCount = 0;
 	var tasks = {};
-	var suffix = '_setImmediate';
+	var suffix = '_setImmediate' + window.immediateId;
 	var _window = window,
 	    setImmediateNative = _window.setImmediate;
 
@@ -384,10 +376,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	function setImmediateTimeout(fn) {
 		return setTimeout(fn);
-	}
-
-	function setImmediate(fn) {
-		return setImmediateAvailable(fn);
 	}
 
 	function testImmediate(fn, onSuccess) {
@@ -418,6 +406,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
+	var setImmediate = function setImmediate(fn) {
+		return setImmediateAvailable(fn);
+	};
+
 	var PENDING = 0;
 	var FULFILLED = 1;
 	var REJECTED = 2;
@@ -444,17 +436,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(J0Promise, [{
 			key: 'resolve',
-			value: function resolve(value) {
+			value: function resolve() {
 				var _this5 = this;
+
+				var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.value;
 
 				this.state = FULFILLED;
 				this.value = value;
 				setImmediate(function () {
 					var functions = _this5.onFulfilled;
-					forEach(functions, function (onFulfilled) {
-						onFulfilled(value);
-					});
-					_this5.finish();
+					while (functions[0]) {
+						shift(functions)(value);
+					}
 				});
 			}
 		}, {
@@ -466,36 +459,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.value = error;
 				setImmediate(function () {
 					var functions = _this6.onRejected;
-					forEach(functions, function (onRejected) {
-						onRejected(error);
-					});
-					_this6.finish();
+					while (functions[0]) {
+						shift(functions)(error);
+					}
 				});
-			}
-		}, {
-			key: 'finish',
-			value: function finish() {
-				this.onFulfilled = null;
-				this.onRejected = null;
 			}
 		}, {
 			key: 'then',
 			value: function then(onFulfilled, onRejected) {
 				var _this7 = this;
 
+				var promise = new J0Promise(function (onFulfilled2, onRejected2) {
+					addThenFunction(_this7.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
+					addThenFunction(_this7.onRejected, onRejected, onFulfilled2, onRejected2);
+				});
 				switch (this.state) {
 					case PENDING:
-						return new J0Promise(function (onFulfilled2, onRejected2) {
-							addThenFunction(_this7.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
-							addThenFunction(_this7.onRejected, onRejected, onFulfilled2, onRejected2);
-						});
+						break;
 					case FULFILLED:
-						return Promise.resolve(this.value).then(onFulfilled, onRejected);
+						this.resolve();
+						break;
 					case REJECTED:
-						return Promise.reject(this.value).then(onFulfilled, onRejected);
+						this.reject();
+						break;
 					default:
 						throw new Error('Unknown state: ' + this.state);
 				}
+				return promise;
 			}
 		}, {
 			key: 'catch',
@@ -521,7 +511,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function race(promises) {
 				return new J0Promise(function (resolve, reject) {
 					var finished = false;
-					forEach(promises, function (promise) {
+					_forEach(promises, function (promise) {
 						promise.then(function (result) {
 							if (!finished) {
 								finished = true;
@@ -544,7 +534,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var goal = promises.length;
 					var finished = false;
 					var count = 0;
-					forEach(promises, function (promise, index) {
+					_forEach(promises, function (promise, index) {
 						promise.then(function (result) {
 							if (!finished) {
 								results[index] = result;
@@ -584,16 +574,236 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		} : onFulfilled2);
 	}
 
-	var polyfillPromise = function polyfillPromise() {
-		if (!window.Promise) {
-			window.Promise = J0Promise;
+	if (!window.Promise) {
+		window.Promise = J0Promise;
+	}
+
+	function getMatcher(ref) {
+		return function (value) {
+			return ref === value;
+		};
+	}
+
+	function find(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = void 0;
+		if (!isFunction(fn)) {
+			fn = getMatcher(fn);
 		}
-	};
+		_forEach(iterable, function (item, index) {
+			if (fn.call(thisArg, item, index, iterable)) {
+				result = item;
+				return true;
+			}
+		});
+		return result;
+	}
+
+	function getMatcher$1(ref) {
+		return function (value) {
+			return ref === value;
+		};
+	}
+
+	function find$2(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = void 0;
+		if (!isFunction(fn)) {
+			fn = getMatcher$1(fn);
+		}
+		_forEach(iterable, function (item, index) {
+			if (fn.call(thisArg, item, index, iterable)) {
+				result = index;
+				return true;
+			}
+		});
+		return result;
+	}
+
+	function splice(array) {
+		for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+			args[_key4 - 1] = arguments[_key4];
+		}
+
+		return array.splice.apply(array, args);
+	}
+
+	var Map$2 = function () {
+		function Map$2() {
+			_classCallCheck(this, Map$2);
+
+			this.clear();
+		}
+
+		_createClass(Map$2, [{
+			key: 'clear',
+			value: function clear() {
+				this.data = [];
+				this.size = 0;
+			}
+		}, {
+			key: 'indexOfKey',
+			value: function indexOfKey(key) {
+				return find$2(this.data, function (_ref) {
+					var _ref2 = _slicedToArray(_ref, 1),
+					    itemKey = _ref2[0];
+
+					return itemKey === key;
+				});
+			}
+		}, {
+			key: 'has',
+			value: function has(key) {
+				return 0 <= this.indexOfKey(key);
+			}
+		}, {
+			key: 'set',
+			value: function set(key, value) {
+				var index = this.indexOfKey(key);
+				if (index < 0) {
+					push(this.data, [key, value]);
+				} else {
+					this.data[index][1] = value;
+				}
+				return this;
+			}
+		}, {
+			key: 'get',
+			value: function get(key) {
+				return find(this.data, function (_ref3) {
+					var _ref4 = _slicedToArray(_ref3, 1),
+					    itemKey = _ref4[0];
+
+					return itemKey === key;
+				});
+			}
+		}, {
+			key: 'delete',
+			value: function _delete(key) {
+				var index = this.indexOfKey(key);
+				if (0 <= index) {
+					splice(this.data, index, 1);
+					return true;
+				}
+				return false;
+			}
+		}, {
+			key: 'entries',
+			value: function entries() {
+				return this.data[Symbol.iterator]();
+			}
+		}, {
+			key: 'forEach',
+			value: function forEach(fn, thisArg) {
+				_forEach(this.data, fn, thisArg);
+			}
+		}, {
+			key: 'keys',
+			value: function keys() {
+				return map(this.data, function (_ref5) {
+					var _ref6 = _slicedToArray(_ref5, 1),
+					    key = _ref6[0];
+
+					return key;
+				});
+			}
+		}, {
+			key: 'values',
+			value: function values() {
+				return map(this.data, function (_ref7) {
+					var _ref8 = _slicedToArray(_ref7, 2),
+					    value = _ref8[1];
+
+					return value;
+				});
+			}
+		}]);
+
+		return Map$2;
+	}();
+
+	if (!window.Map) {
+		window.Map = Map$2;
+		Map$2.prototype[Symbol.iterator] = function () {
+			return this.entries();
+		};
+	}
+
+	function includes$2(iterable, searchElement, fromIndex) {
+		return Array.from(iterable).includes(searchElement, fromIndex);
+	}
+
+	var Set$2 = function () {
+		function Set$2() {
+			_classCallCheck(this, Set$2);
+
+			this.clear();
+		}
+
+		_createClass(Set$2, [{
+			key: 'clear',
+			value: function clear() {
+				this.data = [];
+			}
+		}, {
+			key: 'has',
+			value: function has(value) {
+				return includes$2(this.data, value);
+			}
+		}, {
+			key: 'add',
+			value: function add(value) {
+				if (!this.has(value)) {
+					push(this.data, value);
+				}
+				return this;
+			}
+		}, {
+			key: 'delete',
+			value: function _delete(value) {
+				var index = find$2(this.data, value);
+				if (0 <= index) {
+					splice(this.data, index, 1);
+				}
+				return 0 <= index;
+			}
+		}, {
+			key: 'entries',
+			value: function entries() {
+				return this.data[Symbol.iterator]();
+			}
+		}, {
+			key: 'forEach',
+			value: function forEach(fn, thisArg) {
+				_forEach(this.data, fn, thisArg);
+			}
+		}, {
+			key: 'values',
+			value: function values() {
+				return slice(this.data);
+			}
+		}, {
+			key: 'size',
+			get: function get() {
+				return this.data.length;
+			}
+		}]);
+
+		return Set$2;
+	}();
+
+	if (!window.Set) {
+		window.Set = Set$2;
+		Set$2.prototype[Symbol.iterator] = function () {
+			return this.entries();
+		};
+	}
 
 	window.global = window;
-	polyfill$1();
-	polyfill$3();
-	polyfill$2();
-	polyfill$4();
-	polyfillPromise();
+
+	window.ready = true;
 });

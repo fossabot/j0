@@ -4,11 +4,10 @@
 <title>j0/setTimeout</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../page.css" rel="stylesheet">
+<script src="../polyfill.js"></script>
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
-<script src="../polyfill.js"></script>
-<script src="../page.js"></script>
 <h1 id="title"><a href="../">j0</a>/setTimeout<span class="version">0.0.55</span></h1>
 <ul class="Children" data-count="0">
 	
@@ -21,15 +20,14 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">assert</span> <span class="name">from</span> <span class="string">'assert'</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span> <span class="name">Promise</span> <span class="name">from</span> <a href="../Promise"><span class="string"><span class="string">'../../Promise'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">Promise</span> <span class="name">from</span> <a href="../Promise"><span class="string"><span class="string">'../../Promise'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">Date</span> <span class="name">from</span> <a href="../Date"><span class="string"><span class="string">'../../Date'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">setTimeout</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'setTimeout'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">WAIT</span> <span class="_3d">=</span> <span class="num">50</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">MARGIN</span> <span class="_3d">=</span> <span class="num">0.9</span><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">WAIT</span> <span class="_3d">=</span> <span class="num">100</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">MARGIN</span> <span class="_3d">=</span> <span class="num">0.9</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'setTimeout'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="_60">`</span><span class="template">should call fn after </span><span class="_24_7b">${</span><span class="name">WAIT</span><span class="_7d">}</span><span class="template">ms</span><span class="_60">`</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">start</span> <span class="_3d">=</span> <span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
@@ -55,4 +53,6 @@
 	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <a class="TestResult" href="#mocha"></a>
+<script src="../page.js"></script>
 <script src="index.test.js"></script>
+<script>start()</script>

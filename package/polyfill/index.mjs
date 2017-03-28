@@ -1,13 +1,10 @@
-import polyfillSymbol from '../Symbol/polyfill';
-import polyfillArray from '../Array/polyfill';
-import polyfillObject from '../Object/polyfill';
-import polyfillString from '../String/polyfill';
-import polyfillPromise from '../Promise/polyfill';
+import '../Symbol/polyfill';
+import '../Array/polyfill';
+import '../Object/polyfill';
+import '../String/polyfill';
+import '../Promise/polyfill';
+import '../Map/polyfill';
+import '../Set/polyfill';
 import window from '../window';
 
 window.global = window;
-polyfillSymbol();
-polyfillObject();
-polyfillArray();
-polyfillString();
-polyfillPromise();

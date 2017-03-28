@@ -1,12 +1,11 @@
-import assert from 'assert';
 import Promise from '../../Promise';
 import Date from '../../Date';
 import setTimeout from '..';
 
-describe('setTimeout', function () {
+const WAIT = 50;
+const MARGIN = 0.9;
 
-	const WAIT = 100;
-	const MARGIN = 0.9;
+describe('setTimeout', function () {
 
 	it(`should call fn after ${WAIT}ms`, function () {
 		const start = Date.now();

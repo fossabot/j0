@@ -2,21 +2,36 @@ import isString from '..';
 
 describe('isString', function () {
 
-	const tests = [
-		[[undefined], false],
-		[[null], false],
-		[[NaN], false],
-		[[123], false],
-		[['123'], true],
-		[[{}], false],
-		[[[]], false],
-		[[function () {}], false]
-	];
+	it('should return false if the arguments are []', function () {
+		assert.equal(isString(), false);
+	});
 
-	for (const [args, expected] of tests) {
-		it(`should return ${expected} if the arguments are ${args}`, function () {
-			assert.equal(isString(...args), expected);
-		});
-	}
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isString(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isString(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isString(123), false);
+	});
+
+	it('should return true if the arguments are [\'abc\']', function () {
+		assert.equal(isString('abc'), true);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isString({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isString([]), false);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isString(function () {}), false);
+	});
 
 });

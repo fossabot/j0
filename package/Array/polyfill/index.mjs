@@ -6,37 +6,33 @@ import arrayOf from '../of/polyfill';
 import isArray from '../isArray/polyfill';
 import includes from '../includes/polyfill';
 
-function polyfill() {
-	if (!Array.from) {
-		Array.from = arrayFrom;
-	}
-	if (!Array.of) {
-		Array.of = arrayOf;
-	}
-	if (!Array.isArray) {
-		Array.isArray = isArray;
-	}
-	if (!Array.prototype.every) {
-		Array.prototype.every = every;
-	}
-	if (!Array.prototype.includes) {
-		Array.prototype.includes = includes;
-	}
-	if (!Array.prototype[Symbol.iterator]) {
-		Array.prototype[Symbol.iterator] = function () {
-			let index = 0;
-			return {
-				next: () => {
-					const result = {
-						value: this[index],
-						done: !(index < this.length)
-					};
-					index += 1;
-					return result;
-				}
-			};
-		};
-	}
+if (!Array.from) {
+	Array.from = arrayFrom;
 }
-
-export default polyfill;
+if (!Array.of) {
+	Array.of = arrayOf;
+}
+if (!Array.isArray) {
+	Array.isArray = isArray;
+}
+if (!Array.prototype.every) {
+	Array.prototype.every = every;
+}
+if (!Array.prototype.includes) {
+	Array.prototype.includes = includes;
+}
+if (!Array.prototype[Symbol.iterator]) {
+	Array.prototype[Symbol.iterator] = function () {
+		let index = 0;
+		return {
+			next: () => {
+				const result = {
+					value: this[index],
+					done: !(index < this.length)
+				};
+				index += 1;
+				return result;
+			}
+		};
+	};
+}

@@ -77,10 +77,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		window.assert = chai.assert;
 		mocha.setup('bdd');
 	}
+
+	window.start = startMocha;
 	getBody.then(function () {
-		if (mocha) {
-			startMocha();
-		}
 		showEnvironment();
 	}).catch(onError);
 });

@@ -10,7 +10,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	describe('location', function () {
 
 		it('should have href', function () {
-			assert.equal(0 < location.href, true);
+			assert.equal(!location.href, false);
 		});
 	});
 });
