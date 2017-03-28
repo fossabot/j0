@@ -1,5 +1,7 @@
 'use strict';
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -8,6 +10,61 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
+
+	function addClass(element, className) {
+		element.classList.add(className);
+	}
+
+	function isString(x) {
+		return typeof x === 'string';
+	}
+
+	function isNode(x) {
+		return x instanceof Node;
+	}
+
+	function setAttribute(element, attrName) {
+		for (var _len = arguments.length, value = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+			value[_key - 2] = arguments[_key];
+		}
+
+		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
+	}
+
+	var key = Symbol('events');
+
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
+		}
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents.set(eventName, events);
+			}
+			return events;
+		}
+		return allEvents;
+	}
+
+	function addEventListener(element, eventName, fn) {
+		element.addEventListener(eventName, fn);
+		getEventListeners(element, eventName).add(fn);
+	}
+
+	function noop(x) {
+		return x;
+	}
 
 	function forEach(iterable, fn, thisArg) {
 		var index = 0;
@@ -40,92 +97,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	}
 
-	function addClass(element) {
-		for (var _len = arguments.length, classNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			classNames[_key - 1] = arguments[_key];
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+			args[_key2 - 1] = arguments[_key2];
 		}
 
-		forEach(classNames, function (className) {
-			element.classList.add(className);
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
+	function filter(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index, iterable2) {
+			if (fn.call(thisArg, value, index, iterable2)) {
+				push(result, value);
+			}
 		});
-	}
-
-	function isString(x) {
-		return typeof x === 'string';
-	}
-
-	function isNode(x) {
-		return x instanceof Node;
-	}
-
-	function noop(x) {
-		return x;
-	}
-
-	function setAttribute(element, attrName) {
-		for (var _len2 = arguments.length, value = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-			value[_key2 - 2] = arguments[_key2];
-		}
-
-		element.setAttribute(attrName, value.join(' '));
-	}
-
-	function appendChild(parentNode) {
-		for (var _len3 = arguments.length, newNodes = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			newNodes[_key3 - 1] = arguments[_key3];
-		}
-
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = newNodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var newNode = _step2.value;
-
-				parentNode.appendChild(newNode);
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
-				}
-			}
-		}
-	}
-
-	var key = Symbol('events');
-
-	function getEventListeners(element) {
-		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-		var allEvents = element[key];
-		var events = void 0;
-		if (!allEvents) {
-			allEvents = new Map();
-			element[key] = allEvents;
-		}
-		if (eventName) {
-			events = allEvents.get(eventName);
-			if (!events) {
-				events = new Set();
-				allEvents[eventName] = events;
-			}
-			return events;
-		}
-		return allEvents;
-	}
-
-	function addEventListener(element, eventName, fn) {
-		element.addEventListener(eventName, fn);
-		getEventListeners(element, eventName).add(fn);
+		return result;
 	}
 
 	function processTace() {
@@ -140,57 +132,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		    e = _tace$e === undefined ? [] : _tace$e;
 
 		var element = document.createElement(t);
-		var _iteratorNormalCompletion3 = true;
-		var _didIteratorError3 = false;
-		var _iteratorError3 = undefined;
-
-		try {
-			for (var _iterator3 = a.filter(noop)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var args = _step3.value;
-
-				setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
-			}
-		} catch (err) {
-			_didIteratorError3 = true;
-			_iteratorError3 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion3 && _iterator3.return) {
-					_iterator3.return();
-				}
-			} finally {
-				if (_didIteratorError3) {
-					throw _iteratorError3;
-				}
-			}
-		}
-
-		appendChild.apply(undefined, [element].concat(_toConsumableArray(c.filter(noop).map(createElement))));
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = e.filter(noop)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var _args = _step4.value;
-
-				addEventListener.apply(undefined, [element].concat(_toConsumableArray(_args)));
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
+		forEach(filter(a), function (args) {
+			setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
+		forEach(filter(c), function (data) {
+			appendChild(element, createElement(data));
+		});
+		forEach(filter(e), function (args) {
+			addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
 		return element;
 	}
 
@@ -203,48 +153,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function getAttribute(element, attributeName) {
-		return element.getAttribute(attributeName);
+	function hasClass(element, className) {
+		return element.classList.contains(className);
 	}
 
 	describe('dom/addClass', function () {
 
-		it('should add classes', function () {
+		it('should add a class', function () {
 			var element = createElement({});
-			var c1 = 'abc';
-			var c2 = 'def';
-			var c3 = 'ghi';
-			var expected = 'abc def ghi';
-			addClass(element, c1, c2, c3);
-			assert.equal(getAttribute(element, 'class'), expected);
-		});
-
-		it('should keep uniqueness', function () {
-			var element = createElement({});
-			var c1 = 'abc';
-			var c2 = 'def';
-			var c3 = 'abc';
-			var expected = 'abc def';
-			addClass(element, c1, c2, c3);
-			assert.equal(getAttribute(element, 'class'), expected);
+			var className = 'abc';
+			assert.equal(hasClass(element, className), false);
+			addClass(element, className);
+			assert.equal(hasClass(element, className), true);
 		});
 	});
 
 	describe('dom/addEventListener', function () {
 
 		it('should add a listener', function () {
-			function fn(event) {
-				console.log(event);
-			}
-			var element = createElement({});
+			function fn() {}
+			var element = createElement();
 			var eventName = 'abc';
 			addEventListener(element, eventName, fn);
+			assert.equal(getEventListeners(element, eventName).has(fn), true);
 		});
 	});
-
-	function from() {
-		return Array.from.apply(Array, arguments);
-	}
 
 	describe('dom/appendChild', function () {
 
@@ -261,14 +194,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			appendChild(parent, child);
 			assert.equal(child.parentNode, parent);
 		});
+	});
 
-		it('should append multiple elements', function () {
-			var parent = createElement();
-			var children = [{}, 'text', 'text2'].map(createElement);
-			appendChild.apply(undefined, [parent].concat(_toConsumableArray(children)));
-			assert.deepEqual(from(parent.childNodes), children);
+	describe('dom/createElement', function () {
+
+		it('should create a <div>', function () {
+			var element = createElement();
+			assert.equal(element.tagName.toLowerCase(), 'div');
 		});
 	});
+
+	function removeChild(parentElement, childNode) {
+		parentElement.removeChild(childNode);
+	}
+
+	function empty(element) {
+		while (element.firstChild) {
+			removeChild(element, element.firstChild);
+		}
+	}
+
+	describe('dom/empty', function () {
+
+		it('should clear an element', function () {
+			var element = createElement({ c: ['abc'] });
+			assert.equal(element.childNodes.length, 1);
+			empty(element);
+			assert.equal(element.childNodes.length, 0);
+		});
+	});
+
+	function getAttribute(element, attributeName) {
+		return element.getAttribute(attributeName);
+	}
 
 	describe('dom/getAttribute', function () {
 
@@ -291,6 +249,250 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function () {
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
+			}
+
+			push(result, fn.call.apply(fn, [thisArg].concat(args)));
+		});
+		return result;
+	}
+
+	describe('dom/getEventListeners', function () {
+
+		it('should get a Map', function () {
+			function fn1() {}
+			function fn2() {}
+			var eventName1 = 'abc';
+			var eventName2 = 'def';
+			var element = createElement({
+				e: [[eventName1, fn1], [eventName2, fn2]]
+			});
+			var result = getEventListeners(element);
+			assert.deepEqual(map(result.keys()), [eventName1, eventName2]);
+			assert.deepEqual(map(result.values(), function (set) {
+				return map(set);
+			}), [[fn1], [fn2]]);
+		});
+
+		it('should get a Set', function () {
+			function fn1() {}
+			function fn2() {}
+			var eventName1 = 'abc';
+			var eventName2 = 'def';
+			var element = createElement({
+				e: [[eventName1, fn1], [eventName2, fn2]]
+			});
+			var result = getEventListeners(element, eventName2);
+			assert.deepEqual(map(result), [fn2]);
+		});
+	});
+
+	function getScrollY(element) {
+		return element ? element.scrollTop : window.pageYOffset;
+	}
+
+	describe('getScrollY', function () {
+
+		it('should return a non-negative integer', function () {
+			assert.equal(0 <= getScrollY(), true);
+		});
+	});
+
+	describe('dom/createElement', function () {
+
+		it('should return true if the element has the class', function () {
+			var className = 'abc';
+			var element = createElement({
+				a: [['class', className]]
+			});
+			assert.equal(hasClass(element, className), true);
+		});
+
+		it('should return false if the element does not have the class', function () {
+			var className1 = 'abc';
+			var className2 = 'def';
+			var element = createElement({
+				a: [['class', className1]]
+			});
+			assert.equal(hasClass(element, className2), false);
+		});
+	});
+
+	function hasEventListener(element, eventName, fn) {
+		var events = getEventListeners(element, fn ? eventName : null);
+		return events && events.has(fn ? fn : eventName);
+	}
+
+	describe('dom/hasEventListener', function () {
+
+		it('should return true if the element has a listener for abc events', function () {
+			function fn() {}
+			var eventName = 'abc';
+			var element = createElement({
+				e: [[eventName, fn]]
+			});
+			assert.equal(hasEventListener(element, eventName), true);
+		});
+
+		it('should return false if the element has no listeners for abc events', function () {
+			function fn() {}
+			var eventName1 = 'abc';
+			var eventName2 = 'def';
+			var element = createElement({
+				e: [[eventName2, fn]]
+			});
+			assert.equal(hasEventListener(element, eventName1), false);
+		});
+
+		it('should return true if the element has a specified listener for abc events', function () {
+			function fn() {}
+			var eventName = 'abc';
+			var element = createElement({
+				e: [[eventName, fn]]
+			});
+			assert.equal(hasEventListener(element, eventName, fn), true);
+		});
+
+		it('should return false if the element does not have a specified listener for abc events', function () {
+			function fn() {}
+			function fn2() {}
+			var eventName = 'abc';
+			var element = createElement({
+				e: [[eventName, fn]]
+			});
+			assert.equal(hasEventListener(element, eventName, fn2), false);
+		});
+	});
+
+	function querySelectorAll(element, selectors) {
+		return (element === null ? document : element).querySelector(selectors);
+	}
+
+	describe('dom/querySelector', function () {
+
+		it('should get an element', function () {
+			var className = 'abc';
+			var child = createElement({
+				a: [['class', className]]
+			});
+			var parent = createElement({
+				c: [{ c: [child] }]
+			});
+			assert.equal(querySelectorAll(parent, '.' + className), child);
+		});
+	});
+
+	function querySelectorAll$1(element, selectors) {
+		return (element === null ? document : element).querySelectorAll(selectors);
+	}
+
+	describe('dom/querySelectorAll', function () {
+
+		it('should get elements', function () {
+			var className = 'abc';
+			var child1 = createElement({
+				a: [['class', className]]
+			});
+			var child2 = createElement({
+				a: [['class', className]]
+			});
+			var parent = createElement({
+				c: [{ c: [child1] }, child2]
+			});
+			assert.deepEqual(map(querySelectorAll$1(parent, '.' + className)), [child1, child2]);
+		});
+	});
+
+	function removeAttribute(element, attributeName) {
+		element.removeAttribute(attributeName);
+	}
+
+	describe('dom/removeAttribute', function () {
+
+		it('should remove an arrtibute', function () {
+			var attrName = 'abc';
+			var value = '1';
+			var element = createElement({
+				a: [[attrName, value]]
+			});
+			assert.equal(getAttribute(element, attrName), value);
+			removeAttribute(element, attrName);
+			assert.equal(getAttribute(element, attrName), null);
+		});
+	});
+
+	describe('dom/removeChild', function () {
+
+		it('should remove a child', function () {
+			var child = createElement();
+			var parent = createElement({ c: [child] });
+			assert.equal(child.parentNode, parent);
+			removeChild(parent, child);
+			assert.equal(child.parentNode, null);
+		});
+	});
+
+	function removeClass(element, className) {
+		element.classList.remove(className);
+	}
+
+	describe('dom/removeClass', function () {
+
+		it('should add a class', function () {
+			var className = 'abc';
+			var element = createElement({
+				a: [['class', className]]
+			});
+			assert.equal(hasClass(element, className), true);
+			removeClass(element, className);
+			assert.equal(hasClass(element, className), false);
+		});
+	});
+
+	function removeEventListener(element, eventName, fn) {
+		var events = getEventListeners(element, eventName);
+		if (fn) {
+			element.removeEventListener(eventName, fn);
+			events.delete(fn);
+		} else if (eventName) {
+			forEach(events, function (f) {
+				removeEventListener(element, eventName, f);
+			});
+			events.clear();
+		} else {
+			forEach(events, function (_ref) {
+				var _ref2 = _slicedToArray(_ref, 2),
+				    key = _ref2[0],
+				    set = _ref2[1];
+
+				forEach(set, function (f) {
+					removeEventListener(element, key, f);
+				});
+			});
+		}
+	}
+
+	describe('dom/removeEventListener', function () {
+
+		it('should remove a listener', function () {
+			function fn() {}
+			var eventName = 'abc';
+			var element = createElement({
+				e: [[eventName, fn]]
+			});
+			assert.equal(hasEventListener(element, eventName, fn), true);
+			removeEventListener(element, eventName, fn);
+			assert.equal(hasEventListener(element, eventName, fn), false);
+		});
+	});
+
 	describe('dom/setAttribute', function () {
 
 		it('should set an attribute to an element', function () {
@@ -310,11 +512,100 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
-	describe('dom/setStyle', function () {});
+	function setStyle(element, name, value) {
+		element.style[name] = value;
+	}
 
-	describe('dom/setTextContent', function () {});
+	describe('dom/setStyle', function () {
 
-	describe('dom/toggleClass', function () {});
+		it('should set css property', function () {
+			var element = createElement();
+			var key = 'color';
+			var value = 'rgb(0, 0, 0)';
+			setStyle(element, key, value);
+			assert.equal(/color\s*:\s*rgb\(\s*0\s*,\s*0\s*,\s*0\s*\)/.test(getAttribute(element, 'style')), true);
+		});
+	});
 
-	describe('dom/trigger', function () {});
+	function setTextContent(node, text) {
+		node.textContent = text;
+	}
+
+	describe('dom/setTextContent', function () {
+
+		it('should set a text', function () {
+			var element = createElement();
+			var text = 'abc';
+			assert.equal(element.childNodes.length, 0);
+			setTextContent(element, text);
+			assert.equal(element.textContent, text);
+		});
+	});
+
+	function toggleClass(element, className) {
+		return element.classList.toggle(className);
+	}
+
+	describe('dom/toggleClass', function () {
+
+		it('should add a class', function () {
+			var element = createElement({});
+			var className = 'abc';
+			toggleClass(element, className);
+			assert.equal(hasClass(element, className), true);
+		});
+
+		it('should remove a class', function () {
+			var element = createElement({});
+			var className = 'abc';
+			toggleClass(element, className);
+			assert.equal(hasClass(element, className), true);
+			toggleClass(element, className);
+			assert.equal(hasClass(element, className), false);
+		});
+	});
+
+	var Event = CustomEvent;
+	try {
+		new Event('G');
+	} catch (error) {
+		Event = null;
+	}
+	var CustomEvent$1 = Event;
+
+	var createEvent = void 0;
+
+	if (CustomEvent$1) {
+		createEvent = function createEvent(eventName, data) {
+			return new CustomEvent$1(eventName, {
+				detail: data,
+				bubbles: false,
+				cancelable: false
+			});
+		};
+	} else {
+		createEvent = function createEvent(eventName, data) {
+			var event = document.createEvent('CustomEvent');
+			event.initCustomEvent(eventName, false, false, data);
+			return event;
+		};
+	}
+
+	function trigger(element, eventName, data) {
+		element.dispatchEvent(createEvent(eventName, data));
+	}
+
+	describe('dom/trigger', function () {
+
+		it('should trigger an event', function () {
+			var count = 0;
+			var element = createElement({
+				e: [['abc', function () {
+					count += 1;
+				}]]
+			});
+			trigger(element, 'abc');
+			assert.equal(count, 1);
+		});
+	});
 });

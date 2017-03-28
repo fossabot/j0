@@ -33,7 +33,9 @@ class Set {
 	}
 
 	delete(value) {
-		const index = findIndex(this.data, value);
+		const index = findIndex(this.data, function (item) {
+			return item === value;
+		});
 		if (0 <= index) {
 			splice(this.data, index, 1);
 		}
@@ -56,7 +58,42 @@ class Set {
 
 if (!window.Set) {
 	window.Set = Set;
-	Set.prototype[Symbol.iterator] = function () {
-		return this.entries();
-	};
 }
+(function (prototype) {
+	if (Object.prototype[Symbol.iterator] === prototype[Symbol.iterator]) {
+		prototype[Symbol.iterator] = function () {
+			return this.entries();
+		};
+	}
+	if (!prototype.entries) {
+		prototype.entries = function () {
+			const result = [];
+			this.forEach(function (value) {
+				result[result.length] = value;
+			});
+			const {length} = result;
+			let index = 0;
+			return {
+				next: function () {
+					const value = result[index];
+					index += 1;
+					return {
+						value: value,
+						done: length < index
+					};
+				}
+			};
+		};
+	}
+	if (!prototype.has) {
+		prototype.has = function (value) {
+			let result = false;
+			this.forEach(function (item) {
+				if (!result && item === value) {
+					result = true;
+				}
+			});
+			return result;
+		};
+	}
+}(window.Set.prototype));

@@ -9,35 +9,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function appendChild(parentNode) {
-		for (var _len = arguments.length, newNodes = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			newNodes[_key - 1] = arguments[_key];
-		}
-
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = newNodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var newNode = _step.value;
-
-				parentNode.appendChild(newNode);
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
 	}
 
 	function isString(x) {
@@ -48,13 +21,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return x instanceof Node;
 	}
 
-	function noop(x) {
-		return x;
-	}
-
 	function setAttribute(element, attrName) {
-		for (var _len2 = arguments.length, value = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-			value[_key2 - 2] = arguments[_key2];
+		for (var _len = arguments.length, value = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+			value[_key - 2] = arguments[_key];
 		}
 
 		element.setAttribute(attrName, value.join(' '));
@@ -75,7 +44,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			events = allEvents.get(eventName);
 			if (!events) {
 				events = new Set();
-				allEvents[eventName] = events;
+				allEvents.set(eventName, events);
 			}
 			return events;
 		}
@@ -85,6 +54,64 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	function addEventListener(element, eventName, fn) {
 		element.addEventListener(eventName, fn);
 		getEventListeners(element, eventName).add(fn);
+	}
+
+	function noop(x) {
+		return x;
+	}
+
+	function forEach(iterable, fn, thisArg) {
+		var index = 0;
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+
+		try {
+			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var value = _step.value;
+
+				if (fn.call(thisArg, value, index, iterable)) {
+					return;
+				}
+				index += 1;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	}
+
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+			args[_key2 - 1] = arguments[_key2];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
+	function filter(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index, iterable2) {
+			if (fn.call(thisArg, value, index, iterable2)) {
+				push(result, value);
+			}
+		});
+		return result;
 	}
 
 	function processTace() {
@@ -99,57 +126,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		    e = _tace$e === undefined ? [] : _tace$e;
 
 		var element = document.createElement(t);
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = a.filter(noop)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var args = _step2.value;
-
-				setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
-				}
-			}
-		}
-
-		appendChild.apply(undefined, [element].concat(_toConsumableArray(c.filter(noop).map(createElement))));
-		var _iteratorNormalCompletion3 = true;
-		var _didIteratorError3 = false;
-		var _iteratorError3 = undefined;
-
-		try {
-			for (var _iterator3 = e.filter(noop)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var _args = _step3.value;
-
-				addEventListener.apply(undefined, [element].concat(_toConsumableArray(_args)));
-			}
-		} catch (err) {
-			_didIteratorError3 = true;
-			_iteratorError3 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion3 && _iterator3.return) {
-					_iterator3.return();
-				}
-			} finally {
-				if (_didIteratorError3) {
-					throw _iteratorError3;
-				}
-			}
-		}
-
+		forEach(filter(a), function (args) {
+			setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
+		forEach(filter(c), function (data) {
+			appendChild(element, createElement(data));
+		});
+		forEach(filter(e), function (args) {
+			addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
 		return element;
 	}
 
@@ -160,10 +145,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			return document.createTextNode(data);
 		}
 		return processTace(data);
-	}
-
-	function from() {
-		return Array.from.apply(Array, arguments);
 	}
 
 	describe('dom/appendChild', function () {
@@ -180,13 +161,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var child = createElement('text');
 			appendChild(parent, child);
 			assert.equal(child.parentNode, parent);
-		});
-
-		it('should append multiple elements', function () {
-			var parent = createElement();
-			var children = [{}, 'text', 'text2'].map(createElement);
-			appendChild.apply(undefined, [parent].concat(_toConsumableArray(children)));
-			assert.deepEqual(from(parent.childNodes), children);
 		});
 	});
 });

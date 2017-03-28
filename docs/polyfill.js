@@ -284,7 +284,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 				};
 			}
-			throw new TypeError('This object is not iterable');
+			throw new TypeError(this + ' is not iterable');
 		};
 	}
 
@@ -307,8 +307,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		String.prototype.repeat = repeat;
 	}
 
-	function shift(iterable) {
-		return iterable.shift();
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	function shift(arrayLike) {
+		if (arrayLike.shift) {
+			return arrayLike.shift();
+		} else if (!isUndefined(arrayLike.length)) {
+			var returnValue = arrayLike[0];
+			var length = arrayLike.length;
+
+			for (var i = 0; i < length; i += 1) {
+				arrayLike[i] = arrayLike[i + 1];
+			}
+			delete arrayLike[length - 1];
+			arrayLike.length = length - 1;
+			return returnValue;
+		}
+		throw new TypeError('The object is not shift-able');
 	}
 
 	var postMessage = window.postMessage;
@@ -328,7 +345,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			events = allEvents.get(eventName);
 			if (!events) {
 				events = new Set();
-				allEvents[eventName] = events;
+				allEvents.set(eventName, events);
 			}
 			return events;
 		}
@@ -578,20 +595,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		window.Promise = J0Promise;
 	}
 
-	function getMatcher(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
 		var result = void 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher(fn);
-		}
 		_forEach(iterable, function (item, index) {
 			if (fn.call(thisArg, item, index, iterable)) {
 				result = item;
@@ -601,20 +609,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return result;
 	}
 
-	function getMatcher$1(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
 	function find$2(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
-		var result = void 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher$1(fn);
-		}
+		var result = -1;
 		_forEach(iterable, function (item, index) {
 			if (fn.call(thisArg, item, index, iterable)) {
 				result = index;
@@ -664,22 +663,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'set',
 			value: function set(key, value) {
 				var index = this.indexOfKey(key);
-				if (index < 0) {
-					push(this.data, [key, value]);
-				} else {
+				if (0 <= index) {
 					this.data[index][1] = value;
+				} else {
+					push(this.data, [key, value]);
 				}
 				return this;
 			}
 		}, {
 			key: 'get',
 			value: function get(key) {
-				return find(this.data, function (_ref3) {
+				var found = find(this.data, function (_ref3) {
 					var _ref4 = _slicedToArray(_ref3, 1),
 					    itemKey = _ref4[0];
 
 					return itemKey === key;
 				});
+				if (found) {
+					return found[1];
+				}
 			}
 		}, {
 			key: 'delete',
@@ -728,10 +730,53 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	if (!window.Map) {
 		window.Map = Map$2;
-		Map$2.prototype[Symbol.iterator] = function () {
-			return this.entries();
-		};
 	}
+	(function (prototype) {
+		if (Object.prototype[Symbol.iterator] === prototype[Symbol.iterator]) {
+			prototype[Symbol.iterator] = function () {
+				return this.entries();
+			};
+		}
+		if (!prototype.entries) {
+			prototype.entries = function () {
+				var result = [];
+				this.forEach(function (value, key) {
+					result[result.length] = [key, value];
+				});
+				var length = result.length;
+
+				var index = 0;
+				return {
+					next: function next() {
+						var value = result[index];
+						index += 1;
+						return {
+							value: value,
+							done: length < index
+						};
+					}
+				};
+			};
+		}
+		if (!prototype.keys) {
+			prototype.keys = function () {
+				var result = [];
+				this.forEach(function (value, key) {
+					result[result.length] = key;
+				});
+				return result;
+			};
+		}
+		if (!prototype.values) {
+			prototype.values = function () {
+				var result = [];
+				this.forEach(function (value) {
+					result[result.length] = value;
+				});
+				return result;
+			};
+		}
+	})(window.Map.prototype);
 
 	function includes$2(iterable, searchElement, fromIndex) {
 		return Array.from(iterable).includes(searchElement, fromIndex);
@@ -765,7 +810,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'delete',
 			value: function _delete(value) {
-				var index = find$2(this.data, value);
+				var index = find$2(this.data, function (item) {
+					return item === value;
+				});
 				if (0 <= index) {
 					splice(this.data, index, 1);
 				}
@@ -798,10 +845,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	if (!window.Set) {
 		window.Set = Set$2;
-		Set$2.prototype[Symbol.iterator] = function () {
-			return this.entries();
-		};
 	}
+	(function (prototype) {
+		if (Object.prototype[Symbol.iterator] === prototype[Symbol.iterator]) {
+			prototype[Symbol.iterator] = function () {
+				return this.entries();
+			};
+		}
+		if (!prototype.entries) {
+			prototype.entries = function () {
+				var result = [];
+				this.forEach(function (value) {
+					result[result.length] = value;
+				});
+				var length = result.length;
+
+				var index = 0;
+				return {
+					next: function next() {
+						var value = result[index];
+						index += 1;
+						return {
+							value: value,
+							done: length < index
+						};
+					}
+				};
+			};
+		}
+		if (!prototype.has) {
+			prototype.has = function (value) {
+				var result = false;
+				this.forEach(function (item) {
+					if (!result && item === value) {
+						result = true;
+					}
+				});
+				return result;
+			};
+		}
+	})(window.Set.prototype);
 
 	window.global = window;
 

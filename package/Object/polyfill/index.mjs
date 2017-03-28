@@ -24,6 +24,6 @@ if (!Object.prototype[Symbol.iterator]) {
 				}
 			};
 		}
-		throw new TypeError('This object is not iterable');
+		throw new TypeError(`${this} is not iterable`);
 	};
 }

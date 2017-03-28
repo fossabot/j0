@@ -6,4 +6,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
+
+	function getScrollY(element) {
+		return element ? element.scrollTop : window.pageYOffset;
+	}
+
+	describe('getScrollY', function () {
+
+		it('should return a non-negative integer', function () {
+			assert.equal(0 <= getScrollY(), true);
+		});
+	});
 });

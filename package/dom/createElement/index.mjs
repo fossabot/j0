@@ -1,21 +1,24 @@
 import document from '../../document';
 import isString from '../../isString';
 import isNode from '../../isNode';
-import noop from '../../noop';
 import setAttribute from '../setAttribute';
 import appendChild from '../appendChild';
 import addEventListener from '../addEventListener';
+import filter from '../../Array/filter';
+import forEach from '../../Array/forEach';
 
 function processTace(tace = {}) {
 	const {t = 'div', a = [], c = [], e = []} = tace;
 	const element = document.createElement(t);
-	for (const args of a.filter(noop)) {
+	forEach(filter(a), function (args) {
 		setAttribute(element, ...args);
-	}
-	appendChild(element, ...c.filter(noop).map(createElement));
-	for (const args of e.filter(noop)) {
+	});
+	forEach(filter(c), function (data) {
+		appendChild(element, createElement(data));
+	});
+	forEach(filter(e), function (args) {
 		addEventListener(element, ...args);
-	}
+	});
 	return element;
 }
 

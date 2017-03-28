@@ -42,24 +42,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		}
 	}
 
-	function isFunction(x) {
-		return typeof x === 'function';
-	}
-
-	function getMatcher(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
-		var result = void 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher(fn);
-		}
+		var result = -1;
 		forEach(iterable, function (item, index) {
 			if (fn.call(thisArg, item, index, iterable)) {
 				result = index;

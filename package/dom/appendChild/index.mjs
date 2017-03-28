@@ -1,7 +1,5 @@
-function appendChild(parentNode, ...newNodes) {
-	for (const newNode of newNodes) {
-		parentNode.appendChild(newNode);
-	}
+function appendChild(parentNode, newNode) {
+	parentNode.appendChild(newNode);
 }
 
 export default appendChild;

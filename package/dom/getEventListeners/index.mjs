@@ -15,7 +15,7 @@ function getEventListeners(element, eventName = '') {
 		events = allEvents.get(eventName);
 		if (!events) {
 			events = new Set();
-			allEvents[eventName] = events;
+			allEvents.set(eventName, events);
 		}
 		return events;
 	}

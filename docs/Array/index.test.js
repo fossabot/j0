@@ -88,24 +88,83 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		}
 	}
 
-	function isFunction(x) {
-		return typeof x === 'function';
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
 	}
 
-	function getMatcher(ref) {
-		return function (value) {
-			return ref === value;
-		};
+	function filter(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index, iterable2) {
+			if (fn.call(thisArg, value, index, iterable2)) {
+				push(result, value);
+			}
+		});
+		return result;
 	}
+
+	describe('Array/filter', function () {
+
+		it('should filter an array', function () {
+			function fn(x) {
+				return x % 2;
+			}
+			var array = [1, 2, 3, 4, 5];
+			var actual = filter(array, fn);
+			var expected = [1, 3, 5];
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should filter an array-like object', function () {
+			function fn(x) {
+				return x % 2;
+			}
+			var array = {
+				0: 1,
+				1: 2,
+				2: 3,
+				3: 4,
+				4: 5,
+				length: 5
+			};
+			var actual = filter(array, fn);
+			var expected = [1, 3, 5];
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should filter an iterable', function () {
+			function fn(x) {
+				return x % 2;
+			}
+			var count = 0;
+			var array = {
+				next: function next() {
+					count += 1;
+					return {
+						value: count,
+						done: 5 < count
+					};
+				}
+			};
+			var actual = filter(array, fn);
+			var expected = [1, 3, 5];
+			assert.deepEqual(actual, expected);
+		});
+	});
 
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
 		var result = void 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher(fn);
-		}
 		forEach(iterable, function (item, index) {
 			if (fn.call(thisArg, item, index, iterable)) {
 				result = item;
@@ -186,20 +245,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
-	function getMatcher$1(ref) {
-		return function (value) {
-			return ref === value;
-		};
-	}
-
 	function find$2(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
-		var result = void 0;
-		if (!isFunction(fn)) {
-			fn = getMatcher$1(fn);
-		}
+		var result = -1;
 		forEach(iterable, function (item, index) {
 			if (fn.call(thisArg, item, index, iterable)) {
 				result = index;
@@ -279,16 +329,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			assert.deepEqual(context, { sum: 15 });
 		});
 	});
-
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
 
 	describe('Array/forEach', function () {
 
@@ -773,6 +813,57 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	function shift(arrayLike) {
+		if (arrayLike.shift) {
+			return arrayLike.shift();
+		} else if (!isUndefined(arrayLike.length)) {
+			var returnValue = arrayLike[0];
+			var length = arrayLike.length;
+
+			for (var i = 0; i < length; i += 1) {
+				arrayLike[i] = arrayLike[i + 1];
+			}
+			delete arrayLike[length - 1];
+			arrayLike.length = length - 1;
+			return returnValue;
+		}
+		throw new TypeError('The object is not shift-able');
+	}
+
+	describe('Array/shift', function () {
+
+		it('should remove the first item of an array', function () {
+			var array = [1, 2, 3, 4];
+			var expected1 = 1;
+			var expected2 = [2, 3, 4];
+			assert.equal(shift(array), expected1);
+			assert.deepEqual(array, expected2);
+		});
+
+		it('should remove the first item of an array-like object', function () {
+			var array = {
+				0: 1,
+				1: 2,
+				2: 3,
+				3: 4,
+				length: 4
+			};
+			var expected1 = 1;
+			var expected2 = {
+				0: 2,
+				1: 3,
+				2: 4,
+				length: 3
+			};
+			assert.equal(shift(array), expected1);
+			assert.deepEqual(array, expected2);
+		});
+	});
+
 	function slice(iterable, start, end) {
 		return from(iterable).slice(start, end);
 	}
@@ -814,6 +905,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			var actual = slice(args);
 			var expected = [1, 2, 3, 4, 5];
 			assert.deepEqual(actual, expected);
+		});
+	});
+
+	function splice(array) {
+		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+			args[_key3 - 1] = arguments[_key3];
+		}
+
+		return array.splice.apply(array, args);
+	}
+
+	describe('Array/splice', function () {
+
+		it('should remove items from an array', function () {
+			var array = [1, 2, 3, 4, 5];
+			splice(array, 1, 2);
+			assert.deepEqual(array, [1, 4, 5]);
 		});
 	});
 });

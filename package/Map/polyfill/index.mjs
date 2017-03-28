@@ -1,4 +1,5 @@
 import Symbol from '../../Symbol';
+import Object from '../../Object';
 import window from '../../window';
 import map from '../../Array/map';
 import find from '../../Array/find';
@@ -30,18 +31,21 @@ class Map {
 
 	set(key, value) {
 		const index = this.indexOfKey(key);
-		if (index < 0) {
-			push(this.data, [key, value]);
-		} else {
+		if (0 <= index) {
 			this.data[index][1] = value;
+		} else {
+			push(this.data, [key, value]);
 		}
 		return this;
 	}
 
 	get(key) {
-		return find(this.data, function ([itemKey]) {
+		const found = find(this.data, function ([itemKey]) {
 			return itemKey === key;
 		});
+		if (found) {
+			return found[1];
+		}
 	}
 
 	delete(key) {
@@ -77,7 +81,49 @@ class Map {
 
 if (!window.Map) {
 	window.Map = Map;
-	Map.prototype[Symbol.iterator] = function () {
-		return this.entries();
-	};
 }
+(function (prototype) {
+	if (Object.prototype[Symbol.iterator] === prototype[Symbol.iterator]) {
+		prototype[Symbol.iterator] = function () {
+			return this.entries();
+		};
+	}
+	if (!prototype.entries) {
+		prototype.entries = function () {
+			const result = [];
+			this.forEach(function (value, key) {
+				result[result.length] = [key, value];
+			});
+			const {length} = result;
+			let index = 0;
+			return {
+				next: function () {
+					const value = result[index];
+					index += 1;
+					return {
+						value: value,
+						done: length < index
+					};
+				}
+			};
+		};
+	}
+	if (!prototype.keys) {
+		prototype.keys = function () {
+			const result = [];
+			this.forEach(function (value, key) {
+				result[result.length] = key;
+			});
+			return result;
+		};
+	}
+	if (!prototype.values) {
+		prototype.values = function () {
+			const result = [];
+			this.forEach(function (value) {
+				result[result.length] = value;
+			});
+			return result;
+		};
+	}
+}(window.Map.prototype));

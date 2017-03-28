@@ -58,8 +58,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
-	function shift(iterable) {
-		return iterable.shift();
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	function shift(arrayLike) {
+		if (arrayLike.shift) {
+			return arrayLike.shift();
+		} else if (!isUndefined(arrayLike.length)) {
+			var returnValue = arrayLike[0];
+			var length = arrayLike.length;
+
+			for (var i = 0; i < length; i += 1) {
+				arrayLike[i] = arrayLike[i + 1];
+			}
+			delete arrayLike[length - 1];
+			arrayLike.length = length - 1;
+			return returnValue;
+		}
+		throw new TypeError('The object is not shift-able');
 	}
 
 	var postMessage = window.postMessage;
@@ -79,7 +96,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			events = allEvents.get(eventName);
 			if (!events) {
 				events = new Set();
-				allEvents[eventName] = events;
+				allEvents.set(eventName, events);
 			}
 			return events;
 		}

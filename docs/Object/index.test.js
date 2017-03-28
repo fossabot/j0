@@ -27,15 +27,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	describe('Object/toString', function () {
 
-		it('should convert null to [object Null]', function () {
-			var value = null;
-			var expected = '[object Null]';
+		it('should convert [] to [object Array]', function () {
+			var value = [];
+			var expected = '[object Array]';
 			assert.equal(toString(value), expected);
-		});
-
-		it('should convert undefined to [object Undefined]', function () {
-			var expected = '[object Undefined]';
-			assert.equal(toString(), expected);
 		});
 	});
 });

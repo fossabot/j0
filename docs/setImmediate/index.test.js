@@ -26,7 +26,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			events = allEvents.get(eventName);
 			if (!events) {
 				events = new Set();
-				allEvents[eventName] = events;
+				allEvents.set(eventName, events);
 			}
 			return events;
 		}

@@ -9,6 +9,61 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
+	function addClass(element, className) {
+		element.classList.add(className);
+	}
+
+	function isString(x) {
+		return typeof x === 'string';
+	}
+
+	function isNode(x) {
+		return x instanceof Node;
+	}
+
+	function setAttribute(element, attrName) {
+		for (var _len = arguments.length, value = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+			value[_key - 2] = arguments[_key];
+		}
+
+		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
+	}
+
+	var key = Symbol('events');
+
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
+		}
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents.set(eventName, events);
+			}
+			return events;
+		}
+		return allEvents;
+	}
+
+	function addEventListener(element, eventName, fn) {
+		element.addEventListener(eventName, fn);
+		getEventListeners(element, eventName).add(fn);
+	}
+
+	function noop(x) {
+		return x;
+	}
+
 	function forEach(iterable, fn, thisArg) {
 		var index = 0;
 		var _iteratorNormalCompletion = true;
@@ -40,92 +95,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 	}
 
-	function addClass(element) {
-		for (var _len = arguments.length, classNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			classNames[_key - 1] = arguments[_key];
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+			args[_key2 - 1] = arguments[_key2];
 		}
 
-		forEach(classNames, function (className) {
-			element.classList.add(className);
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
+	function filter(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index, iterable2) {
+			if (fn.call(thisArg, value, index, iterable2)) {
+				push(result, value);
+			}
 		});
-	}
-
-	function isString(x) {
-		return typeof x === 'string';
-	}
-
-	function isNode(x) {
-		return x instanceof Node;
-	}
-
-	function noop(x) {
-		return x;
-	}
-
-	function setAttribute(element, attrName) {
-		for (var _len2 = arguments.length, value = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-			value[_key2 - 2] = arguments[_key2];
-		}
-
-		element.setAttribute(attrName, value.join(' '));
-	}
-
-	function appendChild(parentNode) {
-		for (var _len3 = arguments.length, newNodes = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			newNodes[_key3 - 1] = arguments[_key3];
-		}
-
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = newNodes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var newNode = _step2.value;
-
-				parentNode.appendChild(newNode);
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
-				}
-			}
-		}
-	}
-
-	var key = Symbol('events');
-
-	function getEventListeners(element) {
-		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-		var allEvents = element[key];
-		var events = void 0;
-		if (!allEvents) {
-			allEvents = new Map();
-			element[key] = allEvents;
-		}
-		if (eventName) {
-			events = allEvents.get(eventName);
-			if (!events) {
-				events = new Set();
-				allEvents[eventName] = events;
-			}
-			return events;
-		}
-		return allEvents;
-	}
-
-	function addEventListener(element, eventName, fn) {
-		element.addEventListener(eventName, fn);
-		getEventListeners(element, eventName).add(fn);
+		return result;
 	}
 
 	function processTace() {
@@ -140,57 +130,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		    e = _tace$e === undefined ? [] : _tace$e;
 
 		var element = document.createElement(t);
-		var _iteratorNormalCompletion3 = true;
-		var _didIteratorError3 = false;
-		var _iteratorError3 = undefined;
-
-		try {
-			for (var _iterator3 = a.filter(noop)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var args = _step3.value;
-
-				setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
-			}
-		} catch (err) {
-			_didIteratorError3 = true;
-			_iteratorError3 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion3 && _iterator3.return) {
-					_iterator3.return();
-				}
-			} finally {
-				if (_didIteratorError3) {
-					throw _iteratorError3;
-				}
-			}
-		}
-
-		appendChild.apply(undefined, [element].concat(_toConsumableArray(c.filter(noop).map(createElement))));
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
-
-		try {
-			for (var _iterator4 = e.filter(noop)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var _args = _step4.value;
-
-				addEventListener.apply(undefined, [element].concat(_toConsumableArray(_args)));
-			}
-		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
-				}
-			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
-				}
-			}
-		}
-
+		forEach(filter(a), function (args) {
+			setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
+		forEach(filter(c), function (data) {
+			appendChild(element, createElement(data));
+		});
+		forEach(filter(e), function (args) {
+			addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
+		});
 		return element;
 	}
 
@@ -203,30 +151,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function getAttribute(element, attributeName) {
-		return element.getAttribute(attributeName);
+	function hasClass(element, className) {
+		return element.classList.contains(className);
 	}
 
 	describe('dom/addClass', function () {
 
-		it('should add classes', function () {
+		it('should add a class', function () {
 			var element = createElement({});
-			var c1 = 'abc';
-			var c2 = 'def';
-			var c3 = 'ghi';
-			var expected = 'abc def ghi';
-			addClass(element, c1, c2, c3);
-			assert.equal(getAttribute(element, 'class'), expected);
-		});
-
-		it('should keep uniqueness', function () {
-			var element = createElement({});
-			var c1 = 'abc';
-			var c2 = 'def';
-			var c3 = 'abc';
-			var expected = 'abc def';
-			addClass(element, c1, c2, c3);
-			assert.equal(getAttribute(element, 'class'), expected);
+			var className = 'abc';
+			assert.equal(hasClass(element, className), false);
+			addClass(element, className);
+			assert.equal(hasClass(element, className), true);
 		});
 	});
 });

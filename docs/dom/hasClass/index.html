@@ -24,7 +24,33 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">hasClass</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">createElement</span> <span class="name">from</span> <a href="../createElement"><span class="string"><span class="string">'../../createElement'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'dom/createElement'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return true if the element has the class'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">className</span> <span class="_3d">=</span> <span class="string">'abc'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">element</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">a</span><span class="_3a">:</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="string">'class'</span><span class="_2c">,</span> <span class="name">className</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">hasClass</span><span class="_28">(</span><span class="name">element</span><span class="_2c">,</span> <span class="name">className</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the element does not have the class'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">className1</span> <span class="_3d">=</span> <span class="string">'abc'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">className2</span> <span class="_3d">=</span> <span class="string">'def'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">element</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">a</span><span class="_3a">:</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="string">'class'</span><span class="_2c">,</span> <span class="name">className1</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">hasClass</span><span class="_28">(</span><span class="name">element</span><span class="_2c">,</span> <span class="name">className2</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/hasClass/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>

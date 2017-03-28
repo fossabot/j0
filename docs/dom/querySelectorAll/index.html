@@ -26,7 +26,37 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">querySelectorAll</span> <span class="name">from</span> <a href="../querySelectorAll"><span class="string"><span class="string">'../../querySelectorAll'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">createElement</span> <span class="name">from</span> <a href="../createElement"><span class="string"><span class="string">'../../createElement'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">map</span> <span class="name">from</span> <a href="../../Array/map"><span class="string"><span class="string">'../../../Array/map'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'dom/querySelectorAll'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should get elements'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">className</span> <span class="_3d">=</span> <span class="string">'abc'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">child1</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">a</span><span class="_3a">:</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="string">'class'</span><span class="_2c">,</span> <span class="name">className</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">child2</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">a</span><span class="_3a">:</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="string">'class'</span><span class="_2c">,</span> <span class="name">className</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">parent</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">c</span><span class="_3a">:</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_7b">{</span><span class="name">c</span><span class="_3a">:</span> <span class="_5b">[</span><span class="name">child1</span><span class="_5d">]</span><span class="_7d">}</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">child2</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">deepEqual</span><span class="_28">(</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">map</span><span class="_28">(</span><span class="name">querySelectorAll</span><span class="_28">(</span><span class="name">parent</span><span class="_2c">,</span> <span class="_60">`</span><span class="template">.</span><span class="_24_7b">${</span><span class="name">className</span><span class="_7d">}</span><span class="_60">`</span><span class="_29">)</span><span class="_29">)</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_5b">[</span><span class="name">child1</span><span class="_2c">,</span> <span class="name">child2</span><span class="_5d">]</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/querySelectorAll/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>
