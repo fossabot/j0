@@ -3,8 +3,7 @@
   "scripts": {
     "server": "node build --watch",
     "build": "node build",
-    "wdio": "wdio wdio.conf.js",
-    "test": "npm run build && npm run wdio",
+    "test": "wdio wdio.conf.js",
     "prepublish": "npm run build"
   },
   "devDependencies": {
