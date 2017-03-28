@@ -1,28 +1,43 @@
+dist: trusty
+sudo: false
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 env:
+  matrix:
   - BROWSER=phantomjs
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
-  code_climate: dd662873003f506c468db393bbb2750f5485fa5dbfe537d151c04d2e614d5183
+    - g++-4.8
+  code_climate: dd662873003f506c468db393bbb2750f5485fa5dbfe537d151c04d2e614d5183,
+  artifacts:
+    debug: true
+    paths:
+    - ./__errorShots
+    target_paths: $TRAVIS_BUILD_NUMBER
+    bucket: ci-results
+    s3_region: ap-northeast-1
+    secret:
+      secure: SYaN2TZKNSca8CTE8FlKHAmRdO7ywuXNIbkzp7H2Jv6yM1lUjEnquhVEGtqoAGcGmVkHx9c7K6SUup75wNdtuth08KgkZ46X01gGNFES+M6FVBLsSHK2WRWgguPOisIz9YxQeFeX4LIG9scdKn+koYY3sSmNxFvdt/DR76cJlSMA1QNZ1q0yYBVOgAptqkckVexv7XqIEdMCXBw91gQtcdoMKhn6HKRe1GK6XDCU9gnv9kBQu7hfvMNzjGVdQuuCNYcGcaeYoWqK7azbH+3UQ0m+ECRGOZI/HPy/RjrloDhqziB2pas117FfLyGGoubmd84O6jVmY577JJsfBZZV9TdRG/5sHnyHrEhFHnoCwIguIx6f95TSDn8/swRc1a3uVwgjavDao6nJPDP/Zs0axIBPkTcTSDGASH8wAJx27IhlAs0/3mKwWPMzaoskmDBiU44j2XxsfM7Iid0zKfCyl/Dlk8pQvXnTrFQAcnErlfxwDe9VKXOvffyuZeL0xBHsi6tn8q/0RPx9ZssmMS46eBQroWR9AsE2YBSsPNPkF2AvUXIQVEBduAS3L6aZQDLnLz9T84I279+F20vQRJt4+EdD10YbH9oGe80B7BbNi9hvGJ7x2x27GKit6R2uiddtoQ6saIhQYc/BG7p0Yl7g9xoKUnjGa6ZSxBUIXgsp2Ns=
+    key:
+      secure: W+3KsIcS2YVxe6HNaeyD4t9gOt/+Tl5s0onsvaKwlKOJTA3MMPaqJlxKwRh8ddW4KrZlN0UvdqmcF4cTwcTUoRvnJM7ErELzpRrGHmeF4j49tn4tNS21PDKY5mTTKZ1o4yGQy7jeoYVoaRXKwGDD6bEtvaQ/m35xTJRoYwuvz2NAey03K5VSmAXhx1Dkfh5iT1eBIGcn94wrTFrYie8qS0ADS6GLMhE+h4yvjpf0RnKuaDe+sqrbnkMm2xsqISN5nVKop1yR8rE0dMWaBRw0OGC4V1NghNqRPTTGfmH/pa5LfrRL9Ka6aFnoUbJ3Lkm5Bh7Q15W7C39+lDPTZLXznMwPbvZpJnfF/T5apNrb080TiTUSQgt2tgGAryJjbh/ivZoK9qkdYx7HR78n2jiSP98cMfMrstAIF3M2RnP0pGScSVhN3Prp8I/NoJgRpFauqVQc50pxlvxedNpSwGhlT4rnaGbqhwZSA7ZfQebATpnehIoVjpZHkuNWgWK1bg4J34HOknLZBZy/ZFKkUunCcT3J8oXOUeZg3I//FzINWXgXFNzDrmZ9F6C4SRDSynr+nMfroQPKZBwDi+SS+ycvQhnFZ/XQitrMMc/4j1TGCMp0vquFG3LznLA3x9l0uguPmX3n7RY7bAXROehBQaPcRkg3zAib3qxt6wIeFzjEdvY=
 install:
-  - export CXX=g++-4.8
-  - nvm install stable
-  - npm install
+- export CXX=g++-4.8
+- nvm install stable
+- npm install
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 5
 script:
-  - npm test
+- npm test
 after_success:
-  - npm install -g codeclimate-test-reporter
-  - CODECLIMATE_REPO_TOKEN=dd662873003f506c468db393bbb2750f5485fa5dbfe537d151c04d2e614d5183 codeclimate-test-reporter < ./coverage/lcov.info
+- npm install -g codeclimate-test-reporter
+- CODECLIMATE_REPO_TOKEN=dd662873003f506c468db393bbb2750f5485fa5dbfe537d151c04d2e614d5183
+  codeclimate-test-reporter < ./coverage/lcov.info
 notifications:
   slack:
     secure: dJr827OKb0wZgq/cX8C06PzxcTho1kyDkD5gtq3FWyN8i+0pa52jV22MHYMhbKl/Er7Tl1UYQTIvU+uK3AG5e32htRv89ggC+0KOUS23WQIhlUrf7YT09P9yOWNEbGyPs6s8FkcD1hJZhdqD4O6jPX1ZBTS7/k5wD/N9m189KFZBrCaw9c25eNQdliiVHkVc/ST1OPswUvbwaHH6w5zZx6pLsL/52tvBedoDgwK6vftOM8c2aahJYwyJx1d8MI2PkK2xb0eri/qBlBsQ9BuYIqBFvNVtl2/ykc6OQ6rdUi+YN05fehYLtWYHeJ7aKG8IGyMPvWCk86Rqh/WYiImGtrVYyaBzeaTwsaRWtOJozqIlec5DBJZAbCquEZMrLubYrucN9o0TKMX3Wh759PHLFJHFmLs/5p2sLcDE0rXtm+BI5ur/aJxfaeyVXITyTgb/us5sCMT/5/Va3Ymzn89R28vvqWrK4dKfg41Zk0RP2LZET4k+1mOP75jT4dbMY0+Y83k11qvhpVsVulp5M7H+lzXSUEt51WhRLc37+YkGD3Zaao0QiLSJj+Rg9Ahzs00ANFDnLpXDjJ0QI8oIh4gTTzLyrQjhS4vBAQdIZrkV3oimjwXIWgplfxaalSMMZpMoij5Tl1rhtkGfGUe5HtXGNsYQbUUUYd0Oqg7r7cLOJVo=

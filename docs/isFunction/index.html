@@ -1,0 +1,78 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>j0/isFunction</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
+<link href="../page.css" rel="stylesheet">
+<script src="../polyfill.js"></script>
+<script src="https://use.fontawesome.com/9701068490.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
+<h1 id="title"><a href="../">j0</a>/isFunction<span class="version">0.0.55</span></h1>
+<ul class="Children" data-count="0">
+	
+</ul>
+<h2>Source</h2>
+<section class="Code">
+	<pre><span class="linenum"></span><span class="function">function</span> <span class="name">isFunction</span><span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="typeof">typeof</span> <span class="name">x</span> <span class="_3d_3d_2f_21_3d">===</span> <span class="string">'function'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">isFunction</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/isFunction/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+
+<h2>Tests</h2>
+<section class="TestCode">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">isFunction</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'isFunction'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are []'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [null]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="null">null</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [NaN]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="name">NaN</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [123]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="num">123</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [\'abc\']'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="string">'abc'</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [{}]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the arguments are [[]]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="_5b">[</span><span class="_5d">]</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return true if the arguments are [function () {}]'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">isFunction</span><span class="_28">(</span><span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/isFunction/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+<h2>Result</h2>
+<div id="mocha"></div>
+<h2>Your Environment</h2>
+<table><tbody id="environment"></tbody></table>
+
+<h2>About</h2>
+<footer>
+	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
+</footer>
+<a class="TestResult" href="#mocha"></a>
+<script src="../page.js"></script>
+<script src="index.test.js"></script>
+<script>start()</script>

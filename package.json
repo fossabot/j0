@@ -1,40 +1,40 @@
 {
-  "name": "j0",
-  "license": "MIT",
-  "version": "0.0.56",
-  "description": "A library of wrappers and utility functions",
-  "author": {
-    "name": "Kei Ito",
-    "email": "kei.itof@gmail.com",
-    "url": "https://github.com/kei-ito"
-  },
-  "engines": {
-    "node": ">=6"
-  },
-  "repository": "kei-ito/j0",
-  "keywords": [
-    "blogs",
-    "library",
-    "frontend"
-  ],
+  "private": true,
   "scripts": {
-    "build_test": "node test/build",
-    "test": "npm run build_test && wdio wdio.conf.js"
+    "server": "node build --watch",
+    "build": "node build",
+    "test": "wdio wdio.conf.js",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
+    "autoprefixer": "^6.7.6",
+    "babel-core": "^6.23.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-latest": "^6.22.0",
+    "chai": "^3.5.0",
+    "chalk": "^1.1.3",
+    "chokidar": "^1.6.1",
     "glob": "*",
     "j1": "*",
+    "marked": "^0.3.6",
+    "mu2": "^0.5.21",
+    "paze": "0.0.2",
+    "postcss": "^5.2.16",
+    "power-assert": "^1.4.2",
     "rollup": "^0.41.4",
-    "rollup-plugin-buble": "^0.15.0",
     "rollup-plugin-commonjs": "^7.0.0",
-    "rollup-plugin-node-builtins": "^2.1.0",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-watch": "^3.2.2",
+    "sable": "0.0.19",
     "selenium-standalone": "^6.0.1",
-    "socket.io": "*",
+    "stylus": "^0.54.5",
     "wdio-junit-reporter": "^0.2.0",
     "wdio-mocha-framework": "^0.5.9",
     "wdio-selenium-standalone-service": "0.0.8",
     "wdio-spec-reporter": "0.0.5",
     "webdriverio": "^4.6.2"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0"
   }
 }

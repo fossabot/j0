@@ -1,1 +1,0 @@
-window.testJs = 'Laughing Grass';
