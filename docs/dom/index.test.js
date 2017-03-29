@@ -66,32 +66,60 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return x;
 	}
 
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
 	function forEach(iterable, fn, thisArg) {
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
+		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+		var length = iterable.length;
 
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+		var index = void 0;
+		if (0 <= length) {
+			for (index = fromIndex; index < length; index += 1) {
+				if (fn.call(thisArg, iterable[index], index, iterable)) {
+					return;
+				}
+			}
+		} else if (isFunction(iterable.next)) {
+			index = 0;
+			while (1) {
+				var _iterable$next = iterable.next(),
+				    value = _iterable$next.value,
+				    done = _iterable$next.done;
 
-				if (fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
 					return;
 				}
 				index += 1;
 			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
+		} else {
+			index = fromIndex;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var value = _step.value;
+
+					if (fn.call(thisArg, value, index, iterable)) {
+						return;
+					}
+					index += 1;
 				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
 			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
 				}
 			}
 		}
@@ -253,8 +281,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return node.childNodes;
 	}
 
-	function from() {
-		return Array.from.apply(Array, arguments);
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index) {
+			push(result, fn.call(thisArg, value, index, iterable));
+		});
+		return result;
 	}
 
 	describe('dom/getChildNodes', function () {
@@ -265,24 +300,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var parent = createElement({
 				c: [c1, c2]
 			});
-			assert.deepEqual(from(getChildNodes(parent)), [c1, c2]);
+			assert.deepEqual(map(getChildNodes(parent)), [c1, c2]);
 		});
 	});
-
-	function map(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments[2];
-
-		var result = [];
-		forEach(iterable, function () {
-			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				args[_key3] = arguments[_key3];
-			}
-
-			push(result, fn.call.apply(fn, [thisArg].concat(args)));
-		});
-		return result;
-	}
 
 	describe('dom/getEventListeners', function () {
 
@@ -420,7 +440,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertBefore(newNode, c2);
-			assert.deepEqual(from(getChildNodes(parent)), [c1, newNode, c2]);
+			assert.deepEqual(map(getChildNodes(parent)), [c1, newNode, c2]);
 		});
 
 		it('should insert an element after the last child', function () {
@@ -431,7 +451,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertBefore(newNode, null, parent);
-			assert.deepEqual(from(getChildNodes(parent)), [c1, c2, newNode]);
+			assert.deepEqual(map(getChildNodes(parent)), [c1, c2, newNode]);
 		});
 	});
 

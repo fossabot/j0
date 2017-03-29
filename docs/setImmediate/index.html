@@ -14,8 +14,8 @@
 </ul>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">postMessage</span> <span class="name">from</span> <a href="../postMessage"><span class="string"><span class="string">'../postMessage'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span> <span class="name">addEventListner</span> <span class="name">from</span> <a href="../dom/addEventListener"><span class="string"><span class="string">'../dom/addEventListener'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="comment">// import postMessage from '../postMessage';</span>
+<span class="linenum"></span><span class="comment">// import addEventListner from '../dom/addEventListener';</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">window</span> <span class="name">from</span> <a href="../window"><span class="string"><span class="string">'../window'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">setTimeout</span> <span class="name">from</span> <a href="../setTimeout"><span class="string"><span class="string">'../setTimeout'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
@@ -23,32 +23,32 @@
 <span class="linenum"></span><span class="indent">	</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="name">let</span> <span class="name">setImmediateAvailable</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="name">let</span> <span class="name">firstImmediate</span> <span class="_3d">=</span> <span class="true">true</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="name">let</span> <span class="name">immediateCount</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="const">const</span> <span class="name">tasks</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="const">const</span> <span class="name">suffix</span> <span class="_3d">=</span> <span class="_60">`</span><span class="template">_setImmediate</span><span class="_24_7b">${</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span><span class="_7d">}</span><span class="_60">`</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="const">const</span> <span class="_7b">{</span><span class="name">setImmediate</span><span class="_3a">:</span> <span class="name">setImmediateNative</span><span class="_7d">}</span> <span class="_3d">=</span> <span class="name">window</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="name">let</span> <span class="name">setImmediateAvailable</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="comment">// let firstImmediate = true;</span>
+<span class="linenum"></span><span class="comment">// let immediateCount = 0;</span>
+<span class="linenum"></span><span class="comment">// const tasks = {};</span>
+<span class="linenum"></span><span class="comment">// const suffix = `_setImmediate${window.immediateId}`;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="function">function</span> <span class="name">setImmediatePostMessage</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">firstImmediate</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">firstImmediate</span> <span class="_3d">=</span> <span class="false">false</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">addEventListner</span><span class="_28">(</span><span class="name">window</span><span class="_2c">,</span> <span class="string">'message'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_7b">{</span><span class="name">data</span><span class="_7d">}</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">data</span><span class="_2e">.</span><span class="name">split</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span> <span class="_3d">=</span> <span class="name">data</span><span class="_2e">.</span><span class="name">split</span><span class="_28">(</span><span class="name">suffix</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">task</span> <span class="_3d">=</span> <span class="name">tasks</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">task</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">task</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="delete">delete</span> <span class="name">tasks</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">immediateCount</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">postMessage</span><span class="_28">(</span><span class="_60">`</span><span class="_24_7b">${</span><span class="name">immediateCount</span><span class="_7d">}</span><span class="_24_7b">${</span><span class="name">suffix</span><span class="_7d">}</span><span class="_60">`</span><span class="_2c">,</span> <span class="string">'*'</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">tasks</span><span class="_5b">[</span><span class="name">immediateCount</span><span class="_5d">]</span> <span class="_3d">=</span> <span class="name">fn</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">immediateCount</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="comment">// function setImmediatePostMessage(fn) {</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>if (firstImmediate) {</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span>firstImmediate = false;</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span>addEventListner(window, 'message', function ({data}) {</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>if (data.split) {</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>const [key] = data.split(suffix);</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>const task = tasks[key];</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>if (task) {</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>task();</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>}</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>delete tasks[key];</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>}</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span><span class="indent">	</span>});</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>}</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>immediateCount += 1;</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>postMessage(`${immediateCount}${suffix}`, '*');</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>tasks[immediateCount] = fn;</span>
+<span class="linenum"></span><span class="comment">// <span class="indent">	</span>return immediateCount;</span>
+<span class="linenum"></span><span class="comment">// }</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">setImmediateTimeout</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">setTimeout</span><span class="_28">(</span><span class="name">fn</span><span class="_29">)</span><span class="_3b">;</span>
@@ -68,13 +68,13 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">setImmediateAvailable</span> <span class="_3d">=</span> <span class="name">setImmediateTimeout</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="name">setTimeout</span><span class="_28">(</span><span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">postMessage</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">testImmediate</span><span class="_28">(</span><span class="name">setImmediatePostMessage</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">setImmediateAvailable</span> <span class="_3d_3d_2f_21_3d">!==</span> <span class="name">setImmediateNative</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">setImmediateAvailable</span> <span class="_3d">=</span> <span class="name">setImmediatePostMessage</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// if (postMessage) {</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// <span class="indent">	</span>testImmediate(setImmediatePostMessage, function () {</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// <span class="indent">	</span><span class="indent">	</span>if (setImmediateAvailable !== setImmediateNative) {</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// <span class="indent">	</span><span class="indent">	</span><span class="indent">	</span>setImmediateAvailable = setImmediatePostMessage;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// <span class="indent">	</span><span class="indent">	</span>}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// <span class="indent">	</span>});</span>
+<span class="linenum"></span><span class="indent">	</span><span class="comment">// }</span>
 <span class="linenum"></span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">setImmediateNative</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">testImmediate</span><span class="_28">(</span><span class="name">setImmediateNative</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">setImmediateAvailable</span> <span class="_3d">=</span> <span class="name">setImmediateNative</span><span class="_3b">;</span>

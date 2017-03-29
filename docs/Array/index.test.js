@@ -11,15 +11,91 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return x;
 	}
 
-	function from() {
-		return Array.from.apply(Array, arguments);
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
+	function forEach(iterable, fn, thisArg) {
+		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+		var length = iterable.length;
+
+		var index = void 0;
+		if (0 <= length) {
+			for (index = fromIndex; index < length; index += 1) {
+				if (fn.call(thisArg, iterable[index], index, iterable)) {
+					return;
+				}
+			}
+		} else if (isFunction(iterable.next)) {
+			index = 0;
+			while (1) {
+				var _iterable$next = iterable.next(),
+				    value = _iterable$next.value,
+				    done = _iterable$next.done;
+
+				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
+					return;
+				}
+				index += 1;
+			}
+		} else {
+			index = fromIndex;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var value = _step.value;
+
+					if (fn.call(thisArg, value, index, iterable)) {
+						return;
+					}
+					index += 1;
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+	}
+
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index) {
+			push(result, fn.call(thisArg, value, index, iterable));
+		});
+		return result;
 	}
 
 	function every(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
-		return from(iterable).every(fn, thisArg);
+		return map(iterable).every(fn, thisArg);
 	}
 
 	describe('Array/every', function () {
@@ -56,47 +132,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			assert.deepEqual(consumed, [0, 1, 2, 3]);
 		});
 	});
-
-	function forEach(iterable, fn, thisArg) {
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
-
-				if (fn.call(thisArg, value, index, iterable)) {
-					return;
-				}
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	}
-
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
 
 	function filter(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -391,19 +426,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	var isArray = Array.isArray;
 
 	function createArrayFromArguments() {
-		return Array.from(arguments);
+		return map(arguments);
 	}
 
 	describe('Array/from', function () {
 
-		it('should create a new instance of array from arguments', function () {
+		it('should create a new array from arguments', function () {
 			var result = createArrayFromArguments(1, 2, 3);
 			assert.equal(isArray(result), true);
 			assert.deepEqual(result, [1, 2, 3]);
 		});
 
-		it('should create a new instance of array from an array-like object', function () {
-			var result = Array.from({
+		it('should create a new array from an array-like object', function () {
+			var result = map({
 				0: 1,
 				1: 2,
 				2: 3,
@@ -412,10 +447,31 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			assert.equal(isArray(result), true);
 			assert.deepEqual(result, [1, 2, 3]);
 		});
+
+		it('should create a new array from an iterable object', function () {
+			var count = 0;
+			var iterator = {
+				next: function next() {
+					count += 1;
+					return {
+						value: count,
+						done: 5 <= count
+					};
+				}
+			};
+			var result = map(iterator);
+			assert.equal(isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3, 4]);
+		});
 	});
 
 	function includes(iterable, searchElement, fromIndex) {
-		return Array.from(iterable).includes(searchElement, fromIndex);
+		var result = false;
+		forEach(iterable, function (value) {
+			result = value === searchElement;
+			return result;
+		}, null, fromIndex);
+		return result;
 	}
 
 	describe('Array/includes', function () {
@@ -445,7 +501,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 					count += 1;
 					return {
 						value: count,
-						done: 4 < count
+						done: 4 <= count
 					};
 				}
 			};
@@ -498,7 +554,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	function join(iterable) {
 		var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
 
-		return from(iterable).join(separator);
+		return map(iterable).join(separator);
 	}
 
 	describe('Array/join', function () {
@@ -547,21 +603,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			assert.equal(join(array, '--'), expected);
 		});
 	});
-
-	function map(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments[2];
-
-		var result = [];
-		forEach(iterable, function () {
-			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				args[_key2] = arguments[_key2];
-			}
-
-			push(result, fn.call.apply(fn, [thisArg].concat(args)));
-		});
-		return result;
-	}
 
 	describe('Array/map', function () {
 
@@ -703,33 +744,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		var thisArg = arguments[3];
 
 		var result = initialValue;
-		var index = 0;
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var item = _step2.value;
-
-				result = fn.call(thisArg, result, item, index, iterable);
-				index += 1;
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
-				}
-			}
-		}
-
+		forEach(iterable, function (item, index) {
+			result = fn.call(thisArg, result, item, index, iterable);
+		});
 		return result;
 	}
 
@@ -865,7 +882,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	});
 
 	function slice(iterable, start, end) {
-		return from(iterable).slice(start, end);
+		return map(iterable).slice(start, end);
 	}
 
 	describe('Array/slice', function () {
@@ -909,8 +926,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	});
 
 	function splice(array) {
-		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-			args[_key3 - 1] = arguments[_key3];
+		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+			args[_key2 - 1] = arguments[_key2];
 		}
 
 		return array.splice.apply(array, args);

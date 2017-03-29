@@ -1,5 +1,5 @@
-import postMessage from '../postMessage';
-import addEventListner from '../dom/addEventListener';
+// import postMessage from '../postMessage';
+// import addEventListner from '../dom/addEventListener';
 import window from '../window';
 import setTimeout from '../setTimeout';
 
@@ -7,32 +7,32 @@ if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-let setImmediateAvailable;
-let firstImmediate = true;
-let immediateCount = 0;
-const tasks = {};
-const suffix = `_setImmediate${window.immediateId}`;
 const {setImmediate: setImmediateNative} = window;
+let setImmediateAvailable;
+// let firstImmediate = true;
+// let immediateCount = 0;
+// const tasks = {};
+// const suffix = `_setImmediate${window.immediateId}`;
 
-function setImmediatePostMessage(fn) {
-	if (firstImmediate) {
-		firstImmediate = false;
-		addEventListner(window, 'message', function ({data}) {
-			if (data.split) {
-				const [key] = data.split(suffix);
-				const task = tasks[key];
-				if (task) {
-					task();
-				}
-				delete tasks[key];
-			}
-		});
-	}
-	immediateCount += 1;
-	postMessage(`${immediateCount}${suffix}`, '*');
-	tasks[immediateCount] = fn;
-	return immediateCount;
-}
+// function setImmediatePostMessage(fn) {
+// 	if (firstImmediate) {
+// 		firstImmediate = false;
+// 		addEventListner(window, 'message', function ({data}) {
+// 			if (data.split) {
+// 				const [key] = data.split(suffix);
+// 				const task = tasks[key];
+// 				if (task) {
+// 					task();
+// 				}
+// 				delete tasks[key];
+// 			}
+// 		});
+// 	}
+// 	immediateCount += 1;
+// 	postMessage(`${immediateCount}${suffix}`, '*');
+// 	tasks[immediateCount] = fn;
+// 	return immediateCount;
+// }
 
 function setImmediateTimeout(fn) {
 	return setTimeout(fn);
@@ -52,13 +52,13 @@ function testImmediate(fn, onSuccess) {
 
 setImmediateAvailable = setImmediateTimeout;
 setTimeout(function () {
-	if (postMessage) {
-		testImmediate(setImmediatePostMessage, function () {
-			if (setImmediateAvailable !== setImmediateNative) {
-				setImmediateAvailable = setImmediatePostMessage;
-			}
-		});
-	}
+	// if (postMessage) {
+	// 	testImmediate(setImmediatePostMessage, function () {
+	// 		if (setImmediateAvailable !== setImmediateNative) {
+	// 			setImmediateAvailable = setImmediatePostMessage;
+	// 		}
+	// 	});
+	// }
 	if (setImmediateNative) {
 		testImmediate(setImmediateNative, function () {
 			setImmediateAvailable = setImmediateNative;

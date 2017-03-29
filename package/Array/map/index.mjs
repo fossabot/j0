@@ -4,8 +4,8 @@ import noop from '../../noop';
 
 function map(iterable, fn = noop, thisArg) {
 	const result = [];
-	forEach(iterable, function (...args) {
-		push(result, fn.call(thisArg, ...args));
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
 	});
 	return result;
 }

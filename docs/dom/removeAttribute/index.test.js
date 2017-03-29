@@ -64,32 +64,60 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return x;
 	}
 
+	function isFunction(x) {
+		return typeof x === 'function';
+	}
+
 	function forEach(iterable, fn, thisArg) {
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
+		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+		var length = iterable.length;
 
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+		var index = void 0;
+		if (0 <= length) {
+			for (index = fromIndex; index < length; index += 1) {
+				if (fn.call(thisArg, iterable[index], index, iterable)) {
+					return;
+				}
+			}
+		} else if (isFunction(iterable.next)) {
+			index = 0;
+			while (1) {
+				var _iterable$next = iterable.next(),
+				    value = _iterable$next.value,
+				    done = _iterable$next.done;
 
-				if (fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
 					return;
 				}
 				index += 1;
 			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
+		} else {
+			index = fromIndex;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var value = _step.value;
+
+					if (fn.call(thisArg, value, index, iterable)) {
+						return;
+					}
+					index += 1;
 				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
 			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
 				}
 			}
 		}

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import isFunction from '../../isFunction';
 import push from '../../Array/push';
 import forEach from '../../Array/forEach';
@@ -9,6 +10,18 @@ const PENDING = 0;
 const RESOLVED = 1;
 const REJECTED = 2;
 const CHAINED = 3;
+
+class Deferred {
+
+	constructor(onResolved = null, onRejected = null) {
+		/* eslint-disable no-use-before-define */
+		this.promise = new J0Promise(noop);
+		/* eslint-enable no-use-before-define */
+		this.onResolved = onResolved;
+		this.onRejected = onRejected;
+	}
+
+}
 
 class J0Promise {
 
@@ -51,7 +64,14 @@ class J0Promise {
 				throw new TypeError('A promise cannot be resolved with itself');
 			}
 			this.value = value;
-			this.state = isThennable(value) ? CHAINED : RESOLVED;
+			if (isThennable(value)) {
+				this.state = CHAINED;
+				this.exec((resolve, reject) => {
+					value.then(resolve, reject);
+				});
+			} else {
+				this.state = RESOLVED;
+			}
 			this.finish();
 		} catch (error) {
 			this.reject(error);
@@ -72,7 +92,9 @@ class J0Promise {
 	}
 
 	handle(deferred) {
+		/* eslint-disable consistent-this */
 		let self = this;
+		/* eslint-enable consistent-this */
 		while (self.is(CHAINED)) {
 			self = self.value;
 		}
@@ -81,94 +103,88 @@ class J0Promise {
 			return;
 		}
 		setImmediate(() => {
-			const [
+			const {
 				promise,
 				onResolved = null,
 				onRejected = null
-			] = deferred;
-			const callback = self.is(RESOLVED) ? onResolved : onRejected;
+			} = deferred;
+			const resolved = self.is(RESOLVED);
+			const callback = resolved ? onResolved : onRejected;
 			if (callback === null) {
-				if (self.is(RESOLVED)) {
+				if (resolved) {
 					promise.resolve(self.value);
 				} else {
 					promise.reject(self.value);
 				}
 				return;
 			}
+			let value;
 			try {
-				promise.resolve(callback(self.value));
+				value = callback(self.value);
 			} catch (error) {
 				promise.reject(error);
+				return;
 			}
+			promise.resolve(value);
 		});
-	}
-
-	then(onResolved = null, onRejected = null) {
-		const promise = new J0Promise(noop);
-		this.handle([promise, onResolved, onRejected]);
-		return promise;
 	}
 
 	catch(onRejected) {
 		return this.then(null, onRejected);
 	}
 
+	then(onResolved, onRejected) {
+		const deferred = new Deferred(onResolved, onRejected);
+		this.handle(deferred);
+		return deferred.promise;
+	}
+
 	static resolve(value) {
-		return new J0Promise(function (onResolved) {
-			onResolved(value);
+		if (isThennable(value)) {
+			return value;
+		}
+		return new J0Promise(function (resolve) {
+			resolve(value);
 		});
 	}
 
 	static reject(error) {
-		return new J0Promise(function () {
-			throw error;
+		return new J0Promise(function (resolve, reject) {
+			reject(error);
 		});
 	}
 
 	static race(promises) {
 		return new J0Promise(function (resolve, reject) {
-			let finished = false;
 			forEach(promises, function (promise) {
-				promise.then(
-					function (result) {
-						if (!finished) {
-							finished = true;
-							resolve(result);
-						}
-					},
-					function (error) {
-						if (!finished) {
-							finished = true;
-							reject(error);
-						}
-					}
-				);
+				promise.then(resolve, reject);
 			});
 		});
 	}
 
-	static all(promises) {
+	static all(values) {
 		return new J0Promise(function (resolve, reject) {
-			const results = [];
-			const goal = promises.length;
-			let finished = false;
-			let count = 0;
-			forEach(promises, function (promise, index) {
-				promise.then(
-					function (result) {
-						if (!finished) {
-							results[index] = result;
-							count += 1;
-							if (count === goal) {
-								resolve(results);
-							}
-						}
-					},
-					function (error) {
-						finished = true;
-						reject(error);
-					}
-				);
+			const {length} = values;
+			if (length === 0) {
+				resolve([]);
+				return;
+			}
+			let remaining = length;
+			function check(value, index) {
+				if (isThennable(value)) {
+					value.then(function (value2) {
+						check(value2, index);
+					}, reject);
+					return;
+				}
+				values[index] = value;
+				remaining -= 1;
+				if (remaining === 0) {
+					resolve(values);
+				}
+			}
+			forEach(values, function (value, index) {
+				check(value, index);
 			});
 		});
 	}
@@ -176,7 +192,7 @@ class J0Promise {
 }
 
 function isThennable(value) {
-	return value && isFunction(value.then);
+	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
 export default J0Promise;

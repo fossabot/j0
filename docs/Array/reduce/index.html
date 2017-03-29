@@ -14,13 +14,13 @@
 </ul>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="function">function</span> <span class="name">reduce</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span><span class="_2c">,</span> <span class="name">initialValue</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span> <span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">forEach</span> <span class="name">from</span> <a href="../forEach"><span class="string"><span class="string">'../forEach'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">reduce</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span><span class="_2c">,</span> <span class="name">initialValue</span> <span class="_3d">=</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">result</span> <span class="_3d">=</span> <span class="name">initialValue</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">index</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="const">const</span> <span class="name">item</span> <span class="name">of</span> <span class="name">iterable</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">forEach</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">item</span><span class="_2c">,</span> <span class="name">index</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">result</span> <span class="_3d">=</span> <span class="name">fn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span> <span class="name">result</span><span class="_2c">,</span> <span class="name">item</span><span class="_2c">,</span> <span class="name">index</span><span class="_2c">,</span> <span class="name">iterable</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">index</span> <span class="__3d">+=</span> <span class="num">1</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">result</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>

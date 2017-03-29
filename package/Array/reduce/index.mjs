@@ -1,10 +1,10 @@
+import forEach from '../forEach';
+
 function reduce(iterable, fn, initialValue = {}, thisArg) {
 	let result = initialValue;
-	let index = 0;
-	for (const item of iterable) {
+	forEach(iterable, function (item, index) {
 		result = fn.call(thisArg, result, item, index, iterable);
-		index += 1;
-	}
+	});
 	return result;
 }
 

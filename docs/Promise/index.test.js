@@ -2,8 +2,6 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,102 +26,94 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}
 
 	function forEach(iterable, fn, thisArg) {
-		var index = 0;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
+		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+		var length = iterable.length;
 
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+		var index = void 0;
+		if (0 <= length) {
+			for (index = fromIndex; index < length; index += 1) {
+				if (fn.call(thisArg, iterable[index], index, iterable)) {
+					return;
+				}
+			}
+		} else if (isFunction(iterable.next)) {
+			index = 0;
+			while (1) {
+				var _iterable$next = iterable.next(),
+				    value = _iterable$next.value,
+				    done = _iterable$next.done;
 
-				if (fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
 					return;
 				}
 				index += 1;
 			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
+		} else {
+			index = fromIndex;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var value = _step.value;
+
+					if (fn.call(thisArg, value, index, iterable)) {
+						return;
+					}
+					index += 1;
 				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
 			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
 				}
 			}
 		}
 	}
 
-	var postMessage = window.postMessage;
-
-	var key = Symbol('events');
-
-	function getEventListeners(element) {
-		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-		var allEvents = element[key];
-		var events = void 0;
-		if (!allEvents) {
-			allEvents = new Map();
-			element[key] = allEvents;
-		}
-		if (eventName) {
-			events = allEvents.get(eventName);
-			if (!events) {
-				events = new Set();
-				allEvents.set(eventName, events);
-			}
-			return events;
-		}
-		return allEvents;
-	}
-
-	function addEventListener(element, eventName, fn) {
-		element.addEventListener(eventName, fn);
-		getEventListeners(element, eventName).add(fn);
-	}
-
+	// import postMessage from '../postMessage';
+	// import addEventListner from '../dom/addEventListener';
 	if (!window.immediateId) {
 		window.immediateId = 0;
 	}
 	window.immediateId += 1;
-	var setImmediateAvailable = void 0;
-	var firstImmediate = true;
-	var immediateCount = 0;
-	var tasks = {};
-	var suffix = '_setImmediate' + window.immediateId;
 	var _window = window,
 	    setImmediateNative = _window.setImmediate;
 
+	var setImmediateAvailable = void 0;
+	// let firstImmediate = true;
+	// let immediateCount = 0;
+	// const tasks = {};
+	// const suffix = `_setImmediate${window.immediateId}`;
 
-	function setImmediatePostMessage(fn) {
-		if (firstImmediate) {
-			firstImmediate = false;
-			addEventListener(window, 'message', function (_ref) {
-				var data = _ref.data;
-
-				if (data.split) {
-					var _data$split = data.split(suffix),
-					    _data$split2 = _slicedToArray(_data$split, 1),
-					    _key2 = _data$split2[0];
-
-					var task = tasks[_key2];
-					if (task) {
-						task();
-					}
-					delete tasks[_key2];
-				}
-			});
-		}
-		immediateCount += 1;
-		postMessage('' + immediateCount + suffix, '*');
-		tasks[immediateCount] = fn;
-		return immediateCount;
-	}
+	// function setImmediatePostMessage(fn) {
+	// 	if (firstImmediate) {
+	// 		firstImmediate = false;
+	// 		addEventListner(window, 'message', function ({data}) {
+	// 			if (data.split) {
+	// 				const [key] = data.split(suffix);
+	// 				const task = tasks[key];
+	// 				if (task) {
+	// 					task();
+	// 				}
+	// 				delete tasks[key];
+	// 			}
+	// 		});
+	// 	}
+	// 	immediateCount += 1;
+	// 	postMessage(`${immediateCount}${suffix}`, '*');
+	// 	tasks[immediateCount] = fn;
+	// 	return immediateCount;
+	// }
 
 	function setImmediateTimeout(fn) {
 		return setTimeout(fn);
@@ -143,13 +133,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	setImmediateAvailable = setImmediateTimeout;
 	setTimeout(function () {
-		if (postMessage) {
-			testImmediate(setImmediatePostMessage, function () {
-				if (setImmediateAvailable !== setImmediateNative) {
-					setImmediateAvailable = setImmediatePostMessage;
-				}
-			});
-		}
+		// if (postMessage) {
+		// 	testImmediate(setImmediatePostMessage, function () {
+		// 		if (setImmediateAvailable !== setImmediateNative) {
+		// 			setImmediateAvailable = setImmediatePostMessage;
+		// 		}
+		// 	});
+		// }
 		if (setImmediateNative) {
 			testImmediate(setImmediateNative, function () {
 				setImmediateAvailable = setImmediateNative;
@@ -165,10 +155,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return x;
 	}
 
+	/* eslint-disable no-underscore-dangle */
 	var PENDING = 0;
 	var RESOLVED = 1;
 	var REJECTED = 2;
 	var CHAINED = 3;
+
+	var Deferred = function Deferred() {
+		var onResolved = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+		var onRejected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+		_classCallCheck(this, Deferred);
+
+		/* eslint-disable no-use-before-define */
+		this.promise = new J0Promise(noop);
+		/* eslint-enable no-use-before-define */
+		this.onResolved = onResolved;
+		this.onRejected = onRejected;
+	};
 
 	var J0Promise = function () {
 		function J0Promise(fn) {
@@ -218,7 +222,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						throw new TypeError('A promise cannot be resolved with itself');
 					}
 					this.value = value;
-					this.state = isThennable(value) ? CHAINED : RESOLVED;
+					if (isThennable(value)) {
+						this.state = CHAINED;
+						this.exec(function (resolve, reject) {
+							value.then(resolve, reject);
+						});
+					} else {
+						this.state = RESOLVED;
+					}
 					this.finish();
 				} catch (error) {
 					this.reject(error);
@@ -244,7 +255,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'handle',
 			value: function handle(deferred) {
+				/* eslint-disable consistent-this */
 				var self = this;
+				/* eslint-enable consistent-this */
 				while (self.is(CHAINED)) {
 					self = self.value;
 				}
@@ -253,99 +266,96 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return;
 				}
 				setImmediate(function () {
-					var _deferred = _slicedToArray(deferred, 3),
-					    promise = _deferred[0],
-					    _deferred$ = _deferred[1],
-					    onResolved = _deferred$ === undefined ? null : _deferred$,
-					    _deferred$2 = _deferred[2],
-					    onRejected = _deferred$2 === undefined ? null : _deferred$2;
+					var promise = deferred.promise,
+					    _deferred$onResolved = deferred.onResolved,
+					    onResolved = _deferred$onResolved === undefined ? null : _deferred$onResolved,
+					    _deferred$onRejected = deferred.onRejected,
+					    onRejected = _deferred$onRejected === undefined ? null : _deferred$onRejected;
 
-					var callback = self.is(RESOLVED) ? onResolved : onRejected;
+					var resolved = self.is(RESOLVED);
+					var callback = resolved ? onResolved : onRejected;
 					if (callback === null) {
-						if (self.is(RESOLVED)) {
+						if (resolved) {
 							promise.resolve(self.value);
 						} else {
 							promise.reject(self.value);
 						}
 						return;
 					}
+					var value = void 0;
 					try {
-						promise.resolve(callback(self.value));
+						value = callback(self.value);
 					} catch (error) {
 						promise.reject(error);
+						return;
 					}
+					promise.resolve(value);
 				});
-			}
-		}, {
-			key: 'then',
-			value: function then() {
-				var onResolved = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-				var onRejected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-				var promise = new J0Promise(noop);
-				this.handle([promise, onResolved, onRejected]);
-				return promise;
 			}
 		}, {
 			key: 'catch',
 			value: function _catch(onRejected) {
 				return this.then(null, onRejected);
 			}
+		}, {
+			key: 'then',
+			value: function then(onResolved, onRejected) {
+				var deferred = new Deferred(onResolved, onRejected);
+				this.handle(deferred);
+				return deferred.promise;
+			}
 		}], [{
 			key: 'resolve',
 			value: function resolve(value) {
-				return new J0Promise(function (onResolved) {
-					onResolved(value);
+				if (isThennable(value)) {
+					return value;
+				}
+				return new J0Promise(function (resolve) {
+					resolve(value);
 				});
 			}
 		}, {
 			key: 'reject',
 			value: function reject(error) {
-				return new J0Promise(function () {
-					throw error;
+				return new J0Promise(function (resolve, reject) {
+					reject(error);
 				});
 			}
 		}, {
 			key: 'race',
 			value: function race(promises) {
 				return new J0Promise(function (resolve, reject) {
-					var finished = false;
 					forEach(promises, function (promise) {
-						promise.then(function (result) {
-							if (!finished) {
-								finished = true;
-								resolve(result);
-							}
-						}, function (error) {
-							if (!finished) {
-								finished = true;
-								reject(error);
-							}
-						});
+						promise.then(resolve, reject);
 					});
 				});
 			}
 		}, {
 			key: 'all',
-			value: function all(promises) {
+			value: function all(values) {
 				return new J0Promise(function (resolve, reject) {
-					var results = [];
-					var goal = promises.length;
-					var finished = false;
-					var count = 0;
-					forEach(promises, function (promise, index) {
-						promise.then(function (result) {
-							if (!finished) {
-								results[index] = result;
-								count += 1;
-								if (count === goal) {
-									resolve(results);
-								}
-							}
-						}, function (error) {
-							finished = true;
-							reject(error);
-						});
+					var length = values.length;
+
+					if (length === 0) {
+						resolve([]);
+						return;
+					}
+					var remaining = length;
+					function check(value, index) {
+						if (isThennable(value)) {
+							value.then(function (value2) {
+								check(value2, index);
+							}, reject);
+							return;
+						}
+						values[index] = value;
+						remaining -= 1;
+						if (remaining === 0) {
+							resolve(values);
+						}
+					}
+					forEach(values, function (value, index) {
+						check(value, index);
 					});
 				});
 			}
@@ -355,7 +365,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	function isThennable(value) {
-		return value && isFunction(value.then);
+		return value && isFunction(value.then) && isFunction(value.catch);
 	}
 
 	function onUnexpectedFullfill() {

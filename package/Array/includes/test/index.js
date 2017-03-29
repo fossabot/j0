@@ -27,7 +27,7 @@ describe('Array/includes', function () {
 				count += 1;
 				return {
 					value: count,
-					done: 4 < count
+					done: 4 <= count
 				};
 			}
 		};
