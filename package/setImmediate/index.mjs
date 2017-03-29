@@ -17,13 +17,15 @@ const {setImmediate: setImmediateNative} = window;
 function setImmediatePostMessage(fn) {
 	if (firstImmediate) {
 		firstImmediate = false;
-		addEventListner(window, 'message', function (event) {
-			const [key] = event.data.split(suffix);
-			const task = tasks[key];
-			if (task) {
-				task();
+		addEventListner(window, 'message', function ({data}) {
+			if (data.split) {
+				const [key] = data.split(suffix);
+				const task = tasks[key];
+				if (task) {
+					task();
+				}
+				delete tasks[key];
 			}
-			delete tasks[key];
 		});
 	}
 	immediateCount += 1;
