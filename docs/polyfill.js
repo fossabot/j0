@@ -527,7 +527,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var onResolved = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 				var onRejected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-				var promise = new Promise(noop);
+				var promise = new J0Promise(noop);
 				this.handle([promise, onResolved, onRejected]);
 				return promise;
 			}
@@ -603,7 +603,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return value && isFunction(value.then);
 	}
 
-	window.Promise = J0Promise;
+	if (!window.Promise) {
+		window.Promise = J0Promise;
+	}
 
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;

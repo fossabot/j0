@@ -17,10 +17,9 @@
 	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">window</span> <span class="name">from</span> <a href="../../window"><span class="string"><span class="string">'../../window'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span> <span class="name">J0Promise</span> <span class="name">from</span> <a href="../J0Promise"><span class="string"><span class="string">'../J0Promise'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="comment">// if (!window.Promise) {</span>
-<span class="linenum"></span><span class="comment">// <span class="indent">	</span>window.Promise = J0Promise;</span>
-<span class="linenum"></span><span class="comment">// }</span>
-<span class="linenum"></span><span class="name">window</span><span class="_2e">.</span><span class="name">Promise</span> <span class="_3d">=</span> <span class="name">J0Promise</span><span class="_3b">;</span></pre>
+<span class="linenum"></span><span class="if">if</span> <span class="_28">(</span><span class="prefix">!</span><span class="name">window</span><span class="_2e">.</span><span class="name">Promise</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">window</span><span class="_2e">.</span><span class="name">Promise</span> <span class="_3d">=</span> <span class="name">J0Promise</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Promise/polyfill/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 

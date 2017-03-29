@@ -1,7 +1,6 @@
 import isFunction from '../../isFunction';
 import push from '../../Array/push';
 import forEach from '../../Array/forEach';
-import shift from '../../Array/shift';
 import setImmediate from '../../setImmediate';
 import TypeError from '../../TypeError';
 import noop from '../../noop';
@@ -105,7 +104,7 @@ class J0Promise {
 	}
 
 	then(onResolved = null, onRejected = null) {
-		const promise = new Promise(noop);
+		const promise = new J0Promise(noop);
 		this.handle([promise, onResolved, onRejected]);
 		return promise;
 	}

@@ -9,8 +9,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function getChildNodes(node) {
-		return node.childNodes;
+	function getParent(node) {
+		return node.parentNode;
+	}
+
+	function insertBefore(newNode, referenceNode) {
+		var parentNode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : getParent(referenceNode);
+
+		return parentNode.insertBefore(newNode, referenceNode);
 	}
 
 	function isString(x) {
@@ -151,19 +157,36 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
+	function getChildNodes(node) {
+		return node.childNodes;
+	}
+
 	function from() {
 		return Array.from.apply(Array, arguments);
 	}
 
-	describe('dom/getChildNodes', function () {
+	describe('dom/insertBefore', function () {
 
-		it('should get a list of children', function () {
+		it('should insert an element before a specified element', function () {
 			var c1 = createElement();
 			var c2 = createElement();
 			var parent = createElement({
 				c: [c1, c2]
 			});
-			assert.deepEqual(from(getChildNodes(parent)), [c1, c2]);
+			var newNode = createElement();
+			insertBefore(newNode, c2);
+			assert.deepEqual(from(getChildNodes(parent)), [c1, newNode, c2]);
+		});
+
+		it('should insert an element after the last child', function () {
+			var c1 = createElement();
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			var newNode = createElement();
+			insertBefore(newNode, null, parent);
+			assert.deepEqual(from(getChildNodes(parent)), [c1, c2, newNode]);
 		});
 	});
 });
