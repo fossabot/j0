@@ -54,16 +54,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	function setImmediatePostMessage(fn) {
 		if (firstImmediate) {
 			firstImmediate = false;
-			addEventListener(window, 'message', function (event) {
-				var _event$data$split = event.data.split(suffix),
-				    _event$data$split2 = _slicedToArray(_event$data$split, 1),
-				    key = _event$data$split2[0];
+			addEventListener(window, 'message', function (_ref) {
+				var data = _ref.data;
 
-				var task = tasks[key];
-				if (task) {
-					task();
+				if (data.split) {
+					var _data$split = data.split(suffix),
+					    _data$split2 = _slicedToArray(_data$split, 1),
+					    _key = _data$split2[0];
+
+					var task = tasks[_key];
+					if (task) {
+						task();
+					}
+					delete tasks[_key];
 				}
-				delete tasks[key];
 			});
 		}
 		immediateCount += 1;

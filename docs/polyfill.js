@@ -307,27 +307,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		String.prototype.repeat = repeat;
 	}
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
-
-	function shift(arrayLike) {
-		if (arrayLike.shift) {
-			return arrayLike.shift();
-		} else if (!isUndefined(arrayLike.length)) {
-			var returnValue = arrayLike[0];
-			var length = arrayLike.length;
-
-			for (var i = 0; i < length; i += 1) {
-				arrayLike[i] = arrayLike[i + 1];
-			}
-			delete arrayLike[length - 1];
-			arrayLike.length = length - 1;
-			return returnValue;
-		}
-		throw new TypeError('The object is not shift-able');
-	}
-
 	var postMessage = window.postMessage;
 
 	var key = Symbol('events');
@@ -373,16 +352,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	function setImmediatePostMessage(fn) {
 		if (firstImmediate) {
 			firstImmediate = false;
-			addEventListener(window, 'message', function (event) {
-				var _event$data$split = event.data.split(suffix),
-				    _event$data$split2 = _slicedToArray(_event$data$split, 1),
-				    key = _event$data$split2[0];
+			addEventListener(window, 'message', function (_ref) {
+				var data = _ref.data;
 
-				var task = tasks[key];
-				if (task) {
-					task();
+				if (data.split) {
+					var _data$split = data.split(suffix),
+					    _data$split2 = _slicedToArray(_data$split, 1),
+					    key = _data$split2[0];
+
+					var task = tasks[key];
+					if (task) {
+						task();
+					}
+					delete tasks[key];
 				}
-				delete tasks[key];
 			});
 		}
 		immediateCount += 1;
@@ -428,80 +411,124 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	};
 
 	var PENDING = 0;
-	var FULFILLED = 1;
+	var RESOLVED = 1;
 	var REJECTED = 2;
+	var CHAINED = 3;
 
 	var J0Promise = function () {
 		function J0Promise(fn) {
-			var _this4 = this;
-
 			_classCallCheck(this, J0Promise);
 
-			this.onFulfilled = [];
-			this.onRejected = [];
+			this.deferreds = [];
 			this.state = PENDING;
-			try {
-				fn(function (value) {
-					_this4.resolve(value);
-				}, function (error) {
-					_this4.reject(error);
-				});
-			} catch (error) {
-				this.reject(error);
-			}
+			this.exec(fn);
 		}
 
 		_createClass(J0Promise, [{
-			key: 'resolve',
-			value: function resolve() {
-				var _this5 = this;
+			key: 'is',
+			value: function is(state) {
+				return this.state === state;
+			}
+		}, {
+			key: 'exec',
+			value: function exec(fn) {
+				var _this4 = this;
 
-				var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.value;
-
-				this.state = FULFILLED;
-				this.value = value;
-				setImmediate(function () {
-					var functions = _this5.onFulfilled;
-					while (functions[0]) {
-						shift(functions)(value);
+				var done = false;
+				var onResolve = function onResolve(value) {
+					if (done) {
+						return;
 					}
-				});
+					done = true;
+					_this4.resolve(value);
+				};
+				var onReject = function onReject(error) {
+					if (done) {
+						return;
+					}
+					done = true;
+					_this4.reject(error);
+				};
+				try {
+					fn(onResolve, onReject);
+				} catch (error) {
+					onReject(error);
+				}
+			}
+		}, {
+			key: 'resolve',
+			value: function resolve(value) {
+				try {
+					if (value === this) {
+						throw new TypeError('A promise cannot be resolved with itself');
+					}
+					this.value = value;
+					this.state = isThennable(value) ? CHAINED : RESOLVED;
+					this.finish();
+				} catch (error) {
+					this.reject(error);
+				}
 			}
 		}, {
 			key: 'reject',
 			value: function reject(error) {
-				var _this6 = this;
-
 				this.state = REJECTED;
 				this.value = error;
+				this.finish();
+			}
+		}, {
+			key: 'finish',
+			value: function finish() {
+				var _this5 = this;
+
+				_forEach(this.deferreds, function (deferred) {
+					_this5.handle(deferred);
+				});
+				this.deferreds = null;
+			}
+		}, {
+			key: 'handle',
+			value: function handle(deferred) {
+				var self = this;
+				while (self.is(CHAINED)) {
+					self = self.value;
+				}
+				if (self.is(PENDING)) {
+					push(self.deferreds, deferred);
+					return;
+				}
 				setImmediate(function () {
-					var functions = _this6.onRejected;
-					while (functions[0]) {
-						shift(functions)(error);
+					var _deferred = _slicedToArray(deferred, 3),
+					    promise = _deferred[0],
+					    _deferred$ = _deferred[1],
+					    onResolved = _deferred$ === undefined ? null : _deferred$,
+					    _deferred$2 = _deferred[2],
+					    onRejected = _deferred$2 === undefined ? null : _deferred$2;
+
+					var callback = self.is(RESOLVED) ? onResolved : onRejected;
+					if (callback === null) {
+						if (self.is(RESOLVED)) {
+							promise.resolve(self.value);
+						} else {
+							promise.reject(self.value);
+						}
+						return;
+					}
+					try {
+						promise.resolve(callback(self.value));
+					} catch (error) {
+						promise.reject(error);
 					}
 				});
 			}
 		}, {
 			key: 'then',
-			value: function then(onFulfilled, onRejected) {
-				var _this7 = this;
+			value: function then() {
+				var onResolved = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+				var onRejected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-				var promise = new J0Promise(function (onFulfilled2, onRejected2) {
-					addThenFunction(_this7.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
-					addThenFunction(_this7.onRejected, onRejected, onFulfilled2, onRejected2);
-				});
-				switch (this.state) {
-					case PENDING:
-						break;
-					case FULFILLED:
-						this.resolve();
-						break;
-					case REJECTED:
-						this.reject();
-						break;
-					default:
-						throw new Error('Unknown state: ' + this.state);
-				}
+				var promise = new Promise(noop);
+				this.handle([promise, onResolved, onRejected]);
 				return promise;
 			}
 		}, {
@@ -512,8 +539,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}], [{
 			key: 'resolve',
 			value: function resolve(value) {
-				return new J0Promise(function (onFulfilled) {
-					onFulfilled(value);
+				return new J0Promise(function (onResolved) {
+					onResolved(value);
 				});
 			}
 		}, {
@@ -573,27 +600,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	function isThennable(value) {
-		return value && isFunction(value.then) && isFunction(value.catch);
+		return value && isFunction(value.then);
 	}
 
-	function addThenFunction(list, fn, onFulfilled2, onRejected2) {
-		push(list, isFunction(fn) ? function (value) {
-			try {
-				var value2 = fn(value);
-				if (isThennable(value2)) {
-					value2.then(onFulfilled2, onRejected2);
-				} else {
-					onFulfilled2(value2);
-				}
-			} catch (error2) {
-				onRejected2(error2);
-			}
-		} : onFulfilled2);
-	}
-
-	if (!window.Promise) {
-		window.Promise = J0Promise;
-	}
+	window.Promise = J0Promise;
 
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -647,9 +657,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'indexOfKey',
 			value: function indexOfKey(key) {
-				return find$2(this.data, function (_ref) {
-					var _ref2 = _slicedToArray(_ref, 1),
-					    itemKey = _ref2[0];
+				return find$2(this.data, function (_ref2) {
+					var _ref3 = _slicedToArray(_ref2, 1),
+					    itemKey = _ref3[0];
 
 					return itemKey === key;
 				});
@@ -673,9 +683,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get(key) {
-				var found = find(this.data, function (_ref3) {
-					var _ref4 = _slicedToArray(_ref3, 1),
-					    itemKey = _ref4[0];
+				var found = find(this.data, function (_ref4) {
+					var _ref5 = _slicedToArray(_ref4, 1),
+					    itemKey = _ref5[0];
 
 					return itemKey === key;
 				});
@@ -706,9 +716,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'keys',
 			value: function keys() {
-				return map(this.data, function (_ref5) {
-					var _ref6 = _slicedToArray(_ref5, 1),
-					    key = _ref6[0];
+				return map(this.data, function (_ref6) {
+					var _ref7 = _slicedToArray(_ref6, 1),
+					    key = _ref7[0];
 
 					return key;
 				});
@@ -716,9 +726,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'values',
 			value: function values() {
-				return map(this.data, function (_ref7) {
-					var _ref8 = _slicedToArray(_ref7, 2),
-					    value = _ref8[1];
+				return map(this.data, function (_ref8) {
+					var _ref9 = _slicedToArray(_ref8, 2),
+					    value = _ref9[1];
 
 					return value;
 				});

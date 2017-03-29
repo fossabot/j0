@@ -8,8 +8,10 @@ import navigator from '../package/navigator';
 function startMocha() {
 	mocha.run()
 		.once('end', function () {
+			const className = 0 < this.stats.failures ? 'failed' : 'passed';
 			document.body.classList.add('done');
-			document.body.classList.add(0 < this.stats.failures ? 'failed' : 'passed');
+			document.body.classList.add(className);
+			document.title += `[${className}]`;
 		});
 }
 
