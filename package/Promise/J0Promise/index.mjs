@@ -3,35 +3,120 @@ import push from '../../Array/push';
 import forEach from '../../Array/forEach';
 import shift from '../../Array/shift';
 import setImmediate from '../../setImmediate';
-import Error from '../../Error';
+import TypeError from '../../TypeError';
+import noop from '../../noop';
 
 const PENDING = 0;
-const FULFILLED = 1;
+const RESOLVED = 1;
 const REJECTED = 2;
+const CHAINED = 3;
 
 class J0Promise {
 
 	constructor(fn) {
-		this.onFulfilled = [];
-		this.onRejected = [];
+		this.deferreds = [];
 		this.state = PENDING;
+		this.exec(fn);
+	}
+
+	is(state) {
+		return this.state === state;
+	}
+
+	exec(fn) {
+		let done = false;
+		const onResolve = (value) => {
+			if (done) {
+				return;
+			}
+			done = true;
+			this.resolve(value);
+		};
+		const onReject = (error) => {
+			if (done) {
+				return;
+			}
+			done = true;
+			this.reject(error);
+		};
 		try {
-			fn(
-				(value) => {
-					this.resolve(value);
-				},
-				(error) => {
-					this.reject(error);
-				}
-			);
+			fn(onResolve, onReject);
+		} catch (error) {
+			onReject(error);
+		}
+	}
+
+	resolve(value) {
+		try {
+			if (value === this) {
+				throw new TypeError('A promise cannot be resolved with itself');
+			}
+			this.value = value;
+			this.state = isThennable(value) ? CHAINED : RESOLVED;
+			this.finish();
 		} catch (error) {
 			this.reject(error);
 		}
 	}
 
+	reject(error) {
+		this.state = REJECTED;
+		this.value = error;
+		this.finish();
+	}
+
+	finish() {
+		forEach(this.deferreds, (deferred) => {
+			this.handle(deferred);
+		});
+		this.deferreds = null;
+	}
+
+	handle(deferred) {
+		let self = this;
+		while (self.is(CHAINED)) {
+			self = self.value;
+		}
+		if (self.is(PENDING)) {
+			push(self.deferreds, deferred);
+			return;
+		}
+		setImmediate(() => {
+			const [
+				promise,
+				onResolved = null,
+				onRejected = null
+			] = deferred;
+			const callback = self.is(RESOLVED) ? onResolved : onRejected;
+			if (callback === null) {
+				if (self.is(RESOLVED)) {
+					promise.resolve(self.value);
+				} else {
+					promise.reject(self.value);
+				}
+				return;
+			}
+			try {
+				promise.resolve(callback(self.value));
+			} catch (error) {
+				promise.reject(error);
+			}
+		});
+	}
+
+	then(onResolved = null, onRejected = null) {
+		const promise = new Promise(noop);
+		this.handle([promise, onResolved, onRejected]);
+		return promise;
+	}
+
+	catch(onRejected) {
+		return this.then(null, onRejected);
+	}
+
 	static resolve(value) {
-		return new J0Promise(function (onFulfilled) {
-			onFulfilled(value);
+		return new J0Promise(function (onResolved) {
+			onResolved(value);
 		});
 	}
 
@@ -89,71 +174,10 @@ class J0Promise {
 		});
 	}
 
-	resolve(value = this.value) {
-		this.state = FULFILLED;
-		this.value = value;
-		setImmediate(() => {
-			const functions = this.onFulfilled;
-			while (functions[0]) {
-				shift(functions)(value);
-			}
-		});
-	}
-
-	reject(error) {
-		this.state = REJECTED;
-		this.value = error;
-		setImmediate(() => {
-			const functions = this.onRejected;
-			while (functions[0]) {
-				shift(functions)(error);
-			}
-		});
-	}
-
-	then(onFulfilled, onRejected) {
-		const promise = new J0Promise((onFulfilled2, onRejected2) => {
-			addThenFunction(this.onFulfilled, onFulfilled, onFulfilled2, onRejected2);
-			addThenFunction(this.onRejected, onRejected, onFulfilled2, onRejected2);
-		});
-		switch (this.state) {
-		case PENDING:
-			break;
-		case FULFILLED:
-			this.resolve();
-			break;
-		case REJECTED:
-			this.reject();
-			break;
-		default:
-			throw new Error(`Unknown state: ${this.state}`);
-		}
-		return promise;
-	}
-
-	catch(onRejected) {
-		return this.then(null, onRejected);
-	}
-
 }
 
 function isThennable(value) {
-	return value && isFunction(value.then) && isFunction(value.catch);
-}
-
-function addThenFunction(list, fn, onFulfilled2, onRejected2) {
-	push(list, isFunction(fn) ? function (value) {
-		try {
-			const value2 = fn(value);
-			if (isThennable(value2)) {
-				value2.then(onFulfilled2, onRejected2);
-			} else {
-				onFulfilled2(value2);
-			}
-		} catch (error2) {
-			onRejected2(error2);
-		}
-	} : onFulfilled2);
+	return value && isFunction(value.then);
 }
 
 export default J0Promise;
