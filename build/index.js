@@ -58,7 +58,10 @@ function startServer() {
 	])
 	.then(() => {
 		console.debug('starting sable server');
-		return sable({documentRoot: constants.dest});
+		return sable({
+			documentRoot: constants.dest,
+			quiet: constants.quiet
+		});
 	});
 }
 

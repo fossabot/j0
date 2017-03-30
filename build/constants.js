@@ -17,5 +17,6 @@ module.exports = {
 	ignore: /[/\\][._]|node_modules/,
 	exts: ['.js', '.mjs'],
 	watch: process.argv.includes('--watch'),
+	quiet: process.argv.includes('--quiet'),
 	packageJSON: packageJSON
 };

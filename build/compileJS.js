@@ -7,19 +7,26 @@ const babel = require('babel-core');
 const console = require('j1/console').create('compileJS');
 const writeFile = require('j1/writeFile');
 const fileSize = require('j1/fileSize');
+const changeExt = require('j1/changeExt');
 const glob = require('glob');
 
-const {watch, format} = require('./constants');
+const {
+	watch,
+	format,
+	quiet
+} = require('./constants');
 const projectRoot = path.join(__dirname, '..');
 
 function minify(src) {
 	return {
 		transformBundle: (code) => {
 			const {code: babeledCode} = babel.transform(code, {presets: ['latest']});
-			console.debug(`${src}\n${[
-				code.length,
-				babeledCode.length
-			].map(fileSize).join(' -> ')}`);
+			if (!quiet) {
+				console.debug(`${src}\n${[
+					code.length,
+					babeledCode.length
+				].map(fileSize).join(' -> ')}`);
+			}
 			return babeledCode;
 		}
 	};
@@ -33,13 +40,26 @@ function globImport() {
 				return null;
 			}
 			const fromDir = path.dirname(importer);
-			const files = glob.sync(path.join(fromDir, importee));
-			const name = path.join(fromDir, `${importee}`.split(path.sep).join('_'));
+			const files = [
+				...glob.sync(path.join(fromDir, importee)),
+				...glob.sync(path.join(fromDir, changeExt(importee, '.js')))
+			]
+			.map((file) => {
+				return changeExt(file, '');
+			})
+			.filter((value, index, list) => {
+				return list.indexOf(value) === index;
+			});
+			const name = importee
+			.split(path.sep)
+			.join('_')
+			.replace(/[*.]/g, 'x');
+			const id = path.join(fromDir, name);
 			const code = files.map((file) => {
-				return `import '${path.relative(fromDir, file)}'`;
+				return `import './${path.relative(fromDir, file)}'`;
 			}).join('\n');
-			codes[name] = code;
-			return name;
+			codes[id] = code;
+			return id;
 		},
 		load: (id) => {
 			return codes[id];
@@ -48,7 +68,9 @@ function globImport() {
 }
 
 function compileJS(src, dest) {
-	console.debug(`${path.relative(projectRoot, src)}\n -> ${path.relative(projectRoot, dest)}`);
+	if (!quiet) {
+		console.debug(`${path.relative(projectRoot, src)}\n -> ${path.relative(projectRoot, dest)}`);
+	}
 	const options = {
 		entry: src,
 		plugins: [
@@ -63,7 +85,9 @@ function compileJS(src, dest) {
 		options.format = format;
 		const watcher = rollupWatch(rollup, options);
 		watcher.on('event', (event) => {
-			console.info(event.code, src);
+			if (!quiet) {
+				console.info(event.code, src);
+			}
 			if (event.error) {
 				console.error(event.error.stack);
 			}
