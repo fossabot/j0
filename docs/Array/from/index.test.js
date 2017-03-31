@@ -2,40 +2,46 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 (function (global, factory) {
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
 
+	var iteratorKey = Symbol.iterator;
+
 	function isFunction(x) {
 		return typeof x === 'function';
 	}
+
+	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	function forEach(iterable, fn, thisArg) {
 		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 		var length = iterable.length;
 
-		var index = void 0;
+		var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
 		if (0 <= length) {
-			for (index = fromIndex; index < length; index += 1) {
+			for (var index = fromIndex; index < length; index += 1) {
 				if (fn.call(thisArg, iterable[index], index, iterable)) {
 					return;
 				}
 			}
-		} else if (isFunction(iterable.next)) {
-			index = 0;
-			while (1) {
-				var _iterable$next = iterable.next(),
-				    value = _iterable$next.value,
-				    done = _iterable$next.done;
+		} else if (isFunction(iterator.next)) {
+			var _index = 0;
+			while (_index < MAX_SAFE_INTEGER) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
 					return;
 				}
-				index += 1;
+				_index += 1;
 			}
 		} else {
-			index = fromIndex;
+			var _index2 = fromIndex;
 			var _iteratorNormalCompletion = true;
 			var _didIteratorError = false;
 			var _iteratorError = undefined;
@@ -44,10 +50,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var value = _step.value;
 
-					if (fn.call(thisArg, value, index, iterable)) {
+					if (fn.call(thisArg, value, _index2, iterable)) {
 						return;
 					}
-					index += 1;
+					_index2 += 1;
 				}
 			} catch (err) {
 				_didIteratorError = true;
@@ -93,17 +99,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	var isArray = Array.isArray;
 
-	function createArrayFromArguments() {
-		return map(arguments);
-	}
-
 	describe('Array/from', function () {
-
-		it('should create a new array from arguments', function () {
-			var result = createArrayFromArguments(1, 2, 3);
-			assert.equal(isArray(result), true);
-			assert.deepEqual(result, [1, 2, 3]);
-		});
 
 		it('should create a new array from an array-like object', function () {
 			var result = map({
@@ -117,6 +113,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 
 		it('should create a new array from an iterable object', function () {
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 5 <= count
+						};
+					}
+				};
+			});
+			var result = map(iterable);
+			assert.equal(isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3, 4]);
+		});
+
+		it('should create a new array from an iterator object', function () {
 			var count = 0;
 			var iterator = {
 				next: function next() {

@@ -4,6 +4,7 @@
 <title>j0/Array/every</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../../page.css" rel="stylesheet">
+<script id="root" type="text/plain">../..</script>
 <script src="../../polyfill.js"></script>
 <script src="https://use.fontawesome.com/9701068490.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
@@ -14,11 +15,17 @@
 </ul>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">noop</span> <span class="name">from</span> <a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span> <span class="name">from</span> <span class="name">from</span> <a href="../from"><span class="string"><span class="string">'../from'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">Boolean</span> <span class="name">from</span> <a href="../../Boolean"><span class="string"><span class="string">'../../Boolean'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">noop</span> <span class="name">from</span> <a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">forEach</span> <span class="name">from</span> <a href="../forEach"><span class="string"><span class="string">'../forEach'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span> <span class="name">every</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="name">fn</span> <span class="_3d">=</span> <span class="name">noop</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">from</span><span class="_28">(</span><span class="name">iterable</span><span class="_29">)</span><span class="_2e">.</span><span class="name">every</span><span class="_28">(</span><span class="name">fn</span><span class="_2c">,</span> <span class="name">thisArg</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">result</span> <span class="_3d">=</span> <span class="true">true</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">forEach</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="name">value</span><span class="_2c">,</span> <span class="name">index</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">result</span> <span class="_3d">=</span> <span class="name">fn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span> <span class="name">value</span><span class="_2c">,</span> <span class="name">index</span><span class="_2c">,</span> <span class="name">iterable</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="prefix">!</span><span class="name">result</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">Boolean</span><span class="_28">(</span><span class="name">result</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">every</span><span class="_3b">;</span></pre>
@@ -37,13 +44,6 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return false if the array have falthy value'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">every</span><span class="_28">(</span><span class="_5b">[</span><span class="_2b_2f_2d">-</span><span class="num">1</span><span class="_2c">,</span> <span class="num">1</span><span class="_2c">,</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_2c">,</span> <span class="_7b">{</span><span class="_7d">}</span><span class="_2c">,</span> <span class="num">0</span><span class="_5d">]</span><span class="_29">)</span><span class="_2c">,</span> <span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should use given functions'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="function">function</span> <span class="name">fn</span><span class="_28">(</span><span class="name">x</span><span class="_29">)</span> <span class="_7b">{</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="_2b_2f_2d">-</span><span class="num">3</span> <span class="_3c_2f_3e">&lt;</span> <span class="name">x</span> <span class="_26_26">&&</span> <span class="name">x</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">3</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">every</span><span class="_28">(</span><span class="_5b">[</span><span class="_2b_2f_2d">-</span><span class="num">2</span><span class="_2c">,</span> <span class="_2b_2f_2d">-</span><span class="num">1</span><span class="_2c">,</span> <span class="num">0</span><span class="_2c">,</span> <span class="num">1</span><span class="_2c">,</span> <span class="num">2</span><span class="_5d">]</span><span class="_2c">,</span> <span class="name">fn</span><span class="_29">)</span><span class="_2c">,</span> <span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should use given functions'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>

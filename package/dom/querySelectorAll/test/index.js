@@ -23,7 +23,7 @@ describe('dom/querySelectorAll', function () {
 			]
 		});
 		assert.deepEqual(
-			map(querySelectorAll(parent, `.${className}`)),
+			map(querySelectorAll(`.${className}`, parent)),
 			[child1, child2]
 		);
 	});

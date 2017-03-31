@@ -51,4 +51,26 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			assert.equal(repeat(src, count), expected);
 		});
 	});
+
+	function toLowerCase(string) {
+		return ('' + string).toLowerCase();
+	}
+
+	describe('toLowerCase', function () {
+
+		it('should convert cases', function () {
+			assert.equal(toLowerCase('ABc'), 'abc');
+		});
+	});
+
+	function trim(string) {
+		return string.trim();
+	}
+
+	describe('String/trim', function () {
+
+		it('should trim spaces at beginning and ending', function () {
+			assert.equal(trim('\r\n\tab\tc\n\r\t'), 'ab\tc');
+		});
+	});
 });

@@ -1,3 +1,4 @@
-import Array from '..';
-
-export default Array.of;
+function arrayOf(...args) {
+	return args;
+}
+export default arrayOf;

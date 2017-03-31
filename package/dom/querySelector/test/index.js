@@ -15,7 +15,7 @@ describe('dom/querySelector', function () {
 				{c: [child]}
 			]
 		});
-		assert.equal(querySelector(parent, `.${className}`), child);
+		assert.equal(querySelector(`.${className}`, parent), child);
 	});
 
 });

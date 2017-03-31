@@ -1,7 +1,7 @@
 import document from '../../document';
 
-function querySelectorAll(element, selectors) {
-	return (element === null ? document : element).querySelector(selectors);
+function querySelectorAll(selectors, element = document) {
+	return element.querySelector(selectors);
 }
 
 export default querySelectorAll;
