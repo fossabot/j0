@@ -1,2 +1,21 @@
+---
+prepare:
+  fetch:
+  - url: https://raw.githubusercontent.com/kei-ito/editor-settings/master/.eslintrc.js
+    path: .eslintrc.js
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+  - "**.mjs"
 exclude_paths:
 - docs/
