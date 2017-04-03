@@ -77,7 +77,8 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 	}
 
 	function parse(body) {
-		var form = new FormData();
+		var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
 		forEach(trim(body).split('&'), function (data) {
 			if (data) {
 				var _data$split = data.split('='),
@@ -93,36 +94,19 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		return form;
 	}
 
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
-
-	function noop(x) {
-		return x;
-	}
-
-	function map(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments[2];
-
-		var result = [];
-		forEach(iterable, function (value, index) {
-			push(result, fn.call(thisArg, value, index, iterable));
-		});
-		return result;
-	}
-
 	describe('FormData/parse', function () {
 
 		it('should parse string', function () {
-			var form = parse('a=b&c=d');
-			assert.deepEqual(map(form.entries()), [['a', 'b'], ['c', 'd']]);
+			var form = parse('a=b&c=d', {
+				data: {},
+				append: function append(key, value) {
+					this.data[key] = value;
+				}
+			});
+			assert.deepEqual(form.data, {
+				a: 'b',
+				c: 'd'
+			});
 		});
 	});
 });

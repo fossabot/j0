@@ -204,7 +204,8 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 	}
 
 	function parse(body) {
-		var form = new FormData();
+		var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
 		forEach(trim(body).split('&'), function (data) {
 			if (data) {
 				var _data$split = data.split('='),

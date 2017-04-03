@@ -10,6 +10,7 @@ import '../NamedNodeMap/polyfill';
 import '../URLSearchParams/polyfill';
 import '../Headers/polyfill';
 import '../fetch/polyfill';
+import '../FormData/polyfill';
 import '../regeneratorRuntime/polyfill';
 import window from '../window';
 window.global = window;

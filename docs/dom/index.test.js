@@ -308,6 +308,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function querySelectorAll(selectors) {
+		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+		return element.querySelector(selectors);
+	}
+
+	function getElementById(id, element) {
+		return querySelectorAll('[id=\'' + id + '\']', element);
+	}
+
+	describe('getElementById', function () {
+
+		it('should return an element', function () {
+			var id = 'abc';
+			var data = {
+				a: [['id', id]]
+			};
+			var c1 = createElement(data);
+			var c2 = createElement(data);
+			var parent = createElement({ c: [c1, c2] });
+			var element = getElementById(id, parent);
+			assert.equal(element, c1);
+		});
+	});
+
 	function getElementsByClassName(className) {
 		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 
@@ -480,12 +505,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			assert.deepEqual(map(getChildNodes(parent)), [c1, c2, newNode]);
 		});
 	});
-
-	function querySelectorAll(selectors) {
-		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-		return element.querySelector(selectors);
-	}
 
 	describe('dom/querySelector', function () {
 

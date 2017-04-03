@@ -4,7 +4,7 @@ describe('ArrayBuffer', function () {
 
 	it('should create a new instance', function () {
 		assert.doesNotThrow(function () {
-			return new ArrayBuffer(0);
+			return new ArrayBuffer(1);
 		});
 	});
 

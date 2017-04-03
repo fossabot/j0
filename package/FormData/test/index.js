@@ -1,3 +1,4 @@
+import '../*/test';
 import FormData from '..';
 
 describe('FormData', function () {
