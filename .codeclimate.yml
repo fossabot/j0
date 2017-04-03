@@ -1,4 +1,3 @@
----
 prepare:
   fetch:
   - url: https://raw.githubusercontent.com/kei-ito/editor-settings/master/.eslintrc.js
