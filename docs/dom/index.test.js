@@ -385,6 +385,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function getFirstChild(element) {
+		return element.firstChild;
+	}
+
+	describe('dom/getFirstChild', function () {
+
+		it('should return the first child', function () {
+			var c1 = createElement('');
+			var parent = createElement({ c: [c1, {}, {}] });
+			assert.equal(getFirstChild(parent), c1);
+		});
+	});
+
 	function getParent(node) {
 		return node.parentNode;
 	}
@@ -481,6 +494,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return parentNode.insertBefore(newNode, referenceNode);
 	}
 
+	function nextSibling(element) {
+		return element.nextSibling;
+	}
+
+	function insertAfter(newNode, referenceNode, parentNode) {
+		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : getFirstChild(parentNode), parentNode);
+	}
+
+	describe('dom/insertAfter', function () {
+
+		it('should insert an element after a specified element', function () {
+			var c1 = createElement();
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			var newNode = createElement();
+			insertAfter(newNode, c1);
+			assert.deepEqual(map(getChildNodes(parent)), [c1, newNode, c2]);
+		});
+
+		it('should insert an element before the first child', function () {
+			var c1 = createElement();
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			var newNode = createElement();
+			insertAfter(newNode, null, parent);
+			assert.deepEqual(map(getChildNodes(parent)), [newNode, c1, c2]);
+		});
+	});
+
 	describe('dom/insertBefore', function () {
 
 		it('should insert an element before a specified element', function () {
@@ -503,6 +549,30 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var newNode = createElement();
 			insertBefore(newNode, null, parent);
 			assert.deepEqual(map(getChildNodes(parent)), [c1, c2, newNode]);
+		});
+	});
+
+	describe('dom/nextSibling', function () {
+
+		it('should return the previous element', function () {
+			var c1 = createElement('a');
+			var c2 = createElement();
+			createElement({ c: [c1, c2] });
+			assert.equal(nextSibling(c1), c2);
+		});
+	});
+
+	function previousSibling(element) {
+		return element.previousSibling;
+	}
+
+	describe('dom/previousSibling', function () {
+
+		it('should return the previous element', function () {
+			var c1 = createElement('a');
+			var c2 = createElement();
+			createElement({ c: [c1, c2] });
+			assert.equal(previousSibling(c2), c1);
 		});
 	});
 
