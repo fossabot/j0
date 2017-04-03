@@ -23,12 +23,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return element.nextSibling;
 	}
 
-	function getFirstChild(element) {
+	function firstChild(element) {
 		return element.firstChild;
 	}
 
 	function insertAfter(newNode, referenceNode, parentNode) {
-		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : getFirstChild(parentNode), parentNode);
+		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
 	}
 
 	function isString(x) {

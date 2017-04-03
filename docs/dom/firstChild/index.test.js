@@ -9,7 +9,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function getFirstChild(element) {
+	function firstChild(element) {
 		return element.firstChild;
 	}
 
@@ -183,12 +183,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	describe('dom/getFirstChild', function () {
+	describe('dom/firstChild', function () {
 
 		it('should return the first child', function () {
 			var c1 = createElement('');
 			var parent = createElement({ c: [c1, {}, {}] });
-			assert.equal(getFirstChild(parent), c1);
+			assert.equal(firstChild(parent), c1);
 		});
 	});
 });

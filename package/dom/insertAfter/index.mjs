@@ -1,9 +1,9 @@
 import insertBefore from '../insertBefore';
 import nextSibling from '../nextSibling';
-import getFirstChild from '../getFirstChild';
+import firstChild from '../firstChild';
 
 function insertAfter(newNode, referenceNode, parentNode) {
-	return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : getFirstChild(parentNode), parentNode);
+	return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
 }
 
 export default insertAfter;

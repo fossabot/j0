@@ -256,6 +256,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function firstChild(element) {
+		return element.firstChild;
+	}
+
+	describe('dom/firstChild', function () {
+
+		it('should return the first child', function () {
+			var c1 = createElement('');
+			var parent = createElement({ c: [c1, {}, {}] });
+			assert.equal(firstChild(parent), c1);
+		});
+	});
+
 	function getAttribute(element, attributeName) {
 		return element.getAttribute(attributeName);
 	}
@@ -385,19 +398,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
-	function getFirstChild(element) {
-		return element.firstChild;
-	}
-
-	describe('dom/getFirstChild', function () {
-
-		it('should return the first child', function () {
-			var c1 = createElement('');
-			var parent = createElement({ c: [c1, {}, {}] });
-			assert.equal(getFirstChild(parent), c1);
-		});
-	});
-
 	function getParent(node) {
 		return node.parentNode;
 	}
@@ -499,7 +499,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	}
 
 	function insertAfter(newNode, referenceNode, parentNode) {
-		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : getFirstChild(parentNode), parentNode);
+		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
 	}
 
 	describe('dom/insertAfter', function () {
