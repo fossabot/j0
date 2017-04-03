@@ -3,6 +3,7 @@ const sable = require('sable');
 const console = require('j1/console').create('builder');
 const promisify = require('j1/promisify');
 const rm = require('j1/rm');
+const cp = require('j1/cp');
 const chokidar = require('chokidar');
 const glob = promisify(require('glob'));
 
@@ -110,6 +111,9 @@ rm(constants.dest)
 		buildCSS(),
 		buildPageJS()
 	]);
+})
+.then(() => {
+	return cp(constants.staticFiles, constants.staticFilesDest);
 })
 .then(() => {
 	return constants.watch ? startServer() : build();

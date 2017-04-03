@@ -1,0 +1,120 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>j0/ArrayBuffer/toString</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
+<link href="../../page.css" rel="stylesheet">
+<script id="root" type="text/plain">../..</script>
+<script src="../../polyfill.js"></script>
+<script src="https://use.fontawesome.com/9701068490.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
+<h1 id="title"><a href="../../">j0</a>/<a href="../">ArrayBuffer</a>/toString<span class="version">0.0.55</span></h1>
+<ul class="Children" data-count="0">
+	
+</ul>
+<h2>Source</h2>
+<section class="Code">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">Uint8Array</span> <span class="name">from</span> <a href="../../TypedArray/Uint8Array"><span class="string"><span class="string">'../../TypedArray/Uint8Array'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">push</span> <span class="name">from</span> <a href="../../Array/push"><span class="string"><span class="string">'../../Array/push'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">String</span> <span class="name">from</span> <a href="../../String"><span class="string"><span class="string">'../../String'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">lastMasks</span> <span class="_3d">=</span> <span class="_5b">[</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x3f</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x7f</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x1f</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0xf</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x7</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x3</span><span class="_2c">,</span>
+<span class="linenum"></span><span class="indent">	</span><span class="num">0x1</span>
+<span class="linenum"></span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">availableBits</span> <span class="_3d">=</span> <span class="num">6</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="const">const</span> <span class="_5b">[</span><span class="name">baseMask</span><span class="_5d">]</span> <span class="_3d">=</span> <span class="name">lastMasks</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="comment">/* eslint-disable no-bitwise */</span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">consume</span><span class="_28">(</span><span class="name">view</span><span class="_2c">,</span> <span class="name">index</span><span class="_2c">,</span> <span class="name">length</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">lastMask</span> <span class="_3d">=</span> <span class="name">lastMasks</span><span class="_5b">[</span><span class="name">length</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">charCode</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">let</span> <span class="name">i</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="while">while</span> <span class="_28">(</span><span class="num">0</span> <span class="_3c_2f_3e">&lt;</span> <span class="name">length</span><span class="_2b_2b_2f_2d_2d">--</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">mask</span> <span class="_3d">=</span> <span class="name">length</span> <span class="_3d_3d_2f_21_3d">===</span> <span class="num">0</span> <span class="_3f">?</span> <span class="name">lastMask</span> <span class="_3a">:</span> <span class="name">baseMask</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">shiftSize</span> <span class="_3d">=</span> <span class="name">availableBits</span> <span class="_2a">*</span> <span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">charCode</span> <span class="__3d">|=</span> <span class="_28">(</span><span class="name">view</span><span class="_5b">[</span><span class="name">index</span> <span class="_2b_2f_2d">+</span> <span class="name">length</span><span class="_5d">]</span> <span class="_26">&</span> <span class="name">mask</span><span class="_29">)</span> <span class="_3c_3c_2f_3e_3e">&lt;&lt;</span> <span class="name">shiftSize</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">String</span><span class="_2e">.</span><span class="name">fromCharCode</span><span class="_28">(</span><span class="name">charCode</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="comment">/* eslint-enable no-bitwise */</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">arrayBufferToString</span><span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">view</span> <span class="_3d">=</span> <span class="new">new</span> <span class="name">Uint8Array</span><span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="const">const</span> <span class="name">chars</span> <span class="_3d">=</span> <span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="for">for</span> <span class="_28">(</span><span class="name">let</span> <span class="name">i</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span> <span class="name">i</span> <span class="_3c_2f_3e">&lt;</span> <span class="name">view</span><span class="_2e">.</span><span class="name">length</span><span class="_3b">;</span> <span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">byte</span> <span class="_3d">=</span> <span class="name">view</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">let</span> <span class="name">length</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="if">if</span> <span class="_28">(</span><span class="name">byte</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">0x80</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">1</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="if">if</span> <span class="_28">(</span><span class="name">byte</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">0xe0</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">2</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="if">if</span> <span class="_28">(</span><span class="name">byte</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">0xf0</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">3</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="if">if</span> <span class="_28">(</span><span class="name">byte</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">0xf8</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">4</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="if">if</span> <span class="_28">(</span><span class="name">byte</span> <span class="_3c_2f_3e">&lt;</span> <span class="num">0xfc</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">5</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span> <span class="else">else</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">length</span> <span class="_3d">=</span> <span class="num">6</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">push</span><span class="_28">(</span><span class="name">chars</span><span class="_2c">,</span> <span class="name">consume</span><span class="_28">(</span><span class="name">view</span><span class="_2c">,</span> <span class="name">i</span><span class="_2c">,</span> <span class="name">length</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">i</span> <span class="__3d">+=</span> <span class="name">length</span> <span class="_2b_2f_2d">-</span> <span class="num">1</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">chars</span><span class="_2e">.</span><span class="name">join</span><span class="_28">(</span><span class="string">''</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">arrayBufferToString</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/ArrayBuffer/toString/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+
+<h2>Tests</h2>
+<section class="TestCode">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">arrayBufferToString</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">readBlob</span> <span class="name">from</span> <a href="../../FileReader/readBlob"><span class="string"><span class="string">'../../../FileReader/readBlob'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">Blob</span> <span class="name">from</span> <a href="../../Blob"><span class="string"><span class="string">'../../../Blob'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">createArrayBuffer</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">console</span><span class="_2e">.</span><span class="name">log</span><span class="_28">(</span><span class="name">data</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="return">return</span> <span class="name">readBlob</span><span class="_28">(</span><span class="new">new</span> <span class="name">Blob</span><span class="_28">(</span><span class="_5b">[</span><span class="name">data</span><span class="_5d">]</span><span class="_29">)</span><span class="_2c">,</span> <span class="string">'ArrayBuffer'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'ArrayBuffer/toString'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return hello'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">src</span> <span class="_3d">=</span> <span class="string">'hello'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">createArrayBuffer</span><span class="_28">(</span><span class="name">src</span><span class="_29">)</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_2e">.</span><span class="name">then</span><span class="_28">(</span><span class="function">function</span> <span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">arrayBufferToString</span><span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span><span class="_2c">,</span> <span class="name">src</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should return こんにちは'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">src</span> <span class="_3d">=</span> <span class="string">'こんにちは'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="return">return</span> <span class="name">createArrayBuffer</span><span class="_28">(</span><span class="name">src</span><span class="_29">)</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_2e">.</span><span class="name">then</span><span class="_28">(</span><span class="function">function</span> <span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">arrayBufferToString</span><span class="_28">(</span><span class="name">arrayBuffer</span><span class="_29">)</span><span class="_2c">,</span> <span class="name">src</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/ArrayBuffer/toString/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+<h2>Result</h2>
+<div id="mocha"></div>
+<h2>Your Environment</h2>
+<table><tbody id="environment"></tbody></table>
+
+<h2>About</h2>
+<footer>
+	<p>j0 is free and open source software released under MIT license. The latest version is 0.0.55. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
+</footer>
+<a class="TestResult" href="#mocha"></a>
+<script src="../../page.js"></script>
+<script src="index.test.js"></script>
+<script>start()</script>

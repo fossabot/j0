@@ -14,6 +14,8 @@ module.exports = {
 	indexTemplate: path.join(__dirname, 'indexTemplate.html'),
 	wdioTemplate: path.join(__dirname, 'wdioTemplate.js'),
 	wdioDest: path.join(__dirname, '..', 'docs', 'wdio.js'),
+	staticFiles: path.join(__dirname, 'staticFiles'),
+	staticFilesDest: path.join(__dirname, '..', 'docs', 'staticFiles'),
 	ignore: /[/\\][._]|node_modules/,
 	exts: ['.js', '.mjs'],
 	watch: process.argv.includes('--watch'),

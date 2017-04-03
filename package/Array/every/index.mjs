@@ -1,8 +1,14 @@
+import Boolean from '../../Boolean';
 import noop from '../../noop';
-import from from '../from';
+import forEach from '../forEach';
 
 function every(iterable, fn = noop, thisArg) {
-	return from(iterable).every(fn, thisArg);
+	let result = true;
+	forEach(iterable, function (value, index) {
+		result = fn.call(thisArg, value, index, iterable);
+		return !result;
+	});
+	return Boolean(result);
 }
 
 export default every;

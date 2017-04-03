@@ -66,35 +66,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return x;
 	}
 
+	var iteratorKey = Symbol.iterator;
+
 	function isFunction(x) {
 		return typeof x === 'function';
 	}
+
+	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	function forEach(iterable, fn, thisArg) {
 		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 		var length = iterable.length;
 
-		var index = void 0;
+		var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
 		if (0 <= length) {
-			for (index = fromIndex; index < length; index += 1) {
+			for (var index = fromIndex; index < length; index += 1) {
 				if (fn.call(thisArg, iterable[index], index, iterable)) {
 					return;
 				}
 			}
-		} else if (isFunction(iterable.next)) {
-			index = 0;
-			while (1) {
-				var _iterable$next = iterable.next(),
-				    value = _iterable$next.value,
-				    done = _iterable$next.done;
+		} else if (isFunction(iterator.next)) {
+			var _index = 0;
+			while (_index < MAX_SAFE_INTEGER) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
 					return;
 				}
-				index += 1;
+				_index += 1;
 			}
 		} else {
-			index = fromIndex;
+			var _index2 = fromIndex;
 			var _iteratorNormalCompletion = true;
 			var _didIteratorError = false;
 			var _iteratorError = undefined;
@@ -103,10 +107,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var value = _step.value;
 
-					if (fn.call(thisArg, value, index, iterable)) {
+					if (fn.call(thisArg, value, _index2, iterable)) {
 						return;
 					}
-					index += 1;
+					_index2 += 1;
 				}
 			} catch (err) {
 				_didIteratorError = true;
@@ -304,6 +308,53 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function querySelectorAll(selectors) {
+		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+		return element.querySelector(selectors);
+	}
+
+	function getElementById(id, element) {
+		return querySelectorAll('[id=\'' + id + '\']', element);
+	}
+
+	describe('getElementById', function () {
+
+		it('should return an element', function () {
+			var id = 'abc';
+			var data = {
+				a: [['id', id]]
+			};
+			var c1 = createElement(data);
+			var c2 = createElement(data);
+			var parent = createElement({ c: [c1, c2] });
+			var element = getElementById(id, parent);
+			assert.equal(element, c1);
+		});
+	});
+
+	function getElementsByClassName(className) {
+		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+		return element.getElementsByClassName(className);
+	}
+
+	describe('getElementsByClassName', function () {
+
+		it('should return a live list of elements', function () {
+			var className = 'abc';
+			var data = {
+				a: [['class', className]]
+			};
+			var c1 = createElement(data);
+			var c2 = createElement(data);
+			var parent = createElement({ c: [c1] });
+			var list = getElementsByClassName(className, parent);
+			appendChild(parent, c2);
+			assert.deepEqual(map(list), [c1, c2]);
+		});
+	});
+
 	describe('dom/getEventListeners', function () {
 
 		it('should get a Map', function () {
@@ -455,10 +506,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
-	function querySelectorAll(element, selectors) {
-		return (element === null ? document : element).querySelector(selectors);
-	}
-
 	describe('dom/querySelector', function () {
 
 		it('should get an element', function () {
@@ -469,12 +516,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var parent = createElement({
 				c: [{ c: [child] }]
 			});
-			assert.equal(querySelectorAll(parent, '.' + className), child);
+			assert.equal(querySelectorAll('.' + className, parent), child);
 		});
 	});
 
-	function querySelectorAll$1(element, selectors) {
-		return (element === null ? document : element).querySelectorAll(selectors);
+	function querySelectorAll$1(selectors) {
+		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+		return element.querySelectorAll(selectors);
 	}
 
 	describe('dom/querySelectorAll', function () {
@@ -490,7 +539,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var parent = createElement({
 				c: [{ c: [child1] }, child2]
 			});
-			assert.deepEqual(map(querySelectorAll$1(parent, '.' + className)), [child1, child2]);
+			assert.deepEqual(map(querySelectorAll$1('.' + className, parent)), [child1, child2]);
 		});
 	});
 

@@ -2,44 +2,87 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 (function (global, factory) {
 	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
 })(undefined, function () {
 	'use strict';
 
+	function generator() {
+		var _this = this;
+
+		var length = this.length;
+
+		var index = 0;
+		return {
+			next: function next() {
+				return {
+					value: _this[index],
+					done: length <= index++
+				};
+			}
+		};
+	}
+
+	describe('Array/@iterator', function () {
+
+		it('should return an iterator', function () {
+			var array = [1, 2, 3];
+			var iterator = generator.call(array);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, array);
+		});
+	});
+
 	function noop(x) {
 		return x;
 	}
+
+	var iteratorKey = Symbol.iterator;
 
 	function isFunction(x) {
 		return typeof x === 'function';
 	}
 
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
 	function forEach(iterable, fn, thisArg) {
 		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 		var length = iterable.length;
 
-		var index = void 0;
+		var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
 		if (0 <= length) {
-			for (index = fromIndex; index < length; index += 1) {
+			for (var index = fromIndex; index < length; index += 1) {
 				if (fn.call(thisArg, iterable[index], index, iterable)) {
 					return;
 				}
 			}
-		} else if (isFunction(iterable.next)) {
-			index = 0;
-			while (1) {
-				var _iterable$next = iterable.next(),
-				    value = _iterable$next.value,
-				    done = _iterable$next.done;
+		} else if (isFunction(iterator.next)) {
+			var _index = 0;
+			while (_index < MAX_SAFE_INTEGER) {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
 					return;
 				}
-				index += 1;
+				_index += 1;
 			}
 		} else {
-			index = fromIndex;
+			var _index2 = fromIndex;
 			var _iteratorNormalCompletion = true;
 			var _didIteratorError = false;
 			var _iteratorError = undefined;
@@ -48,10 +91,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var value = _step.value;
 
-					if (fn.call(thisArg, value, index, iterable)) {
+					if (fn.call(thisArg, value, _index2, iterable)) {
 						return;
 					}
-					index += 1;
+					_index2 += 1;
 				}
 			} catch (err) {
 				_didIteratorError = true;
@@ -70,32 +113,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		}
 	}
 
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
-
-	function map(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments[2];
-
-		var result = [];
-		forEach(iterable, function (value, index) {
-			push(result, fn.call(thisArg, value, index, iterable));
-		});
-		return result;
-	}
-
 	function every(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
 
-		return map(iterable).every(fn, thisArg);
+		var result = true;
+		forEach(iterable, function (value, index) {
+			result = fn.call(thisArg, value, index, iterable);
+			return !result;
+		});
+		return Boolean(result);
 	}
 
 	describe('Array/every', function () {
@@ -106,13 +133,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 		it('should return false if the array have falthy value', function () {
 			assert.equal(every([-1, 1, [], {}, 0]), false);
-		});
-
-		it('should use given functions', function () {
-			function fn(x) {
-				return -3 < x && x < 3;
-			}
-			assert.equal(every([-2, -1, 0, 1, 2], fn), true);
 		});
 
 		it('should use given functions', function () {
@@ -133,6 +153,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
 	function filter(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 		var thisArg = arguments[2];
@@ -148,48 +178,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 	describe('Array/filter', function () {
 
-		it('should filter an array', function () {
-			function fn(x) {
-				return x % 2;
-			}
-			var array = [1, 2, 3, 4, 5];
-			var actual = filter(array, fn);
-			var expected = [1, 3, 5];
-			assert.deepEqual(actual, expected);
-		});
-
-		it('should filter an array-like object', function () {
-			function fn(x) {
-				return x % 2;
-			}
-			var array = {
-				0: 1,
-				1: 2,
-				2: 3,
-				3: 4,
-				4: 5,
-				length: 5
-			};
-			var actual = filter(array, fn);
-			var expected = [1, 3, 5];
-			assert.deepEqual(actual, expected);
-		});
-
 		it('should filter an iterable', function () {
 			function fn(x) {
 				return x % 2;
 			}
-			var count = 0;
-			var array = {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 5 < count
-					};
-				}
-			};
-			var actual = filter(array, fn);
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 5 < count
+						};
+					}
+				};
+			});
+			var actual = filter(iterable, fn);
 			var expected = [1, 3, 5];
 			assert.deepEqual(actual, expected);
 		});
@@ -209,74 +214,27 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return result;
 	}
 
-	function getArguments() {
-		return arguments;
-	}
-
 	describe('Array/find', function () {
 
-		it('should find an item', function () {
-			function matcher(x) {
-				return x === 3;
-			}
-			var actual = find([0, 1, 2, 3], matcher);
-			var expected = 3;
-			assert.equal(actual, expected);
-		});
-
-		it('should find the first truthy item', function () {
-			var actual = find([0, false, null, 1]);
-			var expected = 1;
-			assert.equal(actual, expected);
-		});
-
-		it('should find an item from arguments', function () {
-			function matcher(x) {
-				return x === 3;
-			}
-			var actual = find(getArguments(0, 1, 2, 3), matcher);
-			var expected = 3;
-			assert.equal(actual, expected);
-		});
-
 		it('should find an item from iterable', function () {
-			var count = 0;
-			var iterator = {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 20 < count
+						};
+					}
+				};
+			});
 			function matcher(x) {
 				return 10 <= x;
 			}
-			var actual = find(iterator, matcher);
+			var actual = find(iterable, matcher);
 			var expected = 10;
 			assert.equal(actual, expected);
-		});
-
-		it('should find a character from a string', function () {
-			function matcher(x) {
-				return x === 'b';
-			}
-			var actual = find('abc', matcher);
-			var expected = 'b';
-			assert.equal(actual, expected);
-		});
-
-		it('should call matcher in a specified context', function () {
-			function matcher(x) {
-				this.sum += x;
-				return 4 < x;
-			}
-			var context = { sum: 0 };
-			var actual = find([0, 1, 2, 3, 4, 5, 6], matcher, context);
-			var expected = 5;
-			assert.equal(actual, expected);
-			assert.deepEqual(context, { sum: 15 });
 		});
 	});
 
@@ -294,74 +252,27 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		return result;
 	}
 
-	function getArguments$1() {
-		return arguments;
-	}
-
 	describe('Array/findIndex', function () {
 
-		it('should find an index an item', function () {
-			function matcher(x) {
-				return x === 3;
-			}
-			var actual = find$2([0, 1, 2, 3], matcher);
-			var expected = 3;
-			assert.equal(actual, expected);
-		});
-
-		it('should find an index the first truthy item', function () {
-			var actual = find$2([0, false, null, 1]);
-			var expected = 3;
-			assert.equal(actual, expected);
-		});
-
-		it('should find an index an item from arguments', function () {
-			function matcher(x) {
-				return x === 3;
-			}
-			var actual = find$2(getArguments$1(0, 1, 2, 3), matcher);
-			var expected = 3;
-			assert.equal(actual, expected);
-		});
-
 		it('should find an index an item from iterable', function () {
-			var count = 0;
-			var iterator = {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 20 < count
+						};
+					}
+				};
+			});
 			function matcher(x) {
 				return 10 <= x;
 			}
-			var actual = find$2(iterator, matcher);
+			var actual = find$2(iterable, matcher);
 			var expected = 9;
 			assert.equal(actual, expected);
-		});
-
-		it('should find an index a character from a string', function () {
-			function matcher(x) {
-				return x === 'b';
-			}
-			var actual = find$2('abc', matcher);
-			var expected = 1;
-			assert.equal(actual, expected);
-		});
-
-		it('should call matcher in a specified context', function () {
-			function matcher(x) {
-				this.sum += x;
-				return 4 < x;
-			}
-			var context = { sum: 0 };
-			var actual = find$2([0, 1, 2, 3, 4, 5, 6], matcher, context);
-			var expected = 5;
-			assert.equal(actual, expected);
-			assert.deepEqual(context, { sum: 15 });
 		});
 	});
 
@@ -387,8 +298,28 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 
 		it('should iterate over an iterable', function () {
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 4 < count
+						};
+					}
+				};
+			});
+			var results = [];
+			forEach(iterable, function (value, index, arr) {
+				push(results, [value, index, arr]);
+			});
+			assert.deepEqual(results, [[1, 0, iterable], [2, 1, iterable], [3, 2, iterable], [4, 3, iterable]]);
+		});
+
+		it('should iterate over an iterator', function () {
 			var count = 0;
-			var iterable = {
+			var iterator = {
 				next: function next() {
 					count += 1;
 					return {
@@ -398,10 +329,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				}
 			};
 			var results = [];
-			forEach(iterable, function (value, index, arr) {
+			forEach(iterator, function (value, index, arr) {
 				push(results, [value, index, arr]);
 			});
-			assert.deepEqual(results, [[1, 0, iterable], [2, 1, iterable], [3, 2, iterable], [4, 3, iterable]]);
+			assert.deepEqual(results, [[1, 0, iterator], [2, 1, iterator], [3, 2, iterator], [4, 3, iterator]]);
 		});
 
 		it('should iterate over a string', function () {
@@ -423,19 +354,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
-	var isArray = Array.isArray;
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
 
-	function createArrayFromArguments() {
-		return map(arguments);
+		var result = [];
+		forEach(iterable, function (value, index) {
+			push(result, fn.call(thisArg, value, index, iterable));
+		});
+		return result;
 	}
 
-	describe('Array/from', function () {
+	var isArray = Array.isArray;
 
-		it('should create a new array from arguments', function () {
-			var result = createArrayFromArguments(1, 2, 3);
-			assert.equal(isArray(result), true);
-			assert.deepEqual(result, [1, 2, 3]);
-		});
+	describe('Array/from', function () {
 
 		it('should create a new array from an array-like object', function () {
 			var result = map({
@@ -449,6 +381,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 
 		it('should create a new array from an iterable object', function () {
+			var iterable = _defineProperty({}, iteratorKey, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 5 <= count
+						};
+					}
+				};
+			});
+			var result = map(iterable);
+			assert.equal(isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3, 4]);
+		});
+
+		it('should create a new array from an iterator object', function () {
 			var count = 0;
 			var iterator = {
 				next: function next() {
@@ -666,19 +616,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 	});
 
-	describe('Array/from', function () {
+	function arrayOf() {
+		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+			args[_key2] = arguments[_key2];
+		}
+
+		return args;
+	}
+
+	describe('Array/of', function () {
 
 		it('should create an array', function () {
-			var actual = Array.of(1, 2, 3);
+			var actual = arrayOf(1, 2, 3);
 			var expected = [1, 2, 3];
 			assert.deepEqual(actual, expected);
-		});
-	});
-
-	describe('Array/polyfill', function () {
-
-		it('should have from', function () {
-			assert.deepEqual(Array.from('abc'), ['a', 'b', 'c']);
 		});
 	});
 
@@ -926,8 +877,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	});
 
 	function splice(array) {
-		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-			args[_key2 - 1] = arguments[_key2];
+		for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+			args[_key3 - 1] = arguments[_key3];
 		}
 
 		return array.splice.apply(array, args);

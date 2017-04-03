@@ -33,35 +33,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return allEvents;
 	}
 
+	var iteratorKey = Symbol.iterator;
+
 	function isFunction(x) {
 		return typeof x === 'function';
 	}
+
+	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	function forEach(iterable, fn, thisArg) {
 		var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 		var length = iterable.length;
 
-		var index = void 0;
+		var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
 		if (0 <= length) {
-			for (index = fromIndex; index < length; index += 1) {
+			for (var index = fromIndex; index < length; index += 1) {
 				if (fn.call(thisArg, iterable[index], index, iterable)) {
 					return;
 				}
 			}
-		} else if (isFunction(iterable.next)) {
-			index = 0;
-			while (1) {
-				var _iterable$next = iterable.next(),
-				    value = _iterable$next.value,
-				    done = _iterable$next.done;
+		} else if (isFunction(iterator.next)) {
+			var _index = 0;
+			while (_index < MAX_SAFE_INTEGER) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-				if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
+				if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
 					return;
 				}
-				index += 1;
+				_index += 1;
 			}
 		} else {
-			index = fromIndex;
+			var _index2 = fromIndex;
 			var _iteratorNormalCompletion = true;
 			var _didIteratorError = false;
 			var _iteratorError = undefined;
@@ -70,10 +74,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var value = _step.value;
 
-					if (fn.call(thisArg, value, index, iterable)) {
+					if (fn.call(thisArg, value, _index2, iterable)) {
 						return;
 					}
-					index += 1;
+					_index2 += 1;
 				}
 			} catch (err) {
 				_didIteratorError = true;

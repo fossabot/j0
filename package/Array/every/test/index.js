@@ -17,13 +17,6 @@ describe('Array/every', function () {
 		assert.equal(every([-2, -1, 0, 1, 2], fn), true);
 	});
 
-	it('should use given functions', function () {
-		function fn(x) {
-			return -3 < x && x < 3;
-		}
-		assert.equal(every([-2, -1, 0, 1, 2], fn), true);
-	});
-
 	it('should stop iteration at failure', function () {
 		const consumed = [];
 		function fn(x) {

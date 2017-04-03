@@ -7,6 +7,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
+	var iteratorKey = Symbol.iterator;
+
+	function isUndefined(x) {
+		return typeof x === 'undefined';
+	}
+
+	describe('Symbol/iterator', function () {
+
+		it('should not be undefined', function () {
+			assert.equal(isUndefined(iteratorKey), false);
+		});
+	});
+
 	describe('Symbol/polyfill', function () {
 
 		it('should generate a new symbol', function () {
