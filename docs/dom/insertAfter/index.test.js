@@ -201,7 +201,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function getChildNodes(node) {
+	function childNodes(node) {
 		return node.childNodes;
 	}
 
@@ -226,7 +226,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertAfter(newNode, c1);
-			assert.deepEqual(map(getChildNodes(parent)), [c1, newNode, c2]);
+			assert.deepEqual(map(childNodes(parent)), [c1, newNode, c2]);
 		});
 
 		it('should insert an element before the first child', function () {
@@ -237,7 +237,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertAfter(newNode, null, parent);
-			assert.deepEqual(map(getChildNodes(parent)), [newNode, c1, c2]);
+			assert.deepEqual(map(childNodes(parent)), [newNode, c1, c2]);
 		});
 	});
 });

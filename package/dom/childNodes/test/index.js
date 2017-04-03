@@ -1,8 +1,8 @@
-import getChildNodes from '..';
+import childNodes from '..';
 import createElement from '../../createElement';
 import arrayFrom from '../../../Array/from';
 
-describe('dom/getChildNodes', function () {
+describe('dom/childNodes', function () {
 
 	it('should get a list of children', function () {
 		const c1 = createElement();
@@ -13,7 +13,7 @@ describe('dom/getChildNodes', function () {
 				c2
 			]
 		});
-		assert.deepEqual(arrayFrom(getChildNodes(parent)), [c1, c2]);
+		assert.deepEqual(arrayFrom(childNodes(parent)), [c1, c2]);
 	});
 
 });

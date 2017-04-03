@@ -9,20 +9,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function generator() {
-		var _this = this;
-
-		var length = this.length;
-
-		var index = 0;
-		return {
-			next: function next() {
-				return {
-					value: _this[index],
-					done: length <= index++
-				};
-			}
-		};
+	function childNodes(node) {
+		return node.childNodes;
 	}
 
 	function isString(x) {
@@ -195,29 +183,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function childNodes(node) {
-		return node.childNodes;
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index) {
+			push(result, fn.call(thisArg, value, index, iterable));
+		});
+		return result;
 	}
 
-	describe('NodeList/@iterator', function () {
+	describe('dom/childNodes', function () {
 
-		it('should create an iterator', function () {
-			var expected = [createElement(), createElement()];
-			var parent = createElement({ c: expected });
-			var iterator = generator.call(childNodes(parent));
-			var results = [];
-			var index = 0;
-			while (1) {
-				var _iterator$next2 = iterator.next(),
-				    value = _iterator$next2.value,
-				    done = _iterator$next2.done;
-
-				if (done) {
-					break;
-				}
-				results[index++] = value;
-			}
-			assert.deepEqual(results, expected);
+		it('should get a list of children', function () {
+			var c1 = createElement();
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			assert.deepEqual(map(childNodes(parent)), [c1, c2]);
 		});
 	});
 });

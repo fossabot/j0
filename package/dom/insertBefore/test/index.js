@@ -1,6 +1,6 @@
 import insertBefore from '..';
 import createElement from '../../createElement';
-import getChildNodes from '../../getChildNodes';
+import childNodes from '../../childNodes';
 import arrayFrom from '../../../Array/from';
 
 describe('dom/insertBefore', function () {
@@ -16,7 +16,7 @@ describe('dom/insertBefore', function () {
 		});
 		const newNode = createElement();
 		insertBefore(newNode, c2);
-		assert.deepEqual(arrayFrom(getChildNodes(parent)), [c1, newNode, c2]);
+		assert.deepEqual(arrayFrom(childNodes(parent)), [c1, newNode, c2]);
 	});
 
 	it('should insert an element after the last child', function () {
@@ -30,7 +30,7 @@ describe('dom/insertBefore', function () {
 		});
 		const newNode = createElement();
 		insertBefore(newNode, null, parent);
-		assert.deepEqual(arrayFrom(getChildNodes(parent)), [c1, c2, newNode]);
+		assert.deepEqual(arrayFrom(childNodes(parent)), [c1, c2, newNode]);
 	});
 
 });

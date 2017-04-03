@@ -228,6 +228,49 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function childNodes(node) {
+		return node.childNodes;
+	}
+
+	function map(iterable) {
+		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+		var thisArg = arguments[2];
+
+		var result = [];
+		forEach(iterable, function (value, index) {
+			push(result, fn.call(thisArg, value, index, iterable));
+		});
+		return result;
+	}
+
+	describe('dom/childNodes', function () {
+
+		it('should get a list of children', function () {
+			var c1 = createElement();
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			assert.deepEqual(map(childNodes(parent)), [c1, c2]);
+		});
+	});
+
+	function children(node) {
+		return node.children;
+	}
+
+	describe('dom/children', function () {
+
+		it('should get a list of children', function () {
+			var c1 = createElement('c1');
+			var c2 = createElement();
+			var parent = createElement({
+				c: [c1, c2]
+			});
+			assert.deepEqual(map(children(parent)), [c2]);
+		});
+	});
+
 	describe('dom/createElement', function () {
 
 		it('should create a <div>', function () {
@@ -291,33 +334,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				a: [[attributeName, attributeValue]]
 			});
 			assert.equal(getAttribute(element, attributeName), attributeValue);
-		});
-	});
-
-	function getChildNodes(node) {
-		return node.childNodes;
-	}
-
-	function map(iterable) {
-		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-		var thisArg = arguments[2];
-
-		var result = [];
-		forEach(iterable, function (value, index) {
-			push(result, fn.call(thisArg, value, index, iterable));
-		});
-		return result;
-	}
-
-	describe('dom/getChildNodes', function () {
-
-		it('should get a list of children', function () {
-			var c1 = createElement();
-			var c2 = createElement();
-			var parent = createElement({
-				c: [c1, c2]
-			});
-			assert.deepEqual(map(getChildNodes(parent)), [c1, c2]);
 		});
 	});
 
@@ -512,7 +528,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertAfter(newNode, c1);
-			assert.deepEqual(map(getChildNodes(parent)), [c1, newNode, c2]);
+			assert.deepEqual(map(childNodes(parent)), [c1, newNode, c2]);
 		});
 
 		it('should insert an element before the first child', function () {
@@ -523,7 +539,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertAfter(newNode, null, parent);
-			assert.deepEqual(map(getChildNodes(parent)), [newNode, c1, c2]);
+			assert.deepEqual(map(childNodes(parent)), [newNode, c1, c2]);
 		});
 	});
 
@@ -537,7 +553,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertBefore(newNode, c2);
-			assert.deepEqual(map(getChildNodes(parent)), [c1, newNode, c2]);
+			assert.deepEqual(map(childNodes(parent)), [c1, newNode, c2]);
 		});
 
 		it('should insert an element after the last child', function () {
@@ -548,7 +564,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			var newNode = createElement();
 			insertBefore(newNode, null, parent);
-			assert.deepEqual(map(getChildNodes(parent)), [c1, c2, newNode]);
+			assert.deepEqual(map(childNodes(parent)), [c1, c2, newNode]);
 		});
 	});
 

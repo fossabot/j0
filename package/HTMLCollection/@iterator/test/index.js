@@ -1,13 +1,13 @@
 import generator from '..';
 import createElement from '../../../dom/createElement';
-import getChildNodes from '../../../dom/getChildNodes';
+import childNodes from '../../../dom/childNodes';
 
 describe('HTMLCollection/@iterator', function () {
 
 	it('should create an iterator', function () {
 		const expected = [createElement(), createElement()];
 		const parent = createElement({c: expected});
-		const iterator = generator.call(getChildNodes(parent));
+		const iterator = generator.call(childNodes(parent));
 		const results = [];
 		let index = 0;
 		while (1) {

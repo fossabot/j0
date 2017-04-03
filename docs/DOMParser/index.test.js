@@ -7,7 +7,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(undefined, function () {
 	'use strict';
 
-	function getChildNodes(node) {
+	function childNodes(node) {
 		return node.childNodes;
 	}
 
@@ -118,7 +118,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			var src = '\n\t\t\t<note>\n\t\t\t\t<to>A</to>\n\t\t\t\t<from>B</from>\n\t\t\t\t<heading>C</heading>\n\t\t\t\t<body>D</body>\n\t\t\t</note>\n\t\t';
 			var parser = new DOMParser();
 			var doc = parser.parseFromString(src, "application/xml");
-			var body = filter(map(getChildNodes(getChildNodes(doc)[0]), function (node) {
+			var body = filter(map(childNodes(childNodes(doc)[0]), function (node) {
 				return node.textContent.replace(/\s+/g, '');
 			}));
 			assert.deepEqual(body, ['A', 'B', 'C', 'D']);

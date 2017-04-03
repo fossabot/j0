@@ -195,7 +195,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function getChildNodes(node) {
+	function childNodes(node) {
 		return node.childNodes;
 	}
 
@@ -204,7 +204,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		it('should create an iterator', function () {
 			var expected = [createElement(), createElement()];
 			var parent = createElement({ c: expected });
-			var iterator = generator.call(getChildNodes(parent));
+			var iterator = generator.call(childNodes(parent));
 			var results = [];
 			var index = 0;
 			while (1) {
