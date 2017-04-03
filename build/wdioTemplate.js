@@ -3,8 +3,8 @@ const chalk = require('chalk');
 const console = require('j1/console').create('wdio');
 
 const lengthToRemoveArrowMark = -2;
-const waitBody = 800;
-const retry = 10;
+const waitBody = 1000;
+const retry = 20;
 
 browser.setViewportSize({
 	width: 600,
