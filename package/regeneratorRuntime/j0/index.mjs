@@ -1,3 +1,5 @@
+import isFunction from '../../isFunction';
+
 class Context {
 
 	constructor() {
@@ -21,7 +23,7 @@ class Generator {
 	next() {
 		const value = this.fn.call(this.self, this.context);
 		const done = value === this.context.stop;
-		if (!done) {
+		if (!done && isFunction(value.then)) {
 			value.then((result) => {
 				this.context.sent = result;
 			});
