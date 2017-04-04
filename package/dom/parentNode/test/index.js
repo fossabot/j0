@@ -1,12 +1,12 @@
-import getParent from '..';
+import parentNode from '..';
 import createElement from '../../createElement';
 
-describe('dom/getParent', function () {
+describe('dom/parentNode', function () {
 
 	it('should return a parent of a node', function () {
 		const child = createElement('');
 		const parent = createElement({c: [child]});
-		assert.equal(getParent(child), parent);
+		assert.equal(parentNode(child), parent);
 	});
 
 });

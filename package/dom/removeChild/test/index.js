@@ -7,7 +7,7 @@ describe('dom/removeChild', function () {
 		const child = createElement();
 		const parent = createElement({c: [child]});
 		assert.equal(child.parentNode, parent);
-		removeChild(parent, child);
+		removeChild(child);
 		assert.equal(child.parentNode, null);
 	});
 

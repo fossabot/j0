@@ -15,7 +15,9 @@
 </ul>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="function">function</span> <span class="name">removeChild</span><span class="_28">(</span><span class="name">parentElement</span><span class="_2c">,</span> <span class="name">childNode</span><span class="_29">)</span> <span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">parentNode</span> <span class="name">from</span> <a href="../parentNode"><span class="string"><span class="string">'../parentNode'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span> <span class="name">removeChild</span><span class="_28">(</span><span class="name">childNode</span><span class="_2c">,</span> <span class="name">parentElement</span> <span class="_3d">=</span> <span class="name">parentNode</span><span class="_28">(</span><span class="name">childNode</span><span class="_29">)</span><span class="_29">)</span> <span class="_7b">{</span>
 <span class="linenum"></span><span class="indent">	</span><span class="name">parentElement</span><span class="_2e">.</span><span class="name">removeChild</span><span class="_28">(</span><span class="name">childNode</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
@@ -34,7 +36,7 @@
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">child</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="const">const</span> <span class="name">parent</span> <span class="_3d">=</span> <span class="name">createElement</span><span class="_28">(</span><span class="_7b">{</span><span class="name">c</span><span class="_3a">:</span> <span class="_5b">[</span><span class="name">child</span><span class="_5d">]</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">child</span><span class="_2e">.</span><span class="name">parentNode</span><span class="_2c">,</span> <span class="name">parent</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">removeChild</span><span class="_28">(</span><span class="name">parent</span><span class="_2c">,</span> <span class="name">child</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">removeChild</span><span class="_28">(</span><span class="name">child</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">child</span><span class="_2e">.</span><span class="name">parentNode</span><span class="_2c">,</span> <span class="null">null</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>

@@ -1,6 +1,6 @@
-import getParent from '../getParent';
+import parentNode from '../parentNode';
 
-function insertBefore(newNode, referenceNode, parentNode = getParent(referenceNode)) {
+function insertBefore(newNode, referenceNode, parentNode = parentNode(referenceNode)) {
 	return parentNode.insertBefore(newNode, referenceNode);
 }
 

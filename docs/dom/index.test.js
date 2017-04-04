@@ -279,13 +279,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
-	function removeChild(parentElement, childNode) {
+	function parentNode(node) {
+		return node.parentNode;
+	}
+
+	function removeChild(childNode) {
+		var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
+
 		parentElement.removeChild(childNode);
 	}
 
 	function empty(element) {
 		while (element.firstChild) {
-			removeChild(element, element.firstChild);
+			removeChild(element.firstChild, element);
 		}
 	}
 
@@ -442,19 +448,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
-	function getParent(node) {
-		return node.parentNode;
-	}
-
-	describe('dom/getParent', function () {
-
-		it('should return a parent of a node', function () {
-			var child = createElement('');
-			var parent = createElement({ c: [child] });
-			assert.equal(getParent(child), parent);
-		});
-	});
-
 	function getScrollY(element) {
 		return element ? element.scrollTop : window.pageYOffset;
 	}
@@ -533,9 +526,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	});
 
 	function insertBefore(newNode, referenceNode) {
-		var parentNode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : getParent(referenceNode);
+		var parentNode$$1 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode$$1(referenceNode);
 
-		return parentNode.insertBefore(newNode, referenceNode);
+		return parentNode$$1.insertBefore(newNode, referenceNode);
 	}
 
 	function nextSibling(element) {
@@ -603,6 +596,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var c2 = createElement();
 			createElement({ c: [c1, c2] });
 			assert.equal(nextSibling(c1), c2);
+		});
+	});
+
+	describe('dom/parentNode', function () {
+
+		it('should return a parent of a node', function () {
+			var child = createElement('');
+			var parent = createElement({ c: [child] });
+			assert.equal(parentNode(child), parent);
 		});
 	});
 
@@ -681,7 +683,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			var child = createElement();
 			var parent = createElement({ c: [child] });
 			assert.equal(child.parentNode, parent);
-			removeChild(parent, child);
+			removeChild(child);
 			assert.equal(child.parentNode, null);
 		});
 	});

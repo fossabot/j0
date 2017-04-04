@@ -9,13 +9,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function removeChild(parentElement, childNode) {
+	function parentNode(node) {
+		return node.parentNode;
+	}
+
+	function removeChild(childNode) {
+		var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
+
 		parentElement.removeChild(childNode);
 	}
 
 	function empty(element) {
 		while (element.firstChild) {
-			removeChild(element, element.firstChild);
+			removeChild(element.firstChild, element);
 		}
 	}
 
