@@ -288,7 +288,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function URLSearchParams(init) {
 			_classCallCheck(this, URLSearchParams);
 
-			return _possibleConstructorReturn(this, (URLSearchParams.__proto__ || Object.getPrototypeOf(URLSearchParams)).call(this, init ? map(init.split(separator), function (entry) {
+			return _possibleConstructorReturn(this, (URLSearchParams.__proto__ || Object.getPrototypeOf(URLSearchParams)).call(this, init ? map(init.replace(/^\?/, '').split(separator), function (entry) {
 				return entry.split(equal);
 			}) : null));
 		}

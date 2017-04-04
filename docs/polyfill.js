@@ -1017,18 +1017,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var separator = '&';
 	var equal = '=';
 
-	var URLSearchParams$1 = function (_StringList) {
-		_inherits(URLSearchParams$1, _StringList);
+	var URLSearchParams$2 = function (_StringList) {
+		_inherits(URLSearchParams$2, _StringList);
 
-		function URLSearchParams$1(init) {
-			_classCallCheck(this, URLSearchParams$1);
+		function URLSearchParams$2(init) {
+			_classCallCheck(this, URLSearchParams$2);
 
-			return _possibleConstructorReturn(this, (URLSearchParams$1.__proto__ || Object.getPrototypeOf(URLSearchParams$1)).call(this, init ? map(init.split(separator), function (entry) {
+			return _possibleConstructorReturn(this, (URLSearchParams$2.__proto__ || Object.getPrototypeOf(URLSearchParams$2)).call(this, init ? map(init.replace(/^\?/, '').split(separator), function (entry) {
 				return entry.split(equal);
 			}) : null));
 		}
 
-		_createClass(URLSearchParams$1, [{
+		_createClass(URLSearchParams$2, [{
 			key: 'toString',
 			value: function toString() {
 				return map(this.data, function (_ref19) {
@@ -1042,11 +1042,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}]);
 
-		return URLSearchParams$1;
+		return URLSearchParams$2;
 	}(StringList);
 
-	if (!window.URLSearchParams) {
-		window.URLSearchParams = URLSearchParams$1;
+	var _window2 = window,
+	    URLSearchParams$1 = _window2.URLSearchParams;
+
+	if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
+		window.URLSearchParams = URLSearchParams$2;
 	}
 
 	function forEachKey(obj, fn, thisArg) {

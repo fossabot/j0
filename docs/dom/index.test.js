@@ -526,9 +526,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	});
 
 	function insertBefore(newNode, referenceNode) {
-		var parentNode$$1 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode$$1(referenceNode);
+		var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode(referenceNode);
 
-		return parentNode$$1.insertBefore(newNode, referenceNode);
+		return parent.insertBefore(newNode, referenceNode);
 	}
 
 	function nextSibling(element) {

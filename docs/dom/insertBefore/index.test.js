@@ -9,10 +9,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function insertBefore(newNode, referenceNode) {
-		var parentNode$$1 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode$$1(referenceNode);
+	function parentNode(node) {
+		return node.parentNode;
+	}
 
-		return parentNode$$1.insertBefore(newNode, referenceNode);
+	function insertBefore(newNode, referenceNode) {
+		var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode(referenceNode);
+
+		return parent.insertBefore(newNode, referenceNode);
 	}
 
 	function isString(x) {

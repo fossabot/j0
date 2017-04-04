@@ -7,7 +7,7 @@ const equal = '=';
 class URLSearchParams extends StringList {
 
 	constructor(init) {
-		super(init ? map(init.split(separator), (entry) => {
+		super(init ? map(init.replace(/^\?/, '').split(separator), (entry) => {
 			return entry.split(equal);
 		}) : null);
 	}
