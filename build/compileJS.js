@@ -89,6 +89,7 @@ function compileJS(src, dest) {
 				console.info(event.code, src);
 			}
 			if (event.error) {
+				console.error(`@${src}`);
 				console.error(event.error.stack);
 			}
 		});
