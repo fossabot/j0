@@ -42,8 +42,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_createClass(Generator, [{
 			key: 'next',
 			value: function next() {
+				var _this = this;
+
 				var value = this.fn.call(this.self, this.context);
 				var done = value === this.context.stop;
+				if (!done) {
+					value.then(function (result) {
+						_this.context.sent = result;
+					});
+				}
 				return {
 					value: value,
 					done: done

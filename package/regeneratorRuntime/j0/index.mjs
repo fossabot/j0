@@ -21,6 +21,11 @@ class Generator {
 	next() {
 		const value = this.fn.call(this.self, this.context);
 		const done = value === this.context.stop;
+		if (!done) {
+			value.then((result) => {
+				this.context.sent = result;
+			});
+		}
 		return {
 			value,
 			done

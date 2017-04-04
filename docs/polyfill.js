@@ -1554,8 +1554,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_createClass(Generator, [{
 			key: 'next',
 			value: function next() {
+				var _this16 = this;
+
 				var value = this.fn.call(this.self, this.context);
 				var done = value === this.context.stop;
+				if (!done) {
+					value.then(function (result) {
+						_this16.context.sent = result;
+					});
+				}
 				return {
 					value: value,
 					done: done
@@ -1587,6 +1594,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	if (!window.regeneratorRuntime) {
 		window.regeneratorRuntime = j0RegeneratorRuntime;
 	}
+
+	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
+		return setTimeout(function () {
+			fn(Date.now());
+		}, 30);
+	};
+
+	window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function (id) {
+		return clearTimeout(id);
+	};
 
 	window.global = window;
 

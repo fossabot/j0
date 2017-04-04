@@ -12,5 +12,7 @@ import '../Headers/polyfill';
 import '../fetch/polyfill';
 import '../FormData/polyfill';
 import '../regeneratorRuntime/polyfill';
+import '../requestAnimationFrame/polyfill';
+import '../cancelAnimationFrame/polyfill';
 import window from '../window';
 window.global = window;
