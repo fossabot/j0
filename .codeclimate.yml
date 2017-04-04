@@ -18,3 +18,5 @@ ratings:
   - "**.mjs"
 exclude_paths:
 - docs/
+- lib/
+- mod/
