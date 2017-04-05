@@ -271,6 +271,42 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function cloneNode(node, deep) {
+		return node.cloneNode(deep);
+	}
+
+	function getTextContent(_ref) {
+		var _ref$textContent = _ref.textContent,
+		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
+
+		return textContent;
+	}
+
+	describe('cloneNode', function () {
+
+		it('should clone a node', function () {
+			var element = createElement({
+				c: ['a', {
+					c: ['b', {
+						c: ['c']
+					}]
+				}]
+			});
+			assert.equal(getTextContent(cloneNode(element)), '');
+		});
+
+		it('should clone a node deeply', function () {
+			var element = createElement({
+				c: ['a', {
+					c: ['b', {
+						c: ['c']
+					}]
+				}]
+			});
+			assert.equal(getTextContent(cloneNode(element, true)), 'abc');
+		});
+	});
+
 	describe('dom/createElement', function () {
 
 		it('should create a <div>', function () {
@@ -475,13 +511,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			assert.equal(0 <= getScrollY(), true);
 		});
 	});
-
-	function getTextContent(_ref) {
-		var _ref$textContent = _ref.textContent,
-		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
-
-		return textContent;
-	}
 
 	describe('dom/getTextContent', function () {
 
