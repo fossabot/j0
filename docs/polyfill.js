@@ -1522,7 +1522,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		};
 	}
 
-	if (NodeList.prototype[iteratorKey]) {
+	if (!NodeList.prototype[iteratorKey]) {
 		NodeList.prototype[iteratorKey] = generator$4;
 	}
 
@@ -1542,7 +1542,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		};
 	}
 
-	if (HTMLCollection.prototype[iteratorKey]) {
+	if (!HTMLCollection.prototype[iteratorKey]) {
 		HTMLCollection.prototype[iteratorKey] = generator$6;
 	}
 
@@ -1562,7 +1562,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		};
 	}
 
-	if (NamedNodeMap.prototype[iteratorKey]) {
+	if (!NamedNodeMap.prototype[iteratorKey]) {
 		NamedNodeMap.prototype[iteratorKey] = generator$8;
 	}
 

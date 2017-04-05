@@ -1,9 +1,22 @@
 import getBoundingClientRect from '..';
 import appendChild from '../../appendChild';
+import removeChild from '../../removeChild';
+import setStyle from '../../setStyle';
 import document from '../../../document';
 import createElement from '../../createElement';
 
 describe('dom/getBoundingClientRect', function () {
+
+	let element;
+
+	beforeEach(function () {
+		element = createElement();
+		appendChild(document.body, element);
+	});
+
+	afterEach(function () {
+		removeChild(element, document.body);
+	});
 
 	it('should return a rect', function () {
 		const expected = {
@@ -12,22 +25,14 @@ describe('dom/getBoundingClientRect', function () {
 			width: 70,
 			height: 80
 		};
-		const element = createElement({
-			a: [
-				['style', [
-					'position: fixed',
-					'background-color:rgba(0,0,0,0.5)',
-					`left:${expected.left}px`,
-					`top:${expected.top}px`,
-					`width:${expected.width}px`,
-					`height:${expected.height}px`,
-					'margin:0'
-				].join(';')]
-			]
-		});
+		setStyle(element, 'position', 'fixed');
+		setStyle(element, 'left', `${expected.left}px`);
+		setStyle(element, 'top', `${expected.top}px`);
+		setStyle(element, 'width', `${expected.width}px`);
+		setStyle(element, 'height', `${expected.height}px`);
+		setStyle(element, 'margin', 0);
 		appendChild(document.body, element);
 		const rect = getBoundingClientRect(element);
-		console.log(rect, expected);
 		assert.deepEqual({
 			left: rect.left,
 			top: rect.top,

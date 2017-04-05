@@ -9,26 +9,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function getBoundingClientRect(element) {
-		return element.getBoundingClientRect();
-	}
+	function getTextContent(_ref) {
+		var _ref$textContent = _ref.textContent,
+		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
 
-	function appendChild(parentNode, newNode) {
-		parentNode.appendChild(newNode);
-	}
-
-	function parentNode(node) {
-		return node.parentNode;
-	}
-
-	function removeChild(childNode) {
-		var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
-
-		parentElement.removeChild(childNode);
-	}
-
-	function setStyle(element, name, value) {
-		element.style[name] = value;
+		return textContent;
 	}
 
 	function isString(x) {
@@ -45,6 +30,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 
 		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
 	}
 
 	var key = Symbol('events');
@@ -197,40 +186,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	describe('dom/getBoundingClientRect', function () {
+	describe('dom/getTextContent', function () {
 
-		var element = void 0;
-
-		beforeEach(function () {
-			element = createElement();
-			appendChild(document.body, element);
-		});
-
-		afterEach(function () {
-			removeChild(element, document.body);
-		});
-
-		it('should return a rect', function () {
-			var expected = {
-				left: 50,
-				top: 60,
-				width: 70,
-				height: 80
-			};
-			setStyle(element, 'position', 'fixed');
-			setStyle(element, 'left', expected.left + 'px');
-			setStyle(element, 'top', expected.top + 'px');
-			setStyle(element, 'width', expected.width + 'px');
-			setStyle(element, 'height', expected.height + 'px');
-			setStyle(element, 'margin', 0);
-			appendChild(document.body, element);
-			var rect = getBoundingClientRect(element);
-			assert.deepEqual({
-				left: rect.left,
-				top: rect.top,
-				width: rect.width,
-				height: rect.height
-			}, expected);
+		it('should return textContent', function () {
+			var element = createElement({
+				c: ['h', {
+					c: ['e', {
+						c: ['l', {
+							c: ['l', {
+								c: ['o']
+							}]
+						}]
+					}]
+				}]
+			});
+			assert.equal(getTextContent(element), 'hello');
 		});
 	});
 });

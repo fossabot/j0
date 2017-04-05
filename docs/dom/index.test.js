@@ -347,7 +347,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return element.getBoundingClientRect();
 	}
 
+	function setStyle(element, name, value) {
+		element.style[name] = value;
+	}
+
 	describe('dom/getBoundingClientRect', function () {
+
+		var element = void 0;
+
+		beforeEach(function () {
+			element = createElement();
+			appendChild(document.body, element);
+		});
+
+		afterEach(function () {
+			removeChild(element, document.body);
+		});
 
 		it('should return a rect', function () {
 			var expected = {
@@ -356,12 +371,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				width: 70,
 				height: 80
 			};
-			var element = createElement({
-				a: [['style', ['position: fixed', 'background-color:rgba(0,0,0,0.5)', 'left:' + expected.left + 'px', 'top:' + expected.top + 'px', 'width:' + expected.width + 'px', 'height:' + expected.height + 'px', 'margin:0'].join(';')]]
-			});
+			setStyle(element, 'position', 'fixed');
+			setStyle(element, 'left', expected.left + 'px');
+			setStyle(element, 'top', expected.top + 'px');
+			setStyle(element, 'width', expected.width + 'px');
+			setStyle(element, 'height', expected.height + 'px');
+			setStyle(element, 'margin', 0);
 			appendChild(document.body, element);
 			var rect = getBoundingClientRect(element);
-			console.log(rect, expected);
 			assert.deepEqual({
 				left: rect.left,
 				top: rect.top,
@@ -456,6 +473,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 		it('should return a non-negative integer', function () {
 			assert.equal(0 <= getScrollY(), true);
+		});
+	});
+
+	function getTextContent(_ref) {
+		var _ref$textContent = _ref.textContent,
+		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
+
+		return textContent;
+	}
+
+	describe('dom/getTextContent', function () {
+
+		it('should return textContent', function () {
+			var element = createElement({
+				c: ['h', {
+					c: ['e', {
+						c: ['l', {
+							c: ['l', {
+								c: ['o']
+							}]
+						}]
+					}]
+				}]
+			});
+			assert.equal(getTextContent(element), 'hello');
 		});
 	});
 
@@ -608,6 +650,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function prependChild(parentNode, newNode) {
+		insertBefore(newNode, firstChild(parentNode), parentNode);
+	}
+
+	describe('dom/prependChild', function () {
+
+		it('should append an element', function () {
+			var parent = createElement();
+			var child = createElement();
+			prependChild(parent, child);
+			assert.equal(child.parentNode, parent);
+		});
+
+		it('should append a text element', function () {
+			var parent = createElement();
+			var child = createElement('text');
+			prependChild(parent, child);
+			assert.equal(child.parentNode, parent);
+		});
+	});
+
 	function previousSibling(element) {
 		return element.previousSibling;
 	}
@@ -716,10 +779,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			events.clear();
 		} else {
-			forEach(events, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    set = _ref2[1];
+			forEach(events, function (_ref2) {
+				var _ref3 = _slicedToArray(_ref2, 2),
+				    key = _ref3[0],
+				    set = _ref3[1];
 
 				forEach(set, function (f) {
 					removeEventListener(element, key, f);
@@ -760,10 +823,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			assert.equal(getAttribute(element, attributeName), attributeValue);
 		});
 	});
-
-	function setStyle(element, name, value) {
-		element.style[name] = value;
-	}
 
 	describe('dom/setStyle', function () {
 

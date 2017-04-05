@@ -9,26 +9,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function getBoundingClientRect(element) {
-		return element.getBoundingClientRect();
-	}
-
-	function appendChild(parentNode, newNode) {
-		parentNode.appendChild(newNode);
-	}
-
 	function parentNode(node) {
 		return node.parentNode;
 	}
 
-	function removeChild(childNode) {
-		var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
+	function insertBefore(newNode, referenceNode) {
+		var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode(referenceNode);
 
-		parentElement.removeChild(childNode);
+		return parent.insertBefore(newNode, referenceNode);
 	}
 
-	function setStyle(element, name, value) {
-		element.style[name] = value;
+	function firstChild(element) {
+		return element.firstChild;
+	}
+
+	function prependChild(parentNode, newNode) {
+		insertBefore(newNode, firstChild(parentNode), parentNode);
 	}
 
 	function isString(x) {
@@ -45,6 +41,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 
 		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
 	}
 
 	var key = Symbol('events');
@@ -197,40 +197,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	describe('dom/getBoundingClientRect', function () {
+	describe('dom/prependChild', function () {
 
-		var element = void 0;
-
-		beforeEach(function () {
-			element = createElement();
-			appendChild(document.body, element);
+		it('should append an element', function () {
+			var parent = createElement();
+			var child = createElement();
+			prependChild(parent, child);
+			assert.equal(child.parentNode, parent);
 		});
 
-		afterEach(function () {
-			removeChild(element, document.body);
-		});
-
-		it('should return a rect', function () {
-			var expected = {
-				left: 50,
-				top: 60,
-				width: 70,
-				height: 80
-			};
-			setStyle(element, 'position', 'fixed');
-			setStyle(element, 'left', expected.left + 'px');
-			setStyle(element, 'top', expected.top + 'px');
-			setStyle(element, 'width', expected.width + 'px');
-			setStyle(element, 'height', expected.height + 'px');
-			setStyle(element, 'margin', 0);
-			appendChild(document.body, element);
-			var rect = getBoundingClientRect(element);
-			assert.deepEqual({
-				left: rect.left,
-				top: rect.top,
-				width: rect.width,
-				height: rect.height
-			}, expected);
+		it('should append a text element', function () {
+			var parent = createElement();
+			var child = createElement('text');
+			prependChild(parent, child);
+			assert.equal(child.parentNode, parent);
 		});
 	});
 });
