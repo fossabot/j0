@@ -161,37 +161,33 @@ exports.config = {
 	// resolved to continue.
 	//
 	// Gets executed once before all workers get launched.
-	onPrepare: function () {
-		return Promise.all([
+	onPrepare: async function () {
+		const [httpServer, files] = await Promise.all([
 			sable({
 				documentRoot: dest,
-				noWatch: true
+				noWatch: true,
+				quiet: true
 			}),
 			glob(path.join(dest, '**', 'index.test.js'))
-		])
-		.then(([httpServer, files]) => {
-			server = httpServer;
-			return Promise.all(files.map((file) => {
-				return stat(file)
-				.then(({size}) => {
-					return {
-						file,
-						size
-					};
-				});
-			}));
-		})
-		.then((files) => {
-			const validFiles = files
-			.filter(({size}) => {
-				return 0 < size;
-			})
-			.map(({file}) => {
-				return file;
+		]);
+		server = httpServer;
+		const {port} = server.address();
+		const validFiles = (await Promise.all(files.map((file) => {
+			return stat(file)
+			.then(({size}) => {
+				return {
+					file,
+					size
+				};
 			});
-			const {port} = server.address();
-			return buildWebdriverScript(validFiles, port);
+		})))
+		.filter(({size}) => {
+			return 0 < size;
+		})
+		.map(({file}) => {
+			return file;
 		});
+		await buildWebdriverScript(validFiles, port);
 	},
 	//
 	// Gets executed just before initialising the webdriver session and test framework. It allows you
@@ -205,9 +201,8 @@ exports.config = {
 	// },
 	//
 	// Hook that gets executed before the suite starts
-	beforeSuite: function (suite) {
-		console.info(`${suite.type} ${suite.title}`);
-	},
+	// beforeSuite: function (suite) {
+	// },
 	//
 	// Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
 	// beforeEach in Mocha)

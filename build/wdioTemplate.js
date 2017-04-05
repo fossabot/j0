@@ -15,12 +15,13 @@ browser.setViewportSize({
 describe('{{name}}', function () {
 
 	before(function () {
+		const started = Date.now();
 		this.timeout(30000);
 		console.info('start: {{name}}');
 		this.retries(retry);
 		browser.url('{{url}}');
 		browser.waitForExist('body.done', waitBody);
-		console.info('end: {{name}}');
+		console.info(`end: ${Date.now() - started}ms`);
 	});
 
 	it('should pass the tests', function () {
