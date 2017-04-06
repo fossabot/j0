@@ -15,4 +15,17 @@ describe('debounce', function () {
 		});
 	});
 
+	it('should call the function with its context', () => {
+		return new Promise((resolve) => {
+			const execute = debounce(function (value) {
+				resolve(this);
+			}, 50);
+			execute.call(1);
+			execute.call(2);
+			execute.call(3);
+		}).then((result) => {
+			assert.equal(result, 3);
+		});
+	});
+
 });

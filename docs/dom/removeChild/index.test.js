@@ -16,7 +16,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	function removeChild(childNode) {
 		var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
 
-		parentElement.removeChild(childNode);
+		if (parentElement) {
+			parentElement.removeChild(childNode);
+		}
 	}
 
 	function isString(x) {

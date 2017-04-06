@@ -1,9 +1,9 @@
-function debounce(fn, delay = 0, thisArg = this) {
+function debounce(fn, delay = 0, thisArg) {
 	let timer;
-	return (...args) => {
+	return function (...args) {
 		clearTimeout(timer);
-		timer = setTimeout(function () {
-			fn.call(thisArg, ...args);
+		timer = setTimeout(() => {
+			fn.call(thisArg || this, ...args);
 		}, delay);
 	};
 }
