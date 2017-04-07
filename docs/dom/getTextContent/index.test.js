@@ -9,11 +9,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function getTextContent(_ref) {
-		var _ref$textContent = _ref.textContent,
-		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
-
-		return textContent;
+	function getTextContent(node) {
+		return node ? node.textContent : '';
 	}
 
 	function isString(x) {

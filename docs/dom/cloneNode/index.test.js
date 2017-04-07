@@ -183,11 +183,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function getTextContent(_ref) {
-		var _ref$textContent = _ref.textContent,
-		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
-
-		return textContent;
+	function getTextContent(node) {
+		return node ? node.textContent : '';
 	}
 
 	describe('cloneNode', function () {

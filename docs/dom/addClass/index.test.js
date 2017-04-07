@@ -183,8 +183,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function hasClass(element, className) {
-		return element.classList.contains(className);
+	function hasClass(_ref, className) {
+		var classList = _ref.classList;
+
+		return classList && classList.contains(className);
 	}
 
 	describe('dom/addClass', function () {

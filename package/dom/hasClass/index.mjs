@@ -1,5 +1,5 @@
-function hasClass(element, className) {
-	return element.classList.contains(className);
+function hasClass({classList}, className) {
+	return classList && classList.contains(className);
 }
 
 export default hasClass;

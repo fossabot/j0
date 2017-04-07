@@ -185,8 +185,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function hasClass(element, className) {
-		return element.classList.contains(className);
+	function hasClass(_ref, className) {
+		var classList = _ref.classList;
+
+		return classList && classList.contains(className);
 	}
 
 	describe('dom/addClass', function () {
@@ -275,11 +277,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return node.cloneNode(deep);
 	}
 
-	function getTextContent(_ref) {
-		var _ref$textContent = _ref.textContent,
-		    textContent = _ref$textContent === undefined ? '' : _ref$textContent;
-
-		return textContent;
+	function getTextContent(node) {
+		return node ? node.textContent : '';
 	}
 
 	describe('cloneNode', function () {
