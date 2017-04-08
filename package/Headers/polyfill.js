@@ -1,2 +1,2 @@
 import './missing';
-import './*/polyfill';
+import './*/polyfill.js';

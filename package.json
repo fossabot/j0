@@ -24,6 +24,7 @@
     "regenerator-runtime": "^0.10.3",
     "rollup": "^0.41.4",
     "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-glob-import": "0.0.2",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-watch": "^3.2.2",
     "sable": "0.0.20",
