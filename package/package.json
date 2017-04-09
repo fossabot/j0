@@ -16,11 +16,5 @@
     "blogs",
     "library",
     "frontend"
-  ],
-  "scripts": {
-    "server": "node ../build --watch",
-    "build": "node ../build",
-    "test": "npm run build && wdio ../wdio.conf.js",
-    "prepublish": "npm run build"
-  }
+  ]
 }

@@ -3,8 +3,7 @@
   "scripts": {
     "server": "node build --watch",
     "build": "node build",
-    "test": "wdio wdio.conf.js",
-    "prepublish": "npm run build"
+    "test": "wdio wdio.conf.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
@@ -35,8 +34,5 @@
     "wdio-selenium-standalone-service": "0.0.8",
     "wdio-spec-reporter": "0.0.5",
     "webdriverio": "^4.6.2"
-  },
-  "dependencies": {
-    "bluebird": "^3.5.0"
   }
 }

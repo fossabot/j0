@@ -12,9 +12,9 @@ const fileSize = require('j1/fileSize');
 const {
 	watch,
 	format,
-	quiet
+	quiet,
+	root
 } = require('./constants');
-const projectRoot = path.join(__dirname, '..');
 
 function minify(src) {
 	return {
@@ -33,7 +33,7 @@ function minify(src) {
 
 function compileJS(src, dest) {
 	if (!quiet) {
-		console.debug(`${path.relative(projectRoot, src)}\n -> ${path.relative(projectRoot, dest)}`);
+		console.debug(`${path.relative(root, src)}\n -> ${path.relative(root, dest)}`);
 	}
 	const options = {
 		entry: src,

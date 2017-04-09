@@ -9,17 +9,11 @@ const readFile = promisify(fs.readFile, fs);
 
 const autoprefixerOptions = {browsers: ['last 2 versions']};
 
-function compileCSS(src, dest) {
-	return readFile(src, 'utf8')
-	.then((stylusCode) => {
-		return promisify(stylus.render, stylus)(stylusCode, {filename: src});
-	})
-	.then((cssCode) => {
-		return postcss([autoprefixer(autoprefixerOptions)]).process(cssCode);
-	})
-	.then(({css}) => {
-		return writeFile(changeExt(dest, '.css'), css);
-	});
+async function compileCSS(src, dest) {
+	const stylusCode = await readFile(src, 'utf8');
+	const cssCode = await promisify(stylus.render, stylus)(stylusCode, {filename: src});
+	const {css} = await postcss([autoprefixer(autoprefixerOptions)]).process(cssCode);
+	return writeFile(changeExt(dest, '.css'), css);
 }
 
 module.exports = compileCSS;
