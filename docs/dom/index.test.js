@@ -258,7 +258,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	});
 
 	function children(node) {
-		return node.children;
+		return filter(childNodes(node), function (_ref2) {
+			var _ref2$nodeType = _ref2.nodeType,
+			    nodeType = _ref2$nodeType === undefined ? 0 : _ref2$nodeType;
+
+			return nodeType === 1;
+		});
 	}
 
 	describe('dom/children', function () {
@@ -809,10 +814,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			});
 			events.clear();
 		} else {
-			forEach(events, function (_ref2) {
-				var _ref3 = _slicedToArray(_ref2, 2),
-				    key = _ref3[0],
-				    set = _ref3[1];
+			forEach(events, function (_ref3) {
+				var _ref4 = _slicedToArray(_ref3, 2),
+				    key = _ref4[0],
+				    set = _ref4[1];
 
 				forEach(set, function (f) {
 					removeEventListener(element, key, f);
