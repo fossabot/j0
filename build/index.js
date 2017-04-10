@@ -56,7 +56,7 @@ async function startServer() {
 					});
 			});
 		})
-	])
+	]);
 	console.debug('starting sable server');
 	return sable({
 		documentRoot: constants.dest,
@@ -64,7 +64,7 @@ async function startServer() {
 	});
 }
 
-async function build() {
+function build() {
 	return glob(path.join(constants.src, '**', '*'), {
 		nodir: true,
 		ignore: [
