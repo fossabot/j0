@@ -835,16 +835,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		Array.prototype[iteratorKey] = generator;
 	}
 
-	function push(arrayLike) {
-		var _Array$prototype$push;
-
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-
-		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-	}
-
 	function isFunction(x) {
 		return typeof x === 'function';
 	}
@@ -906,6 +896,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	}
 
+	function push(arrayLike) {
+		var _Array$prototype$push;
+
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+
+		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	}
+
 	function noop(x) {
 		return x;
 	}
@@ -919,6 +919,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			push(result, fn.call(thisArg, value, index, iterable));
 		});
 		return result;
+	}
+
+	if (!Array.from) {
+		Array.from = map;
 	}
 
 	function join(iterable) {

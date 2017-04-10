@@ -9,57 +9,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	function children(node) {
-		return node.children;
-	}
-
-	function isString(x) {
-		return typeof x === 'string';
-	}
-
-	function isNode(x) {
-		return x instanceof Node;
-	}
-
-	function setAttribute(element, attrName) {
-		for (var _len = arguments.length, value = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-			value[_key - 2] = arguments[_key];
-		}
-
-		element.setAttribute(attrName, value.join(' '));
-	}
-
-	function appendChild(parentNode, newNode) {
-		parentNode.appendChild(newNode);
-	}
-
-	var key = Symbol('events');
-
-	function getEventListeners(element) {
-		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-		var allEvents = element[key];
-		var events = void 0;
-		if (!allEvents) {
-			allEvents = new Map();
-			element[key] = allEvents;
-		}
-		if (eventName) {
-			events = allEvents.get(eventName);
-			if (!events) {
-				events = new Set();
-				allEvents.set(eventName, events);
-			}
-			return events;
-		}
-		return allEvents;
-	}
-
-	function addEventListener(element, eventName, fn) {
-		element.addEventListener(eventName, fn);
-		getEventListeners(element, eventName).add(fn);
-	}
-
 	function noop(x) {
 		return x;
 	}
@@ -130,8 +79,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 	function push(arrayLike) {
 		var _Array$prototype$push;
 
-		for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-			args[_key2 - 1] = arguments[_key2];
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
 		}
 
 		return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
@@ -148,6 +97,66 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 			}
 		});
 		return result;
+	}
+
+	function childNodes(node) {
+		return node.childNodes;
+	}
+
+	function children(node) {
+		return filter(childNodes(node), function (_ref) {
+			var _ref$nodeType = _ref.nodeType,
+			    nodeType = _ref$nodeType === undefined ? 0 : _ref$nodeType;
+
+			return nodeType === 1;
+		});
+	}
+
+	function isString(x) {
+		return typeof x === 'string';
+	}
+
+	function isNode(x) {
+		return x instanceof Node;
+	}
+
+	function setAttribute(element, attrName) {
+		for (var _len2 = arguments.length, value = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+			value[_key2 - 2] = arguments[_key2];
+		}
+
+		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
+	}
+
+	var key = Symbol('events');
+
+	function getEventListeners(element) {
+		var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+		var allEvents = element[key];
+		var events = void 0;
+		if (!allEvents) {
+			allEvents = new Map();
+			element[key] = allEvents;
+		}
+		if (eventName) {
+			events = allEvents.get(eventName);
+			if (!events) {
+				events = new Set();
+				allEvents.set(eventName, events);
+			}
+			return events;
+		}
+		return allEvents;
+	}
+
+	function addEventListener(element, eventName, fn) {
+		element.addEventListener(eventName, fn);
+		getEventListeners(element, eventName).add(fn);
 	}
 
 	function processTace() {
