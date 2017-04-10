@@ -103,17 +103,15 @@ async function build() {
 	.then(buildIndexes);
 }
 
-rm(constants.dest)
-.then(() => {
-	return Promise.all([
+async function start() {
+	await rm(constants.dest);
+	await Promise.all([
 		buildCSS(),
-		buildPageJS()
+		buildPageJS(),
+		cp(constants.staticFiles, constants.staticFilesDest)
 	]);
-})
-.then(() => {
-	return cp(constants.staticFiles, constants.staticFilesDest);
-})
-.then(() => {
 	return constants.watch ? startServer() : build();
-})
+}
+
+start()
 .catch(console.onError);
