@@ -28,8 +28,8 @@ function buildPageJS() {
 	}));
 }
 
-function startServer() {
-	return Promise.all([
+async function startServer() {
+	await Promise.all([
 		new Promise((resolve) => {
 			chokidar.watch(constants.src)
 				.on('add', function (file) {
@@ -57,16 +57,14 @@ function startServer() {
 			});
 		})
 	])
-	.then(() => {
-		console.debug('starting sable server');
-		return sable({
-			documentRoot: constants.dest,
-			quiet: constants.quiet
-		});
+	console.debug('starting sable server');
+	return sable({
+		documentRoot: constants.dest,
+		quiet: constants.quiet
 	});
 }
 
-function build() {
+async function build() {
 	return glob(path.join(constants.src, '**', '*'), {
 		nodir: true,
 		ignore: [
