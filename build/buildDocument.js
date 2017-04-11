@@ -7,8 +7,14 @@ const paze = require('paze');
 const readdir = promisify(fs.readdir, fs);
 const stat = promisify(fs.stat, fs);
 
-const {ignore, src, dest, watch, template} = require('./constants');
-const packageJSON = require('../package/package');
+const {
+	ignore,
+	src,
+	dest,
+	watch,
+	template,
+	packageJSON
+} = require('./constants');
 const buildIndexDebounce = 2000;
 const buildIndexes = debounce(require('./buildIndexes'), buildIndexDebounce);
 

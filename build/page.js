@@ -1,9 +1,9 @@
 /* global chai */
-import window from '../package/window';
-import getBody from '../package/getBody';
-import onError from '../package/onError';
-import document from '../package/document';
-import navigator from '../package/navigator';
+import window from '../window';
+import getBody from '../getBody';
+import onError from '../onError';
+import document from '../document';
+import navigator from '../navigator';
 
 function startMocha() {
 	mocha.run()

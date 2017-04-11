@@ -1,7 +1,7 @@
 const path = require('path');
 const packageJSON = require('../package');
 const root = path.join(__dirname, '..');
-const src = path.join(root, 'package');
+const src = root;
 const dest = path.join(root, 'docs');
 module.exports = {
 	format: 'umd',
@@ -12,7 +12,7 @@ module.exports = {
 	exts: ['.js', '.mjs'],
 	watch: process.argv.includes('--watch'),
 	quiet: process.argv.includes('--quiet'),
-	packageJSON: packageJSON,
+	packageJSON,
 	template: path.join(__dirname, 'template.html'),
 	indexTemplate: path.join(__dirname, 'indexTemplate.html'),
 	styl: [

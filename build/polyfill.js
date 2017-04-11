@@ -1,4 +1,4 @@
 import 'regenerator-runtime/runtime';
-import '../package/polyfill';
-import window from '../package/window';
+import '../polyfill';
+import window from '../window';
 window.ready = true;
