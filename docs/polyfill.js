@@ -1228,9 +1228,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return value && isFunction(value.then) && isFunction(value.catch);
 	}
 
-	if (!window.Promise) {
-		window.Promise = J0Promise;
-	}
+	window.Promise = window.Promise || J0Promise;
 
 	function find(iterable) {
 		var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
