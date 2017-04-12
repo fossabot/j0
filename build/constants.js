@@ -1,29 +1,29 @@
+const fs = require('fs');
 const path = require('path');
+
 const packageJSON = require('../package');
-const root = path.join(__dirname, '..');
-const src = path.join(root, 'package');
-const dest = path.join(root, 'docs');
+const projectRoot = path.join(__dirname, '..');
+/* eslint-disable no-sync */
+const ignores = fs.readFileSync(path.join(projectRoot, '.npmignore'), 'utf8').trim()
+.split(/\s+/);
+const targetDirectories = fs.readdirSync(projectRoot)
+.filter((name) => {
+	return (/^\w+$/).test(name) && !ignores.includes(name);
+})
+.map((name) => {
+	return path.join(projectRoot, name);
+});
+/* eslint-enable no-sync */
+const serverMode = process.argv.includes('--server');
+const dest = path.join(projectRoot, 'docs');
+const format = 'umd';
+
 module.exports = {
-	format: 'umd',
-	root,
-	src,
+	packageJSON,
+	projectRoot,
+	ignores,
+	targetDirectories,
+	serverMode,
 	dest,
-	ignore: /[/\\][._]|node_modules/,
-	exts: ['.js', '.mjs'],
-	watch: process.argv.includes('--watch'),
-	quiet: process.argv.includes('--quiet'),
-	packageJSON: packageJSON,
-	template: path.join(__dirname, 'template.html'),
-	indexTemplate: path.join(__dirname, 'indexTemplate.html'),
-	styl: [
-		path.join(__dirname, 'page.styl')
-	],
-	js: [
-		path.join(__dirname, 'page.js'),
-		path.join(__dirname, 'polyfill.js')
-	],
-	wdioTemplate: path.join(__dirname, 'wdioTemplate.js'),
-	wdioDest: path.join(dest, 'wdio.js'),
-	staticFiles: path.join(__dirname, 'staticFiles'),
-	staticFilesDest: path.join(dest, 'staticFiles')
+	format
 };

@@ -65,9 +65,6 @@ body.passed>.TestResult::after {
 .version::before {
   content: 'v';
 }
-.Children[data-count='0'] {
-  display: none;
-}
 .TestResult {
   z-index: 1;
   position: fixed;

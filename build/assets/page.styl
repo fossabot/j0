@@ -1,0 +1,216 @@
+$baseWidth = 94%
+$maxWidth = 720px
+$baseMargin = 8px
+
+$small = '(max-width: 500px)'
+$tiny = '(max-width: 300px)'
+
+*
+::before
+::after
+	position relative
+	box-sizing border-box
+	padding 0
+	margin 0
+	border none
+	background-repeat no-repeat
+	background-color transparent
+	background-position center
+	background-size cover
+	border-radius 0
+	border-width 1px
+	border-style none
+	outline 0
+	list-style none
+	appearance none
+	color inherit
+	min-width 0
+	min-height 0
+	max-width none
+	max-height none
+	text-decoration none
+	-webkit-appearance none
+	-webkit-overflow-scrolling touch
+	border-collapse collapse
+
+body
+	padding 0 0 12px 0
+	font-size 14px
+	font-family -apple-system, BlinkMacSystemFont, arial, sans-serif
+	color #333
+	background-color #fff
+	&>#mocha
+	&>*
+		width $baseWidth
+		max-width $maxWidth
+		margin 12px auto
+	&>h1
+		margin 24px auto 18px auto
+	&>h2
+		margin 32px auto 12px auto
+	&.failed
+		&>.TestResult
+			background-color red
+			&::after
+				content '✖ failed'
+	&.passed
+		&>.TestResult
+			background-color green
+			&::after
+				content '✔ passed'
+
+.version
+	margin-left 8px
+	font-size 12px
+	&::before
+		content 'v'
+
+.TestResult
+	z-index 1
+	position fixed
+	right 0
+	top 0
+	width auto
+	margin 0
+	padding 4px 8px
+	color #fff
+	font-size 12px
+	border-radius 0 0 0 3px
+	text-decoration none
+	&::after
+		color #fff
+
+a
+	text-decoration underline
+
+h1
+h2
+h3
+h4
+h5
+h6
+	font-weight 400
+
+ul
+	padding-left 24px
+	&>li
+		list-style disc
+
+ol
+	padding-left 24px
+	&>li
+		list-style decimal
+
+$color1 = lightness(#ffb500, 85%)
+
+footer
+	&>*
+		margin $baseMargin auto
+
+section
+	&.Document
+		font-size 14px
+		line-height 22px
+		&>*
+			margin $baseMargin auto
+		&>h1
+			font-size 20px
+			font-weight bold
+		&>h2
+			font-size 18px
+			font-weight bold
+		&>h3
+			font-weight bold
+	&.Code
+	&.TestCode
+		&>pre
+			padding-left 0
+
+pre
+	line-height 18px
+	padding 8px 12px 8px 0
+	background-color #eee
+	overflow-x auto
+	white-space pre
+	counter-reset line
+	tab-size 2
+	font-family Consolas, monospace
+	font-size 12px
+
+span
+	&.indent
+		display inline-block
+		border-left solid 1px #e0e0e0;
+	&.const
+	&.function
+	&.export
+	&.import
+	&.default
+	&.class
+	&.return
+		color blue
+	&.name
+		color #790101
+	&.string
+		color #127901
+	&.comment
+		color #777
+	&.true
+	&.false
+	&.num
+		color #e28116
+	&.linenum
+		counter-increment line
+		user-select none
+		&::before
+			content counter(line)
+			display inline-block
+			width 38px
+			padding-right 10px
+			text-align right
+			color #999
+
+#environment
+	font-family Consolas, monospace
+	font-size 12px
+	&>tr
+		&>*
+			vertical-align top
+			padding 2px 4px
+			border solid 1px #ddd
+		&>th
+			text-align left
+		&.object
+		&.function
+			display none
+
+#mocha
+	background none
+	&>*
+		width 100%
+	li
+		list-style none
+	.suite
+		margin-left 0
+
+#mocha-stats
+	position absolute
+	right 0
+	top auto
+	bottom 100%
+	width auto
+	&>.progress
+		margin-right 0
+	@media $small
+		&>.duration
+			display none
+
+.GitHubLink
+	position absolute
+	right 0
+	bottom 0
+	padding 4px 8px
+	font-size 12px
+	user-select none
+	&>.fa-external-link
+		margin-left 2px

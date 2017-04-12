@@ -1,116 +1,57 @@
 const path = require('path');
 const sable = require('sable');
-const console = require('j1/console').create('builder');
-const promisify = require('j1/promisify');
+const console = require('j1/console').create('build');
 const rm = require('j1/rm');
-const cp = require('j1/cp');
-const chokidar = require('chokidar');
+const promisify = require('j1/promisify');
+const leftpad = require('j1/leftpad');
 const glob = promisify(require('glob'));
 
-const constants = require('./constants');
-const buildModule = require('./buildModule');
-const buildDocument = require('./buildDocument');
-const buildIndexes = require('./buildIndexes');
-const compileJS = require('./compileJS');
-const compileCSS = require('./compileCSS');
+const buildHTML = require('./buildHTML');
+const copyAssets = require('./copyAssets');
+const {
+	projectRoot,
+	dest,
+	targetDirectories,
+	serverMode
+} = require('./constants');
 
-function buildCSS() {
-	return Promise.all(constants.styl.map((file) => {
-		const relativePath = path.relative(__dirname, file);
-		return compileCSS(file, path.join(constants.dest, relativePath));
-	}));
-}
-
-function buildPageJS() {
-	return Promise.all(constants.js.map((file) => {
-		const relativePath = path.relative(__dirname, file);
-		return compileJS(file, path.join(constants.dest, relativePath));
-	}));
-}
-
-async function startServer() {
-	await Promise.all([
-		new Promise((resolve) => {
-			chokidar.watch(constants.src)
-				.on('add', function (file) {
-					this.unwatch(file);
-					buildModule(file);
-				})
-				.on('error', console.onError)
-				.once('ready', function () {
-					resolve(this);
-				});
-		}),
-		...[
-			[constants.dest, buildDocument],
-			[constants.styl, buildCSS]
-		].map(([pattern, fn, options = {}]) => {
-			options.awaitWriteFinish = {stabilityThreshold: 100};
-			return new Promise((resolve) => {
-				chokidar.watch(pattern, options)
-					.on('add', fn)
-					.on('change', fn)
-					.on('error', console.onError)
-					.once('ready', function () {
-						resolve(this);
-					});
-			});
-		})
-	]);
-	console.debug('starting sable server');
-	return sable({
-		documentRoot: constants.dest,
-		quiet: constants.quiet
-	});
-}
-
-function build() {
-	return glob(path.join(constants.src, '**', '*'), {
-		nodir: true,
-		ignore: [
-			'**/node_modules'
-		]
-	})
-	.then((files) => {
-		const list = [].concat(...files);
-		const {length} = list;
-		function buildJS() {
-			const file = list.shift();
-			if (file) {
-				console.info(`buildModule: ${length - list.length}/${length}`);
-				const promise = buildModule(file);
-				return promise ? promise.then(buildJS) : buildJS();
-			}
+function buildInOrder(modulePaths) {
+	const remains = modulePaths.slice();
+	const {length} = remains;
+	const {length: digits} = `${length}`;
+	async function build() {
+		const modulePath = remains.shift();
+		const started = Date.now();
+		if (modulePath) {
+			console.info(`${leftpad(length - remains.length, digits)}/${length} ${modulePath}`);
+			await Promise.all([
+				copyAssets(path.join(projectRoot, modulePath, 'test'), path.join(dest, modulePath)),
+				buildHTML(modulePath)
+			]);
+			console.debug(`${modulePath} ${Date.now() - started}ms`);
+			return build();
 		}
-		return buildJS();
-	})
-	.then(() => {
-		return glob(path.join(constants.dest, '**', '*.test.js'), {nodir: true});
-	})
-	.then((files) => {
-		const list = [].concat(...files);
-		const {length} = list;
-		function buildJS() {
-			const file = list.shift();
-			if (file) {
-				console.info(`buildModule: ${length - list.length}/${length}`);
-				return buildDocument(file)
-				.then(buildJS);
-			}
-		}
-		return buildJS();
-	})
-	.then(buildIndexes);
+	}
+	return build();
 }
 
 async function start() {
-	await rm(constants.dest);
-	await Promise.all([
-		buildCSS(),
-		buildPageJS(),
-		cp(constants.staticFiles, constants.staticFilesDest)
-	]);
-	return constants.watch ? startServer() : build();
+	await rm(dest);
+	await copyAssets(path.join(__dirname, 'assets'));
+	const modulePaths = [].concat(...await Promise.all(targetDirectories.map(function (dir) {
+		return glob(path.join(dir, '**', 'test', 'index.js'));
+	})))
+	.map(function (absoluteTestScriptPath) {
+		return path.relative(projectRoot, path.join(path.dirname(absoluteTestScriptPath), '..'));
+	});
+	console.info(`Found ${modulePaths.length} test scripts`);
+	await buildInOrder(modulePaths);
+	if (serverMode) {
+		sable({
+			documentRoot: dest,
+			quiet: true
+		});
+	}
 }
 
 start()
