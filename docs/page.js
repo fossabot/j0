@@ -13,7 +13,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 	var createNavigation = function () {
 		var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-			var root, response, tree, rootBranch, parseBranch, nav;
+			var root, response, tree, _location, pathname, basePath, rootBranch, parseBranch, nav;
+
 			return regeneratorRuntime.wrap(function _callee$(_context) {
 				while (1) {
 					switch (_context.prev = _context.next) {
@@ -48,7 +49,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 						case 7:
 							tree = _context.sent;
-							rootBranch = reduce(location.pathname.replace(/^\/|\/$/g, '').split('/'), function (parent, name) {
+							_location = location, pathname = _location.pathname;
+							basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
+							rootBranch = reduce(pathname.replace(basePath, '').split('/'), function (parent, name) {
 								return name ? parent[name] : parent;
 							}, tree);
 							nav = parseBranch(rootBranch, '', '');
@@ -57,7 +60,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 								insertAfter(createElement(nav), getElementById('title'));
 							}
 
-						case 11:
+						case 13:
 						case 'end':
 							return _context.stop();
 					}
@@ -311,6 +314,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return result;
 	}
 
+	function pop(array) {
+		return array.pop();
+	}
+
 	function forEachKey(obj, fn, thisArg) {
 		for (var _key3 in obj) {
 			if (obj.hasOwnProperty(_key3)) {
@@ -351,6 +358,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 				}]
 			}));
 		});
+	}
+
+	function normalizeUrl(url) {
+		return reduce(url.split('/'), function (result, fragment) {
+			switch (fragment) {
+				case '..':
+					pop(result);
+					break;
+				case '.':
+				case '':
+					break;
+				default:
+					push(result, fragment);
+			}
+			return result;
+		}, []).join('/');
 	}
 
 	if (mocha) {

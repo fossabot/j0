@@ -14,6 +14,7 @@ import createElement from '../../dom/createElement';
 import forEach from '../../Array/forEach';
 import reduce from '../../Array/reduce';
 import push from '../../Array/push';
+import pop from '../../Array/pop';
 import forEachKey from '../../Object/forEachKey';
 import fetch from '../../fetch';
 
@@ -52,11 +53,29 @@ function showEnvironment() {
 	});
 }
 
+function normalizeUrl(url) {
+	return reduce(url.split('/'), function (result, fragment) {
+		switch (fragment) {
+		case '..':
+			pop(result);
+			break;
+		case '.':
+		case '':
+			break;
+		default:
+			push(result, fragment);
+		}
+		return result;
+	}, []).join('/');
+}
+
 async function createNavigation() {
 	const root = getTextContent(getElementById('root'));
 	const response = await fetch(`${root}/sitemap.json`);
 	const tree = await response.json();
-	const rootBranch = reduce(location.pathname.replace(/^\/|\/$/g, '').split('/'), function (parent, name) {
+	const {pathname} = location;
+	const basePath = `/${normalizeUrl(`${pathname}/${root}`)}/`;
+	const rootBranch = reduce(pathname.replace(basePath, '').split('/'), function (parent, name) {
 		return name ? parent[name] : parent;
 	}, tree);
 	function parseBranch(parent, name, base) {
