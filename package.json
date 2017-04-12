@@ -15,9 +15,9 @@
     "frontend"
   ],
   "scripts": {
-    "server": "node build --watch",
+    "server": "node build --server",
     "build": "node build",
-    "test": "wdio wdio.conf.js"
+    "test": "wdio build/wdio.conf.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.6",

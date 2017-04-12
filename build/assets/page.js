@@ -1,9 +1,9 @@
 /* global chai */
-import window from '../window';
-import getBody from '../getBody';
-import onError from '../onError';
-import document from '../document';
-import navigator from '../navigator';
+import window from '../../window';
+import getBody from '../../getBody';
+import onError from '../../onError';
+import document from '../../document';
+import navigator from '../../navigator';
 
 function startMocha() {
 	mocha.run()
@@ -31,11 +31,9 @@ function showEnvironment() {
 if (mocha) {
 	window.assert = chai.assert;
 	mocha.setup('bdd');
+	window.start = startMocha;
 }
 
-window.start = startMocha;
 getBody
-.then(function () {
-	showEnvironment();
-})
+.then(showEnvironment)
 .catch(onError);

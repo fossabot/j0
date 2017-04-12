@@ -6,9 +6,6 @@
 <link href="{{root}}/page.css" rel="stylesheet">
 <script id="root" type="text/plain">{{root}}</script>
 <h1 id="title">{{&titleHTML}}<span class="version">{{package.version}}</span></h1>
-<ul class="Children" data-count="{{children.length}}">
-	{{#children}}<li><a href="{{&childname}}/">{{package.name}}/{{&name}}/{{&childname}}</a></li>{{/children}}
-</ul>
 <h2>Source</h2>
 <section class="Code">
 	<pre>{{&code}}</pre>
@@ -35,5 +32,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
 <script src="{{root}}/page.js"></script>
-<script src="index.test.js"></script>
+<script src="index.js"></script>
 <script>start()</script>

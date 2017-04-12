@@ -755,16 +755,6 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		});
 	}
 
-	function querySelectorAll(selectors) {
-		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-		return element.querySelector(selectors);
-	}
-
-	function getElementById(id, element) {
-		return querySelectorAll('[id=\'' + id + '\']', element);
-	}
-
 	function tests(fetch, name) {
 
 		describe(name, function () {
@@ -778,8 +768,7 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 			});
 
 			it('should get json', function () {
-				var root = getElementById('root').textContent;
-				return fetch(root + '/staticFiles/test.json').then(function (response) {
+				return fetch('test.json').then(function (response) {
 					return response.json();
 				}).then(function (data) {
 					assert.deepEqual(data, { a: 'b' });

@@ -3,7 +3,6 @@ import readBlob from '../../../FileReader/readBlob';
 import Blob from '../../../Blob';
 
 function createArrayBuffer(data) {
-	console.log(data);
 	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
 

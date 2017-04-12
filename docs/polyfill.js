@@ -2239,6 +2239,4 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	};
 
 	window.global = window;
-
-	window.ready = true;
 });

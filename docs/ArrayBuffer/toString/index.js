@@ -90,7 +90,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	}
 
 	function createArrayBuffer(data) {
-		console.log(data);
 		return read(new Blob([data]), 'ArrayBuffer');
 	}
 
@@ -107,15 +106,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			var src = 'こんにちは';
 			return createArrayBuffer(src).then(function (arrayBuffer) {
 				assert.equal(arrayBufferToString(arrayBuffer), src);
-			});
-		});
-	});
-
-	describe('ArrayBuffer', function () {
-
-		it('should create a new instance', function () {
-			assert.doesNotThrow(function () {
-				return new ArrayBuffer(1);
 			});
 		});
 	});

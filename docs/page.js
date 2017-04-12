@@ -78,10 +78,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	if (mocha) {
 		window.assert = chai.assert;
 		mocha.setup('bdd');
+		window.start = startMocha;
 	}
 
-	window.start = startMocha;
-	getBody.then(function () {
-		showEnvironment();
-	}).catch(onError);
+	getBody.then(showEnvironment).catch(onError);
 });

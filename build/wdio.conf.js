@@ -1,16 +1,10 @@
-const fs = require('fs');
 const path = require('path');
-const console = require('j1/console').create('test');
 const sable = require('sable');
 const promisify = require('j1/promisify');
 const glob = promisify(require('glob'));
-const stat = promisify(fs.stat, fs);
 
-const buildWebdriverScript = require('./build/buildWebdriverScript');
-const {
-	dest,
-	wdioDest
-} = require('./build/constants');
+const buildWebdriverScript = require('./buildWebdriverScript');
+const {dest} = require('./constants');
 
 /* eslint-disable no-process-env */
 const BROWSER = process.env.BROWSER ? process.env.BROWSER : 'phantomjs';
@@ -29,7 +23,7 @@ exports.config = {
 	// directory is where your package.json resides, so `wdio` will be called from there.
 	//
 	specs: [
-		wdioDest
+		path.join(dest, 'wdio.js')
 	],
 	// Patterns to exclude.
 	// exclude: [
@@ -172,22 +166,7 @@ exports.config = {
 		]);
 		server = httpServer;
 		const {port} = server.address();
-		const validFiles = (await Promise.all(files.map((file) => {
-			return stat(file)
-			.then(({size}) => {
-				return {
-					file,
-					size
-				};
-			});
-		})))
-		.filter(({size}) => {
-			return 0 < size;
-		})
-		.map(({file}) => {
-			return file;
-		});
-		await buildWebdriverScript(validFiles, port);
+		return buildWebdriverScript(port);
 	},
 	//
 	// Gets executed just before initialising the webdriver session and test framework. It allows you

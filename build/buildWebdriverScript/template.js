@@ -1,4 +1,4 @@
-/* global browser, $$ */
+/* global browser */
 const chalk = require('chalk');
 const console = require('j1/console').create('wdio');
 

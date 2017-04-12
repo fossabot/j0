@@ -1,5 +1,3 @@
-import getElementById from '../dom/getElementById';
-
 function tests(fetch, name) {
 
 	describe(name, function () {
@@ -15,8 +13,7 @@ function tests(fetch, name) {
 		});
 
 		it('should get json', function () {
-			const root = getElementById('root').textContent;
-			return fetch(`${root}/staticFiles/test.json`)
+			return fetch('test.json')
 			.then((response) => {
 				return response.json();
 			})
