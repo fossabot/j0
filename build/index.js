@@ -7,6 +7,7 @@ const leftpad = require('j1/leftpad');
 const glob = promisify(require('glob'));
 
 const buildHTML = require('./buildHTML');
+const buildSiteMap = require('./buildSiteMap');
 const copyAssets = require('./copyAssets');
 const {
 	projectRoot,
@@ -32,7 +33,12 @@ function buildInOrder(modulePaths) {
 			return build();
 		}
 	}
-	return build();
+	const workers = [];
+	const workerCount = 3;
+	while (workers.length < workerCount) {
+		workers.push(build());
+	}
+	return Promise.all(workers);
 }
 
 async function start() {
@@ -46,6 +52,7 @@ async function start() {
 	});
 	console.info(`Found ${modulePaths.length} test scripts`);
 	await buildInOrder(modulePaths);
+	await buildSiteMap();
 	if (serverMode) {
 		sable({
 			documentRoot: dest,
