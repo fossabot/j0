@@ -2,8 +2,6 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 (function (global, factory) {
@@ -11,127 +9,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 })(undefined, function () {
 	'use strict';
 
-	var createNavigation = function () {
-		var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-			var root, response, tree, rootBranch, parseBranch, nav;
-			return regeneratorRuntime.wrap(function _callee$(_context) {
-				while (1) {
-					switch (_context.prev = _context.next) {
-						case 0:
-							parseBranch = function parseBranch(parent, name, base) {
-								var childElements = [];
-								forEachKey(parent, function (branch, key) {
-									push(childElements, parseBranch(branch, key, base ? base + '/' + name : name));
-								});
-								var ul = 0 < childElements.length ? {
-									t: 'ul',
-									c: childElements
-								} : null;
-								return name ? {
-									t: 'li',
-									c: [{
-										t: 'a',
-										a: [['href', base ? base + '/' + name : name]],
-										c: [name]
-									}, ul]
-								} : ul;
-							};
+	function tagName() {
+		var node = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var name = node.tagName;
 
-							root = getTextContent(getElementById('root'));
-							_context.next = 4;
-							return fetch(root + '/sitemap.json');
-
-						case 4:
-							response = _context.sent;
-							_context.next = 7;
-							return response.json();
-
-						case 7:
-							tree = _context.sent;
-							rootBranch = reduce(location.pathname.replace(/^\/|\/$/g, '').split('/'), function (parent, name) {
-								return name ? parent[name] : parent;
-							}, tree);
-							nav = parseBranch(rootBranch, '', '');
-
-							if (nav) {
-								insertAfter(createElement(nav), getElementById('title'));
-							}
-
-						case 11:
-						case 'end':
-							return _context.stop();
-					}
-				}
-			}, _callee, this);
-		}));
-
-		return function createNavigation() {
-			return _ref.apply(this, arguments);
-		};
-	}();
-
-	var INTERVAL = 100;
-
-	var getBody = new Promise(function (resolve) {
-		function get() {
-			var _document = document,
-			    body = _document.body;
-
-			if (body) {
-				resolve(body);
-			} else {
-				setTimeout(get, INTERVAL);
-			}
-		}
-		get();
-	});
-
-	function onError(error) {
-		onError.listener(error);
-	}
-
-	onError.listener = function (error) {
-		console.error(error);
-	};
-
-	function parentNode(node) {
-		return node.parentNode;
-	}
-
-	function insertBefore(newNode, referenceNode) {
-		var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode(referenceNode);
-
-		return parent.insertBefore(newNode, referenceNode);
-	}
-
-	function nextSibling(element) {
-		return element.nextSibling;
-	}
-
-	function firstChild(element) {
-		return element.firstChild;
-	}
-
-	function insertAfter(newNode, referenceNode, parentNode) {
-		return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
-	}
-
-	function querySelectorAll(selectors) {
-		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-		return element.querySelector(selectors);
-	}
-
-	function getElementById(id, element) {
-		return querySelectorAll('[id=\'' + id + '\']', element);
-	}
-
-	function getTextContent(node) {
-		return node ? node.textContent : '';
-	}
-
-	function appendChild(parentNode, newNode) {
-		parentNode.appendChild(newNode);
+		return name ? name.toLowerCase() : name;
 	}
 
 	function isString(x) {
@@ -148,6 +30,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		}
 
 		element.setAttribute(attrName, value.join(' '));
+	}
+
+	function appendChild(parentNode, newNode) {
+		parentNode.appendChild(newNode);
 	}
 
 	var key = Symbol('events');
@@ -300,66 +186,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		return processTace(data);
 	}
 
-	function reduce(iterable, fn) {
-		var initialValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-		var thisArg = arguments[3];
+	describe('dom/tagName', function () {
 
-		var result = initialValue;
-		forEach(iterable, function (item, index) {
-			result = fn.call(thisArg, result, item, index, iterable);
+		it('should return a tagName', function () {
+			var element = createElement();
+			var expected = 'div';
+			assert.equal(tagName(element), expected);
 		});
-		return result;
-	}
-
-	function forEachKey(obj, fn, thisArg) {
-		for (var _key3 in obj) {
-			if (obj.hasOwnProperty(_key3)) {
-				if (fn.call(thisArg, obj[_key3], _key3, obj)) {
-					return;
-				}
-			}
-		}
-	}
-
-	/* global chai */
-	var _window = window,
-	    mocha = _window.mocha;
-
-
-	function startMocha() {
-		mocha.run().once('end', function () {
-			var className = 0 < this.stats.failures ? 'failed' : 'passed';
-			document.body.classList.add('done');
-			document.body.classList.add(className);
-			document.title += '[' + className + ']';
-		});
-	}
-
-	function showEnvironment() {
-		var environment = getElementById('environment');
-		forEach(Object.keys(navigator.constructor.prototype), function (key) {
-			var value = navigator[key];
-			appendChild(environment, createElement({
-				t: 'tr',
-				a: [['class', typeof value === 'undefined' ? 'undefined' : _typeof(value)]],
-				c: [{
-					t: 'th',
-					c: [key]
-				}, {
-					t: 'td',
-					c: [value]
-				}]
-			}));
-		});
-	}
-
-	if (mocha) {
-		window.assert = chai.assert;
-		mocha.setup('bdd');
-		window.start = startMocha;
-	}
-
-	getBody.then(function () {
-		return Promise.all([mocha && showEnvironment(), createNavigation()]);
-	}).catch(onError);
+	});
 });

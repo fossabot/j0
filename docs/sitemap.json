@@ -1,0 +1,203 @@
+{
+	"Array": {
+		"@iterator": {},
+		"every": {},
+		"filter": {},
+		"find": {},
+		"findIndex": {},
+		"forEach": {},
+		"from": {},
+		"includes": {},
+		"isArray": {},
+		"join": {},
+		"last": {},
+		"map": {},
+		"of": {},
+		"push": {},
+		"reduce": {},
+		"shift": {},
+		"slice": {},
+		"splice": {}
+	},
+	"ArrayBuffer": {
+		"toString": {}
+	},
+	"Blob": {},
+	"Body": {
+		"j0": {}
+	},
+	"Boolean": {},
+	"Canvas": {
+		"getContext": {}
+	},
+	"CustomEvent": {},
+	"DOMParser": {},
+	"DataView": {},
+	"Date": {
+		"format": {}
+	},
+	"Error": {},
+	"FileReader": {
+		"promisify": {},
+		"readBlob": {}
+	},
+	"FormData": {
+		"parse": {}
+	},
+	"HTMLCollection": {
+		"@iterator": {}
+	},
+	"Headers": {
+		"j0": {},
+		"parse": {}
+	},
+	"JSON": {
+		"parse": {},
+		"stringify": {}
+	},
+	"Map": {
+		"@iterator": {},
+		"j0": {}
+	},
+	"Math": {
+		"clamp": {},
+		"cubicBezier": {}
+	},
+	"NamedNodeMap": {
+		"@iterator": {}
+	},
+	"Node": {
+		"nextSibling": {},
+		"previousSibling": {}
+	},
+	"NodeList": {
+		"@iterator": {}
+	},
+	"Number": {
+		"MAX_SAFE_INTEGER": {},
+		"toOrdinalString": {}
+	},
+	"Object": {
+		"forEachKey": {},
+		"toString": {}
+	},
+	"Promise": {
+		"j0": {}
+	},
+	"Request": {
+		"j0": {}
+	},
+	"Response": {
+		"j0": {}
+	},
+	"Set": {
+		"@iterator": {},
+		"j0": {}
+	},
+	"String": {
+		"leftpad": {},
+		"polyfill": {},
+		"repeat": {},
+		"toLowerCase": {},
+		"trim": {}
+	},
+	"StringList": {},
+	"Symbol": {
+		"iterator": {},
+		"polyfill": {}
+	},
+	"TypeError": {},
+	"TypedArray": {
+		"Float32Array": {},
+		"Float64Array": {},
+		"Int16Array": {},
+		"Int32Array": {},
+		"Int8Array": {},
+		"Uint16Array": {},
+		"Uint32Array": {},
+		"Uint8Array": {},
+		"Uint8ClampedArray": {}
+	},
+	"URLSearchParams": {
+		"j0": {}
+	},
+	"XMLHttpRequest": {},
+	"cancelAnimationFrame": {},
+	"clearTimeout": {},
+	"debounce": {},
+	"decodeURIComponent": {},
+	"document": {},
+	"dom": {
+		"addClass": {},
+		"addEventListener": {},
+		"appendChild": {},
+		"childNodes": {},
+		"children": {},
+		"cloneNode": {},
+		"createElement": {},
+		"empty": {},
+		"firstChild": {},
+		"getAttribute": {},
+		"getBoundingClientRect": {},
+		"getElementById": {},
+		"getElementsByClassName": {},
+		"getEventListeners": {},
+		"getScrollY": {},
+		"getTextContent": {},
+		"hasClass": {},
+		"hasEventListener": {},
+		"insertAfter": {},
+		"insertBefore": {},
+		"nextSibling": {},
+		"parentNode": {},
+		"prependChild": {},
+		"previousSibling": {},
+		"querySelector": {},
+		"querySelectorAll": {},
+		"removeAttribute": {},
+		"removeChild": {},
+		"removeClass": {},
+		"removeEventListener": {},
+		"setAttribute": {},
+		"setStyle": {},
+		"setTextContent": {},
+		"tagName": {},
+		"toggleClass": {},
+		"trigger": {}
+	},
+	"encodeURIComponent": {},
+	"fetch": {
+		"j0": {}
+	},
+	"getBody": {},
+	"getComputedStyle": {},
+	"history": {},
+	"innerHeight": {},
+	"innerWidth": {},
+	"isArray": {},
+	"isArrayBufferView": {},
+	"isFunction": {},
+	"isInstanceOf": {},
+	"isNode": {},
+	"isNumber": {},
+	"isString": {},
+	"isUndefined": {},
+	"location": {},
+	"navigator": {},
+	"noop": {
+		"true": {}
+	},
+	"onError": {},
+	"parseInt": {},
+	"polyfill": {},
+	"postMessage": {},
+	"requestAnimationFrame": {},
+	"scrollBy": {},
+	"scrollTo": {},
+	"scrollX": {},
+	"scrollY": {},
+	"setImmediate": {},
+	"setTimeout": {},
+	"throttle": {},
+	"window": {}
+}

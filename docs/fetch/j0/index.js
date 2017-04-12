@@ -748,7 +748,11 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 				xhr.withCredentials = true;
 			}
 			xhr.responseType = 'blob';
-			forEach(request.headers, function (value, name) {
+			forEach(request.headers, function (_ref14) {
+				var _ref15 = _slicedToArray(_ref14, 2),
+				    name = _ref15[0],
+				    value = _ref15[1];
+
 				xhr.setRequestHeader(name, value);
 			});
 			xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);

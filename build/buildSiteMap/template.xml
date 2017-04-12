@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:j0="https://kei-ito.github.io/j0/schema">
-	<url>
-		<loc>https://kei-ito.github.io/j0/</loc>
-	</url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {{#modules}}
 	<url>
-		<loc>https://kei-ito.github.io/j0/{{path}}/</loc>
-		<j0:name>{{path}}</j0:name>
+		<loc>https://kei-ito.github.io/j0/{{path}}</loc>
 	</url>{{/modules}}
 </urlset>

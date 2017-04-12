@@ -1,6 +1,5 @@
 const path = require('path');
 const mu = require('mu2');
-const console = require('j1/console').create('buildWebdriverScript');
 const writeFile = require('j1/writeFile');
 const promisify = require('j1/promisify');
 const glob = promisify(require('glob'));
@@ -19,7 +18,6 @@ async function buildWebdriverScript(port) {
 		})
 	};
 	const stream = mu.compileAndRender(path.join(__dirname, 'template.js'), context);
-	stream.on('error', console.onError);
 	return writeFile(path.join(dest, 'wdio.js'), stream);
 }
 

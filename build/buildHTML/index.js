@@ -1,12 +1,12 @@
 const path = require('path');
 const paze = require('paze');
-const console = require('j1/console').create('buildHTML');
 
 const {
 	projectRoot,
 	dest,
 	serverMode,
-	packageJSON
+	packageJSON,
+	message
 } = require('../constants');
 
 function wrapLine(line) {
@@ -50,7 +50,6 @@ function formatCode(code, linkSkip) {
 function buildHTML(modulePath) {
 	const testScriptPath = path.join(projectRoot, modulePath, 'test', 'index.js');
 	const moduleScriptPath = path.join(projectRoot, modulePath, 'index.mjs');
-	console.debug(modulePath);
 	return paze({
 		template: path.join(__dirname, 'template.html'),
 		src: moduleScriptPath,
@@ -59,6 +58,7 @@ function buildHTML(modulePath) {
 		dest: path.join(dest, modulePath, 'index.html'),
 		name: modulePath,
 		package: packageJSON,
+		message,
 		titleHTML: `${packageJSON.name}/${modulePath}`.split(path.sep)
 		.reverse()
 		.map((fragment, index) => {

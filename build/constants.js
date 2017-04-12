@@ -25,5 +25,11 @@ module.exports = {
 	targetDirectories,
 	serverMode,
 	dest,
-	format
+	format,
+	message: [
+		'j0 is free and open source software released under MIT license.',
+		`The latest version is ${packageJSON.version}.`,
+		'The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>.',
+		'If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.'
+	].join(' ')
 };

@@ -34,7 +34,7 @@ function buildInOrder(modulePaths) {
 		}
 	}
 	const workers = [];
-	const workerCount = 3;
+	const workerCount = 2;
 	while (workers.length < workerCount) {
 		workers.push(build());
 	}

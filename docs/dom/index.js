@@ -885,6 +885,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 		});
 	});
 
+	function tagName() {
+		var node = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var name = node.tagName;
+
+		return name ? name.toLowerCase() : name;
+	}
+
+	describe('dom/tagName', function () {
+
+		it('should return a tagName', function () {
+			var element = createElement();
+			var expected = 'div';
+			assert.equal(tagName(element), expected);
+		});
+	});
+
 	function toggleClass(element, className) {
 		return element.classList.toggle(className);
 	}

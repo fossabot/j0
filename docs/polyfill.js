@@ -2217,16 +2217,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				xhr.withCredentials = true;
 			}
 			xhr.responseType = 'blob';
-			_forEach(request.headers, function (value, name) {
+			_forEach(request.headers, function (_ref22) {
+				var _ref23 = _slicedToArray(_ref22, 2),
+				    name = _ref23[0],
+				    value = _ref23[1];
+
 				xhr.setRequestHeader(name, value);
 			});
 			xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
 		});
 	}
 
-	if (!window.fetch) {
-		window.fetch = fetch;
-	}
+	// if (!window.fetch) {
+	// 	window.fetch = j0Fetch;
+	// }
+	window.fetch = fetch;
 
 	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
 		return setTimeout(function () {

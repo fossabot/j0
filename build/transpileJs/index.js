@@ -38,13 +38,22 @@ async function transpileJS(scriptPath, destPath) {
 		options.dest = destPath;
 		options.format = format;
 		const watcher = rollupWatch(rollup, options);
-		watcher.on('event', function (event) {
-			if (event.error) {
-				console.error(`Failed to transpile ${relativeScriptPath}`);
-				console.error(event.error.stack);
-			}
+		return new Promise((resolve, reject) => {
+			let count = 0;
+			watcher.on('event', function ({code, error}) {
+				if (0 < count) {
+					if (error) {
+						console.error(`Failed to transpile ${relativeScriptPath}`);
+						console.error(error.stack);
+					}
+				} else if (error) {
+					reject(error);
+				} else if (code === 'BUILD_END') {
+					resolve();
+					count += 1;
+				}
+			});
 		});
-		return Promise.resolve(watcher);
 	}
 	const bundle = await rollup.rollup(options);
 	const {code} = bundle.generate({format: format});
