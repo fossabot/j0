@@ -338,12 +338,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'get', this).call(this, toLowerCase(name));
+				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 			}
 		}, {
-			key: 'getAll',
-			value: function getAll(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name));
+			key: 'entries',
+			value: function entries() {
+				var _this3 = this;
+
+				var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
+				var history = [];
+				return {
+					next: function next() {
+						while (1) {
+							var _iterator$next3 = iterator.next(),
+							    value = _iterator$next3.value,
+							    done = _iterator$next3.done;
+
+							var key = value && value[0];
+							if (done || history.indexOf(key) < 0) {
+								push(history, key);
+								return {
+									value: [key, _this3.get(key)],
+									done: done
+								};
+							}
+						}
+					}
+				};
 			}
 		}]);
 
@@ -390,17 +411,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var value2 = 'c';
 				headers.append(name, value1);
 				headers.append(name, value2);
-				assert.equal(headers.get(name), value1);
-			});
-
-			it('should have getAll()', function () {
-				var headers = new Headers();
-				var name = 'a';
-				var value1 = 'b';
-				var value2 = 'c';
-				headers.append(name, value1);
-				headers.append(name, value2);
-				assert.deepEqual(headers.getAll(name), [value1, value2]);
+				assert.equal(headers.get(name), value1 + ',' + value2);
 			});
 
 			it('should have delete()', function () {
@@ -426,16 +437,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var results = [];
 				var iterator = headers.entries();
 				while (1) {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+					var _iterator$next4 = iterator.next(),
+					    value = _iterator$next4.value,
+					    done = _iterator$next4.done;
 
 					if (done) {
 						break;
 					}
 					results[index++] = value;
 				}
-				assert.deepEqual(results, [[name, value1], [name, value2]]);
+				assert.deepEqual(results, [[name, value1 + ',' + value2]]);
 			});
 
 			it('should have values()', function () {
@@ -449,16 +460,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var results = [];
 				var iterator = headers.values();
 				while (1) {
-					var _iterator$next4 = iterator.next(),
-					    value = _iterator$next4.value,
-					    done = _iterator$next4.done;
+					var _iterator$next5 = iterator.next(),
+					    value = _iterator$next5.value,
+					    done = _iterator$next5.done;
 
 					if (done) {
 						break;
 					}
 					results[index++] = value;
 				}
-				assert.deepEqual(results, [value1, value2]);
+				assert.deepEqual(results, [value1 + ',' + value2]);
 			});
 		});
 	}

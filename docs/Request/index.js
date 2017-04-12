@@ -567,12 +567,33 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		}, {
 			key: 'get',
 			value: function get(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'get', this).call(this, toLowerCase(name));
+				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 			}
 		}, {
-			key: 'getAll',
-			value: function getAll(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name));
+			key: 'entries',
+			value: function entries() {
+				var _this3 = this;
+
+				var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
+				var history = [];
+				return {
+					next: function next() {
+						while (1) {
+							var _iterator$next3 = iterator.next(),
+							    value = _iterator$next3.value,
+							    done = _iterator$next3.done;
+
+							var key = value && value[0];
+							if (done || history.indexOf(key) < 0) {
+								push(history, key);
+								return {
+									value: [key, _this3.get(key)],
+									done: done
+								};
+							}
+						}
+					}
+				};
 			}
 		}]);
 
@@ -589,25 +610,25 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 			var body = init.body;
 
-			var _this3 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+			var _this4 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 			if (input instanceof Request$1) {
-				body = _this3.inheritFrom(input, body, init);
+				body = _this4.inheritFrom(input, body, init);
 			} else {
-				_this3.url = String(input);
+				_this4.url = String(input);
 			}
-			_this3.credentials = init.credentials || _this3.credentials || 'omit';
-			if (init.headers || !_this3.headers) {
-				_this3.headers = new Headers(init.headers);
+			_this4.credentials = init.credentials || _this4.credentials || 'omit';
+			if (init.headers || !_this4.headers) {
+				_this4.headers = new Headers(init.headers);
 			}
-			_this3.method = (init.method || _this3.method || 'GET').toUpperCase();
-			_this3.mode = init.mode || _this3.mode || null;
-			_this3.referrer = null;
-			if ((_this3.method === 'GET' || _this3.method === 'HEAD') && body) {
+			_this4.method = (init.method || _this4.method || 'GET').toUpperCase();
+			_this4.mode = init.mode || _this4.mode || null;
+			_this4.referrer = null;
+			if ((_this4.method === 'GET' || _this4.method === 'HEAD') && body) {
 				throw new TypeError('Body not allowed for GET or HEAD requests');
 			}
-			_this3.initBody(body);
-			return _this3;
+			_this4.initBody(body);
+			return _this4;
 		}
 
 		_createClass(Request$1, [{
@@ -647,7 +668,7 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 			it('should create a new instance', function () {
 				assert.doesNotThrow(function () {
-					return new Request();
+					return new Request('/');
 				});
 			});
 		});

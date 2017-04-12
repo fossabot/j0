@@ -571,12 +571,33 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		}, {
 			key: 'get',
 			value: function get(name) {
-				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'get', this).call(this, toLowerCase(name));
+				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 			}
 		}, {
-			key: 'getAll',
-			value: function getAll(name) {
-				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name));
+			key: 'entries',
+			value: function entries() {
+				var _this3 = this;
+
+				var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
+				var history = [];
+				return {
+					next: function next() {
+						while (1) {
+							var _iterator$next3 = iterator.next(),
+							    value = _iterator$next3.value,
+							    done = _iterator$next3.done;
+
+							var key = value && value[0];
+							if (done || history.indexOf(key) < 0) {
+								push(history, key);
+								return {
+									value: [key, _this3.get(key)],
+									done: done
+								};
+							}
+						}
+					}
+				};
 			}
 		}]);
 
@@ -593,25 +614,25 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 			var body = init.body;
 
-			var _this3 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+			var _this4 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 			if (input instanceof Request) {
-				body = _this3.inheritFrom(input, body, init);
+				body = _this4.inheritFrom(input, body, init);
 			} else {
-				_this3.url = String(input);
+				_this4.url = String(input);
 			}
-			_this3.credentials = init.credentials || _this3.credentials || 'omit';
-			if (init.headers || !_this3.headers) {
-				_this3.headers = new Headers$1(init.headers);
+			_this4.credentials = init.credentials || _this4.credentials || 'omit';
+			if (init.headers || !_this4.headers) {
+				_this4.headers = new Headers$1(init.headers);
 			}
-			_this3.method = (init.method || _this3.method || 'GET').toUpperCase();
-			_this3.mode = init.mode || _this3.mode || null;
-			_this3.referrer = null;
-			if ((_this3.method === 'GET' || _this3.method === 'HEAD') && body) {
+			_this4.method = (init.method || _this4.method || 'GET').toUpperCase();
+			_this4.mode = init.mode || _this4.mode || null;
+			_this4.referrer = null;
+			if ((_this4.method === 'GET' || _this4.method === 'HEAD') && body) {
 				throw new TypeError('Body not allowed for GET or HEAD requests');
 			}
-			_this3.initBody(body);
-			return _this3;
+			_this4.initBody(body);
+			return _this4;
 		}
 
 		_createClass(Request, [{
@@ -657,16 +678,16 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 			_classCallCheck(this, Response);
 
-			var _this4 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+			var _this5 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-			_this4.type = 'default';
-			_this4.status = 'status' in init ? init.status : minOkStatus;
-			_this4.ok = _this4.status >= minOkStatus && _this4.status < maxOkStatus;
-			_this4.statusText = 'statusText' in init ? init.statusText : 'OK';
-			_this4.headers = new Headers$1(init.headers);
-			_this4.url = init.url || '';
-			_this4.initBody(body);
-			return _this4;
+			_this5.type = 'default';
+			_this5.status = 'status' in init ? init.status : minOkStatus;
+			_this5.ok = _this5.status >= minOkStatus && _this5.status < maxOkStatus;
+			_this5.statusText = 'statusText' in init ? init.statusText : 'OK';
+			_this5.headers = new Headers$1(init.headers);
+			_this5.url = init.url || '';
+			_this5.initBody(body);
+			return _this5;
 		}
 
 		_createClass(Response, [{
@@ -759,6 +780,20 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		});
 	}
 
+	function querySelectorAll(selectors) {
+		var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+		return element.querySelector(selectors);
+	}
+
+	function getElementById(id, element) {
+		return querySelectorAll('[id=\'' + id + '\']', element);
+	}
+
+	function getTextContent(node) {
+		return node ? node.textContent : '';
+	}
+
 	function tests(fetch, name) {
 
 		describe(name, function () {
@@ -772,7 +807,7 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 			});
 
 			it('should get json', function () {
-				return fetch('test.json').then(function (response) {
+				return fetch(getTextContent(getElementById('root')) + '/fetch/test.json').then(function (response) {
 					return response.json();
 				}).then(function (data) {
 					assert.deepEqual(data, { a: 'b' });

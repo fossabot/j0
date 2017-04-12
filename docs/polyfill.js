@@ -1809,12 +1809,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get(name) {
-				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'get', this).call(this, toLowerCase(name));
+				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 			}
 		}, {
-			key: 'getAll',
-			value: function getAll(name) {
-				return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name));
+			key: 'entries',
+			value: function entries() {
+				var _this14 = this;
+
+				var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
+				var history = [];
+				return {
+					next: function next() {
+						while (1) {
+							var _iterator$next6 = iterator.next(),
+							    value = _iterator$next6.value,
+							    done = _iterator$next6.done;
+
+							var key = value && value[0];
+							if (done || history.indexOf(key) < 0) {
+								push(history, key);
+								return {
+									value: [key, _this14.get(key)],
+									done: done
+								};
+							}
+						}
+					}
+				};
 			}
 		}]);
 
@@ -2062,25 +2083,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			var body = init.body;
 
-			var _this14 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+			var _this15 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 			if (input instanceof Request) {
-				body = _this14.inheritFrom(input, body, init);
+				body = _this15.inheritFrom(input, body, init);
 			} else {
-				_this14.url = String(input);
+				_this15.url = String(input);
 			}
-			_this14.credentials = init.credentials || _this14.credentials || 'omit';
-			if (init.headers || !_this14.headers) {
-				_this14.headers = new Headers$1(init.headers);
+			_this15.credentials = init.credentials || _this15.credentials || 'omit';
+			if (init.headers || !_this15.headers) {
+				_this15.headers = new Headers$1(init.headers);
 			}
-			_this14.method = (init.method || _this14.method || 'GET').toUpperCase();
-			_this14.mode = init.mode || _this14.mode || null;
-			_this14.referrer = null;
-			if ((_this14.method === 'GET' || _this14.method === 'HEAD') && body) {
+			_this15.method = (init.method || _this15.method || 'GET').toUpperCase();
+			_this15.mode = init.mode || _this15.mode || null;
+			_this15.referrer = null;
+			if ((_this15.method === 'GET' || _this15.method === 'HEAD') && body) {
 				throw new TypeError('Body not allowed for GET or HEAD requests');
 			}
-			_this14.initBody(body);
-			return _this14;
+			_this15.initBody(body);
+			return _this15;
 		}
 
 		_createClass(Request, [{
@@ -2126,16 +2147,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			_classCallCheck(this, Response);
 
-			var _this15 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+			var _this16 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-			_this15.type = 'default';
-			_this15.status = 'status' in init ? init.status : minOkStatus;
-			_this15.ok = _this15.status >= minOkStatus && _this15.status < maxOkStatus;
-			_this15.statusText = 'statusText' in init ? init.statusText : 'OK';
-			_this15.headers = new Headers$1(init.headers);
-			_this15.url = init.url || '';
-			_this15.initBody(body);
-			return _this15;
+			_this16.type = 'default';
+			_this16.status = 'status' in init ? init.status : minOkStatus;
+			_this16.ok = _this16.status >= minOkStatus && _this16.status < maxOkStatus;
+			_this16.statusText = 'statusText' in init ? init.statusText : 'OK';
+			_this16.headers = new Headers$1(init.headers);
+			_this16.url = init.url || '';
+			_this16.initBody(body);
+			return _this16;
 		}
 
 		_createClass(Response, [{
@@ -2232,6 +2253,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	// 	window.fetch = j0Fetch;
 	// }
 	window.fetch = fetch;
+
+	if (!window.Body) {
+		window.Body = Body;
+	}
+
+	if (!window.Response) {
+		window.Response = Response;
+	}
+
+	if (!window.Request) {
+		window.Request = Request;
+	}
 
 	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
 		return setTimeout(function () {

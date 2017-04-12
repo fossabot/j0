@@ -4,7 +4,7 @@ function tests(Request, name) {
 
 		it('should create a new instance', function () {
 			assert.doesNotThrow(function () {
-				return new Request();
+				return new Request('/');
 			});
 		});
 

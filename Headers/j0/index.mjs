@@ -36,11 +36,30 @@ class Headers extends StringList {
 	}
 
 	get(name) {
-		return super.get(toLowerCase(name));
+		return super.getAll(toLowerCase(name)).join(',');
 	}
 
-	getAll(name) {
-		return super.getAll(toLowerCase(name));
+	entries() {
+		const iterator = super.entries();
+		const history = [];
+		return {
+			next: () => {
+				while (1) {
+					const {
+						value,
+						done
+					} = iterator.next();
+					const key = value && value[0];
+					if (done || history.indexOf(key) < 0) {
+						push(history, key);
+						return {
+							value: [key, this.get(key)],
+							done
+						};
+					}
+				}
+			}
+		};
 	}
 
 }

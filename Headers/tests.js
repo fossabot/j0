@@ -38,17 +38,7 @@ function tests(Headers, testName) {
 			const value2 = 'c';
 			headers.append(name, value1);
 			headers.append(name, value2);
-			assert.equal(headers.get(name), value1);
-		});
-
-		it('should have getAll()', function () {
-			const headers = new Headers();
-			const name = 'a';
-			const value1 = 'b';
-			const value2 = 'c';
-			headers.append(name, value1);
-			headers.append(name, value2);
-			assert.deepEqual(headers.getAll(name), [value1, value2]);
+			assert.equal(headers.get(name), `${value1},${value2}`);
 		});
 
 		it('should have delete()', function () {
@@ -81,8 +71,7 @@ function tests(Headers, testName) {
 				results[index++] = value;
 			}
 			assert.deepEqual(results, [
-				[name, value1],
-				[name, value2]
+				[name, `${value1},${value2}`]
 			]);
 		});
 
@@ -104,8 +93,7 @@ function tests(Headers, testName) {
 				results[index++] = value;
 			}
 			assert.deepEqual(results, [
-				value1,
-				value2
+				`${value1},${value2}`
 			]);
 		});
 

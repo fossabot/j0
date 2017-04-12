@@ -567,12 +567,33 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 		}, {
 			key: 'get',
 			value: function get(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'get', this).call(this, toLowerCase(name));
+				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 			}
 		}, {
-			key: 'getAll',
-			value: function getAll(name) {
-				return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name));
+			key: 'entries',
+			value: function entries() {
+				var _this3 = this;
+
+				var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
+				var history = [];
+				return {
+					next: function next() {
+						while (1) {
+							var _iterator$next3 = iterator.next(),
+							    value = _iterator$next3.value,
+							    done = _iterator$next3.done;
+
+							var key = value && value[0];
+							if (done || history.indexOf(key) < 0) {
+								push(history, key);
+								return {
+									value: [key, _this3.get(key)],
+									done: done
+								};
+							}
+						}
+					}
+				};
 			}
 		}]);
 
@@ -591,16 +612,16 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 			_classCallCheck(this, Response);
 
-			var _this3 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+			var _this4 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-			_this3.type = 'default';
-			_this3.status = 'status' in init ? init.status : minOkStatus;
-			_this3.ok = _this3.status >= minOkStatus && _this3.status < maxOkStatus;
-			_this3.statusText = 'statusText' in init ? init.statusText : 'OK';
-			_this3.headers = new Headers(init.headers);
-			_this3.url = init.url || '';
-			_this3.initBody(body);
-			return _this3;
+			_this4.type = 'default';
+			_this4.status = 'status' in init ? init.status : minOkStatus;
+			_this4.ok = _this4.status >= minOkStatus && _this4.status < maxOkStatus;
+			_this4.statusText = 'statusText' in init ? init.statusText : 'OK';
+			_this4.headers = new Headers(init.headers);
+			_this4.url = init.url || '';
+			_this4.initBody(body);
+			return _this4;
 		}
 
 		_createClass(Response, [{

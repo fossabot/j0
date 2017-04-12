@@ -1,3 +1,6 @@
+import getElementById from '../dom/getElementById';
+import getTextContent from '../dom/getTextContent';
+
 function tests(fetch, name) {
 
 	describe(name, function () {
@@ -13,7 +16,7 @@ function tests(fetch, name) {
 		});
 
 		it('should get json', function () {
-			return fetch('test.json')
+			return fetch(`${getTextContent(getElementById('root'))}/fetch/test.json`)
 			.then((response) => {
 				return response.json();
 			})
