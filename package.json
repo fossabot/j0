@@ -36,17 +36,16 @@
     "power-assert": "^1.4.2",
     "regenerator-runtime": "^0.10.3",
     "rollup": "^0.41.4",
-    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-glob-import": "0.0.2",
-    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^3.2.2",
     "sable": "0.0.21",
     "selenium-standalone": "^6.0.1",
     "stylus": "^0.54.5",
-    "wdio-junit-reporter": "^0.2.0",
     "wdio-mocha-framework": "^0.5.9",
     "wdio-selenium-standalone-service": "0.0.8",
-    "wdio-spec-reporter": "0.0.5",
+    "wdio-spec-reporter": "^0.1.0",
     "webdriverio": "^4.6.2"
   }
 }

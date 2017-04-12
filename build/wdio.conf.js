@@ -1,7 +1,5 @@
 const path = require('path');
 const sable = require('sable');
-const promisify = require('j1/promisify');
-const glob = promisify(require('glob'));
 
 const buildWebdriverScript = require('./buildWebdriverScript');
 const {dest} = require('./constants');
@@ -134,13 +132,13 @@ exports.config = {
 	// Test reporter for stdout.
 	// The only one supported by default is 'dot'
 	// see also: http://webdriver.io/guide/testrunner/reporters.html
-	reporters: ['spec', 'junit'],
-	reporterOptions: {
-		outputDir: './__results',
-		outputFileFormat: function (opts) {
-			return `results-${opts.cid}.${opts.capabilities}.xml`;
-		}
-	},
+	reporters: ['spec'],
+	// reporterOptions: {
+	// 	outputDir: './__results',
+	// 	outputFileFormat: function (opts) {
+	// 		return `results-${opts.cid}.${opts.capabilities}.xml`;
+	// 	}
+	// },
 	//
 	// Options to be passed to Mocha.
 	// See the full list at http://mochajs.org/
@@ -156,17 +154,12 @@ exports.config = {
 	//
 	// Gets executed once before all workers get launched.
 	onPrepare: async function () {
-		const [httpServer, files] = await Promise.all([
-			sable({
-				documentRoot: dest,
-				noWatch: true,
-				quiet: true
-			}),
-			glob(path.join(dest, '**', 'index.test.js'))
-		]);
-		server = httpServer;
-		const {port} = server.address();
-		return buildWebdriverScript(port);
+		server = await sable({
+			documentRoot: dest,
+			noWatch: true,
+			quiet: true
+		});
+		return buildWebdriverScript(server.address().port);
 	},
 	//
 	// Gets executed just before initialising the webdriver session and test framework. It allows you
