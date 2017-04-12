@@ -31,7 +31,7 @@ function fetch(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		forEach(request.headers, function (value, name) {
+		forEach(request.headers, function ([name, value]) {
 			xhr.setRequestHeader(name, value);
 		});
 		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
