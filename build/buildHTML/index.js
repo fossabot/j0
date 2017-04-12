@@ -6,7 +6,8 @@ const {
 	dest,
 	serverMode,
 	packageJSON,
-	message
+	message,
+	ga
 } = require('../constants');
 
 function wrapLine(line) {
@@ -59,6 +60,7 @@ function buildHTML(modulePath) {
 		name: modulePath,
 		package: packageJSON,
 		message,
+		ga,
 		titleHTML: `${packageJSON.name}/${modulePath}`.split(path.sep)
 		.reverse()
 		.map((fragment, index) => {
