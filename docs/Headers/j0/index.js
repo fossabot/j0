@@ -391,7 +391,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var value = 'b';
 				headers.append(name, value);
 				headers.append(name, value);
-				assert.deepEqual(headers.getAll(name), [value, value]);
+				assert.deepEqual(headers.get(name), [value, value].join(','));
 			});
 
 			it('should have set()', function () {
@@ -401,7 +401,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var value2 = 'c';
 				headers.set(name, value1);
 				headers.set(name, value2);
-				assert.deepEqual(headers.getAll(name), [value2]);
+				assert.deepEqual(headers.get(name), value2);
 			});
 
 			it('should have get()', function () {
