@@ -1,18 +1,12 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+describe('Float64Array', function () {
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
-
-	describe('Float64Array', function () {
-
-		it('should create a new array', function () {
-			assert.doesNotThrow(function () {
-				return new Float64Array(1);
-			});
+	it('should create a new array', function () {
+		assert.doesNotThrow(function () {
+			return new Float64Array(1);
 		});
 	});
 });
+}())

@@ -9,7 +9,7 @@ class Request extends Body {
 		if (input instanceof Request) {
 			body = this.inheritFrom(input, body, init);
 		} else {
-			this.url = String(input);
+			this.url = `${input}`;
 		}
 		this.credentials = init.credentials || this.credentials || 'omit';
 		if (init.headers || !this.headers) {

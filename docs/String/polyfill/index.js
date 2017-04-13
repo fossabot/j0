@@ -1,16 +1,10 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+describe('String/polyfill', function () {
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
-
-	describe('String/polyfill', function () {
-
-		it('should have repeat', function () {
-			assert.equal('a'.repeat(2), 'aa');
-		});
+	it('should have repeat', function () {
+		assert.equal('a'.repeat(2), 'aa');
 	});
 });
+}())

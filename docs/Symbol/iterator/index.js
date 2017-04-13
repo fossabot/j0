@@ -1,22 +1,16 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var iteratorKey = Symbol.iterator;
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
 
-	var iteratorKey = Symbol.iterator;
+describe('Symbol/iterator', function () {
 
-	function isUndefined(x) {
-		return typeof x === 'undefined';
-	}
-
-	describe('Symbol/iterator', function () {
-
-		it('should not be undefined', function () {
-			assert.equal(isUndefined(iteratorKey), false);
-		});
+	it('should not be undefined', function () {
+		assert.equal(isUndefined(iteratorKey), false);
 	});
 });
+}())

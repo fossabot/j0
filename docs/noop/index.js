@@ -1,38 +1,32 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function noopTrue() {
+	return true;
+}
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
+describe('noop/true', function () {
 
-	function noopTrue() {
-		return true;
-	}
-
-	describe('noop/true', function () {
-
-		it('should return true', function () {
-			assert.equal(noopTrue(false), true);
-		});
-	});
-
-	function noop(x) {
-		return x;
-	}
-
-	describe('noop', function () {
-
-		it('should be callable', function () {
-			assert.doesNotThrow(function () {
-				noop();
-			});
-		});
-
-		it('should return the first argument', function () {
-			var data = new Date();
-			assert.equal(noop(data), data);
-		});
+	it('should return true', function () {
+		assert.equal(noopTrue(false), true);
 	});
 });
+
+function noop(x) {
+	return x;
+}
+
+describe('noop', function () {
+
+	it('should be callable', function () {
+		assert.doesNotThrow(function () {
+			noop();
+		});
+	});
+
+	it('should return the first argument', function () {
+		var data = new Date();
+		assert.equal(noop(data), data);
+	});
+});
+}())

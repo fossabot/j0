@@ -16,7 +16,7 @@ const targetDirectories = fs.readdirSync(projectRoot)
 /* eslint-enable no-sync */
 const serverMode = process.argv.includes('--server');
 const dest = path.join(projectRoot, 'docs');
-const format = 'umd';
+const format = 'es';
 
 module.exports = {
 	packageJSON,

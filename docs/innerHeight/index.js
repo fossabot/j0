@@ -1,20 +1,14 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function innerHeight() {
+	return window.innerHeight;
+}
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
+describe('innerHeight', function () {
 
-	function innerHeight() {
-		return window.innerHeight;
-	}
-
-	describe('innerHeight', function () {
-
-		it('should return a non-negative integer', function () {
-			assert.equal(0 <= innerHeight(), true);
-		});
+	it('should return a non-negative integer', function () {
+		assert.equal(0 <= innerHeight(), true);
 	});
 });
+}())

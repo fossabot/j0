@@ -15,8 +15,9 @@
     "frontend"
   ],
   "scripts": {
-    "server": "node build --server",
-    "build": "node build",
+    "start": "node build --server",
+    "polyfill": "uglifyjs docs/polyfill.js --mangle --compless --output polyfill.min.js",
+    "build": "node build && npm run polyfill",
     "test": "wdio build/wdio.conf.js"
   },
   "devDependencies": {

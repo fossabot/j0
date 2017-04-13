@@ -1,18 +1,12 @@
+(function(){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var parse = JSON.parse;
 
-(function (global, factory) {
-	(typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-	'use strict';
+describe('parse', function () {
 
-	var parse = JSON.parse;
-
-	describe('parse', function () {
-
-		it('should parse JSON string', function () {
-			assert.deepEqual(parse('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
-		});
+	it('should parse JSON string', function () {
+		assert.deepEqual(parse('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
 	});
 });
+}())

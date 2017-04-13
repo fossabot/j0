@@ -7,6 +7,7 @@ const commonjs = require('rollup-plugin-commonjs');
 const babel = require('babel-core');
 const console = require('j1/console').create('transpileJS');
 const writeFile = require('j1/writeFile');
+// const UglifyJS = require('uglify-js');
 
 const {
 	projectRoot,
@@ -18,7 +19,15 @@ function minify() {
 	return {
 		transformBundle: function (code) {
 			const {code: babeledCode} = babel.transform(code, {presets: ['latest']});
-			return babeledCode;
+			const wrappedCode = `(function(){\n${babeledCode}\n}())`;
+			return wrappedCode;
+			// const {code: minifiedCode} = UglifyJS.minify(wrappedCode, {
+			// 	fromString: true,
+			// 	acorn: true,
+			// 	mangle: {toplevel: false},
+			// 	compress: true
+			// });
+			// return minifiedCode;
 		}
 	};
 }
