@@ -4312,6 +4312,14 @@ spec$1(J0Promise, 'Promise/j0');
 
 spec$1(Promise, 'Promise');
 
+describe('RegExp', function () {
+
+	it('should create a regular expression', function () {
+		var exp = new RegExp('Hello', 'gi');
+		assert.deepEqual('HeLLohellO'.match(exp), ['HeLLo', 'hellO']);
+	});
+});
+
 function tests$9(Request, name) {
 
 	describe(name, function () {
