@@ -1,0 +1,70 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>j0/localStorage</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
+<link href="../page.css" rel="stylesheet">
+<script id="root" type="text/plain">..</script>
+<h1 id="title"><a href="../">j0</a>/localStorage<span class="version">0.2.2</span></h1>
+<h2>Source</h2>
+<section class="Code">
+	<pre><span class="linenum"></span><span class="name">let</span> <span class="name">storage</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="try">try</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">storage</span> <span class="_3d">=</span> <span class="name">localStorage</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">storage</span><span class="_2e">.</span><span class="name">is</span> <span class="_3d">=</span> <span class="string">'available'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span> <span class="catch">catch</span> <span class="_28">(</span><span class="name">err</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">storage</span> <span class="_3d">=</span> <span class="num">0</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="if">if</span> <span class="_28">(</span><span class="name">storage</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">storage</span><span class="_2e">.</span><span class="name">removeItem</span><span class="_28">(</span><span class="string">'is'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span> <span class="else">else</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">storage</span> <span class="_3d">=</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">removeItem</span><span class="_3a">:</span> <span class="function">function</span> <span class="_28">(</span><span class="name">key</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="indent">	</span><span class="delete">delete</span> <span class="this">this</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="_7d">}</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span><span class="export">export</span> <span class="default">default</span> <span class="name">storage</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/localStorage/index.mjs" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+
+<h2>Tests</h2>
+<section class="TestCode">
+	<pre><span class="linenum"></span><span class="import">import</span> <span class="name">localStorage</span> <span class="name">from</span> <span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span> <span class="name">Date</span> <span class="name">from</span> <a href="../Date"><span class="string"><span class="string">'../../Date'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="const">const</span> <span class="name">key</span> <span class="_3d">=</span> <span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'localStorage'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should be writable/readable'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">localStorage</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span> <span class="_3d">=</span> <span class="name">key</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">localStorage</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_2c">,</span> <span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="indent">	</span><span class="name">it</span><span class="_28">(</span><span class="string">'should remove data'</span><span class="_2c">,</span> <span class="function">function</span> <span class="_28">(</span><span class="_29">)</span> <span class="_7b">{</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">localStorage</span><span class="_2e">.</span><span class="name">removeItem</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="indent">	</span><span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">localStorage</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="indent">	</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/localStorage/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+</section>
+<h2>Result</h2>
+<div id="mocha"></div>
+<h2>Your Environment</h2>
+<table><tbody id="environment"></tbody></table>
+
+<h2>About</h2>
+<footer>
+	<p>j0 is free and open source software released under MIT license. The latest version is 0.2.2. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
+</footer>
+<a class="TestResult" href="#mocha"></a>
+<script src="../polyfill.js"></script>
+<script src="https://use.fontawesome.com/9701068490.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
+<script src="../page.js"></script>
+<script src="index.js"></script>
+<script>start()</script>
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");ga("create", "UA-56327919-7", "auto");ga("send", "pageview");</script>
