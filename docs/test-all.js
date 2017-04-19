@@ -3947,6 +3947,17 @@ describe('postMessage', function () {
 	});
 });
 
+function preventDefault(event) {
+	event.preventDefault();
+}
+
+describe('preventDefault', function () {
+
+	it('should be a function', function () {
+		assert.equal(isFunction(preventDefault), true);
+	});
+});
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
 if (!window.immediateId) {
@@ -4720,6 +4731,17 @@ describe('setTimeout', function () {
 			var elapsed = Date.now() - start;
 			assert.equal(WAIT$1 * MARGIN < elapsed, true);
 		});
+	});
+});
+
+function stopPropagation(event) {
+	event.stopPropagation();
+}
+
+describe('stopPropagation', function () {
+
+	it('should be a function', function () {
+		assert.equal(isFunction(stopPropagation), true);
 	});
 });
 

@@ -195,6 +195,7 @@
 	"parseInt": {},
 	"polyfill": {},
 	"postMessage": {},
+	"preventDefault": {},
 	"requestAnimationFrame": {},
 	"scrollBy": {},
 	"scrollTo": {},
@@ -202,6 +203,7 @@
 	"scrollY": {},
 	"setImmediate": {},
 	"setTimeout": {},
+	"stopPropagation": {},
 	"throttle": {},
 	"window": {}
 }

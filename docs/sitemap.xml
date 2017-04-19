@@ -503,6 +503,9 @@
 		<loc>https://kei-ito.github.io/j0/postMessage/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/preventDefault/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/requestAnimationFrame/</loc>
 	</url>
 	<url>
@@ -522,6 +525,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/setTimeout/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/stopPropagation/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/throttle/</loc>
