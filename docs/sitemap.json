@@ -185,6 +185,7 @@
 	"isNumber": {},
 	"isString": {},
 	"isUndefined": {},
+	"localStorage": {},
 	"location": {},
 	"navigator": {},
 	"noop": {
