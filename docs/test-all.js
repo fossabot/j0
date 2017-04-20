@@ -3238,7 +3238,7 @@ describe('isUndefined', function () {
 	});
 });
 
-describe('parse', function () {
+describe('JSON/parse', function () {
 
 	it('should parse JSON string', function () {
 		assert.deepEqual(parse$2('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
@@ -3811,6 +3811,44 @@ describe('Number/toOrdinalString', function () {
 			}
 		}
 	}
+});
+
+function clone(obj) {
+	return parse$2(stringify(obj));
+}
+
+describe('Object/clone', function () {
+
+	it('should clone an object', function () {
+		var data = { a: 1 };
+		var actual = clone(data);
+		var expected = { a: 1 };
+		assert.deepEqual(actual, expected);
+	});
+
+	it('should remove functions', function () {
+		var data = {
+			a: noop,
+			b: 0,
+			c: noop
+		};
+		var actual = clone(data);
+		var expected = { b: 0 };
+		assert.deepEqual(actual, expected);
+	});
+
+	it('should isolate original', function () {
+		var data = {
+			a: noop,
+			b: {},
+			c: noop
+		};
+		var actual = clone(data);
+		actual.b.a = 0;
+		var expected = { b: { a: 0 } };
+		assert.deepEqual(actual, expected);
+		assert.deepEqual(data.b, {});
+	});
 });
 
 describe('Object/forEachKey', function () {

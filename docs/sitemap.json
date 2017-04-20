@@ -79,6 +79,7 @@
 		"toOrdinalString": {}
 	},
 	"Object": {
+		"clone": {},
 		"forEachKey": {},
 		"keys": {},
 		"toString": {}
