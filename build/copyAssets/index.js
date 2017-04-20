@@ -22,6 +22,7 @@ async function copyAssets(dirPath, baseDir = constants.dest) {
 		case '.styl':
 			return transpileStyl(filePath, changeExt(destPath, '.css'));
 		case '.html':
+		case '.css':
 			return writeFile(destPath, mu.compileAndRender(filePath, constants));
 		default:
 			return cp(filePath, destPath);
