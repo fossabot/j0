@@ -3813,6 +3813,42 @@ describe('Number/toOrdinalString', function () {
 	}
 });
 
+function assign(target) {
+	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
+		sources[_key8 - 1] = arguments[_key8];
+	}
+
+	_forEach(sources, function (source) {
+		forEachKey(source, function (value, key) {
+			target[key] = value;
+		});
+	});
+	return target;
+}
+
+describe('Object/assign', function () {
+	it('should assign values', function () {
+		var target = {
+			a: 0,
+			b: 0,
+			c: 0
+		};
+		var src1 = { b: 1 };
+		var src2 = {
+			b: 2,
+			c: 3
+		};
+		var returnValue = assign(target, src1, src2);
+		var expected = {
+			a: 0,
+			b: 2,
+			c: 3
+		};
+		assert.equal(target, returnValue);
+		assert.deepEqual(returnValue, expected);
+	});
+});
+
 function clone(obj) {
 	return parse$2(stringify(obj));
 }
@@ -3860,8 +3896,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len6 = arguments.length, args = Array(_len6), _key8 = 0; _key8 < _len6; _key8++) {
-				args[_key8] = arguments[_key8];
+			for (var _len7 = arguments.length, args = Array(_len7), _key9 = 0; _key9 < _len7; _key9++) {
+				args[_key9] = arguments[_key9];
 			}
 
 			push(results, args);
@@ -3876,8 +3912,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len7 = arguments.length, args = Array(_len7), _key9 = 0; _key9 < _len7; _key9++) {
-				args[_key9] = arguments[_key9];
+			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
+				args[_key10] = arguments[_key10];
 			}
 
 			push(results, args);
@@ -3890,8 +3926,8 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
+				args[_key11] = arguments[_key11];
 			}
 
 			push(results, args);
@@ -4673,8 +4709,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
-					args[_key11] = arguments[_key11];
+				for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
+					args[_key12] = arguments[_key12];
 				}
 
 				args[3] = this;
@@ -4994,8 +5030,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
-			args[_key12] = arguments[_key12];
+		for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
+			args[_key13] = arguments[_key13];
 		}
 
 		lastArgs = args;
