@@ -11,7 +11,7 @@ function wait(duration, data) {
 
 describe('wait', function () {
 	it('should return a promise', function () {
-		var start = Date().now();
+		var start = Date.now();
 		return wait(100).then(function () {
 			assert.equal(80 < Date.now() - start, true);
 		});
