@@ -57,25 +57,27 @@ function buildHTML(modulePath) {
 		test: testScriptPath,
 		watch: serverMode,
 		dest: path.join(dest, modulePath, 'index.html'),
-		name: modulePath,
-		package: packageJSON,
-		message,
-		ga,
-		titleHTML: `${packageJSON.name}/${modulePath}`.split(path.sep)
-		.reverse()
-		.map((fragment, index) => {
-			return 0 < index ? `<a href="${'../'.repeat(index)}">${fragment}</a>` : fragment;
-		})
-		.reverse()
-		.join('/'),
-		root: modulePath.split(path.sep)
-		.map(function () {
-			return '..';
-		})
-		.join('/'),
 		beforeRender: function (context) {
 			context.code = formatCode(context.code);
-			context.test.code = formatCode(context.test.code, 1);
+			context.test = formatCode(context.test, 1);
+		},
+		context: {
+			name: modulePath,
+			package: packageJSON,
+			message,
+			ga,
+			titleHTML: `${packageJSON.name}/${modulePath}`.split(path.sep)
+			.reverse()
+			.map((fragment, index) => {
+				return 0 < index ? `<a href="${'../'.repeat(index)}">${fragment}</a>` : fragment;
+			})
+			.reverse()
+			.join('/'),
+			root: modulePath.split(path.sep)
+			.map(function () {
+				return '..';
+			})
+			.join('/')
 		}
 	});
 }
