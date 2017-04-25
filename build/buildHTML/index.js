@@ -50,7 +50,7 @@ function formatCode(code, linkSkip) {
 
 function buildHTML(modulePath) {
 	const testScriptPath = path.join(projectRoot, modulePath, 'test', 'index.js');
-	const moduleScriptPath = path.join(projectRoot, modulePath, 'index.mjs');
+	const moduleScriptPath = path.join(projectRoot, modulePath, 'index.js');
 	return paze({
 		template: path.join(__dirname, 'template.html'),
 		src: moduleScriptPath,
