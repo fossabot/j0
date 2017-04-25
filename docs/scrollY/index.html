@@ -10,8 +10,8 @@
 <h2>Source</h2>
 <section class="Code">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">window</span>&#32;<span class="name">from</span>&#32;<a href="../window"><span class="string"><span class="string">'../window'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">scrollY</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="name">window</span><span class="_2e">.</span><span class="name">pageYOffset</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">scrollY</span><span class="_28">(</span><span class="name">element</span>&#32;<span class="_3d">=</span>&#32;<span class="name">window</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="name">element</span><span class="_2e">.</span><span class="name">scrollTop</span>&#32;<span class="_7c_7c">||</span>&#32;<span class="name">element</span><span class="_2e">.</span><span class="name">pageYOffset</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span><span class="export">export</span>&#32;<span class="default">default</span>&#32;<span class="name">scrollY</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/scrollY/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>

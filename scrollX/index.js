@@ -1,5 +1,5 @@
 import window from '../window';
-function scrollX() {
-	return window.pageXOffset;
+function scrollX(element = window) {
+	return element.scrollLeft || element.pageXOffset;
 }
 export default scrollX;

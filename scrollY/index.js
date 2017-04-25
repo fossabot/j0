@@ -1,5 +1,5 @@
 import window from '../window';
-function scrollY() {
-	return window.pageYOffset;
+function scrollY(element = window) {
+	return element.scrollTop || element.pageYOffset;
 }
 export default scrollY;

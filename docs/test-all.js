@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x30, _x31) {
+	return function wait(_x32, _x33) {
 		return _ref29.apply(this, arguments);
 	};
 }();
@@ -1821,17 +1821,6 @@ describe('dom/getEventListeners', function () {
 		});
 		var result = getEventListeners(element, eventName2);
 		assert.deepEqual(map(result), [fn2]);
-	});
-});
-
-function getScrollY(element) {
-	return element ? element.scrollTop : window.pageYOffset;
-}
-
-describe('getScrollY', function () {
-
-	it('should return a non-negative integer', function () {
-		assert.equal(0 <= getScrollY(), true);
 	});
 });
 
@@ -4539,7 +4528,9 @@ describe('scrollTo', function () {
 });
 
 function scrollX() {
-	return window.pageXOffset;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+
+	return element.scrollLeft || element.pageXOffset;
 }
 
 describe('scrollX', function () {
@@ -4549,7 +4540,9 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	return window.pageYOffset;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+
+	return element.scrollTop || element.pageYOffset;
 }
 
 describe('scrollY', function () {

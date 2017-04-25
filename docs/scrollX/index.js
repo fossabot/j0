@@ -2,7 +2,9 @@
 'use strict';
 
 function scrollX() {
-	return window.pageXOffset;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+
+	return element.scrollLeft || element.pageXOffset;
 }
 
 describe('scrollX', function () {
