@@ -7,6 +7,35 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var wait = function () {
+	var _ref29 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
+		return regeneratorRuntime.wrap(function _callee2$(_context2) {
+			while (1) {
+				switch (_context2.prev = _context2.next) {
+					case 0:
+						_context2.next = 2;
+						return new Promise(function (resolve) {
+							setTimeout(resolve, duration);
+						});
+
+					case 2:
+						return _context2.abrupt('return', data);
+
+					case 3:
+					case 'end':
+						return _context2.stop();
+				}
+			}
+		}, _callee2, this);
+	}));
+
+	return function wait(_x30, _x31) {
+		return _ref29.apply(this, arguments);
+	};
+}();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -5226,21 +5255,33 @@ tests$15(URLSearchParams$2, 'J0URLSearchParams');
 
 tests$15(URLSearchParams, 'URLSearchParams');
 
-function wait(duration, data) {
-	return new Promise(function (resolve) {
-		setTimeout(resolve, duration);
-	}).then(function () {
-		return data;
-	});
-}
-
 describe('wait', function () {
-	it('should return a promise', function () {
-		var start = Date.now();
-		return wait(100).then(function () {
-			assert.equal(80 < Date.now() - start, true);
-		});
-	});
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+		var start, data, duration, margin, actual;
+		return regeneratorRuntime.wrap(function _callee3$(_context3) {
+			while (1) {
+				switch (_context3.prev = _context3.next) {
+					case 0:
+						start = Date.now();
+						data = start;
+						duration = 100;
+						margin = 0.9;
+						_context3.next = 6;
+						return wait(duration, data);
+
+					case 6:
+						actual = _context3.sent;
+
+						assert.equal(actual, data);
+						assert.equal(margin * duration < Date.now() - start, true);
+
+					case 9:
+					case 'end':
+						return _context3.stop();
+				}
+			}
+		}, _callee3, this);
+	})));
 });
 
 describe('window', function () {
