@@ -38,7 +38,7 @@ async function transpileJS(scriptPath, destPath) {
 		entry: scriptPath,
 		plugins: [
 			globImport(),
-			nodeResolve({extensions: ['.mjs', '.js', '.json']}),
+			nodeResolve(),
 			commonjs(),
 			minify()
 		]
