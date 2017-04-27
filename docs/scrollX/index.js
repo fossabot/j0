@@ -4,7 +4,7 @@
 function scrollX() {
 	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
 
-	return element.scrollLeft || element.pageXOffset;
+	return element.scrollLeft || element.pageXOffset || 0;
 }
 
 describe('scrollX', function () {

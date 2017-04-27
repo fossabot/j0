@@ -380,7 +380,22 @@ describe('dom/getAttribute', function () {
 });
 
 function getBoundingClientRect(element) {
-	return element.getBoundingClientRect();
+	var _element$getBoundingC = element.getBoundingClientRect(),
+	    left = _element$getBoundingC.left,
+	    top = _element$getBoundingC.top,
+	    width = _element$getBoundingC.width,
+	    height = _element$getBoundingC.height;
+
+	return {
+		left: left,
+		right: left + width,
+		top: top,
+		bottom: top + height,
+		width: width,
+		height: height,
+		cx: left + width / 2,
+		cy: top + height / 2
+	};
 }
 
 function setStyle(element, name, value) {

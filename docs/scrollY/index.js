@@ -4,7 +4,7 @@
 function scrollY() {
 	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
 
-	return element.scrollTop || element.pageYOffset;
+	return element.scrollTop || element.pageYOffset || 0;
 }
 
 describe('scrollY', function () {
