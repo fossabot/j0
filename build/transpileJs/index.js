@@ -18,7 +18,7 @@ const {
 function minify() {
 	return {
 		transformBundle: function (code) {
-			const {code: babeledCode} = babel.transform(code, {presets: ['latest']});
+			const {code: babeledCode} = babel.transform(code, {presets: ['env']});
 			const wrappedCode = `(function(){\n${babeledCode}\n}())`;
 			return wrappedCode;
 			// const {code: minifiedCode} = UglifyJS.minify(wrappedCode, {
