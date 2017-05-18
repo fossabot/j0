@@ -1,0 +1,11 @@
+{
+  "name": "j0-polyfill",
+  "license": "MIT",
+  "version": "0.2.10",
+  "author": {
+    "name": "Kei Ito",
+    "email": "kei.itof@gmail.com",
+    "url": "https://github.com/kei-ito"
+  },
+  "repository": "kei-ito/j0"
+}

@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "start": "node build --server",
-    "polyfill": "uglifyjs docs/polyfill.js --mangle --compless --output polyfill.min.js",
+    "polyfill": "node build/polyfill",
     "build": "node build && npm run polyfill",
     "test": "wdio build/wdio.conf.js"
   },
