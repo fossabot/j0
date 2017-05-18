@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 __errorShots
 wdio.js
+temp

@@ -9,13 +9,187 @@
 <h1 id="title"><a href="../">j0</a>/dom<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Symbol</span>&#32;<span class="name">from</span>&#32;<a href="../Symbol"><span class="string"><span class="string">'../Symbol'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">document</span>&#32;<span class="name">from</span>&#32;<a href="../document"><span class="string"><span class="string">'../document'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isString</span>&#32;<span class="name">from</span>&#32;<a href="../isString"><span class="string"><span class="string">'../isString'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isNode</span>&#32;<span class="name">from</span>&#32;<a href="../isNode"><span class="string"><span class="string">'../isNode'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="const">const</span>&#32;<span class="name">nodeKey</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="string">'node'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="const">const</span>&#32;<span class="name">eventsKey</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="string">'events'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="class">class</span>&#32;<span class="name">J0Element</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="comment">/*&#32;eslint-disable&#32;max-statements&#32;*/</span>
+<span class="linenum"></span>&#9;<span class="name">constructor</span><span class="_28">(</span><span class="name">source</span>&#32;<span class="_3d">=</span>&#32;<span class="_7b">{</span><span class="_7d">}</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">source</span>&#32;<span class="instanceof">instanceof</span>&#32;<span class="name">J0Element</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_5b">[</span><span class="name">nodeKey</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">source</span><span class="_2e">.</span><span class="name">node</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>&#32;<span class="else">else</span>&#32;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">isString</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_5b">[</span><span class="name">nodeKey</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">document</span><span class="_2e">.</span><span class="name">createTextNode</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>&#32;<span class="else">else</span>&#32;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">isNode</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_5b">[</span><span class="name">nodeKey</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">source</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>&#32;<span class="else">else</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">t</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'div'</span><span class="_2c">,</span>&#32;<span class="name">a</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_2c">,</span>&#32;<span class="name">c</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_2c">,</span>&#32;<span class="name">e</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">source</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_5b">[</span><span class="name">nodeKey</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">wrap</span><span class="_28">(</span><span class="name">document</span><span class="_5b">[</span><span class="_60">`</span><span class="template">createElement</span><span class="_24_7b">${</span><span class="name">t</span><span class="_2e">.</span><span class="name">indexOf</span><span class="_28">(</span><span class="string">':'</span><span class="_29">)</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="num">0</span>&#32;<span class="_3f">?</span>&#32;<span class="string">''</span>&#32;<span class="_3a">:</span>&#32;<span class="string">'NS'</span><span class="_7d">}</span><span class="_60">`</span><span class="_5d">]</span><span class="_28">(</span><span class="name">t</span><span class="_29">)</span><span class="_29">)</span><span class="_2e">.</span><span class="name">node</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">length</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">c</span><span class="_3b">;</span>&#32;<span class="name">i</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">item</span>&#32;<span class="_3d">=</span>&#32;<span class="name">c</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">item</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">append</span><span class="_28">(</span><span class="name">item</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">length</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">e</span><span class="_3b">;</span>&#32;<span class="name">i</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">item</span>&#32;<span class="_3d">=</span>&#32;<span class="name">e</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">item</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">on</span><span class="_28">(</span><span class="name">item</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_2c">,</span>&#32;<span class="name">item</span><span class="_5b">[</span><span class="num">1</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">length</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">a</span><span class="_3b">;</span>&#32;<span class="name">i</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">item</span>&#32;<span class="_3d">=</span>&#32;<span class="name">a</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">item</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">setAttribute</span><span class="_28">(</span><span class="_2e_2e_2e">...</span><span class="name">item</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_5b">[</span><span class="name">eventsKey</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;<span class="comment">/*&#32;eslint-enable&#32;max-statements&#32;*/</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">node</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_5b">[</span><span class="name">nodeKey</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">text</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">textContent</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">set</span>&#32;<span class="name">text</span><span class="_28">(</span><span class="name">text</span>&#32;<span class="_3d">=</span>&#32;<span class="string">''</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">textContent</span>&#32;<span class="_3d">=</span>&#32;<span class="name">text</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">parent</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">parentNode</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="name">parentNode</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">wrap</span><span class="_28">(</span><span class="name">parentNode</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">set</span>&#32;<span class="name">parent</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">wrap</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span><span class="_2e">.</span><span class="name">append</span><span class="_28">(</span><span class="this">this</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">childNodes</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="_5b">[</span><span class="_2e_2e_2e">...</span><span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">childNodes</span><span class="_5d">]</span>
+<span class="linenum"></span>&#9;&#9;<span class="_2e">.</span><span class="name">map</span><span class="_28">(</span><span class="name">wrap</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">children</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="_5b">[</span><span class="_2e_2e_2e">...</span><span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">children</span><span class="_5d">]</span>
+<span class="linenum"></span>&#9;&#9;<span class="_2e">.</span><span class="name">map</span><span class="_28">(</span><span class="name">wrap</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">events</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_5b">[</span><span class="name">eventsKey</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">get</span>&#32;<span class="name">attributes</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">attributes</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">append</span><span class="_28">(</span><span class="name">element</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">appendChild</span><span class="_28">(</span><span class="name">wrap</span><span class="_28">(</span><span class="name">element</span><span class="_29">)</span><span class="_2e">.</span><span class="name">node</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">remove</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">parent</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">parent</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">parent</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">removeChild</span><span class="_28">(</span><span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">empty</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">childNodes</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">length</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">childNodes</span><span class="_3b">;</span>&#32;<span class="name">i</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">childNodes</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_2e">.</span><span class="name">remove</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">setAttribute</span><span class="_28">(</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="_2e_2e_2e">...</span><span class="name">value</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">setAttribute</span><span class="_28">(</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_2e">.</span><span class="name">join</span><span class="_28">(</span><span class="string">'&#32;'</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">getAttribute</span><span class="_28">(</span><span class="name">name</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">getAttribute</span><span class="_28">(</span><span class="name">name</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">on</span><span class="_28">(</span><span class="name">eventName</span><span class="_2c">,</span>&#32;<span class="name">fn</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">wrapped</span>&#32;<span class="_3d">=</span>&#32;<span class="_28">(</span><span class="name">event</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">fn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="this">this</span><span class="_2c">,</span>&#32;<span class="name">event</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">addEventListener</span><span class="_28">(</span><span class="name">eventName</span><span class="_2c">,</span>&#32;<span class="name">wrapped</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">events</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="_5b">[</span><span class="name">eventName</span><span class="_2c">,</span>&#32;<span class="name">fn</span><span class="_2c">,</span>&#32;<span class="name">wrapped</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">off</span><span class="_28">(</span><span class="name">eventName</span><span class="_2c">,</span>&#32;<span class="name">fn</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">events</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="name">events</span><span class="_2e">.</span><span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">--</span><span class="_3b">;</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_5b">[</span><span class="name">e</span><span class="_2c">,</span>&#32;<span class="name">f</span><span class="_2c">,</span>&#32;<span class="name">wrapped</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">events</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">e</span>&#32;<span class="_3d_3d_2f_21_3d">===</span>&#32;<span class="name">eventName</span>&#32;<span class="_26_26">&&</span>&#32;<span class="_28">(</span><span class="prefix">!</span><span class="name">fn</span>&#32;<span class="_7c_7c">||</span>&#32;<span class="name">fn</span>&#32;<span class="_3d_3d_2f_21_3d">===</span>&#32;<span class="name">f</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">node</span><span class="_2e">.</span><span class="name">removeEventListener</span><span class="_28">(</span><span class="name">eventName</span><span class="_2c">,</span>&#32;<span class="name">wrapped</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">events</span><span class="_2e">.</span><span class="name">splice</span><span class="_28">(</span><span class="name">i</span><span class="_2c">,</span>&#32;<span class="num">1</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">wrap</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="new">new</span>&#32;<span class="name">J0Element</span><span class="_28">(</span><span class="name">source</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="export">export</span>&#32;<span class="default">default</span>&#32;<span class="name">wrap</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="string">'../*/test'</span><span class="_3b">;</span></pre>
+	<pre><span class="linenum"></span><span class="comment">//&#32;import&#32;'../*/test';</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">$</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Date</span>&#32;<span class="name">from</span>&#32;<a href="../Date"><span class="string"><span class="string">'../../Date'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'$'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;create&#32;a&#32;new&#32;J0Element'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="string">'node'</span>&#32;<span class="in">in</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'J0Element.prototype.text'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;return&#32;its&#32;textContent'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="_60">`</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="name">text</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">element</span><span class="_2e">.</span><span class="name">text</span><span class="_2c">,</span>&#32;<span class="name">text</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;set&#32;its&#32;textContent'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text1</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="template">-1</span><span class="_60">`</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text2</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="template">-2</span><span class="_60">`</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">c</span><span class="_3a">:</span>&#32;<span class="_5b">[</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">element1</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">text2</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_5d">]</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">element1</span><span class="_2e">.</span><span class="name">text</span>&#32;<span class="_3d">=</span>&#32;<span class="name">text1</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">console</span><span class="_2e">.</span><span class="name">log</span><span class="_28">(</span><span class="name">element2</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">element2</span><span class="_2e">.</span><span class="name">text</span><span class="_2c">,</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">text1</span><span class="_7d">}</span><span class="_24_7b">${</span><span class="name">text2</span><span class="_7d">}</span><span class="_60">`</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/dom/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>

@@ -8,7 +8,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref31 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
+	var _ref27 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
 		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
@@ -29,8 +29,8 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x32, _x33) {
-		return _ref31.apply(this, arguments);
+	return function wait(_x29, _x30) {
+		return _ref27.apply(this, arguments);
 	};
 }();
 
@@ -1509,777 +1509,213 @@ describe('document', function () {
 	});
 });
 
-function addClass(element, className) {
-	element.classList.add(className);
+var nodeKey = Symbol('node');
+var eventsKey = Symbol('events');
+
+var J0Element = function () {
+
+	/* eslint-disable max-statements */
+	function J0Element() {
+		var source = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+		_classCallCheck(this, J0Element);
+
+		if (source instanceof J0Element) {
+			this[nodeKey] = source.node;
+		} else if (isString(source)) {
+			this[nodeKey] = document.createTextNode(source);
+		} else if (isNode(source)) {
+			this[nodeKey] = source;
+		} else {
+			var _source$t = source.t,
+			    t = _source$t === undefined ? 'div' : _source$t,
+			    _source$a = source.a,
+			    a = _source$a === undefined ? [] : _source$a,
+			    _source$c = source.c,
+			    c = _source$c === undefined ? [] : _source$c,
+			    _source$e = source.e,
+			    e = _source$e === undefined ? [] : _source$e;
+
+			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			for (var i = 0, length = c.length; i < length; i++) {
+				var item = c[i];
+				if (item) {
+					this.append(item);
+				}
+			}
+			for (var _i = 0, _length = e.length; _i < _length; _i++) {
+				var _item = e[_i];
+				if (_item) {
+					this.on(_item[0], _item[1]);
+				}
+			}
+			for (var _i2 = 0, _length2 = a.length; _i2 < _length2; _i2++) {
+				var _item2 = a[_i2];
+				if (_item2) {
+					this.setAttribute.apply(this, _toConsumableArray(_item2));
+				}
+			}
+		}
+		this[eventsKey] = [];
+	}
+	/* eslint-enable max-statements */
+
+	_createClass(J0Element, [{
+		key: 'append',
+		value: function append(element) {
+			this.node.appendChild(wrap(element).node);
+			return this;
+		}
+	}, {
+		key: 'remove',
+		value: function remove() {
+			var parent = this.parent;
+
+			if (parent) {
+				parent.node.removeChild(this.node);
+			}
+			return this;
+		}
+	}, {
+		key: 'empty',
+		value: function empty() {
+			var childNodes = this.childNodes;
+
+			for (var i = 0, length = childNodes.length; i < length; i++) {
+				childNodes[i].remove();
+			}
+			return this;
+		}
+	}, {
+		key: 'setAttribute',
+		value: function setAttribute(name) {
+			for (var _len6 = arguments.length, value = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+				value[_key6 - 1] = arguments[_key6];
+			}
+
+			this.node.setAttribute(name, value.join(' '));
+			return this;
+		}
+	}, {
+		key: 'getAttribute',
+		value: function getAttribute(name) {
+			return this.node.getAttribute(name);
+		}
+	}, {
+		key: 'on',
+		value: function on(eventName, fn) {
+			var _this3 = this;
+
+			var wrapped = function wrapped(event) {
+				fn.call(_this3, event);
+			};
+			this.node.addEventListener(eventName, wrapped);
+			this.events.push([eventName, fn, wrapped]);
+			return this;
+		}
+	}, {
+		key: 'off',
+		value: function off(eventName, fn) {
+			var events = this.events;
+
+			for (var i = events.length; i--;) {
+				var _events$i = _slicedToArray(events[i], 3),
+				    e = _events$i[0],
+				    f = _events$i[1],
+				    wrapped = _events$i[2];
+
+				if (e === eventName && (!fn || fn === f)) {
+					this.node.removeEventListener(eventName, wrapped);
+					events.splice(i, 1);
+				}
+			}
+		}
+	}, {
+		key: 'node',
+		get: function get() {
+			return this[nodeKey];
+		}
+	}, {
+		key: 'text',
+		get: function get() {
+			return this.node.textContent;
+		},
+		set: function set() {
+			var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+			this.node.textContent = text;
+		}
+	}, {
+		key: 'parent',
+		get: function get() {
+			var parentNode = this.node.parentNode;
+
+			return parentNode && wrap(parentNode);
+		},
+		set: function set(source) {
+			wrap(source).append(this);
+		}
+	}, {
+		key: 'childNodes',
+		get: function get() {
+			return [].concat(_toConsumableArray(this.node.childNodes)).map(wrap);
+		}
+	}, {
+		key: 'children',
+		get: function get() {
+			return [].concat(_toConsumableArray(this.node.children)).map(wrap);
+		}
+	}, {
+		key: 'events',
+		get: function get() {
+			return this[eventsKey];
+		}
+	}, {
+		key: 'attributes',
+		get: function get() {
+			return this.node.attributes;
+		}
+	}]);
+
+	return J0Element;
+}();
+
+function wrap(source) {
+	return new J0Element(source);
 }
 
-function hasClass(_ref, className) {
-	var classList = _ref.classList;
+// import '../*/test';
+describe('$', function () {
 
-	return classList && classList.contains(className);
-}
-
-describe('dom/addClass', function () {
-
-	it('should add a class', function () {
-		var element = createElement({});
-		var className = 'abc';
-		assert.equal(hasClass(element, className), false);
-		addClass(element, className);
-		assert.equal(hasClass(element, className), true);
+	it('should create a new J0Element', function () {
+		assert.equal('node' in wrap(), true);
 	});
 });
 
-describe('dom/addEventListener', function () {
+describe('J0Element.prototype.text', function () {
 
-	it('should add a listener', function () {
-		function fn() {}
-		var element = createElement();
-		var eventName = 'abc';
-		addEventListener(element, eventName, fn);
-		assert.equal(getEventListeners(element, eventName).has(fn), true);
-	});
-});
-
-describe('dom/appendChild', function () {
-
-	it('should append an element', function () {
-		var parent = createElement();
-		var child = createElement();
-		appendChild(parent, child);
-		assert.equal(child.parentNode, parent);
+	it('should return its textContent', function () {
+		var text = '' + Date.now();
+		var element = wrap(text);
+		assert.equal(element.text, text);
 	});
 
-	it('should append a text element', function () {
-		var parent = createElement();
-		var child = createElement('text');
-		appendChild(parent, child);
-		assert.equal(child.parentNode, parent);
+	it('should set its textContent', function () {
+		var text1 = Date.now() + '-1';
+		var element1 = wrap();
+		var text2 = Date.now() + '-2';
+		var element2 = wrap({
+			c: [element1, text2]
+		});
+		element1.text = text1;
+		console.log(element2);
+		assert.equal(element2.text, '' + text1 + text2);
 	});
 });
 
 function childNodes(node) {
 	return node.childNodes;
 }
-
-describe('dom/childNodes', function () {
-
-	it('should get a list of children', function () {
-		var c1 = createElement();
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		assert.deepEqual(map(childNodes(parent)), [c1, c2]);
-	});
-});
-
-function children(node) {
-	return filter(childNodes(node), function (_ref2) {
-		var _ref2$nodeType = _ref2.nodeType,
-		    nodeType = _ref2$nodeType === undefined ? 0 : _ref2$nodeType;
-
-		return nodeType === 1;
-	});
-}
-
-describe('dom/children', function () {
-
-	it('should get a list of children', function () {
-		var c1 = createElement('c1');
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		assert.deepEqual(map(children(parent)), [c2]);
-	});
-});
-
-function cloneNode(node, deep) {
-	return node.cloneNode(deep);
-}
-
-function getTextContent(node) {
-	return node ? node.textContent : '';
-}
-
-describe('cloneNode', function () {
-
-	it('should clone a node', function () {
-		var element = createElement({
-			c: ['a', {
-				c: ['b', {
-					c: ['c']
-				}]
-			}]
-		});
-		assert.equal(getTextContent(cloneNode(element)), '');
-	});
-
-	it('should clone a node deeply', function () {
-		var element = createElement({
-			c: ['a', {
-				c: ['b', {
-					c: ['c']
-				}]
-			}]
-		});
-		assert.equal(getTextContent(cloneNode(element, true)), 'abc');
-	});
-});
-
-describe('dom/createElement', function () {
-
-	it('should create a <div>', function () {
-		var element = createElement();
-		assert.equal(element.tagName.toLowerCase(), 'div');
-	});
-});
-
-function parentNode(node) {
-	return node.parentNode;
-}
-
-function removeChild(childNode) {
-	var parentElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : parentNode(childNode);
-
-	if (parentElement) {
-		parentElement.removeChild(childNode);
-	}
-}
-
-function empty(element) {
-	while (element.firstChild) {
-		removeChild(element.firstChild, element);
-	}
-}
-
-describe('dom/empty', function () {
-
-	it('should clear an element', function () {
-		var element = createElement({ c: ['abc'] });
-		assert.equal(element.childNodes.length, 1);
-		empty(element);
-		assert.equal(element.childNodes.length, 0);
-	});
-});
-
-function firstChild(element) {
-	return element.firstChild;
-}
-
-describe('dom/firstChild', function () {
-
-	it('should return the first child', function () {
-		var c1 = createElement('');
-		var parent = createElement({ c: [c1, {}, {}] });
-		assert.equal(firstChild(parent), c1);
-	});
-});
-
-function getAttribute(element, attributeName) {
-	return element.getAttribute(attributeName);
-}
-
-describe('dom/getAttribute', function () {
-
-	it('should get an attribute from an element', function () {
-		var attributeName = 'a';
-		var attributeValue = 'b';
-		var element = createElement({
-			a: [[attributeName, attributeValue]]
-		});
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
-
-	it('should get a "data-" prefixed attribute from an element', function () {
-		var attributeName = 'data-a';
-		var attributeValue = 'b';
-		var element = createElement({
-			a: [[attributeName, attributeValue]]
-		});
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
-});
-
-function getBoundingClientRect(element) {
-	var _element$getBoundingC = element.getBoundingClientRect(),
-	    left = _element$getBoundingC.left,
-	    top = _element$getBoundingC.top,
-	    width = _element$getBoundingC.width,
-	    height = _element$getBoundingC.height;
-
-	return {
-		left: left,
-		right: left + width,
-		top: top,
-		bottom: top + height,
-		width: width,
-		height: height,
-		cx: left + width / 2,
-		cy: top + height / 2
-	};
-}
-
-function setStyle(element, name, value) {
-	element.style[name] = value;
-}
-
-describe('dom/getBoundingClientRect', function () {
-
-	var element = void 0;
-
-	beforeEach(function () {
-		element = createElement();
-		appendChild(document.body, element);
-	});
-
-	afterEach(function () {
-		removeChild(element, document.body);
-	});
-
-	it('should return a rect', function () {
-		var expected = {
-			left: 50,
-			top: 60,
-			width: 70,
-			height: 80
-		};
-		setStyle(element, 'position', 'fixed');
-		setStyle(element, 'left', expected.left + 'px');
-		setStyle(element, 'top', expected.top + 'px');
-		setStyle(element, 'width', expected.width + 'px');
-		setStyle(element, 'height', expected.height + 'px');
-		setStyle(element, 'margin', 0);
-		appendChild(document.body, element);
-		var rect = getBoundingClientRect(element);
-		assert.deepEqual({
-			left: rect.left,
-			top: rect.top,
-			width: rect.width,
-			height: rect.height
-		}, expected);
-	});
-});
-
-function querySelectorAll(selectors) {
-	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-	return element.querySelector(selectors);
-}
-
-function getElementById(id, element) {
-	return querySelectorAll('[id=\'' + id + '\']', element);
-}
-
-describe('getElementById', function () {
-
-	it('should return an element', function () {
-		var id = 'abc';
-		var data = {
-			a: [['id', id]]
-		};
-		var c1 = createElement(data);
-		var c2 = createElement(data);
-		var parent = createElement({ c: [c1, c2] });
-		var element = getElementById(id, parent);
-		assert.equal(element, c1);
-	});
-});
-
-function getElementsByClassName(className) {
-	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-	return element.getElementsByClassName(className);
-}
-
-describe('getElementsByClassName', function () {
-
-	it('should return a live list of elements', function () {
-		var className = 'abc';
-		var data = {
-			a: [['class', className]]
-		};
-		var c1 = createElement(data);
-		var c2 = createElement(data);
-		var parent = createElement({ c: [c1] });
-		var list = getElementsByClassName(className, parent);
-		appendChild(parent, c2);
-		assert.deepEqual(map(list), [c1, c2]);
-	});
-});
-
-describe('dom/getEventListeners', function () {
-
-	it('should get a Map', function () {
-		function fn1() {}
-		function fn2() {}
-		var eventName1 = 'abc';
-		var eventName2 = 'def';
-		var element = createElement({
-			e: [[eventName1, fn1], [eventName2, fn2]]
-		});
-		var result = getEventListeners(element);
-		assert.deepEqual(map(result.keys()), [eventName1, eventName2]);
-		assert.deepEqual(map(result.values(), function (set) {
-			return map(set);
-		}), [[fn1], [fn2]]);
-	});
-
-	it('should get a Set', function () {
-		function fn1() {}
-		function fn2() {}
-		var eventName1 = 'abc';
-		var eventName2 = 'def';
-		var element = createElement({
-			e: [[eventName1, fn1], [eventName2, fn2]]
-		});
-		var result = getEventListeners(element, eventName2);
-		assert.deepEqual(map(result), [fn2]);
-	});
-});
-
-describe('dom/getTextContent', function () {
-
-	it('should return textContent', function () {
-		var element = createElement({
-			c: ['h', {
-				c: ['e', {
-					c: ['l', {
-						c: ['l', {
-							c: ['o']
-						}]
-					}]
-				}]
-			}]
-		});
-		assert.equal(getTextContent(element), 'hello');
-	});
-});
-
-describe('dom/createElement', function () {
-
-	it('should return true if the element has the class', function () {
-		var className = 'abc';
-		var element = createElement({
-			a: [['class', className]]
-		});
-		assert.equal(hasClass(element, className), true);
-	});
-
-	it('should return false if the element does not have the class', function () {
-		var className1 = 'abc';
-		var className2 = 'def';
-		var element = createElement({
-			a: [['class', className1]]
-		});
-		assert.equal(hasClass(element, className2), false);
-	});
-});
-
-function hasEventListener(element, eventName, fn) {
-	var events = getEventListeners(element, fn ? eventName : null);
-	return events && events.has(fn ? fn : eventName);
-}
-
-describe('dom/hasEventListener', function () {
-
-	it('should return true if the element has a listener for abc events', function () {
-		function fn() {}
-		var eventName = 'abc';
-		var element = createElement({
-			e: [[eventName, fn]]
-		});
-		assert.equal(hasEventListener(element, eventName), true);
-	});
-
-	it('should return false if the element has no listeners for abc events', function () {
-		function fn() {}
-		var eventName1 = 'abc';
-		var eventName2 = 'def';
-		var element = createElement({
-			e: [[eventName2, fn]]
-		});
-		assert.equal(hasEventListener(element, eventName1), false);
-	});
-
-	it('should return true if the element has a specified listener for abc events', function () {
-		function fn() {}
-		var eventName = 'abc';
-		var element = createElement({
-			e: [[eventName, fn]]
-		});
-		assert.equal(hasEventListener(element, eventName, fn), true);
-	});
-
-	it('should return false if the element does not have a specified listener for abc events', function () {
-		function fn() {}
-		function fn2() {}
-		var eventName = 'abc';
-		var element = createElement({
-			e: [[eventName, fn]]
-		});
-		assert.equal(hasEventListener(element, eventName, fn2), false);
-	});
-});
-
-function insertBefore(newNode, referenceNode) {
-	var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : parentNode(referenceNode);
-
-	return parent.insertBefore(newNode, referenceNode);
-}
-
-function nextSibling(element) {
-	return element.nextSibling;
-}
-
-function insertAfter(newNode, referenceNode, parentNode) {
-	return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
-}
-
-describe('dom/insertAfter', function () {
-
-	it('should insert an element after a specified element', function () {
-		var c1 = createElement();
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		var newNode = createElement();
-		insertAfter(newNode, c1);
-		assert.deepEqual(map(childNodes(parent)), [c1, newNode, c2]);
-	});
-
-	it('should insert an element before the first child', function () {
-		var c1 = createElement();
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		var newNode = createElement();
-		insertAfter(newNode, null, parent);
-		assert.deepEqual(map(childNodes(parent)), [newNode, c1, c2]);
-	});
-});
-
-describe('dom/insertBefore', function () {
-
-	it('should insert an element before a specified element', function () {
-		var c1 = createElement();
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		var newNode = createElement();
-		insertBefore(newNode, c2);
-		assert.deepEqual(map(childNodes(parent)), [c1, newNode, c2]);
-	});
-
-	it('should insert an element after the last child', function () {
-		var c1 = createElement();
-		var c2 = createElement();
-		var parent = createElement({
-			c: [c1, c2]
-		});
-		var newNode = createElement();
-		insertBefore(newNode, null, parent);
-		assert.deepEqual(map(childNodes(parent)), [c1, c2, newNode]);
-	});
-});
-
-describe('dom/nextSibling', function () {
-
-	it('should return the previous element', function () {
-		var c1 = createElement('a');
-		var c2 = createElement();
-		createElement({ c: [c1, c2] });
-		assert.equal(nextSibling(c1), c2);
-	});
-});
-
-describe('dom/parentNode', function () {
-
-	it('should return a parent of a node', function () {
-		var child = createElement('');
-		var parent = createElement({ c: [child] });
-		assert.equal(parentNode(child), parent);
-	});
-});
-
-function prependChild(parentNode, newNode) {
-	insertBefore(newNode, firstChild(parentNode), parentNode);
-}
-
-describe('dom/prependChild', function () {
-
-	it('should append an element', function () {
-		var parent = createElement();
-		var child = createElement();
-		prependChild(parent, child);
-		assert.equal(child.parentNode, parent);
-	});
-
-	it('should append a text element', function () {
-		var parent = createElement();
-		var child = createElement('text');
-		prependChild(parent, child);
-		assert.equal(child.parentNode, parent);
-	});
-});
-
-function previousSibling(element) {
-	return element.previousSibling;
-}
-
-describe('dom/previousSibling', function () {
-
-	it('should return the previous element', function () {
-		var c1 = createElement('a');
-		var c2 = createElement();
-		createElement({ c: [c1, c2] });
-		assert.equal(previousSibling(c2), c1);
-	});
-});
-
-describe('dom/querySelector', function () {
-
-	it('should get an element', function () {
-		var className = 'abc';
-		var child = createElement({
-			a: [['class', className]]
-		});
-		var parent = createElement({
-			c: [{ c: [child] }]
-		});
-		assert.equal(querySelectorAll('.' + className, parent), child);
-	});
-});
-
-function querySelectorAll$1(selectors) {
-	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-	return element.querySelectorAll(selectors);
-}
-
-describe('dom/querySelectorAll', function () {
-
-	it('should get elements', function () {
-		var className = 'abc';
-		var child1 = createElement({
-			a: [['class', className]]
-		});
-		var child2 = createElement({
-			a: [['class', className]]
-		});
-		var parent = createElement({
-			c: [{ c: [child1] }, child2]
-		});
-		assert.deepEqual(map(querySelectorAll$1('.' + className, parent)), [child1, child2]);
-	});
-});
-
-function removeAttribute(element, attributeName) {
-	element.removeAttribute(attributeName);
-}
-
-describe('dom/removeAttribute', function () {
-
-	it('should remove an arrtibute', function () {
-		var attrName = 'abc';
-		var value = '1';
-		var element = createElement({
-			a: [[attrName, value]]
-		});
-		assert.equal(getAttribute(element, attrName), value);
-		removeAttribute(element, attrName);
-		assert.equal(getAttribute(element, attrName), null);
-	});
-});
-
-describe('dom/removeChild', function () {
-
-	it('should remove a child', function () {
-		var child = createElement();
-		var parent = createElement({ c: [child] });
-		assert.equal(child.parentNode, parent);
-		removeChild(child);
-		assert.equal(child.parentNode, null);
-	});
-});
-
-function removeClass(element, className) {
-	element.classList.remove(className);
-}
-
-describe('dom/removeClass', function () {
-
-	it('should add a class', function () {
-		var className = 'abc';
-		var element = createElement({
-			a: [['class', className]]
-		});
-		assert.equal(hasClass(element, className), true);
-		removeClass(element, className);
-		assert.equal(hasClass(element, className), false);
-	});
-});
-
-function removeEventListener(element, eventName, fn) {
-	var events = getEventListeners(element, eventName);
-	if (fn) {
-		element.removeEventListener(eventName, fn);
-		events.delete(fn);
-	} else if (eventName) {
-		_forEach(events, function (f) {
-			removeEventListener(element, eventName, f);
-		});
-		events.clear();
-	} else {
-		_forEach(events, function (_ref3) {
-			var _ref4 = _slicedToArray(_ref3, 2),
-			    key = _ref4[0],
-			    set = _ref4[1];
-
-			_forEach(set, function (f) {
-				removeEventListener(element, key, f);
-			});
-		});
-	}
-}
-
-describe('dom/removeEventListener', function () {
-
-	it('should remove a listener', function () {
-		function fn() {}
-		var eventName = 'abc';
-		var element = createElement({
-			e: [[eventName, fn]]
-		});
-		assert.equal(hasEventListener(element, eventName, fn), true);
-		removeEventListener(element, eventName, fn);
-		assert.equal(hasEventListener(element, eventName, fn), false);
-	});
-});
-
-describe('dom/setAttribute', function () {
-
-	it('should set an attribute to an element', function () {
-		var attributeName = 'a';
-		var attributeValue = 'b';
-		var element = createElement({});
-		setAttribute(element, attributeName, attributeValue);
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
-
-	it('should set a "data-" prefixed attribute to an element', function () {
-		var attributeName = 'data-a';
-		var attributeValue = 'b';
-		var element = createElement({});
-		setAttribute(element, attributeName, attributeValue);
-		assert.equal(getAttribute(element, attributeName), attributeValue);
-	});
-});
-
-describe('dom/setStyle', function () {
-
-	it('should set css property', function () {
-		var element = createElement();
-		var key = 'color';
-		var value = 'rgb(0, 0, 0)';
-		setStyle(element, key, value);
-		assert.equal(/color\s*:\s*rgb\(\s*0\s*,\s*0\s*,\s*0\s*\)/.test(getAttribute(element, 'style')), true);
-	});
-});
-
-function setTextContent(node, text) {
-	node.textContent = text;
-}
-
-describe('dom/setTextContent', function () {
-
-	it('should set a text', function () {
-		var element = createElement();
-		var text = 'abc';
-		assert.equal(element.childNodes.length, 0);
-		setTextContent(element, text);
-		assert.equal(element.textContent, text);
-	});
-});
-
-function tagName() {
-	var node = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	var name = node.tagName;
-
-	return name ? name.toLowerCase() : name;
-}
-
-describe('dom/tagName', function () {
-
-	it('should return a tagName', function () {
-		var element = createElement();
-		var expected = 'div';
-		assert.equal(tagName(element), expected);
-	});
-});
-
-function toggleClass(element, className) {
-	return element.classList.toggle(className);
-}
-
-describe('dom/toggleClass', function () {
-
-	it('should add a class', function () {
-		var element = createElement({});
-		var className = 'abc';
-		toggleClass(element, className);
-		assert.equal(hasClass(element, className), true);
-	});
-
-	it('should remove a class', function () {
-		var element = createElement({});
-		var className = 'abc';
-		toggleClass(element, className);
-		assert.equal(hasClass(element, className), true);
-		toggleClass(element, className);
-		assert.equal(hasClass(element, className), false);
-	});
-});
-
-var createEvent = void 0;
-
-if (CustomEvent$1) {
-	createEvent = function createEvent(eventName, data) {
-		return new CustomEvent$1(eventName, {
-			detail: data,
-			bubbles: false,
-			cancelable: false
-		});
-	};
-} else {
-	createEvent = function createEvent(eventName, data) {
-		var event = document.createEvent('CustomEvent');
-		event.initCustomEvent(eventName, false, false, data);
-		return event;
-	};
-}
-
-function trigger(element, eventName, data) {
-	element.dispatchEvent(createEvent(eventName, data));
-}
-
-describe('dom/trigger', function () {
-
-	it('should trigger an event', function () {
-		var count = 0;
-		var element = createElement({
-			e: [['abc', function () {
-				count += 1;
-			}]]
-		});
-		trigger(element, 'abc');
-		assert.equal(count, 1);
-	});
-});
 
 describe('DOMParser', function () {
 
@@ -2312,18 +1748,18 @@ describe('Error', function () {
 
 var StringList = function () {
 	function StringList(iterable) {
-		var _this3 = this;
+		var _this4 = this;
 
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref5) {
-				var _ref6 = _slicedToArray(_ref5, 2),
-				    key = _ref6[0],
-				    value = _ref6[1];
+			map(iterable, function (_ref) {
+				var _ref2 = _slicedToArray(_ref, 2),
+				    key = _ref2[0],
+				    value = _ref2[1];
 
-				_this3.append(key, value);
+				_this4.append(key, value);
 			});
 		}
 	}
@@ -2336,9 +1772,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find$2(this.data, function (_ref7) {
-				var _ref8 = _slicedToArray(_ref7, 1),
-				    itemName = _ref8[0];
+			return find$2(this.data, function (_ref3) {
+				var _ref4 = _slicedToArray(_ref3, 1),
+				    itemName = _ref4[0];
 
 				return itemName === name;
 			});
@@ -2366,9 +1802,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref9) {
-				var _ref10 = _slicedToArray(_ref9, 1),
-				    itemName = _ref10[0];
+			this.data = filter(this.data, function (_ref5) {
+				var _ref6 = _slicedToArray(_ref5, 1),
+				    itemName = _ref6[0];
 
 				return itemName !== name;
 			});
@@ -2376,9 +1812,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref11) {
-				var _ref12 = _slicedToArray(_ref11, 1),
-				    itemName = _ref12[0];
+			var found = find(this.data, function (_ref7) {
+				var _ref8 = _slicedToArray(_ref7, 1),
+				    itemName = _ref8[0];
 
 				return itemName === name;
 			});
@@ -2388,10 +1824,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			_forEach(this.data, function (_ref13) {
-				var _ref14 = _slicedToArray(_ref13, 2),
-				    itemName = _ref14[0],
-				    value = _ref14[1];
+			_forEach(this.data, function (_ref9) {
+				var _ref10 = _slicedToArray(_ref9, 2),
+				    itemName = _ref10[0],
+				    value = _ref10[1];
 
 				if (itemName === name) {
 					push(result, value);
@@ -2402,11 +1838,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref15) {
-				var _ref16 = _slicedToArray(_ref15, 2),
-				    name = _ref16[0],
-				    _ref16$ = _ref16[1],
-				    value = _ref16$ === undefined ? '' : _ref16$;
+			return map(this.data, function (_ref11) {
+				var _ref12 = _slicedToArray(_ref11, 2),
+				    name = _ref12[0],
+				    _ref12$ = _ref12[1],
+				    value = _ref12$ === undefined ? '' : _ref12$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -2444,9 +1880,9 @@ var StringList = function () {
 }();
 
 function forEachKey(obj, fn, thisArg) {
-	for (var _key6 in obj) {
-		if (obj.hasOwnProperty(_key6)) {
-			if (fn.call(thisArg, obj[_key6], _key6, obj)) {
+	for (var _key7 in obj) {
+		if (obj.hasOwnProperty(_key7)) {
+			if (fn.call(thisArg, obj[_key7], _key7, obj)) {
 				return;
 			}
 		}
@@ -2505,7 +1941,7 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -2516,11 +1952,11 @@ var Headers$1 = function (_StringList) {
 						    value = _iterator$next4.value,
 						    done = _iterator$next4.done;
 
-						var _key7 = value && value[0];
-						if (done || history.indexOf(_key7) < 0) {
-							push(history, _key7);
+						var _key8 = value && value[0];
+						if (done || history.indexOf(_key8) < 0) {
+							push(history, _key8);
 							return {
-								value: [_key7, _this5.get(_key7)],
+								value: [_key8, _this6.get(_key8)],
 								done: done
 							};
 						}
@@ -2543,31 +1979,31 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this6 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this7 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this6.inheritFrom(input, body, init);
+			body = _this7.inheritFrom(input, body, init);
 		} else {
-			_this6.url = '' + input;
+			_this7.url = '' + input;
 		}
-		_this6.credentials = init.credentials || _this6.credentials || 'omit';
-		if (init.headers || !_this6.headers) {
-			_this6.headers = new Headers$1(init.headers);
+		_this7.credentials = init.credentials || _this7.credentials || 'omit';
+		if (init.headers || !_this7.headers) {
+			_this7.headers = new Headers$1(init.headers);
 		}
-		_this6.method = (init.method || _this6.method || 'GET').toUpperCase();
-		_this6.mode = init.mode || _this6.mode || null;
-		_this6.referrer = null;
-		if ((_this6.method === 'GET' || _this6.method === 'HEAD') && body) {
+		_this7.method = (init.method || _this7.method || 'GET').toUpperCase();
+		_this7.mode = init.mode || _this7.mode || null;
+		_this7.referrer = null;
+		if ((_this7.method === 'GET' || _this7.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this6.initBody(body);
-		return _this6;
+		_this7.initBody(body);
+		return _this7;
 	}
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref17) {
-			var headers = _ref17.headers;
+		value: function inheritFrom(input, body, _ref13) {
+			var headers = _ref13.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -2607,16 +2043,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this7 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this8 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this7.type = 'default';
-		_this7.status = 'status' in init ? init.status : minOkStatus;
-		_this7.ok = _this7.status >= minOkStatus && _this7.status < maxOkStatus;
-		_this7.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this7.headers = new Headers$1(init.headers);
-		_this7.url = init.url || '';
-		_this7.initBody(body);
-		return _this7;
+		_this8.type = 'default';
+		_this8.status = 'status' in init ? init.status : minOkStatus;
+		_this8.ok = _this8.status >= minOkStatus && _this8.status < maxOkStatus;
+		_this8.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this8.headers = new Headers$1(init.headers);
+		_this8.url = init.url || '';
+		_this8.initBody(body);
+		return _this8;
 	}
 
 	_createClass(Response$1, [{
@@ -2698,15 +2134,29 @@ function fetch$1(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		_forEach(request.headers, function (_ref18) {
-			var _ref19 = _slicedToArray(_ref18, 2),
-			    name = _ref19[0],
-			    value = _ref19[1];
+		_forEach(request.headers, function (_ref14) {
+			var _ref15 = _slicedToArray(_ref14, 2),
+			    name = _ref15[0],
+			    value = _ref15[1];
 
 			xhr.setRequestHeader(name, value);
 		});
 		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
 	});
+}
+
+function querySelectorAll(selectors) {
+	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+
+	return element.querySelector(selectors);
+}
+
+function getElementById(id, element) {
+	return querySelectorAll('[id=\'' + id + '\']', element);
+}
+
+function getTextContent(node) {
+	return node ? node.textContent : '';
 }
 
 function tests$2(fetch, name) {
@@ -2930,7 +2380,7 @@ describe('history', function () {
 });
 
 function generator$2() {
-	var _this8 = this;
+	var _this9 = this;
 
 	var length = this.length;
 
@@ -2938,7 +2388,7 @@ function generator$2() {
 	return {
 		next: function next() {
 			return {
-				value: _this8[index],
+				value: _this9[index],
 				done: length <= index++
 			};
 		}
@@ -3363,18 +2813,18 @@ describe('Map/@iterator', function () {
 
 var Map$2 = function () {
 	function Map$2(iterable) {
-		var _this9 = this;
+		var _this10 = this;
 
 		_classCallCheck(this, Map$2);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref20) {
-				var _ref21 = _slicedToArray(_ref20, 2),
-				    key = _ref21[0],
-				    value = _ref21[1];
+			_forEach(iterable, function (_ref16) {
+				var _ref17 = _slicedToArray(_ref16, 2),
+				    key = _ref17[0],
+				    value = _ref17[1];
 
-				_this9.set(key, value);
+				_this10.set(key, value);
 			});
 		}
 	}
@@ -3387,9 +2837,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref22) {
-				var _ref23 = _slicedToArray(_ref22, 1),
-				    itemKey = _ref23[0];
+			return find$2(this.data, function (_ref18) {
+				var _ref19 = _slicedToArray(_ref18, 1),
+				    itemKey = _ref19[0];
 
 				return itemKey === key;
 			});
@@ -3413,9 +2863,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref24) {
-				var _ref25 = _slicedToArray(_ref24, 1),
-				    itemKey = _ref25[0];
+			var found = find(this.data, function (_ref20) {
+				var _ref21 = _slicedToArray(_ref20, 1),
+				    itemKey = _ref21[0];
 
 				return itemKey === key;
 			});
@@ -3570,9 +3020,9 @@ function clamp(x) {
 	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
 
 	if (H < L) {
-		var _ref26 = [H, L];
-		L = _ref26[0];
-		H = _ref26[1];
+		var _ref22 = [H, L];
+		L = _ref22[0];
+		H = _ref22[1];
 	}
 	if (x < L) {
 		x = L;
@@ -3636,7 +3086,7 @@ describe('Math/cubicBezier', function () {
 });
 
 function generator$6() {
-	var _this10 = this;
+	var _this11 = this;
 
 	var length = this.length;
 
@@ -3644,7 +3094,7 @@ function generator$6() {
 	return {
 		next: function next() {
 			return {
-				value: _this10[index],
+				value: _this11[index],
 				done: length <= index++
 			};
 		}
@@ -3680,7 +3130,7 @@ describe('navigator', function () {
 	});
 });
 
-function nextSibling$2(node) {
+function nextSibling(node) {
 	return node.nextSibling;
 }
 
@@ -3690,17 +3140,17 @@ describe('Node/nextSibling', function () {
 		var n1 = createElement({});
 		var n2 = createElement('');
 		createElement({ c: [n1, n2] });
-		assert.equal(nextSibling$2(n1), n2);
+		assert.equal(nextSibling(n1), n2);
 	});
 
 	it('should return null if there is nothing', function () {
 		var n1 = createElement({});
 		createElement({ c: [n1] });
-		assert.equal(nextSibling$2(n1), null);
+		assert.equal(nextSibling(n1), null);
 	});
 });
 
-function previousSibling$2(node) {
+function previousSibling(node) {
 	return node.previousSibling;
 }
 
@@ -3710,18 +3160,18 @@ describe('Node/previousSibling', function () {
 		var n1 = createElement({});
 		var n2 = createElement('');
 		createElement({ c: [n1, n2] });
-		assert.equal(previousSibling$2(n2), n1);
+		assert.equal(previousSibling(n2), n1);
 	});
 
 	it('should return null if there is nothing', function () {
 		var n1 = createElement({});
 		createElement({ c: [n1] });
-		assert.equal(previousSibling$2(n1), null);
+		assert.equal(previousSibling(n1), null);
 	});
 });
 
 function generator$8() {
-	var _this11 = this;
+	var _this12 = this;
 
 	var length = this.length;
 
@@ -3729,7 +3179,7 @@ function generator$8() {
 	return {
 		next: function next() {
 			return {
-				value: _this11[index],
+				value: _this12[index],
 				done: length <= index++
 			};
 		}
@@ -3824,12 +3274,12 @@ describe('Number/toOrdinalString', function () {
 
 	try {
 		for (var _iterator2 = tests[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-			var _ref27 = _step2.value;
+			var _ref23 = _step2.value;
 
-			var _ref28 = _slicedToArray(_ref27, 2);
+			var _ref24 = _slicedToArray(_ref23, 2);
 
-			var n = _ref28[0];
-			var expected = _ref28[1];
+			var n = _ref24[0];
+			var expected = _ref24[1];
 
 			_loop(n, expected);
 		}
@@ -3850,8 +3300,8 @@ describe('Number/toOrdinalString', function () {
 });
 
 function assign(target) {
-	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
-		sources[_key8 - 1] = arguments[_key8];
+	for (var _len7 = arguments.length, sources = Array(_len7 > 1 ? _len7 - 1 : 0), _key9 = 1; _key9 < _len7; _key9++) {
+		sources[_key9 - 1] = arguments[_key9];
 	}
 
 	_forEach(sources, function (source) {
@@ -3932,8 +3382,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len7 = arguments.length, args = Array(_len7), _key9 = 0; _key9 < _len7; _key9++) {
-				args[_key9] = arguments[_key9];
+			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
+				args[_key10] = arguments[_key10];
 			}
 
 			push(results, args);
@@ -3948,8 +3398,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
+				args[_key11] = arguments[_key11];
 			}
 
 			push(results, args);
@@ -3962,8 +3412,8 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
-				args[_key11] = arguments[_key11];
+			for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
+				args[_key12] = arguments[_key12];
 			}
 
 			push(results, args);
@@ -4175,7 +3625,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this12 = this;
+			var _this13 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -4183,14 +3633,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this12.resolve(value);
+				_this13.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this12.reject(error);
+				_this13.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -4229,10 +3679,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this13 = this;
+			var _this14 = this;
 
 			_forEach(this.deferreds, function (deferred) {
-				_this13.handle(deferred);
+				_this14.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -4597,14 +4047,14 @@ describe('Set/@iterator', function () {
 
 var Set$2 = function () {
 	function Set$2(iterable) {
-		var _this14 = this;
+		var _this15 = this;
 
 		_classCallCheck(this, Set$2);
 
 		this.clear();
 		if (iterable) {
 			_forEach(iterable, function (value) {
-				_this14.add(value);
+				_this15.add(value);
 			});
 		}
 	}
@@ -4644,10 +4094,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this15 = this;
+			var _this16 = this;
 
 			_forEach(this.data, function (value) {
-				fn.call(thisArg, value, value, _this15);
+				fn.call(thisArg, value, value, _this16);
 			});
 		}
 	}, {
@@ -4749,8 +4199,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
-					args[_key12] = arguments[_key12];
+				for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
+					args[_key13] = arguments[_key13];
 				}
 
 				args[3] = this;
@@ -5070,8 +4520,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
-			args[_key13] = arguments[_key13];
+		for (var _len12 = arguments.length, args = Array(_len12), _key14 = 0; _key14 < _len12; _key14++) {
+			args[_key14] = arguments[_key14];
 		}
 
 		lastArgs = args;
@@ -5139,11 +4589,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref29) {
-				var _ref30 = _slicedToArray(_ref29, 2),
-				    name = _ref30[0],
-				    _ref30$ = _ref30[1],
-				    value = _ref30$ === undefined ? '' : _ref30$;
+			return map(this.data, function (_ref25) {
+				var _ref26 = _slicedToArray(_ref25, 2),
+				    name = _ref26[0],
+				    _ref26$ = _ref26[1],
+				    value = _ref26$ === undefined ? '' : _ref26$;
 
 				return name + '=' + value;
 			}).join('&');

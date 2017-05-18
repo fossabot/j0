@@ -25,23 +25,26 @@ describe('Number/toOrdinalString', function () {
 
 	var tests = [[0, '0th'], [1, '1st'], [2, '2nd'], [3, '3rd'], [4, '4th'], [5, '5th'], [6, '6th'], [7, '7th'], [8, '8th'], [9, '9th'], [10, '10th'], [11, '11th'], [12, '12th'], [13, '13th'], [14, '14th'], [15, '15th'], [16, '16th'], [17, '17th'], [18, '18th'], [19, '19th'], [20, '20th'], [121, '121st'], [122, '122nd'], [123, '123rd'], [124, '124th']];
 
+	var _loop = function _loop(n, expected) {
+		it('should return ' + expected + ' if the argument is ' + n, function () {
+			assert.equal(toOrdinalString(n), expected);
+		});
+	};
+
 	var _iteratorNormalCompletion = true;
 	var _didIteratorError = false;
 	var _iteratorError = undefined;
 
 	try {
-		var _loop = function _loop() {
-			var _step$value = _slicedToArray(_step.value, 2),
-			    n = _step$value[0],
-			    expected = _step$value[1];
-
-			it('should return ' + expected + ' if the argument is ' + n, function () {
-				assert.equal(toOrdinalString(n), expected);
-			});
-		};
-
 		for (var _iterator = tests[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-			_loop();
+			var _ref = _step.value;
+
+			var _ref2 = _slicedToArray(_ref, 2);
+
+			var n = _ref2[0];
+			var expected = _ref2[1];
+
+			_loop(n, expected);
 		}
 	} catch (err) {
 		_didIteratorError = true;

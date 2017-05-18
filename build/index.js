@@ -45,7 +45,11 @@ async function start() {
 	await rm(dest);
 	await copyAssets(path.join(__dirname, 'assets'));
 	const modulePaths = [].concat(...await Promise.all(targetDirectories.map(function (dir) {
-		return glob(path.join(dir, '**', 'test', 'index.js'));
+		return glob(path.join(dir, '**', 'test', 'index.js'), {
+			ignore: [
+				path.join(__dirname, '**', '*')
+			]
+		});
 	})))
 	.map(function (absoluteTestScriptPath) {
 		return path.relative(projectRoot, path.join(path.dirname(absoluteTestScriptPath), '..'));

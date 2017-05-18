@@ -93,9 +93,9 @@ function forEach(iterable, fn, thisArg) {
 
 		try {
 			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+				var _value = _step.value;
 
-				if (fn.call(thisArg, value, _index2, iterable)) {
+				if (fn.call(thisArg, _value, _index2, iterable)) {
 					return;
 				}
 				_index2 += 1;
