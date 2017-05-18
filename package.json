@@ -18,7 +18,7 @@
     "start": "node build --server",
     "polyfill": "uglifyjs docs/polyfill.js --mangle --compless --output polyfill.min.js",
     "build": "node build && npm run polyfill",
-    "test": "wdio build/wdio.conf.js"
+    "test": "node build/test"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
@@ -38,7 +38,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^3.2.2",
     "sable": "0.0.21",
-    "selenium-standalone": "^6.0.1",
+    "selenium-webdriver": "^3.4.0",
     "stylus": "^0.54.5",
     "uglify-js": "^2.8.22"
   }
