@@ -1,5 +1,5 @@
 const path = require('path');
-const sable = require('sable');
+const SableServer = require('sable');
 
 const buildWebdriverScript = require('./buildWebdriverScript');
 const {dest} = require('./constants');
@@ -154,11 +154,12 @@ exports.config = {
 	//
 	// Gets executed once before all workers get launched.
 	onPrepare: async function () {
-		server = await sable({
+		server = new SableServer({
 			documentRoot: dest,
 			noWatch: true,
 			quiet: true
 		});
+		await server.start();
 		return buildWebdriverScript(server.address().port);
 	},
 	//

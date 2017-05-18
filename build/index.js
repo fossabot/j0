@@ -1,5 +1,5 @@
 const path = require('path');
-const sable = require('sable');
+const SableServer = require('sable');
 const console = require('j1/console').create('build');
 const rm = require('j1/rm');
 const promisify = require('j1/promisify');
@@ -58,10 +58,11 @@ async function start() {
 	await buildInOrder(modulePaths);
 	await buildSiteMap();
 	if (serverMode) {
-		sable({
+		const server = new SableServer({
 			documentRoot: dest,
 			quiet: true
 		});
+		await server.start();
 	}
 }
 
