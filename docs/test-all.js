@@ -8,7 +8,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref29 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
+	var _ref31 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
 		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
@@ -30,7 +30,7 @@ var wait = function () {
 	}));
 
 	return function wait(_x32, _x33) {
-		return _ref29.apply(this, arguments);
+		return _ref31.apply(this, arguments);
 	};
 }();
 
@@ -128,9 +128,9 @@ function _forEach(iterable, fn, thisArg) {
 
 		try {
 			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var value = _step.value;
+				var _value = _step.value;
 
-				if (fn.call(thisArg, value, _index2, iterable)) {
+				if (fn.call(thisArg, _value, _index2, iterable)) {
 					return;
 				}
 				_index2 += 1;
@@ -3812,23 +3812,26 @@ describe('Number/toOrdinalString', function () {
 
 	var tests = [[0, '0th'], [1, '1st'], [2, '2nd'], [3, '3rd'], [4, '4th'], [5, '5th'], [6, '6th'], [7, '7th'], [8, '8th'], [9, '9th'], [10, '10th'], [11, '11th'], [12, '12th'], [13, '13th'], [14, '14th'], [15, '15th'], [16, '16th'], [17, '17th'], [18, '18th'], [19, '19th'], [20, '20th'], [121, '121st'], [122, '122nd'], [123, '123rd'], [124, '124th']];
 
+	var _loop = function _loop(n, expected) {
+		it('should return ' + expected + ' if the argument is ' + n, function () {
+			assert.equal(toOrdinalString(n), expected);
+		});
+	};
+
 	var _iteratorNormalCompletion2 = true;
 	var _didIteratorError2 = false;
 	var _iteratorError2 = undefined;
 
 	try {
-		var _loop = function _loop() {
-			var _step2$value = _slicedToArray(_step2.value, 2),
-			    n = _step2$value[0],
-			    expected = _step2$value[1];
-
-			it('should return ' + expected + ' if the argument is ' + n, function () {
-				assert.equal(toOrdinalString(n), expected);
-			});
-		};
-
 		for (var _iterator2 = tests[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-			_loop();
+			var _ref27 = _step2.value;
+
+			var _ref28 = _slicedToArray(_ref27, 2);
+
+			var n = _ref28[0];
+			var expected = _ref28[1];
+
+			_loop(n, expected);
 		}
 	} catch (err) {
 		_didIteratorError2 = true;
@@ -5136,11 +5139,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref27) {
-				var _ref28 = _slicedToArray(_ref27, 2),
-				    name = _ref28[0],
-				    _ref28$ = _ref28[1],
-				    value = _ref28$ === undefined ? '' : _ref28$;
+			return map(this.data, function (_ref29) {
+				var _ref30 = _slicedToArray(_ref29, 2),
+				    name = _ref30[0],
+				    _ref30$ = _ref30[1],
+				    value = _ref30$ === undefined ? '' : _ref30$;
 
 				return name + '=' + value;
 			}).join('&');
