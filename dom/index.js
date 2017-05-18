@@ -112,19 +112,20 @@ class J0Element {
 	}
 
 	on(eventName, fn) {
-		this.node.addEventListener(eventName, (event) => {
+		const wrapped = (event) => {
 			fn.call(this, event);
-		});
-		this.events.push([eventName, fn]);
+		};
+		this.node.addEventListener(eventName, wrapped);
+		this.events.push([eventName, fn, wrapped]);
 		return this;
 	}
 
 	off(eventName, fn) {
 		const {events} = this;
 		for (let i = events.length; i--;) {
-			const [e, f] = events[i];
+			const [e, f, wrapped] = events[i];
 			if (e === eventName && (!fn || fn === f)) {
-				this.node.removeEventListener(eventName, fn);
+				this.node.removeEventListener(eventName, wrapped);
 				events.splice(i, 1);
 			}
 		}

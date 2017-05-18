@@ -1606,10 +1606,11 @@ var J0Element = function () {
 		value: function on(eventName, fn) {
 			var _this3 = this;
 
-			this.node.addEventListener(eventName, function (event) {
+			var wrapped = function wrapped(event) {
 				fn.call(_this3, event);
-			});
-			this.events.push([eventName, fn]);
+			};
+			this.node.addEventListener(eventName, wrapped);
+			this.events.push([eventName, fn, wrapped]);
 			return this;
 		}
 	}, {
@@ -1618,12 +1619,13 @@ var J0Element = function () {
 			var events = this.events;
 
 			for (var i = events.length; i--;) {
-				var _events$i = _slicedToArray(events[i], 2),
+				var _events$i = _slicedToArray(events[i], 3),
 				    e = _events$i[0],
-				    f = _events$i[1];
+				    f = _events$i[1],
+				    wrapped = _events$i[2];
 
 				if (e === eventName && (!fn || fn === f)) {
-					this.node.removeEventListener(eventName, fn);
+					this.node.removeEventListener(eventName, wrapped);
 					events.splice(i, 1);
 				}
 			}
