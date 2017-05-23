@@ -1,10 +1,13 @@
 (function(){
 'use strict';
 
+/* global window */
+var w = window;
+
 describe('polyfill', function () {
 
 	it('should add global', function () {
-		assert.equal(window.global, window);
+		assert.equal(w.global, w);
 	});
 });
 }())

@@ -165,7 +165,6 @@
 	},
 	"onError": {},
 	"polyfill": {},
-	"postMessage": {},
 	"preventDefault": {},
 	"requestAnimationFrame": {},
 	"scrollBy": {},
@@ -175,6 +174,5 @@
 	"setImmediate": {},
 	"stopPropagation": {},
 	"throttle": {},
-	"wait": {},
-	"window": {}
+	"wait": {}
 }

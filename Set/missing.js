@@ -1,4 +1,4 @@
-import window from '../window';
+import {window} from '..';
 import J0Set from './j0';
 
 let SET = window.Set;

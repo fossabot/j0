@@ -1,8 +1,11 @@
 (function(){
 'use strict';
 
+/* global window */
+var w = window;
+
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }

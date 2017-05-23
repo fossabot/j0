@@ -2318,7 +2318,7 @@ describe('HTMLCollection/@iterator', function () {
 });
 
 function innerHeight() {
-	return window.innerHeight;
+	return w.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -2329,7 +2329,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return window.innerWidth;
+	return w.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -3362,16 +3362,7 @@ describe('onError', function () {
 describe('polyfill', function () {
 
 	it('should add global', function () {
-		assert.equal(window.global, window);
-	});
-});
-
-var postMessage = window.postMessage;
-
-describe('postMessage', function () {
-
-	it('should be a function', function () {
-		assert.equal(isFunction(postMessage), true);
+		assert.equal(w.global, w);
 	});
 });
 
@@ -3857,7 +3848,7 @@ describe('scrollTo', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -3869,7 +3860,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -4588,12 +4579,5 @@ describe('wait', function () {
 			}
 		}, _callee3, this);
 	})));
-});
-
-describe('window', function () {
-
-	it('should have document', function () {
-		assert.equal(window.document.defaultView, window);
-	});
 });
 }())

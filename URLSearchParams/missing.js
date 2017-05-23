@@ -1,4 +1,4 @@
-import window from '../window';
+import {window} from '..';
 import J0URLSearchParams from './j0';
 const {URLSearchParams} = window;
 if (!(URLSearchParams && new URLSearchParams('?a=b').has('a'))) {

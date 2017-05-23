@@ -1,8 +1,11 @@
 (function(){
 'use strict';
 
+/* global window */
+var w = window;
+
 function innerHeight() {
-	return window.innerHeight;
+	return w.innerHeight;
 }
 
 describe('innerHeight', function () {

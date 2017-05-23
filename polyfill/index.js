@@ -16,5 +16,5 @@ import '../Request/polyfill';
 import '../FormData/polyfill';
 import '../requestAnimationFrame/polyfill';
 import '../cancelAnimationFrame/polyfill';
-import window from '../window';
+import {window} from '..';
 window.global = window;

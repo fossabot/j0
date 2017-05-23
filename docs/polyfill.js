@@ -1277,7 +1277,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-window.Promise = window.Promise || J0Promise;
+w.Promise = w.Promise || J0Promise;
 
 function find(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -1441,13 +1441,13 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = window.Map;
+var MAP = w.Map;
 
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
 
-window.Map = MAP;
+w.Map = MAP;
 
 function generator$2() {
 	return this.entries();
@@ -1549,13 +1549,13 @@ var Set = function () {
 	return Set;
 }();
 
-var SET = window.Set;
+var SET = w.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 	SET = Set;
 }
 
-window.Set = SET;
+w.Set = SET;
 
 function generator$4() {
 	var _this8 = this;
@@ -1794,11 +1794,10 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window23 = window,
-    URLSearchParams$1 = _window23.URLSearchParams;
+var URLSearchParams$1 = w.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	window.URLSearchParams = URLSearchParams$2;
+	w.URLSearchParams = URLSearchParams$2;
 }
 
 function forEachKey(obj, fn, thisArg) {
@@ -1891,8 +1890,8 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!window.Headers) {
-	window.Headers = Headers$1;
+if (!w.Headers) {
+	w.Headers = Headers$1;
 }
 
 function isUndefined(x) {
@@ -2300,18 +2299,18 @@ function fetch(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0Fetch;
 // }
-window.fetch = fetch;
+w.fetch = fetch;
 
-if (!window.Body) {
-	window.Body = Body;
+if (!w.Body) {
+	w.Body = Body;
 }
 
-if (!window.Response) {
-	window.Response = Response;
+if (!w.Response) {
+	w.Response = Response;
 }
 
-if (!window.Request) {
-	window.Request = Request;
+if (!w.Request) {
+	w.Request = Request;
 }
 
 w.requestAnimationFrame = w.requestAnimationFrame || w.mozRequestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || function (fn) {
@@ -2324,5 +2323,5 @@ w.cancelAnimationFrame = w.cancelAnimationFrame || w.mozCancelAnimationFrame || 
 	return clearTimeout(id);
 };
 
-window.global = window;
+w.global = w;
 }())

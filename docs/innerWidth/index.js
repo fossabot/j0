@@ -1,8 +1,11 @@
 (function(){
 'use strict';
 
+/* global window */
+var w = window;
+
 function innerWidth() {
-	return window.innerWidth;
+	return w.innerWidth;
 }
 
 describe('innerWidth', function () {

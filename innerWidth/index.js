@@ -1,4 +1,4 @@
-import window from '../window';
+import {window} from '..';
 function innerWidth() {
 	return window.innerWidth;
 }

@@ -1,4 +1,4 @@
-import window from '../window';
+import {window} from '..';
 function innerHeight() {
 	return window.innerHeight;
 }
