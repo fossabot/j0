@@ -79,6 +79,8 @@ var _window3 = window,
     document = _window3.document;
 var _window4 = window,
     setTimeout = _window4.setTimeout;
+var _window5 = window,
+    Promise = _window5.Promise;
 
 
 var INTERVAL = 100;

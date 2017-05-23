@@ -768,6 +768,8 @@ var _window18 = window,
     Float64Array = _window18.Float64Array;
 var _window19 = window,
     XMLHttpRequest = _window19.XMLHttpRequest;
+var _window20 = window,
+    Promise$1 = _window20.Promise;
 
 
 function isString(x) {
@@ -1786,8 +1788,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window20 = window,
-    URLSearchParams$1 = _window20.URLSearchParams;
+var _window21 = window,
+    URLSearchParams$1 = _window21.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;
@@ -2050,7 +2052,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return read(blob, 'ArrayBuffer');
@@ -2064,13 +2066,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise.resolve(this.bodyBlob);
+				return Promise$1.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise.resolve(new Blob([this.bodyText]));
+				return Promise$1.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -2083,11 +2085,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return read(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise.resolve(this.bodyText);
+				return Promise$1.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -2104,7 +2106,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError$1('Already used'));
+				return Promise$1.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -2254,7 +2256,7 @@ function parse$1(rawHeaders) {
 }
 
 function fetch(input, init) {
-	return new Promise(function (resolve, reject) {
+	return new Promise$1(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {

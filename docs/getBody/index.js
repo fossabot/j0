@@ -7,6 +7,8 @@ var _window = window,
     document = _window.document;
 var _window2 = window,
     setTimeout = _window2.setTimeout;
+var _window3 = window,
+    Promise = _window3.Promise;
 
 
 var INTERVAL = 100;

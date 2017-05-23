@@ -1,7 +1,6 @@
 /* global chai */
 import getBody from '../../getBody';
 import onError from '../../onError';
-import Promise from '../../Promise';
 import insertAfter from '../../dom/insertAfter';
 import getElementById from '../../dom/getElementById';
 import getTextContent from '../../dom/getTextContent';
@@ -17,7 +16,8 @@ import {
 	window,
 	location,
 	navigator,
-	document
+	document,
+	Promise
 } from '../..';
 
 const {mocha} = window;

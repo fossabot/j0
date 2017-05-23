@@ -1,5 +1,5 @@
-import Promise from '../Promise';
 import {
+	Promise,
 	document,
 	setTimeout
 } from '..';

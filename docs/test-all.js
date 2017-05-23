@@ -898,6 +898,8 @@ var _window17 = window,
     Float64Array = _window17.Float64Array;
 var _window18 = window,
     XMLHttpRequest = _window18.XMLHttpRequest;
+var _window19 = window,
+    Promise$1 = _window19.Promise;
 
 
 function shift(arrayLike) {
@@ -1201,7 +1203,7 @@ var Body$1 = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return read(blob, 'ArrayBuffer');
@@ -1215,13 +1217,13 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise.resolve(this.bodyBlob);
+				return Promise$1.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise.resolve(new Blob([this.bodyText]));
+				return Promise$1.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -1234,11 +1236,11 @@ var Body$1 = function () {
 			if (this.bodyBlob) {
 				return read(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise.resolve(this.bodyText);
+				return Promise$1.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1255,7 +1257,7 @@ var Body$1 = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError$1('Already used'));
+				return Promise$1.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -2066,7 +2068,7 @@ function parse$3(rawHeaders) {
 }
 
 function fetch$1(input, init) {
-	return new Promise(function (resolve, reject) {
+	return new Promise$1(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {
@@ -2177,7 +2179,7 @@ describe('FormData', function () {
 
 var INTERVAL = 100;
 
-var getBody = new Promise(function (resolve) {
+var getBody = new Promise$1(function (resolve) {
 	function get() {
 		var body = document.body;
 

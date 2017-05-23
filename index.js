@@ -24,3 +24,4 @@ export const {Int32Array} = window;
 export const {Float32Array} = window;
 export const {Float64Array} = window;
 export const {XMLHttpRequest} = window;
+export const {Promise} = window;

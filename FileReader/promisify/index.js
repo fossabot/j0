@@ -1,4 +1,4 @@
-import Promise from '../../Promise';
+import {Promise} from '../..';
 
 function promisify(reader) {
 	return new Promise(function (resolve, reject) {

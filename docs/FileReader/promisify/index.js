@@ -1,6 +1,12 @@
 (function(){
 'use strict';
 
+/* global window */
+
+var _window = window,
+    Promise = _window.Promise;
+
+
 function promisify(reader) {
 	return new Promise(function (resolve, reject) {
 		reader.onload = function () {

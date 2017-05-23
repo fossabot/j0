@@ -1,4 +1,3 @@
-import Promise from '../../Promise';
 import FormData from '../../FormData';
 import isString from '../../isString';
 import Blob from '../../Blob';
@@ -13,7 +12,8 @@ import {
 	ArrayBuffer,
 	DataView,
 	TypeError,
-	Uint8Array
+	Uint8Array,
+	Promise
 } from '../..';
 
 function bufferClone(buf) {
