@@ -13,6 +13,8 @@ function insertBefore(newNode, referenceNode) {
 	return parent.insertBefore(newNode, referenceNode);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

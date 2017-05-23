@@ -4,7 +4,7 @@ import Request from '../../Request/j0';
 import Response from '../../Response/j0';
 import parseHeaders from '../../Headers/parse';
 import Promise from '../../Promise';
-import {XMLHttpRequest} from '../../global';
+import {XMLHttpRequest} from '../..';
 
 function fetch(input, init) {
 	return new Promise(function (resolve, reject) {

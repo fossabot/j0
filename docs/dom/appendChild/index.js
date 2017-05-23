@@ -7,6 +7,8 @@ function appendChild(parentNode, newNode) {
 	parentNode.appendChild(newNode);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

@@ -7,6 +7,8 @@ function getTextContent(node) {
 	return node ? node.textContent : '';
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

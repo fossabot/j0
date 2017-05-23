@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+/* global window */
+
 var _window = window,
     Uint8Array = _window.Uint8Array;
 var _window2 = window,

@@ -7,6 +7,8 @@ function parentNode(node) {
 	return node.parentNode;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

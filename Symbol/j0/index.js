@@ -4,7 +4,7 @@ import forEach from '../../Array/forEach';
 import {
 	TypeError,
 	Object
-} from '../../global';
+} from '../..';
 
 const hex = 16;
 

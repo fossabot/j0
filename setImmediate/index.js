@@ -3,7 +3,7 @@
 import {
 	window,
 	setTimeout
-} from '../global';
+} from '..';
 
 if (!window.immediateId) {
 	window.immediateId = 0;

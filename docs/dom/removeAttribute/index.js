@@ -7,6 +7,8 @@ function removeAttribute(element, attributeName) {
 	element.removeAttribute(attributeName);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

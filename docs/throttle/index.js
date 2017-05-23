@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+/* global window */
+
 var _window = window,
     setTimeout = _window.setTimeout;
 

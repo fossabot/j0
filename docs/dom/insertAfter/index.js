@@ -25,6 +25,8 @@ function insertAfter(newNode, referenceNode, parentNode) {
 	return insertBefore(newNode, referenceNode ? nextSibling(referenceNode) : firstChild(parentNode), parentNode);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

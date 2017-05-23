@@ -106,6 +106,8 @@ function children(node) {
 	});
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

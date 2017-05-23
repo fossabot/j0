@@ -8,7 +8,7 @@ import {
 	Int32Array,
 	Float32Array,
 	Float64Array
-} from '../../global';
+} from '../..';
 import isArrayBufferView from '..';
 
 describe('isArrayBufferView', function () {

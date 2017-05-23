@@ -7,6 +7,8 @@ function previousSibling(element) {
 	return element.previousSibling;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

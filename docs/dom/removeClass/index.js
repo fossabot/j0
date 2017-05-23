@@ -7,6 +7,8 @@ function removeClass(element, className) {
 	element.classList.remove(className);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

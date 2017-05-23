@@ -7,6 +7,8 @@ function firstChild(element) {
 	return element.firstChild;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

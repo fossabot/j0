@@ -17,6 +17,8 @@ function isNode(x) {
 	return x instanceof Node;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

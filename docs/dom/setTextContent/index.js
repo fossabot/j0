@@ -7,6 +7,8 @@ function setTextContent(node, text) {
 	node.textContent = text;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

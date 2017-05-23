@@ -70,6 +70,8 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+/* global window */
+
 var _window = window,
     decodeURIComponent = _window.decodeURIComponent;
 

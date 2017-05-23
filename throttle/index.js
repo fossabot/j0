@@ -1,4 +1,4 @@
-import {setTimeout} from '../global';
+import {setTimeout} from '..';
 import isUndefined from '../isUndefined';
 
 function throttle(fn, interval = 0, context) {

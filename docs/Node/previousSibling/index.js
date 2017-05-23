@@ -7,6 +7,8 @@ function previousSibling(node) {
 	return node.previousSibling;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

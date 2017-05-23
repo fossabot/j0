@@ -815,6 +815,8 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+/* global window */
+
 var _window = window,
     TypeError = _window.TypeError;
 
@@ -833,7 +835,7 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError('The object is not shift-able');
+	throw new TypeError('The object is not shift-able object');
 }
 
 describe('Array/shift', function () {

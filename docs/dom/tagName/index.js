@@ -10,6 +10,8 @@ function tagName() {
 	return name ? name.toLowerCase() : name;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

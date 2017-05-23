@@ -68,6 +68,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+/* global window */
+var w = window;
+
 var _window = window,
     location = _window.location;
 var _window2 = window,
@@ -333,8 +336,7 @@ function forEachKey(obj, fn, thisArg) {
 }
 
 /* global chai */
-var _window5 = window,
-    mocha = _window5.mocha;
+var mocha = w.mocha;
 
 
 function startMocha() {
@@ -381,9 +383,9 @@ function normalizeUrl(url) {
 }
 
 if (mocha) {
-	window.assert = chai.assert;
+	w.assert = chai.assert;
 	mocha.setup('bdd');
-	window.start = startMocha;
+	w.start = startMocha;
 }
 
 getBody.then(function () {

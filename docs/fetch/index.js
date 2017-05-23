@@ -136,6 +136,7 @@ function find(iterable) {
 	return result;
 }
 
+/* global window */
 var _window = window,
     String = _window.String;
 var _window2 = window,

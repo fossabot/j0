@@ -7,6 +7,8 @@ function addClass(element, className) {
 	element.classList.add(className);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

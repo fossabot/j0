@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 var _window2 = window,

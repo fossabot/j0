@@ -42,6 +42,8 @@ function setStyle(element, name, value) {
 	element.style[name] = value;
 }
 
+/* global window */
+
 var _window = window,
     document$1 = _window.document;
 

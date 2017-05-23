@@ -30,6 +30,8 @@ function addEventListener(element, eventName, fn) {
 	getEventListeners(element, eventName).add(fn);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

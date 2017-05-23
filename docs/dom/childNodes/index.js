@@ -7,6 +7,8 @@ function childNodes(node) {
 	return node.childNodes;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

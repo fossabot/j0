@@ -860,6 +860,8 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+/* global window */
+var w = window;
 var _window = window,
     String = _window.String;
 var _window2 = window,
@@ -912,7 +914,7 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError$1('The object is not shift-able');
+	throw new TypeError$1('The object is not shift-able object');
 }
 
 describe('Array/shift', function () {
@@ -3433,12 +3435,11 @@ describe('preventDefault', function () {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!w.immediateId) {
+	w.immediateId = 0;
 }
-window.immediateId += 1;
-var _window19 = window,
-    setImmediateNative = _window19.setImmediate;
+w.immediateId += 1;
+var setImmediateNative = w.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;

@@ -1,5 +1,5 @@
 import isUndefined from '../../isUndefined';
-import {TypeError} from '../../global';
+import {TypeError} from '../..';
 
 function shift(arrayLike) {
 	if (arrayLike.shift) {
@@ -14,6 +14,6 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError('The object is not shift-able');
+	throw new TypeError('The object is not shift-able object');
 }
 export default shift;

@@ -12,6 +12,8 @@ describe('Number/MAX_SAFE_INTEGER', function () {
 	});
 });
 
+/* global window */
+
 var _window = window,
     parseInt = _window.parseInt;
 

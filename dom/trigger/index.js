@@ -1,4 +1,4 @@
-import {document} from '../../global';
+import {document} from '../..';
 import CustomEvent from '../../CustomEvent';
 
 let createEvent;

@@ -21,6 +21,8 @@ function prependChild(parentNode, newNode) {
 	insertBefore(newNode, firstChild(parentNode), parentNode);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

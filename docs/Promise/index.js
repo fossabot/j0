@@ -78,6 +78,9 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+/* global window */
+var w = window;
+
 var _window = window,
     setTimeout$1 = _window.setTimeout;
 var _window2 = window,
@@ -86,12 +89,11 @@ var _window2 = window,
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
 
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!w.immediateId) {
+	w.immediateId = 0;
 }
-window.immediateId += 1;
-var _window3 = window,
-    setImmediateNative = _window3.setImmediate;
+w.immediateId += 1;
+var setImmediateNative = w.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;

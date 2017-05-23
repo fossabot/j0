@@ -7,6 +7,8 @@ function nextSibling(element) {
 	return element.nextSibling;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

@@ -728,6 +728,8 @@ var runtime = createCommonjsModule(function (module) {
 	(typeof commonjsGlobal === 'undefined' ? 'undefined' : _typeof(commonjsGlobal)) === "object" ? commonjsGlobal : (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === "object" ? window : (typeof self === 'undefined' ? 'undefined' : _typeof(self)) === "object" ? self : commonjsGlobal);
 });
 
+/* global window */
+var w = window;
 var _window = window,
     String$1 = _window.String;
 var _window2 = window,
@@ -912,8 +914,8 @@ var SymbolRegistry = function () {
 
 var J0Symbol = new SymbolRegistry().Symbol;
 
-if (!window.Symbol) {
-	window.Symbol = J0Symbol;
+if (!w.Symbol) {
+	w.Symbol = J0Symbol;
 }
 
 function generator() {
@@ -986,12 +988,11 @@ if (!String.prototype.repeat) {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!w.immediateId) {
+	w.immediateId = 0;
 }
-window.immediateId += 1;
-var _window20 = window,
-    setImmediateNative = _window20.setImmediate;
+w.immediateId += 1;
+var setImmediateNative = w.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1785,8 +1786,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window21 = window,
-    URLSearchParams$1 = _window21.URLSearchParams;
+var _window20 = window,
+    URLSearchParams$1 = _window20.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;
@@ -2305,13 +2306,13 @@ if (!window.Request) {
 	window.Request = Request;
 }
 
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
+w.requestAnimationFrame = w.requestAnimationFrame || w.mozRequestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || function (fn) {
 	return setTimeout(function () {
 		fn(Date.now());
 	}, 30);
 };
 
-window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function (id) {
+w.cancelAnimationFrame = w.cancelAnimationFrame || w.mozCancelAnimationFrame || function (id) {
 	return clearTimeout(id);
 };
 

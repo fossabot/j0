@@ -25,6 +25,8 @@ function getEventListeners(element) {
 	return allEvents;
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

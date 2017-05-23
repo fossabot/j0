@@ -14,7 +14,7 @@ import {
 	DataView,
 	TypeError,
 	Uint8Array
-} from '../../global';
+} from '../..';
 
 function bufferClone(buf) {
 	if (buf.slice) {

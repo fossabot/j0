@@ -1,4 +1,4 @@
-import {window, clearTimeout} from '../global';
+import {window, clearTimeout} from '..';
 window.cancelAnimationFrame =
 	window.cancelAnimationFrame ||
 	window.mozCancelAnimationFrame ||

@@ -7,6 +7,8 @@ function toggleClass(element, className) {
 	return element.classList.toggle(className);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

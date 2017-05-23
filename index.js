@@ -1,5 +1,6 @@
-import window from '../window';
-export {window};
+/* global window */
+const w = window;
+export {w as window};
 export const {String} = window;
 export const {Object} = window;
 export const {parseInt} = window;

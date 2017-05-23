@@ -18,7 +18,7 @@ import {
 	location,
 	navigator,
 	document
-} from '../../global';
+} from '../..';
 
 const {mocha} = window;
 

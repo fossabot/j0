@@ -1,18 +1,20 @@
 (function(){
 'use strict';
 
+/* global window */
+var w = window;
+
 var _window = window,
     setTimeout$1 = _window.setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
 
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!w.immediateId) {
+	w.immediateId = 0;
 }
-window.immediateId += 1;
-var _window2 = window,
-    setImmediateNative = _window2.setImmediate;
+w.immediateId += 1;
+var setImmediateNative = w.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;

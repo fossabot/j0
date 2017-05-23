@@ -21,6 +21,8 @@ function empty(element) {
 	}
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

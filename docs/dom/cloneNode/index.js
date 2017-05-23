@@ -7,6 +7,8 @@ function cloneNode(node, deep) {
 	return node.cloneNode(deep);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

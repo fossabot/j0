@@ -9,6 +9,8 @@ function hasClass(_ref, className) {
 	return classList && classList.contains(className);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

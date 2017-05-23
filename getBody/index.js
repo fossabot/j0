@@ -2,7 +2,7 @@ import Promise from '../Promise';
 import {
 	document,
 	setTimeout
-} from '../global';
+} from '..';
 
 const INTERVAL = 100;
 

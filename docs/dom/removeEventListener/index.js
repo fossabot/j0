@@ -118,6 +118,8 @@ function hasEventListener(element, eventName, fn) {
 	return events && events.has(fn ? fn : eventName);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

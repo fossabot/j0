@@ -10,6 +10,8 @@ function getContext(canvas) {
 	return canvas.getContext(contextType, contextAttributes);
 }
 
+/* global window */
+
 var _window = window,
     document = _window.document;
 

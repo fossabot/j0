@@ -1,4 +1,4 @@
-import {document} from '../../global';
+import {document} from '../..';
 import isString from '../../isString';
 import isNode from '../../isNode';
 import setAttribute from '../setAttribute';
