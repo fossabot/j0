@@ -1,50 +1,25 @@
 import window from '../window';
-const {
-	String,
-	Object,
-	parseInt,
-	ArrayBuffer,
-	DataView,
-	location,
-	navigator,
-	document,
-	setTimeout,
-	clearTimeout,
-	decodeURIComponent,
-	encodeURIComponent,
-	TypeError,
-	Uint8Array,
-	Uint8ClampedArray,
-	Uint16Array,
-	Uint32Array,
-	Int8Array,
-	Int16Array,
-	Int32Array,
-	Float32Array,
-	Float64Array
-} = window;
-export {
-	window,
-	String,
-	Object,
-	parseInt,
-	ArrayBuffer,
-	DataView,
-	location,
-	navigator,
-	document,
-	setTimeout,
-	clearTimeout,
-	decodeURIComponent,
-	encodeURIComponent,
-	TypeError,
-	Uint8Array,
-	Uint8ClampedArray,
-	Uint16Array,
-	Uint32Array,
-	Int8Array,
-	Int16Array,
-	Int32Array,
-	Float32Array,
-	Float64Array
-};
+export {window};
+export const {String} = window;
+export const {Object} = window;
+export const {parseInt} = window;
+export const {ArrayBuffer} = window;
+export const {DataView} = window;
+export const {location} = window;
+export const {navigator} = window;
+export const {document} = window;
+export const {setTimeout} = window;
+export const {clearTimeout} = window;
+export const {decodeURIComponent} = window;
+export const {encodeURIComponent} = window;
+export const {TypeError} = window;
+export const {Uint8Array} = window;
+export const {Uint8ClampedArray} = window;
+export const {Uint16Array} = window;
+export const {Uint32Array} = window;
+export const {Int8Array} = window;
+export const {Int16Array} = window;
+export const {Int32Array} = window;
+export const {Float32Array} = window;
+export const {Float64Array} = window;
+export const {XMLHttpRequest} = window;

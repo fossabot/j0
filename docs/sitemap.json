@@ -107,7 +107,6 @@
 	"URLSearchParams": {
 		"j0": {}
 	},
-	"XMLHttpRequest": {},
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
 	"debounce": {},

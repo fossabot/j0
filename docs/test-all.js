@@ -861,28 +861,41 @@ function isUndefined(x) {
 }
 
 var _window = window,
-    String = _window.String,
-    Object$1 = _window.Object,
-    parseInt = _window.parseInt,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout$1 = _window.setTimeout,
-    clearTimeout$1 = _window.clearTimeout,
-    decodeURIComponent = _window.decodeURIComponent,
-    encodeURIComponent = _window.encodeURIComponent,
-    TypeError$1 = _window.TypeError,
-    Uint8Array = _window.Uint8Array,
-    Uint8ClampedArray = _window.Uint8ClampedArray,
-    Uint16Array = _window.Uint16Array,
-    Uint32Array = _window.Uint32Array,
-    Int8Array = _window.Int8Array,
-    Int16Array = _window.Int16Array,
-    Int32Array = _window.Int32Array,
-    Float32Array = _window.Float32Array,
-    Float64Array = _window.Float64Array;
+    String = _window.String;
+var _window2 = window,
+    parseInt = _window2.parseInt;
+var _window3 = window,
+    ArrayBuffer = _window3.ArrayBuffer;
+var _window4 = window,
+    DataView = _window4.DataView;
+var _window5 = window,
+    document = _window5.document;
+var _window6 = window,
+    setTimeout$1 = _window6.setTimeout;
+var _window7 = window,
+    decodeURIComponent = _window7.decodeURIComponent;
+var _window8 = window,
+    TypeError$1 = _window8.TypeError;
+var _window9 = window,
+    Uint8Array = _window9.Uint8Array;
+var _window10 = window,
+    Uint8ClampedArray = _window10.Uint8ClampedArray;
+var _window11 = window,
+    Uint16Array = _window11.Uint16Array;
+var _window12 = window,
+    Uint32Array = _window12.Uint32Array;
+var _window13 = window,
+    Int8Array = _window13.Int8Array;
+var _window14 = window,
+    Int16Array = _window14.Int16Array;
+var _window15 = window,
+    Int32Array = _window15.Int32Array;
+var _window16 = window,
+    Float32Array = _window16.Float32Array;
+var _window17 = window,
+    Float64Array = _window17.Float64Array;
+var _window18 = window,
+    XMLHttpRequest = _window18.XMLHttpRequest;
 
 
 function shift(arrayLike) {
@@ -3426,8 +3439,8 @@ if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window2 = window,
-    setImmediateNative = _window2.setImmediate;
+var _window19 = window,
+    setImmediateNative = _window19.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -4620,25 +4633,6 @@ describe('window', function () {
 
 	it('should have document', function () {
 		assert.equal(window.document.defaultView, window);
-	});
-});
-
-describe('XMLHttpRequest', function () {
-
-	it('should get this page', function () {
-		return new Promise(function (resolve, reject) {
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', '.');
-			xhr.onerror = function () {
-				reject(xhr.error);
-			};
-			xhr.onload = function () {
-				resolve(xhr.response);
-			};
-			xhr.send();
-		}).then(function (result) {
-			assert.equal(/<!doctype/.test(result), true);
-		});
 	});
 });
 }())

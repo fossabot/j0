@@ -796,28 +796,43 @@ function _forEach(iterable, fn, thisArg) {
 }
 
 var _window = window,
-    String$1 = _window.String,
-    Object$1 = _window.Object,
-    parseInt = _window.parseInt,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout = _window.setTimeout,
-    clearTimeout = _window.clearTimeout,
-    decodeURIComponent = _window.decodeURIComponent,
-    encodeURIComponent = _window.encodeURIComponent,
-    TypeError$1 = _window.TypeError,
-    Uint8Array = _window.Uint8Array,
-    Uint8ClampedArray = _window.Uint8ClampedArray,
-    Uint16Array = _window.Uint16Array,
-    Uint32Array = _window.Uint32Array,
-    Int8Array = _window.Int8Array,
-    Int16Array = _window.Int16Array,
-    Int32Array = _window.Int32Array,
-    Float32Array = _window.Float32Array,
-    Float64Array = _window.Float64Array;
+    String$1 = _window.String;
+var _window2 = window,
+    Object$1 = _window2.Object;
+var _window3 = window,
+    parseInt = _window3.parseInt;
+var _window4 = window,
+    ArrayBuffer = _window4.ArrayBuffer;
+var _window5 = window,
+    DataView = _window5.DataView;
+var _window6 = window,
+    setTimeout = _window6.setTimeout;
+var _window7 = window,
+    clearTimeout = _window7.clearTimeout;
+var _window8 = window,
+    decodeURIComponent = _window8.decodeURIComponent;
+var _window9 = window,
+    TypeError$1 = _window9.TypeError;
+var _window10 = window,
+    Uint8Array = _window10.Uint8Array;
+var _window11 = window,
+    Uint8ClampedArray = _window11.Uint8ClampedArray;
+var _window12 = window,
+    Uint16Array = _window12.Uint16Array;
+var _window13 = window,
+    Uint32Array = _window13.Uint32Array;
+var _window14 = window,
+    Int8Array = _window14.Int8Array;
+var _window15 = window,
+    Int16Array = _window15.Int16Array;
+var _window16 = window,
+    Int32Array = _window16.Int32Array;
+var _window17 = window,
+    Float32Array = _window17.Float32Array;
+var _window18 = window,
+    Float64Array = _window18.Float64Array;
+var _window19 = window,
+    XMLHttpRequest = _window19.XMLHttpRequest;
 
 
 var hex = 16;
@@ -973,8 +988,8 @@ if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window2 = window,
-    setImmediateNative = _window2.setImmediate;
+var _window20 = window,
+    setImmediateNative = _window20.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1768,8 +1783,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window3 = window,
-    URLSearchParams$1 = _window3.URLSearchParams;
+var _window21 = window,
+    URLSearchParams$1 = _window21.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;
