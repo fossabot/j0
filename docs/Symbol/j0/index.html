@@ -1,19 +1,18 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>j0/Symbol/polyfill</title>
+<title>j0/Symbol/j0</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../../page.css" rel="stylesheet">
 <link href="../../package.css" rel="stylesheet">
 <script id="root" type="text/plain">../..</script>
-<h1 id="title"><a href="../../">j0</a>/<a href="../">Symbol</a>/polyfill<span class="version j0_version"></span></h1>
+<h1 id="title"><a href="../../">j0</a>/<a href="../">Symbol</a>/j0<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Date</span>&#32;<span class="name">from</span>&#32;<a href="../../Date"><span class="string"><span class="string">'../../Date'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isString</span>&#32;<span class="name">from</span>&#32;<a href="../../isString"><span class="string"><span class="string">'../../isString'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEach</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/forEach"><span class="string"><span class="string">'../../Array/forEach'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="name">window</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">TypeError</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Object</span>
 <span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../../global"><span class="string"><span class="string">'../../global'</span></span></a><span class="_3b">;</span>
@@ -90,56 +89,16 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="if">if</span>&#32;<span class="_28">(</span><span class="prefix">!</span><span class="name">window</span><span class="_2e">.</span><span class="name">Symbol</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="name">window</span><span class="_2e">.</span><span class="name">Symbol</span>&#32;<span class="_3d">=</span>&#32;<span class="new">new</span>&#32;<span class="name">SymbolRegistry</span><span class="_28">(</span><span class="_29">)</span><span class="_2e">.</span><span class="name">Symbol</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="_7d">}</span></pre>
-	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Symbol/polyfill/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+<span class="linenum"></span><span class="export">export</span>&#32;<span class="default">default</span>&#32;<span class="new">new</span>&#32;<span class="name">SymbolRegistry</span><span class="_28">(</span><span class="_29">)</span><span class="_2e">.</span><span class="name">Symbol</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Symbol/j0/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Symbol</span>&#32;<span class="name">from</span>&#32;<a href=".."><span class="string"><span class="string">'../..'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'Symbol/polyfill'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;generate&#32;a&#32;new&#32;symbol'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">s1</span>&#32;<span class="_3d_3d_2f_21_3d">!==</span>&#32;<span class="name">s2</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;generate&#32;a&#32;new&#32;symbol&#32;even&#32;if&#32;they&#32;have&#32;same&#32;key'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'key'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">s1</span>&#32;<span class="_3d_3d_2f_21_3d">!==</span>&#32;<span class="name">s2</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;generate&#32;a&#32;new&#32;symbol&#32;unless&#32;the&#32;symbol&#32;has&#32;created&#32;by&#32;Symbol.for'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'key'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_2e">.</span><span class="for">for</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">s1</span>&#32;<span class="_3d_3d_2f_21_3d">!==</span>&#32;<span class="name">s2</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;get&#32;a&#32;symbol&#32;from&#32;a&#32;key'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'key1'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_2e">.</span><span class="for">for</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">Symbol</span><span class="_2e">.</span><span class="for">for</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="name">s</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;get&#32;a&#32;key&#32;from&#32;a&#32;symbol'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'key1'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">s</span>&#32;<span class="_3d">=</span>&#32;<span class="name">Symbol</span><span class="_2e">.</span><span class="for">for</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">Symbol</span><span class="_2e">.</span><span class="name">keyFor</span><span class="_28">(</span><span class="name">s</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;have&#32;Symbol.iterator'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="prefix">!</span><span class="name">Symbol</span><span class="_2e">.</span><span class="name">iterator</span><span class="_2c">,</span>&#32;<span class="false">false</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
-	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Symbol/polyfill/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">J0Symbol</span>&#32;<span class="name">from</span>&#32;<a href=".."><span class="string"><span class="string">'../..'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">test</span>&#32;<span class="name">from</span>&#32;<a href="../test"><span class="string"><span class="string">'../../test/test'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="name">test</span><span class="_28">(</span><span class="name">J0Symbol</span><span class="_2c">,</span>&#32;<span class="string">'J0Symbol'</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Symbol/j0/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>
 <div id="mocha"></div>

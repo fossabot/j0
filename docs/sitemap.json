@@ -102,7 +102,7 @@
 	"StringList": {},
 	"Symbol": {
 		"iterator": {},
-		"polyfill": {}
+		"j0": {}
 	},
 	"URLSearchParams": {
 		"j0": {}

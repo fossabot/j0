@@ -3,9 +3,9 @@
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
 	var _ref27 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x29, _x30) {
+	return function wait(_x30, _x31) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -902,9 +902,7 @@ function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();
 	} else if (!isUndefined(arrayLike.length)) {
-		var _arrayLike = _slicedToArray(arrayLike, 1),
-		    returnValue = _arrayLike[0];
-
+		var returnValue = arrayLike[0];
 		var length = arrayLike.length;
 
 		for (var i = 0; i < length; i += 1) {
@@ -4364,44 +4362,53 @@ describe('Symbol/iterator', function () {
 	});
 });
 
-describe('Symbol/polyfill', function () {
+function test$2(_Symbol) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
-	it('should generate a new symbol', function () {
-		var s1 = Symbol();
-		var s2 = Symbol();
-		assert.equal(s1 !== s2, true);
-	});
 
-	it('should generate a new symbol even if they have same key', function () {
-		var key = 'key';
-		var s1 = Symbol(key);
-		var s2 = Symbol(key);
-		assert.equal(s1 !== s2, true);
-	});
+	describe(name, function () {
 
-	it('should generate a new symbol unless the symbol has created by Symbol.for', function () {
-		var key = 'key';
-		var s1 = Symbol(key);
-		var s2 = Symbol.for(key);
-		assert.equal(s1 !== s2, true);
-	});
+		it('should generate a new symbol', function () {
+			var s1 = _Symbol();
+			var s2 = _Symbol();
+			assert.equal(s1 !== s2, true);
+		});
 
-	it('should get a symbol from a key', function () {
-		var key = 'key1';
-		var s = Symbol.for(key);
-		assert.equal(Symbol.for(key), s);
-	});
+		it('should generate a new symbol even if they have same key', function () {
+			var key = 'key';
+			var s1 = _Symbol(key);
+			var s2 = _Symbol(key);
+			assert.equal(s1 !== s2, true);
+		});
 
-	it('should get a key from a symbol', function () {
-		var key = 'key1';
-		var s = Symbol.for(key);
-		assert.equal(Symbol.keyFor(s), key);
-	});
+		it('should generate a new symbol unless the symbol has created by Symbol.for', function () {
+			var key = 'key';
+			var s1 = _Symbol(key);
+			var s2 = _Symbol.for(key);
+			assert.equal(s1 !== s2, true);
+		});
 
-	it('should have Symbol.iterator', function () {
-		assert.equal(!Symbol.iterator, false);
+		it('should get a symbol from a key', function () {
+			var key = 'key1';
+			var s = _Symbol.for(key);
+			assert.equal(_Symbol.for(key), s);
+		});
+
+		it('should get a key from a symbol', function () {
+			var key = 'key1';
+			var s = _Symbol.for(key);
+			assert.equal(_Symbol.keyFor(s), key);
+		});
+
+		it('should have Symbol.iterator', function () {
+			assert.equal(!_Symbol.iterator, false);
+		});
 	});
-});
+}
+
+test$2(Symbol, 'J0Symbol');
+
+test$2(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;

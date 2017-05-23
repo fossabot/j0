@@ -728,6 +728,46 @@ var runtime = createCommonjsModule(function (module) {
 	(typeof commonjsGlobal === 'undefined' ? 'undefined' : _typeof(commonjsGlobal)) === "object" ? commonjsGlobal : (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === "object" ? window : (typeof self === 'undefined' ? 'undefined' : _typeof(self)) === "object" ? self : commonjsGlobal);
 });
 
+var _window = window,
+    String$1 = _window.String;
+var _window2 = window,
+    Object$1 = _window2.Object;
+var _window3 = window,
+    parseInt = _window3.parseInt;
+var _window4 = window,
+    ArrayBuffer = _window4.ArrayBuffer;
+var _window5 = window,
+    DataView = _window5.DataView;
+var _window6 = window,
+    setTimeout = _window6.setTimeout;
+var _window7 = window,
+    clearTimeout = _window7.clearTimeout;
+var _window8 = window,
+    decodeURIComponent = _window8.decodeURIComponent;
+var _window9 = window,
+    TypeError$1 = _window9.TypeError;
+var _window10 = window,
+    Uint8Array = _window10.Uint8Array;
+var _window11 = window,
+    Uint8ClampedArray = _window11.Uint8ClampedArray;
+var _window12 = window,
+    Uint16Array = _window12.Uint16Array;
+var _window13 = window,
+    Uint32Array = _window13.Uint32Array;
+var _window14 = window,
+    Int8Array = _window14.Int8Array;
+var _window15 = window,
+    Int16Array = _window15.Int16Array;
+var _window16 = window,
+    Int32Array = _window16.Int32Array;
+var _window17 = window,
+    Float32Array = _window17.Float32Array;
+var _window18 = window,
+    Float64Array = _window18.Float64Array;
+var _window19 = window,
+    XMLHttpRequest = _window19.XMLHttpRequest;
+
+
 function isString(x) {
 	return typeof x === 'string';
 }
@@ -794,46 +834,6 @@ function _forEach(iterable, fn, thisArg) {
 		}
 	}
 }
-
-var _window = window,
-    String$1 = _window.String;
-var _window2 = window,
-    Object$1 = _window2.Object;
-var _window3 = window,
-    parseInt = _window3.parseInt;
-var _window4 = window,
-    ArrayBuffer = _window4.ArrayBuffer;
-var _window5 = window,
-    DataView = _window5.DataView;
-var _window6 = window,
-    setTimeout = _window6.setTimeout;
-var _window7 = window,
-    clearTimeout = _window7.clearTimeout;
-var _window8 = window,
-    decodeURIComponent = _window8.decodeURIComponent;
-var _window9 = window,
-    TypeError$1 = _window9.TypeError;
-var _window10 = window,
-    Uint8Array = _window10.Uint8Array;
-var _window11 = window,
-    Uint8ClampedArray = _window11.Uint8ClampedArray;
-var _window12 = window,
-    Uint16Array = _window12.Uint16Array;
-var _window13 = window,
-    Uint32Array = _window13.Uint32Array;
-var _window14 = window,
-    Int8Array = _window14.Int8Array;
-var _window15 = window,
-    Int16Array = _window15.Int16Array;
-var _window16 = window,
-    Int32Array = _window16.Int32Array;
-var _window17 = window,
-    Float32Array = _window17.Float32Array;
-var _window18 = window,
-    Float64Array = _window18.Float64Array;
-var _window19 = window,
-    XMLHttpRequest = _window19.XMLHttpRequest;
-
 
 var hex = 16;
 
@@ -910,8 +910,10 @@ var SymbolRegistry = function () {
 	return SymbolRegistry;
 }();
 
+var J0Symbol = new SymbolRegistry().Symbol;
+
 if (!window.Symbol) {
-	window.Symbol = new SymbolRegistry().Symbol;
+	window.Symbol = J0Symbol;
 }
 
 function generator() {
