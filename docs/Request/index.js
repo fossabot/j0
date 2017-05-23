@@ -165,6 +165,8 @@ var _window15 = window,
     Float64Array = _window15.Float64Array;
 var _window16 = window,
     Promise$1 = _window16.Promise;
+var _window17 = window,
+    Blob = _window17.Blob;
 
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];

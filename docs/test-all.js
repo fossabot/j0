@@ -234,6 +234,8 @@ var _window19 = window,
     XMLHttpRequest = _window19.XMLHttpRequest;
 var _window20 = window,
     Promise$1 = _window20.Promise;
+var _window21 = window,
+    Blob = _window21.Blob;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -1063,15 +1065,6 @@ describe('ArrayBuffer/toString', function () {
 		var src = 'こんにちは';
 		return createArrayBuffer(src).then(function (arrayBuffer) {
 			assert.equal(arrayBufferToString(arrayBuffer), src);
-		});
-	});
-});
-
-describe('Blob', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new Blob(['data']);
 		});
 	});
 });

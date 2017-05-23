@@ -1,6 +1,5 @@
 import FormData from '../../FormData';
 import isString from '../../isString';
-import Blob from '../../Blob';
 import URLSearchParams from '../../URLSearchParams';
 import isInstanceOf from '../../isInstanceOf';
 import readBlob from '../../FileReader/readBlob';
@@ -9,6 +8,7 @@ import parseAsForm from '../../FormData/parse';
 import parseAsJSON from '../../JSON/parse';
 import arrayBufferToString from '../../arrayBufferToString';
 import {
+	Blob,
 	ArrayBuffer,
 	DataView,
 	TypeError,

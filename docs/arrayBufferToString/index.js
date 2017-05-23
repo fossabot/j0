@@ -8,6 +8,8 @@ var _window2 = window,
     Array = _window2.Array;
 var _window3 = window,
     Uint8Array = _window3.Uint8Array;
+var _window4 = window,
+    Blob = _window4.Blob;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

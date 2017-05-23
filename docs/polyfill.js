@@ -772,6 +772,8 @@ var _window20 = window,
     XMLHttpRequest = _window20.XMLHttpRequest;
 var _window21 = window,
     Promise$1 = _window21.Promise;
+var _window22 = window,
+    Blob = _window22.Blob;
 
 
 function isString(x) {
@@ -1792,8 +1794,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window22 = window,
-    URLSearchParams$1 = _window22.URLSearchParams;
+var _window23 = window,
+    URLSearchParams$1 = _window23.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;
