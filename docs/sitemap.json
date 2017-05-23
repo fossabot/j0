@@ -123,7 +123,6 @@
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
 	"debounce": {},
-	"decodeURIComponent": {},
 	"dom": {
 		"addClass": {},
 		"addEventListener": {},
@@ -161,7 +160,6 @@
 		"toggleClass": {},
 		"trigger": {}
 	},
-	"encodeURIComponent": {},
 	"fetch": {
 		"j0": {}
 	},

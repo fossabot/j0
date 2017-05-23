@@ -8,7 +8,9 @@ const {
 	navigator,
 	document,
 	setTimeout,
-	clearTimeout
+	clearTimeout,
+	decodeURIComponent,
+	encodeURIComponent
 } = window;
 export {
 	window,
@@ -20,5 +22,7 @@ export {
 	navigator,
 	document,
 	setTimeout,
-	clearTimeout
+	clearTimeout,
+	decodeURIComponent,
+	encodeURIComponent
 };

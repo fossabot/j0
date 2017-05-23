@@ -143,6 +143,20 @@ function trim(string) {
 	return string.trim();
 }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array$2 = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent;
+
+
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 
@@ -163,16 +177,6 @@ function parse(body) {
 
 var parseAsJSON = JSON.parse;
 
-var _window = window,
-    String = _window.String,
-    Uint8Array$2 = _window.Uint8Array,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout = _window.setTimeout,
-    clearTimeout = _window.clearTimeout;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

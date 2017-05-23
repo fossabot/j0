@@ -22,7 +22,9 @@ var _window = window,
     navigator = _window.navigator,
     document = _window.document,
     setTimeout = _window.setTimeout,
-    clearTimeout = _window.clearTimeout;
+    clearTimeout = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent;
 
 
 function isString(x) {

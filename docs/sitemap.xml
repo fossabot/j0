@@ -299,9 +299,6 @@
 		<loc>https://kei-ito.github.io/j0/debounce/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/decodeURIComponent/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/dom/addClass/</loc>
 	</url>
 	<url>
@@ -408,9 +405,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/dom/trigger/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/encodeURIComponent/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/fetch/j0/</loc>

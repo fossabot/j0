@@ -87,7 +87,9 @@ var _window = window,
     navigator = _window.navigator,
     document = _window.document,
     setTimeout$1 = _window.setTimeout,
-    clearTimeout = _window.clearTimeout;
+    clearTimeout = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';

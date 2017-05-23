@@ -977,7 +977,9 @@ var _window = window,
     navigator = _window.navigator,
     document = _window.document,
     setTimeout$1 = _window.setTimeout,
-    clearTimeout$1 = _window.clearTimeout;
+    clearTimeout$1 = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent;
 
 
 var baseMask = 0x3f;
@@ -1470,13 +1472,6 @@ describe('debounce', function () {
 	});
 });
 
-describe('decodeURIComponent', function () {
-
-	it('should decode an encoded string', function () {
-		assert.equal(decodeURIComponent('%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF'), 'こんにちは');
-	});
-});
-
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
 
@@ -1678,13 +1673,6 @@ describe('J0Element.prototype.text', function () {
 		element1.text = text1;
 		console.log(element2);
 		assert.equal(element2.text, '' + text1 + text2);
-	});
-});
-
-describe('encodeURIComponent', function () {
-
-	it('should encode an decoded string', function () {
-		assert.equal(encodeURIComponent('こんにちは'), '%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF');
 	});
 });
 

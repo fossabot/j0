@@ -1,7 +1,7 @@
 import FormData from '..';
 import trim from '../../String/trim';
 import forEach from '../../Array/forEach';
-import decodeURIComponent from '../../decodeURIComponent';
+import {decodeURIComponent} from '../../global';
 function parse(body, form = new FormData()) {
 	forEach(trim(body).split('&'), function (data) {
 		if (data) {
