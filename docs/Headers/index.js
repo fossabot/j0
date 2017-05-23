@@ -78,14 +78,14 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-function push(arrayLike) {
-	var _Array$prototype$push;
+var arrayPush = Array.prototype.push;
 
+function push(arrayLike) {
 	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 		args[_key - 1] = arguments[_key];
 	}
 
-	return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	return arrayPush.apply(arrayLike, args);
 }
 
 function noop(x) {

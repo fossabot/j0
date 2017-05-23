@@ -1,9 +1,12 @@
-import Uint8Array from '../../TypedArray/Uint8Array';
-import push from '../../Array/push';
-import String from '../../String';
+import {
+	Uint8Array,
+	String
+} from '../global';
+import push from '../Array/push';
 
+const baseMask = 0x3f;
 const lastMasks = [
-	0x3f,
+	baseMask,
 	0x7f,
 	0x1f,
 	0xf,
@@ -12,7 +15,6 @@ const lastMasks = [
 	0x1
 ];
 const availableBits = 6;
-const [baseMask] = lastMasks;
 
 /* eslint-disable no-bitwise */
 function consume(view, index, length) {

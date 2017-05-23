@@ -192,14 +192,14 @@ describe('Array/every', function () {
 	});
 });
 
-function push(arrayLike) {
-	var _Array$prototype$push;
+var arrayPush = Array.prototype.push;
 
+function push(arrayLike) {
 	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 		args[_key - 1] = arguments[_key];
 	}
 
-	return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	return arrayPush.apply(arrayLike, args);
 }
 
 function filter(iterable) {
@@ -968,12 +968,18 @@ describe('Array/splice', function () {
 	});
 });
 
-var lastMasks = [0x3f, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
+var _window = window,
+    String = _window.String,
+    Uint8Array$1 = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView;
+
+
+var baseMask = 0x3f;
+var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
-var baseMask = lastMasks[0];
 
 /* eslint-disable no-bitwise */
-
 function consume(view, index, length) {
 	var lastMask = lastMasks[length];
 	var charCode = 0;
@@ -988,7 +994,7 @@ function consume(view, index, length) {
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new Uint8Array$1(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -1057,15 +1063,6 @@ describe('ArrayBuffer/toString', function () {
 		var src = 'こんにちは';
 		return createArrayBuffer(src).then(function (arrayBuffer) {
 			assert.equal(arrayBufferToString(arrayBuffer), src);
-		});
-	});
-});
-
-describe('ArrayBuffer', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new ArrayBuffer(1);
 		});
 	});
 });
@@ -1395,15 +1392,6 @@ describe('CustomEvent', function () {
 		} else {
 			assert.equal(CustomEvent$1, null);
 		}
-	});
-});
-
-describe('DataView', function () {
-
-	it('should create a new DataView', function () {
-		assert.doesNotThrow(function () {
-			return new DataView(new ArrayBuffer(0));
-		});
 	});
 });
 
@@ -3524,8 +3512,8 @@ if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+var _window2 = window,
+    setImmediateNative = _window2.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;

@@ -20,9 +20,6 @@
 		"slice": {},
 		"splice": {}
 	},
-	"ArrayBuffer": {
-		"toString": {}
-	},
 	"Blob": {},
 	"Body": {
 		"j0": {}
@@ -33,7 +30,6 @@
 	},
 	"CustomEvent": {},
 	"DOMParser": {},
-	"DataView": {},
 	"Date": {
 		"format": {}
 	},
@@ -127,6 +123,7 @@
 		"j0": {}
 	},
 	"XMLHttpRequest": {},
+	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
 	"clearTimeout": {},
 	"debounce": {},

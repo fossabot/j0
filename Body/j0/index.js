@@ -6,13 +6,15 @@ import Blob from '../../Blob';
 import URLSearchParams from '../../URLSearchParams';
 import isInstanceOf from '../../isInstanceOf';
 import readBlob from '../../FileReader/readBlob';
-import ArrayBuffer from '../../ArrayBuffer';
 import isArrayBufferView from '../../isArrayBufferView';
 import Uint8Array from '../../TypedArray/Uint8Array';
-import DataView from '../../DataView';
-import arrayBufferToString from '../../ArrayBuffer/toString';
 import parseAsForm from '../../FormData/parse';
 import parseAsJSON from '../../JSON/parse';
+import arrayBufferToString from '../../arrayBufferToString';
+import {
+	ArrayBuffer,
+	DataView
+} from '../../global';
 
 function bufferClone(buf) {
 	if (buf.slice) {

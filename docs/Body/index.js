@@ -131,60 +131,6 @@ function isArrayBufferView(obj) {
 	});
 }
 
-function push(arrayLike) {
-	var _Array$prototype$push;
-
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
-}
-
-var lastMasks = [0x3f, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
-var availableBits = 6;
-var baseMask = lastMasks[0];
-
-/* eslint-disable no-bitwise */
-
-function consume(view, index, length) {
-	var lastMask = lastMasks[length];
-	var charCode = 0;
-	var i = 0;
-	while (0 < length--) {
-		var mask = length === 0 ? lastMask : baseMask;
-		var shiftSize = availableBits * i++;
-		charCode |= (view[index + length] & mask) << shiftSize;
-	}
-	return String.fromCharCode(charCode);
-}
-/* eslint-enable no-bitwise */
-
-function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
-	var chars = [];
-	for (var i = 0; i < view.length; i++) {
-		var byte = view[i];
-		var length = void 0;
-		if (byte < 0x80) {
-			length = 1;
-		} else if (byte < 0xe0) {
-			length = 2;
-		} else if (byte < 0xf0) {
-			length = 3;
-		} else if (byte < 0xf8) {
-			length = 4;
-		} else if (byte < 0xfc) {
-			length = 5;
-		} else {
-			length = 6;
-		}
-		push(chars, consume(view, i, length));
-		i += length - 1;
-	}
-	return chars.join('');
-}
-
 function trim(string) {
 	return string.trim();
 }
@@ -208,6 +154,64 @@ function parse(body) {
 }
 
 var parseAsJSON = JSON.parse;
+
+var _window = window,
+    String = _window.String,
+    Uint8Array$2 = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView;
+var arrayPush = Array.prototype.push;
+
+function push(arrayLike) {
+	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+		args[_key - 1] = arguments[_key];
+	}
+
+	return arrayPush.apply(arrayLike, args);
+}
+
+var baseMask = 0x3f;
+var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
+var availableBits = 6;
+
+/* eslint-disable no-bitwise */
+function consume(view, index, length) {
+	var lastMask = lastMasks[length];
+	var charCode = 0;
+	var i = 0;
+	while (0 < length--) {
+		var mask = length === 0 ? lastMask : baseMask;
+		var shiftSize = availableBits * i++;
+		charCode |= (view[index + length] & mask) << shiftSize;
+	}
+	return String.fromCharCode(charCode);
+}
+/* eslint-enable no-bitwise */
+
+function arrayBufferToString(arrayBuffer) {
+	var view = new Uint8Array$2(arrayBuffer);
+	var chars = [];
+	for (var i = 0; i < view.length; i++) {
+		var byte = view[i];
+		var length = void 0;
+		if (byte < 0x80) {
+			length = 1;
+		} else if (byte < 0xe0) {
+			length = 2;
+		} else if (byte < 0xf0) {
+			length = 3;
+		} else if (byte < 0xf8) {
+			length = 4;
+		} else if (byte < 0xfc) {
+			length = 5;
+		} else {
+			length = 6;
+		}
+		push(chars, consume(view, i, length));
+		i += length - 1;
+	}
+	return chars.join('');
+}
 
 function bufferClone(buf) {
 	if (buf.slice) {

@@ -2,7 +2,8 @@
 ::before,
 ::after {
   position: relative;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   padding: 0;
   margin: 0;
   border: none;
@@ -137,6 +138,7 @@ pre {
   white-space: pre;
   counter-reset: line;
   -moz-tab-size: 2;
+    -o-tab-size: 2;
        tab-size: 2;
   font-family: Consolas, monospace;
   font-size: 12px;

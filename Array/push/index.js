@@ -1,7 +1,6 @@
 import Array from '..';
-
+const {push: arrayPush} = Array.prototype;
 function push(arrayLike, ...args) {
-	return Array.prototype.push.call(arrayLike, ...args);
+	return arrayPush.apply(arrayLike, args);
 }
-
 export default push;

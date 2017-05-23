@@ -123,14 +123,14 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-function push(arrayLike) {
-	var _Array$prototype$push;
+var arrayPush = Array.prototype.push;
 
+function push(arrayLike) {
 	for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
 		args[_key2 - 1] = arguments[_key2];
 	}
 
-	return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	return arrayPush.apply(arrayLike, args);
 }
 
 function filter(iterable) {

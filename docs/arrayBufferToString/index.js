@@ -1,22 +1,26 @@
 (function(){
 'use strict';
 
-function push(arrayLike) {
-	var _Array$prototype$push;
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView;
+var arrayPush = Array.prototype.push;
 
+function push(arrayLike) {
 	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 		args[_key - 1] = arguments[_key];
 	}
 
-	return (_Array$prototype$push = Array.prototype.push).call.apply(_Array$prototype$push, [arrayLike].concat(args));
+	return arrayPush.apply(arrayLike, args);
 }
 
-var lastMasks = [0x3f, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
+var baseMask = 0x3f;
+var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
-var baseMask = lastMasks[0];
 
 /* eslint-disable no-bitwise */
-
 function consume(view, index, length) {
 	var lastMask = lastMasks[length];
 	var charCode = 0;
@@ -100,15 +104,6 @@ describe('ArrayBuffer/toString', function () {
 		var src = 'こんにちは';
 		return createArrayBuffer(src).then(function (arrayBuffer) {
 			assert.equal(arrayBufferToString(arrayBuffer), src);
-		});
-	});
-});
-
-describe('ArrayBuffer', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new ArrayBuffer(1);
 		});
 	});
 });
