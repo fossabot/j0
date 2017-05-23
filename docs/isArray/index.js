@@ -1,40 +1,46 @@
 (function(){
 'use strict';
 
-var isArray$1 = Array.isArray;
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
+
+
+var isArray = Array.isArray;
 
 describe('isArray', function () {
 
 	it('should return false if the arguments are []', function () {
-		assert.equal(isArray$1(), false);
+		assert.equal(isArray(), false);
 	});
 
 	it('should return false if the arguments are [null]', function () {
-		assert.equal(isArray$1(null), false);
+		assert.equal(isArray(null), false);
 	});
 
 	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isArray$1(NaN), false);
+		assert.equal(isArray(NaN), false);
 	});
 
 	it('should return false if the arguments are [123]', function () {
-		assert.equal(isArray$1(123), false);
+		assert.equal(isArray(123), false);
 	});
 
 	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isArray$1('abc'), false);
+		assert.equal(isArray('abc'), false);
 	});
 
 	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isArray$1({}), false);
+		assert.equal(isArray({}), false);
 	});
 
 	it('should return true if the arguments are [[]]', function () {
-		assert.equal(isArray$1([]), true);
+		assert.equal(isArray([]), true);
 	});
 
 	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isArray$1(function () {}), false);
+		assert.equal(isArray(function () {}), false);
 	});
 });
 }())

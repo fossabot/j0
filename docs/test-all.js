@@ -192,6 +192,48 @@ describe('Array/every', function () {
 	});
 });
 
+/* global window */
+var w = window;
+var _window = window,
+    String = _window.String;
+var _window2 = window,
+    Array = _window2.Array;
+var _window3 = window,
+    parseInt = _window3.parseInt;
+var _window4 = window,
+    ArrayBuffer = _window4.ArrayBuffer;
+var _window5 = window,
+    DataView = _window5.DataView;
+var _window6 = window,
+    document = _window6.document;
+var _window7 = window,
+    setTimeout$1 = _window7.setTimeout;
+var _window8 = window,
+    decodeURIComponent = _window8.decodeURIComponent;
+var _window9 = window,
+    TypeError$1 = _window9.TypeError;
+var _window10 = window,
+    Uint8Array = _window10.Uint8Array;
+var _window11 = window,
+    Uint8ClampedArray = _window11.Uint8ClampedArray;
+var _window12 = window,
+    Uint16Array = _window12.Uint16Array;
+var _window13 = window,
+    Uint32Array = _window13.Uint32Array;
+var _window14 = window,
+    Int8Array = _window14.Int8Array;
+var _window15 = window,
+    Int16Array = _window15.Int16Array;
+var _window16 = window,
+    Int32Array = _window16.Int32Array;
+var _window17 = window,
+    Float32Array = _window17.Float32Array;
+var _window18 = window,
+    Float64Array = _window18.Float64Array;
+var _window19 = window,
+    XMLHttpRequest = _window19.XMLHttpRequest;
+var _window20 = window,
+    Promise$1 = _window20.Promise;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -502,41 +544,6 @@ describe('Array/includes', function () {
 		var string = 'abcde';
 		assert.equal(includes(string, 'c'), true);
 		assert.equal(includes(string, 'f'), false);
-	});
-});
-
-describe('Array/isArray', function () {
-
-	it('should return false if the argument is undefined', function () {
-		assert.equal(isArray(), false);
-	});
-
-	it('should return false if the argument is null', function () {
-		assert.equal(isArray(null), false);
-	});
-
-	it('should return false if the argument is NaN', function () {
-		assert.equal(isArray(NaN), false);
-	});
-
-	it('should return false if the argument is a number', function () {
-		assert.equal(isArray(123), false);
-	});
-
-	it('should return false if the argument is a string', function () {
-		assert.equal(isArray('xyz'), false);
-	});
-
-	it('should return false if the argument is an object', function () {
-		assert.equal(isArray({}), false);
-	});
-
-	it('should return true if the argument is an array', function () {
-		assert.equal(isArray([]), true);
-	});
-
-	it('should return false if the argument is a function', function () {
-		assert.equal(isArray(function () {}), false);
 	});
 });
 
@@ -859,48 +866,6 @@ describe('Array/reduce', function () {
 function isUndefined(x) {
 	return typeof x === 'undefined';
 }
-
-/* global window */
-var w = window;
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    parseInt = _window2.parseInt;
-var _window3 = window,
-    ArrayBuffer = _window3.ArrayBuffer;
-var _window4 = window,
-    DataView = _window4.DataView;
-var _window5 = window,
-    document = _window5.document;
-var _window6 = window,
-    setTimeout$1 = _window6.setTimeout;
-var _window7 = window,
-    decodeURIComponent = _window7.decodeURIComponent;
-var _window8 = window,
-    TypeError$1 = _window8.TypeError;
-var _window9 = window,
-    Uint8Array = _window9.Uint8Array;
-var _window10 = window,
-    Uint8ClampedArray = _window10.Uint8ClampedArray;
-var _window11 = window,
-    Uint16Array = _window11.Uint16Array;
-var _window12 = window,
-    Uint32Array = _window12.Uint32Array;
-var _window13 = window,
-    Int8Array = _window13.Int8Array;
-var _window14 = window,
-    Int16Array = _window14.Int16Array;
-var _window15 = window,
-    Int32Array = _window15.Int32Array;
-var _window16 = window,
-    Float32Array = _window16.Float32Array;
-var _window17 = window,
-    Float64Array = _window17.Float64Array;
-var _window18 = window,
-    XMLHttpRequest = _window18.XMLHttpRequest;
-var _window19 = window,
-    Promise$1 = _window19.Promise;
-
 
 function shift(arrayLike) {
 	if (arrayLike.shift) {

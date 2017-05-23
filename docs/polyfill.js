@@ -733,43 +733,45 @@ var w = window;
 var _window = window,
     String$1 = _window.String;
 var _window2 = window,
-    Object$1 = _window2.Object;
+    Array = _window2.Array;
 var _window3 = window,
-    parseInt = _window3.parseInt;
+    Object$1 = _window3.Object;
 var _window4 = window,
-    ArrayBuffer = _window4.ArrayBuffer;
+    parseInt = _window4.parseInt;
 var _window5 = window,
-    DataView = _window5.DataView;
+    ArrayBuffer = _window5.ArrayBuffer;
 var _window6 = window,
-    setTimeout = _window6.setTimeout;
+    DataView = _window6.DataView;
 var _window7 = window,
-    clearTimeout = _window7.clearTimeout;
+    setTimeout = _window7.setTimeout;
 var _window8 = window,
-    decodeURIComponent = _window8.decodeURIComponent;
+    clearTimeout = _window8.clearTimeout;
 var _window9 = window,
-    TypeError$1 = _window9.TypeError;
+    decodeURIComponent = _window9.decodeURIComponent;
 var _window10 = window,
-    Uint8Array = _window10.Uint8Array;
+    TypeError$1 = _window10.TypeError;
 var _window11 = window,
-    Uint8ClampedArray = _window11.Uint8ClampedArray;
+    Uint8Array = _window11.Uint8Array;
 var _window12 = window,
-    Uint16Array = _window12.Uint16Array;
+    Uint8ClampedArray = _window12.Uint8ClampedArray;
 var _window13 = window,
-    Uint32Array = _window13.Uint32Array;
+    Uint16Array = _window13.Uint16Array;
 var _window14 = window,
-    Int8Array = _window14.Int8Array;
+    Uint32Array = _window14.Uint32Array;
 var _window15 = window,
-    Int16Array = _window15.Int16Array;
+    Int8Array = _window15.Int8Array;
 var _window16 = window,
-    Int32Array = _window16.Int32Array;
+    Int16Array = _window16.Int16Array;
 var _window17 = window,
-    Float32Array = _window17.Float32Array;
+    Int32Array = _window17.Int32Array;
 var _window18 = window,
-    Float64Array = _window18.Float64Array;
+    Float32Array = _window18.Float32Array;
 var _window19 = window,
-    XMLHttpRequest = _window19.XMLHttpRequest;
+    Float64Array = _window19.Float64Array;
 var _window20 = window,
-    Promise$1 = _window20.Promise;
+    XMLHttpRequest = _window20.XMLHttpRequest;
+var _window21 = window,
+    Promise$1 = _window21.Promise;
 
 
 function isString(x) {
@@ -936,8 +938,10 @@ function generator() {
 	};
 }
 
-if (!Array.prototype[iteratorKey]) {
-	Array.prototype[iteratorKey] = generator;
+var prototype = Array.prototype;
+
+if (!prototype[iteratorKey]) {
+	prototype[iteratorKey] = generator;
 }
 
 var arrayPush = Array.prototype.push;
@@ -1788,8 +1792,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window21 = window,
-    URLSearchParams$1 = _window21.URLSearchParams;
+var _window22 = window,
+    URLSearchParams$1 = _window22.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;

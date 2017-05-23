@@ -5,7 +5,9 @@
 var _window = window,
     String = _window.String;
 var _window2 = window,
-    Uint8Array = _window2.Uint8Array;
+    Array = _window2.Array;
+var _window3 = window,
+    Uint8Array = _window3.Uint8Array;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

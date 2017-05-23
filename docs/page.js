@@ -72,15 +72,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var w = window;
 
 var _window = window,
-    location = _window.location;
+    Array = _window.Array;
 var _window2 = window,
-    navigator = _window2.navigator;
+    location = _window2.location;
 var _window3 = window,
-    document = _window3.document;
+    navigator = _window3.navigator;
 var _window4 = window,
-    setTimeout = _window4.setTimeout;
+    document = _window4.document;
 var _window5 = window,
-    Promise = _window5.Promise;
+    setTimeout = _window5.setTimeout;
+var _window6 = window,
+    Promise = _window6.Promise;
 
 
 var INTERVAL = 100;

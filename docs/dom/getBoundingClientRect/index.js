@@ -45,7 +45,9 @@ function setStyle(element, name, value) {
 /* global window */
 
 var _window = window,
-    document$1 = _window.document;
+    Array = _window.Array;
+var _window2 = window,
+    document$1 = _window2.document;
 
 
 function isString(x) {

@@ -24,7 +24,9 @@ function prependChild(parentNode, newNode) {
 /* global window */
 
 var _window = window,
-    document = _window.document;
+    Array = _window.Array;
+var _window2 = window,
+    document = _window2.document;
 
 
 function isString(x) {

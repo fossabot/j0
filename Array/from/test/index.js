@@ -1,5 +1,5 @@
 import arrayFrom from '..';
-import isArray from '../../isArray';
+import isArray from '../../../isArray';
 import iteratorKey from '../../../Symbol/iterator';
 
 describe('Array/from', function () {

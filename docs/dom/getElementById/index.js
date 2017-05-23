@@ -6,7 +6,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /* global window */
 
 var _window = window,
-    document = _window.document;
+    Array = _window.Array;
+var _window2 = window,
+    document = _window2.document;
 
 
 function querySelectorAll(selectors) {

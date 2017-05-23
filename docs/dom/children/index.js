@@ -70,6 +70,12 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    document = _window2.document;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -105,12 +111,6 @@ function children(node) {
 		return nodeType === 1;
 	});
 }
-
-/* global window */
-
-var _window = window,
-    document = _window.document;
-
 
 function isString(x) {
 	return typeof x === 'string';

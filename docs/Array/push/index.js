@@ -1,6 +1,10 @@
 (function(){
 'use strict';
 
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

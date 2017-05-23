@@ -1,7 +1,7 @@
-import from from '../from';
+import arrayFrom from '../from';
 
 function join(iterable, separator = ',') {
-	return from(iterable).join(separator);
+	return arrayFrom(iterable).join(separator);
 }
 
 export default join;

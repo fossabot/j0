@@ -74,6 +74,10 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

@@ -64,9 +64,14 @@ async function transpileJS(scriptPath, destPath) {
 			});
 		});
 	}
-	const bundle = await rollup.rollup(options);
-	const {code} = bundle.generate({format: format});
-	return writeFile(destPath, code);
+	try {
+		const bundle = await rollup.rollup(options);
+		const {code} = bundle.generate({format: format});
+		return writeFile(destPath, code);
+	} catch (error) {
+		console.error(`Failed to transpile ${scriptPath}`);
+		throw error;
+	}
 }
 
 module.exports = transpileJS;

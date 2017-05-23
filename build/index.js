@@ -43,7 +43,6 @@ function buildInOrder(modulePaths) {
 
 async function start() {
 	await rm(dest);
-	await copyAssets(path.join(__dirname, 'assets'));
 	const modulePaths = [].concat(...await Promise.all(targetDirectories.map(function (dir) {
 		return glob(path.join(dir, '**', 'test', 'index.js'), {
 			ignore: [
@@ -57,6 +56,7 @@ async function start() {
 	console.info(`Found ${modulePaths.length} test scripts`);
 	await buildInOrder(modulePaths);
 	await buildSiteMap();
+	await copyAssets(path.join(__dirname, 'assets'));
 	if (serverMode) {
 		const server = new SableServer({
 			documentRoot: dest,

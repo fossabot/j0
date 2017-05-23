@@ -1,2 +1,2 @@
-import isArray from '../Array/isArray';
-export default isArray;
+import {Array} from '..';
+export default Array.isArray;

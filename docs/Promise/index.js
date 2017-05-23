@@ -9,6 +9,15 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+/* global window */
+var w = window;
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    setTimeout$1 = _window2.setTimeout;
+var _window3 = window,
+    TypeError = _window3.TypeError;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -78,17 +87,8 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-var w = window;
-
-var _window = window,
-    setTimeout$1 = _window.setTimeout;
-var _window2 = window,
-    TypeError = _window2.TypeError;
-
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-
 if (!w.immediateId) {
 	w.immediateId = 0;
 }

@@ -1,4 +1,4 @@
-import Array from '..';
+import {Array} from '../..';
 const {push: arrayPush} = Array.prototype;
 function push(arrayLike, ...args) {
 	return arrayPush.apply(arrayLike, args);
