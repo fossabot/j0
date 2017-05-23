@@ -2,7 +2,6 @@ import Date from '../../Date';
 import isString from '../../isString';
 import forEach from '../../Array/forEach';
 import {
-	window,
 	TypeError,
 	Object
 } from '../../global';
@@ -79,6 +78,4 @@ class SymbolRegistry {
 
 }
 
-if (!window.Symbol) {
-	window.Symbol = new SymbolRegistry().Symbol;
-}
+export default new SymbolRegistry().Symbol;
