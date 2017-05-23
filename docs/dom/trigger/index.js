@@ -3,6 +3,18 @@
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
+
 var Event = CustomEvent;
 try {
 	new Event('G');

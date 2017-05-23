@@ -83,16 +83,10 @@
 		<loc>https://kei-ito.github.io/j0/CustomEvent/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/DOMParser/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/Date/format/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Date/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Error/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/FileReader/promisify/</loc>
@@ -206,9 +200,6 @@
 		<loc>https://kei-ito.github.io/j0/Promise/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/RegExp/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/Request/j0/</loc>
 	</url>
 	<url>
@@ -305,16 +296,10 @@
 		<loc>https://kei-ito.github.io/j0/cancelAnimationFrame/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/clearTimeout/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/debounce/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/decodeURIComponent/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/document/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/dom/addClass/</loc>
@@ -437,9 +422,6 @@
 		<loc>https://kei-ito.github.io/j0/getBody/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/getComputedStyle/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/history/</loc>
 	</url>
 	<url>
@@ -474,12 +456,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/localStorage/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/location/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/navigator/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/noop/</loc>
@@ -519,9 +495,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/setImmediate/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/setTimeout/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/stopPropagation/</loc>

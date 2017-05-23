@@ -29,11 +29,9 @@
 		"getContext": {}
 	},
 	"CustomEvent": {},
-	"DOMParser": {},
 	"Date": {
 		"format": {}
 	},
-	"Error": {},
 	"FileReader": {
 		"promisify": {},
 		"readBlob": {}
@@ -84,7 +82,6 @@
 	"Promise": {
 		"j0": {}
 	},
-	"RegExp": {},
 	"Request": {
 		"j0": {}
 	},
@@ -125,10 +122,8 @@
 	"XMLHttpRequest": {},
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
-	"clearTimeout": {},
 	"debounce": {},
 	"decodeURIComponent": {},
-	"document": {},
 	"dom": {
 		"addClass": {},
 		"addEventListener": {},
@@ -171,7 +166,6 @@
 		"j0": {}
 	},
 	"getBody": {},
-	"getComputedStyle": {},
 	"history": {},
 	"innerHeight": {},
 	"innerWidth": {},
@@ -184,8 +178,6 @@
 	"isString": {},
 	"isUndefined": {},
 	"localStorage": {},
-	"location": {},
-	"navigator": {},
 	"noop": {
 		"true": {}
 	},
@@ -200,7 +192,6 @@
 	"scrollX": {},
 	"scrollY": {},
 	"setImmediate": {},
-	"setTimeout": {},
 	"stopPropagation": {},
 	"throttle": {},
 	"wait": {},

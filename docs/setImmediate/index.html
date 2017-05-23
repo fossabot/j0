@@ -11,8 +11,10 @@
 <section class="Code">
 	<pre><span class="linenum"></span><span class="comment">//&#32;import&#32;postMessage&#32;from&#32;'../postMessage';</span>
 <span class="linenum"></span><span class="comment">//&#32;import&#32;addEventListner&#32;from&#32;'../dom/addEventListener';</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">window</span>&#32;<span class="name">from</span>&#32;<a href="../window"><span class="string"><span class="string">'../window'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">setTimeout</span>&#32;<span class="name">from</span>&#32;<a href="../setTimeout"><span class="string"><span class="string">'../setTimeout'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">window</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">setTimeout</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../global"><span class="string"><span class="string">'../global'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="if">if</span>&#32;<span class="_28">(</span><span class="prefix">!</span><span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="name">window</span><span class="_2e">.</span><span class="name">immediateId</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_3b">;</span>
@@ -87,8 +89,6 @@
 <h2>Tests</h2>
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">setImmediate</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Promise</span>&#32;<span class="name">from</span>&#32;<a href="../Promise"><span class="string"><span class="string">'../../Promise'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">setTimeout</span>&#32;<span class="name">from</span>&#32;<a href="../setTimeout"><span class="string"><span class="string">'../../setTimeout'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'setImmediate'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>

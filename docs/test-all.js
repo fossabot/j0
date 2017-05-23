@@ -972,7 +972,12 @@ var _window = window,
     String = _window.String,
     Uint8Array$1 = _window.Uint8Array,
     ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView;
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout$1 = _window.setTimeout,
+    clearTimeout$1 = _window.clearTimeout;
 
 
 var baseMask = 0x3f;
@@ -1356,24 +1361,6 @@ describe('Canvas/getContext', function () {
 	});
 });
 
-var WAIT = 100;
-
-describe('clearTimeout', function () {
-
-	it('should cancel calling', function () {
-		var count = 0;
-		return new Promise(function (resolve) {
-			var timer = setTimeout(function () {
-				count += 1;
-			});
-			clearTimeout(timer);
-			setTimeout(resolve, WAIT);
-		}).then(function () {
-			assert.equal(count, 0);
-		});
-	});
-});
-
 var Event = CustomEvent;
 try {
 	new Event('G');
@@ -1487,13 +1474,6 @@ describe('decodeURIComponent', function () {
 
 	it('should decode an encoded string', function () {
 		assert.equal(decodeURIComponent('%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF'), 'こんにちは');
-	});
-});
-
-describe('document', function () {
-
-	it('should have document.createElement', function () {
-		assert.equal(isFunction(document.createElement), true);
 	});
 });
 
@@ -1701,36 +1681,10 @@ describe('J0Element.prototype.text', function () {
 	});
 });
 
-function childNodes(node) {
-	return node.childNodes;
-}
-
-describe('DOMParser', function () {
-
-	it('should parse a string', function () {
-		var src = '\n\t\t\t<note>\n\t\t\t\t<to>A</to>\n\t\t\t\t<from>B</from>\n\t\t\t\t<heading>C</heading>\n\t\t\t\t<body>D</body>\n\t\t\t</note>\n\t\t';
-		var parser = new DOMParser();
-		var doc = parser.parseFromString(src, "application/xml");
-		var body = filter(map(childNodes(childNodes(doc)[0]), function (node) {
-			return node.textContent.replace(/\s+/g, '');
-		}));
-		assert.deepEqual(body, ['A', 'B', 'C', 'D']);
-	});
-});
-
 describe('encodeURIComponent', function () {
 
 	it('should encode an decoded string', function () {
 		assert.equal(encodeURIComponent('こんにちは'), '%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF');
-	});
-});
-
-describe('Error', function () {
-
-	it('should have message', function () {
-		var message = 'abc';
-		var error = new Error(message);
-		assert.equal(error.message, message);
 	});
 });
 
@@ -2211,13 +2165,12 @@ var INTERVAL = 100;
 
 var getBody = new Promise(function (resolve) {
 	function get() {
-		var _document = document,
-		    body = _document.body;
+		var body = document.body;
 
 		if (body) {
 			resolve(body);
 		} else {
-			setTimeout(get, INTERVAL);
+			setTimeout$1(get, INTERVAL);
 		}
 	}
 	get();
@@ -2229,18 +2182,6 @@ describe('getBody', function () {
 		return getBody.then(function (body) {
 			assert.equal(!body.appendChild, false);
 		});
-	});
-});
-
-describe('getComputedStyle', function () {
-
-	it('should get color in rgb', function () {
-		var element = createElement({
-			a: [['style', 'color:#ff0099']]
-		});
-		appendChild(document.body, element);
-		var style = getComputedStyle(element);
-		assert.equal(style.color, 'rgb(255, 0, 153)');
 	});
 });
 
@@ -2381,6 +2322,10 @@ function generator$2() {
 			};
 		}
 	};
+}
+
+function childNodes(node) {
+	return node.childNodes;
 }
 
 describe('HTMLCollection/@iterator', function () {
@@ -2766,13 +2711,6 @@ describe('localStorage', function () {
 	});
 });
 
-describe('location', function () {
-
-	it('should have href', function () {
-		assert.equal(!location.href, false);
-	});
-});
-
 function generator$4() {
 	return this.entries();
 }
@@ -3108,13 +3046,6 @@ describe('NamedNodeMap/@iterator', function () {
 			results[index++] = value;
 		}
 		assert.deepEqual(results, expected);
-	});
-});
-
-describe('navigator', function () {
-
-	it('should have userAgent', function () {
-		assert.equal(0 < navigator.userAgent.length, true);
 	});
 });
 
@@ -3542,7 +3473,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return setTimeout$1(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -3558,7 +3489,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+setTimeout$1(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -3790,7 +3721,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function spec$1(Promise, name) {
+function test$1(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3887,10 +3818,11 @@ function spec$1(Promise, name) {
 
 		it('should return a result of the last promise', function () {
 			var expected = 3;
+			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), Promise.resolve(expected)]).then(function (result) {
 				assert.equal(result, expected);
 			}).catch(onUnexpectedReject);
@@ -3905,28 +3837,21 @@ function spec$1(Promise, name) {
 
 		it('should return an error of the last promise', function () {
 			var expected = 3;
+			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), new Promise(function (resolve) {
-				setTimeout(resolve, 100);
-			}), Promise.reject(3)]).then(onUnexpectedFullfill, function (error) {
+				setTimeout(resolve, timeout);
+			}), Promise.reject(expected)]).then(onUnexpectedFullfill, function (error) {
 				assert.equal(error, expected);
 			}).catch(onUnexpectedReject);
 		});
 	});
 }
 
-spec$1(J0Promise, 'Promise/j0');
+test$1(J0Promise, 'Promise/j0');
 
-spec$1(Promise, 'Promise');
-
-describe('RegExp', function () {
-
-	it('should create a regular expression', function () {
-		var exp = new RegExp('Hello', 'gi');
-		assert.deepEqual('HeLLohellO'.match(exp), ['HeLLo', 'hellO']);
-	});
-});
+test$1(Promise, 'Promise');
 
 function tests$9(Request, name) {
 
@@ -4270,22 +4195,6 @@ describe('setImmediate', function () {
 	});
 });
 
-var WAIT$1 = 50;
-var MARGIN = 0.9;
-
-describe('setTimeout', function () {
-
-	it('should call fn after ' + WAIT$1 + 'ms', function () {
-		var start = Date.now();
-		return new Promise(function (resolve) {
-			setTimeout(resolve, WAIT$1);
-		}).then(function () {
-			var elapsed = Date.now() - start;
-			assert.equal(WAIT$1 * MARGIN < elapsed, true);
-		});
-	});
-});
-
 function stopPropagation(event) {
 	event.stopPropagation();
 }
@@ -4517,7 +4426,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = setTimeout(function () {
+			timer = setTimeout$1(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;

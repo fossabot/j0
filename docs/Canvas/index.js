@@ -10,6 +10,18 @@ function getContext(canvas) {
 	return canvas.getContext(contextType, contextAttributes);
 }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
+
 function isString(x) {
 	return typeof x === 'string';
 }

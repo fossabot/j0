@@ -42,6 +42,18 @@ function setStyle(element, name, value) {
 	element.style[name] = value;
 }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document$1 = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
+
 function isString(x) {
 	return typeof x === 'string';
 }
@@ -186,7 +198,7 @@ function processTace() {
 	    _tace$e = tace.e,
 	    e = _tace$e === undefined ? [] : _tace$e;
 
-	var element = document.createElement(t);
+	var element = document$1.createElement(t);
 	forEach(filter(a), function (args) {
 		setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
 	});
@@ -203,7 +215,7 @@ function createElement(data) {
 	if (isNode(data)) {
 		return data;
 	} else if (isString(data)) {
-		return document.createTextNode(data);
+		return document$1.createTextNode(data);
 	}
 	return processTace(data);
 }

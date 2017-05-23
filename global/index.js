@@ -3,11 +3,22 @@ const {
 	String,
 	Uint8Array,
 	ArrayBuffer,
-	DataView
+	DataView,
+	location,
+	navigator,
+	document,
+	setTimeout,
+	clearTimeout
 } = window;
 export {
+	window,
 	String,
 	Uint8Array,
 	ArrayBuffer,
-	DataView
+	DataView,
+	location,
+	navigator,
+	document,
+	setTimeout,
+	clearTimeout
 };

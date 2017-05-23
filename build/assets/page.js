@@ -1,11 +1,7 @@
 /* global chai */
-import window from '../../window';
 import getBody from '../../getBody';
 import onError from '../../onError';
 import Promise from '../../Promise';
-import document from '../../document';
-import navigator from '../../navigator';
-import location from '../../location';
 import insertAfter from '../../dom/insertAfter';
 import getElementById from '../../dom/getElementById';
 import getTextContent from '../../dom/getTextContent';
@@ -17,6 +13,12 @@ import push from '../../Array/push';
 import pop from '../../Array/pop';
 import forEachKey from '../../Object/forEachKey';
 import fetch from '../../fetch';
+import {
+	window,
+	location,
+	navigator,
+	document
+} from '../../global';
 
 const {mocha} = window;
 

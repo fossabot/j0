@@ -1,4 +1,4 @@
-import document from '../../document';
+import {document} from '../../global';
 function getElementsByClassName(className, element = document) {
 	return element.getElementsByClassName(className);
 }

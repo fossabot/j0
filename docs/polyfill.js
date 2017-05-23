@@ -953,14 +953,26 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = repeat;
 }
 
+var _window = window,
+    String$2 = _window.String,
+    Uint8Array$1 = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
+
 if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+var _window2 = window,
+    setImmediateNative = _window2.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1754,8 +1766,8 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window2 = window,
-    URLSearchParams$1 = _window2.URLSearchParams;
+var _window3 = window,
+    URLSearchParams$1 = _window3.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window.URLSearchParams = URLSearchParams$2;
@@ -1922,13 +1934,6 @@ function parse(body) {
 
 var parseAsJSON = JSON.parse;
 
-var _window3 = window,
-    String$2 = _window3.String,
-    Uint8Array$2 = _window3.Uint8Array,
-    ArrayBuffer = _window3.ArrayBuffer,
-    DataView = _window3.DataView;
-
-
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
@@ -1948,7 +1953,7 @@ function consume(view, index, length) {
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array$2(arrayBuffer);
+	var view = new Uint8Array$1(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];

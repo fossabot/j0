@@ -1,7 +1,9 @@
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-import window from '../window';
-import setTimeout from '../setTimeout';
+import {
+	window,
+	setTimeout
+} from '../global';
 
 if (!window.immediateId) {
 	window.immediateId = 0;

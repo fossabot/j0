@@ -78,14 +78,26 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout$1 = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
+
 if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+var _window2 = window,
+    setImmediateNative = _window2.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -114,7 +126,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return setTimeout$1(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -130,7 +142,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+setTimeout$1(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -366,7 +378,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function spec$1(Promise, name) {
+function test$1(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -463,10 +475,11 @@ function spec$1(Promise, name) {
 
 		it('should return a result of the last promise', function () {
 			var expected = 3;
+			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), Promise.resolve(expected)]).then(function (result) {
 				assert.equal(result, expected);
 			}).catch(onUnexpectedReject);
@@ -481,16 +494,17 @@ function spec$1(Promise, name) {
 
 		it('should return an error of the last promise', function () {
 			var expected = 3;
+			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				setTimeout(resolve, 100);
+				setTimeout(resolve, timeout);
 			}), new Promise(function (resolve) {
-				setTimeout(resolve, 100);
-			}), Promise.reject(3)]).then(onUnexpectedFullfill, function (error) {
+				setTimeout(resolve, timeout);
+			}), Promise.reject(expected)]).then(onUnexpectedFullfill, function (error) {
 				assert.equal(error, expected);
 			}).catch(onUnexpectedReject);
 		});
 	});
 }
 
-spec$1(J0Promise, 'Promise/j0');
+test$1(J0Promise, 'Promise/j0');
 }())

@@ -1,7 +1,4 @@
-import Error from '../Error';
-import setTimeout from '../setTimeout';
-
-function spec(Promise, name) {
+function test(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -137,12 +134,13 @@ function spec(Promise, name) {
 
 		it('should return a result of the last promise', function () {
 			const expected = 3;
+			const timeout = 100;
 			return Promise.race([
 				new Promise(function (resolve) {
-					setTimeout(resolve, 100);
+					setTimeout(resolve, timeout);
 				}),
 				new Promise(function (resolve) {
-					setTimeout(resolve, 100);
+					setTimeout(resolve, timeout);
 				}),
 				Promise.resolve(expected)
 			])
@@ -170,14 +168,15 @@ function spec(Promise, name) {
 
 		it('should return an error of the last promise', function () {
 			const expected = 3;
+			const timeout = 100;
 			return Promise.race([
 				new Promise(function (resolve) {
-					setTimeout(resolve, 100);
+					setTimeout(resolve, timeout);
 				}),
 				new Promise(function (resolve) {
-					setTimeout(resolve, 100);
+					setTimeout(resolve, timeout);
 				}),
-				Promise.reject(3)
+				Promise.reject(expected)
 			])
 			.then(
 				onUnexpectedFullfill,
@@ -191,4 +190,4 @@ function spec(Promise, name) {
 	});
 }
 
-export default spec;
+export default test;

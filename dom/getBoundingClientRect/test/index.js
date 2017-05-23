@@ -2,7 +2,6 @@ import getBoundingClientRect from '..';
 import appendChild from '../../appendChild';
 import removeChild from '../../removeChild';
 import setStyle from '../../setStyle';
-import document from '../../../document';
 import createElement from '../../createElement';
 
 describe('dom/getBoundingClientRect', function () {

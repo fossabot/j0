@@ -1,6 +1,8 @@
 import Promise from '../Promise';
-import setTimeout from '../setTimeout';
-import document from '../document';
+import {
+	document,
+	setTimeout
+} from '../global';
 
 const INTERVAL = 100;
 

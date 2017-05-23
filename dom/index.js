@@ -1,7 +1,7 @@
 import Symbol from '../Symbol';
-import document from '../document';
 import isString from '../isString';
 import isNode from '../isNode';
+import {document} from '../global';
 
 const nodeKey = Symbol('node');
 const eventsKey = Symbol('events');

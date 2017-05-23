@@ -5,8 +5,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var createNavigation = function () {
 	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-		var root, response, tree, _location, pathname, basePath, rootBranch, parseBranch, nav;
-
+		var root, response, tree, pathname, basePath, rootBranch, parseBranch, nav;
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
@@ -41,7 +40,7 @@ var createNavigation = function () {
 
 					case 7:
 						tree = _context.sent;
-						_location = location, pathname = _location.pathname;
+						pathname = location.pathname;
 						basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
 						rootBranch = reduce(pathname.replace(basePath, '').split('/'), function (parent, name) {
 							return name ? parent[name] : parent;
@@ -69,12 +68,23 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
+
 var INTERVAL = 100;
 
 var getBody = new Promise(function (resolve) {
 	function get() {
-		var _document = document,
-		    body = _document.body;
+		var body = document.body;
 
 		if (body) {
 			resolve(body);
@@ -325,8 +335,8 @@ function forEachKey(obj, fn, thisArg) {
 }
 
 /* global chai */
-var _window = window,
-    mocha = _window.mocha;
+var _window2 = window,
+    mocha = _window2.mocha;
 
 
 function startMocha() {

@@ -1,6 +1,4 @@
 import setImmediate from '..';
-import Promise from '../../Promise';
-import setTimeout from '../../setTimeout';
 
 describe('setImmediate', function () {
 

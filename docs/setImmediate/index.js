@@ -1,14 +1,26 @@
 (function(){
 'use strict';
 
+var _window = window,
+    String = _window.String,
+    Uint8Array = _window.Uint8Array,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout$1 = _window.setTimeout,
+    clearTimeout = _window.clearTimeout;
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
+
 if (!window.immediateId) {
 	window.immediateId = 0;
 }
 window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+var _window2 = window,
+    setImmediateNative = _window2.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -37,7 +49,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return setTimeout$1(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -53,7 +65,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+setTimeout$1(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
