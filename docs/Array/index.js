@@ -40,6 +40,16 @@ describe('Array/@iterator', function () {
 	});
 });
 
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    TypeError = _window2.TypeError;
+var _window3 = window,
+    Boolean = _window3.Boolean;
+
+
 function noop(x) {
 	return x;
 }
@@ -147,12 +157,6 @@ describe('Array/every', function () {
 	});
 });
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    TypeError = _window2.TypeError;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

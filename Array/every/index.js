@@ -1,4 +1,4 @@
-import Boolean from '../../Boolean';
+import {Boolean} from '../..';
 import noop from '../../noop';
 import forEach from '../forEach';
 

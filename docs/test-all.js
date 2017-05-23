@@ -85,6 +85,54 @@ describe('Array/@iterator', function () {
 	});
 });
 
+/* global window */
+var w = window;
+var _window = window,
+    String = _window.String;
+var _window2 = window,
+    Array = _window2.Array;
+var _window3 = window,
+    parseInt = _window3.parseInt;
+var _window4 = window,
+    ArrayBuffer = _window4.ArrayBuffer;
+var _window5 = window,
+    DataView = _window5.DataView;
+var _window6 = window,
+    document = _window6.document;
+var _window7 = window,
+    setTimeout$1 = _window7.setTimeout;
+var _window8 = window,
+    decodeURIComponent = _window8.decodeURIComponent;
+var _window9 = window,
+    TypeError$1 = _window9.TypeError;
+var _window10 = window,
+    Uint8Array = _window10.Uint8Array;
+var _window11 = window,
+    Uint8ClampedArray = _window11.Uint8ClampedArray;
+var _window12 = window,
+    Uint16Array = _window12.Uint16Array;
+var _window13 = window,
+    Uint32Array = _window13.Uint32Array;
+var _window14 = window,
+    Int8Array = _window14.Int8Array;
+var _window15 = window,
+    Int16Array = _window15.Int16Array;
+var _window16 = window,
+    Int32Array = _window16.Int32Array;
+var _window17 = window,
+    Float32Array = _window17.Float32Array;
+var _window18 = window,
+    Float64Array = _window18.Float64Array;
+var _window19 = window,
+    XMLHttpRequest = _window19.XMLHttpRequest;
+var _window20 = window,
+    Promise$1 = _window20.Promise;
+var _window21 = window,
+    Blob = _window21.Blob;
+var _window22 = window,
+    Boolean = _window22.Boolean;
+
+
 function noop(x) {
 	return x;
 }
@@ -192,50 +240,6 @@ describe('Array/every', function () {
 	});
 });
 
-/* global window */
-var w = window;
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    parseInt = _window3.parseInt;
-var _window4 = window,
-    ArrayBuffer = _window4.ArrayBuffer;
-var _window5 = window,
-    DataView = _window5.DataView;
-var _window6 = window,
-    document = _window6.document;
-var _window7 = window,
-    setTimeout$1 = _window7.setTimeout;
-var _window8 = window,
-    decodeURIComponent = _window8.decodeURIComponent;
-var _window9 = window,
-    TypeError$1 = _window9.TypeError;
-var _window10 = window,
-    Uint8Array = _window10.Uint8Array;
-var _window11 = window,
-    Uint8ClampedArray = _window11.Uint8ClampedArray;
-var _window12 = window,
-    Uint16Array = _window12.Uint16Array;
-var _window13 = window,
-    Uint32Array = _window13.Uint32Array;
-var _window14 = window,
-    Int8Array = _window14.Int8Array;
-var _window15 = window,
-    Int16Array = _window15.Int16Array;
-var _window16 = window,
-    Int32Array = _window16.Int32Array;
-var _window17 = window,
-    Float32Array = _window17.Float32Array;
-var _window18 = window,
-    Float64Array = _window18.Float64Array;
-var _window19 = window,
-    XMLHttpRequest = _window19.XMLHttpRequest;
-var _window20 = window,
-    Promise$1 = _window20.Promise;
-var _window21 = window,
-    Blob = _window21.Blob;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -1239,17 +1243,6 @@ function tests(Body, name) {
 tests(Body$1, 'J0Body');
 
 tests(Body, 'Body');
-
-describe('Boolean', function () {
-
-	it('should convert 0 to false', function () {
-		assert.equal(Boolean(0), false);
-	});
-
-	it('should convert 100 to true', function () {
-		assert.equal(Boolean(100), true);
-	});
-});
 
 describe('cancelAnimationFrame', function () {
 

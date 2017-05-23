@@ -1,6 +1,12 @@
 (function(){
 'use strict';
 
+/* global window */
+
+var _window = window,
+    Boolean = _window.Boolean;
+
+
 function noop(x) {
 	return x;
 }
