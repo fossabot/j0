@@ -5,7 +5,7 @@ function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();
 	} else if (!isUndefined(arrayLike.length)) {
-		const [returnValue] = arrayLike;
+		const returnValue = arrayLike[0];
 		const {length} = arrayLike;
 		for (let i = 0; i < length; i += 1) {
 			arrayLike[i] = arrayLike[i + 1];
