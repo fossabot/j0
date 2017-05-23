@@ -1,11 +1,11 @@
 import isUndefined from '../../isUndefined';
-import TypeError from '../../TypeError';
+import {TypeError} from '../../global';
 
 function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();
 	} else if (!isUndefined(arrayLike.length)) {
-		const returnValue = arrayLike[0];
+		const [returnValue] = arrayLike;
 		const {length} = arrayLike;
 		for (let i = 0; i < length; i += 1) {
 			arrayLike[i] = arrayLike[i + 1];

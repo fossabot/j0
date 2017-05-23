@@ -3,8 +3,8 @@ import isFunction from '../../isFunction';
 import push from '../../Array/push';
 import forEach from '../../Array/forEach';
 import setImmediate from '../../setImmediate';
-import TypeError from '../../TypeError';
 import noop from '../../noop';
+import {TypeError} from '../../global';
 
 const PENDING = 0;
 const RESOLVED = 1;

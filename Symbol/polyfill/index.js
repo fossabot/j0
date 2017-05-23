@@ -1,8 +1,11 @@
-import Object from '../../Object';
 import Date from '../../Date';
 import isString from '../../isString';
-import TypeError from '../../TypeError';
-import window from '../../window';
+import forEach from '../../Array/forEach';
+import {
+	window,
+	TypeError,
+	Object
+} from '../../global';
 
 const hex = 16;
 
@@ -50,20 +53,21 @@ class SymbolRegistry {
 		function define(key, value) {
 			Object.defineProperty(fn, key, {value: value});
 		}
-		function defineSymbol(key) {
+		forEach([
+			'iterator',
+			'match',
+			'replace',
+			'search',
+			'split',
+			'hasInstance',
+			'isConcatSpreadable',
+			'unscopables',
+			'species',
+			'toPrimitive',
+			'toStringTag'
+		], (key) => {
 			define(key, fn(key));
-		}
-		defineSymbol('iterator');
-		defineSymbol('match');
-		defineSymbol('replace');
-		defineSymbol('search');
-		defineSymbol('split');
-		defineSymbol('hasInstance');
-		defineSymbol('isConcatSpreadable');
-		defineSymbol('unscopables');
-		defineSymbol('species');
-		defineSymbol('toPrimitive');
-		defineSymbol('toStringTag');
+		});
 		define('for', (key) => {
 			return this.for(key);
 		});

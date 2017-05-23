@@ -124,6 +124,31 @@ function find(iterable) {
 	return result;
 }
 
+var _window = window,
+    String = _window.String,
+    Object = _window.Object,
+    parseInt = _window.parseInt,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent,
+    TypeError = _window.TypeError,
+    Uint8Array = _window.Uint8Array,
+    Uint8ClampedArray = _window.Uint8ClampedArray,
+    Uint16Array = _window.Uint16Array,
+    Uint32Array = _window.Uint32Array,
+    Int8Array = _window.Int8Array,
+    Int16Array = _window.Int16Array,
+    Int32Array = _window.Int32Array,
+    Float32Array = _window.Float32Array,
+    Float64Array = _window.Float64Array;
+
+
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
 	return 0 <= find(viewClasses, function (constructor) {
@@ -134,20 +159,6 @@ function isArrayBufferView(obj) {
 function trim(string) {
 	return string.trim();
 }
-
-var _window = window,
-    String = _window.String,
-    Uint8Array$2 = _window.Uint8Array,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout = _window.setTimeout,
-    clearTimeout = _window.clearTimeout,
-    decodeURIComponent = _window.decodeURIComponent,
-    encodeURIComponent = _window.encodeURIComponent;
-
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
@@ -198,7 +209,7 @@ function consume(view, index, length) {
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array$2(arrayBuffer);
+	var view = new Uint8Array(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];

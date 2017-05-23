@@ -104,18 +104,6 @@
 		"iterator": {},
 		"polyfill": {}
 	},
-	"TypeError": {},
-	"TypedArray": {
-		"Float32Array": {},
-		"Float64Array": {},
-		"Int16Array": {},
-		"Int32Array": {},
-		"Int8Array": {},
-		"Uint16Array": {},
-		"Uint32Array": {},
-		"Uint8Array": {},
-		"Uint8ClampedArray": {}
-	},
 	"URLSearchParams": {
 		"j0": {}
 	},
@@ -180,7 +168,6 @@
 		"true": {}
 	},
 	"onError": {},
-	"parseInt": {},
 	"polyfill": {},
 	"postMessage": {},
 	"preventDefault": {},

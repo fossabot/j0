@@ -732,117 +732,7 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var hex = 16;
-
-var SymbolRegistry = function () {
-	function SymbolRegistry() {
-		_classCallCheck(this, SymbolRegistry);
-
-		this.seed = Date.now();
-		this.registry = [];
-	}
-
-	_createClass(SymbolRegistry, [{
-		key: 'get',
-		value: function get() {
-			var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Date.now();
-
-			var symbol = 'Symbol(' + key + ')' + (this.seed + this.registry.length).toString(hex);
-			this.registry.push([symbol, '' + key + salt]);
-			return symbol;
-		}
-	}, {
-		key: 'for',
-		value: function _for(key) {
-			if (isString(key)) {
-				var length = this.registry.length;
-
-				for (var i = 0; i < length; i += 1) {
-					var item = this.registry[i];
-					if (key === item[1]) {
-						return item[0];
-					}
-				}
-				return this.get(key, '');
-			}
-			throw new TypeError('Symbol.for was called with non-string: ' + key);
-		}
-	}, {
-		key: 'keyFor',
-		value: function keyFor(sym) {
-			var length = this.registry.length;
-
-			for (var i = 0; i < length; i += 1) {
-				var item = this.registry[i];
-				if (sym === item[0]) {
-					return item[1];
-				}
-			}
-		}
-	}, {
-		key: 'Symbol',
-		get: function get() {
-			var _this = this;
-
-			var fn = function fn(key) {
-				return _this.get(key);
-			};
-			function define(key, value) {
-				Object.defineProperty(fn, key, { value: value });
-			}
-			function defineSymbol(key) {
-				define(key, fn(key));
-			}
-			defineSymbol('iterator');
-			defineSymbol('match');
-			defineSymbol('replace');
-			defineSymbol('search');
-			defineSymbol('split');
-			defineSymbol('hasInstance');
-			defineSymbol('isConcatSpreadable');
-			defineSymbol('unscopables');
-			defineSymbol('species');
-			defineSymbol('toPrimitive');
-			defineSymbol('toStringTag');
-			define('for', function (key) {
-				return _this.for(key);
-			});
-			define('keyFor', function (key) {
-				return _this.keyFor(key);
-			});
-			return fn;
-		}
-	}]);
-
-	return SymbolRegistry;
-}();
-
-if (!window.Symbol) {
-	window.Symbol = new SymbolRegistry().Symbol;
-}
-
 var iteratorKey = Symbol.iterator;
-
-function generator() {
-	var _this2 = this;
-
-	var length = this.length;
-
-	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this2[index],
-				done: length <= index++
-			};
-		}
-	};
-}
-
-if (!Array.prototype[iteratorKey]) {
-	Array.prototype[iteratorKey] = generator;
-}
 
 function isFunction(x) {
 	return typeof x === 'function';
@@ -905,6 +795,130 @@ function _forEach(iterable, fn, thisArg) {
 	}
 }
 
+var _window = window,
+    String$1 = _window.String,
+    Object$1 = _window.Object,
+    parseInt = _window.parseInt,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout = _window.setTimeout,
+    clearTimeout = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent,
+    TypeError$1 = _window.TypeError,
+    Uint8Array = _window.Uint8Array,
+    Uint8ClampedArray = _window.Uint8ClampedArray,
+    Uint16Array = _window.Uint16Array,
+    Uint32Array = _window.Uint32Array,
+    Int8Array = _window.Int8Array,
+    Int16Array = _window.Int16Array,
+    Int32Array = _window.Int32Array,
+    Float32Array = _window.Float32Array,
+    Float64Array = _window.Float64Array;
+
+
+var hex = 16;
+
+var SymbolRegistry = function () {
+	function SymbolRegistry() {
+		_classCallCheck(this, SymbolRegistry);
+
+		this.seed = Date.now();
+		this.registry = [];
+	}
+
+	_createClass(SymbolRegistry, [{
+		key: 'get',
+		value: function get() {
+			var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Date.now();
+
+			var symbol = 'Symbol(' + key + ')' + (this.seed + this.registry.length).toString(hex);
+			this.registry.push([symbol, '' + key + salt]);
+			return symbol;
+		}
+	}, {
+		key: 'for',
+		value: function _for(key) {
+			if (isString(key)) {
+				var length = this.registry.length;
+
+				for (var i = 0; i < length; i += 1) {
+					var item = this.registry[i];
+					if (key === item[1]) {
+						return item[0];
+					}
+				}
+				return this.get(key, '');
+			}
+			throw new TypeError$1('Symbol.for was called with non-string: ' + key);
+		}
+	}, {
+		key: 'keyFor',
+		value: function keyFor(sym) {
+			var length = this.registry.length;
+
+			for (var i = 0; i < length; i += 1) {
+				var item = this.registry[i];
+				if (sym === item[0]) {
+					return item[1];
+				}
+			}
+		}
+	}, {
+		key: 'Symbol',
+		get: function get() {
+			var _this = this;
+
+			var fn = function fn(key) {
+				return _this.get(key);
+			};
+			function define(key, value) {
+				Object$1.defineProperty(fn, key, { value: value });
+			}
+			_forEach(['iterator', 'match', 'replace', 'search', 'split', 'hasInstance', 'isConcatSpreadable', 'unscopables', 'species', 'toPrimitive', 'toStringTag'], function (key) {
+				define(key, fn(key));
+			});
+			define('for', function (key) {
+				return _this.for(key);
+			});
+			define('keyFor', function (key) {
+				return _this.keyFor(key);
+			});
+			return fn;
+		}
+	}]);
+
+	return SymbolRegistry;
+}();
+
+if (!window.Symbol) {
+	window.Symbol = new SymbolRegistry().Symbol;
+}
+
+function generator() {
+	var _this2 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return {
+		next: function next() {
+			return {
+				value: _this2[index],
+				done: length <= index++
+			};
+		}
+	};
+}
+
+if (!Array.prototype[iteratorKey]) {
+	Array.prototype[iteratorKey] = generator;
+}
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -953,22 +967,8 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = repeat;
 }
 
-var _window = window,
-    String$2 = _window.String,
-    Uint8Array$1 = _window.Uint8Array,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout = _window.setTimeout,
-    clearTimeout = _window.clearTimeout,
-    decodeURIComponent = _window.decodeURIComponent,
-    encodeURIComponent = _window.encodeURIComponent;
-
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-
 if (!window.immediateId) {
 	window.immediateId = 0;
 }
@@ -1102,7 +1102,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError('A promise cannot be resolved with itself');
+					throw new TypeError$1('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -1950,12 +1950,12 @@ function consume(view, index, length) {
 		var shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String$2.fromCharCode(charCode);
+	return String$1.fromCharCode(charCode);
 }
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array$1(arrayBuffer);
+	var view = new Uint8Array(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -2086,7 +2086,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError('Already used'));
+				return Promise.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}

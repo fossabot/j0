@@ -1,7 +1,8 @@
 import window from '../window';
 const {
 	String,
-	Uint8Array,
+	Object,
+	parseInt,
 	ArrayBuffer,
 	DataView,
 	location,
@@ -10,12 +11,23 @@ const {
 	setTimeout,
 	clearTimeout,
 	decodeURIComponent,
-	encodeURIComponent
+	encodeURIComponent,
+	TypeError,
+	Uint8Array,
+	Uint8ClampedArray,
+	Uint16Array,
+	Uint32Array,
+	Int8Array,
+	Int16Array,
+	Int32Array,
+	Float32Array,
+	Float64Array
 } = window;
 export {
 	window,
 	String,
-	Uint8Array,
+	Object,
+	parseInt,
 	ArrayBuffer,
 	DataView,
 	location,
@@ -24,5 +36,15 @@ export {
 	setTimeout,
 	clearTimeout,
 	decodeURIComponent,
-	encodeURIComponent
+	encodeURIComponent,
+	TypeError,
+	Uint8Array,
+	Uint8ClampedArray,
+	Uint16Array,
+	Uint32Array,
+	Int8Array,
+	Int16Array,
+	Int32Array,
+	Float32Array,
+	Float64Array
 };

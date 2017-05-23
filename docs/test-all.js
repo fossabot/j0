@@ -3,9 +3,9 @@
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var wait = function () {
 	var _ref27 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
@@ -860,11 +860,38 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+var _window = window,
+    String = _window.String,
+    Object$1 = _window.Object,
+    parseInt = _window.parseInt,
+    ArrayBuffer = _window.ArrayBuffer,
+    DataView = _window.DataView,
+    location = _window.location,
+    navigator = _window.navigator,
+    document = _window.document,
+    setTimeout$1 = _window.setTimeout,
+    clearTimeout$1 = _window.clearTimeout,
+    decodeURIComponent = _window.decodeURIComponent,
+    encodeURIComponent = _window.encodeURIComponent,
+    TypeError$1 = _window.TypeError,
+    Uint8Array = _window.Uint8Array,
+    Uint8ClampedArray = _window.Uint8ClampedArray,
+    Uint16Array = _window.Uint16Array,
+    Uint32Array = _window.Uint32Array,
+    Int8Array = _window.Int8Array,
+    Int16Array = _window.Int16Array,
+    Int32Array = _window.Int32Array,
+    Float32Array = _window.Float32Array,
+    Float64Array = _window.Float64Array;
+
+
 function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();
 	} else if (!isUndefined(arrayLike.length)) {
-		var returnValue = arrayLike[0];
+		var _arrayLike = _slicedToArray(arrayLike, 1),
+		    returnValue = _arrayLike[0];
+
 		var length = arrayLike.length;
 
 		for (var i = 0; i < length; i += 1) {
@@ -874,7 +901,7 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError('The object is not shift-able');
+	throw new TypeError$1('The object is not shift-able');
 }
 
 describe('Array/shift', function () {
@@ -968,20 +995,6 @@ describe('Array/splice', function () {
 	});
 });
 
-var _window = window,
-    String = _window.String,
-    Uint8Array$1 = _window.Uint8Array,
-    ArrayBuffer = _window.ArrayBuffer,
-    DataView = _window.DataView,
-    location = _window.location,
-    navigator = _window.navigator,
-    document = _window.document,
-    setTimeout$1 = _window.setTimeout,
-    clearTimeout$1 = _window.clearTimeout,
-    decodeURIComponent = _window.decodeURIComponent,
-    encodeURIComponent = _window.encodeURIComponent;
-
-
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
@@ -1001,7 +1014,7 @@ function consume(view, index, length) {
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array$1(arrayBuffer);
+	var view = new Uint8Array(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -1229,7 +1242,7 @@ var Body$1 = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError('Already used'));
+				return Promise.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -3380,24 +3393,6 @@ describe('onError', function () {
 	});
 });
 
-var dec = 10;
-var hex = 16;
-
-describe('parseInt', function () {
-
-	it('should convert a dec to an integer', function () {
-		var value = '100';
-		var expected = 100;
-		assert.equal(parseInt(value, dec), expected);
-	});
-
-	it('should convert a hex to an integer', function () {
-		var value = '100';
-		var expected = 256;
-		assert.equal(parseInt(value, hex), expected);
-	});
-});
-
 describe('polyfill', function () {
 
 	it('should add global', function () {
@@ -3560,7 +3555,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError('A promise cannot be resolved with itself');
+					throw new TypeError$1('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -4445,15 +4440,6 @@ describe('throttle', function () {
 		}).then(function (result) {
 			assert.equal(result, 6);
 		});
-	});
-});
-
-describe('TypeError', function () {
-
-	it('should have message', function () {
-		var message = 'abc';
-		var error = new TypeError(message);
-		assert.equal(error.message, message);
 	});
 });
 

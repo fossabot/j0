@@ -1,5 +1,4 @@
 import Promise from '../../Promise';
-import TypeError from '../../TypeError';
 import FormData from '../../FormData';
 import isString from '../../isString';
 import Blob from '../../Blob';
@@ -7,13 +6,14 @@ import URLSearchParams from '../../URLSearchParams';
 import isInstanceOf from '../../isInstanceOf';
 import readBlob from '../../FileReader/readBlob';
 import isArrayBufferView from '../../isArrayBufferView';
-import Uint8Array from '../../TypedArray/Uint8Array';
 import parseAsForm from '../../FormData/parse';
 import parseAsJSON from '../../JSON/parse';
 import arrayBufferToString from '../../arrayBufferToString';
 import {
 	ArrayBuffer,
-	DataView
+	DataView,
+	TypeError,
+	Uint8Array
 } from '../../global';
 
 function bufferClone(buf) {

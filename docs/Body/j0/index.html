@@ -10,7 +10,6 @@
 <h2>Source</h2>
 <section class="Code">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Promise</span>&#32;<span class="name">from</span>&#32;<a href="../../Promise"><span class="string"><span class="string">'../../Promise'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">TypeError</span>&#32;<span class="name">from</span>&#32;<a href="../../TypeError"><span class="string"><span class="string">'../../TypeError'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">FormData</span>&#32;<span class="name">from</span>&#32;<a href="../../FormData"><span class="string"><span class="string">'../../FormData'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isString</span>&#32;<span class="name">from</span>&#32;<a href="../../isString"><span class="string"><span class="string">'../../isString'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Blob</span>&#32;<span class="name">from</span>&#32;<a href="../../Blob"><span class="string"><span class="string">'../../Blob'</span></span></a><span class="_3b">;</span>
@@ -18,13 +17,14 @@
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isInstanceOf</span>&#32;<span class="name">from</span>&#32;<a href="../../isInstanceOf"><span class="string"><span class="string">'../../isInstanceOf'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">readBlob</span>&#32;<span class="name">from</span>&#32;<a href="../../FileReader/readBlob"><span class="string"><span class="string">'../../FileReader/readBlob'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isArrayBufferView</span>&#32;<span class="name">from</span>&#32;<a href="../../isArrayBufferView"><span class="string"><span class="string">'../../isArrayBufferView'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint8Array</span>&#32;<span class="name">from</span>&#32;<a href="../../TypedArray/Uint8Array"><span class="string"><span class="string">'../../TypedArray/Uint8Array'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">parseAsForm</span>&#32;<span class="name">from</span>&#32;<a href="../../FormData/parse"><span class="string"><span class="string">'../../FormData/parse'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">parseAsJSON</span>&#32;<span class="name">from</span>&#32;<a href="../../JSON/parse"><span class="string"><span class="string">'../../JSON/parse'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">arrayBufferToString</span>&#32;<span class="name">from</span>&#32;<a href="../../arrayBufferToString"><span class="string"><span class="string">'../../arrayBufferToString'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="name">ArrayBuffer</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;<span class="name">DataView</span>
+<span class="linenum"></span>&#9;<span class="name">DataView</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">TypeError</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint8Array</span>
 <span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../../global"><span class="string"><span class="string">'../../global'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span>&#32;<span class="name">bufferClone</span><span class="_28">(</span><span class="name">buf</span><span class="_29">)</span>&#32;<span class="_7b">{</span>

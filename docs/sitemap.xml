@@ -251,36 +251,6 @@
 		<loc>https://kei-ito.github.io/j0/Symbol/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/TypeError/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Float32Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Float64Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Int16Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Int32Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Int8Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Uint16Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Uint32Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Uint8Array/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/TypedArray/Uint8ClampedArray/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/URLSearchParams/j0/</loc>
 	</url>
 	<url>
@@ -459,9 +429,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/onError/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/parseInt/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/polyfill/</loc>

@@ -11,15 +11,17 @@
 <section class="Code">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">findIndex</span>&#32;<span class="name">from</span>&#32;<a href="../Array/findIndex"><span class="string"><span class="string">'../Array/findIndex'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isInstanceOf</span>&#32;<span class="name">from</span>&#32;<a href="../isInstanceOf"><span class="string"><span class="string">'../isInstanceOf'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int8Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int8Array"><span class="string"><span class="string">'../TypedArray/Int8Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int16Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int16Array"><span class="string"><span class="string">'../TypedArray/Int16Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int32Array"><span class="string"><span class="string">'../TypedArray/Int32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint8ClampedArray</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint8ClampedArray"><span class="string"><span class="string">'../TypedArray/Uint8ClampedArray'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint8Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint8Array"><span class="string"><span class="string">'../TypedArray/Uint8Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint16Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint16Array"><span class="string"><span class="string">'../TypedArray/Uint16Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint32Array"><span class="string"><span class="string">'../TypedArray/Uint32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Float32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Float32Array"><span class="string"><span class="string">'../TypedArray/Float32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Float64Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Float64Array"><span class="string"><span class="string">'../TypedArray/Float64Array'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">Uint8Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint8ClampedArray</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint16Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int8Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int16Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Float32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Float64Array</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../global"><span class="string"><span class="string">'../global'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="const">const</span>&#32;<span class="name">viewClasses</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span>
 <span class="linenum"></span>&#9;<span class="name">Uint8Array</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Uint8ClampedArray</span><span class="_2c">,</span>
@@ -42,15 +44,17 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int8Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int8Array"><span class="string"><span class="string">'../../TypedArray/Int8Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int16Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int16Array"><span class="string"><span class="string">'../../TypedArray/Int16Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Int32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Int32Array"><span class="string"><span class="string">'../../TypedArray/Int32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint8ClampedArray</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint8ClampedArray"><span class="string"><span class="string">'../../TypedArray/Uint8ClampedArray'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint8Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint8Array"><span class="string"><span class="string">'../../TypedArray/Uint8Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint16Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint16Array"><span class="string"><span class="string">'../../TypedArray/Uint16Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Uint32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Uint32Array"><span class="string"><span class="string">'../../TypedArray/Uint32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Float32Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Float32Array"><span class="string"><span class="string">'../../TypedArray/Float32Array'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Float64Array</span>&#32;<span class="name">from</span>&#32;<a href="../TypedArray/Float64Array"><span class="string"><span class="string">'../../TypedArray/Float64Array'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">Uint8Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint8ClampedArray</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint16Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Uint32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int8Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int16Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Int32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Float32Array</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Float64Array</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../global"><span class="string"><span class="string">'../../global'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isArrayBufferView</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'isArrayBufferView'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>

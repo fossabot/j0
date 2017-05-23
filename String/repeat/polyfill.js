@@ -1,4 +1,4 @@
-import parseInt from '../../parseInt';
+import {parseInt} from '../../global';
 import push from '../../Array/push';
 import join from '../../Array/join';
 

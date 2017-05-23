@@ -1,4 +1,4 @@
-import parseInt from '../../parseInt';
+import {parseInt} from '../../global';
 
 const suffixes = ['th', 'st', 'nd', 'rd'];
 const TEN = 10;
