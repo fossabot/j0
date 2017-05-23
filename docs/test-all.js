@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x30, _x31) {
+	return function wait(_x29, _x30) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -131,6 +131,10 @@ var _window21 = window,
     Blob = _window21.Blob;
 var _window22 = window,
     Boolean = _window22.Boolean;
+var _window23 = window,
+    requestAnimationFrame = _window23.requestAnimationFrame;
+var _window24 = window,
+    cancelAnimationFrame = _window24.cancelAnimationFrame;
 
 
 function noop(x) {
@@ -1246,99 +1250,8 @@ tests(Body, 'Body');
 
 describe('cancelAnimationFrame', function () {
 
-	it('', function () {});
-});
-
-function getContext(canvas) {
-	var contextType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '2d';
-	var contextAttributes = arguments[2];
-
-	return canvas.getContext(contextType, contextAttributes);
-}
-
-function isNode(x) {
-	return x instanceof Node;
-}
-
-function setAttribute(element, attrName) {
-	for (var _len4 = arguments.length, value = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-		value[_key4 - 2] = arguments[_key4];
-	}
-
-	element.setAttribute(attrName, value.join(' '));
-}
-
-function appendChild(parentNode, newNode) {
-	parentNode.appendChild(newNode);
-}
-
-var key = Symbol('events');
-
-function getEventListeners(element) {
-	var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-	var allEvents = element[key];
-	var events = void 0;
-	if (!allEvents) {
-		allEvents = new Map();
-		element[key] = allEvents;
-	}
-	if (eventName) {
-		events = allEvents.get(eventName);
-		if (!events) {
-			events = new Set();
-			allEvents.set(eventName, events);
-		}
-		return events;
-	}
-	return allEvents;
-}
-
-function addEventListener(element, eventName, fn) {
-	element.addEventListener(eventName, fn);
-	getEventListeners(element, eventName).add(fn);
-}
-
-function processTace() {
-	var tace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	var _tace$t = tace.t,
-	    t = _tace$t === undefined ? 'div' : _tace$t,
-	    _tace$a = tace.a,
-	    a = _tace$a === undefined ? [] : _tace$a,
-	    _tace$c = tace.c,
-	    c = _tace$c === undefined ? [] : _tace$c,
-	    _tace$e = tace.e,
-	    e = _tace$e === undefined ? [] : _tace$e;
-
-	var element = document.createElement(t);
-	_forEach(filter(a), function (args) {
-		setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
-	});
-	_forEach(filter(c), function (data) {
-		appendChild(element, createElement(data));
-	});
-	_forEach(filter(e), function (args) {
-		addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
-	});
-	return element;
-}
-
-function createElement(data) {
-	if (isNode(data)) {
-		return data;
-	} else if (isString(data)) {
-		return document.createTextNode(data);
-	}
-	return processTace(data);
-}
-
-describe('Canvas/getContext', function () {
-
-	it('should return context', function () {
-		var canvas = createElement({ t: 'canvas' });
-		assert.doesNotThrow(function () {
-			return getContext(canvas);
-		});
+	it('', function () {
+		cancelAnimationFrame();
 	});
 });
 
@@ -1411,8 +1324,8 @@ function debounce(fn) {
 	return function () {
 		var _this2 = this;
 
-		for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-			args[_key5] = arguments[_key5];
+		for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+			args[_key4] = arguments[_key4];
 		}
 
 		clearTimeout(timer);
@@ -1450,6 +1363,10 @@ describe('debounce', function () {
 		});
 	});
 });
+
+function isNode(x) {
+	return x instanceof Node;
+}
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
@@ -1531,8 +1448,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len6 = arguments.length, value = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-				value[_key6 - 1] = arguments[_key6];
+			for (var _len5 = arguments.length, value = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+				value[_key5 - 1] = arguments[_key5];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -1789,9 +1706,9 @@ var StringList = function () {
 }();
 
 function forEachKey(obj, fn, thisArg) {
-	for (var _key7 in obj) {
-		if (obj.hasOwnProperty(_key7)) {
-			if (fn.call(thisArg, obj[_key7], _key7, obj)) {
+	for (var _key6 in obj) {
+		if (obj.hasOwnProperty(_key6)) {
+			if (fn.call(thisArg, obj[_key6], _key6, obj)) {
 				return;
 			}
 		}
@@ -1861,11 +1778,11 @@ var Headers$1 = function (_StringList) {
 						    value = _iterator$next4.value,
 						    done = _iterator$next4.done;
 
-						var _key8 = value && value[0];
-						if (done || history.indexOf(_key8) < 0) {
-							push(history, _key8);
+						var _key7 = value && value[0];
+						if (done || history.indexOf(_key7) < 0) {
+							push(history, _key7);
 							return {
-								value: [_key8, _this6.get(_key8)],
+								value: [_key7, _this6.get(_key7)],
 								done: done
 							};
 						}
@@ -2289,6 +2206,78 @@ function generator$2() {
 			};
 		}
 	};
+}
+
+function setAttribute(element, attrName) {
+	for (var _len6 = arguments.length, value = Array(_len6 > 2 ? _len6 - 2 : 0), _key8 = 2; _key8 < _len6; _key8++) {
+		value[_key8 - 2] = arguments[_key8];
+	}
+
+	element.setAttribute(attrName, value.join(' '));
+}
+
+function appendChild(parentNode, newNode) {
+	parentNode.appendChild(newNode);
+}
+
+var key = Symbol('events');
+
+function getEventListeners(element) {
+	var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+	var allEvents = element[key];
+	var events = void 0;
+	if (!allEvents) {
+		allEvents = new Map();
+		element[key] = allEvents;
+	}
+	if (eventName) {
+		events = allEvents.get(eventName);
+		if (!events) {
+			events = new Set();
+			allEvents.set(eventName, events);
+		}
+		return events;
+	}
+	return allEvents;
+}
+
+function addEventListener(element, eventName, fn) {
+	element.addEventListener(eventName, fn);
+	getEventListeners(element, eventName).add(fn);
+}
+
+function processTace() {
+	var tace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	var _tace$t = tace.t,
+	    t = _tace$t === undefined ? 'div' : _tace$t,
+	    _tace$a = tace.a,
+	    a = _tace$a === undefined ? [] : _tace$a,
+	    _tace$c = tace.c,
+	    c = _tace$c === undefined ? [] : _tace$c,
+	    _tace$e = tace.e,
+	    e = _tace$e === undefined ? [] : _tace$e;
+
+	var element = document.createElement(t);
+	_forEach(filter(a), function (args) {
+		setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
+	});
+	_forEach(filter(c), function (data) {
+		appendChild(element, createElement(data));
+	});
+	_forEach(filter(e), function (args) {
+		addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
+	});
+	return element;
+}
+
+function createElement(data) {
+	if (isNode(data)) {
+		return data;
+	} else if (isString(data)) {
+		return document.createTextNode(data);
+	}
+	return processTace(data);
 }
 
 function childNodes(node) {
@@ -3810,7 +3799,9 @@ tests$9(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('', function () {});
+	it('', function () {
+		requestAnimationFrame();
+	});
 });
 
 function tests$11(Response, name) {

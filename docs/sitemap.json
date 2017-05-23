@@ -22,9 +22,6 @@
 	"Body": {
 		"j0": {}
 	},
-	"Canvas": {
-		"getContext": {}
-	},
 	"CustomEvent": {},
 	"Date": {
 		"format": {}

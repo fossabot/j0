@@ -28,3 +28,5 @@ export const {XMLHttpRequest} = window;
 export const {Promise} = window;
 export const {Blob} = window;
 export const {Boolean} = window;
+export const {requestAnimationFrame} = window;
+export const {cancelAnimationFrame} = window;

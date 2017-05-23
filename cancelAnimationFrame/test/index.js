@@ -1,7 +1,9 @@
-import cancelAnimationFrame from '..';
+import {cancelAnimationFrame} from '../..';
 
 describe('cancelAnimationFrame', function () {
 
-	it('', function () {});
+	it('', function () {
+		cancelAnimationFrame();
+	});
 
 });

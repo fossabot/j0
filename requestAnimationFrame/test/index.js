@@ -1,7 +1,9 @@
-import requestAnimationFrame from '..';
+import {requestAnimationFrame} from '../..';
 
 describe('requestAnimationFrame', function () {
 
-	it('', function () {});
+	it('', function () {
+		requestAnimationFrame();
+	});
 
 });
