@@ -12,6 +12,8 @@ describe('Number/MAX_SAFE_INTEGER', function () {
 	});
 });
 
+var parseInt = window.parseInt;
+
 var suffixes = ['th', 'st', 'nd', 'rd'];
 var TEN = 10;
 var HUNDRED = 100;

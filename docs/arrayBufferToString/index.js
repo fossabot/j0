@@ -1,6 +1,10 @@
 (function(){
 'use strict';
 
+var Uint8Array = window.Uint8Array;
+
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -53,6 +57,8 @@ function arrayBufferToString(arrayBuffer) {
 	}
 	return chars.join('');
 }
+
+var FileReader = window.FileReader;
 
 function readBlob(data, type) {
 	var reader = new FileReader();

@@ -1,8 +1,10 @@
 (function(){
 'use strict';
 
+var window$1 = window.window;
+
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }

@@ -40,6 +40,8 @@ describe('Array/@iterator', function () {
 	});
 });
 
+var Boolean = window.Boolean;
+
 function noop(x) {
 	return x;
 }
@@ -146,6 +148,8 @@ describe('Array/every', function () {
 		assert.deepEqual(consumed, [0, 1, 2, 3]);
 	});
 });
+
+var Array = window.Array;
 
 var arrayPush = Array.prototype.push;
 
@@ -779,6 +783,8 @@ describe('Array/reduce', function () {
 function isUndefined(x) {
 	return typeof x === 'undefined';
 }
+
+var TypeError = window.TypeError;
 
 function shift(arrayLike) {
 	if (arrayLike.shift) {

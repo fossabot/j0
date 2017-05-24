@@ -1,12 +1,17 @@
 (function(){
 'use strict';
 
+var Promise = window.Promise;
+
+var document = window.document;
+
+var setTimeout = window.setTimeout;
+
 var INTERVAL = 100;
 
 var getBody = new Promise(function (resolve) {
 	function get() {
-		var _document = document,
-		    body = _document.body;
+		var body = document.body;
 
 		if (body) {
 			resolve(body);

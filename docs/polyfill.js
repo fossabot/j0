@@ -728,6 +728,8 @@ var runtime = createCommonjsModule(function (module) {
 	(typeof commonjsGlobal === 'undefined' ? 'undefined' : _typeof(commonjsGlobal)) === "object" ? commonjsGlobal : (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === "object" ? window : (typeof self === 'undefined' ? 'undefined' : _typeof(self)) === "object" ? self : commonjsGlobal);
 });
 
+var window$1 = window.window;
+
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -795,6 +797,10 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+var Date = window.Date;
+
+var TypeError$1 = window.TypeError;
+
 var hex = 16;
 
 var SymbolRegistry = function () {
@@ -829,7 +835,7 @@ var SymbolRegistry = function () {
 				}
 				return this.get(key, '');
 			}
-			throw new TypeError('Symbol.for was called with non-string: ' + key);
+			throw new TypeError$1('Symbol.for was called with non-string: ' + key);
 		}
 	}, {
 		key: 'keyFor',
@@ -872,8 +878,8 @@ var SymbolRegistry = function () {
 
 var J0Symbol = new SymbolRegistry().Symbol;
 
-if (!window.Symbol) {
-	window.Symbol = J0Symbol;
+if (!window$1.Symbol) {
+	window$1.Symbol = J0Symbol;
 }
 
 function generator() {
@@ -891,6 +897,8 @@ function generator() {
 		}
 	};
 }
+
+var Array = window.Array;
 
 var prototype = Array.prototype;
 
@@ -927,6 +935,8 @@ if (!Array.from) {
 	Array.from = map;
 }
 
+var parseInt = window.parseInt;
+
 function join(iterable) {
 	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
 
@@ -946,14 +956,15 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = repeat;
 }
 
+var setTimeout = window.setTimeout;
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!window$1.immediateId) {
+	window$1.immediateId = 0;
 }
-window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+window$1.immediateId += 1;
+var setImmediateNative = window$1.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1081,7 +1092,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError('A promise cannot be resolved with itself');
+					throw new TypeError$1('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -1230,7 +1241,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-window.Promise = window.Promise || J0Promise;
+window$1.Promise = window$1.Promise || J0Promise;
 
 function find(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -1394,13 +1405,13 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = window.Map;
+var MAP = window$1.Map;
 
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
 
-window.Map = MAP;
+window$1.Map = MAP;
 
 function generator$2() {
 	return this.entries();
@@ -1502,13 +1513,13 @@ var Set = function () {
 	return Set;
 }();
 
-var SET = window.Set;
+var SET = window$1.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 	SET = Set;
 }
 
-window.Set = SET;
+window$1.Set = SET;
 
 function generator$4() {
 	var _this8 = this;
@@ -1747,11 +1758,10 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var _window2 = window,
-    URLSearchParams$1 = _window2.URLSearchParams;
+var URLSearchParams$1 = window$1.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	window.URLSearchParams = URLSearchParams$2;
+	window$1.URLSearchParams = URLSearchParams$2;
 }
 
 function forEachKey(obj, fn, thisArg) {
@@ -1844,13 +1854,31 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!window.Headers) {
-	window.Headers = Headers$1;
+if (!window$1.Headers) {
+	window$1.Headers = Headers$1;
 }
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
+
+var Uint8Array = window.Uint8Array;
+
+var Uint8ClampedArray = window.Uint8ClampedArray;
+
+var Uint16Array = window.Uint16Array;
+
+var Uint32Array = window.Uint32Array;
+
+var Int8Array = window.Int8Array;
+
+var Int16Array = window.Int16Array;
+
+var Int32Array = window.Int32Array;
+
+var Float32Array = window.Float32Array;
+
+var Float64Array = window.Float64Array;
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
@@ -1904,6 +1932,16 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
+var Blob = window.Blob;
+
+var ArrayBuffer = window.ArrayBuffer;
+
+var DataView = window.DataView;
+
+var Promise$1 = window.Promise;
+
+var FileReader = window.FileReader;
+
 function readBlob(data, type) {
 	var reader = new FileReader();
 	var promise = new Promise(function (resolve, reject) {
@@ -1932,9 +1970,13 @@ function readBlob(data, type) {
 	return promise;
 }
 
+var FormData = window.FormData;
+
 function trim(string) {
 	return string.trim();
 }
+
+var decodeURIComponent = window.decodeURIComponent;
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
@@ -2007,7 +2049,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -2021,13 +2063,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise.resolve(this.bodyBlob);
+				return Promise$1.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise.resolve(new Blob([this.bodyText]));
+				return Promise$1.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -2040,11 +2082,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise.resolve(this.bodyText);
+				return Promise$1.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -2061,7 +2103,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError('Already used'));
+				return Promise$1.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -2214,8 +2256,10 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+var XMLHttpRequest = window.XMLHttpRequest;
+
 function fetch(input, init) {
-	return new Promise(function (resolve, reject) {
+	return new Promise$1(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {
@@ -2250,29 +2294,34 @@ function fetch(input, init) {
 	});
 }
 
-window.fetch = fetch;
+// if (!window.fetch) {
+// 	window.fetch = j0Fetch;
+// }
+window$1.fetch = fetch;
 
-if (!window.Body) {
-	window.Body = Body;
+if (!window$1.Body) {
+	window$1.Body = Body;
 }
 
-if (!window.Response) {
-	window.Response = Response;
+if (!window$1.Response) {
+	window$1.Response = Response;
 }
 
-if (!window.Request) {
-	window.Request = Request;
+if (!window$1.Request) {
+	window$1.Request = Request;
 }
 
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
+window$1.requestAnimationFrame = window$1.requestAnimationFrame || window$1.mozRequestAnimationFrame || window$1.webkitRequestAnimationFrame || window$1.msRequestAnimationFrame || function (fn) {
 	return setTimeout(function () {
 		fn(Date.now());
 	}, 30);
 };
 
-window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function (id) {
+var clearTimeout = window.clearTimeout;
+
+window$1.cancelAnimationFrame = window$1.cancelAnimationFrame || window$1.mozCancelAnimationFrame || function (id) {
 	return clearTimeout(id);
 };
 
-window.global = window;
+window$1.global = window$1;
 }())

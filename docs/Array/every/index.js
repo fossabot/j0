@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var Boolean = window.Boolean;
+
 function noop(x) {
 	return x;
 }

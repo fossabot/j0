@@ -104,6 +104,24 @@ function find(iterable) {
 	return result;
 }
 
+var Uint8Array = window.Uint8Array;
+
+var Uint8ClampedArray = window.Uint8ClampedArray;
+
+var Uint16Array = window.Uint16Array;
+
+var Uint32Array = window.Uint32Array;
+
+var Int8Array = window.Int8Array;
+
+var Int16Array = window.Int16Array;
+
+var Int32Array = window.Int32Array;
+
+var Float32Array = window.Float32Array;
+
+var Float64Array = window.Float64Array;
+
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
 	return 0 <= find(viewClasses, function (constructor) {
@@ -112,6 +130,8 @@ function isArrayBufferView(obj) {
 }
 
 var parseAsJSON = JSON.parse;
+
+var Array = window.Array;
 
 var arrayPush = Array.prototype.push;
 
@@ -166,6 +186,18 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
+var Blob = window.Blob;
+
+var ArrayBuffer = window.ArrayBuffer;
+
+var DataView = window.DataView;
+
+var TypeError$1 = window.TypeError;
+
+var Promise$1 = window.Promise;
+
+var FileReader = window.FileReader;
+
 function readBlob(data, type) {
 	var reader = new FileReader();
 	var promise = new Promise(function (resolve, reject) {
@@ -194,9 +226,13 @@ function readBlob(data, type) {
 	return promise;
 }
 
+var FormData = window.FormData;
+
 function trim(string) {
 	return string.trim();
 }
+
+var decodeURIComponent = window.decodeURIComponent;
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
@@ -269,7 +305,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -283,13 +319,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise.resolve(this.bodyBlob);
+				return Promise$1.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise.resolve(new Blob([this.bodyText]));
+				return Promise$1.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -302,11 +338,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise.resolve(this.bodyText);
+				return Promise$1.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -323,7 +359,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError('Already used'));
+				return Promise$1.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -737,8 +773,10 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+var XMLHttpRequest = window.XMLHttpRequest;
+
 function fetch(input, init) {
-	return new Promise(function (resolve, reject) {
+	return new Promise$1(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {

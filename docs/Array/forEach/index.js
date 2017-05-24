@@ -66,6 +66,8 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

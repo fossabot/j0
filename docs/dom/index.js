@@ -13,6 +13,8 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+var Node = window.Node;
+
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
@@ -84,6 +86,8 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -108,6 +112,8 @@ function map(iterable) {
 	});
 	return result;
 }
+
+var document = window.document;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');

@@ -9,8 +9,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var createNavigation = function () {
 	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-		var root, response, tree, _location, pathname, basePath, rootBranch, parseBranch, nav;
-
+		var root, response, tree, pathname, basePath, rootBranch, parseBranch, nav;
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
@@ -45,7 +44,7 @@ var createNavigation = function () {
 
 					case 7:
 						tree = _context.sent;
-						_location = location, pathname = _location.pathname;
+						pathname = location.pathname;
 						basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
 						rootBranch = pathname.replace(basePath, '').split('/').reduce(function (parent, name) {
 							return name ? parent[name] : parent;
@@ -88,6 +87,8 @@ function forEachKey(obj, fn, thisArg) {
 function isString(x) {
 	return typeof x === 'string';
 }
+
+var Node = window.Node;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
@@ -160,6 +161,8 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -184,6 +187,8 @@ function map(iterable) {
 	});
 	return result;
 }
+
+var document = window.document;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
@@ -423,12 +428,15 @@ onError.listener = function (error) {
 	console.error(error);
 };
 
+var Promise = window.Promise;
+
+var setTimeout = window.setTimeout;
+
 var INTERVAL = 100;
 
 var getBody = new Promise(function (resolve) {
 	function get() {
-		var _document = document,
-		    body = _document.body;
+		var body = document.body;
 
 		if (body) {
 			resolve(body);
@@ -439,9 +447,16 @@ var getBody = new Promise(function (resolve) {
 	get();
 });
 
+var window$1 = window.window;
+
+var fetch = window.fetch;
+
+var location = window.location;
+
+var navigator = window.navigator;
+
 /* global chai */
-var _window = window,
-    mocha = _window.mocha;
+var mocha = window$1.mocha;
 
 
 function startMocha() {
@@ -488,9 +503,9 @@ function normalizeUrl(url) {
 }
 
 if (mocha) {
-	window.assert = chai.assert;
+	window$1.assert = chai.assert;
 	mocha.setup('bdd');
-	window.start = startMocha;
+	window$1.start = startMocha;
 }
 
 getBody.then(function () {

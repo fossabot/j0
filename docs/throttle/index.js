@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var setTimeout = window.setTimeout;
+
 function isUndefined(x) {
 	return typeof x === 'undefined';
 }

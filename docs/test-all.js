@@ -85,6 +85,8 @@ describe('Array/@iterator', function () {
 	});
 });
 
+var Boolean = window.Boolean;
+
 function noop(x) {
 	return x;
 }
@@ -191,6 +193,8 @@ describe('Array/every', function () {
 		assert.deepEqual(consumed, [0, 1, 2, 3]);
 	});
 });
+
+var Array = window.Array;
 
 var arrayPush = Array.prototype.push;
 
@@ -825,6 +829,8 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+var TypeError$1 = window.TypeError;
+
 function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();
@@ -839,7 +845,7 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError('The object is not shift-able object');
+	throw new TypeError$1('The object is not shift-able object');
 }
 
 describe('Array/shift', function () {
@@ -933,6 +939,8 @@ describe('Array/splice', function () {
 	});
 });
 
+var Uint8Array$1 = window.Uint8Array;
+
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
@@ -952,7 +960,7 @@ function consume(view, index, length) {
 /* eslint-enable no-bitwise */
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new Uint8Array$1(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -975,6 +983,8 @@ function arrayBufferToString(arrayBuffer) {
 	}
 	return chars.join('');
 }
+
+var FileReader = window.FileReader;
 
 function readBlob(data, type) {
 	var reader = new FileReader();
@@ -1033,7 +1043,23 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+var Uint8ClampedArray$1 = window.Uint8ClampedArray;
+
+var Uint16Array$1 = window.Uint16Array;
+
+var Uint32Array$1 = window.Uint32Array;
+
+var Int8Array$1 = window.Int8Array;
+
+var Int16Array$1 = window.Int16Array;
+
+var Int32Array$1 = window.Int32Array;
+
+var Float32Array$1 = window.Float32Array;
+
+var Float64Array$1 = window.Float64Array;
+
+var viewClasses = [Uint8Array$1, Uint8ClampedArray$1, Uint16Array$1, Uint32Array$1, Int8Array$1, Int16Array$1, Int32Array$1, Float32Array$1, Float64Array$1];
 function isArrayBufferView(obj) {
 	return 0 <= find$2(viewClasses, function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1042,9 +1068,21 @@ function isArrayBufferView(obj) {
 
 var parse = JSON.parse;
 
+var Blob$1 = window.Blob;
+
+var ArrayBuffer = window.ArrayBuffer;
+
+var DataView = window.DataView;
+
+var Promise$1 = window.Promise;
+
+var FormData = window.FormData;
+
 function trim(string) {
 	return string.trim();
 }
+
+var decodeURIComponent = window.decodeURIComponent;
 
 function parse$1(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
@@ -1068,8 +1106,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new Uint8Array(buf.byteLength);
-	view.set(new Uint8Array(buf));
+	var view = new Uint8Array$1(buf.byteLength);
+	view.set(new Uint8Array$1(buf));
 	return view.buffer;
 }
 
@@ -1088,7 +1126,7 @@ var Body$1 = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, Blob)) {
+			} else if (isInstanceOf(body, Blob$1)) {
 				this.bodyBlob = body;
 			} else if (isInstanceOf(body, FormData)) {
 				this.bodyFormData = body;
@@ -1097,7 +1135,7 @@ var Body$1 = function () {
 			} else if (isInstanceOf(body, DataView)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new Blob([this.bodyArrayBuffer]);
+				this.bodyInit = new Blob$1([this.bodyArrayBuffer]);
 			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
@@ -1117,7 +1155,7 @@ var Body$1 = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1131,13 +1169,13 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise.resolve(this.bodyBlob);
+				return Promise$1.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise$1.resolve(new Blob$1([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise.resolve(new Blob([this.bodyText]));
+				return Promise$1.resolve(new Blob$1([this.bodyText]));
 			}
 		}
 	}, {
@@ -1150,11 +1188,11 @@ var Body$1 = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise.resolve(this.bodyText);
+				return Promise$1.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1171,7 +1209,7 @@ var Body$1 = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise.reject(new TypeError('Already used'));
+				return Promise$1.reject(new TypeError$1('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1198,6 +1236,8 @@ tests(Body$1, 'J0Body');
 
 /* global Body */
 tests(Body);
+
+var cancelAnimationFrame = window.cancelAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
@@ -1254,9 +1294,13 @@ describe('debounce', function () {
 	});
 });
 
+var Node = window.Node;
+
 function isNode(x) {
 	return isInstanceOf(x, Node);
 }
+
+var document$1 = window.document;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
@@ -1272,7 +1316,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document.createTextNode(source);
+			this[nodeKey] = document$1.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -1285,7 +1329,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(document$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -1473,14 +1517,14 @@ function wrap(source) {
 }
 
 function find$3(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
 
 	var element = rootElement.querySelector(selector);
 	return element && wrap(element);
 }
 
 function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
 
 	return map(rootElement.querySelectorAll(selector), wrap);
 }
@@ -1879,8 +1923,10 @@ function parse$3(rawHeaders) {
 	return headers;
 }
 
+var XMLHttpRequest = window.XMLHttpRequest;
+
 function fetch$1(input, init) {
-	return new Promise(function (resolve, reject) {
+	return new Promise$1(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {
@@ -1943,6 +1989,8 @@ tests$2(fetch$1, 'J0Fetch');
 
 tests$2(fetch);
 
+var Date$1 = window.Date;
+
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 	var padChar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
@@ -1960,7 +2008,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new Date(src);
+	var date = new Date$1(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();
@@ -1983,17 +2031,18 @@ describe('format', function () {
 	});
 });
 
+var setTimeout$1 = window.setTimeout;
+
 var INTERVAL = 100;
 
-var getBody = new Promise(function (resolve) {
+var getBody = new Promise$1(function (resolve) {
 	function get() {
-		var _document = document,
-		    body = _document.body;
+		var body = document$1.body;
 
 		if (body) {
 			resolve(body);
 		} else {
-			setTimeout(get, INTERVAL);
+			setTimeout$1(get, INTERVAL);
 		}
 	}
 	get();
@@ -2194,8 +2243,10 @@ describe('HTMLCollection/@iterator', function () {
 	});
 });
 
+var window$1 = window.window;
+
 function innerHeight() {
-	return window.innerHeight;
+	return window$1.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -2206,7 +2257,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return window.innerWidth;
+	return window$1.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -3013,6 +3064,8 @@ describe('Number/MAX_SAFE_INTEGER', function () {
 	});
 });
 
+var parseInt = window.parseInt;
+
 var suffixes = ['th', 'st', 'nd', 'rd'];
 var TEN = 10;
 var HUNDRED = 100;
@@ -3265,7 +3318,7 @@ describe('FormData/parse', function () {
 describe('polyfill', function () {
 
 	it('should add global', function () {
-		assert.equal(window.global, window);
+		assert.equal(window$1.global, window$1);
 	});
 });
 
@@ -3282,12 +3335,11 @@ describe('preventDefault', function () {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!window$1.immediateId) {
+	window$1.immediateId = 0;
 }
-window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+window$1.immediateId += 1;
+var setImmediateNative = window$1.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -3316,7 +3368,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return setTimeout$1(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -3332,7 +3384,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+setTimeout$1(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -3415,7 +3467,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError('A promise cannot be resolved with itself');
+					throw new TypeError$1('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -3719,6 +3771,8 @@ tests$9(Request$1, 'J0Request');
 
 tests$9(Request, 'Request');
 
+var requestAnimationFrame = window.requestAnimationFrame;
+
 describe('requestAnimationFrame', function () {
 
 	it('', function () {
@@ -3761,7 +3815,7 @@ describe('scrollTo', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -3773,7 +3827,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -4287,7 +4341,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = setTimeout(function () {
+			timer = setTimeout$1(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;

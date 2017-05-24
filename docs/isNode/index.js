@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var Node = window.Node;
+
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }

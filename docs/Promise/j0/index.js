@@ -9,6 +9,8 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -78,14 +80,17 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var window$1 = window.window;
+
+var setTimeout$1 = window.setTimeout;
+
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window.immediateId) {
-	window.immediateId = 0;
+if (!window$1.immediateId) {
+	window$1.immediateId = 0;
 }
-window.immediateId += 1;
-var _window = window,
-    setImmediateNative = _window.setImmediate;
+window$1.immediateId += 1;
+var setImmediateNative = window$1.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -114,7 +119,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return setTimeout$1(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -130,7 +135,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+setTimeout$1(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -152,6 +157,8 @@ var setImmediate = function setImmediate(fn) {
 function noop(x) {
 	return x;
 }
+
+var TypeError = window.TypeError;
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;

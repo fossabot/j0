@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var FileReader = window.FileReader;
+
 function readBlob(data, type) {
 	var reader = new FileReader();
 	var promise = new Promise(function (resolve, reject) {

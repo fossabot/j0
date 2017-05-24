@@ -70,6 +70,10 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var decodeURIComponent = window.decodeURIComponent;
+
+var FormData = window.FormData;
+
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 

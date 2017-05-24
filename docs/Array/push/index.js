@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

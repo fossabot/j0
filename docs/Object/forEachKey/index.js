@@ -11,6 +11,8 @@ function forEachKey(obj, fn, thisArg) {
 	}
 }
 
+var Array = window.Array;
+
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
