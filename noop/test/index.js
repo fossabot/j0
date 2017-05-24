@@ -1,6 +1,5 @@
 import '../*/test';
 import noop from '..';
-import Date from '../../Date';
 
 describe('noop', function () {
 

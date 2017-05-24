@@ -1,5 +1,4 @@
 import localStorage from '..';
-import Date from '../../Date';
 
 const key = Date.now();
 

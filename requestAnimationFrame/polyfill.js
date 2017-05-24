@@ -1,5 +1,5 @@
-import Date from '../Date';
 import {
+	Date,
 	window,
 	setTimeout
 } from '..';

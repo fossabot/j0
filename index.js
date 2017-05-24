@@ -4,6 +4,7 @@ export {w as window};
 export const {String} = window;
 export const {Array} = window;
 export const {Object} = window;
+export const {Date} = window;
 export const {parseInt} = window;
 export const {ArrayBuffer} = window;
 export const {DataView} = window;

@@ -1,7 +1,7 @@
-import Date from '../../Date';
 import isString from '../../isString';
 import forEach from '../../Array/forEach';
 import {
+	Date,
 	TypeError,
 	Object
 } from '../..';

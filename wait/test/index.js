@@ -1,4 +1,3 @@
-import Date from '../../Date';
 import wait from '..';
 describe('wait', function () {
 	it('should return a promise and it should resolved with given data', async function () {
