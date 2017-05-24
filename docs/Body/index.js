@@ -148,24 +148,6 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-function noop(x) {
-	return x;
-}
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
 var Uint8ClampedArray = window.Uint8ClampedArray;
 
 var Uint16Array = window.Uint16Array;
@@ -184,7 +166,7 @@ var Float64Array = window.Float64Array;
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
-	return 0 <= find(viewClasses, function (constructor) {
+	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
 }

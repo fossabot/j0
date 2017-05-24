@@ -40,11 +40,71 @@ describe('Array/@iterator', function () {
 	});
 });
 
-var Boolean = window.Boolean;
-
-function noop(x) {
-	return x;
+function findIndex(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		var value = this[i];
+		if (fn.call(thisArg, this[i], i, this)) {
+			return value;
+		}
+	}
 }
+
+function test(findIndex) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.find';
+
+
+	describe(name, function () {
+
+		it('should return 1', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === 1;
+			}), 1);
+		});
+
+		it('should return undefined', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === 4;
+			}));
+		});
+	});
+}
+
+test(findIndex, 'Array.prototype.find.j0');
+
+test(Array.prototype.find);
+
+function findIndex$2(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		if (fn.call(thisArg, this[i], i, this)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+function test$2(findIndex) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.findIndex';
+
+
+	describe(name, function () {
+
+		it('should return 0', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === this.expected;
+			}, { expected: 1 }), 0);
+		});
+
+		it('should return -1', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === this.expected;
+			}, { expected: 4 }), -1);
+		});
+	});
+}
+
+test$2(findIndex$2, 'Array.prototype.findIndex.j0');
+
+test$2(Array.prototype.findIndex);
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -108,171 +168,6 @@ function forEach(iterable, fn, thisArg) {
 		}
 	}
 }
-
-function every(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = true;
-	forEach(iterable, function (value, index) {
-		result = fn.call(thisArg, value, index, iterable);
-		return !result;
-	});
-	return Boolean(result);
-}
-
-describe('Array/every', function () {
-
-	it('should return true if items are truthy', function () {
-		assert.equal(every([-1, 1, [], {}]), true);
-	});
-
-	it('should return false if the array have falthy value', function () {
-		assert.equal(every([-1, 1, [], {}, 0]), false);
-	});
-
-	it('should use given functions', function () {
-		function fn(x) {
-			return -3 < x && x < 3;
-		}
-		assert.equal(every([-2, -1, 0, 1, 2], fn), true);
-	});
-
-	it('should stop iteration at failure', function () {
-		var consumed = [];
-		function fn(x) {
-			consumed[consumed.length] = x;
-			return x < 3;
-		}
-		assert.equal(every([0, 1, 2, 3, 4, 5], fn), false);
-		assert.deepEqual(consumed, [0, 1, 2, 3]);
-	});
-});
-
-var Array$1 = window.Array;
-
-var arrayPush = Array$1.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function filter(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index, iterable2) {
-		if (fn.call(thisArg, value, index, iterable2)) {
-			push(result, value);
-		}
-	});
-	return result;
-}
-
-describe('Array/filter', function () {
-
-	it('should filter an iterable', function () {
-		function fn(x) {
-			return x % 2;
-		}
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 5 < count
-					};
-				}
-			};
-		});
-		var actual = filter(iterable, fn);
-		var expected = [1, 3, 5];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
-describe('Array/find', function () {
-
-	it('should find an item from iterable', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
-		});
-		function matcher(x) {
-			return 10 <= x;
-		}
-		var actual = find(iterable, matcher);
-		var expected = 10;
-		assert.equal(actual, expected);
-	});
-});
-
-function find$2(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
-describe('Array/findIndex', function () {
-
-	it('should find an index an item from iterable', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
-		});
-		function matcher(x) {
-			return 10 <= x;
-		}
-		var actual = find$2(iterable, matcher);
-		var expected = 9;
-		assert.equal(actual, expected);
-	});
-});
 
 describe('Array/forEach', function () {
 
@@ -352,66 +247,44 @@ describe('Array/forEach', function () {
 	});
 });
 
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
+function test$4(arrayFrom) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.from';
 
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
+
+	describe(name, function () {
+
+		it('should create a new array from an array-like object', function () {
+			var result = arrayFrom({
+				0: 1,
+				1: 2,
+				2: 3,
+				length: 3
+			});
+			assert.equal(Array.isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3]);
+		});
+
+		it('should create a new array from an iterable object', function () {
+			var iterable = _defineProperty({}, Symbol.iterator, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 5 <= count
+						};
+					}
+				};
+			});
+			var result = arrayFrom(iterable);
+			assert.equal(Array.isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3, 4]);
+		});
 	});
-	return result;
 }
 
-var isArray = Array$1.isArray;
-
-describe('Array/from', function () {
-
-	it('should create a new array from an array-like object', function () {
-		var result = map({
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		});
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3]);
-	});
-
-	it('should create a new array from an iterable object', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 5 <= count
-					};
-				}
-			};
-		});
-		var result = map(iterable);
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3, 4]);
-	});
-
-	it('should create a new array from an iterator object', function () {
-		var count = 0;
-		var iterator = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 5 <= count
-				};
-			}
-		};
-		var result = map(iterator);
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3, 4]);
-	});
-});
+test$4(Array.from);
 
 function includes(searchElement, fromIndex) {
 	var result = false;
@@ -422,7 +295,7 @@ function includes(searchElement, fromIndex) {
 	return result;
 }
 
-function test(includes) {
+function test$6(includes) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
 
@@ -454,437 +327,23 @@ function test(includes) {
 	});
 }
 
-test(includes, 'j0includes');
+test$6(includes, 'j0includes');
 
-test(Array.prototype.includes);
+test$6(Array.prototype.includes);
 
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+function test$8(arrayOf) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.of';
 
-	return map(iterable).join(separator);
-}
 
-describe('Array/join', function () {
+	describe(name, function () {
 
-	it('should join items of an array', function () {
-		var array = [1, 2, 3];
-		var expected = '1,2,3';
-		assert.equal(join(array), expected);
-	});
-
-	it('should join items of an array with specified separator', function () {
-		var array = [1, 2, 3];
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of an array-like object with specified separator', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		};
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of a string with specified separator', function () {
-		var array = '123';
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of an iterable with specified separator', function () {
-		var count = 0;
-		var array = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 3 < count
-				};
-			}
-		};
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-});
-
-function last(arrayLike) {
-	return arrayLike[arrayLike.length - 1];
-}
-
-describe('Array/last', function () {
-
-	it('should return the last item of an array', function () {
-		var array = [1, 2, 3];
-		assert.equal(last(array), 3);
-	});
-
-	it('should return the last item of an array-like object', function () {
-		var arrayLike = {
-			2: 3,
-			length: 3
-		};
-		assert.equal(last(arrayLike), 3);
-	});
-});
-
-describe('Array/map', function () {
-
-	it('should iterate over an array', function () {
-		var actual = map([0, 1, 2, 3], function (x) {
-			return x * 2;
-		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over an array-like', function () {
-		var actual = map({
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
-		}, function (x) {
-			return x * 2;
-		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over a string', function () {
-		var actual = map('xyz', function (x) {
-			return x + x;
-		});
-		var expected = ['xx', 'yy', 'zz'];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over an iterable', function () {
-		var counter = 0;
-		var iterable = {
-			next: function next() {
-				counter += 1;
-				return {
-					value: counter,
-					done: 4 < counter
-				};
-			}
-		};
-		var actual = map(iterable, function (x) {
-			return x * 2;
-		});
-		var expected = [2, 4, 6, 8];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should call fn in a specified context', function () {
-		function fn(value) {
-			this.sum += value;
-			return this.sum;
-		}
-		var context = { sum: 0 };
-		var result = map([0, 1, 2, 3, 4, 5], fn, context);
-		var expected = [0, 1, 3, 6, 10, 15];
-		assert.deepEqual(result, expected);
-	});
-});
-
-function arrayOf() {
-	for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-		args[_key2] = arguments[_key2];
-	}
-
-	return args;
-}
-
-describe('Array/of', function () {
-
-	it('should create an array', function () {
-		var actual = arrayOf(1, 2, 3);
-		var expected = [1, 2, 3];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function pop(array) {
-	return array.pop();
-}
-
-describe('Array/pop', function () {
-
-	it('should return the last item of array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = pop(array);
-		var expected1 = 5;
-		var expected2 = [1, 2, 3, 4];
-		assert.equal(actual, expected1);
-		assert.deepEqual(array, expected2);
-	});
-});
-
-describe('Array/push', function () {
-
-	it('should append an item to an array', function () {
-		var item = 3;
-		var array = [0, 1, 2];
-		var expected = [0, 1, 2, 3];
-		push(array, item);
-		assert.deepEqual(array, expected);
-	});
-
-	it('should append 3 items to an array', function () {
-		var items = [3, 4, 5];
-		var array = [0, 1, 2];
-		var expected = [0, 1, 2, 3, 4, 5];
-		push.apply(undefined, [array].concat(items));
-		assert.deepEqual(array, expected);
-	});
-
-	it('should append an item to an array-like object', function () {
-		var item = 3;
-		var array = {
-			0: 0,
-			1: 1,
-			2: 2,
-			length: 3
-		};
-		push(array, item);
-		assert.deepEqual(array, {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
+		it('should create an array', function () {
+			var actual = arrayOf(1, 2, 3);
+			var expected = [1, 2, 3];
+			assert.deepEqual(actual, expected);
 		});
 	});
-
-	it('should append 3 items to an array-like object', function () {
-		var items = [3, 4, 5];
-		var array = {
-			0: 0,
-			1: 1,
-			2: 2,
-			length: 3
-		};
-		push.apply(undefined, [array].concat(items));
-		assert.deepEqual(array, {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			4: 4,
-			5: 5,
-			length: 6
-		});
-	});
-});
-
-function reduce(iterable, fn) {
-	var initialValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	var thisArg = arguments[3];
-
-	var result = initialValue;
-	forEach(iterable, function (item, index) {
-		result = fn.call(thisArg, result, item, index, iterable);
-	});
-	return result;
 }
 
-describe('Array/reduce', function () {
-
-	it('should iterate over an array', function () {
-		var array = [1, 2, 3];
-		var result = [];
-		reduce(array, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, array);
-			return memo;
-		}, result);
-		assert.deepEqual(result, array);
-	});
-
-	it('should iterate over an array-like', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		};
-		var result = [];
-		var expected = [1, 2, 3];
-		reduce(array, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, array);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should iterate over an iterable', function () {
-		var count = 0;
-		var iterable = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 4 < count
-				};
-			}
-		};
-		var expected = [1, 2, 3, 4];
-		var result = [];
-		reduce(iterable, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, iterable);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should iterate over a string', function () {
-		var text = 'abcd';
-		var expected = ['a', 'b', 'c', 'd'];
-		var result = [];
-		reduce(text, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, text);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should call fn in a specified context', function () {
-		var array = [1, 2, 3];
-		var context = { sum: 0 };
-		var result = [];
-		var expected = [2, 5, 9];
-		function fn(memo, value, index, arr) {
-			this.sum += value;
-			memo[index] = value + this.sum;
-			assert.equal(arr, array);
-			return memo;
-		}
-		reduce(array, fn, result, context);
-		assert.deepEqual(context, { sum: 6 });
-		assert.deepEqual(result, expected);
-	});
-});
-
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
-var TypeError = window.TypeError;
-
-function shift(arrayLike) {
-	if (arrayLike.shift) {
-		return arrayLike.shift();
-	} else if (!isUndefined(arrayLike.length)) {
-		var returnValue = arrayLike[0];
-		var length = arrayLike.length;
-
-		for (var i = 0; i < length; i += 1) {
-			arrayLike[i] = arrayLike[i + 1];
-		}
-		delete arrayLike[length - 1];
-		arrayLike.length = length - 1;
-		return returnValue;
-	}
-	throw new TypeError('The object is not shift-able object');
-}
-
-describe('Array/shift', function () {
-
-	it('should remove the first item of an array', function () {
-		var array = [1, 2, 3, 4];
-		var expected1 = 1;
-		var expected2 = [2, 3, 4];
-		assert.equal(shift(array), expected1);
-		assert.deepEqual(array, expected2);
-	});
-
-	it('should remove the first item of an array-like object', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			3: 4,
-			length: 4
-		};
-		var expected1 = 1;
-		var expected2 = {
-			0: 2,
-			1: 3,
-			2: 4,
-			length: 3
-		};
-		assert.equal(shift(array), expected1);
-		assert.deepEqual(array, expected2);
-	});
-});
-
-function slice(iterable, start, end) {
-	return map(iterable).slice(start, end);
-}
-
-describe('Array/slice', function () {
-
-	it('should copy an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array);
-		var expected = [1, 2, 3, 4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should slice an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, 3);
-		var expected = [4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should create an empty array from an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, 0, 0);
-		var expected = [];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should slice from end of an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, -2);
-		var expected = [4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should create a new array from arguments', function () {
-		var args = function () {
-			return arguments;
-		}(1, 2, 3, 4, 5);
-		var actual = slice(args);
-		var expected = [1, 2, 3, 4, 5];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function splice(array) {
-	for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-		args[_key3 - 1] = arguments[_key3];
-	}
-
-	return array.splice.apply(array, args);
-}
-
-describe('Array/splice', function () {
-
-	it('should remove items from an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		splice(array, 1, 2);
-		assert.deepEqual(array, [1, 4, 5]);
-	});
-});
+test$8(Array.of);
 }())

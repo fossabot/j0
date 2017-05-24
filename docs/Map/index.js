@@ -35,147 +35,41 @@ describe('Map/@iterator', function () {
 	});
 });
 
-var iteratorSymbol = Symbol.iterator;
-
-function isFunction(x) {
-	return typeof x === 'function';
-}
-
-var Number = window.Number;
-
-function _forEach(iterable, fn, thisArg) {
-	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-	var length = iterable.length;
-
-	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
-	if (0 <= length) {
-		for (var index = fromIndex; index < length; index += 1) {
-			if (fn.call(thisArg, iterable[index], index, iterable)) {
-				return;
-			}
-		}
-	} else if (isFunction(iterator.next)) {
-		var _index = 0;
-		while (_index < Number.MAX_SAFE_INTEGER) {
-			var _iterator$next2 = iterator.next(),
-			    value = _iterator$next2.value,
-			    done = _iterator$next2.done;
-
-			if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
-				return;
-			}
-			_index += 1;
-		}
-	} else {
-		var _index2 = fromIndex;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var _value = _step.value;
-
-				if (fn.call(thisArg, _value, _index2, iterable)) {
-					return;
-				}
-				_index2 += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	}
-}
-
-var Array = window.Array;
-
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function noop(x) {
-	return x;
-}
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
-function find$2(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
-function splice(array) {
-	for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-		args[_key2 - 1] = arguments[_key2];
-	}
-
-	return array.splice.apply(array, args);
-}
-
 var Map$2 = function () {
 	function Map$2(iterable) {
-		var _this = this;
-
 		_classCallCheck(this, Map$2);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    value = _ref2[1];
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
 
-				_this.set(key, value);
-			});
+			try {
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var _ref = _step.value;
+
+					var _ref2 = _slicedToArray(_ref, 2);
+
+					var key = _ref2[0];
+					var value = _ref2[1];
+
+					this.set(key, value);
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
 		}
 	}
 
@@ -187,7 +81,7 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref3) {
+			return this.data.findIndex(function (_ref3) {
 				var _ref4 = _slicedToArray(_ref3, 1),
 				    itemKey = _ref4[0];
 
@@ -206,7 +100,7 @@ var Map$2 = function () {
 			if (0 <= index) {
 				this.data[index][1] = value;
 			} else {
-				push(this.data, [key, value]);
+				this.data.push([key, value]);
 			}
 			return this;
 		}
@@ -228,7 +122,7 @@ var Map$2 = function () {
 		value: function _delete(key) {
 			var index = this.indexOfKey(key);
 			if (0 <= index) {
-				splice(this.data, index, 1);
+				this.data.splice(index, 1);
 				return true;
 			}
 			return false;
@@ -241,7 +135,7 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			_forEach(this.data, fn, thisArg);
+			this.data.forEach(fn, thisArg);
 		}
 	}, {
 		key: 'keys',
@@ -249,9 +143,9 @@ var Map$2 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+					var _iterator$next2 = iterator.next(),
+					    value = _iterator$next2.value,
+					    done = _iterator$next2.done;
 
 					return {
 						value: value && value[0],
@@ -266,9 +160,9 @@ var Map$2 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next4 = iterator.next(),
-					    value = _iterator$next4.value,
-					    done = _iterator$next4.done;
+					var _iterator$next3 = iterator.next(),
+					    value = _iterator$next3.value,
+					    done = _iterator$next3.done;
 
 					return {
 						value: value && value[1],
@@ -293,26 +187,26 @@ function tests(Map, name) {
 
 		it('should create an instance', function () {
 			assert.doesNotThrow(function () {
-				var map$$1 = new Map();
-				return map$$1;
+				var map = new Map();
+				return map;
 			});
 		});
 
 		it('should return keys', function () {
-			var map$$1 = new Map();
-			assert.deepEqual(map(map$$1.keys()), []);
+			var map = new Map();
+			assert.deepEqual(Array.from(map.keys()), []);
 		});
 
 		it('should return values', function () {
-			var map$$1 = new Map();
-			assert.deepEqual(map(map$$1.values()), []);
+			var map = new Map();
+			assert.deepEqual(Array.from(map.values()), []);
 		});
 
 		it('should initialize with given array', function () {
-			var map$$1 = new Map([[0, 1]]);
+			var map = new Map([[0, 1]]);
 			assert.deepEqual({
-				keys: map(map$$1.keys()),
-				values: map(map$$1.values())
+				keys: Array.from(map.keys()),
+				values: Array.from(map.values())
 			}, {
 				keys: [0],
 				values: [1]
@@ -349,10 +243,10 @@ function tests(Map, name) {
 					}
 				}, _callee, this);
 			}));
-			var map$$1 = new Map(iterable);
+			var map = new Map(iterable);
 			assert.deepEqual({
-				keys: map(map$$1.keys()),
-				values: map(map$$1.values())
+				keys: Array.from(map.keys()),
+				values: Array.from(map.values())
 			}, {
 				keys: [0],
 				values: [1]

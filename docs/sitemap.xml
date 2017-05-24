@@ -5,19 +5,22 @@
 		<loc>https://kei-ito.github.io/j0/Array/@iterator/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/every/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/filter/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/find/j0/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/find/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/findIndex/j0/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/findIndex/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/forEach/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/from/j0/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/from/</loc>
@@ -29,34 +32,10 @@
 		<loc>https://kei-ito.github.io/j0/Array/includes/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/join/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/last/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/map/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/of/j0/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/of/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/pop/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/push/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/reduce/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/shift/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/slice/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Array/splice/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/</loc>

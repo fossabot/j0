@@ -9,9 +9,8 @@
 <h1 id="title"><a href="../">j0</a>/isArrayBufferView<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">findIndex</span>&#32;<span class="name">from</span>&#32;<a href="../Array/findIndex"><span class="string"><span class="string">'../Array/findIndex'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isInstanceOf</span>&#32;<span class="name">from</span>&#32;<a href="../isInstanceOf"><span class="string"><span class="string">'../isInstanceOf'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">isInstanceOf</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Uint8Array</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Uint8ClampedArray</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Uint16Array</span><span class="_2c">,</span>
@@ -34,7 +33,8 @@
 <span class="linenum"></span>&#9;<span class="name">Float64Array</span>
 <span class="linenum"></span><span class="_5d">]</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="function">function</span>&#32;<span class="name">isArrayBufferView</span><span class="_28">(</span><span class="name">obj</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="num">0</span>&#32;<span class="_3c_2f_3e">&lt;=</span>&#32;<span class="name">findIndex</span><span class="_28">(</span><span class="name">viewClasses</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="name">constructor</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="num">0</span>&#32;<span class="_3c_2f_3e">&lt;=</span>&#32;<span class="name">viewClasses</span>
+<span class="linenum"></span>&#9;<span class="_2e">.</span><span class="name">findIndex</span><span class="_28">(</span><span class="function">function</span>&#32;<span class="_28">(</span><span class="name">constructor</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="name">isInstanceOf</span><span class="_28">(</span><span class="name">obj</span><span class="_2c">,</span>&#32;<span class="name">constructor</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>

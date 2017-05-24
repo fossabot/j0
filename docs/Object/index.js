@@ -110,18 +110,6 @@ describe('Object/assign', function () {
 	});
 });
 
-var Array = window.Array;
-
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-		args[_key2 - 1] = arguments[_key2];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
 describe('Object/forEachKey', function () {
 
 	it('should iterate over an object', function () {
@@ -131,11 +119,11 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				args[_key3] = arguments[_key3];
+			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				args[_key2] = arguments[_key2];
 			}
 
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [[0, 'a', obj], [1, 'b', obj]]);
 	});
@@ -147,11 +135,11 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-				args[_key4] = arguments[_key4];
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
 			}
 
-			push(results, args);
+			results.push(args);
 			return true;
 		});
 		assert.deepEqual(results, [[0, 'a', obj]]);
@@ -161,11 +149,11 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-				args[_key5] = arguments[_key5];
+			for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+				args[_key4] = arguments[_key4];
 			}
 
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [[1, '0', obj], [2, '1', obj]]);
 	});

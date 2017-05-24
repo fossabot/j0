@@ -13,150 +13,41 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var iteratorSymbol = Symbol.iterator;
 
-function isFunction(x) {
-	return typeof x === 'function';
-}
-
-var Number = window.Number;
-
-function forEach(iterable, fn, thisArg) {
-	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-	var length = iterable.length;
-
-	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
-	if (0 <= length) {
-		for (var index = fromIndex; index < length; index += 1) {
-			if (fn.call(thisArg, iterable[index], index, iterable)) {
-				return;
-			}
-		}
-	} else if (isFunction(iterator.next)) {
-		var _index = 0;
-		while (_index < Number.MAX_SAFE_INTEGER) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
-
-			if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
-				return;
-			}
-			_index += 1;
-		}
-	} else {
-		var _index2 = fromIndex;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var _value = _step.value;
-
-				if (fn.call(thisArg, _value, _index2, iterable)) {
-					return;
-				}
-				_index2 += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	}
-}
-
-var Array = window.Array;
-
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function noop(x) {
-	return x;
-}
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-function filter(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index, iterable2) {
-		if (fn.call(thisArg, value, index, iterable2)) {
-			push(result, value);
-		}
-	});
-	return result;
-}
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
-function find$1(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
 var StringList = function () {
 	function StringList(iterable) {
-		var _this = this;
-
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    value = _ref2[1];
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
 
-				_this.append(key, value);
-			});
+			try {
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var _ref = _step.value;
+
+					var _ref2 = _slicedToArray(_ref, 2);
+
+					var key = _ref2[0];
+					var value = _ref2[1];
+
+					this.append(key, value);
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
 		}
 	}
 
@@ -168,7 +59,7 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find(this.data, function (_ref3) {
+			return this.data.findIndex(function (_ref3) {
 				var _ref4 = _slicedToArray(_ref3, 1),
 				    itemName = _ref4[0];
 
@@ -183,7 +74,7 @@ var StringList = function () {
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			push(this.data, [name, value]);
+			this.data.push([name, value]);
 		}
 	}, {
 		key: 'set',
@@ -198,7 +89,7 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref5) {
+			this.data = this.data.filter(function (_ref5) {
 				var _ref6 = _slicedToArray(_ref5, 1),
 				    itemName = _ref6[0];
 
@@ -208,7 +99,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find$1(this.data, function (_ref7) {
+			var found = find(this.data, function (_ref7) {
 				var _ref8 = _slicedToArray(_ref7, 1),
 				    itemName = _ref8[0];
 
@@ -220,13 +111,13 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			forEach(this.data, function (_ref9) {
+			this.data.forEach(function (_ref9) {
 				var _ref10 = _slicedToArray(_ref9, 2),
 				    itemName = _ref10[0],
 				    value = _ref10[1];
 
 				if (itemName === name) {
-					push(result, value);
+					result.push(value);
 				}
 			});
 			return result;
@@ -234,7 +125,7 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref11) {
+			return this.data.map(function (_ref11) {
 				var _ref12 = _slicedToArray(_ref11, 2),
 				    name = _ref12[0],
 				    _ref12$ = _ref12[1],
@@ -254,9 +145,9 @@ var StringList = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+					var _iterator$next = iterator.next(),
+					    value = _iterator$next.value,
+					    done = _iterator$next.done;
 
 					return {
 						value: value && value[1],
@@ -284,7 +175,7 @@ var URLSearchParams = function (_StringList) {
 	function URLSearchParams(init) {
 		_classCallCheck(this, URLSearchParams);
 
-		return _possibleConstructorReturn(this, (URLSearchParams.__proto__ || Object.getPrototypeOf(URLSearchParams)).call(this, init ? map(init.replace(/^\?/, '').split(separator), function (entry) {
+		return _possibleConstructorReturn(this, (URLSearchParams.__proto__ || Object.getPrototypeOf(URLSearchParams)).call(this, init ? init.replace(/^\?/, '').split(separator).map(function (entry) {
 			return entry.split(equal);
 		}) : null));
 	}
@@ -292,7 +183,7 @@ var URLSearchParams = function (_StringList) {
 	_createClass(URLSearchParams, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref13) {
+			return this.data.map(function (_ref13) {
 				var _ref14 = _slicedToArray(_ref13, 2),
 				    name = _ref14[0],
 				    _ref14$ = _ref14[1],
@@ -378,9 +269,9 @@ function tests(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.entries();
 			while (1) {
-				var _iterator$next3 = iterator.next(),
-				    value = _iterator$next3.value,
-				    done = _iterator$next3.done;
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
 				if (done) {
 					break;
@@ -401,9 +292,9 @@ function tests(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.values();
 			while (1) {
-				var _iterator$next4 = iterator.next(),
-				    value = _iterator$next4.value,
-				    done = _iterator$next4.done;
+				var _iterator$next3 = iterator.next(),
+				    value = _iterator$next3.value,
+				    done = _iterator$next3.done;
 
 				if (done) {
 					break;

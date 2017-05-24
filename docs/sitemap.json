@@ -1,25 +1,22 @@
 {
 	"Array": {
 		"@iterator": {},
-		"every": {},
-		"filter": {},
-		"find": {},
-		"findIndex": {},
+		"find": {
+			"j0": {}
+		},
+		"findIndex": {
+			"j0": {}
+		},
 		"forEach": {},
-		"from": {},
+		"from": {
+			"j0": {}
+		},
 		"includes": {
 			"j0": {}
 		},
-		"join": {},
-		"last": {},
-		"map": {},
-		"of": {},
-		"pop": {},
-		"push": {},
-		"reduce": {},
-		"shift": {},
-		"slice": {},
-		"splice": {}
+		"of": {
+			"j0": {}
+		}
 	},
 	"Body": {
 		"j0": {}

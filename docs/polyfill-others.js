@@ -43,13 +43,86 @@ if (!prototype[iteratorSymbol]) {
 	prototype[iteratorSymbol] = generator;
 }
 
+function findIndex(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		var value = this[i];
+		if (fn.call(thisArg, this[i], i, this)) {
+			return value;
+		}
+	}
+}
+
+var prototype$1 = Array.prototype;
+
+if (!prototype$1.find) {
+	prototype$1.find = findIndex;
+}
+
+function findIndex$1(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		if (fn.call(thisArg, this[i], i, this)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+var prototype$2 = Array.prototype;
+
+if (!prototype$2.findIndex) {
+	prototype$2.findIndex = findIndex$1;
+}
+
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
+
+function arrayFrom(iterable) {
+	var result = [];
+	if (isUndefined(iterable.length)) {
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+
+		try {
+			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var item = _step.value;
+
+				result.push(item);
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	} else {
+		for (var i = 0, length = iterable.length; i < length; i++) {
+			result[i] = iterable[i];
+		}
+	}
+	return result;
+}
+
+if (!Array.from) {
+	Array.from = arrayFrom;
+}
+
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
 var Number = window.Number;
 
-function _forEach(iterable, fn, thisArg) {
+function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
@@ -74,13 +147,13 @@ function _forEach(iterable, fn, thisArg) {
 		}
 	} else {
 		var _index2 = fromIndex;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
+		var _iteratorNormalCompletion2 = true;
+		var _didIteratorError2 = false;
+		var _iteratorError2 = undefined;
 
 		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var _value = _step.value;
+			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var _value = _step2.value;
 
 				if (fn.call(thisArg, _value, _index2, iterable)) {
 					return;
@@ -88,81 +161,58 @@ function _forEach(iterable, fn, thisArg) {
 				_index2 += 1;
 			}
 		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
+			_didIteratorError2 = true;
+			_iteratorError2 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
+				if (!_iteratorNormalCompletion2 && _iterator2.return) {
+					_iterator2.return();
 				}
 			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
+				if (_didIteratorError2) {
+					throw _iteratorError2;
 				}
 			}
 		}
 	}
 }
 
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function noop(x) {
-	return x;
-}
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-if (!Array.from) {
-	Array.from = map;
-}
-
 function includes(searchElement, fromIndex) {
 	var result = false;
-	_forEach(this, function (value) {
+	forEach(this, function (value) {
 		result = value === searchElement;
 		return result;
 	}, null, fromIndex);
 	return result;
 }
 
-var prototype$1 = Array.prototype;
+var prototype$3 = Array.prototype;
 
-if (!prototype$1.includes) {
-	prototype$1.includes = includes;
+if (!prototype$3.includes) {
+	prototype$3.includes = includes;
+}
+
+function arrayOf() {
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+
+	return args;
+}
+
+if (!Array.of) {
+	Array.of = arrayOf;
 }
 
 var parseInt = window.parseInt;
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
 
 function repeat(c) {
 	var count = parseInt(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
-		push(results, this);
+		results.push(this);
 	}
-	return join(results, '');
+	return results.join('');
 }
 
 if (!String.prototype.repeat) {
@@ -242,6 +292,10 @@ setTimeout(function () {
 var setImmediate = function setImmediate(fn) {
 	return setImmediateAvailable(fn);
 };
+
+function noop(x) {
+	return x;
+}
 
 var TypeError$1 = window.TypeError;
 
@@ -337,7 +391,7 @@ var J0Promise = function () {
 		value: function finish() {
 			var _this3 = this;
 
-			_forEach(this.deferreds, function (deferred) {
+			this.deferreds.forEach(function (deferred) {
 				_this3.handle(deferred);
 			});
 			this.deferreds = null;
@@ -352,7 +406,7 @@ var J0Promise = function () {
 				self = self.value;
 			}
 			if (self.is(PENDING)) {
-				push(self.deferreds, deferred);
+				self.deferreds.push(deferred);
 				return;
 			}
 			setImmediate(function () {
@@ -415,7 +469,7 @@ var J0Promise = function () {
 		key: 'race',
 		value: function race(promises) {
 			return new J0Promise(function (resolve, reject) {
-				_forEach(promises, function (promise) {
+				promises.forEach(function (promise) {
 					promise.then(resolve, reject);
 				});
 			});
@@ -444,7 +498,7 @@ var J0Promise = function () {
 						resolve(values);
 					}
 				}
-				_forEach(values, function (value, index) {
+				values.forEach(function (value, index) {
 					check(value, index);
 				});
 			});
@@ -460,57 +514,41 @@ function isThennable(value) {
 
 window$1.Promise = window$1.Promise || J0Promise;
 
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
-function find$2(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
-function splice(array) {
-	for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-		args[_key2 - 1] = arguments[_key2];
-	}
-
-	return array.splice.apply(array, args);
-}
-
 var Map$1 = function () {
 	function Map$1(iterable) {
-		var _this4 = this;
-
 		_classCallCheck(this, Map$1);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    value = _ref2[1];
+			var _iteratorNormalCompletion3 = true;
+			var _didIteratorError3 = false;
+			var _iteratorError3 = undefined;
 
-				_this4.set(key, value);
-			});
+			try {
+				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+					var _ref = _step3.value;
+
+					var _ref2 = _slicedToArray(_ref, 2);
+
+					var key = _ref2[0];
+					var value = _ref2[1];
+
+					this.set(key, value);
+				}
+			} catch (err) {
+				_didIteratorError3 = true;
+				_iteratorError3 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion3 && _iterator3.return) {
+						_iterator3.return();
+					}
+				} finally {
+					if (_didIteratorError3) {
+						throw _iteratorError3;
+					}
+				}
+			}
 		}
 	}
 
@@ -522,7 +560,7 @@ var Map$1 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref3) {
+			return this.data.findIndex(function (_ref3) {
 				var _ref4 = _slicedToArray(_ref3, 1),
 				    itemKey = _ref4[0];
 
@@ -541,7 +579,7 @@ var Map$1 = function () {
 			if (0 <= index) {
 				this.data[index][1] = value;
 			} else {
-				push(this.data, [key, value]);
+				this.data.push([key, value]);
 			}
 			return this;
 		}
@@ -563,7 +601,7 @@ var Map$1 = function () {
 		value: function _delete(key) {
 			var index = this.indexOfKey(key);
 			if (0 <= index) {
-				splice(this.data, index, 1);
+				this.data.splice(index, 1);
 				return true;
 			}
 			return false;
@@ -576,7 +614,7 @@ var Map$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			_forEach(this.data, fn, thisArg);
+			this.data.forEach(fn, thisArg);
 		}
 	}, {
 		key: 'keys',
@@ -634,23 +672,42 @@ function generator$2() {
 	return this.entries();
 }
 
-var prototype$2 = Map.prototype;
+var prototype$4 = Map.prototype;
 
-if (!prototype$2[iteratorSymbol]) {
-	prototype$2[iteratorSymbol] = generator$2;
+if (!prototype$4[iteratorSymbol]) {
+	prototype$4[iteratorSymbol] = generator$2;
 }
 
 var Set = function () {
 	function Set(iterable) {
-		var _this5 = this;
-
 		_classCallCheck(this, Set);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (value) {
-				_this5.add(value);
-			});
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
+
+			try {
+				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var value = _step4.value;
+
+					this.add(value);
+				}
+			} catch (err) {
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
+					}
+				} finally {
+					if (_didIteratorError4) {
+						throw _iteratorError4;
+					}
+				}
+			}
 		}
 	}
 
@@ -673,7 +730,7 @@ var Set = function () {
 		key: 'add',
 		value: function add(item) {
 			if (!this.has(item)) {
-				push(this.data, item);
+				this.data.push(item);
 			}
 			return this;
 		}
@@ -682,17 +739,17 @@ var Set = function () {
 		value: function _delete(item) {
 			var index = this.indexOf(item);
 			if (0 <= index) {
-				splice(this.data, index, 1);
+				this.data.splice(index, 1);
 			}
 			return 0 <= index;
 		}
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this6 = this;
+			var _this4 = this;
 
-			_forEach(this.data, function (value) {
-				fn.call(thisArg, value, value, _this6);
+			this.data.forEach(function (value) {
+				fn.call(thisArg, value, value, _this4);
 			});
 		}
 	}, {
@@ -747,6 +804,53 @@ if (!Number.MAX_SAFE_INTEGER) {
 }
 
 function generator$4() {
+	var _this5 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return {
+		next: function next() {
+			return {
+				value: _this5[index],
+				done: length <= index++
+			};
+		}
+	};
+}
+
+var _NodeList = NodeList,
+    prototype$5 = _NodeList.prototype;
+
+if (!prototype$5[iteratorSymbol]) {
+	prototype$5[iteratorSymbol] = generator$4;
+}
+
+var HTMLCollection = window.HTMLCollection;
+
+function generator$6() {
+	var _this6 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return {
+		next: function next() {
+			return {
+				value: _this6[index],
+				done: length <= index++
+			};
+		}
+	};
+}
+
+var prototype$6 = HTMLCollection.prototype;
+
+if (!prototype$6[iteratorSymbol]) {
+	prototype$6[iteratorSymbol] = generator$6;
+}
+
+function generator$8() {
 	var _this7 = this;
 
 	var length = this.length;
@@ -762,88 +866,48 @@ function generator$4() {
 	};
 }
 
-var _NodeList = NodeList,
-    prototype$3 = _NodeList.prototype;
-
-if (!prototype$3[iteratorSymbol]) {
-	prototype$3[iteratorSymbol] = generator$4;
-}
-
-var HTMLCollection = window.HTMLCollection;
-
-function generator$6() {
-	var _this8 = this;
-
-	var length = this.length;
-
-	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this8[index],
-				done: length <= index++
-			};
-		}
-	};
-}
-
-var prototype$4 = HTMLCollection.prototype;
-
-if (!prototype$4[iteratorSymbol]) {
-	prototype$4[iteratorSymbol] = generator$6;
-}
-
-function generator$8() {
-	var _this9 = this;
-
-	var length = this.length;
-
-	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this9[index],
-				done: length <= index++
-			};
-		}
-	};
-}
-
 var _NamedNodeMap = NamedNodeMap,
-    prototype$5 = _NamedNodeMap.prototype;
+    prototype$7 = _NamedNodeMap.prototype;
 
-if (!prototype$5[iteratorSymbol]) {
-	prototype$5[iteratorSymbol] = generator$8;
-}
-
-function filter(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index, iterable2) {
-		if (fn.call(thisArg, value, index, iterable2)) {
-			push(result, value);
-		}
-	});
-	return result;
+if (!prototype$7[iteratorSymbol]) {
+	prototype$7[iteratorSymbol] = generator$8;
 }
 
 var StringList = function () {
 	function StringList(iterable) {
-		var _this10 = this;
-
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref7) {
-				var _ref8 = _slicedToArray(_ref7, 2),
-				    key = _ref8[0],
-				    value = _ref8[1];
+			var _iteratorNormalCompletion5 = true;
+			var _didIteratorError5 = false;
+			var _iteratorError5 = undefined;
 
-				_this10.append(key, value);
-			});
+			try {
+				for (var _iterator5 = iterable[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+					var _ref7 = _step5.value;
+
+					var _ref8 = _slicedToArray(_ref7, 2);
+
+					var key = _ref8[0];
+					var value = _ref8[1];
+
+					this.append(key, value);
+				}
+			} catch (err) {
+				_didIteratorError5 = true;
+				_iteratorError5 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion5 && _iterator5.return) {
+						_iterator5.return();
+					}
+				} finally {
+					if (_didIteratorError5) {
+						throw _iteratorError5;
+					}
+				}
+			}
 		}
 	}
 
@@ -855,7 +919,7 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find$2(this.data, function (_ref9) {
+			return this.data.findIndex(function (_ref9) {
 				var _ref10 = _slicedToArray(_ref9, 1),
 				    itemName = _ref10[0];
 
@@ -870,7 +934,7 @@ var StringList = function () {
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			push(this.data, [name, value]);
+			this.data.push([name, value]);
 		}
 	}, {
 		key: 'set',
@@ -885,7 +949,7 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref11) {
+			this.data = this.data.filter(function (_ref11) {
 				var _ref12 = _slicedToArray(_ref11, 1),
 				    itemName = _ref12[0];
 
@@ -907,13 +971,13 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			_forEach(this.data, function (_ref15) {
+			this.data.forEach(function (_ref15) {
 				var _ref16 = _slicedToArray(_ref15, 2),
 				    itemName = _ref16[0],
 				    value = _ref16[1];
 
 				if (itemName === name) {
-					push(result, value);
+					result.push(value);
 				}
 			});
 			return result;
@@ -921,7 +985,7 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref17) {
+			return this.data.map(function (_ref17) {
 				var _ref18 = _slicedToArray(_ref17, 2),
 				    name = _ref18[0],
 				    _ref18$ = _ref18[1],
@@ -971,7 +1035,7 @@ var URLSearchParams$2 = function (_StringList) {
 	function URLSearchParams$2(init) {
 		_classCallCheck(this, URLSearchParams$2);
 
-		return _possibleConstructorReturn(this, (URLSearchParams$2.__proto__ || Object.getPrototypeOf(URLSearchParams$2)).call(this, init ? map(init.replace(/^\?/, '').split(separator), function (entry) {
+		return _possibleConstructorReturn(this, (URLSearchParams$2.__proto__ || Object.getPrototypeOf(URLSearchParams$2)).call(this, init ? init.replace(/^\?/, '').split(separator).map(function (entry) {
 			return entry.split(equal);
 		}) : null));
 	}
@@ -979,7 +1043,7 @@ var URLSearchParams$2 = function (_StringList) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref19) {
+			return this.data.map(function (_ref19) {
 				var _ref20 = _slicedToArray(_ref19, 2),
 				    name = _ref20[0],
 				    _ref20$ = _ref20[1],
@@ -1022,7 +1086,7 @@ var Headers = function (_StringList2) {
 		var init = [];
 		if (headers) {
 			forEachKey(headers, function (value, key) {
-				push(init, [key, value]);
+				init.push([key, value]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
@@ -1061,7 +1125,7 @@ var Headers = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this13 = this;
+			var _this10 = this;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
@@ -1074,9 +1138,9 @@ var Headers = function (_StringList2) {
 
 						var key = value && value[0];
 						if (done || history.indexOf(key) < 0) {
-							push(history, key);
+							history.push(key);
 							return {
-								value: [key, _this13.get(key)],
+								value: [key, _this10.get(key)],
 								done: done
 							};
 						}
@@ -1144,7 +1208,7 @@ var decodeURIComponent = window.decodeURIComponent;
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 
-	_forEach(trim(body).split('&'), function (data) {
+	forEach(trim(body).split('&'), function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
@@ -1185,7 +1249,7 @@ var Float64Array = window.Float64Array;
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
-	return 0 <= find$2(viewClasses, function (constructor) {
+	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
 }
@@ -1363,25 +1427,25 @@ var Request = function (_Body) {
 
 		var body = init.body;
 
-		var _this14 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+		var _this11 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 		if (input instanceof Request) {
-			body = _this14.inheritFrom(input, body, init);
+			body = _this11.inheritFrom(input, body, init);
 		} else {
-			_this14.url = '' + input;
+			_this11.url = '' + input;
 		}
-		_this14.credentials = init.credentials || _this14.credentials || 'omit';
-		if (init.headers || !_this14.headers) {
-			_this14.headers = new Headers(init.headers);
+		_this11.credentials = init.credentials || _this11.credentials || 'omit';
+		if (init.headers || !_this11.headers) {
+			_this11.headers = new Headers(init.headers);
 		}
-		_this14.method = (init.method || _this14.method || 'GET').toUpperCase();
-		_this14.mode = init.mode || _this14.mode || null;
-		_this14.referrer = null;
-		if ((_this14.method === 'GET' || _this14.method === 'HEAD') && body) {
+		_this11.method = (init.method || _this11.method || 'GET').toUpperCase();
+		_this11.mode = init.mode || _this11.mode || null;
+		_this11.referrer = null;
+		if ((_this11.method === 'GET' || _this11.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this14.initBody(body);
-		return _this14;
+		_this11.initBody(body);
+		return _this11;
 	}
 
 	_createClass(Request, [{
@@ -1427,16 +1491,16 @@ var Response = function (_Body2) {
 
 		_classCallCheck(this, Response);
 
-		var _this15 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+		var _this12 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-		_this15.type = 'default';
-		_this15.status = 'status' in init ? init.status : minOkStatus;
-		_this15.ok = _this15.status >= minOkStatus && _this15.status < maxOkStatus;
-		_this15.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this15.headers = new Headers(init.headers);
-		_this15.url = init.url || '';
-		_this15.initBody(body);
-		return _this15;
+		_this12.type = 'default';
+		_this12.status = 'status' in init ? init.status : minOkStatus;
+		_this12.ok = _this12.status >= minOkStatus && _this12.status < maxOkStatus;
+		_this12.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this12.headers = new Headers(init.headers);
+		_this12.url = init.url || '';
+		_this12.initBody(body);
+		return _this12;
 	}
 
 	_createClass(Response, [{
@@ -1495,10 +1559,6 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
 var XMLHttpRequest = window.XMLHttpRequest;
 
 function fetch(input, init) {
@@ -1526,7 +1586,7 @@ function fetch(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		_forEach(request.headers, function (_ref22) {
+		forEach(request.headers, function (_ref22) {
 			var _ref23 = _slicedToArray(_ref22, 2),
 			    name = _ref23[0],
 			    value = _ref23[1];
@@ -1537,6 +1597,9 @@ function fetch(input, init) {
 	});
 }
 
+// if (!window.fetch) {
+// 	window.fetch = j0Fetch;
+// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {

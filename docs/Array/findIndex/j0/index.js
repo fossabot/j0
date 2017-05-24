@@ -31,6 +31,4 @@ function test(findIndex) {
 }
 
 test(findIndex, 'Array.prototype.findIndex.j0');
-
-test(Array.prototype.findIndex);
 }())

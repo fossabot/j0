@@ -156,24 +156,6 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-function noop(x) {
-	return x;
-}
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
 var Uint8ClampedArray = window.Uint8ClampedArray;
 
 var Uint16Array = window.Uint16Array;
@@ -192,7 +174,7 @@ var Float64Array = window.Float64Array;
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
-	return 0 <= find(viewClasses, function (constructor) {
+	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
 }
@@ -360,71 +342,41 @@ var Body = function () {
 	return Body;
 }();
 
-var Array = window.Array;
-
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-function filter(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index, iterable2) {
-		if (fn.call(thisArg, value, index, iterable2)) {
-			push(result, value);
-		}
-	});
-	return result;
-}
-
-function find$1(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
 var StringList = function () {
 	function StringList(iterable) {
-		var _this = this;
-
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    value = _ref2[1];
+			var _iteratorNormalCompletion2 = true;
+			var _didIteratorError2 = false;
+			var _iteratorError2 = undefined;
 
-				_this.append(key, value);
-			});
+			try {
+				for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+					var _ref = _step2.value;
+
+					var _ref2 = _slicedToArray(_ref, 2);
+
+					var key = _ref2[0];
+					var value = _ref2[1];
+
+					this.append(key, value);
+				}
+			} catch (err) {
+				_didIteratorError2 = true;
+				_iteratorError2 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion2 && _iterator2.return) {
+						_iterator2.return();
+					}
+				} finally {
+					if (_didIteratorError2) {
+						throw _iteratorError2;
+					}
+				}
+			}
 		}
 	}
 
@@ -436,7 +388,7 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find(this.data, function (_ref3) {
+			return this.data.findIndex(function (_ref3) {
 				var _ref4 = _slicedToArray(_ref3, 1),
 				    itemName = _ref4[0];
 
@@ -451,7 +403,7 @@ var StringList = function () {
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			push(this.data, [name, value]);
+			this.data.push([name, value]);
 		}
 	}, {
 		key: 'set',
@@ -466,7 +418,7 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref5) {
+			this.data = this.data.filter(function (_ref5) {
 				var _ref6 = _slicedToArray(_ref5, 1),
 				    itemName = _ref6[0];
 
@@ -476,7 +428,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find$1(this.data, function (_ref7) {
+			var found = find(this.data, function (_ref7) {
 				var _ref8 = _slicedToArray(_ref7, 1),
 				    itemName = _ref8[0];
 
@@ -488,13 +440,13 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			forEach(this.data, function (_ref9) {
+			this.data.forEach(function (_ref9) {
 				var _ref10 = _slicedToArray(_ref9, 2),
 				    itemName = _ref10[0],
 				    value = _ref10[1];
 
 				if (itemName === name) {
-					push(result, value);
+					result.push(value);
 				}
 			});
 			return result;
@@ -502,7 +454,7 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref11) {
+			return this.data.map(function (_ref11) {
 				var _ref12 = _slicedToArray(_ref11, 2),
 				    name = _ref12[0],
 				    _ref12$ = _ref12[1],
@@ -566,7 +518,7 @@ var Headers = function (_StringList) {
 		var init = [];
 		if (headers) {
 			forEachKey(headers, function (value, key) {
-				push(init, [key, value]);
+				init.push([key, value]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
@@ -605,7 +557,7 @@ var Headers = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this3 = this;
+			var _this2 = this;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
@@ -618,9 +570,9 @@ var Headers = function (_StringList) {
 
 						var key = value && value[0];
 						if (done || history.indexOf(key) < 0) {
-							push(history, key);
+							history.push(key);
 							return {
-								value: [key, _this3.get(key)],
+								value: [key, _this2.get(key)],
 								done: done
 							};
 						}
@@ -645,16 +597,16 @@ var Response = function (_Body) {
 
 		_classCallCheck(this, Response);
 
-		var _this4 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+		var _this3 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-		_this4.type = 'default';
-		_this4.status = 'status' in init ? init.status : minOkStatus;
-		_this4.ok = _this4.status >= minOkStatus && _this4.status < maxOkStatus;
-		_this4.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this4.headers = new Headers(init.headers);
-		_this4.url = init.url || '';
-		_this4.initBody(body);
-		return _this4;
+		_this3.type = 'default';
+		_this3.status = 'status' in init ? init.status : minOkStatus;
+		_this3.ok = _this3.status >= minOkStatus && _this3.status < maxOkStatus;
+		_this3.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this3.headers = new Headers(init.headers);
+		_this3.url = init.url || '';
+		_this3.initBody(body);
+		return _this3;
 	}
 
 	_createClass(Response, [{

@@ -11,8 +11,6 @@
 <section class="Code">
 	<pre><span class="linenum"></span><span class="comment">/*&#32;eslint-disable&#32;no-underscore-dangle&#32;*/</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isFunction</span>&#32;<span class="name">from</span>&#32;<a href="../../isFunction"><span class="string"><span class="string">'../../isFunction'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">push</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/push"><span class="string"><span class="string">'../../Array/push'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEach</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/forEach"><span class="string"><span class="string">'../../Array/forEach'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">setImmediate</span>&#32;<span class="name">from</span>&#32;<a href="../../setImmediate"><span class="string"><span class="string">'../../setImmediate'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">noop</span>&#32;<span class="name">from</span>&#32;<a href="../../noop"><span class="string"><span class="string">'../../noop'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span><span class="name">TypeError</span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
@@ -96,7 +94,8 @@
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">finish</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">forEach</span><span class="_28">(</span><span class="this">this</span><span class="_2e">.</span><span class="name">deferreds</span><span class="_2c">,</span>&#32;<span class="_28">(</span><span class="name">deferred</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">deferreds</span>
+<span class="linenum"></span>&#9;&#9;<span class="_2e">.</span><span class="name">forEach</span><span class="_28">(</span><span class="_28">(</span><span class="name">deferred</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">handle</span><span class="_28">(</span><span class="name">deferred</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="this">this</span><span class="_2e">.</span><span class="name">deferreds</span>&#32;<span class="_3d">=</span>&#32;<span class="null">null</span><span class="_3b">;</span>
@@ -110,7 +109,7 @@
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">self</span>&#32;<span class="_3d">=</span>&#32;<span class="name">self</span><span class="_2e">.</span><span class="name">value</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">self</span><span class="_2e">.</span><span class="name">is</span><span class="_28">(</span><span class="name">PENDING</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">push</span><span class="_28">(</span><span class="name">self</span><span class="_2e">.</span><span class="name">deferreds</span><span class="_2c">,</span>&#32;<span class="name">deferred</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">self</span><span class="_2e">.</span><span class="name">deferreds</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">deferred</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">setImmediate</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
@@ -167,7 +166,8 @@
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">static</span>&#32;<span class="name">race</span><span class="_28">(</span><span class="name">promises</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="new">new</span>&#32;<span class="name">J0Promise</span><span class="_28">(</span><span class="function">function</span>&#32;<span class="_28">(</span><span class="name">resolve</span><span class="_2c">,</span>&#32;<span class="name">reject</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">forEach</span><span class="_28">(</span><span class="name">promises</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="name">promise</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">promises</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_2e">.</span><span class="name">forEach</span><span class="_28">(</span><span class="function">function</span>&#32;<span class="_28">(</span><span class="name">promise</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">promise</span><span class="_2e">.</span><span class="name">then</span><span class="_28">(</span><span class="name">resolve</span><span class="_2c">,</span>&#32;<span class="name">reject</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
@@ -194,7 +194,8 @@
 <span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">resolve</span><span class="_28">(</span><span class="name">values</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">forEach</span><span class="_28">(</span><span class="name">values</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">index</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">values</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_2e">.</span><span class="name">forEach</span><span class="_28">(</span><span class="function">function</span>&#32;<span class="_28">(</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">index</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">check</span><span class="_28">(</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">index</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>

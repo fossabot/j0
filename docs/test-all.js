@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x34, _x35) {
+	return function wait(_x31, _x32) {
 		return _ref30.apply(this, arguments);
 	};
 }();
@@ -85,11 +85,71 @@ describe('Array/@iterator', function () {
 	});
 });
 
-var Boolean = window.Boolean;
-
-function noop(x) {
-	return x;
+function findIndex(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		var value = this[i];
+		if (fn.call(thisArg, this[i], i, this)) {
+			return value;
+		}
+	}
 }
+
+function test$1(findIndex) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.find';
+
+
+	describe(name, function () {
+
+		it('should return 1', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === 1;
+			}), 1);
+		});
+
+		it('should return undefined', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === 4;
+			}));
+		});
+	});
+}
+
+test$1(findIndex, 'Array.prototype.find.j0');
+
+test$1(Array.prototype.find);
+
+function findIndex$2(fn, thisArg) {
+	for (var i = 0, length = this.length; i < length; i++) {
+		if (fn.call(thisArg, this[i], i, this)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+function test$3(findIndex) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.findIndex';
+
+
+	describe(name, function () {
+
+		it('should return 0', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === this.expected;
+			}, { expected: 1 }), 0);
+		});
+
+		it('should return -1', function () {
+			assert.equal(findIndex.call([1, 2, 3], function (x) {
+				return x === this.expected;
+			}, { expected: 4 }), -1);
+		});
+	});
+}
+
+test$3(findIndex$2, 'Array.prototype.findIndex.j0');
+
+test$3(Array.prototype.findIndex);
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -99,7 +159,7 @@ function isFunction(x) {
 
 var Number$1 = window.Number;
 
-function _forEach(iterable, fn, thisArg) {
+function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
@@ -154,176 +214,11 @@ function _forEach(iterable, fn, thisArg) {
 	}
 }
 
-function every(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = true;
-	_forEach(iterable, function (value, index) {
-		result = fn.call(thisArg, value, index, iterable);
-		return !result;
-	});
-	return Boolean(result);
-}
-
-describe('Array/every', function () {
-
-	it('should return true if items are truthy', function () {
-		assert.equal(every([-1, 1, [], {}]), true);
-	});
-
-	it('should return false if the array have falthy value', function () {
-		assert.equal(every([-1, 1, [], {}, 0]), false);
-	});
-
-	it('should use given functions', function () {
-		function fn(x) {
-			return -3 < x && x < 3;
-		}
-		assert.equal(every([-2, -1, 0, 1, 2], fn), true);
-	});
-
-	it('should stop iteration at failure', function () {
-		var consumed = [];
-		function fn(x) {
-			consumed[consumed.length] = x;
-			return x < 3;
-		}
-		assert.equal(every([0, 1, 2, 3, 4, 5], fn), false);
-		assert.deepEqual(consumed, [0, 1, 2, 3]);
-	});
-});
-
-var Array$1 = window.Array;
-
-var arrayPush = Array$1.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
-function filter(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index, iterable2) {
-		if (fn.call(thisArg, value, index, iterable2)) {
-			push(result, value);
-		}
-	});
-	return result;
-}
-
-describe('Array/filter', function () {
-
-	it('should filter an iterable', function () {
-		function fn(x) {
-			return x % 2;
-		}
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 5 < count
-					};
-				}
-			};
-		});
-		var actual = filter(iterable, fn);
-		var expected = [1, 3, 5];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = void 0;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = item;
-			return true;
-		}
-	});
-	return result;
-}
-
-describe('Array/find', function () {
-
-	it('should find an item from iterable', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
-		});
-		function matcher(x) {
-			return 10 <= x;
-		}
-		var actual = find(iterable, matcher);
-		var expected = 10;
-		assert.equal(actual, expected);
-	});
-});
-
-function find$2(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	_forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
-}
-
-describe('Array/findIndex', function () {
-
-	it('should find an index an item from iterable', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 20 < count
-					};
-				}
-			};
-		});
-		function matcher(x) {
-			return 10 <= x;
-		}
-		var actual = find$2(iterable, matcher);
-		var expected = 9;
-		assert.equal(actual, expected);
-	});
-});
-
 describe('Array/forEach', function () {
 
 	it('should iterate over an array', function () {
 		var array = [1, 2, 3];
-		_forEach(array, function (value, index, arr) {
+		forEach(array, function (value, index, arr) {
 			assert.deepEqual([value, arr], [array[index], arr]);
 		});
 	});
@@ -335,7 +230,7 @@ describe('Array/forEach', function () {
 			2: 3,
 			length: 3
 		};
-		_forEach(array, function (value, index, arr) {
+		forEach(array, function (value, index, arr) {
 			assert.deepEqual([value, arr], [array[index], arr]);
 		});
 	});
@@ -354,7 +249,7 @@ describe('Array/forEach', function () {
 			};
 		});
 		var results = [];
-		_forEach(iterable, function (value, index, arr) {
+		forEach(iterable, function (value, index, arr) {
 			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterable], [2, 1, iterable], [3, 2, iterable], [4, 3, iterable]]);
@@ -372,7 +267,7 @@ describe('Array/forEach', function () {
 			}
 		};
 		var results = [];
-		_forEach(iterator, function (value, index, arr) {
+		forEach(iterator, function (value, index, arr) {
 			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterator], [2, 1, iterator], [3, 2, iterator], [4, 3, iterator]]);
@@ -381,7 +276,7 @@ describe('Array/forEach', function () {
 	it('should iterate over a string', function () {
 		var text = 'abcd';
 		var results = [];
-		_forEach(text, function (value, index, arr) {
+		forEach(text, function (value, index, arr) {
 			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [['a', 0, text], ['b', 1, text], ['c', 2, text], ['d', 3, text]]);
@@ -392,82 +287,60 @@ describe('Array/forEach', function () {
 			this.sum += value;
 		}
 		var context = { sum: 0 };
-		_forEach([0, 1, 2, 3, 4, 5], fn, context);
+		forEach([0, 1, 2, 3, 4, 5], fn, context);
 		assert.deepEqual(context, { sum: 15 });
 	});
 });
 
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
+function test$5(arrayFrom) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.from';
 
-	var result = [];
-	_forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
+
+	describe(name, function () {
+
+		it('should create a new array from an array-like object', function () {
+			var result = arrayFrom({
+				0: 1,
+				1: 2,
+				2: 3,
+				length: 3
+			});
+			assert.equal(Array.isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3]);
+		});
+
+		it('should create a new array from an iterable object', function () {
+			var iterable = _defineProperty({}, Symbol.iterator, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						count += 1;
+						return {
+							value: count,
+							done: 5 <= count
+						};
+					}
+				};
+			});
+			var result = arrayFrom(iterable);
+			assert.equal(Array.isArray(result), true);
+			assert.deepEqual(result, [1, 2, 3, 4]);
+		});
 	});
-	return result;
 }
 
-var isArray = Array$1.isArray;
-
-describe('Array/from', function () {
-
-	it('should create a new array from an array-like object', function () {
-		var result = map({
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		});
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3]);
-	});
-
-	it('should create a new array from an iterable object', function () {
-		var iterable = _defineProperty({}, Symbol.iterator, function () {
-			var count = 0;
-			return {
-				next: function next() {
-					count += 1;
-					return {
-						value: count,
-						done: 5 <= count
-					};
-				}
-			};
-		});
-		var result = map(iterable);
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3, 4]);
-	});
-
-	it('should create a new array from an iterator object', function () {
-		var count = 0;
-		var iterator = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 5 <= count
-				};
-			}
-		};
-		var result = map(iterator);
-		assert.equal(isArray(result), true);
-		assert.deepEqual(result, [1, 2, 3, 4]);
-	});
-});
+test$5(Array.from);
 
 function includes(searchElement, fromIndex) {
 	var result = false;
-	_forEach(this, function (value) {
+	forEach(this, function (value) {
 		result = value === searchElement;
 		return result;
 	}, null, fromIndex);
 	return result;
 }
 
-function test$1(includes) {
+function test$7(includes) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
 
@@ -499,439 +372,25 @@ function test$1(includes) {
 	});
 }
 
-test$1(includes, 'j0includes');
+test$7(includes, 'j0includes');
 
-test$1(Array.prototype.includes);
+test$7(Array.prototype.includes);
 
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+function test$9(arrayOf) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.of';
 
-	return map(iterable).join(separator);
-}
 
-describe('Array/join', function () {
+	describe(name, function () {
 
-	it('should join items of an array', function () {
-		var array = [1, 2, 3];
-		var expected = '1,2,3';
-		assert.equal(join(array), expected);
-	});
-
-	it('should join items of an array with specified separator', function () {
-		var array = [1, 2, 3];
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of an array-like object with specified separator', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		};
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of a string with specified separator', function () {
-		var array = '123';
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-
-	it('should join items of an iterable with specified separator', function () {
-		var count = 0;
-		var array = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 3 < count
-				};
-			}
-		};
-		var expected = '1--2--3';
-		assert.equal(join(array, '--'), expected);
-	});
-});
-
-function last(arrayLike) {
-	return arrayLike[arrayLike.length - 1];
-}
-
-describe('Array/last', function () {
-
-	it('should return the last item of an array', function () {
-		var array = [1, 2, 3];
-		assert.equal(last(array), 3);
-	});
-
-	it('should return the last item of an array-like object', function () {
-		var arrayLike = {
-			2: 3,
-			length: 3
-		};
-		assert.equal(last(arrayLike), 3);
-	});
-});
-
-describe('Array/map', function () {
-
-	it('should iterate over an array', function () {
-		var actual = map([0, 1, 2, 3], function (x) {
-			return x * 2;
-		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over an array-like', function () {
-		var actual = map({
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
-		}, function (x) {
-			return x * 2;
-		});
-		var expected = [0, 2, 4, 6];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over a string', function () {
-		var actual = map('xyz', function (x) {
-			return x + x;
-		});
-		var expected = ['xx', 'yy', 'zz'];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should iterate over an iterable', function () {
-		var counter = 0;
-		var iterable = {
-			next: function next() {
-				counter += 1;
-				return {
-					value: counter,
-					done: 4 < counter
-				};
-			}
-		};
-		var actual = map(iterable, function (x) {
-			return x * 2;
-		});
-		var expected = [2, 4, 6, 8];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should call fn in a specified context', function () {
-		function fn(value) {
-			this.sum += value;
-			return this.sum;
-		}
-		var context = { sum: 0 };
-		var result = map([0, 1, 2, 3, 4, 5], fn, context);
-		var expected = [0, 1, 3, 6, 10, 15];
-		assert.deepEqual(result, expected);
-	});
-});
-
-function arrayOf() {
-	for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-		args[_key2] = arguments[_key2];
-	}
-
-	return args;
-}
-
-describe('Array/of', function () {
-
-	it('should create an array', function () {
-		var actual = arrayOf(1, 2, 3);
-		var expected = [1, 2, 3];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function pop(array) {
-	return array.pop();
-}
-
-describe('Array/pop', function () {
-
-	it('should return the last item of array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = pop(array);
-		var expected1 = 5;
-		var expected2 = [1, 2, 3, 4];
-		assert.equal(actual, expected1);
-		assert.deepEqual(array, expected2);
-	});
-});
-
-describe('Array/push', function () {
-
-	it('should append an item to an array', function () {
-		var item = 3;
-		var array = [0, 1, 2];
-		var expected = [0, 1, 2, 3];
-		push(array, item);
-		assert.deepEqual(array, expected);
-	});
-
-	it('should append 3 items to an array', function () {
-		var items = [3, 4, 5];
-		var array = [0, 1, 2];
-		var expected = [0, 1, 2, 3, 4, 5];
-		push.apply(undefined, [array].concat(items));
-		assert.deepEqual(array, expected);
-	});
-
-	it('should append an item to an array-like object', function () {
-		var item = 3;
-		var array = {
-			0: 0,
-			1: 1,
-			2: 2,
-			length: 3
-		};
-		push(array, item);
-		assert.deepEqual(array, {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
+		it('should create an array', function () {
+			var actual = arrayOf(1, 2, 3);
+			var expected = [1, 2, 3];
+			assert.deepEqual(actual, expected);
 		});
 	});
-
-	it('should append 3 items to an array-like object', function () {
-		var items = [3, 4, 5];
-		var array = {
-			0: 0,
-			1: 1,
-			2: 2,
-			length: 3
-		};
-		push.apply(undefined, [array].concat(items));
-		assert.deepEqual(array, {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			4: 4,
-			5: 5,
-			length: 6
-		});
-	});
-});
-
-function reduce(iterable, fn) {
-	var initialValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	var thisArg = arguments[3];
-
-	var result = initialValue;
-	_forEach(iterable, function (item, index) {
-		result = fn.call(thisArg, result, item, index, iterable);
-	});
-	return result;
 }
 
-describe('Array/reduce', function () {
-
-	it('should iterate over an array', function () {
-		var array = [1, 2, 3];
-		var result = [];
-		reduce(array, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, array);
-			return memo;
-		}, result);
-		assert.deepEqual(result, array);
-	});
-
-	it('should iterate over an array-like', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			length: 3
-		};
-		var result = [];
-		var expected = [1, 2, 3];
-		reduce(array, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, array);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should iterate over an iterable', function () {
-		var count = 0;
-		var iterable = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 4 < count
-				};
-			}
-		};
-		var expected = [1, 2, 3, 4];
-		var result = [];
-		reduce(iterable, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, iterable);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should iterate over a string', function () {
-		var text = 'abcd';
-		var expected = ['a', 'b', 'c', 'd'];
-		var result = [];
-		reduce(text, function (memo, value, index, arr) {
-			memo[index] = value;
-			assert.equal(arr, text);
-			return memo;
-		}, result);
-		assert.deepEqual(result, expected);
-	});
-
-	it('should call fn in a specified context', function () {
-		var array = [1, 2, 3];
-		var context = { sum: 0 };
-		var result = [];
-		var expected = [2, 5, 9];
-		function fn(memo, value, index, arr) {
-			this.sum += value;
-			memo[index] = value + this.sum;
-			assert.equal(arr, array);
-			return memo;
-		}
-		reduce(array, fn, result, context);
-		assert.deepEqual(context, { sum: 6 });
-		assert.deepEqual(result, expected);
-	});
-});
-
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
-var TypeError$1 = window.TypeError;
-
-function shift(arrayLike) {
-	if (arrayLike.shift) {
-		return arrayLike.shift();
-	} else if (!isUndefined(arrayLike.length)) {
-		var returnValue = arrayLike[0];
-		var length = arrayLike.length;
-
-		for (var i = 0; i < length; i += 1) {
-			arrayLike[i] = arrayLike[i + 1];
-		}
-		delete arrayLike[length - 1];
-		arrayLike.length = length - 1;
-		return returnValue;
-	}
-	throw new TypeError$1('The object is not shift-able object');
-}
-
-describe('Array/shift', function () {
-
-	it('should remove the first item of an array', function () {
-		var array = [1, 2, 3, 4];
-		var expected1 = 1;
-		var expected2 = [2, 3, 4];
-		assert.equal(shift(array), expected1);
-		assert.deepEqual(array, expected2);
-	});
-
-	it('should remove the first item of an array-like object', function () {
-		var array = {
-			0: 1,
-			1: 2,
-			2: 3,
-			3: 4,
-			length: 4
-		};
-		var expected1 = 1;
-		var expected2 = {
-			0: 2,
-			1: 3,
-			2: 4,
-			length: 3
-		};
-		assert.equal(shift(array), expected1);
-		assert.deepEqual(array, expected2);
-	});
-});
-
-function slice(iterable, start, end) {
-	return map(iterable).slice(start, end);
-}
-
-describe('Array/slice', function () {
-
-	it('should copy an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array);
-		var expected = [1, 2, 3, 4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should slice an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, 3);
-		var expected = [4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should create an empty array from an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, 0, 0);
-		var expected = [];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should slice from end of an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		var actual = slice(array, -2);
-		var expected = [4, 5];
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should create a new array from arguments', function () {
-		var args = function () {
-			return arguments;
-		}(1, 2, 3, 4, 5);
-		var actual = slice(args);
-		var expected = [1, 2, 3, 4, 5];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function splice(array) {
-	for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-		args[_key3 - 1] = arguments[_key3];
-	}
-
-	return array.splice.apply(array, args);
-}
-
-describe('Array/splice', function () {
-
-	it('should remove items from an array', function () {
-		var array = [1, 2, 3, 4, 5];
-		splice(array, 1, 2);
-		assert.deepEqual(array, [1, 4, 5]);
-	});
-});
+test$9(Array.of);
 
 var Uint8Array$1 = window.Uint8Array;
 
@@ -1105,6 +564,8 @@ var ArrayBuffer = window.ArrayBuffer;
 
 var DataView = window.DataView;
 
+var TypeError$1 = window.TypeError;
+
 var Promise$1 = window.Promise;
 
 var FormData = window.FormData;
@@ -1118,7 +579,7 @@ var decodeURIComponent = window.decodeURIComponent;
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 
-	_forEach(trim(body).split('&'), function (data) {
+	forEach(trim(body).split('&'), function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
@@ -1159,7 +620,7 @@ var Float64Array$1 = window.Float64Array;
 
 var viewClasses = [Uint8Array$1, Uint8ClampedArray$1, Uint16Array$1, Uint32Array$1, Int8Array$1, Int16Array$1, Int32Array$1, Float32Array$1, Float64Array$1];
 function isArrayBufferView(obj) {
-	return 0 <= find$2(viewClasses, function (constructor) {
+	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
 }
@@ -1361,7 +822,7 @@ function clone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
 
-function noop$2() {
+function noop() {
 	return 0;
 }
 
@@ -1376,9 +837,9 @@ describe('Object/clone', function () {
 
 	it('should remove functions', function () {
 		var data = {
-			a: noop$2,
+			a: noop,
 			b: 0,
-			c: noop$2
+			c: noop
 		};
 		var actual = clone(data);
 		var expected = { b: 0 };
@@ -1387,9 +848,9 @@ describe('Object/clone', function () {
 
 	it('should isolate original', function () {
 		var data = {
-			a: noop$2,
+			a: noop,
 			b: {},
-			c: noop$2
+			c: noop
 		};
 		var actual = clone(data);
 		actual.b.a = 0;
@@ -1407,8 +868,8 @@ function debounce(fn) {
 	return function () {
 		var _this2 = this;
 
-		for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-			args[_key4] = arguments[_key4];
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
 		}
 
 		clearTimeout(timer);
@@ -1548,8 +1009,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len5 = arguments.length, value = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-				value[_key5 - 1] = arguments[_key5];
+			for (var _len2 = arguments.length, value = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+				value[_key2 - 1] = arguments[_key2];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -1592,7 +1053,7 @@ var J0Element = function () {
 	}, {
 		key: 'find',
 		value: function find(selector) {
-			return find$3(selector, this);
+			return find$1(selector, this);
 		}
 	}, {
 		key: 'findAll',
@@ -1667,7 +1128,7 @@ function wrap(source) {
 	return new J0Element(source);
 }
 
-function find$3(selector) {
+function find$1(selector) {
 	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
 
 	var element = rootElement.querySelector(selector);
@@ -1677,10 +1138,15 @@ function find$3(selector) {
 function _findAll(selector) {
 	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
 
-	return map(rootElement.querySelectorAll(selector), wrap);
+	var list = rootElement.querySelectorAll(selector);
+	var result = [];
+	for (var i = 0, length = list.length; i < length; i++) {
+		result.push(wrap(list[i]));
+	}
+	return result;
 }
 
-wrap.find = find$3;
+wrap.find = find$1;
 wrap.findAll = _findAll;
 
 // import '../*/test';
@@ -1713,19 +1179,39 @@ describe('J0Element.prototype.text', function () {
 
 var StringList = function () {
 	function StringList(iterable) {
-		var _this4 = this;
-
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref5) {
-				var _ref6 = _slicedToArray(_ref5, 2),
-				    key = _ref6[0],
-				    value = _ref6[1];
+			var _iteratorNormalCompletion2 = true;
+			var _didIteratorError2 = false;
+			var _iteratorError2 = undefined;
 
-				_this4.append(key, value);
-			});
+			try {
+				for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+					var _ref5 = _step2.value;
+
+					var _ref6 = _slicedToArray(_ref5, 2);
+
+					var _key3 = _ref6[0];
+					var value = _ref6[1];
+
+					this.append(_key3, value);
+				}
+			} catch (err) {
+				_didIteratorError2 = true;
+				_iteratorError2 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion2 && _iterator2.return) {
+						_iterator2.return();
+					}
+				} finally {
+					if (_didIteratorError2) {
+						throw _iteratorError2;
+					}
+				}
+			}
 		}
 	}
 
@@ -1737,7 +1223,7 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find$2(this.data, function (_ref7) {
+			return this.data.findIndex(function (_ref7) {
 				var _ref8 = _slicedToArray(_ref7, 1),
 				    itemName = _ref8[0];
 
@@ -1752,7 +1238,7 @@ var StringList = function () {
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			push(this.data, [name, value]);
+			this.data.push([name, value]);
 		}
 	}, {
 		key: 'set',
@@ -1767,7 +1253,7 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref9) {
+			this.data = this.data.filter(function (_ref9) {
 				var _ref10 = _slicedToArray(_ref9, 1),
 				    itemName = _ref10[0];
 
@@ -1789,13 +1275,13 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			_forEach(this.data, function (_ref13) {
+			this.data.forEach(function (_ref13) {
 				var _ref14 = _slicedToArray(_ref13, 2),
 				    itemName = _ref14[0],
 				    value = _ref14[1];
 
 				if (itemName === name) {
-					push(result, value);
+					result.push(value);
 				}
 			});
 			return result;
@@ -1803,7 +1289,7 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref15) {
+			return this.data.map(function (_ref15) {
 				var _ref16 = _slicedToArray(_ref15, 2),
 				    name = _ref16[0],
 				    _ref16$ = _ref16[1],
@@ -1845,9 +1331,9 @@ var StringList = function () {
 }();
 
 function forEachKey(obj, fn, thisArg) {
-	for (var _key6 in obj) {
-		if (obj.hasOwnProperty(_key6)) {
-			if (fn.call(thisArg, obj[_key6], _key6, obj)) {
+	for (var _key4 in obj) {
+		if (obj.hasOwnProperty(_key4)) {
+			if (fn.call(thisArg, obj[_key4], _key4, obj)) {
 				return;
 			}
 		}
@@ -1867,7 +1353,7 @@ var Headers$1 = function (_StringList) {
 		var init = [];
 		if (headers) {
 			forEachKey(headers, function (value, key) {
-				push(init, [key, value]);
+				init.push([key, value]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
@@ -1906,7 +1392,7 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this6 = this;
+			var _this5 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -1917,11 +1403,11 @@ var Headers$1 = function (_StringList) {
 						    value = _iterator$next4.value,
 						    done = _iterator$next4.done;
 
-						var _key7 = value && value[0];
-						if (done || history.indexOf(_key7) < 0) {
-							push(history, _key7);
+						var _key5 = value && value[0];
+						if (done || history.indexOf(_key5) < 0) {
+							history.push(_key5);
 							return {
-								value: [_key7, _this6.get(_key7)],
+								value: [_key5, _this5.get(_key5)],
 								done: done
 							};
 						}
@@ -1944,25 +1430,25 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this7 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this6 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this7.inheritFrom(input, body, init);
+			body = _this6.inheritFrom(input, body, init);
 		} else {
-			_this7.url = '' + input;
+			_this6.url = '' + input;
 		}
-		_this7.credentials = init.credentials || _this7.credentials || 'omit';
-		if (init.headers || !_this7.headers) {
-			_this7.headers = new Headers$1(init.headers);
+		_this6.credentials = init.credentials || _this6.credentials || 'omit';
+		if (init.headers || !_this6.headers) {
+			_this6.headers = new Headers$1(init.headers);
 		}
-		_this7.method = (init.method || _this7.method || 'GET').toUpperCase();
-		_this7.mode = init.mode || _this7.mode || null;
-		_this7.referrer = null;
-		if ((_this7.method === 'GET' || _this7.method === 'HEAD') && body) {
+		_this6.method = (init.method || _this6.method || 'GET').toUpperCase();
+		_this6.mode = init.mode || _this6.mode || null;
+		_this6.referrer = null;
+		if ((_this6.method === 'GET' || _this6.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this7.initBody(body);
-		return _this7;
+		_this6.initBody(body);
+		return _this6;
 	}
 
 	_createClass(Request$1, [{
@@ -2008,16 +1494,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this8 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this7 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this8.type = 'default';
-		_this8.status = 'status' in init ? init.status : minOkStatus;
-		_this8.ok = _this8.status >= minOkStatus && _this8.status < maxOkStatus;
-		_this8.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this8.headers = new Headers$1(init.headers);
-		_this8.url = init.url || '';
-		_this8.initBody(body);
-		return _this8;
+		_this7.type = 'default';
+		_this7.status = 'status' in init ? init.status : minOkStatus;
+		_this7.ok = _this7.status >= minOkStatus && _this7.status < maxOkStatus;
+		_this7.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this7.headers = new Headers$1(init.headers);
+		_this7.url = init.url || '';
+		_this7.initBody(body);
+		return _this7;
 	}
 
 	_createClass(Response$1, [{
@@ -2076,6 +1562,10 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
+
 var XMLHttpRequest = window.XMLHttpRequest;
 
 function fetch$1(input, init) {
@@ -2103,7 +1593,7 @@ function fetch$1(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		_forEach(request.headers, function (_ref18) {
+		forEach(request.headers, function (_ref18) {
 			var _ref19 = _slicedToArray(_ref18, 2),
 			    name = _ref19[0],
 			    value = _ref19[1];
@@ -2320,7 +1810,7 @@ tests$4(Headers$1, 'Headers/j0');
 tests$4(Headers);
 
 function generator$2() {
-	var _this9 = this;
+	var _this8 = this;
 
 	var length = this.length;
 
@@ -2328,14 +1818,14 @@ function generator$2() {
 	return {
 		next: function next() {
 			return {
-				value: _this9[index],
+				value: _this8[index],
 				done: length <= index++
 			};
 		}
 	};
 }
 
-function test$3(generator) {
+function test$11(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -2344,27 +1834,27 @@ function test$3(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion2 = true;
-			var _didIteratorError2 = false;
-			var _iteratorError2 = undefined;
+			var _iteratorNormalCompletion3 = true;
+			var _didIteratorError3 = false;
+			var _iteratorError3 = undefined;
 
 			try {
-				for (var _iterator2 = expected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-					var element = _step2.value;
+				for (var _iterator3 = expected[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+					var element = _step3.value;
 
 					parent.appendChild(element);
 				}
 			} catch (err) {
-				_didIteratorError2 = true;
-				_iteratorError2 = err;
+				_didIteratorError3 = true;
+				_iteratorError3 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion2 && _iterator2.return) {
-						_iterator2.return();
+					if (!_iteratorNormalCompletion3 && _iterator3.return) {
+						_iterator3.return();
 					}
 				} finally {
-					if (_didIteratorError2) {
-						throw _iteratorError2;
+					if (_didIteratorError3) {
+						throw _iteratorError3;
 					}
 				}
 			}
@@ -2387,9 +1877,9 @@ function test$3(generator) {
 	});
 }
 
-test$3(generator$2, 'HTMLCollection/@iterator/j0');
+test$11(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$3(HTMLCollection.prototype[Symbol.iterator]);
+test$11(HTMLCollection.prototype[Symbol.iterator]);
 
 var window$1 = window.window;
 
@@ -2414,6 +1904,10 @@ describe('innerWidth', function () {
 		assert.equal(0 <= innerWidth(), true);
 	});
 });
+
+var Array$1 = window.Array;
+
+var isArray = Array$1.isArray;
 
 describe('isArray', function () {
 
@@ -2758,19 +2252,39 @@ describe('Map/@iterator', function () {
 
 var Map$2 = function () {
 	function Map$2(iterable) {
-		var _this10 = this;
-
 		_classCallCheck(this, Map$2);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref20) {
-				var _ref21 = _slicedToArray(_ref20, 2),
-				    key = _ref21[0],
-				    value = _ref21[1];
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
-				_this10.set(key, value);
-			});
+			try {
+				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var _ref20 = _step4.value;
+
+					var _ref21 = _slicedToArray(_ref20, 2);
+
+					var _key6 = _ref21[0];
+					var value = _ref21[1];
+
+					this.set(_key6, value);
+				}
+			} catch (err) {
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
+					}
+				} finally {
+					if (_didIteratorError4) {
+						throw _iteratorError4;
+					}
+				}
+			}
 		}
 	}
 
@@ -2782,7 +2296,7 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref22) {
+			return this.data.findIndex(function (_ref22) {
 				var _ref23 = _slicedToArray(_ref22, 1),
 				    itemKey = _ref23[0];
 
@@ -2801,7 +2315,7 @@ var Map$2 = function () {
 			if (0 <= index) {
 				this.data[index][1] = value;
 			} else {
-				push(this.data, [key, value]);
+				this.data.push([key, value]);
 			}
 			return this;
 		}
@@ -2823,7 +2337,7 @@ var Map$2 = function () {
 		value: function _delete(key) {
 			var index = this.indexOfKey(key);
 			if (0 <= index) {
-				splice(this.data, index, 1);
+				this.data.splice(index, 1);
 				return true;
 			}
 			return false;
@@ -2836,7 +2350,7 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			_forEach(this.data, fn, thisArg);
+			this.data.forEach(fn, thisArg);
 		}
 	}, {
 		key: 'keys',
@@ -2888,26 +2402,26 @@ function tests$6(Map, name) {
 
 		it('should create an instance', function () {
 			assert.doesNotThrow(function () {
-				var map$$1 = new Map();
-				return map$$1;
+				var map = new Map();
+				return map;
 			});
 		});
 
 		it('should return keys', function () {
-			var map$$1 = new Map();
-			assert.deepEqual(map(map$$1.keys()), []);
+			var map = new Map();
+			assert.deepEqual(Array.from(map.keys()), []);
 		});
 
 		it('should return values', function () {
-			var map$$1 = new Map();
-			assert.deepEqual(map(map$$1.values()), []);
+			var map = new Map();
+			assert.deepEqual(Array.from(map.values()), []);
 		});
 
 		it('should initialize with given array', function () {
-			var map$$1 = new Map([[0, 1]]);
+			var map = new Map([[0, 1]]);
 			assert.deepEqual({
-				keys: map(map$$1.keys()),
-				values: map(map$$1.values())
+				keys: Array.from(map.keys()),
+				values: Array.from(map.values())
 			}, {
 				keys: [0],
 				values: [1]
@@ -2944,10 +2458,10 @@ function tests$6(Map, name) {
 					}
 				}, _callee5, this);
 			}));
-			var map$$1 = new Map(iterable);
+			var map = new Map(iterable);
 			assert.deepEqual({
-				keys: map(map$$1.keys()),
-				values: map(map$$1.values())
+				keys: Array.from(map.keys()),
+				values: Array.from(map.values())
 			}, {
 				keys: [0],
 				values: [1]
@@ -3031,7 +2545,7 @@ describe('Math/cubicBezier', function () {
 });
 
 function generator$6() {
-	var _this11 = this;
+	var _this9 = this;
 
 	var length = this.length;
 
@@ -3039,7 +2553,7 @@ function generator$6() {
 	return {
 		next: function next() {
 			return {
-				value: _this11[index],
+				value: _this9[index],
 				done: length <= index++
 			};
 		}
@@ -3051,27 +2565,27 @@ describe('NamedNodeMap/@iterator', function () {
 	it('should create an iterator', function () {
 		var parent = document.createElement('div');
 		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion3 = true;
-		var _didIteratorError3 = false;
-		var _iteratorError3 = undefined;
+		var _iteratorNormalCompletion5 = true;
+		var _didIteratorError5 = false;
+		var _iteratorError5 = undefined;
 
 		try {
-			for (var _iterator3 = expected[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-				var element = _step3.value;
+			for (var _iterator5 = expected[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+				var element = _step5.value;
 
 				parent.appendChild(element);
 			}
 		} catch (err) {
-			_didIteratorError3 = true;
-			_iteratorError3 = err;
+			_didIteratorError5 = true;
+			_iteratorError5 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion3 && _iterator3.return) {
-					_iterator3.return();
+				if (!_iteratorNormalCompletion5 && _iterator5.return) {
+					_iterator5.return();
 				}
 			} finally {
-				if (_didIteratorError3) {
-					throw _iteratorError3;
+				if (_didIteratorError5) {
+					throw _iteratorError5;
 				}
 			}
 		}
@@ -3094,7 +2608,7 @@ describe('NamedNodeMap/@iterator', function () {
 });
 
 function generator$8() {
-	var _this12 = this;
+	var _this10 = this;
 
 	var length = this.length;
 
@@ -3102,7 +2616,7 @@ function generator$8() {
 	return {
 		next: function next() {
 			return {
-				value: _this12[index],
+				value: _this10[index],
 				done: length <= index++
 			};
 		}
@@ -3114,27 +2628,27 @@ describe('NodeList/@iterator', function () {
 	it('should create an iterator', function () {
 		var parent = document.createElement('div');
 		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion4 = true;
-		var _didIteratorError4 = false;
-		var _iteratorError4 = undefined;
+		var _iteratorNormalCompletion6 = true;
+		var _didIteratorError6 = false;
+		var _iteratorError6 = undefined;
 
 		try {
-			for (var _iterator4 = expected[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var element = _step4.value;
+			for (var _iterator6 = expected[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+				var element = _step6.value;
 
 				parent.appendChild(element);
 			}
 		} catch (err) {
-			_didIteratorError4 = true;
-			_iteratorError4 = err;
+			_didIteratorError6 = true;
+			_iteratorError6 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion4 && _iterator4.return) {
-					_iterator4.return();
+				if (!_iteratorNormalCompletion6 && _iterator6.return) {
+					_iterator6.return();
 				}
 			} finally {
-				if (_didIteratorError4) {
-					throw _iteratorError4;
+				if (_didIteratorError6) {
+					throw _iteratorError6;
 				}
 			}
 		}
@@ -3167,21 +2681,25 @@ describe('noop/true', function () {
 	});
 });
 
+function noop$1(x) {
+	return x;
+}
+
 describe('noop', function () {
 
 	it('should be callable', function () {
 		assert.doesNotThrow(function () {
-			noop();
+			noop$1();
 		});
 	});
 
 	it('should return the first argument', function () {
 		var data = new Date();
-		assert.equal(noop(data), data);
+		assert.equal(noop$1(data), data);
 	});
 });
 
-function test$5(MAX_SAFE_INTEGER) {
+function test$13(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -3195,16 +2713,16 @@ function test$5(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$5(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$13(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$5(Number.MAX_SAFE_INTEGER);
+test$13(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
-	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
-		sources[_key8 - 1] = arguments[_key8];
+	for (var _len3 = arguments.length, sources = Array(_len3 > 1 ? _len3 - 1 : 0), _key7 = 1; _key7 < _len3; _key7++) {
+		sources[_key7 - 1] = arguments[_key7];
 	}
 
-	_forEach(sources, function (source) {
+	forEach(sources, function (source) {
 		forEachKey(source, function (value, key) {
 			target[key] = value;
 		});
@@ -3244,11 +2762,11 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len7 = arguments.length, args = Array(_len7), _key9 = 0; _key9 < _len7; _key9++) {
-				args[_key9] = arguments[_key9];
+			for (var _len4 = arguments.length, args = Array(_len4), _key8 = 0; _key8 < _len4; _key8++) {
+				args[_key8] = arguments[_key8];
 			}
 
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [[0, 'a', obj], [1, 'b', obj]]);
 	});
@@ -3260,11 +2778,11 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len5 = arguments.length, args = Array(_len5), _key9 = 0; _key9 < _len5; _key9++) {
+				args[_key9] = arguments[_key9];
 			}
 
-			push(results, args);
+			results.push(args);
 			return true;
 		});
 		assert.deepEqual(results, [[0, 'a', obj]]);
@@ -3274,11 +2792,11 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
-				args[_key11] = arguments[_key11];
+			for (var _len6 = arguments.length, args = Array(_len6), _key10 = 0; _key10 < _len6; _key10++) {
+				args[_key10] = arguments[_key10];
 			}
 
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [[1, '0', obj], [2, '1', obj]]);
 	});
@@ -3356,7 +2874,7 @@ describe('Headers/parse', function () {
 	it('should parse raw String', function () {
 		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
 		var headers = parse$2(src);
-		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
+		assert.deepEqual(Array.from(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
 	});
 });
 
@@ -3454,7 +2972,7 @@ var Deferred = function Deferred() {
 	_classCallCheck(this, Deferred);
 
 	/* eslint-disable no-use-before-define */
-	this.promise = new J0Promise(noop);
+	this.promise = new J0Promise(noop$1);
 	/* eslint-enable no-use-before-define */
 	this.onResolved = onResolved;
 	this.onRejected = onRejected;
@@ -3477,7 +2995,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this13 = this;
+			var _this11 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -3485,14 +3003,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this13.resolve(value);
+				_this11.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this13.reject(error);
+				_this11.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -3531,10 +3049,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this14 = this;
+			var _this12 = this;
 
-			_forEach(this.deferreds, function (deferred) {
-				_this14.handle(deferred);
+			this.deferreds.forEach(function (deferred) {
+				_this12.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -3548,7 +3066,7 @@ var J0Promise = function () {
 				self = self.value;
 			}
 			if (self.is(PENDING)) {
-				push(self.deferreds, deferred);
+				self.deferreds.push(deferred);
 				return;
 			}
 			setImmediate(function () {
@@ -3611,7 +3129,7 @@ var J0Promise = function () {
 		key: 'race',
 		value: function race(promises) {
 			return new J0Promise(function (resolve, reject) {
-				_forEach(promises, function (promise) {
+				promises.forEach(function (promise) {
 					promise.then(resolve, reject);
 				});
 			});
@@ -3640,7 +3158,7 @@ var J0Promise = function () {
 						resolve(values);
 					}
 				}
-				_forEach(values, function (value, index) {
+				values.forEach(function (value, index) {
 					check(value, index);
 				});
 			});
@@ -3654,7 +3172,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$7(Promise, name) {
+function test$15(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3782,9 +3300,9 @@ function test$7(Promise, name) {
 	});
 }
 
-test$7(J0Promise, 'Promise/j0');
+test$15(J0Promise, 'Promise/j0');
 
-test$7(Promise, 'Promise');
+test$15(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -3920,15 +3438,34 @@ describe('Set/@iterator', function () {
 
 var Set$2 = function () {
 	function Set$2(iterable) {
-		var _this15 = this;
-
 		_classCallCheck(this, Set$2);
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (value) {
-				_this15.add(value);
-			});
+			var _iteratorNormalCompletion7 = true;
+			var _didIteratorError7 = false;
+			var _iteratorError7 = undefined;
+
+			try {
+				for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+					var value = _step7.value;
+
+					this.add(value);
+				}
+			} catch (err) {
+				_didIteratorError7 = true;
+				_iteratorError7 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion7 && _iterator7.return) {
+						_iterator7.return();
+					}
+				} finally {
+					if (_didIteratorError7) {
+						throw _iteratorError7;
+					}
+				}
+			}
 		}
 	}
 
@@ -3951,7 +3488,7 @@ var Set$2 = function () {
 		key: 'add',
 		value: function add(item) {
 			if (!this.has(item)) {
-				push(this.data, item);
+				this.data.push(item);
 			}
 			return this;
 		}
@@ -3960,17 +3497,17 @@ var Set$2 = function () {
 		value: function _delete(item) {
 			var index = this.indexOf(item);
 			if (0 <= index) {
-				splice(this.data, index, 1);
+				this.data.splice(index, 1);
 			}
 			return 0 <= index;
 		}
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this16 = this;
+			var _this13 = this;
 
-			_forEach(this.data, function (value) {
-				fn.call(thisArg, value, value, _this16);
+			this.data.forEach(function (value) {
+				fn.call(thisArg, value, value, _this13);
 			});
 		}
 	}, {
@@ -4072,8 +3609,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
-					args[_key12] = arguments[_key12];
+				for (var _len7 = arguments.length, args = Array(_len7), _key11 = 0; _key11 < _len7; _key11++) {
+					args[_key11] = arguments[_key11];
 				}
 
 				args[3] = this;
@@ -4321,7 +3858,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$8(_Symbol) {
+function test$16(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4365,9 +3902,9 @@ function test$8(_Symbol) {
 	});
 }
 
-test$8(Symbol, 'J0Symbol');
+test$16(Symbol, 'J0Symbol');
 
-test$8(Symbol);
+test$16(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4379,8 +3916,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
-			args[_key13] = arguments[_key13];
+		for (var _len8 = arguments.length, args = Array(_len8), _key12 = 0; _key12 < _len8; _key12++) {
+			args[_key12] = arguments[_key12];
 		}
 
 		lastArgs = args;
@@ -4431,7 +3968,7 @@ var URLSearchParams$2 = function (_StringList2) {
 	function URLSearchParams$2(init) {
 		_classCallCheck(this, URLSearchParams$2);
 
-		return _possibleConstructorReturn(this, (URLSearchParams$2.__proto__ || Object.getPrototypeOf(URLSearchParams$2)).call(this, init ? map(init.replace(/^\?/, '').split(separator), function (entry) {
+		return _possibleConstructorReturn(this, (URLSearchParams$2.__proto__ || Object.getPrototypeOf(URLSearchParams$2)).call(this, init ? init.replace(/^\?/, '').split(separator).map(function (entry) {
 			return entry.split(equal);
 		}) : null));
 	}
@@ -4439,7 +3976,7 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref28) {
+			return this.data.map(function (_ref28) {
 				var _ref29 = _slicedToArray(_ref28, 2),
 				    name = _ref29[0],
 				    _ref29$ = _ref29[1],
