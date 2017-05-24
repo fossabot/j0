@@ -8,9 +8,15 @@ const {createFilter} = require('rollup-pluginutils');
 function rollupPlugin(options = {}) {
 	const {include, exclude} = options;
 	const filter = createFilter(include, exclude);
+	const windowFallback = path.join(__dirname, 'window-fallback');
 	return {
 		resolveId: (importee, importer) => {
-			if (!filter(importee) || importee !== 'j0') {
+			if (!filter(importee)) {
+				return null;
+			}
+			if (importee.startsWith(windowFallback)) {
+				return importee;
+			} else if (importee !== 'j0') {
 				return null;
 			}
 			return path.join(__dirname, importer);
@@ -18,6 +24,10 @@ function rollupPlugin(options = {}) {
 		load: async (id) => {
 			if (!id.startsWith(__dirname)) {
 				return;
+			}
+			if (id.startsWith(windowFallback)) {
+				const name = id.slice(windowFallback.length + 1);
+				return `export default window.${name}`;
 			}
 			const importer = path.relative(__dirname, id).replace(/^([^/])/, '/$1');
 			const code = await readFile(importer, 'utf8');
@@ -37,12 +47,13 @@ function rollupPlugin(options = {}) {
 			});
 			const lines = required
 			.map((name) => {
+				let j0ModulePath;
 				try {
-					const j0ModulePath = require.resolve(`../${name}`);
-					return `import ${name} from '${j0ModulePath}'\nexport {${name}};`;
+					j0ModulePath = require.resolve(`../${name}`);
 				} catch (error) {
-					return `export {${name}};`;
+					j0ModulePath = path.join(windowFallback, name);
 				}
+				return `import ${name} from '${j0ModulePath}'\nexport {${name}};`;
 			});
 			return lines.join('\n');
 		}
