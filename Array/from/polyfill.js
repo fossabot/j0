@@ -1,5 +1,5 @@
 import {Array} from 'j0';
-import arrayFrom from '.';
+import j0arrayFrom from './j0';
 if (!Array.from) {
-	Array.from = arrayFrom;
+	Array.from = j0arrayFrom;
 }

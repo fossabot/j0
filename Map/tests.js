@@ -1,5 +1,4 @@
 import Symbol from '../Symbol';
-import arrayFrom from '../Array/from';
 
 function tests(Map, name) {
 
@@ -14,12 +13,12 @@ function tests(Map, name) {
 
 		it('should return keys', function () {
 			const map = new Map();
-			assert.deepEqual(arrayFrom(map.keys()), []);
+			assert.deepEqual(Array.from(map.keys()), []);
 		});
 
 		it('should return values', function () {
 			const map = new Map();
-			assert.deepEqual(arrayFrom(map.values()), []);
+			assert.deepEqual(Array.from(map.values()), []);
 		});
 
 		it('should initialize with given array', function () {
@@ -28,8 +27,8 @@ function tests(Map, name) {
 			]);
 			assert.deepEqual(
 				{
-					keys: arrayFrom(map.keys()),
-					values: arrayFrom(map.values())
+					keys: Array.from(map.keys()),
+					values: Array.from(map.values())
 				},
 				{
 					keys: [0],
@@ -50,8 +49,8 @@ function tests(Map, name) {
 			};
 			const map = new Map(iterable);
 			assert.deepEqual({
-				keys: arrayFrom(map.keys()),
-				values: arrayFrom(map.values())
+				keys: Array.from(map.keys()),
+				values: Array.from(map.values())
 			}, {
 				keys: [0],
 				values: [1]
