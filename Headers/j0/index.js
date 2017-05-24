@@ -1,6 +1,9 @@
-import StringList from '../../StringList';
 import forEachKey from '../../Object/forEachKey';
 import toLowerCase from '../../String/toLowerCase';
+import {
+	iteratorSymbol,
+	StringList
+} from 'j0';
 
 class Headers extends StringList {
 
@@ -42,6 +45,9 @@ class Headers extends StringList {
 		const iterator = super.entries();
 		const history = [];
 		return {
+			[iteratorSymbol]: function () {
+				return this;
+			},
 			next: () => {
 				while (1) {
 					const {

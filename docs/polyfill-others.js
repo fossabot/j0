@@ -11,6 +11,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -1072,28 +1074,29 @@ var Headers = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this10 = this;
+			var _this10 = this,
+			    _ref21;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
-			return {
-				next: function next() {
-					while (1) {
-						var _iterator$next5 = iterator.next(),
-						    value = _iterator$next5.value,
-						    done = _iterator$next5.done;
+			return _ref21 = {}, _defineProperty(_ref21, iteratorSymbol, function () {
+				return this;
+			}), _defineProperty(_ref21, 'next', function next() {
+				while (1) {
+					var _iterator$next5 = iterator.next(),
+					    value = _iterator$next5.value,
+					    done = _iterator$next5.done;
 
-						var key = value && value[0];
-						if (done || history.indexOf(key) < 0) {
-							history.push(key);
-							return {
-								value: [key, _this10.get(key)],
-								done: done
-							};
-						}
+					var key = value && value[0];
+					if (done || history.indexOf(key) < 0) {
+						history.push(key);
+						return {
+							value: [key, _this10.get(key)],
+							done: done
+						};
 					}
 				}
-			};
+			}), _ref21;
 		}
 	}]);
 
@@ -1397,8 +1400,8 @@ var Request = function (_Body) {
 
 	_createClass(Request, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref21) {
-			var headers = _ref21.headers;
+		value: function inheritFrom(input, body, _ref22) {
+			var headers = _ref22.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -1539,12 +1542,12 @@ function fetch(input, init) {
 
 		try {
 			for (var _iterator5 = request.headers.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-				var _ref22 = _step5.value;
+				var _ref23 = _step5.value;
 
-				var _ref23 = _slicedToArray(_ref22, 2);
+				var _ref24 = _slicedToArray(_ref23, 2);
 
-				var name = _ref23[0];
-				var value = _ref23[1];
+				var name = _ref24[0];
+				var value = _ref24[1];
 
 				xhr.setRequestHeader(name, value);
 			}

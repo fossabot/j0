@@ -7,11 +7,27 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function forEachKey(obj, fn, thisArg) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			if (fn.call(thisArg, obj[key], key, obj)) {
+				return;
+			}
+		}
+	}
+}
+
+function toLowerCase(string) {
+	return ('' + string).toLowerCase();
+}
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -168,20 +184,6 @@ var StringList = function () {
 	return StringList;
 }();
 
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
-		}
-	}
-}
-
-function toLowerCase(string) {
-	return ('' + string).toLowerCase();
-}
-
 var Headers$1 = function (_StringList) {
 	_inherits(Headers$1, _StringList);
 
@@ -230,28 +232,29 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this2 = this;
+			var _this2 = this,
+			    _ref13;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
-			return {
-				next: function next() {
-					while (1) {
-						var _iterator$next2 = iterator.next(),
-						    value = _iterator$next2.value,
-						    done = _iterator$next2.done;
+			return _ref13 = {}, _defineProperty(_ref13, iteratorSymbol, function () {
+				return this;
+			}), _defineProperty(_ref13, 'next', function next() {
+				while (1) {
+					var _iterator$next2 = iterator.next(),
+					    value = _iterator$next2.value,
+					    done = _iterator$next2.done;
 
-						var key = value && value[0];
-						if (done || history.indexOf(key) < 0) {
-							history.push(key);
-							return {
-								value: [key, _this2.get(key)],
-								done: done
-							};
-						}
+					var key = value && value[0];
+					if (done || history.indexOf(key) < 0) {
+						history.push(key);
+						return {
+							value: [key, _this2.get(key)],
+							done: done
+						};
 					}
 				}
-			};
+			}), _ref13;
 		}
 	}]);
 
