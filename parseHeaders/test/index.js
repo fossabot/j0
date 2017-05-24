@@ -1,5 +1,5 @@
 import parse from '..';
-import arrayFrom from '../../../Array/from';
+import arrayFrom from '../../Array/from';
 describe('Headers/parse', function () {
 
 	it('should parse raw String', function () {

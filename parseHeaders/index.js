@@ -1,5 +1,5 @@
 import {Headers} from 'j0';
-import trim from '../../String/trim';
+import trim from '../String/trim';
 function parse(rawHeaders) {
 	const headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space

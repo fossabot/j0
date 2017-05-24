@@ -74,9 +74,6 @@
 		<loc>https://kei-ito.github.io/j0/Headers/j0/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Headers/parse/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/Headers/</loc>
 	</url>
 	<url>
@@ -279,6 +276,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/parseFormData/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/parseHeaders/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/polyfill/</loc>

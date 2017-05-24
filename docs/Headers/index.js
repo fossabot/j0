@@ -7,8 +7,6 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -475,39 +473,6 @@ function tests(Headers) {
 }
 
 tests(Headers$1, 'Headers/j0');
-
-var Headers$2 = window.Headers;
-
-function trim(string) {
-	return string.trim();
-}
-
-function parse(rawHeaders) {
-	var headers = new Headers$2();
-	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
-	// https://tools.ietf.org/html/rfc7230#section-3.2
-	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
-	preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
-		var _line$split = line.split(':'),
-		    _line$split2 = _toArray(_line$split),
-		    key = _line$split2[0],
-		    parts = _line$split2.slice(1);
-
-		if (key) {
-			headers.append(trim(key), trim(parts.join(':')));
-		}
-	});
-	return headers;
-}
-
-describe('Headers/parse', function () {
-
-	it('should parse raw String', function () {
-		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
-		var headers = parse(src);
-		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
-	});
-});
 
 tests(Headers);
 }())

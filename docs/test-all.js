@@ -2166,15 +2166,6 @@ function tests$4(Headers) {
 
 tests$4(Headers$1, 'Headers/j0');
 
-describe('Headers/parse', function () {
-
-	it('should parse raw String', function () {
-		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
-		var headers = parse$3(src);
-		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
-	});
-});
-
 tests$4(Headers);
 
 describe('history', function () {
@@ -3316,6 +3307,15 @@ describe('FormData/parse', function () {
 			a: 'b',
 			c: 'd'
 		});
+	});
+});
+
+describe('Headers/parse', function () {
+
+	it('should parse raw String', function () {
+		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
+		var headers = parse$3(src);
+		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
 	});
 });
 
