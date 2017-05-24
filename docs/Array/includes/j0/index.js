@@ -106,6 +106,4 @@ function test(includes) {
 }
 
 test(includes, 'j0includes');
-
-test(Array.prototype.includes);
 }())

@@ -149,9 +149,9 @@ describe('Array/every', function () {
 	});
 });
 
-var Array = window.Array;
+var Array$1 = window.Array;
 
-var arrayPush = Array.prototype.push;
+var arrayPush = Array$1.prototype.push;
 
 function push(arrayLike) {
 	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -363,7 +363,7 @@ function map(iterable) {
 	return result;
 }
 
-var isArray = Array.isArray;
+var isArray = Array$1.isArray;
 
 describe('Array/from', function () {
 
@@ -413,56 +413,50 @@ describe('Array/from', function () {
 	});
 });
 
-function includes(iterable, searchElement, fromIndex) {
+function includes(searchElement, fromIndex) {
 	var result = false;
-	forEach(iterable, function (value) {
+	forEach(this, function (value) {
 		result = value === searchElement;
 		return result;
 	}, null, fromIndex);
 	return result;
 }
 
-describe('Array/includes', function () {
+function test(includes) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
-	it('should find an item', function () {
-		var array = [0, 1, 2, 3];
-		assert.equal(includes(array, 1), true);
-		assert.equal(includes(array, 4), false);
-	});
 
-	it('should find an item from array-like', function () {
-		var arrayLike = {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
-		};
-		assert.equal(includes(arrayLike, 1), true);
-		assert.equal(includes(arrayLike, 4), false);
-	});
+	describe(name, function () {
 
-	it('should find an item from iterable', function () {
-		var count = 0;
-		var iterator = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 4 <= count
-				};
-			}
-		};
-		assert.equal(includes(iterator, 1), true);
-		assert.equal(includes(iterator, 4), false);
-	});
+		it('should find an item', function () {
+			var array = [0, 1, 2, 3];
+			assert.equal(includes.call(array, 1), true);
+			assert.equal(includes.call(array, 4), false);
+		});
 
-	it('should find a character from a string', function () {
-		var string = 'abcde';
-		assert.equal(includes(string, 'c'), true);
-		assert.equal(includes(string, 'f'), false);
+		it('should find an item from array-like', function () {
+			var arrayLike = {
+				0: 0,
+				1: 1,
+				2: 2,
+				3: 3,
+				length: 4
+			};
+			assert.equal(includes.call(arrayLike, 1), true);
+			assert.equal(includes.call(arrayLike, 4), false);
+		});
+
+		it('should find a character from a string', function () {
+			var string = 'abcde';
+			assert.equal(includes.call(string, 'c'), true);
+			assert.equal(includes.call(string, 'f'), false);
+		});
 	});
-});
+}
+
+test(includes, 'j0includes');
+
+test(Array.prototype.includes);
 
 function join(iterable) {
 	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';

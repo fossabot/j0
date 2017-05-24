@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x33, _x34) {
+	return function wait(_x34, _x35) {
 		return _ref30.apply(this, arguments);
 	};
 }();
@@ -194,9 +194,9 @@ describe('Array/every', function () {
 	});
 });
 
-var Array = window.Array;
+var Array$1 = window.Array;
 
-var arrayPush = Array.prototype.push;
+var arrayPush = Array$1.prototype.push;
 
 function push(arrayLike) {
 	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -408,7 +408,7 @@ function map(iterable) {
 	return result;
 }
 
-var isArray = Array.isArray;
+var isArray = Array$1.isArray;
 
 describe('Array/from', function () {
 
@@ -458,56 +458,50 @@ describe('Array/from', function () {
 	});
 });
 
-function includes(iterable, searchElement, fromIndex) {
+function includes(searchElement, fromIndex) {
 	var result = false;
-	_forEach(iterable, function (value) {
+	_forEach(this, function (value) {
 		result = value === searchElement;
 		return result;
 	}, null, fromIndex);
 	return result;
 }
 
-describe('Array/includes', function () {
+function test$1(includes) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
-	it('should find an item', function () {
-		var array = [0, 1, 2, 3];
-		assert.equal(includes(array, 1), true);
-		assert.equal(includes(array, 4), false);
-	});
 
-	it('should find an item from array-like', function () {
-		var arrayLike = {
-			0: 0,
-			1: 1,
-			2: 2,
-			3: 3,
-			length: 4
-		};
-		assert.equal(includes(arrayLike, 1), true);
-		assert.equal(includes(arrayLike, 4), false);
-	});
+	describe(name, function () {
 
-	it('should find an item from iterable', function () {
-		var count = 0;
-		var iterator = {
-			next: function next() {
-				count += 1;
-				return {
-					value: count,
-					done: 4 <= count
-				};
-			}
-		};
-		assert.equal(includes(iterator, 1), true);
-		assert.equal(includes(iterator, 4), false);
-	});
+		it('should find an item', function () {
+			var array = [0, 1, 2, 3];
+			assert.equal(includes.call(array, 1), true);
+			assert.equal(includes.call(array, 4), false);
+		});
 
-	it('should find a character from a string', function () {
-		var string = 'abcde';
-		assert.equal(includes(string, 'c'), true);
-		assert.equal(includes(string, 'f'), false);
+		it('should find an item from array-like', function () {
+			var arrayLike = {
+				0: 0,
+				1: 1,
+				2: 2,
+				3: 3,
+				length: 4
+			};
+			assert.equal(includes.call(arrayLike, 1), true);
+			assert.equal(includes.call(arrayLike, 4), false);
+		});
+
+		it('should find a character from a string', function () {
+			var string = 'abcde';
+			assert.equal(includes.call(string, 'c'), true);
+			assert.equal(includes.call(string, 'f'), false);
+		});
 	});
-});
+}
+
+test$1(includes, 'j0includes');
+
+test$1(Array.prototype.includes);
 
 function join(iterable) {
 	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
@@ -2341,7 +2335,7 @@ function generator$2() {
 	};
 }
 
-function test$1(generator) {
+function test$3(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -2393,9 +2387,9 @@ function test$1(generator) {
 	});
 }
 
-test$1(generator$2, 'HTMLCollection/@iterator/j0');
+test$3(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$1(HTMLCollection.prototype[Symbol.iterator]);
+test$3(HTMLCollection.prototype[Symbol.iterator]);
 
 var window$1 = window.window;
 
@@ -3187,7 +3181,7 @@ describe('noop', function () {
 	});
 });
 
-function test$3(MAX_SAFE_INTEGER) {
+function test$5(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -3201,9 +3195,9 @@ function test$3(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$3(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$5(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$3(Number.MAX_SAFE_INTEGER);
+test$5(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
 	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
@@ -3660,7 +3654,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$5(Promise, name) {
+function test$7(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3788,9 +3782,9 @@ function test$5(Promise, name) {
 	});
 }
 
-test$5(J0Promise, 'Promise/j0');
+test$7(J0Promise, 'Promise/j0');
 
-test$5(Promise, 'Promise');
+test$7(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -4327,7 +4321,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$6(_Symbol) {
+function test$8(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4371,9 +4365,9 @@ function test$6(_Symbol) {
 	});
 }
 
-test$6(Symbol, 'J0Symbol');
+test$8(Symbol, 'J0Symbol');
 
-test$6(Symbol);
+test$8(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;

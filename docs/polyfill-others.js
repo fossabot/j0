@@ -133,6 +133,21 @@ if (!Array.from) {
 	Array.from = map;
 }
 
+function includes(searchElement, fromIndex) {
+	var result = false;
+	_forEach(this, function (value) {
+		result = value === searchElement;
+		return result;
+	}, null, fromIndex);
+	return result;
+}
+
+var prototype$1 = Array.prototype;
+
+if (!prototype$1.includes) {
+	prototype$1.includes = includes;
+}
+
 var parseInt = window.parseInt;
 
 function join(iterable) {
@@ -619,10 +634,10 @@ function generator$2() {
 	return this.entries();
 }
 
-var prototype$1 = Map.prototype;
+var prototype$2 = Map.prototype;
 
-if (!prototype$1[iteratorSymbol]) {
-	prototype$1[iteratorSymbol] = generator$2;
+if (!prototype$2[iteratorSymbol]) {
+	prototype$2[iteratorSymbol] = generator$2;
 }
 
 var Set = function () {
@@ -748,10 +763,10 @@ function generator$4() {
 }
 
 var _NodeList = NodeList,
-    prototype$2 = _NodeList.prototype;
+    prototype$3 = _NodeList.prototype;
 
-if (!prototype$2[iteratorSymbol]) {
-	prototype$2[iteratorSymbol] = generator$4;
+if (!prototype$3[iteratorSymbol]) {
+	prototype$3[iteratorSymbol] = generator$4;
 }
 
 var HTMLCollection = window.HTMLCollection;
@@ -772,10 +787,10 @@ function generator$6() {
 	};
 }
 
-var prototype$3 = HTMLCollection.prototype;
+var prototype$4 = HTMLCollection.prototype;
 
-if (!prototype$3[iteratorSymbol]) {
-	prototype$3[iteratorSymbol] = generator$6;
+if (!prototype$4[iteratorSymbol]) {
+	prototype$4[iteratorSymbol] = generator$6;
 }
 
 function generator$8() {
@@ -795,10 +810,10 @@ function generator$8() {
 }
 
 var _NamedNodeMap = NamedNodeMap,
-    prototype$4 = _NamedNodeMap.prototype;
+    prototype$5 = _NamedNodeMap.prototype;
 
-if (!prototype$4[iteratorSymbol]) {
-	prototype$4[iteratorSymbol] = generator$8;
+if (!prototype$5[iteratorSymbol]) {
+	prototype$5[iteratorSymbol] = generator$8;
 }
 
 function filter(iterable) {
