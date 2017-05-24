@@ -1,5 +1,4 @@
 import forEachKey from '..';
-import push from '../../../Array/push';
 
 describe('Object/forEachKey', function () {
 
@@ -10,7 +9,7 @@ describe('Object/forEachKey', function () {
 		};
 		const results = [];
 		forEachKey(obj, function (...args) {
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [
 			[0, 'a', obj],
@@ -25,7 +24,7 @@ describe('Object/forEachKey', function () {
 		};
 		const results = [];
 		forEachKey(obj, function (...args) {
-			push(results, args);
+			results.push(args);
 			return true;
 		});
 		assert.deepEqual(results, [
@@ -37,7 +36,7 @@ describe('Object/forEachKey', function () {
 		const obj = [1, 2];
 		const results = [];
 		forEachKey(obj, function (...args) {
-			push(results, args);
+			results.push(args);
 		});
 		assert.deepEqual(results, [
 			[1, '0', obj],

@@ -1,6 +1,5 @@
-import findIndex from '../Array/findIndex';
-import isInstanceOf from '../isInstanceOf';
 import {
+	isInstanceOf,
 	Uint8Array,
 	Uint8ClampedArray,
 	Uint16Array,
@@ -23,7 +22,8 @@ const viewClasses = [
 	Float64Array
 ];
 function isArrayBufferView(obj) {
-	return 0 <= findIndex(viewClasses, function (constructor) {
+	return 0 <= viewClasses
+	.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
 }

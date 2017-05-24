@@ -1,7 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import isFunction from '../../isFunction';
-import push from '../../Array/push';
-import forEach from '../../Array/forEach';
 import setImmediate from '../../setImmediate';
 import noop from '../../noop';
 import {TypeError} from 'j0';
@@ -85,7 +83,8 @@ class J0Promise {
 	}
 
 	finish() {
-		forEach(this.deferreds, (deferred) => {
+		this.deferreds
+		.forEach((deferred) => {
 			this.handle(deferred);
 		});
 		this.deferreds = null;
@@ -99,7 +98,7 @@ class J0Promise {
 			self = self.value;
 		}
 		if (self.is(PENDING)) {
-			push(self.deferreds, deferred);
+			self.deferreds.push(deferred);
 			return;
 		}
 		setImmediate(() => {
@@ -156,7 +155,8 @@ class J0Promise {
 
 	static race(promises) {
 		return new J0Promise(function (resolve, reject) {
-			forEach(promises, function (promise) {
+			promises
+			.forEach(function (promise) {
 				promise.then(resolve, reject);
 			});
 		});
@@ -183,7 +183,8 @@ class J0Promise {
 					resolve(values);
 				}
 			}
-			forEach(values, function (value, index) {
+			values
+			.forEach(function (value, index) {
 				check(value, index);
 			});
 		});

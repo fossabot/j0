@@ -1,11 +1,10 @@
 import forEach from '../forEach';
-import push from '../push';
 import noop from '../../noop';
 
 function map(iterable, fn = noop, thisArg) {
 	const result = [];
 	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
+		result.push(fn.call(thisArg, value, index, iterable));
 	});
 	return result;
 }
