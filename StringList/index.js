@@ -1,9 +1,3 @@
-import map from '../Array/map';
-import push from '../Array/push';
-import filter from '../Array/filter';
-import findIndex from '../Array/findIndex';
-import find from '../Array/find';
-import forEach from '../Array/forEach';
 import {iteratorSymbol} from 'j0';
 
 class StringList {
@@ -11,9 +5,9 @@ class StringList {
 	constructor(iterable) {
 		this.clear();
 		if (iterable) {
-			map(iterable, ([key, value]) => {
+			for (const [key, value] of iterable) {
 				this.append(key, value);
-			});
+			}
 		}
 	}
 
@@ -22,7 +16,7 @@ class StringList {
 	}
 
 	indexOf(name) {
-		return findIndex(this.data, function ([itemName]) {
+		return this.data.findIndex(function ([itemName]) {
 			return itemName === name;
 		});
 	}
@@ -32,7 +26,7 @@ class StringList {
 	}
 
 	append(name, value) {
-		push(this.data, [name, value]);
+		this.data.push([name, value]);
 	}
 
 	set(name, value) {
@@ -45,7 +39,8 @@ class StringList {
 	}
 
 	delete(name) {
-		this.data = filter(this.data, function ([itemName]) {
+		this.data = this.data
+		.filter(function ([itemName]) {
 			return itemName !== name;
 		});
 	}
@@ -59,16 +54,18 @@ class StringList {
 
 	getAll(name) {
 		const result = [];
-		forEach(this.data, function ([itemName, value]) {
+		this.data
+		.forEach(function ([itemName, value]) {
 			if (itemName === name) {
-				push(result, value);
+				result.push(value);
 			}
 		});
 		return result;
 	}
 
 	toString() {
-		return map(this.data, function ([name, value = '']) {
+		return this.data
+		.map(function ([name, value = '']) {
 			return `${name}:${value}`;
 		}).join(',');
 	}

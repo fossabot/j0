@@ -1,6 +1,5 @@
 import StringList from '../../StringList';
 import forEachKey from '../../Object/forEachKey';
-import push from '../../Array/push';
 import toLowerCase from '../../String/toLowerCase';
 
 class Headers extends StringList {
@@ -9,7 +8,7 @@ class Headers extends StringList {
 		const init = [];
 		if (headers) {
 			forEachKey(headers, function (value, key) {
-				push(init, [key, value]);
+				init.push([key, value]);
 			});
 		}
 		super(init);
