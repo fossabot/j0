@@ -2168,13 +2168,6 @@ tests$4(Headers$1, 'Headers/j0');
 
 tests$4(Headers);
 
-describe('history', function () {
-
-	it('should have replaceState()', function () {
-		assert.equal(isFunction(history.replaceState), true);
-	});
-});
-
 function generator$2() {
 	var _this9 = this;
 
