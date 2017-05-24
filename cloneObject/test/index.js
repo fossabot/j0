@@ -1,5 +1,8 @@
 import clone from '..';
-import noop from '../../../noop';
+
+function noop() {
+	return 0;
+}
 
 describe('Object/clone', function () {
 
