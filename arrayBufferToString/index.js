@@ -16,20 +16,6 @@ const lastMasks = [
 ];
 const availableBits = 6;
 
-/* eslint-disable no-bitwise */
-function consume(view, index, length) {
-	const lastMask = lastMasks[length];
-	let charCode = 0;
-	let i = 0;
-	while (0 < length--) {
-		const mask = length === 0 ? lastMask : baseMask;
-		const shiftSize = availableBits * i++;
-		charCode |= (view[index + length] & mask) << shiftSize;
-	}
-	return charCode;
-}
-/* eslint-enable no-bitwise */
-
 function arrayBufferToString(arrayBuffer) {
 	const view = new Uint8Array(arrayBuffer);
 	const chars = [];
@@ -49,7 +35,17 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		chars.push(consume(view, i, length));
+		const lastMask = lastMasks[length];
+		let charCode = 0;
+		let j = 0;
+		let offset = length;
+		while (0 < offset--) {
+			const mask = offset === 0 ? lastMask : baseMask;
+			/* eslint-disable no-bitwise */
+			charCode |= (view[i + offset] & mask) << (availableBits * j++);
+			/* eslint-disable no-bitwise */
+		}
+		chars.push(charCode);
 		i += length - 1;
 	}
 	const strings = [];
