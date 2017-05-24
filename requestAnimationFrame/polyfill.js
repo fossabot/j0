@@ -2,7 +2,7 @@ import {
 	Date,
 	window,
 	setTimeout
-} from '..';
+} from 'j0';
 window.requestAnimationFrame =
 	window.requestAnimationFrame ||
 	window.mozRequestAnimationFrame ||

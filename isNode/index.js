@@ -1,5 +1,7 @@
-import {Node} from '..';
-import isInstanceOf from '../isInstanceOf';
+import {
+	Node,
+	isInstanceOf
+} from 'j0';
 
 function isNode(x) {
 	return isInstanceOf(x, Node);

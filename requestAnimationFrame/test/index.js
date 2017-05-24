@@ -1,4 +1,4 @@
-import {requestAnimationFrame} from '../..';
+import {requestAnimationFrame} from 'j0';
 
 describe('requestAnimationFrame', function () {
 

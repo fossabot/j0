@@ -3,7 +3,7 @@
 import {
 	window,
 	setTimeout
-} from '..';
+} from 'j0';
 
 if (!window.immediateId) {
 	window.immediateId = 0;

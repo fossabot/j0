@@ -1,5 +1,5 @@
 import isUndefined from '../../isUndefined';
-import {TypeError} from '../..';
+import {TypeError} from 'j0';
 
 function shift(arrayLike) {
 	if (arrayLike.shift) {

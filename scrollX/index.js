@@ -1,4 +1,4 @@
-import {window} from '..';
+import {window} from 'j0';
 function scrollX(element = window) {
 	return element.scrollLeft || element.pageXOffset || 0;
 }

@@ -1,4 +1,4 @@
-import {window} from '../..';
+import {window} from 'j0';
 
 describe('polyfill', function () {
 

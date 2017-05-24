@@ -10,7 +10,7 @@ import {
 	Int32Array,
 	Float32Array,
 	Float64Array
-} from '..';
+} from 'j0';
 const viewClasses = [
 	Uint8Array,
 	Uint8ClampedArray,

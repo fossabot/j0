@@ -2,7 +2,7 @@ import {
 	Promise,
 	document,
 	setTimeout
-} from '..';
+} from 'j0';
 
 const INTERVAL = 100;
 

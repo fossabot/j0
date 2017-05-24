@@ -1,8 +1,5 @@
 import arrayBufferToString from '..';
-import {
-	Blob,
-	readBlob
-} from '../..';
+import {readBlob} from 'j0';
 
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');

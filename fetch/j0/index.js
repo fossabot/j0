@@ -1,12 +1,12 @@
-import isUndefined from '../../isUndefined';
 import forEach from '../../Array/forEach';
 import Request from '../../Request/j0';
 import Response from '../../Response/j0';
 import parseHeaders from '../../Headers/parse';
 import {
+	isUndefined,
 	XMLHttpRequest,
 	Promise
-} from '../..';
+} from 'j0';
 
 function fetch(input, init) {
 	return new Promise(function (resolve, reject) {

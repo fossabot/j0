@@ -1,4 +1,7 @@
-import {window, clearTimeout} from '..';
+import {
+	window,
+	clearTimeout
+} from 'j0';
 window.cancelAnimationFrame =
 	window.cancelAnimationFrame ||
 	window.mozCancelAnimationFrame ||

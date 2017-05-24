@@ -1,4 +1,4 @@
-import {FileReader} from '..';
+import {FileReader} from 'j0';
 function readBlob(data, type) {
 	const reader = new FileReader();
 	const promise = new Promise(function (resolve, reject) {

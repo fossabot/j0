@@ -1,10 +1,10 @@
-import isString from '../../isString';
 import forEach from '../../Array/forEach';
 import {
+	isString,
 	Date,
 	TypeError,
 	Object
-} from '../..';
+} from 'j0';
 
 const hex = 16;
 

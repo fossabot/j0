@@ -1,4 +1,4 @@
-import {window} from '..';
+import {window} from 'j0';
 import J0Headers from './j0';
 
 if (!window.Headers) {

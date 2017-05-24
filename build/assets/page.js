@@ -1,20 +1,16 @@
 /* global chai */
-import getBody from '../../getBody';
-import onError from '../../onError';
-import dom from '../../dom';
-import forEach from '../../Array/forEach';
-import reduce from '../../Array/reduce';
-import push from '../../Array/push';
-import pop from '../../Array/pop';
 import forEachKey from '../../Object/forEachKey';
 import {
+	dom,
+	onError,
+	getBody,
 	window,
 	fetch,
 	location,
 	navigator,
 	document,
 	Promise
-} from '../..';
+} from 'j0';
 
 const {mocha} = window;
 
@@ -30,7 +26,8 @@ function startMocha() {
 
 function showEnvironment() {
 	const environment = dom.find('#environment');
-	forEach(Object.keys(navigator.constructor.prototype), function (key) {
+	Object.keys(navigator.constructor.prototype)
+	.forEach(function (key) {
 		const value = navigator[key];
 		environment
 		.append({
@@ -53,19 +50,21 @@ function showEnvironment() {
 }
 
 function normalizeUrl(url) {
-	return reduce(url.split('/'), function (result, fragment) {
+	return url.split('/')
+	.reduce(function (result, fragment) {
 		switch (fragment) {
 		case '..':
-			pop(result);
+			result.pop();
 			break;
 		case '.':
 		case '':
 			break;
 		default:
-			push(result, fragment);
+			result.push(fragment);
 		}
 		return result;
-	}, []).join('/');
+	}, [])
+	.join('/');
 }
 
 async function createNavigation() {
@@ -74,13 +73,14 @@ async function createNavigation() {
 	const tree = await response.json();
 	const {pathname} = location;
 	const basePath = `/${normalizeUrl(`${pathname}/${root}`)}/`;
-	const rootBranch = reduce(pathname.replace(basePath, '').split('/'), function (parent, name) {
+	const rootBranch = pathname.replace(basePath, '').split('/')
+	.reduce(function (parent, name) {
 		return name ? parent[name] : parent;
 	}, tree);
 	function parseBranch(parent, name, base) {
 		const childElements = [];
 		forEachKey(parent, function (branch, key) {
-			push(childElements, parseBranch(branch, key, base ? `${base}/${name}` : name));
+			childElements.push(parseBranch(branch, key, base ? `${base}/${name}` : name));
 		});
 		const ul = 0 < childElements.length ? {
 			t: 'ul',

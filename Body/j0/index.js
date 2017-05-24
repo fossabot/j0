@@ -14,7 +14,7 @@ import {
 	readBlob,
 	FormData,
 	parseFormData
-} from '../..';
+} from 'j0';
 
 function cloneBuffer(buf) {
 	if (buf.slice) {

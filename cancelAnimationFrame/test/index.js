@@ -1,4 +1,4 @@
-import {cancelAnimationFrame} from '../..';
+import {cancelAnimationFrame} from 'j0';
 
 describe('cancelAnimationFrame', function () {
 

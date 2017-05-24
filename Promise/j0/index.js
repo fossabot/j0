@@ -4,7 +4,7 @@ import push from '../../Array/push';
 import forEach from '../../Array/forEach';
 import setImmediate from '../../setImmediate';
 import noop from '../../noop';
-import {TypeError} from '../..';
+import {TypeError} from 'j0';
 
 const PENDING = 0;
 const RESOLVED = 1;

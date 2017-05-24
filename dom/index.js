@@ -2,7 +2,7 @@ import Symbol from '../Symbol';
 import isString from '../isString';
 import isNode from '../isNode';
 import map from '../Array/map';
-import {document} from '..';
+import {document} from 'j0';
 
 const nodeKey = Symbol('node');
 const eventsKey = Symbol('events');

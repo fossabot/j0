@@ -1,4 +1,4 @@
-import {window} from '..';
+import {window} from 'j0';
 import J0Map from './j0';
 
 let MAP = window.Map;

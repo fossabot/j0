@@ -1,5 +1,7 @@
-import {setTimeout} from '..';
-import isUndefined from '../isUndefined';
+import {
+	setTimeout,
+	isUndefined
+} from 'j0';
 
 function throttle(fn, interval = 0, context) {
 	let lastArgs = [];

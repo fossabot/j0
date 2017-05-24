@@ -1,7 +1,7 @@
 import {
 	Uint8Array,
 	String
-} from '..';
+} from 'j0';
 import push from '../Array/push';
 
 const baseMask = 0x3f;

@@ -1,4 +1,4 @@
-import {Date} from '..';
+import {Date} from 'j0';
 import leftpad from '../String/leftpad';
 
 const century = 100;
