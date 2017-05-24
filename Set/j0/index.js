@@ -1,7 +1,7 @@
 import forEach from '../../Array/forEach';
 import push from '../../Array/push';
 import splice from '../../Array/splice';
-import iteratorKey from '../../Symbol/iterator';
+import {iteratorSymbol} from 'j0';
 
 class Set {
 
@@ -52,10 +52,10 @@ class Set {
 	}
 
 	values() {
-		return this.data[iteratorKey]();
+		return this.data[iteratorSymbol]();
 	}
 
-	[iteratorKey]() {
+	[iteratorSymbol]() {
 		return this.values();
 	}
 

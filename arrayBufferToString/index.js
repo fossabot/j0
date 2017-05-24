@@ -2,7 +2,7 @@ import {
 	Uint8Array,
 	String
 } from 'j0';
-import push from '../Array/push';
+const {fromCharCode} = String;
 
 const baseMask = 0x3f;
 const lastMasks = [
@@ -26,7 +26,7 @@ function consume(view, index, length) {
 		const shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String.fromCharCode(charCode);
+	return charCode;
 }
 /* eslint-enable no-bitwise */
 
@@ -49,9 +49,14 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		push(chars, consume(view, i, length));
+		chars.push(consume(view, i, length));
 		i += length - 1;
 	}
-	return chars.join('');
+	const strings = [];
+	const chunkLength = 4096;
+	while (0 < chars.length) {
+		strings.push(fromCharCode(...chars.splice(0, chunkLength)));
+	}
+	return strings.join('');
 }
 export default arrayBufferToString;

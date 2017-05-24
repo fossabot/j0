@@ -1,11 +1,10 @@
 import findIndex from '..';
-import iteratorKey from '../../../Symbol/iterator';
 
 describe('Array/findIndex', function () {
 
 	it('should find an index an item from iterable', function () {
 		const iterable = {
-			[iteratorKey]: function () {
+			[Symbol.iterator]: function () {
 				let count = 0;
 				return {
 					next: function () {

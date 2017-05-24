@@ -1,7 +1,9 @@
-import iteratorKey from '../../Symbol/iterator';
+import {
+	Array,
+	iteratorSymbol
+} from 'j0';
 import generator from '.';
-import {Array} from 'j0';
 const {prototype} = Array;
-if (!prototype[iteratorKey]) {
-	prototype[iteratorKey] = generator;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }

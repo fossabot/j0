@@ -4,7 +4,7 @@ import filter from '../Array/filter';
 import findIndex from '../Array/findIndex';
 import find from '../Array/find';
 import forEach from '../Array/forEach';
-import iteratorKey from '../Symbol/iterator';
+import {iteratorSymbol} from 'j0';
 
 class StringList {
 
@@ -74,7 +74,7 @@ class StringList {
 	}
 
 	entries() {
-		return this.data[iteratorKey]();
+		return this.data[iteratorSymbol]();
 	}
 
 	values() {
@@ -93,7 +93,7 @@ class StringList {
 		};
 	}
 
-	[iteratorKey]() {
+	[iteratorSymbol]() {
 		return this.entries();
 	}
 

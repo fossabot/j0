@@ -1,5 +1,4 @@
 import filter from '..';
-import iteratorKey from '../../../Symbol/iterator';
 
 describe('Array/filter', function () {
 
@@ -8,7 +7,7 @@ describe('Array/filter', function () {
 			return x % 2;
 		}
 		const iterable = {
-			[iteratorKey]: function () {
+			[Symbol.iterator]: function () {
 				let count = 0;
 				return {
 					next: function () {

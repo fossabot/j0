@@ -1,6 +1,4 @@
 import forEach from '..';
-import push from '../../push';
-import iteratorKey from '../../../Symbol/iterator';
 
 describe('Array/forEach', function () {
 
@@ -25,7 +23,7 @@ describe('Array/forEach', function () {
 
 	it('should iterate over an iterable', function () {
 		const iterable = {
-			[iteratorKey]: function () {
+			[Symbol.iterator]: function () {
 				let count = 0;
 				return {
 					next: function () {
@@ -40,7 +38,7 @@ describe('Array/forEach', function () {
 		};
 		const results = [];
 		forEach(iterable, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [
 			[1, 0, iterable],
@@ -63,7 +61,7 @@ describe('Array/forEach', function () {
 		};
 		const results = [];
 		forEach(iterator, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [
 			[1, 0, iterator],
@@ -77,7 +75,7 @@ describe('Array/forEach', function () {
 		const text = 'abcd';
 		const results = [];
 		forEach(text, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [
 			['a', 0, text],

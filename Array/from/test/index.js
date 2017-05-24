@@ -1,6 +1,5 @@
 import arrayFrom from '..';
-import isArray from '../../../isArray';
-import iteratorKey from '../../../Symbol/iterator';
+import {isArray} from 'j0';
 
 describe('Array/from', function () {
 
@@ -17,7 +16,7 @@ describe('Array/from', function () {
 
 	it('should create a new array from an iterable object', function () {
 		const iterable = {
-			[iteratorKey]: function () {
+			[Symbol.iterator]: function () {
 				let count = 0;
 				return {
 					next: function () {

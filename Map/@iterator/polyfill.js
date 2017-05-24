@@ -1,7 +1,9 @@
-import Map from '..';
-import iteratorKey from '../../Symbol/iterator';
+import {
+	Map,
+	iteratorSymbol
+} from 'j0';
 import generator from '.';
-
-if (!Map.prototype[iteratorKey]) {
-	Map.prototype[iteratorKey] = generator;
+const {prototype} = Map;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }

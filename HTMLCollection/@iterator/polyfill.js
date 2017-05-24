@@ -1,6 +1,9 @@
-import iteratorKey from '../../Symbol/iterator';
-import {HTMLCollection} from 'j0';
+import {
+	HTMLCollection,
+	iteratorSymbol
+} from 'j0';
 import generator from './j0';
-if (!HTMLCollection.prototype[iteratorKey]) {
-	HTMLCollection.prototype[iteratorKey] = generator;
+const {prototype} = HTMLCollection;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }

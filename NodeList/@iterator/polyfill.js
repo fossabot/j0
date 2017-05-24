@@ -1,6 +1,9 @@
-import iteratorKey from '../../Symbol/iterator';
-import NodeList from '..';
+import {
+	iteratorSymbol,
+	NodeList
+} from 'j0';
 import generator from '.';
-if (!NodeList.prototype[iteratorKey]) {
-	NodeList.prototype[iteratorKey] = generator;
+const {prototype} = NodeList;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }

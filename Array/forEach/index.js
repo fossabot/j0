@@ -1,10 +1,12 @@
-import iteratorKey from '../../Symbol/iterator';
-import isFunction from '../../isFunction';
-import MAX_SAFE_INTEGER from '../../Number/MAX_SAFE_INTEGER';
+import {
+	iteratorSymbol,
+	isFunction,
+	Number
+} from 'j0';
 
 function forEach(iterable, fn, thisArg, fromIndex = 0) {
 	const {length} = iterable;
-	const iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	const iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (let index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -13,7 +15,7 @@ function forEach(iterable, fn, thisArg, fromIndex = 0) {
 		}
 	} else if (isFunction(iterator.next)) {
 		let index = 0;
-		while (index < MAX_SAFE_INTEGER) {
+		while (index < Number.MAX_SAFE_INTEGER) {
 			const {value, done} = iterator.next();
 			if (done || fromIndex <= index && fn.call(thisArg, value, index, iterable)) {
 				return;

@@ -1,6 +1,9 @@
-import iteratorKey from '../../Symbol/iterator';
-import NamedNodeMap from '..';
+import {
+	iteratorSymbol,
+	NamedNodeMap
+} from 'j0';
 import generator from '.';
-if (!NamedNodeMap.prototype[iteratorKey]) {
-	NamedNodeMap.prototype[iteratorKey] = generator;
+const {prototype} = NamedNodeMap;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }
