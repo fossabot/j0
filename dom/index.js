@@ -1,8 +1,9 @@
-import Symbol from '../Symbol';
-import isString from '../isString';
-import isNode from '../isNode';
-import map from '../Array/map';
-import {document} from 'j0';
+import {
+	document,
+	Symbol,
+	isString,
+	isNode
+} from 'j0';
 
 const nodeKey = Symbol('node');
 const eventsKey = Symbol('events');
@@ -174,7 +175,12 @@ function find(selector, rootElement = document) {
 }
 
 function findAll(selector, rootElement = document) {
-	return map(rootElement.querySelectorAll(selector), wrap);
+	const list = rootElement.querySelectorAll(selector);
+	const result = [];
+	for (let i = 0, {length} = list; i < length; i++) {
+		result.push(wrap(list[i]));
+	}
+	return result;
 }
 
 wrap.find = find;

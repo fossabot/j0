@@ -50,7 +50,7 @@ class Headers extends StringList {
 					} = iterator.next();
 					const key = value && value[0];
 					if (done || history.indexOf(key) < 0) {
-						push(history, key);
+						history.push(key);
 						return {
 							value: [key, this.get(key)],
 							done

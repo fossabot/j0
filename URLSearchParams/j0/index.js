@@ -1,4 +1,3 @@
-import map from '../../Array/map';
 import StringList from '../../StringList';
 
 const separator = '&';
@@ -7,15 +6,22 @@ const equal = '=';
 class URLSearchParams extends StringList {
 
 	constructor(init) {
-		super(init ? map(init.replace(/^\?/, '').split(separator), (entry) => {
-			return entry.split(equal);
-		}) : null);
+		super(
+			init
+			? init.replace(/^\?/, '').split(separator)
+			.map((entry) => {
+				return entry.split(equal);
+			})
+			: null
+		);
 	}
 
 	toString() {
-		return map(this.data, function ([name, value = '']) {
+		return this.data
+		.map(function ([name, value = '']) {
 			return `${name}=${value}`;
-		}).join('&');
+		})
+		.join('&');
 	}
 
 }
