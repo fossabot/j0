@@ -8,43 +8,43 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref27 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(duration, data) {
-		return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	var _ref30 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(duration, data) {
+		return regeneratorRuntime.wrap(function _callee5$(_context5) {
 			while (1) {
-				switch (_context2.prev = _context2.next) {
+				switch (_context5.prev = _context5.next) {
 					case 0:
-						_context2.next = 2;
+						_context5.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context2.abrupt('return', data);
+						return _context5.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context2.stop();
+						return _context5.stop();
 				}
 			}
-		}, _callee2, this);
+		}, _callee5, this);
 	}));
 
 	return function wait(_x32, _x33) {
-		return _ref27.apply(this, arguments);
+		return _ref30.apply(this, arguments);
 	};
 }();
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -91,19 +91,17 @@ function noop(x) {
 	return x;
 }
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function _forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -112,7 +110,7 @@ function _forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next2 = iterator.next(),
 			    value = _iterator$next2.value,
 			    done = _iterator$next2.done;
@@ -225,7 +223,7 @@ describe('Array/filter', function () {
 		function fn(x) {
 			return x % 2;
 		}
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -260,7 +258,7 @@ function find(iterable) {
 describe('Array/find', function () {
 
 	it('should find an item from iterable', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -298,7 +296,7 @@ function find$2(iterable) {
 describe('Array/findIndex', function () {
 
 	it('should find an index an item from iterable', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -341,7 +339,7 @@ describe('Array/forEach', function () {
 	});
 
 	it('should iterate over an iterable', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -355,7 +353,7 @@ describe('Array/forEach', function () {
 		});
 		var results = [];
 		_forEach(iterable, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterable], [2, 1, iterable], [3, 2, iterable], [4, 3, iterable]]);
 	});
@@ -373,7 +371,7 @@ describe('Array/forEach', function () {
 		};
 		var results = [];
 		_forEach(iterator, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterator], [2, 1, iterator], [3, 2, iterator], [4, 3, iterator]]);
 	});
@@ -382,7 +380,7 @@ describe('Array/forEach', function () {
 		var text = 'abcd';
 		var results = [];
 		_forEach(text, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [['a', 0, text], ['b', 1, text], ['c', 2, text], ['d', 3, text]]);
 	});
@@ -424,7 +422,7 @@ describe('Array/from', function () {
 	});
 
 	it('should create a new array from an iterable object', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -941,6 +939,9 @@ describe('Array/splice', function () {
 
 var Uint8Array$1 = window.Uint8Array;
 
+var fromCharCode = String.fromCharCode;
+
+
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
@@ -955,7 +956,7 @@ function consume(view, index, length) {
 		var shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String.fromCharCode(charCode);
+	return charCode;
 }
 /* eslint-enable no-bitwise */
 
@@ -978,10 +979,15 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		push(chars, consume(view, i, length));
+		chars.push(consume(view, i, length));
 		i += length - 1;
 	}
-	return chars.join('');
+	var strings = [];
+	var chunkLength = 4096;
+	while (0 < chars.length) {
+		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
+	}
+	return strings.join('');
 }
 
 var FileReader = window.FileReader;
@@ -1014,25 +1020,105 @@ function readBlob(data, type) {
 	return promise;
 }
 
+var console$1 = window.console;
+
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
 
 describe('ArrayBuffer/toString', function () {
 
-	it('should return hello', function () {
-		var src = 'hello';
-		return createArrayBuffer(src).then(function (arrayBuffer) {
-			assert.equal(arrayBufferToString(arrayBuffer), src);
-		});
-	});
+	it('should return hello', _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+		var src, arrayBuffer;
+		return regeneratorRuntime.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						src = 'hello';
+						_context.next = 3;
+						return createArrayBuffer(src);
 
-	it('should return こんにちは', function () {
-		var src = 'こんにちは';
-		return createArrayBuffer(src).then(function (arrayBuffer) {
-			assert.equal(arrayBufferToString(arrayBuffer), src);
-		});
-	});
+					case 3:
+						arrayBuffer = _context.sent;
+
+						assert.equal(arrayBufferToString(arrayBuffer), src);
+
+					case 5:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	})));
+
+	it('should return こんにちは', _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+		var src, arrayBuffer;
+		return regeneratorRuntime.wrap(function _callee2$(_context2) {
+			while (1) {
+				switch (_context2.prev = _context2.next) {
+					case 0:
+						src = 'こんにちは';
+						_context2.next = 3;
+						return createArrayBuffer(src);
+
+					case 3:
+						arrayBuffer = _context2.sent;
+
+						assert.equal(arrayBufferToString(arrayBuffer), src);
+
+					case 5:
+					case 'end':
+						return _context2.stop();
+				}
+			}
+		}, _callee2, this);
+	})));
+
+	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+		var src, arrayBuffer, results, remains, start, average;
+		return regeneratorRuntime.wrap(function _callee3$(_context3) {
+			while (1) {
+				switch (_context3.prev = _context3.next) {
+					case 0:
+						this.timeout(5000);
+						_context3.next = 3;
+						return fetch('wagahaiha-nekodearu.txt');
+
+					case 3:
+						_context3.next = 5;
+						return _context3.sent.text();
+
+					case 5:
+						src = _context3.sent;
+						_context3.next = 8;
+						return createArrayBuffer(src);
+
+					case 8:
+						arrayBuffer = _context3.sent;
+
+						assert.equal(arrayBufferToString(arrayBuffer), src);
+						results = [];
+						remains = 10;
+
+						while (0 < remains--) {
+							start = Date.now();
+
+							arrayBufferToString(arrayBuffer);
+							results.push(Date.now() - start);
+						}
+						average = results.reduce(function (sum, value) {
+							return sum + value;
+						}, 0) / results.length;
+
+						console$1.log('Average: ' + average + 'ms\n', results);
+
+					case 15:
+					case 'end':
+						return _context3.stop();
+				}
+			}
+		}, _callee3, this);
+	})));
 });
 
 function isString(x) {
@@ -1568,10 +1654,10 @@ var StringList = function () {
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref) {
-				var _ref2 = _slicedToArray(_ref, 2),
-				    key = _ref2[0],
-				    value = _ref2[1];
+			map(iterable, function (_ref4) {
+				var _ref5 = _slicedToArray(_ref4, 2),
+				    key = _ref5[0],
+				    value = _ref5[1];
 
 				_this4.append(key, value);
 			});
@@ -1586,9 +1672,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find$2(this.data, function (_ref3) {
-				var _ref4 = _slicedToArray(_ref3, 1),
-				    itemName = _ref4[0];
+			return find$2(this.data, function (_ref6) {
+				var _ref7 = _slicedToArray(_ref6, 1),
+				    itemName = _ref7[0];
 
 				return itemName === name;
 			});
@@ -1616,9 +1702,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref5) {
-				var _ref6 = _slicedToArray(_ref5, 1),
-				    itemName = _ref6[0];
+			this.data = filter(this.data, function (_ref8) {
+				var _ref9 = _slicedToArray(_ref8, 1),
+				    itemName = _ref9[0];
 
 				return itemName !== name;
 			});
@@ -1626,9 +1712,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref7) {
-				var _ref8 = _slicedToArray(_ref7, 1),
-				    itemName = _ref8[0];
+			var found = find(this.data, function (_ref10) {
+				var _ref11 = _slicedToArray(_ref10, 1),
+				    itemName = _ref11[0];
 
 				return itemName === name;
 			});
@@ -1638,10 +1724,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			_forEach(this.data, function (_ref9) {
-				var _ref10 = _slicedToArray(_ref9, 2),
-				    itemName = _ref10[0],
-				    value = _ref10[1];
+			_forEach(this.data, function (_ref12) {
+				var _ref13 = _slicedToArray(_ref12, 2),
+				    itemName = _ref13[0],
+				    value = _ref13[1];
 
 				if (itemName === name) {
 					push(result, value);
@@ -1652,11 +1738,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref11) {
-				var _ref12 = _slicedToArray(_ref11, 2),
-				    name = _ref12[0],
-				    _ref12$ = _ref12[1],
-				    value = _ref12$ === undefined ? '' : _ref12$;
+			return map(this.data, function (_ref14) {
+				var _ref15 = _slicedToArray(_ref14, 2),
+				    name = _ref15[0],
+				    _ref15$ = _ref15[1],
+				    value = _ref15$ === undefined ? '' : _ref15$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -1664,7 +1750,7 @@ var StringList = function () {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			return this.data[iteratorKey]();
+			return this.data[iteratorSymbol]();
 		}
 	}, {
 		key: 'values',
@@ -1684,7 +1770,7 @@ var StringList = function () {
 			};
 		}
 	}, {
-		key: iteratorKey,
+		key: iteratorSymbol,
 		value: function value() {
 			return this.entries();
 		}
@@ -1816,8 +1902,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref13) {
-			var headers = _ref13.headers;
+		value: function inheritFrom(input, body, _ref16) {
+			var headers = _ref16.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -1952,10 +2038,10 @@ function fetch$1(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		_forEach(request.headers, function (_ref14) {
-			var _ref15 = _slicedToArray(_ref14, 2),
-			    name = _ref15[0],
-			    value = _ref15[1];
+		_forEach(request.headers, function (_ref17) {
+			var _ref18 = _slicedToArray(_ref17, 2),
+			    name = _ref18[0],
+			    value = _ref18[1];
 
 			xhr.setRequestHeader(name, value);
 		});
@@ -2637,10 +2723,10 @@ var Map$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref16) {
-				var _ref17 = _slicedToArray(_ref16, 2),
-				    key = _ref17[0],
-				    value = _ref17[1];
+			_forEach(iterable, function (_ref19) {
+				var _ref20 = _slicedToArray(_ref19, 2),
+				    key = _ref20[0],
+				    value = _ref20[1];
 
 				_this10.set(key, value);
 			});
@@ -2655,9 +2741,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref18) {
-				var _ref19 = _slicedToArray(_ref18, 1),
-				    itemKey = _ref19[0];
+			return find$2(this.data, function (_ref21) {
+				var _ref22 = _slicedToArray(_ref21, 1),
+				    itemKey = _ref22[0];
 
 				return itemKey === key;
 			});
@@ -2681,9 +2767,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref20) {
-				var _ref21 = _slicedToArray(_ref20, 1),
-				    itemKey = _ref21[0];
+			var found = find(this.data, function (_ref23) {
+				var _ref24 = _slicedToArray(_ref23, 1),
+				    itemKey = _ref24[0];
 
 				return itemKey === key;
 			});
@@ -2788,34 +2874,34 @@ function tests$6(Map, name) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee4() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee$(_context) {
+				return regeneratorRuntime.wrap(function _callee4$(_context4) {
 					while (1) {
-						switch (_context.prev = _context.next) {
+						switch (_context4.prev = _context4.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context.next = 7;
+									_context4.next = 7;
 									break;
 								}
 
-								_context.next = 4;
+								_context4.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context.next = 1;
+								_context4.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context.stop();
+								return _context4.stop();
 						}
 					}
-				}, _callee, this);
+				}, _callee4, this);
 			}));
 			var map$$1 = new Map(iterable);
 			assert.deepEqual({
@@ -2838,9 +2924,9 @@ function clamp(x) {
 	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
 
 	if (H < L) {
-		var _ref22 = [H, L];
-		L = _ref22[0];
-		H = _ref22[1];
+		var _ref25 = [H, L];
+		L = _ref25[0];
+		H = _ref25[1];
 	}
 	if (x < L) {
 		x = L;
@@ -3054,6 +3140,8 @@ describe('noop', function () {
 	});
 });
 
+var MAX_SAFE_INTEGER = 9007199254740991;
+
 describe('Number/MAX_SAFE_INTEGER', function () {
 
 	it('should evaluate to true', function () {
@@ -3097,12 +3185,12 @@ describe('Number/toOrdinalString', function () {
 
 	try {
 		for (var _iterator5 = tests[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-			var _ref23 = _step5.value;
+			var _ref26 = _step5.value;
 
-			var _ref24 = _slicedToArray(_ref23, 2);
+			var _ref27 = _slicedToArray(_ref26, 2);
 
-			var n = _ref24[0];
-			var expected = _ref24[1];
+			var n = _ref27[0];
+			var expected = _ref27[1];
 
 			_loop(n, expected);
 		}
@@ -3928,10 +4016,10 @@ var Set$2 = function () {
 	}, {
 		key: 'values',
 		value: function values() {
-			return this.data[iteratorKey]();
+			return this.data[iteratorSymbol]();
 		}
 	}, {
-		key: iteratorKey,
+		key: iteratorSymbol,
 		value: function value() {
 			return this.values();
 		}
@@ -4273,13 +4361,6 @@ describe('StringList', function () {
 	});
 });
 
-describe('Symbol/iterator', function () {
-
-	it('should not be undefined', function () {
-		assert.equal(isUndefined(iteratorKey), false);
-	});
-});
-
 function test$4(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
@@ -4398,11 +4479,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref25) {
-				var _ref26 = _slicedToArray(_ref25, 2),
-				    name = _ref26[0],
-				    _ref26$ = _ref26[1],
-				    value = _ref26$ === undefined ? '' : _ref26$;
+			return map(this.data, function (_ref28) {
+				var _ref29 = _slicedToArray(_ref28, 2),
+				    name = _ref29[0],
+				    _ref29$ = _ref29[1],
+				    value = _ref29$ === undefined ? '' : _ref29$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -4526,31 +4607,31 @@ tests$15(URLSearchParams$2, 'J0URLSearchParams');
 tests$15(URLSearchParams, 'URLSearchParams');
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee3$(_context3) {
+		return regeneratorRuntime.wrap(function _callee6$(_context6) {
 			while (1) {
-				switch (_context3.prev = _context3.next) {
+				switch (_context6.prev = _context6.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context3.next = 6;
+						_context6.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context3.sent;
+						actual = _context6.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context3.stop();
+						return _context6.stop();
 				}
 			}
-		}, _callee3, this);
+		}, _callee6, this);
 	})));
 });
 }())

@@ -11,19 +11,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -32,7 +30,7 @@ function forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next = iterator.next(),
 			    value = _iterator$next.value,
 			    done = _iterator$next.done;
@@ -246,7 +244,7 @@ var StringList = function () {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			return this.data[iteratorKey]();
+			return this.data[iteratorSymbol]();
 		}
 	}, {
 		key: 'values',
@@ -266,7 +264,7 @@ var StringList = function () {
 			};
 		}
 	}, {
-		key: iteratorKey,
+		key: iteratorSymbol,
 		value: function value() {
 			return this.entries();
 		}

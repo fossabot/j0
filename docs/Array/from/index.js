@@ -3,19 +3,17 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -24,7 +22,7 @@ function forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next = iterator.next(),
 			    value = _iterator$next.value,
 			    done = _iterator$next.done;
@@ -109,7 +107,7 @@ describe('Array/from', function () {
 	});
 
 	it('should create a new array from an iterable object', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {

@@ -12,7 +12,7 @@
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEach</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/forEach"><span class="string"><span class="string">'../../Array/forEach'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">push</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/push"><span class="string"><span class="string">'../../Array/push'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">splice</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/splice"><span class="string"><span class="string">'../../Array/splice'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">iteratorKey</span>&#32;<span class="name">from</span>&#32;<a href="../../Symbol/iterator"><span class="string"><span class="string">'../../Symbol/iterator'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span><span class="name">iteratorSymbol</span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="class">class</span>&#32;<span class="name">Set</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
@@ -63,10 +63,10 @@
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">values</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">data</span><span class="_5b">[</span><span class="name">iteratorKey</span><span class="_5d">]</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">data</span><span class="_5b">[</span><span class="name">iteratorSymbol</span><span class="_5d">]</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="_5b">[</span><span class="name">iteratorKey</span><span class="_5d">]</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="_5b">[</span><span class="name">iteratorSymbol</span><span class="_5d">]</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">values</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>

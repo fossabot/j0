@@ -3,19 +3,17 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -24,7 +22,7 @@ function forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next = iterator.next(),
 			    value = _iterator$next.value,
 			    done = _iterator$next.done;
@@ -66,18 +64,6 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-var Array = window.Array;
-
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
 describe('Array/forEach', function () {
 
 	it('should iterate over an array', function () {
@@ -100,7 +86,7 @@ describe('Array/forEach', function () {
 	});
 
 	it('should iterate over an iterable', function () {
-		var iterable = _defineProperty({}, iteratorKey, function () {
+		var iterable = _defineProperty({}, Symbol.iterator, function () {
 			var count = 0;
 			return {
 				next: function next() {
@@ -114,7 +100,7 @@ describe('Array/forEach', function () {
 		});
 		var results = [];
 		forEach(iterable, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterable], [2, 1, iterable], [3, 2, iterable], [4, 3, iterable]]);
 	});
@@ -132,7 +118,7 @@ describe('Array/forEach', function () {
 		};
 		var results = [];
 		forEach(iterator, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [[1, 0, iterator], [2, 1, iterator], [3, 2, iterator], [4, 3, iterator]]);
 	});
@@ -141,7 +127,7 @@ describe('Array/forEach', function () {
 		var text = 'abcd';
 		var results = [];
 		forEach(text, function (value, index, arr) {
-			push(results, [value, index, arr]);
+			results.push([value, index, arr]);
 		});
 		assert.deepEqual(results, [['a', 0, text], ['b', 1, text], ['c', 2, text], ['d', 3, text]]);
 	});

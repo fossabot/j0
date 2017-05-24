@@ -7,6 +7,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function isString(x) {
 	return typeof x === 'string';
 }
@@ -19,19 +21,17 @@ function noop(x) {
 	return x;
 }
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -40,7 +40,7 @@ function forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next = iterator.next(),
 			    value = _iterator$next.value,
 			    done = _iterator$next.done;
@@ -123,17 +123,8 @@ function isArrayBufferView(obj) {
 
 var parseAsJSON = JSON.parse;
 
-var Array = window.Array;
+var fromCharCode = String.fromCharCode;
 
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
 
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
@@ -149,7 +140,7 @@ function consume(view, index, length) {
 		var shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String.fromCharCode(charCode);
+	return charCode;
 }
 /* eslint-enable no-bitwise */
 
@@ -172,10 +163,15 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		push(chars, consume(view, i, length));
+		chars.push(consume(view, i, length));
 		i += length - 1;
 	}
-	return chars.join('');
+	var strings = [];
+	var chunkLength = 4096;
+	while (0 < chars.length) {
+		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
+	}
+	return strings.join('');
 }
 
 var Blob = window.Blob;

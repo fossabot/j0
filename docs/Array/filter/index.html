@@ -30,7 +30,6 @@
 <h2>Tests</h2>
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">filter</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">iteratorKey</span>&#32;<span class="name">from</span>&#32;<a href="../../Symbol/iterator"><span class="string"><span class="string">'../../../Symbol/iterator'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'Array/filter'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
@@ -39,7 +38,7 @@
 <span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="name">x</span>&#32;<span class="_25">%</span>&#32;<span class="num">2</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">iterable</span>&#32;<span class="_3d">=</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="_5b">[</span><span class="name">iteratorKey</span><span class="_5d">]</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_5b">[</span><span class="name">Symbol</span><span class="_2e">.</span><span class="name">iterator</span><span class="_5d">]</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">let</span>&#32;<span class="name">count</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">next</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>

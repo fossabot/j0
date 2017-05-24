@@ -11,6 +11,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -730,19 +732,17 @@ var runtime = createCommonjsModule(function (module) {
 
 var window$1 = window.window;
 
-var iteratorKey = Symbol.iterator;
+var iteratorSymbol = Symbol.iterator;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var MAX_SAFE_INTEGER = 9007199254740991;
-
 function _forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
 
-	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
 	if (0 <= length) {
 		for (var index = fromIndex; index < length; index += 1) {
 			if (fn.call(thisArg, iterable[index], index, iterable)) {
@@ -751,7 +751,7 @@ function _forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < MAX_SAFE_INTEGER) {
+		while (_index < Number.MAX_SAFE_INTEGER) {
 			var _iterator$next = iterator.next(),
 			    value = _iterator$next.value,
 			    done = _iterator$next.done;
@@ -882,6 +882,8 @@ if (!window$1.Symbol) {
 	window$1.Symbol = J0Symbol;
 }
 
+var Array = window.Array;
+
 function generator() {
 	var _this2 = this;
 
@@ -898,12 +900,10 @@ function generator() {
 	};
 }
 
-var Array = window.Array;
-
 var prototype = Array.prototype;
 
-if (!prototype[iteratorKey]) {
-	prototype[iteratorKey] = generator;
+if (!prototype[iteratorSymbol]) {
+	prototype[iteratorSymbol] = generator;
 }
 
 var arrayPush = Array.prototype.push;
@@ -1417,8 +1417,10 @@ function generator$2() {
 	return this.entries();
 }
 
-if (!Map.prototype[iteratorKey]) {
-	Map.prototype[iteratorKey] = generator$2;
+var prototype$1 = Map.prototype;
+
+if (!prototype$1[iteratorSymbol]) {
+	prototype$1[iteratorSymbol] = generator$2;
 }
 
 var Set = function () {
@@ -1479,10 +1481,10 @@ var Set = function () {
 	}, {
 		key: 'values',
 		value: function values() {
-			return this.data[iteratorKey]();
+			return this.data[iteratorSymbol]();
 		}
 	}, {
-		key: iteratorKey,
+		key: iteratorSymbol,
 		value: function value() {
 			return this.values();
 		}
@@ -1537,8 +1539,11 @@ function generator$4() {
 	};
 }
 
-if (!NodeList.prototype[iteratorKey]) {
-	NodeList.prototype[iteratorKey] = generator$4;
+var _NodeList = NodeList,
+    prototype$2 = _NodeList.prototype;
+
+if (!prototype$2[iteratorSymbol]) {
+	prototype$2[iteratorSymbol] = generator$4;
 }
 
 var HTMLCollection = window.HTMLCollection;
@@ -1559,8 +1564,10 @@ function generator$6() {
 	};
 }
 
-if (!HTMLCollection.prototype[iteratorKey]) {
-	HTMLCollection.prototype[iteratorKey] = generator$6;
+var prototype$3 = HTMLCollection.prototype;
+
+if (!prototype$3[iteratorSymbol]) {
+	prototype$3[iteratorSymbol] = generator$6;
 }
 
 function generator$8() {
@@ -1579,8 +1586,11 @@ function generator$8() {
 	};
 }
 
-if (!NamedNodeMap.prototype[iteratorKey]) {
-	NamedNodeMap.prototype[iteratorKey] = generator$8;
+var _NamedNodeMap = NamedNodeMap,
+    prototype$4 = _NamedNodeMap.prototype;
+
+if (!prototype$4[iteratorSymbol]) {
+	prototype$4[iteratorSymbol] = generator$8;
 }
 
 function filter(iterable) {
@@ -1700,7 +1710,7 @@ var StringList = function () {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			return this.data[iteratorKey]();
+			return this.data[iteratorSymbol]();
 		}
 	}, {
 		key: 'values',
@@ -1720,7 +1730,7 @@ var StringList = function () {
 			};
 		}
 	}, {
-		key: iteratorKey,
+		key: iteratorSymbol,
 		value: function value() {
 			return this.entries();
 		}
@@ -1891,6 +1901,9 @@ function isArrayBufferView(obj) {
 
 var parseAsJSON = JSON.parse;
 
+var fromCharCode = String.fromCharCode;
+
+
 var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
@@ -1905,7 +1918,7 @@ function consume(view, index, length) {
 		var shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String.fromCharCode(charCode);
+	return charCode;
 }
 /* eslint-enable no-bitwise */
 
@@ -1928,10 +1941,15 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		push(chars, consume(view, i, length));
+		chars.push(consume(view, i, length));
 		i += length - 1;
 	}
-	return chars.join('');
+	var strings = [];
+	var chunkLength = 4096;
+	while (0 < chars.length) {
+		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
+	}
+	return strings.join('');
 }
 
 var Blob = window.Blob;
