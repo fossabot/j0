@@ -1,12 +1,10 @@
-import forEach from '../../forEach';
-
-function includes(searchElement, fromIndex) {
-	let result = false;
-	forEach(this, function (value) {
-		result = value === searchElement;
-		return result;
-	}, null, fromIndex);
-	return result;
+function includes(searchElement, fromIndex = 0) {
+	for (let i = fromIndex, {length} = this; i < length; i++) {
+		if (this[i] === searchElement) {
+			return true;
+		}
+	}
+	return false;
 }
 
 export default includes;

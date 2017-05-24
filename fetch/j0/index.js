@@ -1,4 +1,3 @@
-import forEach from '../../Array/forEach';
 import Request from '../../Request/j0';
 import Response from '../../Response/j0';
 import {
@@ -33,9 +32,9 @@ function fetch(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		forEach(request.headers, function ([name, value]) {
+		for (const [name, value] of request.headers.entries()) {
 			xhr.setRequestHeader(name, value);
-		});
+		}
 		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
 	});
 }
