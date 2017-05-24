@@ -1,10 +1,5 @@
-import isString from '../../isString';
-import URLSearchParams from '../../URLSearchParams';
-import isInstanceOf from '../../isInstanceOf';
-import isArrayBufferView from '../../isArrayBufferView';
-import parseAsJSON from '../../JSON/parse';
-import arrayBufferToString from '../../arrayBufferToString';
 import {
+	JSON,
 	Blob,
 	ArrayBuffer,
 	DataView,
@@ -13,7 +8,12 @@ import {
 	Promise,
 	readBlob,
 	FormData,
-	parseFormData
+	parseFormData,
+	isString,
+	URLSearchParams,
+	isInstanceOf,
+	isArrayBufferView,
+	arrayBufferToString
 } from 'j0';
 
 function cloneBuffer(buf) {
@@ -119,7 +119,7 @@ class Body {
 
 	json() {
 		return this.text()
-		.then(parseAsJSON);
+		.then(JSON.parse);
 	}
 
 }
