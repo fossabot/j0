@@ -160,13 +160,6 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
-
-console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

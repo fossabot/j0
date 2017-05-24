@@ -64,7 +64,6 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

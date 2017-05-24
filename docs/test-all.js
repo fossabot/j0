@@ -192,24 +192,6 @@ describe('Array/every', function () {
 	});
 });
 
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
-
-console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -411,6 +393,17 @@ describe('Array/forEach', function () {
 	});
 });
 
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	_forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
 var isArray = Array.isArray;
 
 describe('Array/from', function () {
@@ -511,6 +504,12 @@ describe('Array/includes', function () {
 		assert.equal(includes(string, 'f'), false);
 	});
 });
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
 
 describe('Array/join', function () {
 

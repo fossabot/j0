@@ -9,6 +9,16 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var arrayPush = Array.prototype.push;
+
+function push(arrayLike) {
+	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+		args[_key - 1] = arguments[_key];
+	}
+
+	return arrayPush.apply(arrayLike, args);
+}
+
 var iteratorKey = Symbol.iterator;
 
 var MAX_SAFE_INTEGER = 9007199254740991;
@@ -66,38 +76,6 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
-}
-
-function noop(x) {
-	return x;
-}
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
-
-console.log(Object, join);
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
 }
 
 // import postMessage from '../postMessage';
@@ -170,6 +148,10 @@ setTimeout(function () {
 var setImmediate = function setImmediate(fn) {
 	return setImmediateAvailable(fn);
 };
+
+function noop(x) {
+	return x;
+}
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;

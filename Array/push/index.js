@@ -1,9 +1,4 @@
-import {
-	Array,
-	Object as obj
-} from 'j0';
-import join from '../join';
-console.log(obj, join);
+import {Array} from 'j0';
 const {push: arrayPush} = Array.prototype;
 function push(arrayLike, ...args) {
 	return arrayPush.apply(arrayLike, args);

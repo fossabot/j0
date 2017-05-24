@@ -898,13 +898,6 @@ if (!prototype[iteratorKey]) {
 	prototype[iteratorKey] = generator;
 }
 
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
-
-console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -932,6 +925,12 @@ function map(iterable) {
 
 if (!Array.from) {
 	Array.from = map;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
 }
 
 function repeat(c) {
