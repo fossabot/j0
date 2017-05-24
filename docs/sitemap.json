@@ -22,7 +22,6 @@
 	"Body": {
 		"j0": {}
 	},
-	"CustomEvent": {},
 	"FileReader": {
 		"promisify": {},
 		"readBlob": {}
