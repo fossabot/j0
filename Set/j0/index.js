@@ -1,6 +1,3 @@
-import forEach from '../../Array/forEach';
-import push from '../../Array/push';
-import splice from '../../Array/splice';
 import {iteratorSymbol} from 'j0';
 
 class Set {
@@ -8,9 +5,9 @@ class Set {
 	constructor(iterable) {
 		this.clear();
 		if (iterable) {
-			forEach(iterable, (value) => {
+			for (const value of iterable) {
 				this.add(value);
-			});
+			}
 		}
 	}
 
@@ -32,7 +29,7 @@ class Set {
 
 	add(item) {
 		if (!this.has(item)) {
-			push(this.data, item);
+			this.data.push(item);
 		}
 		return this;
 	}
@@ -40,13 +37,14 @@ class Set {
 	delete(item) {
 		const index = this.indexOf(item);
 		if (0 <= index) {
-			splice(this.data, index, 1);
+			this.data.splice(index, 1);
 		}
 		return 0 <= index;
 	}
 
 	forEach(fn, thisArg) {
-		forEach(this.data, (value) => {
+		this.data
+		.forEach((value) => {
 			fn.call(thisArg, value, value, this);
 		});
 	}

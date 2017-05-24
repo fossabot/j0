@@ -1,19 +1,13 @@
 import Symbol from '../../Symbol';
-import map from '../../Array/map';
-import find from '../../Array/find';
-import findIndex from '../../Array/findIndex';
-import push from '../../Array/push';
-import splice from '../../Array/splice';
-import forEach from '../../Array/forEach';
 
 class Map {
 
 	constructor(iterable) {
 		this.clear();
 		if (iterable) {
-			forEach(iterable, ([key, value]) => {
+			for (const [key, value] of iterable) {
 				this.set(key, value);
-			});
+			}
 		}
 	}
 
@@ -26,7 +20,8 @@ class Map {
 	}
 
 	indexOfKey(key) {
-		return findIndex(this.data, function ([itemKey]) {
+		return this.data
+		.findIndex(function ([itemKey]) {
 			return itemKey === key;
 		});
 	}
@@ -40,7 +35,7 @@ class Map {
 		if (0 <= index) {
 			this.data[index][1] = value;
 		} else {
-			push(this.data, [key, value]);
+			this.data.push([key, value]);
 		}
 		return this;
 	}
@@ -57,7 +52,7 @@ class Map {
 	delete(key) {
 		const index = this.indexOfKey(key);
 		if (0 <= index) {
-			splice(this.data, index, 1);
+			this.data.splice(index, 1);
 			return true;
 		}
 		return false;
@@ -68,7 +63,7 @@ class Map {
 	}
 
 	forEach(fn, thisArg) {
-		forEach(this.data, fn, thisArg);
+		this.data.forEach(fn, thisArg);
 	}
 
 	keys() {
