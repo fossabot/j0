@@ -3,6 +3,8 @@
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
+var Headers = window.Headers;
+
 function trim(string) {
 	return string.trim();
 }

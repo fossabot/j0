@@ -369,7 +369,9 @@ var Headers$1 = function (_StringList) {
 	return Headers$1;
 }(StringList);
 
-function tests(Headers, testName) {
+function tests(Headers) {
+	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
+
 
 	describe(testName, function () {
 
@@ -474,12 +476,14 @@ function tests(Headers, testName) {
 
 tests(Headers$1, 'Headers/j0');
 
+var Headers$2 = window.Headers;
+
 function trim(string) {
 	return string.trim();
 }
 
 function parse(rawHeaders) {
-	var headers = new Headers();
+	var headers = new Headers$2();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -505,5 +509,5 @@ describe('Headers/parse', function () {
 	});
 });
 
-tests(Headers, 'Headers');
+tests(Headers);
 }())

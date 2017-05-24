@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x30, _x31) {
+	return function wait(_x31, _x32) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -1905,8 +1905,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
+var Headers$2 = window.Headers;
+
 function parse$3(rawHeaders) {
-	var headers = new Headers();
+	var headers = new Headers$2();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -2057,7 +2059,9 @@ describe('getBody', function () {
 	});
 });
 
-function tests$4(Headers, testName) {
+function tests$4(Headers) {
+	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
+
 
 	describe(testName, function () {
 
@@ -2171,7 +2175,7 @@ describe('Headers/parse', function () {
 	});
 });
 
-tests$4(Headers, 'Headers');
+tests$4(Headers);
 
 describe('history', function () {
 

@@ -367,7 +367,9 @@ var Headers = function (_StringList) {
 	return Headers;
 }(StringList);
 
-function tests(Headers, testName) {
+function tests(Headers) {
+	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
+
 
 	describe(testName, function () {
 

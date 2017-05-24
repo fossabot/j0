@@ -1,4 +1,4 @@
-function tests(Headers, testName) {
+function tests(Headers, testName = 'Headers') {
 
 	describe(testName, function () {
 

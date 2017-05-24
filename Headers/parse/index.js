@@ -1,4 +1,4 @@
-import Headers from '..';
+import {Headers} from 'j0';
 import trim from '../../String/trim';
 function parse(rawHeaders) {
 	const headers = new Headers();

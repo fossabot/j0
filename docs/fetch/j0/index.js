@@ -553,11 +553,11 @@ function toLowerCase(string) {
 	return ('' + string).toLowerCase();
 }
 
-var Headers$1 = function (_StringList) {
-	_inherits(Headers$1, _StringList);
+var Headers = function (_StringList) {
+	_inherits(Headers, _StringList);
 
-	function Headers$1(headers) {
-		_classCallCheck(this, Headers$1);
+	function Headers(headers) {
+		_classCallCheck(this, Headers);
 
 		var init = [];
 		if (headers) {
@@ -565,45 +565,45 @@ var Headers$1 = function (_StringList) {
 				push(init, [key, value]);
 			});
 		}
-		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
+		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
 	}
 
-	_createClass(Headers$1, [{
+	_createClass(Headers, [{
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'indexOf', this).call(this, toLowerCase(name));
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'indexOf', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'has',
 		value: function has(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'has', this).call(this, toLowerCase(name));
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'has', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'append', this).call(this, toLowerCase(name), value);
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'append', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'set',
 		value: function set(name, value) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'set', this).call(this, toLowerCase(name), value);
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'set', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'delete', this).call(this, toLowerCase(name));
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'delete', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'get',
 		value: function get(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
+			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 		}
 	}, {
 		key: 'entries',
 		value: function entries() {
 			var _this3 = this;
 
-			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
+			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
 			return {
 				next: function next() {
@@ -626,7 +626,7 @@ var Headers$1 = function (_StringList) {
 		}
 	}]);
 
-	return Headers$1;
+	return Headers;
 }(StringList);
 
 var Request = function (_Body) {
@@ -648,7 +648,7 @@ var Request = function (_Body) {
 		}
 		_this4.credentials = init.credentials || _this4.credentials || 'omit';
 		if (init.headers || !_this4.headers) {
-			_this4.headers = new Headers$1(init.headers);
+			_this4.headers = new Headers(init.headers);
 		}
 		_this4.method = (init.method || _this4.method || 'GET').toUpperCase();
 		_this4.mode = init.mode || _this4.mode || null;
@@ -671,7 +671,7 @@ var Request = function (_Body) {
 			this.url = input.url;
 			this.credentials = input.credentials;
 			if (!headers) {
-				this.headers = new Headers$1(input.headers);
+				this.headers = new Headers(input.headers);
 			}
 			this.method = input.method;
 			this.mode = input.mode;
@@ -709,7 +709,7 @@ var Response = function (_Body2) {
 		_this5.status = 'status' in init ? init.status : minOkStatus;
 		_this5.ok = _this5.status >= minOkStatus && _this5.status < maxOkStatus;
 		_this5.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this5.headers = new Headers$1(init.headers);
+		_this5.headers = new Headers(init.headers);
 		_this5.url = init.url || '';
 		_this5.initBody(body);
 		return _this5;
@@ -721,7 +721,7 @@ var Response = function (_Body2) {
 			return new Response(this.bodyInit, {
 				status: this.status,
 				statusText: this.statusText,
-				headers: new Headers$1(this.headers),
+				headers: new Headers(this.headers),
 				url: this.url
 			});
 		}
@@ -751,8 +751,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
+var Headers$2 = window.Headers;
+
 function parse$1(rawHeaders) {
-	var headers = new Headers();
+	var headers = new Headers$2();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
