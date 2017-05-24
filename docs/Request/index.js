@@ -13,20 +13,56 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function isString(x) {
-	return typeof x === 'string';
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
+var Blob = window.Blob;
+
+var ArrayBuffer = window.ArrayBuffer;
+
+var DataView = window.DataView;
+
+var TypeError$1 = window.TypeError;
+
+var Uint8Array = window.Uint8Array;
+
+var Promise$1 = window.Promise;
+
+var FileReader = window.FileReader;
+
+function readBlob(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
 }
 
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
+var FormData = window.FormData;
 
-function noop(x) {
-	return x;
+function trim(string) {
+	return string.trim();
 }
 
 var iteratorSymbol = Symbol.iterator;
@@ -90,6 +126,38 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+var decodeURIComponent = window.decodeURIComponent;
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
+}
+
+function isString(x) {
+	return typeof x === 'string';
+}
+
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+function noop(x) {
+	return x;
+}
+
 function find(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 	var thisArg = arguments[2];
@@ -103,8 +171,6 @@ function find(iterable) {
 	});
 	return result;
 }
-
-var Uint8Array = window.Uint8Array;
 
 var Uint8ClampedArray = window.Uint8ClampedArray;
 
@@ -128,8 +194,6 @@ function isArrayBufferView(obj) {
 		return isInstanceOf(obj, constructor);
 	});
 }
-
-var parseAsJSON = JSON.parse;
 
 var fromCharCode = String.fromCharCode;
 
@@ -176,72 +240,6 @@ function arrayBufferToString(arrayBuffer) {
 		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
 	}
 	return strings.join('');
-}
-
-var Blob = window.Blob;
-
-var ArrayBuffer = window.ArrayBuffer;
-
-var DataView = window.DataView;
-
-var TypeError$1 = window.TypeError;
-
-var Promise$1 = window.Promise;
-
-var FileReader = window.FileReader;
-
-function readBlob(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
-var FormData = window.FormData;
-
-function trim(string) {
-	return string.trim();
-}
-
-var decodeURIComponent = window.decodeURIComponent;
-
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
 }
 
 function cloneBuffer(buf) {
@@ -345,7 +343,7 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(parseAsJSON);
+			return this.text().then(JSON.parse);
 		}
 	}, {
 		key: 'isUsed',

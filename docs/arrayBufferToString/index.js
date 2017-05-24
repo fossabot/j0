@@ -84,6 +84,8 @@ function readBlob(data, type) {
 	return promise;
 }
 
+var document = window.document;
+
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
@@ -137,29 +139,30 @@ describe('ArrayBuffer/toString', function () {
 	})));
 
 	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-		var src, arrayBuffer;
+		var root, src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee3$(_context3) {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
-						_context3.next = 2;
-						return fetch('wagahaiha-nekodearu.txt');
+						root = document.getElementById('root').text;
+						_context3.next = 3;
+						return fetch(root + '/arrayBufferToString/wagahaiha-nekodearu.txt');
 
-					case 2:
-						_context3.next = 4;
+					case 3:
+						_context3.next = 5;
 						return _context3.sent.text();
 
-					case 4:
+					case 5:
 						src = _context3.sent;
-						_context3.next = 7;
+						_context3.next = 8;
 						return createArrayBuffer(src);
 
-					case 7:
+					case 8:
 						arrayBuffer = _context3.sent;
 
 						assert.equal(arrayBufferToString(arrayBuffer), src);
 
-					case 9:
+					case 10:
 					case 'end':
 						return _context3.stop();
 				}

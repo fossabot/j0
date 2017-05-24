@@ -8,29 +8,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref30 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(duration, data) {
-		return regeneratorRuntime.wrap(function _callee5$(_context5) {
+	var _ref32 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(duration, data) {
+		return regeneratorRuntime.wrap(function _callee7$(_context7) {
 			while (1) {
-				switch (_context5.prev = _context5.next) {
+				switch (_context7.prev = _context7.next) {
 					case 0:
-						_context5.next = 2;
+						_context7.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context5.abrupt('return', data);
+						return _context7.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context5.stop();
+						return _context7.stop();
 				}
 			}
-		}, _callee5, this);
+		}, _callee7, this);
 	}));
 
 	return function wait(_x32, _x33) {
-		return _ref30.apply(this, arguments);
+		return _ref32.apply(this, arguments);
 	};
 }();
 
@@ -1016,6 +1016,8 @@ function readBlob(data, type) {
 	return promise;
 }
 
+var document$1 = window.document;
+
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
@@ -1069,29 +1071,30 @@ describe('ArrayBuffer/toString', function () {
 	})));
 
 	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-		var src, arrayBuffer;
+		var root, src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee3$(_context3) {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
-						_context3.next = 2;
-						return fetch('wagahaiha-nekodearu.txt');
+						root = document$1.getElementById('root').text;
+						_context3.next = 3;
+						return fetch(root + '/arrayBufferToString/wagahaiha-nekodearu.txt');
 
-					case 2:
-						_context3.next = 4;
+					case 3:
+						_context3.next = 5;
 						return _context3.sent.text();
 
-					case 4:
+					case 5:
 						src = _context3.sent;
-						_context3.next = 7;
+						_context3.next = 8;
 						return createArrayBuffer(src);
 
-					case 7:
+					case 8:
 						arrayBuffer = _context3.sent;
 
 						assert.equal(arrayBufferToString(arrayBuffer), src);
 
-					case 9:
+					case 10:
 					case 'end':
 						return _context3.stop();
 				}
@@ -1099,6 +1102,40 @@ describe('ArrayBuffer/toString', function () {
 		}, _callee3, this);
 	})));
 });
+
+var Blob$1 = window.Blob;
+
+var ArrayBuffer = window.ArrayBuffer;
+
+var DataView = window.DataView;
+
+var Promise$1 = window.Promise;
+
+var FormData = window.FormData;
+
+function trim(string) {
+	return string.trim();
+}
+
+var decodeURIComponent = window.decodeURIComponent;
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	_forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
+}
 
 function isString(x) {
 	return typeof x === 'string';
@@ -1129,42 +1166,6 @@ function isArrayBufferView(obj) {
 	return 0 <= find$2(viewClasses, function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
-}
-
-var parse = JSON.parse;
-
-var Blob$1 = window.Blob;
-
-var ArrayBuffer = window.ArrayBuffer;
-
-var DataView = window.DataView;
-
-var Promise$1 = window.Promise;
-
-var FormData = window.FormData;
-
-function trim(string) {
-	return string.trim();
-}
-
-var decodeURIComponent = window.decodeURIComponent;
-
-function parse$1(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	_forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
 }
 
 function cloneBuffer(buf) {
@@ -1263,12 +1264,12 @@ var Body$1 = function () {
 	}, {
 		key: 'formData',
 		value: function formData() {
-			return this.text().then(parse$1);
+			return this.text().then(parse);
 		}
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(parse);
+			return this.text().then(JSON.parse);
 		}
 	}, {
 		key: 'isUsed',
@@ -1304,10 +1305,101 @@ tests(Body);
 
 var cancelAnimationFrame = window.cancelAnimationFrame;
 
+var requestAnimationFrame = window.requestAnimationFrame;
+
 describe('cancelAnimationFrame', function () {
 
-	it('', function () {
-		cancelAnimationFrame();
+	it('should cancel scheduled invocation', _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+		var baseInterval;
+		return regeneratorRuntime.wrap(function _callee4$(_context4) {
+			while (1) {
+				switch (_context4.prev = _context4.next) {
+					case 0:
+						_context4.next = 2;
+						return new Promise(function (resolve) {
+							requestAnimationFrame(function (time1) {
+								requestAnimationFrame(function (time2) {
+									resolve(time2 - time1);
+								});
+							});
+						});
+
+					case 2:
+						baseInterval = _context4.sent;
+
+						assert.equal(0 < baseInterval, true);
+						_context4.next = 6;
+						return new Promise(function (resolve, reject) {
+							var margin = 10;
+							var timer = setTimeout(function () {
+								reject(new Error('requestAnimationFrame didn\'t invoke the given function.'));
+							}, baseInterval * margin);
+							requestAnimationFrame(function () {
+								clearTimeout(timer);
+								resolve();
+							});
+						});
+
+					case 6:
+						_context4.next = 8;
+						return new Promise(function (resolve, reject) {
+							var margin = 10;
+							var timer = setTimeout(resolve, baseInterval * margin);
+							var id = requestAnimationFrame(function () {
+								clearTimeout(timer);
+								reject(new Error('cancelAnimationFrame didn\'t cancel the invocation.'));
+							});
+							cancelAnimationFrame(id);
+						});
+
+					case 8:
+					case 'end':
+						return _context4.stop();
+				}
+			}
+		}, _callee4, this);
+	})));
+});
+
+function clone(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
+
+function noop$2() {
+	return 0;
+}
+
+describe('Object/clone', function () {
+
+	it('should clone an object', function () {
+		var data = { a: 1 };
+		var actual = clone(data);
+		var expected = { a: 1 };
+		assert.deepEqual(actual, expected);
+	});
+
+	it('should remove functions', function () {
+		var data = {
+			a: noop$2,
+			b: 0,
+			c: noop$2
+		};
+		var actual = clone(data);
+		var expected = { b: 0 };
+		assert.deepEqual(actual, expected);
+	});
+
+	it('should isolate original', function () {
+		var data = {
+			a: noop$2,
+			b: {},
+			c: noop$2
+		};
+		var actual = clone(data);
+		actual.b.a = 0;
+		var expected = { b: { a: 0 } };
+		assert.deepEqual(actual, expected);
+		assert.deepEqual(data.b, {});
 	});
 });
 
@@ -1364,8 +1456,6 @@ var Node = window.Node;
 function isNode(x) {
 	return isInstanceOf(x, Node);
 }
-
-var document$1 = window.document;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
@@ -1633,10 +1723,10 @@ var StringList = function () {
 
 		this.clear();
 		if (iterable) {
-			map(iterable, function (_ref4) {
-				var _ref5 = _slicedToArray(_ref4, 2),
-				    key = _ref5[0],
-				    value = _ref5[1];
+			map(iterable, function (_ref5) {
+				var _ref6 = _slicedToArray(_ref5, 2),
+				    key = _ref6[0],
+				    value = _ref6[1];
 
 				_this4.append(key, value);
 			});
@@ -1651,9 +1741,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return find$2(this.data, function (_ref6) {
-				var _ref7 = _slicedToArray(_ref6, 1),
-				    itemName = _ref7[0];
+			return find$2(this.data, function (_ref7) {
+				var _ref8 = _slicedToArray(_ref7, 1),
+				    itemName = _ref8[0];
 
 				return itemName === name;
 			});
@@ -1681,9 +1771,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = filter(this.data, function (_ref8) {
-				var _ref9 = _slicedToArray(_ref8, 1),
-				    itemName = _ref9[0];
+			this.data = filter(this.data, function (_ref9) {
+				var _ref10 = _slicedToArray(_ref9, 1),
+				    itemName = _ref10[0];
 
 				return itemName !== name;
 			});
@@ -1691,9 +1781,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref10) {
-				var _ref11 = _slicedToArray(_ref10, 1),
-				    itemName = _ref11[0];
+			var found = find(this.data, function (_ref11) {
+				var _ref12 = _slicedToArray(_ref11, 1),
+				    itemName = _ref12[0];
 
 				return itemName === name;
 			});
@@ -1703,10 +1793,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			_forEach(this.data, function (_ref12) {
-				var _ref13 = _slicedToArray(_ref12, 2),
-				    itemName = _ref13[0],
-				    value = _ref13[1];
+			_forEach(this.data, function (_ref13) {
+				var _ref14 = _slicedToArray(_ref13, 2),
+				    itemName = _ref14[0],
+				    value = _ref14[1];
 
 				if (itemName === name) {
 					push(result, value);
@@ -1717,11 +1807,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref14) {
-				var _ref15 = _slicedToArray(_ref14, 2),
-				    name = _ref15[0],
-				    _ref15$ = _ref15[1],
-				    value = _ref15$ === undefined ? '' : _ref15$;
+			return map(this.data, function (_ref15) {
+				var _ref16 = _slicedToArray(_ref15, 2),
+				    name = _ref16[0],
+				    _ref16$ = _ref16[1],
+				    value = _ref16$ === undefined ? '' : _ref16$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -1881,8 +1971,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref16) {
-			var headers = _ref16.headers;
+		value: function inheritFrom(input, body, _ref17) {
+			var headers = _ref17.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -1972,7 +2062,7 @@ var Response$1 = function (_Body$2) {
 
 var Headers$2 = window.Headers;
 
-function parse$3(rawHeaders) {
+function parse$2(rawHeaders) {
 	var headers = new Headers$2();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
@@ -2000,7 +2090,7 @@ function fetch$1(input, init) {
 			var options = {
 				status: xhr.status,
 				statusText: xhr.statusText,
-				headers: parse$3(xhr.getAllResponseHeaders() || '')
+				headers: parse$2(xhr.getAllResponseHeaders() || '')
 			};
 			options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
 			var body = 'response' in xhr ? xhr.response : xhr.responseText;
@@ -2017,10 +2107,10 @@ function fetch$1(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		_forEach(request.headers, function (_ref17) {
-			var _ref18 = _slicedToArray(_ref17, 2),
-			    name = _ref18[0],
-			    value = _ref18[1];
+		_forEach(request.headers, function (_ref18) {
+			var _ref19 = _slicedToArray(_ref18, 2),
+			    name = _ref19[0],
+			    value = _ref19[1];
 
 			xhr.setRequestHeader(name, value);
 		});
@@ -2611,30 +2701,6 @@ describe('isUndefined', function () {
 	});
 });
 
-describe('JSON/parse', function () {
-
-	it('should parse JSON string', function () {
-		assert.deepEqual(parse('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
-	});
-});
-
-var stringify = JSON.stringify;
-
-describe('JSON/stringify', function () {
-
-	it('should convert a string', function () {
-		var value = 'abc';
-		var expected = '"abc"';
-		assert.equal(stringify(value), expected);
-	});
-
-	it('should convert a number', function () {
-		var value = 123;
-		var expected = '123';
-		assert.equal(stringify(value), expected);
-	});
-});
-
 var storage = void 0;
 try {
 	storage = localStorage;
@@ -2702,10 +2768,10 @@ var Map$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			_forEach(iterable, function (_ref19) {
-				var _ref20 = _slicedToArray(_ref19, 2),
-				    key = _ref20[0],
-				    value = _ref20[1];
+			_forEach(iterable, function (_ref20) {
+				var _ref21 = _slicedToArray(_ref20, 2),
+				    key = _ref21[0],
+				    value = _ref21[1];
 
 				_this10.set(key, value);
 			});
@@ -2720,9 +2786,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return find$2(this.data, function (_ref21) {
-				var _ref22 = _slicedToArray(_ref21, 1),
-				    itemKey = _ref22[0];
+			return find$2(this.data, function (_ref22) {
+				var _ref23 = _slicedToArray(_ref22, 1),
+				    itemKey = _ref23[0];
 
 				return itemKey === key;
 			});
@@ -2746,9 +2812,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref23) {
-				var _ref24 = _slicedToArray(_ref23, 1),
-				    itemKey = _ref24[0];
+			var found = find(this.data, function (_ref24) {
+				var _ref25 = _slicedToArray(_ref24, 1),
+				    itemKey = _ref25[0];
 
 				return itemKey === key;
 			});
@@ -2853,34 +2919,34 @@ function tests$6(Map, name) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee4() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee5() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee4$(_context4) {
+				return regeneratorRuntime.wrap(function _callee5$(_context5) {
 					while (1) {
-						switch (_context4.prev = _context4.next) {
+						switch (_context5.prev = _context5.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context4.next = 7;
+									_context5.next = 7;
 									break;
 								}
 
-								_context4.next = 4;
+								_context5.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context4.next = 1;
+								_context5.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context4.stop();
+								return _context5.stop();
 						}
 					}
-				}, _callee4, this);
+				}, _callee5, this);
 			}));
 			var map$$1 = new Map(iterable);
 			assert.deepEqual({
@@ -2903,9 +2969,9 @@ function clamp(x) {
 	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
 
 	if (H < L) {
-		var _ref25 = [H, L];
-		L = _ref25[0];
-		H = _ref25[1];
+		var _ref26 = [H, L];
+		L = _ref26[0];
+		H = _ref26[1];
 	}
 	if (x < L) {
 		x = L;
@@ -3164,12 +3230,12 @@ describe('Number/toOrdinalString', function () {
 
 	try {
 		for (var _iterator5 = tests[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-			var _ref26 = _step5.value;
+			var _ref27 = _step5.value;
 
-			var _ref27 = _slicedToArray(_ref26, 2);
+			var _ref28 = _slicedToArray(_ref27, 2);
 
-			var n = _ref27[0];
-			var expected = _ref27[1];
+			var n = _ref28[0];
+			var expected = _ref28[1];
 
 			_loop(n, expected);
 		}
@@ -3222,44 +3288,6 @@ describe('Object/assign', function () {
 		};
 		assert.equal(target, returnValue);
 		assert.deepEqual(returnValue, expected);
-	});
-});
-
-function clone(obj) {
-	return parse(stringify(obj));
-}
-
-describe('Object/clone', function () {
-
-	it('should clone an object', function () {
-		var data = { a: 1 };
-		var actual = clone(data);
-		var expected = { a: 1 };
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should remove functions', function () {
-		var data = {
-			a: noop,
-			b: 0,
-			c: noop
-		};
-		var actual = clone(data);
-		var expected = { b: 0 };
-		assert.deepEqual(actual, expected);
-	});
-
-	it('should isolate original', function () {
-		var data = {
-			a: noop,
-			b: {},
-			c: noop
-		};
-		var actual = clone(data);
-		actual.b.a = 0;
-		var expected = { b: { a: 0 } };
-		assert.deepEqual(actual, expected);
-		assert.deepEqual(data.b, {});
 	});
 });
 
@@ -3366,7 +3394,7 @@ describe('onError', function () {
 describe('FormData/parse', function () {
 
 	it('should parse string', function () {
-		var form = parse$1('a=b&c=d', {
+		var form = parse('a=b&c=d', {
 			data: {},
 			append: function append(key, value) {
 				this.data[key] = value;
@@ -3383,7 +3411,7 @@ describe('Headers/parse', function () {
 
 	it('should parse raw String', function () {
 		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
-		var headers = parse$3(src);
+		var headers = parse$2(src);
 		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
 	});
 });
@@ -3837,13 +3865,29 @@ tests$9(Request$1, 'J0Request');
 
 tests$9(Request, 'Request');
 
-var requestAnimationFrame = window.requestAnimationFrame;
-
 describe('requestAnimationFrame', function () {
 
-	it('', function () {
-		requestAnimationFrame();
-	});
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+		var timeStamp;
+		return regeneratorRuntime.wrap(function _callee6$(_context6) {
+			while (1) {
+				switch (_context6.prev = _context6.next) {
+					case 0:
+						_context6.next = 2;
+						return new Promise(requestAnimationFrame);
+
+					case 2:
+						timeStamp = _context6.sent;
+
+						assert(0 < timeStamp, true);
+
+					case 4:
+					case 'end':
+						return _context6.stop();
+				}
+			}
+		}, _callee6, this);
+	})));
 });
 
 function tests$11(Response, name) {
@@ -4451,11 +4495,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref28) {
-				var _ref29 = _slicedToArray(_ref28, 2),
-				    name = _ref29[0],
-				    _ref29$ = _ref29[1],
-				    value = _ref29$ === undefined ? '' : _ref29$;
+			return map(this.data, function (_ref30) {
+				var _ref31 = _slicedToArray(_ref30, 2),
+				    name = _ref31[0],
+				    _ref31$ = _ref31[1],
+				    value = _ref31$ === undefined ? '' : _ref31$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -4579,31 +4623,31 @@ tests$15(URLSearchParams$2, 'J0URLSearchParams');
 tests$15(URLSearchParams, 'URLSearchParams');
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee6$(_context6) {
+		return regeneratorRuntime.wrap(function _callee8$(_context8) {
 			while (1) {
-				switch (_context6.prev = _context6.next) {
+				switch (_context8.prev = _context8.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context6.next = 6;
+						_context8.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context6.sent;
+						actual = _context8.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context6.stop();
+						return _context8.stop();
 				}
 			}
-		}, _callee6, this);
+		}, _callee8, this);
 	})));
 });
 }())

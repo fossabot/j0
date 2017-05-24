@@ -80,12 +80,6 @@
 		<loc>https://kei-ito.github.io/j0/Headers/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/JSON/parse/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/JSON/stringify/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/JSON/</loc>
 	</url>
 	<url>
@@ -129,9 +123,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Object/assign/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Object/clone/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Object/forEachKey/</loc>
@@ -210,6 +201,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/cancelAnimationFrame/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/cloneObject/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/debounce/</loc>

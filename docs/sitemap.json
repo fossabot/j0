@@ -30,10 +30,7 @@
 	"Headers": {
 		"j0": {}
 	},
-	"JSON": {
-		"parse": {},
-		"stringify": {}
-	},
+	"JSON": {},
 	"Map": {
 		"@iterator": {},
 		"j0": {}
@@ -54,7 +51,6 @@
 	},
 	"Object": {
 		"assign": {},
-		"clone": {},
 		"forEachKey": {},
 		"keys": {},
 		"toString": {}
@@ -88,6 +84,7 @@
 	},
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
+	"cloneObject": {},
 	"debounce": {},
 	"dom": {},
 	"fetch": {

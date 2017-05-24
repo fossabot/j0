@@ -7,9 +7,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
@@ -1070,93 +1070,13 @@ if (!window$1.Headers) {
 	window$1.Headers = Headers;
 }
 
-function isString(x) {
-	return typeof x === 'string';
-}
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
-
-var Uint8Array = window.Uint8Array;
-
-var Uint8ClampedArray = window.Uint8ClampedArray;
-
-var Uint16Array = window.Uint16Array;
-
-var Uint32Array = window.Uint32Array;
-
-var Int8Array = window.Int8Array;
-
-var Int16Array = window.Int16Array;
-
-var Int32Array = window.Int32Array;
-
-var Float32Array = window.Float32Array;
-
-var Float64Array = window.Float64Array;
-
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
-function isArrayBufferView(obj) {
-	return 0 <= find$2(viewClasses, function (constructor) {
-		return isInstanceOf(obj, constructor);
-	});
-}
-
-var parseAsJSON = JSON.parse;
-
-var fromCharCode = String.fromCharCode;
-
-
-var baseMask = 0x3f;
-var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
-var availableBits = 6;
-
-function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
-	var chars = [];
-	for (var i = 0; i < view.length; i++) {
-		var byte = view[i];
-		var length = void 0;
-		if (byte < 0x80) {
-			length = 1;
-		} else if (byte < 0xe0) {
-			length = 2;
-		} else if (byte < 0xf0) {
-			length = 3;
-		} else if (byte < 0xf8) {
-			length = 4;
-		} else if (byte < 0xfc) {
-			length = 5;
-		} else {
-			length = 6;
-		}
-		var lastMask = lastMasks[length];
-		var charCode = 0;
-		var j = 0;
-		var offset = length;
-		while (0 < offset--) {
-			var mask = offset === 0 ? lastMask : baseMask;
-			/* eslint-disable no-bitwise */
-			charCode |= (view[i + offset] & mask) << availableBits * j++;
-			/* eslint-disable no-bitwise */
-		}
-		chars.push(charCode);
-		i += length - 1;
-	}
-	var strings = [];
-	var chunkLength = 4096;
-	while (0 < chars.length) {
-		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
-	}
-	return strings.join('');
-}
-
 var Blob = window.Blob;
 
 var ArrayBuffer = window.ArrayBuffer;
 
 var DataView = window.DataView;
+
+var Uint8Array = window.Uint8Array;
 
 var Promise$1 = window.Promise;
 
@@ -1214,6 +1134,84 @@ function parse(body) {
 		}
 	});
 	return form;
+}
+
+function isString(x) {
+	return typeof x === 'string';
+}
+
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+var Uint8ClampedArray = window.Uint8ClampedArray;
+
+var Uint16Array = window.Uint16Array;
+
+var Uint32Array = window.Uint32Array;
+
+var Int8Array = window.Int8Array;
+
+var Int16Array = window.Int16Array;
+
+var Int32Array = window.Int32Array;
+
+var Float32Array = window.Float32Array;
+
+var Float64Array = window.Float64Array;
+
+var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+function isArrayBufferView(obj) {
+	return 0 <= find$2(viewClasses, function (constructor) {
+		return isInstanceOf(obj, constructor);
+	});
+}
+
+var fromCharCode = String.fromCharCode;
+
+
+var baseMask = 0x3f;
+var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
+var availableBits = 6;
+
+function arrayBufferToString(arrayBuffer) {
+	var view = new Uint8Array(arrayBuffer);
+	var chars = [];
+	for (var i = 0; i < view.length; i++) {
+		var byte = view[i];
+		var length = void 0;
+		if (byte < 0x80) {
+			length = 1;
+		} else if (byte < 0xe0) {
+			length = 2;
+		} else if (byte < 0xf0) {
+			length = 3;
+		} else if (byte < 0xf8) {
+			length = 4;
+		} else if (byte < 0xfc) {
+			length = 5;
+		} else {
+			length = 6;
+		}
+		var lastMask = lastMasks[length];
+		var charCode = 0;
+		var j = 0;
+		var offset = length;
+		while (0 < offset--) {
+			var mask = offset === 0 ? lastMask : baseMask;
+			/* eslint-disable no-bitwise */
+			charCode |= (view[i + offset] & mask) << availableBits * j++;
+			/* eslint-disable no-bitwise */
+		}
+		chars.push(charCode);
+		i += length - 1;
+	}
+	var strings = [];
+	var chunkLength = 4096;
+	while (0 < chars.length) {
+		strings.push(fromCharCode.apply(undefined, _toConsumableArray(chars.splice(0, chunkLength))));
+	}
+	return strings.join('');
 }
 
 function cloneBuffer(buf) {
@@ -1317,7 +1315,7 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(parseAsJSON);
+			return this.text().then(JSON.parse);
 		}
 	}, {
 		key: 'isUsed',

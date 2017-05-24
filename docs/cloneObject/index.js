@@ -1,16 +1,12 @@
 (function(){
 'use strict';
 
-var parse = JSON.parse;
-
-var stringify = JSON.stringify;
-
 function clone(obj) {
-	return parse(stringify(obj));
+	return JSON.parse(JSON.stringify(obj));
 }
 
-function noop(x) {
-	return x;
+function noop() {
+	return 0;
 }
 
 describe('Object/clone', function () {
