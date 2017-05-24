@@ -146,35 +146,33 @@ var _window3 = window,
 var _window4 = window,
     DataView = _window4.DataView;
 var _window5 = window,
-    document = _window5.document;
+    decodeURIComponent = _window5.decodeURIComponent;
 var _window6 = window,
-    decodeURIComponent = _window6.decodeURIComponent;
+    TypeError$1 = _window6.TypeError;
 var _window7 = window,
-    TypeError$1 = _window7.TypeError;
+    Uint8Array = _window7.Uint8Array;
 var _window8 = window,
-    Uint8Array = _window8.Uint8Array;
+    Uint8ClampedArray = _window8.Uint8ClampedArray;
 var _window9 = window,
-    Uint8ClampedArray = _window9.Uint8ClampedArray;
+    Uint16Array = _window9.Uint16Array;
 var _window10 = window,
-    Uint16Array = _window10.Uint16Array;
+    Uint32Array = _window10.Uint32Array;
 var _window11 = window,
-    Uint32Array = _window11.Uint32Array;
+    Int8Array = _window11.Int8Array;
 var _window12 = window,
-    Int8Array = _window12.Int8Array;
+    Int16Array = _window12.Int16Array;
 var _window13 = window,
-    Int16Array = _window13.Int16Array;
+    Int32Array = _window13.Int32Array;
 var _window14 = window,
-    Int32Array = _window14.Int32Array;
+    Float32Array = _window14.Float32Array;
 var _window15 = window,
-    Float32Array = _window15.Float32Array;
+    Float64Array = _window15.Float64Array;
 var _window16 = window,
-    Float64Array = _window16.Float64Array;
+    XMLHttpRequest = _window16.XMLHttpRequest;
 var _window17 = window,
-    XMLHttpRequest = _window17.XMLHttpRequest;
+    Promise$1 = _window17.Promise;
 var _window18 = window,
-    Promise$1 = _window18.Promise;
-var _window19 = window,
-    Blob = _window19.Blob;
+    Blob = _window18.Blob;
 
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
@@ -814,20 +812,6 @@ function fetch$1(input, init) {
 	});
 }
 
-function querySelectorAll(selectors) {
-	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-	return element.querySelector(selectors);
-}
-
-function getElementById(id, element) {
-	return querySelectorAll('[id=\'' + id + '\']', element);
-}
-
-function getTextContent(node) {
-	return node ? node.textContent : '';
-}
-
 function tests(fetch, name) {
 
 	describe(name, function () {
@@ -841,7 +825,7 @@ function tests(fetch, name) {
 		});
 
 		it('should get json', function () {
-			return fetch(getTextContent(getElementById('root')) + '/fetch/test.json').then(function (response) {
+			return fetch(document.getElementById('root').textContent + '/fetch/test.json').then(function (response) {
 				return response.json();
 			}).then(function (data) {
 				assert.deepEqual(data, { a: 'b' });

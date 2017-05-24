@@ -137,15 +137,6 @@
 		<loc>https://kei-ito.github.io/j0/NamedNodeMap/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Node/nextSibling/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Node/previousSibling/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Node/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/NodeList/@iterator/</loc>
 	</url>
 	<url>
@@ -251,112 +242,7 @@
 		<loc>https://kei-ito.github.io/j0/debounce/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/dom/addClass/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/addEventListener/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/appendChild/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/childNodes/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/children/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/cloneNode/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/createElement/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/empty/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/firstChild/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getAttribute/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getBoundingClientRect/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getElementById/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getElementsByClassName/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getEventListeners/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/getTextContent/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/hasClass/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/hasEventListener/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/insertAfter/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/insertBefore/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/nextSibling/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/parentNode/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/prependChild/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/previousSibling/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/querySelector/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/querySelectorAll/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/removeAttribute/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/removeChild/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/removeClass/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/removeEventListener/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/setAttribute/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/setStyle/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/setTextContent/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/tagName/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/dom/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/toggleClass/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/dom/trigger/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/fetch/j0/</loc>

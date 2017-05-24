@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x29, _x30) {
+	return function wait(_x28, _x29) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -98,43 +98,45 @@ var _window4 = window,
 var _window5 = window,
     DataView = _window5.DataView;
 var _window6 = window,
-    document = _window6.document;
+    document$1 = _window6.document;
 var _window7 = window,
     setTimeout$1 = _window7.setTimeout;
 var _window8 = window,
-    decodeURIComponent = _window8.decodeURIComponent;
+    Node = _window8.Node;
 var _window9 = window,
-    TypeError$1 = _window9.TypeError;
+    decodeURIComponent = _window9.decodeURIComponent;
 var _window10 = window,
-    Uint8Array = _window10.Uint8Array;
+    TypeError$1 = _window10.TypeError;
 var _window11 = window,
-    Uint8ClampedArray = _window11.Uint8ClampedArray;
+    Uint8Array = _window11.Uint8Array;
 var _window12 = window,
-    Uint16Array = _window12.Uint16Array;
+    Uint8ClampedArray = _window12.Uint8ClampedArray;
 var _window13 = window,
-    Uint32Array = _window13.Uint32Array;
+    Uint16Array = _window13.Uint16Array;
 var _window14 = window,
-    Int8Array = _window14.Int8Array;
+    Uint32Array = _window14.Uint32Array;
 var _window15 = window,
-    Int16Array = _window15.Int16Array;
+    Int8Array = _window15.Int8Array;
 var _window16 = window,
-    Int32Array = _window16.Int32Array;
+    Int16Array = _window16.Int16Array;
 var _window17 = window,
-    Float32Array = _window17.Float32Array;
+    Int32Array = _window17.Int32Array;
 var _window18 = window,
-    Float64Array = _window18.Float64Array;
+    Float32Array = _window18.Float32Array;
 var _window19 = window,
-    XMLHttpRequest = _window19.XMLHttpRequest;
+    Float64Array = _window19.Float64Array;
 var _window20 = window,
-    Promise$1 = _window20.Promise;
+    XMLHttpRequest = _window20.XMLHttpRequest;
 var _window21 = window,
-    Blob = _window21.Blob;
+    Promise$1 = _window21.Promise;
 var _window22 = window,
-    Boolean = _window22.Boolean;
+    Blob = _window22.Blob;
 var _window23 = window,
-    requestAnimationFrame = _window23.requestAnimationFrame;
+    Boolean = _window23.Boolean;
 var _window24 = window,
-    cancelAnimationFrame = _window24.cancelAnimationFrame;
+    requestAnimationFrame = _window24.requestAnimationFrame;
+var _window25 = window,
+    cancelAnimationFrame = _window25.cancelAnimationFrame;
 
 
 function noop(x) {
@@ -1365,7 +1367,7 @@ describe('debounce', function () {
 });
 
 function isNode(x) {
-	return x instanceof Node;
+	return isInstanceOf(x, Node);
 }
 
 var nodeKey = Symbol('node');
@@ -1382,7 +1384,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document.createTextNode(source);
+			this[nodeKey] = document$1.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -1395,7 +1397,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(document$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -1424,6 +1426,21 @@ var J0Element = function () {
 		value: function append(element) {
 			this.node.appendChild(wrap(element).node);
 			return this;
+		}
+	}, {
+		key: 'insertBefore',
+		value: function insertBefore(newElement, referenceElement) {
+			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
+		}
+	}, {
+		key: 'before',
+		value: function before(element) {
+			this.parent.insertBefore(element, this);
+		}
+	}, {
+		key: 'after',
+		value: function after(element) {
+			this.parent.insertBefore(element, this.next);
 		}
 	}, {
 		key: 'remove',
@@ -1490,6 +1507,16 @@ var J0Element = function () {
 			}
 		}
 	}, {
+		key: 'find',
+		value: function find(selector) {
+			return find$3(selector, this);
+		}
+	}, {
+		key: 'findAll',
+		value: function findAll(selector) {
+			return _findAll(selector, this);
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -1513,6 +1540,20 @@ var J0Element = function () {
 		},
 		set: function set(source) {
 			wrap(source).append(this);
+		}
+	}, {
+		key: 'previous',
+		get: function get() {
+			var previousSibling = this.node.previousSibling;
+
+			return previousSibling && wrap(previousSibling);
+		}
+	}, {
+		key: 'next',
+		get: function get() {
+			var nextSibling = this.node.nextSibling;
+
+			return nextSibling && wrap(nextSibling);
 		}
 	}, {
 		key: 'childNodes',
@@ -1542,6 +1583,22 @@ var J0Element = function () {
 function wrap(source) {
 	return new J0Element(source);
 }
+
+function find$3(selector) {
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+
+	var element = rootElement.querySelector(selector);
+	return element && wrap(element);
+}
+
+function _findAll(selector) {
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+
+	return map(rootElement.querySelectorAll(selector), wrap);
+}
+
+wrap.find = find$3;
+wrap.findAll = _findAll;
 
 // import '../*/test';
 describe('$', function () {
@@ -1971,20 +2028,6 @@ function fetch$1(input, init) {
 	});
 }
 
-function querySelectorAll(selectors) {
-	var element = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
-
-	return element.querySelector(selectors);
-}
-
-function getElementById(id, element) {
-	return querySelectorAll('[id=\'' + id + '\']', element);
-}
-
-function getTextContent(node) {
-	return node ? node.textContent : '';
-}
-
 function tests$2(fetch, name) {
 
 	describe(name, function () {
@@ -1998,7 +2041,7 @@ function tests$2(fetch, name) {
 		});
 
 		it('should get json', function () {
-			return fetch(getTextContent(getElementById('root')) + '/fetch/test.json').then(function (response) {
+			return fetch(document.getElementById('root').textContent + '/fetch/test.json').then(function (response) {
 				return response.json();
 			}).then(function (data) {
 				assert.deepEqual(data, { a: 'b' });
@@ -2049,7 +2092,7 @@ var INTERVAL = 100;
 
 var getBody = new Promise$1(function (resolve) {
 	function get() {
-		var body = document.body;
+		var body = document$1.body;
 
 		if (body) {
 			resolve(body);
@@ -2208,88 +2251,37 @@ function generator$2() {
 	};
 }
 
-function setAttribute(element, attrName) {
-	for (var _len6 = arguments.length, value = Array(_len6 > 2 ? _len6 - 2 : 0), _key8 = 2; _key8 < _len6; _key8++) {
-		value[_key8 - 2] = arguments[_key8];
-	}
-
-	element.setAttribute(attrName, value.join(' '));
-}
-
-function appendChild(parentNode, newNode) {
-	parentNode.appendChild(newNode);
-}
-
-var key = Symbol('events');
-
-function getEventListeners(element) {
-	var eventName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-	var allEvents = element[key];
-	var events = void 0;
-	if (!allEvents) {
-		allEvents = new Map();
-		element[key] = allEvents;
-	}
-	if (eventName) {
-		events = allEvents.get(eventName);
-		if (!events) {
-			events = new Set();
-			allEvents.set(eventName, events);
-		}
-		return events;
-	}
-	return allEvents;
-}
-
-function addEventListener(element, eventName, fn) {
-	element.addEventListener(eventName, fn);
-	getEventListeners(element, eventName).add(fn);
-}
-
-function processTace() {
-	var tace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	var _tace$t = tace.t,
-	    t = _tace$t === undefined ? 'div' : _tace$t,
-	    _tace$a = tace.a,
-	    a = _tace$a === undefined ? [] : _tace$a,
-	    _tace$c = tace.c,
-	    c = _tace$c === undefined ? [] : _tace$c,
-	    _tace$e = tace.e,
-	    e = _tace$e === undefined ? [] : _tace$e;
-
-	var element = document.createElement(t);
-	_forEach(filter(a), function (args) {
-		setAttribute.apply(undefined, [element].concat(_toConsumableArray(args)));
-	});
-	_forEach(filter(c), function (data) {
-		appendChild(element, createElement(data));
-	});
-	_forEach(filter(e), function (args) {
-		addEventListener.apply(undefined, [element].concat(_toConsumableArray(args)));
-	});
-	return element;
-}
-
-function createElement(data) {
-	if (isNode(data)) {
-		return data;
-	} else if (isString(data)) {
-		return document.createTextNode(data);
-	}
-	return processTace(data);
-}
-
-function childNodes(node) {
-	return node.childNodes;
-}
-
 describe('HTMLCollection/@iterator', function () {
 
 	it('should create an iterator', function () {
-		var expected = [createElement(), createElement()];
-		var parent = createElement({ c: expected });
-		var iterator = generator$2.call(childNodes(parent));
+		var parent = document.createElement('div');
+		var expected = [document.createElement('div'), document.createElement('div')];
+		var _iteratorNormalCompletion2 = true;
+		var _didIteratorError2 = false;
+		var _iteratorError2 = undefined;
+
+		try {
+			for (var _iterator2 = expected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var element = _step2.value;
+
+				parent.appendChild(element);
+			}
+		} catch (err) {
+			_didIteratorError2 = true;
+			_iteratorError2 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion2 && _iterator2.return) {
+					_iterator2.return();
+				}
+			} finally {
+				if (_didIteratorError2) {
+					throw _iteratorError2;
+				}
+			}
+		}
+
+		var iterator = generator$2.call(parent.childNodes);
 		var results = [];
 		var index = 0;
 		while (1) {
@@ -2652,18 +2644,18 @@ if (storage) {
 }
 var localStorage$1 = storage;
 
-var key$1 = Date.now();
+var key = Date.now();
 
 describe('localStorage', function () {
 
 	it('should be writable/readable', function () {
-		localStorage$1[key$1] = key$1;
-		assert.equal(localStorage$1[key$1], key$1);
+		localStorage$1[key] = key;
+		assert.equal(localStorage$1[key], key);
 	});
 
 	it('should remove data', function () {
-		localStorage$1.removeItem(key$1);
-		assert.equal(localStorage$1[key$1], {}[key$1]);
+		localStorage$1.removeItem(key);
+		assert.equal(localStorage$1[key], {}[key]);
 	});
 });
 
@@ -2986,9 +2978,34 @@ function generator$6() {
 describe('NamedNodeMap/@iterator', function () {
 
 	it('should create an iterator', function () {
-		var expected = [createElement(), createElement()];
-		var parent = createElement({ c: expected });
-		var iterator = generator$6.call(childNodes(parent));
+		var parent = document.createElement('div');
+		var expected = [document.createElement('div'), document.createElement('div')];
+		var _iteratorNormalCompletion3 = true;
+		var _didIteratorError3 = false;
+		var _iteratorError3 = undefined;
+
+		try {
+			for (var _iterator3 = expected[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+				var element = _step3.value;
+
+				parent.appendChild(element);
+			}
+		} catch (err) {
+			_didIteratorError3 = true;
+			_iteratorError3 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion3 && _iterator3.return) {
+					_iterator3.return();
+				}
+			} finally {
+				if (_didIteratorError3) {
+					throw _iteratorError3;
+				}
+			}
+		}
+
+		var iterator = generator$6.call(parent.childNodes);
 		var results = [];
 		var index = 0;
 		while (1) {
@@ -3002,46 +3019,6 @@ describe('NamedNodeMap/@iterator', function () {
 			results[index++] = value;
 		}
 		assert.deepEqual(results, expected);
-	});
-});
-
-function nextSibling(node) {
-	return node.nextSibling;
-}
-
-describe('Node/nextSibling', function () {
-
-	it('should return the next node', function () {
-		var n1 = createElement({});
-		var n2 = createElement('');
-		createElement({ c: [n1, n2] });
-		assert.equal(nextSibling(n1), n2);
-	});
-
-	it('should return null if there is nothing', function () {
-		var n1 = createElement({});
-		createElement({ c: [n1] });
-		assert.equal(nextSibling(n1), null);
-	});
-});
-
-function previousSibling(node) {
-	return node.previousSibling;
-}
-
-describe('Node/previousSibling', function () {
-
-	it('should return the previous node', function () {
-		var n1 = createElement({});
-		var n2 = createElement('');
-		createElement({ c: [n1, n2] });
-		assert.equal(previousSibling(n2), n1);
-	});
-
-	it('should return null if there is nothing', function () {
-		var n1 = createElement({});
-		createElement({ c: [n1] });
-		assert.equal(previousSibling(n1), null);
 	});
 });
 
@@ -3064,9 +3041,34 @@ function generator$8() {
 describe('NodeList/@iterator', function () {
 
 	it('should create an iterator', function () {
-		var expected = [createElement(), createElement()];
-		var parent = createElement({ c: expected });
-		var iterator = generator$8.call(childNodes(parent));
+		var parent = document.createElement('div');
+		var expected = [document.createElement('div'), document.createElement('div')];
+		var _iteratorNormalCompletion4 = true;
+		var _didIteratorError4 = false;
+		var _iteratorError4 = undefined;
+
+		try {
+			for (var _iterator4 = expected[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+				var element = _step4.value;
+
+				parent.appendChild(element);
+			}
+		} catch (err) {
+			_didIteratorError4 = true;
+			_iteratorError4 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion4 && _iterator4.return) {
+					_iterator4.return();
+				}
+			} finally {
+				if (_didIteratorError4) {
+					throw _iteratorError4;
+				}
+			}
+		}
+
+		var iterator = generator$8.call(parent.childNodes);
 		var results = [];
 		var index = 0;
 		while (1) {
@@ -3143,13 +3145,13 @@ describe('Number/toOrdinalString', function () {
 		});
 	};
 
-	var _iteratorNormalCompletion2 = true;
-	var _didIteratorError2 = false;
-	var _iteratorError2 = undefined;
+	var _iteratorNormalCompletion5 = true;
+	var _didIteratorError5 = false;
+	var _iteratorError5 = undefined;
 
 	try {
-		for (var _iterator2 = tests[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-			var _ref23 = _step2.value;
+		for (var _iterator5 = tests[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+			var _ref23 = _step5.value;
 
 			var _ref24 = _slicedToArray(_ref23, 2);
 
@@ -3159,24 +3161,24 @@ describe('Number/toOrdinalString', function () {
 			_loop(n, expected);
 		}
 	} catch (err) {
-		_didIteratorError2 = true;
-		_iteratorError2 = err;
+		_didIteratorError5 = true;
+		_iteratorError5 = err;
 	} finally {
 		try {
-			if (!_iteratorNormalCompletion2 && _iterator2.return) {
-				_iterator2.return();
+			if (!_iteratorNormalCompletion5 && _iterator5.return) {
+				_iterator5.return();
 			}
 		} finally {
-			if (_didIteratorError2) {
-				throw _iteratorError2;
+			if (_didIteratorError5) {
+				throw _iteratorError5;
 			}
 		}
 	}
 });
 
 function assign(target) {
-	for (var _len7 = arguments.length, sources = Array(_len7 > 1 ? _len7 - 1 : 0), _key9 = 1; _key9 < _len7; _key9++) {
-		sources[_key9 - 1] = arguments[_key9];
+	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
+		sources[_key8 - 1] = arguments[_key8];
 	}
 
 	_forEach(sources, function (source) {
@@ -3257,8 +3259,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len7 = arguments.length, args = Array(_len7), _key9 = 0; _key9 < _len7; _key9++) {
+				args[_key9] = arguments[_key9];
 			}
 
 			push(results, args);
@@ -3273,8 +3275,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
-				args[_key11] = arguments[_key11];
+			for (var _len8 = arguments.length, args = Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
+				args[_key10] = arguments[_key10];
 			}
 
 			push(results, args);
@@ -3287,8 +3289,8 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
-				args[_key12] = arguments[_key12];
+			for (var _len9 = arguments.length, args = Array(_len9), _key11 = 0; _key11 < _len9; _key11++) {
+				args[_key11] = arguments[_key11];
 			}
 
 			push(results, args);
@@ -4042,8 +4044,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
-					args[_key13] = arguments[_key13];
+				for (var _len10 = arguments.length, args = Array(_len10), _key12 = 0; _key12 < _len10; _key12++) {
+					args[_key12] = arguments[_key12];
 				}
 
 				args[3] = this;
@@ -4356,8 +4358,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len12 = arguments.length, args = Array(_len12), _key14 = 0; _key14 < _len12; _key14++) {
-			args[_key14] = arguments[_key14];
+		for (var _len11 = arguments.length, args = Array(_len11), _key13 = 0; _key13 < _len11; _key13++) {
+			args[_key13] = arguments[_key13];
 		}
 
 		lastArgs = args;

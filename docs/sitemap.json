@@ -55,10 +55,6 @@
 	"NamedNodeMap": {
 		"@iterator": {}
 	},
-	"Node": {
-		"nextSibling": {},
-		"previousSibling": {}
-	},
 	"NodeList": {
 		"@iterator": {}
 	},
@@ -104,43 +100,7 @@
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
 	"debounce": {},
-	"dom": {
-		"addClass": {},
-		"addEventListener": {},
-		"appendChild": {},
-		"childNodes": {},
-		"children": {},
-		"cloneNode": {},
-		"createElement": {},
-		"empty": {},
-		"firstChild": {},
-		"getAttribute": {},
-		"getBoundingClientRect": {},
-		"getElementById": {},
-		"getElementsByClassName": {},
-		"getEventListeners": {},
-		"getTextContent": {},
-		"hasClass": {},
-		"hasEventListener": {},
-		"insertAfter": {},
-		"insertBefore": {},
-		"nextSibling": {},
-		"parentNode": {},
-		"prependChild": {},
-		"previousSibling": {},
-		"querySelector": {},
-		"querySelectorAll": {},
-		"removeAttribute": {},
-		"removeChild": {},
-		"removeClass": {},
-		"removeEventListener": {},
-		"setAttribute": {},
-		"setStyle": {},
-		"setTextContent": {},
-		"tagName": {},
-		"toggleClass": {},
-		"trigger": {}
-	},
+	"dom": {},
 	"fetch": {
 		"j0": {}
 	},
