@@ -112,7 +112,6 @@
 	"onError": {},
 	"parseFormData": {},
 	"parseHeaders": {},
-	"polyfill": {},
 	"preventDefault": {},
 	"readBlob": {},
 	"requestAnimationFrame": {},

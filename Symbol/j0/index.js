@@ -1,4 +1,3 @@
-import forEach from '../../Array/forEach';
 import {
 	isString,
 	Date,
@@ -52,21 +51,22 @@ class SymbolRegistry {
 		function define(key, value) {
 			Object.defineProperty(fn, key, {value: value});
 		}
-		forEach([
-			'iterator',
-			'match',
-			'replace',
-			'search',
-			'split',
-			'hasInstance',
-			'isConcatSpreadable',
-			'unscopables',
-			'species',
-			'toPrimitive',
-			'toStringTag'
-		], (key) => {
+		function defineReserved(key) {
 			define(key, fn(key));
-		});
+		}
+		// Don't use [].forEach().
+		// It may be undefined here.
+		defineReserved('iterator');
+		defineReserved('match');
+		defineReserved('replace');
+		defineReserved('search');
+		defineReserved('split');
+		defineReserved('hasInstance');
+		defineReserved('isConcatSpreadable');
+		defineReserved('unscopables');
+		defineReserved('species');
+		defineReserved('toPrimitive');
+		defineReserved('toStringTag');
 		define('for', (key) => {
 			return this.for(key);
 		});

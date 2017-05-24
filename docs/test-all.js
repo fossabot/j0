@@ -1020,8 +1020,6 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var console$1 = window.console;
-
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
@@ -1075,44 +1073,29 @@ describe('ArrayBuffer/toString', function () {
 	})));
 
 	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-		var src, arrayBuffer, results, remains, start, average;
+		var src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee3$(_context3) {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
-						this.timeout(5000);
-						_context3.next = 3;
+						_context3.next = 2;
 						return fetch('wagahaiha-nekodearu.txt');
 
-					case 3:
-						_context3.next = 5;
+					case 2:
+						_context3.next = 4;
 						return _context3.sent.text();
 
-					case 5:
+					case 4:
 						src = _context3.sent;
-						_context3.next = 8;
+						_context3.next = 7;
 						return createArrayBuffer(src);
 
-					case 8:
+					case 7:
 						arrayBuffer = _context3.sent;
 
 						assert.equal(arrayBufferToString(arrayBuffer), src);
-						results = [];
-						remains = 10;
 
-						while (0 < remains--) {
-							start = Date.now();
-
-							arrayBufferToString(arrayBuffer);
-							results.push(Date.now() - start);
-						}
-						average = results.reduce(function (sum, value) {
-							return sum + value;
-						}, 0) / results.length;
-
-						console$1.log('Average: ' + average + 'ms\n', results);
-
-					case 15:
+					case 9:
 					case 'end':
 						return _context3.stop();
 				}
@@ -3406,13 +3389,6 @@ describe('Headers/parse', function () {
 		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
 		var headers = parse$3(src);
 		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
-	});
-});
-
-describe('polyfill', function () {
-
-	it('should add global', function () {
-		assert.equal(window$1.global, window$1);
 	});
 });
 

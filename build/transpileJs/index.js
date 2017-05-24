@@ -15,7 +15,7 @@ const {
 	serverMode
 } = require('../constants');
 
-function minify() {
+function transpile() {
 	return {
 		transformBundle: function (code) {
 			const {code: babeledCode} = babel.transform(code, {presets: ['env']});
@@ -34,10 +34,10 @@ async function transpileJS(scriptPath, destPath) {
 			globImport(),
 			nodeResolve(),
 			commonjs(),
-			minify()
+			transpile()
 		]
 	};
-	if (serverMode) {
+	if (destPath && serverMode) {
 		options.dest = destPath;
 		options.format = format;
 		const watcher = rollupWatch(rollup, options);
@@ -61,7 +61,7 @@ async function transpileJS(scriptPath, destPath) {
 	try {
 		const bundle = await rollup.rollup(options);
 		const {code} = bundle.generate({format: format});
-		return writeFile(destPath, code);
+		return destPath ? writeFile(destPath, code) : code;
 	} catch (error) {
 		console.error(`Failed to transpile ${scriptPath}`);
 		throw error;

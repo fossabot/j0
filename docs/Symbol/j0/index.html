@@ -9,8 +9,7 @@
 <h1 id="title"><a href="../../">j0</a>/<a href="../">Symbol</a>/j0<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEach</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/forEach"><span class="string"><span class="string">'../../Array/forEach'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="name">isString</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Date</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">TypeError</span><span class="_2c">,</span>
@@ -63,21 +62,22 @@
 <span class="linenum"></span>&#9;&#9;<span class="function">function</span>&#32;<span class="name">define</span><span class="_28">(</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">Object</span><span class="_2e">.</span><span class="name">defineProperty</span><span class="_28">(</span><span class="name">fn</span><span class="_2c">,</span>&#32;<span class="name">key</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_3a">:</span>&#32;<span class="name">value</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">forEach</span><span class="_28">(</span><span class="_5b">[</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'iterator'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'match'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'replace'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'search'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'split'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'hasInstance'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'isConcatSpreadable'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'unscopables'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'species'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'toPrimitive'</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="string">'toStringTag'</span>
-<span class="linenum"></span>&#9;&#9;<span class="_5d">]</span><span class="_2c">,</span>&#32;<span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="function">function</span>&#32;<span class="name">defineReserved</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">define</span><span class="_28">(</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="name">fn</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;<span class="comment">//&#32;Don't&#32;use&#32;[].forEach().</span>
+<span class="linenum"></span>&#9;&#9;<span class="comment">//&#32;It&#32;may&#32;be&#32;undefined&#32;here.</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'iterator'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'match'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'replace'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'search'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'split'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'hasInstance'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'isConcatSpreadable'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'unscopables'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'species'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'toPrimitive'</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">defineReserved</span><span class="_28">(</span><span class="string">'toStringTag'</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">define</span><span class="_28">(</span><span class="string">'for'</span><span class="_2c">,</span>&#32;<span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="for">for</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
@@ -110,7 +110,9 @@
 	<p>j0 is free and open source software released under MIT license. The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>. If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.</p>
 </footer>
 <a class="TestResult" href="#mocha"></a>
-<script src="../../polyfill.js"></script>
+<script src="../../polyfill-symbol.js"></script>
+<script src="../../polyfill-others.js"></script>
+<script src="../../polyfill-regenerator-runtime.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
 <script src="../../page.js"></script>
