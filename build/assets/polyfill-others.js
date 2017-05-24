@@ -3,6 +3,7 @@ import '../../String/polyfill';
 import '../../Promise/polyfill';
 import '../../Map/polyfill';
 import '../../Set/polyfill';
+import '../../Number/polyfill';
 import '../../NodeList/polyfill';
 import '../../HTMLCollection/polyfill';
 import '../../NamedNodeMap/polyfill';

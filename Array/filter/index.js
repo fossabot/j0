@@ -1,4 +1,4 @@
-import noop from '../../noop';
+import {noop} from 'j0';
 import forEach from '../forEach';
 import push from '../push';
 
