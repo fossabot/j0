@@ -361,7 +361,9 @@ var Body$1 = function () {
 	return Body$1;
 }();
 
-function tests(Body, name) {
+function tests(Body) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Body';
+
 
 	describe(name, function () {
 
@@ -375,5 +377,6 @@ function tests(Body, name) {
 
 tests(Body$1, 'J0Body');
 
-tests(Body, 'Body');
+/* global Body */
+tests(Body);
 }())

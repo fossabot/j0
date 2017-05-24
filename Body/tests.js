@@ -1,4 +1,4 @@
-function tests(Body, name) {
+function tests(Body, name = 'Body') {
 
 	describe(name, function () {
 
