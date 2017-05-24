@@ -946,20 +946,6 @@ var baseMask = 0x3f;
 var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
-/* eslint-disable no-bitwise */
-function consume(view, index, length) {
-	var lastMask = lastMasks[length];
-	var charCode = 0;
-	var i = 0;
-	while (0 < length--) {
-		var mask = length === 0 ? lastMask : baseMask;
-		var shiftSize = availableBits * i++;
-		charCode |= (view[index + length] & mask) << shiftSize;
-	}
-	return charCode;
-}
-/* eslint-enable no-bitwise */
-
 function arrayBufferToString(arrayBuffer) {
 	var view = new Uint8Array$1(arrayBuffer);
 	var chars = [];
@@ -979,7 +965,17 @@ function arrayBufferToString(arrayBuffer) {
 		} else {
 			length = 6;
 		}
-		chars.push(consume(view, i, length));
+		var lastMask = lastMasks[length];
+		var charCode = 0;
+		var j = 0;
+		var offset = length;
+		while (0 < offset--) {
+			var mask = offset === 0 ? lastMask : baseMask;
+			/* eslint-disable no-bitwise */
+			charCode |= (view[i + offset] & mask) << availableBits * j++;
+			/* eslint-disable no-bitwise */
+		}
+		chars.push(charCode);
 		i += length - 1;
 	}
 	var strings = [];
