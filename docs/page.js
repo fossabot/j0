@@ -91,6 +91,8 @@ var _window6 = window,
     Node = _window6.Node;
 var _window7 = window,
     Promise = _window7.Promise;
+var _window8 = window,
+    fetch = _window8.fetch;
 
 
 var INTERVAL = 100;

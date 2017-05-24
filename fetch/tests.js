@@ -1,4 +1,4 @@
-function tests(fetch, name) {
+function tests(fetch, name = 'fetch') {
 
 	describe(name, function () {
 

@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x29, _x30) {
+	return function wait(_x30, _x31) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -1956,7 +1956,7 @@ function parse$3(rawHeaders) {
 	return headers;
 }
 
-function fetch$1(input, init) {
+function fetch$2(input, init) {
 	return new Promise$1(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new XMLHttpRequest();
@@ -1992,7 +1992,9 @@ function fetch$1(input, init) {
 	});
 }
 
-function tests$2(fetch, name) {
+function tests$2(fetch) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
+
 
 	describe(name, function () {
 
@@ -2014,9 +2016,9 @@ function tests$2(fetch, name) {
 	});
 }
 
-tests$2(fetch$1, 'J0Fetch');
+tests$2(fetch$2, 'J0Fetch');
 
-tests$2(fetch, 'Fetch');
+tests$2(fetch);
 
 describe('FileReader', function () {
 

@@ -776,7 +776,7 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-function fetch(input, init) {
+function fetch$$1(input, init) {
 	return new Promise$1(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
@@ -812,7 +812,9 @@ function fetch(input, init) {
 	});
 }
 
-function tests(fetch, name) {
+function tests(fetch) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
+
 
 	describe(name, function () {
 
@@ -834,5 +836,5 @@ function tests(fetch, name) {
 	});
 }
 
-tests(fetch, 'J0Fetch');
+tests(fetch$$1, 'J0Fetch');
 }())

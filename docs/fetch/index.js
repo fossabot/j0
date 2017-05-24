@@ -812,7 +812,9 @@ function fetch$1(input, init) {
 	});
 }
 
-function tests(fetch, name) {
+function tests(fetch) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
+
 
 	describe(name, function () {
 
@@ -836,5 +838,5 @@ function tests(fetch, name) {
 
 tests(fetch$1, 'J0Fetch');
 
-tests(fetch, 'Fetch');
+tests(fetch);
 }())

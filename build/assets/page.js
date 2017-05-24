@@ -7,9 +7,9 @@ import reduce from '../../Array/reduce';
 import push from '../../Array/push';
 import pop from '../../Array/pop';
 import forEachKey from '../../Object/forEachKey';
-import fetch from '../../fetch';
 import {
 	window,
+	fetch,
 	location,
 	navigator,
 	document,

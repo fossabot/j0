@@ -2262,7 +2262,7 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-function fetch(input, init) {
+function fetch$1(input, init) {
 	return new Promise$1(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
@@ -2301,7 +2301,7 @@ function fetch(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0Fetch;
 // }
-w.fetch = fetch;
+w.fetch = fetch$1;
 
 if (!w.Body) {
 	w.Body = Body;
