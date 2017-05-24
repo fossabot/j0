@@ -1541,6 +1541,8 @@ if (!NodeList.prototype[iteratorKey]) {
 	NodeList.prototype[iteratorKey] = generator$4;
 }
 
+var HTMLCollection = window.HTMLCollection;
+
 function generator$6() {
 	var _this9 = this;
 

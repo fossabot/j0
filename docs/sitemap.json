@@ -23,7 +23,9 @@
 		"j0": {}
 	},
 	"HTMLCollection": {
-		"@iterator": {}
+		"@iterator": {
+			"j0": {}
+		}
 	},
 	"Headers": {
 		"j0": {}

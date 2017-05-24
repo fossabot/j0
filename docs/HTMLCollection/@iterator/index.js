@@ -17,50 +17,59 @@ function generator() {
 	};
 }
 
-describe('HTMLCollection/@iterator', function () {
+function test(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
-	it('should create an iterator', function () {
-		var parent = document.createElement('div');
-		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
 
-		try {
-			for (var _iterator = expected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var element = _step.value;
+	describe(name, function () {
 
-				parent.appendChild(element);
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
+		it('should create an iterator', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
+				for (var _iterator = expected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var element = _step.value;
+
+					parent.appendChild(element);
 				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
 			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
 				}
 			}
-		}
 
-		var iterator = generator.call(parent.childNodes);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-			if (done) {
-				break;
+				if (done) {
+					break;
+				}
+				results[index++] = value;
 			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, expected);
+			assert.deepEqual(results, expected);
+		});
 	});
-});
+}
+
+test(generator, 'HTMLCollection/@iterator/j0');
+
+test(HTMLCollection.prototype[Symbol.iterator]);
 }())

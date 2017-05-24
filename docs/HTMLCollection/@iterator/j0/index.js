@@ -70,6 +70,4 @@ function test(generator) {
 }
 
 test(generator, 'HTMLCollection/@iterator/j0');
-
-test(HTMLCollection.prototype[Symbol.iterator]);
 }())

@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee2, this);
 	}));
 
-	return function wait(_x31, _x32) {
+	return function wait(_x32, _x33) {
 		return _ref27.apply(this, arguments);
 	};
 }();
@@ -2184,52 +2184,61 @@ function generator$2() {
 	};
 }
 
-describe('HTMLCollection/@iterator', function () {
+function test$1(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
-	it('should create an iterator', function () {
-		var parent = document.createElement('div');
-		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
 
-		try {
-			for (var _iterator2 = expected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var element = _step2.value;
+	describe(name, function () {
 
-				parent.appendChild(element);
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
+		it('should create an iterator', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion2 = true;
+			var _didIteratorError2 = false;
+			var _iteratorError2 = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
+				for (var _iterator2 = expected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+					var element = _step2.value;
+
+					parent.appendChild(element);
 				}
+			} catch (err) {
+				_didIteratorError2 = true;
+				_iteratorError2 = err;
 			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
+				try {
+					if (!_iteratorNormalCompletion2 && _iterator2.return) {
+						_iterator2.return();
+					}
+				} finally {
+					if (_didIteratorError2) {
+						throw _iteratorError2;
+					}
 				}
 			}
-		}
 
-		var iterator = generator$2.call(parent.childNodes);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next7 = iterator.next(),
-			    value = _iterator$next7.value,
-			    done = _iterator$next7.done;
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next7 = iterator.next(),
+				    value = _iterator$next7.value,
+				    done = _iterator$next7.done;
 
-			if (done) {
-				break;
+				if (done) {
+					break;
+				}
+				results[index++] = value;
 			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, expected);
+			assert.deepEqual(results, expected);
+		});
 	});
-});
+}
+
+test$1(generator$2, 'HTMLCollection/@iterator/j0');
+
+test$1(HTMLCollection.prototype[Symbol.iterator]);
 
 var window$1 = window.window;
 
@@ -3613,7 +3622,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$1(Promise, name) {
+function test$3(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3741,9 +3750,9 @@ function test$1(Promise, name) {
 	});
 }
 
-test$1(J0Promise, 'Promise/j0');
+test$3(J0Promise, 'Promise/j0');
 
-test$1(Promise, 'Promise');
+test$3(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -4271,7 +4280,7 @@ describe('Symbol/iterator', function () {
 	});
 });
 
-function test$2(_Symbol) {
+function test$4(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4315,9 +4324,9 @@ function test$2(_Symbol) {
 	});
 }
 
-test$2(Symbol, 'J0Symbol');
+test$4(Symbol, 'J0Symbol');
 
-test$2(Symbol);
+test$4(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;

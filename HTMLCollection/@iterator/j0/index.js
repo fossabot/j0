@@ -10,5 +10,4 @@ function generator() {
 		}
 	};
 }
-
 export default generator;
