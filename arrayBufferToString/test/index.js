@@ -1,5 +1,8 @@
 import arrayBufferToString from '..';
-import {readBlob} from 'j0';
+import {
+	readBlob,
+	document
+} from 'j0';
 
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
@@ -20,7 +23,8 @@ describe('ArrayBuffer/toString', function () {
 	});
 
 	it('should return wagahaiha-nekodearu.txt', async function () {
-		const src = await (await fetch('wagahaiha-nekodearu.txt')).text();
+		const root = document.getElementById('root').text;
+		const src = await (await fetch(`${root}/arrayBufferToString/wagahaiha-nekodearu.txt`)).text();
 		const arrayBuffer = await createArrayBuffer(src);
 		assert.equal(arrayBufferToString(arrayBuffer), src);
 	});
