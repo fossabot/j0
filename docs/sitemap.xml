@@ -68,12 +68,6 @@
 		<loc>https://kei-ito.github.io/j0/CustomEvent/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Date/format/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Date/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/FileReader/promisify/</loc>
 	</url>
 	<url>
@@ -249,6 +243,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/fetch/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/formatDate/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/getBody/</loc>

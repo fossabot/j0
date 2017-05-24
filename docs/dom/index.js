@@ -350,7 +350,7 @@ wrap.find = _find;
 wrap.findAll = _findAll;
 
 // import '../*/test';
-describe('$', function () {
+describe('dom', function () {
 
 	it('should create a new J0Element', function () {
 		assert.equal('node' in wrap(), true);
@@ -373,7 +373,6 @@ describe('J0Element.prototype.text', function () {
 			c: [element1, text2]
 		});
 		element1.text = text1;
-		console.log(element2);
 		assert.equal(element2.text, '' + text1 + text2);
 	});
 });

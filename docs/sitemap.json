@@ -23,9 +23,6 @@
 		"j0": {}
 	},
 	"CustomEvent": {},
-	"Date": {
-		"format": {}
-	},
 	"FileReader": {
 		"promisify": {},
 		"readBlob": {}
@@ -104,6 +101,7 @@
 	"fetch": {
 		"j0": {}
 	},
+	"formatDate": {},
 	"getBody": {},
 	"history": {},
 	"innerHeight": {},

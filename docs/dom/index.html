@@ -198,13 +198,12 @@
 <h2>Tests</h2>
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="comment">//&#32;import&#32;'../*/test';</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">$</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Date</span>&#32;<span class="name">from</span>&#32;<a href="../Date"><span class="string"><span class="string">'../../Date'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">dom</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span>
-<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'$'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'dom'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;create&#32;a&#32;new&#32;J0Element'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="string">'node'</span>&#32;<span class="in">in</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="string">'node'</span>&#32;<span class="in">in</span>&#32;<span class="name">dom</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
@@ -213,22 +212,21 @@
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;return&#32;its&#32;textContent'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="_60">`</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="name">text</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element</span>&#32;<span class="_3d">=</span>&#32;<span class="name">dom</span><span class="_28">(</span><span class="name">text</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">element</span><span class="_2e">.</span><span class="name">text</span><span class="_2c">,</span>&#32;<span class="name">text</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;set&#32;its&#32;textContent'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text1</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="template">-1</span><span class="_60">`</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element1</span>&#32;<span class="_3d">=</span>&#32;<span class="name">dom</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">text2</span>&#32;<span class="_3d">=</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">Date</span><span class="_2e">.</span><span class="name">now</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="template">-2</span><span class="_60">`</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">$</span><span class="_28">(</span><span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">element2</span>&#32;<span class="_3d">=</span>&#32;<span class="name">dom</span><span class="_28">(</span><span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">c</span><span class="_3a">:</span>&#32;<span class="_5b">[</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">element1</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">text2</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_5d">]</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">element1</span><span class="_2e">.</span><span class="name">text</span>&#32;<span class="_3d">=</span>&#32;<span class="name">text1</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">console</span><span class="_2e">.</span><span class="name">log</span><span class="_28">(</span><span class="name">element2</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">element2</span><span class="_2e">.</span><span class="name">text</span><span class="_2c">,</span>&#32;<span class="_60">`</span><span class="_24_7b">${</span><span class="name">text1</span><span class="_7d">}</span><span class="_24_7b">${</span><span class="name">text2</span><span class="_7d">}</span><span class="_60">`</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>

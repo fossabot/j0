@@ -92,51 +92,53 @@ var _window = window,
 var _window2 = window,
     Array = _window2.Array;
 var _window3 = window,
-    parseInt = _window3.parseInt;
+    Date$1 = _window3.Date;
 var _window4 = window,
-    ArrayBuffer = _window4.ArrayBuffer;
+    parseInt = _window4.parseInt;
 var _window5 = window,
-    DataView = _window5.DataView;
+    ArrayBuffer = _window5.ArrayBuffer;
 var _window6 = window,
-    document$1 = _window6.document;
+    DataView = _window6.DataView;
 var _window7 = window,
-    setTimeout$1 = _window7.setTimeout;
+    document$1 = _window7.document;
 var _window8 = window,
-    Node = _window8.Node;
+    setTimeout$1 = _window8.setTimeout;
 var _window9 = window,
-    decodeURIComponent = _window9.decodeURIComponent;
+    Node = _window9.Node;
 var _window10 = window,
-    TypeError$1 = _window10.TypeError;
+    decodeURIComponent = _window10.decodeURIComponent;
 var _window11 = window,
-    Uint8Array = _window11.Uint8Array;
+    TypeError$1 = _window11.TypeError;
 var _window12 = window,
-    Uint8ClampedArray = _window12.Uint8ClampedArray;
+    Uint8Array = _window12.Uint8Array;
 var _window13 = window,
-    Uint16Array = _window13.Uint16Array;
+    Uint8ClampedArray = _window13.Uint8ClampedArray;
 var _window14 = window,
-    Uint32Array = _window14.Uint32Array;
+    Uint16Array = _window14.Uint16Array;
 var _window15 = window,
-    Int8Array = _window15.Int8Array;
+    Uint32Array = _window15.Uint32Array;
 var _window16 = window,
-    Int16Array = _window16.Int16Array;
+    Int8Array = _window16.Int8Array;
 var _window17 = window,
-    Int32Array = _window17.Int32Array;
+    Int16Array = _window17.Int16Array;
 var _window18 = window,
-    Float32Array = _window18.Float32Array;
+    Int32Array = _window18.Int32Array;
 var _window19 = window,
-    Float64Array = _window19.Float64Array;
+    Float32Array = _window19.Float32Array;
 var _window20 = window,
-    XMLHttpRequest = _window20.XMLHttpRequest;
+    Float64Array = _window20.Float64Array;
 var _window21 = window,
-    Promise$1 = _window21.Promise;
+    XMLHttpRequest = _window21.XMLHttpRequest;
 var _window22 = window,
-    Blob = _window22.Blob;
+    Promise$1 = _window22.Promise;
 var _window23 = window,
-    Boolean = _window23.Boolean;
+    Blob = _window23.Blob;
 var _window24 = window,
-    requestAnimationFrame = _window24.requestAnimationFrame;
+    Boolean = _window24.Boolean;
 var _window25 = window,
-    cancelAnimationFrame = _window25.cancelAnimationFrame;
+    requestAnimationFrame = _window25.requestAnimationFrame;
+var _window26 = window,
+    cancelAnimationFrame = _window26.cancelAnimationFrame;
 
 
 function noop(x) {
@@ -1278,46 +1280,6 @@ describe('CustomEvent', function () {
 	});
 });
 
-function leftpad(x) {
-	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-	var padChar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
-
-	var s = x.toString();
-	var pad = length - s.length;
-	return 0 < pad ? '' + padChar.charAt(0).repeat(pad) + s : s;
-}
-
-var century = 100;
-var shortenedLength = 3;
-
-var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-function format(src, template) {
-	var date = new Date(src);
-	if (0 < date) {
-		var Y = date.getFullYear();
-		var M = date.getMonth();
-		var D = date.getDate();
-		var d = date.getDay();
-		var h = date.getHours();
-		var m = date.getMinutes();
-		return template.replace(/%YYYY/g, Y.toString()).replace(/%YY/g, leftpad(Y % century)).replace(/%MMMM/g, MonthNames[M]).replace(/%MMM/g, MonthNames[M].slice(0, shortenedLength)).replace(/%MM/g, leftpad(M + 1)).replace(/%M/g, (M + 1).toString()).replace(/%DD/g, leftpad(D)).replace(/%D/g, D.toString()).replace(/%dddd/g, DayNames[d]).replace(/%ddd/g, DayNames[d].slice(0, shortenedLength)).replace(/%hh/, leftpad(h)).replace(/%h/, h.toString()).replace(/%mm/, leftpad(m)).replace(/%m/, m.toString());
-	}
-	return '';
-}
-
-describe('format', function () {
-
-	it('should format a date', function () {
-		var src = '2016-01-01T12:00Z';
-		var template = '%YYYY%MMM';
-		var expected = '2016Jan';
-		assert.equal(format(src, template), expected);
-	});
-});
-
 function debounce(fn) {
 	var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 	var thisArg = arguments[2];
@@ -1601,7 +1563,7 @@ wrap.find = find$3;
 wrap.findAll = _findAll;
 
 // import '../*/test';
-describe('$', function () {
+describe('dom', function () {
 
 	it('should create a new J0Element', function () {
 		assert.equal('node' in wrap(), true);
@@ -1624,7 +1586,6 @@ describe('J0Element.prototype.text', function () {
 			c: [element1, text2]
 		});
 		element1.text = text1;
-		console.log(element2);
 		assert.equal(element2.text, '' + text1 + text2);
 	});
 });
@@ -2060,6 +2021,46 @@ describe('FileReader', function () {
 		assert.doesNotThrow(function () {
 			return new FileReader();
 		});
+	});
+});
+
+function leftpad(x) {
+	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+	var padChar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
+
+	var s = x.toString();
+	var pad = length - s.length;
+	return 0 < pad ? '' + padChar.charAt(0).repeat(pad) + s : s;
+}
+
+var century = 100;
+var shortenedLength = 3;
+
+var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function format(src, template) {
+	var date = new Date$1(src);
+	if (0 < date) {
+		var Y = date.getFullYear();
+		var M = date.getMonth();
+		var D = date.getDate();
+		var d = date.getDay();
+		var h = date.getHours();
+		var m = date.getMinutes();
+		return template.replace(/%YYYY/g, Y.toString()).replace(/%YY/g, leftpad(Y % century)).replace(/%MMMM/g, MonthNames[M]).replace(/%MMM/g, MonthNames[M].slice(0, shortenedLength)).replace(/%MM/g, leftpad(M + 1)).replace(/%M/g, (M + 1).toString()).replace(/%DD/g, leftpad(D)).replace(/%D/g, D.toString()).replace(/%dddd/g, DayNames[d]).replace(/%ddd/g, DayNames[d].slice(0, shortenedLength)).replace(/%hh/, leftpad(h)).replace(/%h/, h.toString()).replace(/%mm/, leftpad(m)).replace(/%m/, m.toString());
+	}
+	return '';
+}
+
+describe('format', function () {
+
+	it('should format a date', function () {
+		var src = '2016-01-01T12:00Z';
+		var template = '%YYYY%MMM';
+		var expected = '2016Jan';
+		assert.equal(format(src, template), expected);
 	});
 });
 
