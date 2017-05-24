@@ -1,6 +1,7 @@
 import Symbol from '../Symbol';
 import isString from '../isString';
 import isNode from '../isNode';
+import map from '../Array/map';
 import {document} from '..';
 
 const nodeKey = Symbol('node');
@@ -59,6 +60,16 @@ class J0Element {
 		return parentNode && wrap(parentNode);
 	}
 
+	get previous() {
+		const {previousSibling} = this.node;
+		return previousSibling && wrap(previousSibling);
+	}
+
+	get next() {
+		const {nextSibling} = this.node;
+		return nextSibling && wrap(nextSibling);
+	}
+
 	set parent(source) {
 		wrap(source).append(this);
 	}
@@ -84,6 +95,18 @@ class J0Element {
 	append(element) {
 		this.node.appendChild(wrap(element).node);
 		return this;
+	}
+
+	insertBefore(newElement, referenceElement) {
+		this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
+	}
+
+	before(element) {
+		this.parent.insertBefore(element, this);
+	}
+
+	after(element) {
+		this.parent.insertBefore(element, this.next);
 	}
 
 	remove() {
@@ -131,10 +154,30 @@ class J0Element {
 		}
 	}
 
+	find(selector) {
+		return find(selector, this);
+	}
+
+	findAll(selector) {
+		return findAll(selector, this);
+	}
+
 }
 
 function wrap(source) {
 	return new J0Element(source);
 }
+
+function find(selector, rootElement = document) {
+	const element = rootElement.querySelector(selector);
+	return element && wrap(element);
+}
+
+function findAll(selector, rootElement = document) {
+	return map(rootElement.querySelectorAll(selector), wrap);
+}
+
+wrap.find = find;
+wrap.findAll = findAll;
 
 export default wrap;

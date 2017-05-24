@@ -1,11 +1,7 @@
 /* global chai */
 import getBody from '../../getBody';
 import onError from '../../onError';
-import insertAfter from '../../dom/insertAfter';
-import getElementById from '../../dom/getElementById';
-import getTextContent from '../../dom/getTextContent';
-import appendChild from '../../dom/appendChild';
-import createElement from '../../dom/createElement';
+import dom from '../../dom';
 import forEach from '../../Array/forEach';
 import reduce from '../../Array/reduce';
 import push from '../../Array/push';
@@ -33,10 +29,11 @@ function startMocha() {
 }
 
 function showEnvironment() {
-	const environment = getElementById('environment');
+	const environment = dom.find('#environment');
 	forEach(Object.keys(navigator.constructor.prototype), function (key) {
 		const value = navigator[key];
-		appendChild(environment, createElement({
+		environment
+		.append({
 			t: 'tr',
 			a: [
 				['class', typeof value]
@@ -51,7 +48,7 @@ function showEnvironment() {
 					c: [value]
 				}
 			]
-		}));
+		});
 	});
 }
 
@@ -72,7 +69,7 @@ function normalizeUrl(url) {
 }
 
 async function createNavigation() {
-	const root = getTextContent(getElementById('root'));
+	const root = dom.find('#root').text;
 	const response = await fetch(`${root}/sitemap.json`);
 	const tree = await response.json();
 	const {pathname} = location;
@@ -105,7 +102,8 @@ async function createNavigation() {
 	}
 	const nav = parseBranch(rootBranch, '', '');
 	if (nav) {
-		insertAfter(createElement(nav), getElementById('title'));
+		dom.find('#title')
+		.after(nav);
 	}
 }
 

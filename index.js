@@ -12,6 +12,7 @@ export const {navigator} = window;
 export const {document} = window;
 export const {setTimeout} = window;
 export const {clearTimeout} = window;
+export const {Node} = window;
 export const {decodeURIComponent} = window;
 export const {encodeURIComponent} = window;
 export const {TypeError} = window;

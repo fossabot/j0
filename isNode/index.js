@@ -1,7 +1,8 @@
-import Node from '../Node';
+import {Node} from '..';
+import isInstanceOf from '../isInstanceOf';
 
 function isNode(x) {
-	return x instanceof Node;
+	return isInstanceOf(x, Node);
 }
 
 export default isNode;
