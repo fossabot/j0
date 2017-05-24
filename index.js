@@ -32,4 +32,7 @@ export const {Blob} = window;
 export const {Boolean} = window;
 export const {requestAnimationFrame} = window;
 export const {cancelAnimationFrame} = window;
+export const {FileReader} = window;
 export const {fetch} = window;
+import readBlob from './readBlob';
+export {readBlob};

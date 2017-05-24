@@ -1,6 +1,34 @@
 (function(){
 'use strict';
 
+function readBlob$$1(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
 /* global window */
 var _window = window,
     String = _window.String;
@@ -10,6 +38,8 @@ var _window3 = window,
     Uint8Array = _window3.Uint8Array;
 var _window4 = window,
     Blob = _window4.Blob;
+var _window5 = window,
+    FileReader = _window5.FileReader;
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -63,36 +93,8 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
-function read(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
 function createArrayBuffer(data) {
-	return read(new Blob([data]), 'ArrayBuffer');
+	return readBlob$$1(new Blob([data]), 'ArrayBuffer');
 }
 
 describe('ArrayBuffer/toString', function () {

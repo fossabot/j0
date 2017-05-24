@@ -8,12 +8,12 @@ var _window = window,
 var _window2 = window,
     setTimeout = _window2.setTimeout;
 var _window3 = window,
-    Promise = _window3.Promise;
+    Promise$1 = _window3.Promise;
 
 
 var INTERVAL = 100;
 
-var getBody = new Promise(function (resolve) {
+var getBody = new Promise$1(function (resolve) {
 	function get() {
 		var body = document.body;
 

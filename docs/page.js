@@ -90,14 +90,14 @@ var _window5 = window,
 var _window6 = window,
     Node = _window6.Node;
 var _window7 = window,
-    Promise = _window7.Promise;
+    Promise$1 = _window7.Promise;
 var _window8 = window,
     fetch = _window8.fetch;
 
 
 var INTERVAL = 100;
 
-var getBody = new Promise(function (resolve) {
+var getBody = new Promise$1(function (resolve) {
 	function get() {
 		var body = document.body;
 
@@ -527,6 +527,6 @@ if (mocha) {
 }
 
 getBody.then(function () {
-	return Promise.all([mocha && showEnvironment(), createNavigation()]);
+	return Promise$1.all([mocha && showEnvironment(), createNavigation()]);
 }).catch(onError);
 }())

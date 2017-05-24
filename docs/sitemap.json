@@ -22,10 +22,6 @@
 	"Body": {
 		"j0": {}
 	},
-	"FileReader": {
-		"promisify": {},
-		"readBlob": {}
-	},
 	"FormData": {
 		"parse": {}
 	},
@@ -120,6 +116,7 @@
 	"onError": {},
 	"polyfill": {},
 	"preventDefault": {},
+	"readBlob": {},
 	"requestAnimationFrame": {},
 	"scrollBy": {},
 	"scrollTo": {},

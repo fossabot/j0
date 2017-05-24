@@ -90,7 +90,25 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-function read(data, type) {
+function noop(x) {
+	return x;
+}
+
+function find(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = -1;
+	forEach(iterable, function (item, index) {
+		if (fn.call(thisArg, item, index, iterable)) {
+			result = index;
+			return true;
+		}
+	});
+	return result;
+}
+
+function readBlob$$1(data, type) {
 	var reader = new FileReader();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
@@ -116,24 +134,6 @@ function read(data, type) {
 	});
 	promise.reader = reader;
 	return promise;
-}
-
-function noop(x) {
-	return x;
-}
-
-function find(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = -1;
-	forEach(iterable, function (item, index) {
-		if (fn.call(thisArg, item, index, iterable)) {
-			result = index;
-			return true;
-		}
-	});
-	return result;
 }
 
 /* global window */
@@ -173,6 +173,8 @@ var _window17 = window,
     Promise$1 = _window17.Promise;
 var _window18 = window,
     Blob = _window18.Blob;
+var _window19 = window,
+    FileReader = _window19.FileReader;
 
 
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
@@ -259,7 +261,7 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
-function bufferClone(buf) {
+function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
@@ -290,11 +292,11 @@ var Body = function () {
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
 			} else if (isInstanceOf(body, DataView)) {
-				this.bodyArrayBuffer = bufferClone(body.buffer);
+				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
 				this.bodyInit = new Blob([this.bodyArrayBuffer]);
 			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
-				this.bodyArrayBuffer = bufferClone(body);
+				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
 			}
@@ -315,7 +317,7 @@ var Body = function () {
 				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
-				return read(blob, 'ArrayBuffer');
+				return readBlob$$1(blob, 'ArrayBuffer');
 			});
 		}
 	}, {
@@ -343,7 +345,7 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return read(this.bodyBlob, 'Text');
+				return readBlob$$1(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
 				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {

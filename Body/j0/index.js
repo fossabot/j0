@@ -2,7 +2,6 @@ import FormData from '../../FormData';
 import isString from '../../isString';
 import URLSearchParams from '../../URLSearchParams';
 import isInstanceOf from '../../isInstanceOf';
-import readBlob from '../../FileReader/readBlob';
 import isArrayBufferView from '../../isArrayBufferView';
 import parseAsForm from '../../FormData/parse';
 import parseAsJSON from '../../JSON/parse';
@@ -13,10 +12,11 @@ import {
 	DataView,
 	TypeError,
 	Uint8Array,
-	Promise
+	Promise,
+	readBlob
 } from '../..';
 
-function bufferClone(buf) {
+function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
@@ -51,11 +51,11 @@ class Body {
 		} else if (isInstanceOf(body, URLSearchParams)) {
 			this.bodyText = body.toString();
 		} else if (isInstanceOf(body, DataView)) {
-			this.bodyArrayBuffer = bufferClone(body.buffer);
+			this.bodyArrayBuffer = cloneBuffer(body.buffer);
 			// IE 10-11 can't handle a DataView body.
 			this.bodyInit = new Blob([this.bodyArrayBuffer]);
 		} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
-			this.bodyArrayBuffer = bufferClone(body);
+			this.bodyArrayBuffer = cloneBuffer(body);
 		} else {
 			throw new Error('unsupported BodyInit type');
 		}

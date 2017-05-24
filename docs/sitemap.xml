@@ -65,15 +65,6 @@
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/FileReader/promisify/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/FileReader/readBlob/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/FileReader/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/FormData/parse/</loc>
 	</url>
 	<url>
@@ -297,6 +288,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/preventDefault/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/readBlob/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/requestAnimationFrame/</loc>

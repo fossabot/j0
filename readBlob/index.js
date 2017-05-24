@@ -1,5 +1,5 @@
-import FileReader from '..';
-function read(data, type) {
+import {FileReader} from '..';
+function readBlob(data, type) {
 	const reader = new FileReader();
 	const promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
@@ -26,4 +26,4 @@ function read(data, type) {
 	promise.reader = reader;
 	return promise;
 }
-export default read;
+export default readBlob;

@@ -1,6 +1,8 @@
 import arrayBufferToString from '..';
-import readBlob from '../../FileReader/readBlob';
-import {Blob} from '../..';
+import {
+	Blob,
+	readBlob
+} from '../..';
 
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');

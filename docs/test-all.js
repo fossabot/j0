@@ -85,6 +85,34 @@ describe('Array/@iterator', function () {
 	});
 });
 
+function readBlob$$1(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
 /* global window */
 var w = window;
 var _window = window,
@@ -139,6 +167,8 @@ var _window25 = window,
     requestAnimationFrame = _window25.requestAnimationFrame;
 var _window26 = window,
     cancelAnimationFrame = _window26.cancelAnimationFrame;
+var _window27 = window,
+    FileReader = _window27.FileReader;
 
 
 function noop(x) {
@@ -1032,36 +1062,8 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
-function read(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
 function createArrayBuffer(data) {
-	return read(new Blob([data]), 'ArrayBuffer');
+	return readBlob$$1(new Blob([data]), 'ArrayBuffer');
 }
 
 describe('ArrayBuffer/toString', function () {
@@ -1120,7 +1122,7 @@ function parse(body) {
 
 var parse$2 = JSON.parse;
 
-function bufferClone(buf) {
+function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
@@ -1151,11 +1153,11 @@ var Body$1 = function () {
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
 			} else if (isInstanceOf(body, DataView)) {
-				this.bodyArrayBuffer = bufferClone(body.buffer);
+				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
 				this.bodyInit = new Blob([this.bodyArrayBuffer]);
 			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
-				this.bodyArrayBuffer = bufferClone(body);
+				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
 			}
@@ -1176,7 +1178,7 @@ var Body$1 = function () {
 				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
-				return read(blob, 'ArrayBuffer');
+				return readBlob$$1(blob, 'ArrayBuffer');
 			});
 		}
 	}, {
@@ -1204,7 +1206,7 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return read(this.bodyBlob, 'Text');
+				return readBlob$$1(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
 				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
@@ -1998,15 +2000,6 @@ function tests$2(fetch) {
 tests$2(fetch$2, 'J0Fetch');
 
 tests$2(fetch);
-
-describe('FileReader', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new FileReader();
-		});
-	});
-});
 
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -3767,6 +3760,13 @@ function test$1(Promise, name) {
 test$1(J0Promise, 'Promise/j0');
 
 test$1(Promise, 'Promise');
+
+describe('FileReader/read', function () {
+
+	it('should be a function', function () {
+		return readBlob$$1;
+	});
+});
 
 function tests$9(Request, name) {
 
