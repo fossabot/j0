@@ -124,52 +124,6 @@ function readBlob$$1(data, type) {
 	return promise;
 }
 
-/* global window */
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    ArrayBuffer = _window3.ArrayBuffer;
-var _window4 = window,
-    DataView = _window4.DataView;
-var _window5 = window,
-    decodeURIComponent = _window5.decodeURIComponent;
-var _window6 = window,
-    TypeError = _window6.TypeError;
-var _window7 = window,
-    Uint8Array = _window7.Uint8Array;
-var _window8 = window,
-    Uint8ClampedArray = _window8.Uint8ClampedArray;
-var _window9 = window,
-    Uint16Array = _window9.Uint16Array;
-var _window10 = window,
-    Uint32Array = _window10.Uint32Array;
-var _window11 = window,
-    Int8Array = _window11.Int8Array;
-var _window12 = window,
-    Int16Array = _window12.Int16Array;
-var _window13 = window,
-    Int32Array = _window13.Int32Array;
-var _window14 = window,
-    Float32Array = _window14.Float32Array;
-var _window15 = window,
-    Float64Array = _window15.Float64Array;
-var _window16 = window,
-    Promise$1 = _window16.Promise;
-var _window17 = window,
-    Blob = _window17.Blob;
-var _window18 = window,
-    FileReader = _window18.FileReader;
-
-
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
-function isArrayBufferView(obj) {
-	return 0 <= find(viewClasses, function (constructor) {
-		return isInstanceOf(obj, constructor);
-	});
-}
-
 function trim(string) {
 	return string.trim();
 }
@@ -190,6 +144,54 @@ function parse(body) {
 		}
 	});
 	return form;
+}
+
+/* global window */
+var _window = window,
+    String = _window.String;
+var _window2 = window,
+    Array = _window2.Array;
+var _window3 = window,
+    ArrayBuffer = _window3.ArrayBuffer;
+var _window4 = window,
+    DataView = _window4.DataView;
+var _window5 = window,
+    FormData = _window5.FormData;
+var _window6 = window,
+    decodeURIComponent = _window6.decodeURIComponent;
+var _window7 = window,
+    TypeError = _window7.TypeError;
+var _window8 = window,
+    Uint8Array = _window8.Uint8Array;
+var _window9 = window,
+    Uint8ClampedArray = _window9.Uint8ClampedArray;
+var _window10 = window,
+    Uint16Array = _window10.Uint16Array;
+var _window11 = window,
+    Uint32Array = _window11.Uint32Array;
+var _window12 = window,
+    Int8Array = _window12.Int8Array;
+var _window13 = window,
+    Int16Array = _window13.Int16Array;
+var _window14 = window,
+    Int32Array = _window14.Int32Array;
+var _window15 = window,
+    Float32Array = _window15.Float32Array;
+var _window16 = window,
+    Float64Array = _window16.Float64Array;
+var _window17 = window,
+    Promise$1 = _window17.Promise;
+var _window18 = window,
+    Blob = _window18.Blob;
+var _window19 = window,
+    FileReader = _window19.FileReader;
+
+
+var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+function isArrayBufferView(obj) {
+	return 0 <= find(viewClasses, function (constructor) {
+		return isInstanceOf(obj, constructor);
+	});
 }
 
 var parseAsJSON = JSON.parse;

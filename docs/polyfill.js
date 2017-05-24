@@ -9,13 +9,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -756,60 +756,8 @@ function readBlob$$1(data, type) {
 	return promise;
 }
 
-/* global window */
-var w = window;
-var _window = window,
-    String$1 = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    Object$1 = _window3.Object;
-var _window4 = window,
-    Date = _window4.Date;
-var _window5 = window,
-    parseInt = _window5.parseInt;
-var _window6 = window,
-    ArrayBuffer = _window6.ArrayBuffer;
-var _window7 = window,
-    DataView = _window7.DataView;
-var _window8 = window,
-    setTimeout = _window8.setTimeout;
-var _window9 = window,
-    clearTimeout = _window9.clearTimeout;
-var _window10 = window,
-    decodeURIComponent = _window10.decodeURIComponent;
-var _window11 = window,
-    TypeError$1 = _window11.TypeError;
-var _window12 = window,
-    Uint8Array = _window12.Uint8Array;
-var _window13 = window,
-    Uint8ClampedArray = _window13.Uint8ClampedArray;
-var _window14 = window,
-    Uint16Array = _window14.Uint16Array;
-var _window15 = window,
-    Uint32Array = _window15.Uint32Array;
-var _window16 = window,
-    Int8Array = _window16.Int8Array;
-var _window17 = window,
-    Int16Array = _window17.Int16Array;
-var _window18 = window,
-    Int32Array = _window18.Int32Array;
-var _window19 = window,
-    Float32Array = _window19.Float32Array;
-var _window20 = window,
-    Float64Array = _window20.Float64Array;
-var _window21 = window,
-    XMLHttpRequest = _window21.XMLHttpRequest;
-var _window22 = window,
-    Promise$1 = _window22.Promise;
-var _window23 = window,
-    Blob = _window23.Blob;
-var _window24 = window,
-    FileReader = _window24.FileReader;
-
-
-function isString(x) {
-	return typeof x === 'string';
+function trim(string) {
+	return string.trim();
 }
 
 var iteratorKey = Symbol.iterator;
@@ -873,6 +821,82 @@ function _forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	_forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
+}
+
+/* global window */
+var w = window;
+var _window = window,
+    String$1 = _window.String;
+var _window2 = window,
+    Array = _window2.Array;
+var _window3 = window,
+    Object$1 = _window3.Object;
+var _window4 = window,
+    Date = _window4.Date;
+var _window5 = window,
+    parseInt = _window5.parseInt;
+var _window6 = window,
+    ArrayBuffer = _window6.ArrayBuffer;
+var _window7 = window,
+    DataView = _window7.DataView;
+var _window8 = window,
+    FormData = _window8.FormData;
+var _window9 = window,
+    setTimeout = _window9.setTimeout;
+var _window10 = window,
+    clearTimeout = _window10.clearTimeout;
+var _window11 = window,
+    decodeURIComponent = _window11.decodeURIComponent;
+var _window12 = window,
+    TypeError$1 = _window12.TypeError;
+var _window13 = window,
+    Uint8Array = _window13.Uint8Array;
+var _window14 = window,
+    Uint8ClampedArray = _window14.Uint8ClampedArray;
+var _window15 = window,
+    Uint16Array = _window15.Uint16Array;
+var _window16 = window,
+    Uint32Array = _window16.Uint32Array;
+var _window17 = window,
+    Int8Array = _window17.Int8Array;
+var _window18 = window,
+    Int16Array = _window18.Int16Array;
+var _window19 = window,
+    Int32Array = _window19.Int32Array;
+var _window20 = window,
+    Float32Array = _window20.Float32Array;
+var _window21 = window,
+    Float64Array = _window21.Float64Array;
+var _window22 = window,
+    XMLHttpRequest = _window22.XMLHttpRequest;
+var _window23 = window,
+    Promise$1 = _window23.Promise;
+var _window24 = window,
+    Blob = _window24.Blob;
+var _window25 = window,
+    FileReader = _window25.FileReader;
+
+
+function isString(x) {
+	return typeof x === 'string';
 }
 
 var hex = 16;
@@ -1939,28 +1963,6 @@ function isArrayBufferView(obj) {
 	return 0 <= find$2(viewClasses, function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
-}
-
-function trim(string) {
-	return string.trim();
-}
-
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	_forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
 }
 
 var parseAsJSON = JSON.parse;

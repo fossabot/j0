@@ -74,62 +74,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* global window */
-var w = window;
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    location = _window2.location;
-var _window3 = window,
-    navigator = _window3.navigator;
-var _window4 = window,
-    document = _window4.document;
-var _window5 = window,
-    setTimeout = _window5.setTimeout;
-var _window6 = window,
-    Node = _window6.Node;
-var _window7 = window,
-    Promise$1 = _window7.Promise;
-var _window8 = window,
-    fetch = _window8.fetch;
-
-
-var INTERVAL = 100;
-
-var getBody = new Promise$1(function (resolve) {
-	function get() {
-		var body = document.body;
-
-		if (body) {
-			resolve(body);
-		} else {
-			setTimeout(get, INTERVAL);
-		}
-	}
-	get();
-});
-
-function onError(error) {
-	onError.listener(error);
-}
-
-onError.listener = function (error) {
-	console.error(error);
-};
-
-function isString(x) {
-	return typeof x === 'string';
-}
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
-
-function isNode(x) {
-	return isInstanceOf(x, Node);
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -191,6 +135,62 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+/* global window */
+var w = window;
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    location = _window2.location;
+var _window3 = window,
+    navigator = _window3.navigator;
+var _window4 = window,
+    document = _window4.document;
+var _window5 = window,
+    setTimeout = _window5.setTimeout;
+var _window6 = window,
+    Node = _window6.Node;
+var _window7 = window,
+    Promise$1 = _window7.Promise;
+var _window8 = window,
+    fetch = _window8.fetch;
+
+
+var INTERVAL = 100;
+
+var getBody = new Promise$1(function (resolve) {
+	function get() {
+		var body = document.body;
+
+		if (body) {
+			resolve(body);
+		} else {
+			setTimeout(get, INTERVAL);
+		}
+	}
+	get();
+});
+
+function onError(error) {
+	onError.listener(error);
+}
+
+onError.listener = function (error) {
+	console.error(error);
+};
+
+function isString(x) {
+	return typeof x === 'string';
+}
+
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+function isNode(x) {
+	return isInstanceOf(x, Node);
 }
 
 var arrayPush = Array.prototype.push;

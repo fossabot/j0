@@ -9,12 +9,10 @@
 <h1 id="title"><a href="../../">j0</a>/<a href="../">Body</a>/j0<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">FormData</span>&#32;<span class="name">from</span>&#32;<a href="../../FormData"><span class="string"><span class="string">'../../FormData'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isString</span>&#32;<span class="name">from</span>&#32;<a href="../../isString"><span class="string"><span class="string">'../../isString'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isString</span>&#32;<span class="name">from</span>&#32;<a href="../../isString"><span class="string"><span class="string">'../../isString'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">URLSearchParams</span>&#32;<span class="name">from</span>&#32;<a href="../../URLSearchParams"><span class="string"><span class="string">'../../URLSearchParams'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isInstanceOf</span>&#32;<span class="name">from</span>&#32;<a href="../../isInstanceOf"><span class="string"><span class="string">'../../isInstanceOf'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">isArrayBufferView</span>&#32;<span class="name">from</span>&#32;<a href="../../isArrayBufferView"><span class="string"><span class="string">'../../isArrayBufferView'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">parseAsForm</span>&#32;<span class="name">from</span>&#32;<a href="../../FormData/parse"><span class="string"><span class="string">'../../FormData/parse'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">parseAsJSON</span>&#32;<span class="name">from</span>&#32;<a href="../../JSON/parse"><span class="string"><span class="string">'../../JSON/parse'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">arrayBufferToString</span>&#32;<span class="name">from</span>&#32;<a href="../../arrayBufferToString"><span class="string"><span class="string">'../../arrayBufferToString'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
@@ -24,7 +22,9 @@
 <span class="linenum"></span>&#9;<span class="name">TypeError</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Uint8Array</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">Promise</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;<span class="name">readBlob</span>
+<span class="linenum"></span>&#9;<span class="name">readBlob</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">FormData</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">parseFormData</span>
 <span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<a href="../.."><span class="string"><span class="string">'../..'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="function">function</span>&#32;<span class="name">cloneBuffer</span><span class="_28">(</span><span class="name">buf</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
@@ -125,7 +125,7 @@
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">formData</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">text</span><span class="_28">(</span><span class="_29">)</span>
-<span class="linenum"></span>&#9;&#9;<span class="_2e">.</span><span class="name">then</span><span class="_28">(</span><span class="name">parseAsForm</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_2e">.</span><span class="name">then</span><span class="_28">(</span><span class="name">parseFormData</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">json</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>

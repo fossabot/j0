@@ -44,9 +44,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 function generator() {
 	var _this = this;
@@ -113,66 +113,8 @@ function readBlob$$1(data, type) {
 	return promise;
 }
 
-/* global window */
-var w = window;
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    Date$1 = _window3.Date;
-var _window4 = window,
-    parseInt = _window4.parseInt;
-var _window5 = window,
-    ArrayBuffer = _window5.ArrayBuffer;
-var _window6 = window,
-    DataView = _window6.DataView;
-var _window7 = window,
-    document$1 = _window7.document;
-var _window8 = window,
-    setTimeout$1 = _window8.setTimeout;
-var _window9 = window,
-    Node = _window9.Node;
-var _window10 = window,
-    decodeURIComponent = _window10.decodeURIComponent;
-var _window11 = window,
-    TypeError$1 = _window11.TypeError;
-var _window12 = window,
-    Uint8Array = _window12.Uint8Array;
-var _window13 = window,
-    Uint8ClampedArray = _window13.Uint8ClampedArray;
-var _window14 = window,
-    Uint16Array = _window14.Uint16Array;
-var _window15 = window,
-    Uint32Array = _window15.Uint32Array;
-var _window16 = window,
-    Int8Array = _window16.Int8Array;
-var _window17 = window,
-    Int16Array = _window17.Int16Array;
-var _window18 = window,
-    Int32Array = _window18.Int32Array;
-var _window19 = window,
-    Float32Array = _window19.Float32Array;
-var _window20 = window,
-    Float64Array = _window20.Float64Array;
-var _window21 = window,
-    XMLHttpRequest = _window21.XMLHttpRequest;
-var _window22 = window,
-    Promise$1 = _window22.Promise;
-var _window23 = window,
-    Blob = _window23.Blob;
-var _window24 = window,
-    Boolean = _window24.Boolean;
-var _window25 = window,
-    requestAnimationFrame = _window25.requestAnimationFrame;
-var _window26 = window,
-    cancelAnimationFrame = _window26.cancelAnimationFrame;
-var _window27 = window,
-    FileReader = _window27.FileReader;
-
-
-function noop(x) {
-	return x;
+function trim(string) {
+	return string.trim();
 }
 
 var iteratorKey = Symbol.iterator;
@@ -236,6 +178,88 @@ function _forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	_forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
+}
+
+/* global window */
+var w = window;
+var _window = window,
+    String = _window.String;
+var _window2 = window,
+    Array = _window2.Array;
+var _window3 = window,
+    Date$1 = _window3.Date;
+var _window4 = window,
+    parseInt = _window4.parseInt;
+var _window5 = window,
+    ArrayBuffer = _window5.ArrayBuffer;
+var _window6 = window,
+    DataView = _window6.DataView;
+var _window7 = window,
+    FormData = _window7.FormData;
+var _window8 = window,
+    document$1 = _window8.document;
+var _window9 = window,
+    setTimeout$1 = _window9.setTimeout;
+var _window10 = window,
+    Node = _window10.Node;
+var _window11 = window,
+    decodeURIComponent = _window11.decodeURIComponent;
+var _window12 = window,
+    TypeError$1 = _window12.TypeError;
+var _window13 = window,
+    Uint8Array = _window13.Uint8Array;
+var _window14 = window,
+    Uint8ClampedArray = _window14.Uint8ClampedArray;
+var _window15 = window,
+    Uint16Array = _window15.Uint16Array;
+var _window16 = window,
+    Uint32Array = _window16.Uint32Array;
+var _window17 = window,
+    Int8Array = _window17.Int8Array;
+var _window18 = window,
+    Int16Array = _window18.Int16Array;
+var _window19 = window,
+    Int32Array = _window19.Int32Array;
+var _window20 = window,
+    Float32Array = _window20.Float32Array;
+var _window21 = window,
+    Float64Array = _window21.Float64Array;
+var _window22 = window,
+    XMLHttpRequest = _window22.XMLHttpRequest;
+var _window23 = window,
+    Promise$1 = _window23.Promise;
+var _window24 = window,
+    Blob = _window24.Blob;
+var _window25 = window,
+    Boolean = _window25.Boolean;
+var _window26 = window,
+    requestAnimationFrame = _window26.requestAnimationFrame;
+var _window27 = window,
+    cancelAnimationFrame = _window27.cancelAnimationFrame;
+var _window28 = window,
+    FileReader = _window28.FileReader;
+
+
+function noop(x) {
+	return x;
 }
 
 function every(iterable) {
@@ -1096,28 +1120,6 @@ function isArrayBufferView(obj) {
 	return 0 <= find$2(viewClasses, function (constructor) {
 		return isInstanceOf(obj, constructor);
 	});
-}
-
-function trim(string) {
-	return string.trim();
-}
-
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	_forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
 }
 
 var parse$2 = JSON.parse;
@@ -2038,31 +2040,6 @@ describe('format', function () {
 		var template = '%YYYY%MMM';
 		var expected = '2016Jan';
 		assert.equal(format(src, template), expected);
-	});
-});
-
-describe('FormData/parse', function () {
-
-	it('should parse string', function () {
-		var form = parse('a=b&c=d', {
-			data: {},
-			append: function append(key, value) {
-				this.data[key] = value;
-			}
-		});
-		assert.deepEqual(form.data, {
-			a: 'b',
-			c: 'd'
-		});
-	});
-});
-
-describe('FormData', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new FormData();
-		});
 	});
 });
 
@@ -3325,6 +3302,22 @@ describe('onError', function () {
 		onError(1);
 		onError(2);
 		assert.equal(count, 3);
+	});
+});
+
+describe('FormData/parse', function () {
+
+	it('should parse string', function () {
+		var form = parse('a=b&c=d', {
+			data: {},
+			append: function append(key, value) {
+				this.data[key] = value;
+			}
+		});
+		assert.deepEqual(form.data, {
+			a: 'b',
+			c: 'd'
+		});
 	});
 });
 

@@ -13,24 +13,6 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    document = _window2.document;
-var _window3 = window,
-    Node = _window3.Node;
-
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
-
-function isNode(x) {
-	return isInstanceOf(x, Node);
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -92,6 +74,24 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    document = _window2.document;
+var _window3 = window,
+    Node = _window3.Node;
+
+
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+function isNode(x) {
+	return isInstanceOf(x, Node);
 }
 
 var arrayPush = Array.prototype.push;

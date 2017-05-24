@@ -73,7 +73,9 @@ function forEach(iterable, fn, thisArg) {
 /* global window */
 
 var _window = window,
-    decodeURIComponent = _window.decodeURIComponent;
+    FormData = _window.FormData;
+var _window2 = window,
+    decodeURIComponent = _window2.decodeURIComponent;
 
 
 function parse(body) {
@@ -106,15 +108,6 @@ describe('FormData/parse', function () {
 		assert.deepEqual(form.data, {
 			a: 'b',
 			c: 'd'
-		});
-	});
-});
-
-describe('FormData', function () {
-
-	it('should create a new instance', function () {
-		assert.doesNotThrow(function () {
-			return new FormData();
 		});
 	});
 });

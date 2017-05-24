@@ -22,9 +22,6 @@
 	"Body": {
 		"j0": {}
 	},
-	"FormData": {
-		"parse": {}
-	},
 	"HTMLCollection": {
 		"@iterator": {}
 	},
@@ -114,6 +111,7 @@
 		"true": {}
 	},
 	"onError": {},
+	"parseFormData": {},
 	"polyfill": {},
 	"preventDefault": {},
 	"readBlob": {},

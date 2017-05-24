@@ -13,7 +13,6 @@ import '../fetch/polyfill';
 import '../Body/polyfill';
 import '../Response/polyfill';
 import '../Request/polyfill';
-import '../FormData/polyfill';
 import '../requestAnimationFrame/polyfill';
 import '../cancelAnimationFrame/polyfill';
 import {window} from '..';

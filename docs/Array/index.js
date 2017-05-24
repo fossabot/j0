@@ -40,20 +40,6 @@ describe('Array/@iterator', function () {
 	});
 });
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    TypeError = _window2.TypeError;
-var _window3 = window,
-    Boolean = _window3.Boolean;
-
-
-function noop(x) {
-	return x;
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -115,6 +101,20 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+/* global window */
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    TypeError = _window2.TypeError;
+var _window3 = window,
+    Boolean = _window3.Boolean;
+
+
+function noop(x) {
+	return x;
 }
 
 function every(iterable) {

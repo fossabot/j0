@@ -9,25 +9,6 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
-/* global window */
-var w = window;
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    setTimeout$1 = _window2.setTimeout;
-var _window3 = window,
-    TypeError = _window3.TypeError;
-var arrayPush = Array.prototype.push;
-
-function push(arrayLike) {
-	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-		args[_key - 1] = arguments[_key];
-	}
-
-	return arrayPush.apply(arrayLike, args);
-}
-
 var iteratorKey = Symbol.iterator;
 
 var MAX_SAFE_INTEGER = 9007199254740991;
@@ -85,6 +66,25 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+/* global window */
+var w = window;
+
+var _window = window,
+    Array = _window.Array;
+var _window2 = window,
+    setTimeout$1 = _window2.setTimeout;
+var _window3 = window,
+    TypeError = _window3.TypeError;
+var arrayPush = Array.prototype.push;
+
+function push(arrayLike) {
+	for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+		args[_key - 1] = arguments[_key];
+	}
+
+	return arrayPush.apply(arrayLike, args);
 }
 
 // import postMessage from '../postMessage';

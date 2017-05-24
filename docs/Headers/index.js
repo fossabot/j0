@@ -78,6 +78,10 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
+function trim(string) {
+	return string.trim();
+}
+
 /* global window */
 
 var _window = window,
@@ -476,11 +480,7 @@ function tests(Headers, testName) {
 
 tests(Headers$1, 'Headers/j0');
 
-function trim(string) {
-	return string.trim();
-}
-
-function parse(rawHeaders) {
+function parse$2(rawHeaders) {
 	var headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
@@ -502,7 +502,7 @@ describe('Headers/parse', function () {
 
 	it('should parse raw String', function () {
 		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
-		var headers = parse(src);
+		var headers = parse$2(src);
 		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
 	});
 });

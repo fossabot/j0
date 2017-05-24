@@ -1,9 +1,7 @@
-import FormData from '../../FormData';
 import isString from '../../isString';
 import URLSearchParams from '../../URLSearchParams';
 import isInstanceOf from '../../isInstanceOf';
 import isArrayBufferView from '../../isArrayBufferView';
-import parseAsForm from '../../FormData/parse';
 import parseAsJSON from '../../JSON/parse';
 import arrayBufferToString from '../../arrayBufferToString';
 import {
@@ -13,7 +11,9 @@ import {
 	TypeError,
 	Uint8Array,
 	Promise,
-	readBlob
+	readBlob,
+	FormData,
+	parseFormData
 } from '../..';
 
 function cloneBuffer(buf) {
@@ -114,7 +114,7 @@ class Body {
 
 	formData() {
 		return this.text()
-		.then(parseAsForm);
+		.then(parseFormData);
 	}
 
 	json() {

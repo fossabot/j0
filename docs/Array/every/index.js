@@ -1,16 +1,6 @@
 (function(){
 'use strict';
 
-/* global window */
-
-var _window = window,
-    Boolean = _window.Boolean;
-
-
-function noop(x) {
-	return x;
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -72,6 +62,16 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
+}
+
+/* global window */
+
+var _window = window,
+    Boolean = _window.Boolean;
+
+
+function noop(x) {
+	return x;
 }
 
 function every(iterable) {
