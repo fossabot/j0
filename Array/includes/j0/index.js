@@ -1,8 +1,8 @@
-import forEach from '../forEach';
+import forEach from '../../forEach';
 
-function includes(iterable, searchElement, fromIndex) {
+function includes(searchElement, fromIndex) {
 	let result = false;
-	forEach(iterable, function (value) {
+	forEach(this, function (value) {
 		result = value === searchElement;
 		return result;
 	}, null, fromIndex);
