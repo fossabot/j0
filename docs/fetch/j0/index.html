@@ -9,8 +9,7 @@
 <h1 id="title"><a href="../../">j0</a>/<a href="../">fetch</a>/j0<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEach</span>&#32;<span class="name">from</span>&#32;<a href="../../Array/forEach"><span class="string"><span class="string">'../../Array/forEach'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Request</span>&#32;<span class="name">from</span>&#32;<a href="../../Request/j0"><span class="string"><span class="string">'../../Request/j0'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Request</span>&#32;<span class="name">from</span>&#32;<a href="../../Request/j0"><span class="string"><span class="string">'../../Request/j0'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Response</span>&#32;<span class="name">from</span>&#32;<a href="../../Response/j0"><span class="string"><span class="string">'../../Response/j0'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="name">parseHeaders</span><span class="_2c">,</span>
@@ -44,9 +43,9 @@
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">xhr</span><span class="_2e">.</span><span class="name">withCredentials</span>&#32;<span class="_3d">=</span>&#32;<span class="true">true</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">xhr</span><span class="_2e">.</span><span class="name">responseType</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'blob'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">forEach</span><span class="_28">(</span><span class="name">request</span><span class="_2e">.</span><span class="name">headers</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_5b">[</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_5d">]</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="const">const</span>&#32;<span class="_5b">[</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_5d">]</span>&#32;<span class="name">of</span>&#32;<span class="name">request</span><span class="_2e">.</span><span class="name">headers</span><span class="_2e">.</span><span class="name">entries</span><span class="_28">(</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">xhr</span><span class="_2e">.</span><span class="name">setRequestHeader</span><span class="_28">(</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">xhr</span><span class="_2e">.</span><span class="name">send</span><span class="_28">(</span><span class="name">isUndefined</span><span class="_28">(</span><span class="name">request</span><span class="_2e">.</span><span class="name">bodyInit</span><span class="_29">)</span>&#32;<span class="_3f">?</span>&#32;<span class="null">null</span>&#32;<span class="_3a">:</span>&#32;<span class="name">request</span><span class="_2e">.</span><span class="name">bodyInit</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="_7d">}</span>

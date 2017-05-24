@@ -116,74 +116,15 @@ if (!Array.from) {
 	Array.from = arrayFrom;
 }
 
-function isFunction(x) {
-	return typeof x === 'function';
-}
+function includes(searchElement) {
+	var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-var Number = window.Number;
-
-function forEach(iterable, fn, thisArg) {
-	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-	var length = iterable.length;
-
-	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
-	if (0 <= length) {
-		for (var index = fromIndex; index < length; index += 1) {
-			if (fn.call(thisArg, iterable[index], index, iterable)) {
-				return;
-			}
-		}
-	} else if (isFunction(iterator.next)) {
-		var _index = 0;
-		while (_index < Number.MAX_SAFE_INTEGER) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
-
-			if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
-				return;
-			}
-			_index += 1;
-		}
-	} else {
-		var _index2 = fromIndex;
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
-
-		try {
-			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var _value = _step2.value;
-
-				if (fn.call(thisArg, _value, _index2, iterable)) {
-					return;
-				}
-				_index2 += 1;
-			}
-		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
-				}
-			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
-				}
-			}
+	for (var i = fromIndex, length = this.length; i < length; i++) {
+		if (this[i] === searchElement) {
+			return true;
 		}
 	}
-}
-
-function includes(searchElement, fromIndex) {
-	var result = false;
-	forEach(this, function (value) {
-		result = value === searchElement;
-		return result;
-	}, null, fromIndex);
-	return result;
+	return false;
 }
 
 var prototype$3 = Array.prototype;
@@ -220,6 +161,10 @@ if (!String.prototype.repeat) {
 }
 
 var window$1 = window.window;
+
+function isFunction(x) {
+	return typeof x === 'function';
+}
 
 var setTimeout = window.setTimeout;
 
@@ -520,13 +465,13 @@ var Map$1 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion3 = true;
-			var _didIteratorError3 = false;
-			var _iteratorError3 = undefined;
+			var _iteratorNormalCompletion2 = true;
+			var _didIteratorError2 = false;
+			var _iteratorError2 = undefined;
 
 			try {
-				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _ref = _step3.value;
+				for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+					var _ref = _step2.value;
 
 					var _ref2 = _slicedToArray(_ref, 2);
 
@@ -536,16 +481,16 @@ var Map$1 = function () {
 					this.set(key, value);
 				}
 			} catch (err) {
-				_didIteratorError3 = true;
-				_iteratorError3 = err;
+				_didIteratorError2 = true;
+				_iteratorError2 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion3 && _iterator3.return) {
-						_iterator3.return();
+					if (!_iteratorNormalCompletion2 && _iterator2.return) {
+						_iterator2.return();
 					}
 				} finally {
-					if (_didIteratorError3) {
-						throw _iteratorError3;
+					if (_didIteratorError2) {
+						throw _iteratorError2;
 					}
 				}
 			}
@@ -622,9 +567,9 @@ var Map$1 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+					var _iterator$next = iterator.next(),
+					    value = _iterator$next.value,
+					    done = _iterator$next.done;
 
 					return {
 						value: value && value[0],
@@ -639,9 +584,9 @@ var Map$1 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+					var _iterator$next2 = iterator.next(),
+					    value = _iterator$next2.value,
+					    done = _iterator$next2.done;
 
 					return {
 						value: value && value[1],
@@ -684,27 +629,27 @@ var Set = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion4 = true;
-			var _didIteratorError4 = false;
-			var _iteratorError4 = undefined;
+			var _iteratorNormalCompletion3 = true;
+			var _didIteratorError3 = false;
+			var _iteratorError3 = undefined;
 
 			try {
-				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-					var value = _step4.value;
+				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+					var value = _step3.value;
 
 					this.add(value);
 				}
 			} catch (err) {
-				_didIteratorError4 = true;
-				_iteratorError4 = err;
+				_didIteratorError3 = true;
+				_iteratorError3 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion4 && _iterator4.return) {
-						_iterator4.return();
+					if (!_iteratorNormalCompletion3 && _iterator3.return) {
+						_iterator3.return();
 					}
 				} finally {
-					if (_didIteratorError4) {
-						throw _iteratorError4;
+					if (_didIteratorError3) {
+						throw _iteratorError3;
 					}
 				}
 			}
@@ -768,9 +713,9 @@ var Set = function () {
 			var iterator = this.values();
 			return {
 				next: function next() {
-					var _iterator$next4 = iterator.next(),
-					    value = _iterator$next4.value,
-					    done = _iterator$next4.done;
+					var _iterator$next3 = iterator.next(),
+					    value = _iterator$next3.value,
+					    done = _iterator$next3.done;
 
 					return {
 						value: !done && [value, value],
@@ -796,6 +741,8 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 }
 
 window$1.Set = SET;
+
+var Number = window.Number;
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -879,13 +826,13 @@ var StringList = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion5 = true;
-			var _didIteratorError5 = false;
-			var _iteratorError5 = undefined;
+			var _iteratorNormalCompletion4 = true;
+			var _didIteratorError4 = false;
+			var _iteratorError4 = undefined;
 
 			try {
-				for (var _iterator5 = iterable[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-					var _ref7 = _step5.value;
+				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+					var _ref7 = _step4.value;
 
 					var _ref8 = _slicedToArray(_ref7, 2);
 
@@ -895,16 +842,16 @@ var StringList = function () {
 					this.append(key, value);
 				}
 			} catch (err) {
-				_didIteratorError5 = true;
-				_iteratorError5 = err;
+				_didIteratorError4 = true;
+				_iteratorError4 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion5 && _iterator5.return) {
-						_iterator5.return();
+					if (!_iteratorNormalCompletion4 && _iterator4.return) {
+						_iterator4.return();
 					}
 				} finally {
-					if (_didIteratorError5) {
-						throw _iteratorError5;
+					if (_didIteratorError4) {
+						throw _iteratorError4;
 					}
 				}
 			}
@@ -1005,9 +952,9 @@ var StringList = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next5 = iterator.next(),
-					    value = _iterator$next5.value,
-					    done = _iterator$next5.done;
+					var _iterator$next4 = iterator.next(),
+					    value = _iterator$next4.value,
+					    done = _iterator$next4.done;
 
 					return {
 						value: value && value[1],
@@ -1132,9 +1079,9 @@ var Headers = function (_StringList2) {
 			return {
 				next: function next() {
 					while (1) {
-						var _iterator$next6 = iterator.next(),
-						    value = _iterator$next6.value,
-						    done = _iterator$next6.done;
+						var _iterator$next5 = iterator.next(),
+						    value = _iterator$next5.value,
+						    done = _iterator$next5.done;
 
 						var key = value && value[0];
 						if (done || history.indexOf(key) < 0) {
@@ -1208,7 +1155,7 @@ var decodeURIComponent = window.decodeURIComponent;
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 
-	forEach(trim(body).split('&'), function (data) {
+	trim(body).split('&').forEach(function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
@@ -1586,13 +1533,36 @@ function fetch(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		forEach(request.headers, function (_ref22) {
-			var _ref23 = _slicedToArray(_ref22, 2),
-			    name = _ref23[0],
-			    value = _ref23[1];
+		var _iteratorNormalCompletion5 = true;
+		var _didIteratorError5 = false;
+		var _iteratorError5 = undefined;
 
-			xhr.setRequestHeader(name, value);
-		});
+		try {
+			for (var _iterator5 = request.headers.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+				var _ref22 = _step5.value;
+
+				var _ref23 = _slicedToArray(_ref22, 2);
+
+				var name = _ref23[0];
+				var value = _ref23[1];
+
+				xhr.setRequestHeader(name, value);
+			}
+		} catch (err) {
+			_didIteratorError5 = true;
+			_iteratorError5 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion5 && _iterator5.return) {
+					_iterator5.return();
+				}
+			} finally {
+				if (_didIteratorError5) {
+					throw _iteratorError5;
+				}
+			}
+		}
+
 		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
 	});
 }

@@ -65,75 +65,12 @@ function trim(string) {
 	return string.trim();
 }
 
-var iteratorSymbol = Symbol.iterator;
-
-function isFunction(x) {
-	return typeof x === 'function';
-}
-
-var Number = window.Number;
-
-function forEach(iterable, fn, thisArg) {
-	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-	var length = iterable.length;
-
-	var iterator = iterable[iteratorSymbol] ? iterable[iteratorSymbol]() : iterable;
-	if (0 <= length) {
-		for (var index = fromIndex; index < length; index += 1) {
-			if (fn.call(thisArg, iterable[index], index, iterable)) {
-				return;
-			}
-		}
-	} else if (isFunction(iterator.next)) {
-		var _index = 0;
-		while (_index < Number.MAX_SAFE_INTEGER) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
-
-			if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
-				return;
-			}
-			_index += 1;
-		}
-	} else {
-		var _index2 = fromIndex;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var _value = _step.value;
-
-				if (fn.call(thisArg, _value, _index2, iterable)) {
-					return;
-				}
-				_index2 += 1;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	}
-}
-
 var decodeURIComponent = window.decodeURIComponent;
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 
-	forEach(trim(body).split('&'), function (data) {
+	trim(body).split('&').forEach(function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
@@ -342,19 +279,21 @@ var Body = function () {
 	return Body;
 }();
 
+var iteratorSymbol = Symbol.iterator;
+
 var StringList = function () {
 	function StringList(iterable) {
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion2 = true;
-			var _didIteratorError2 = false;
-			var _iteratorError2 = undefined;
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
 
 			try {
-				for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-					var _ref = _step2.value;
+				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var _ref = _step.value;
 
 					var _ref2 = _slicedToArray(_ref, 2);
 
@@ -364,16 +303,16 @@ var StringList = function () {
 					this.append(key, value);
 				}
 			} catch (err) {
-				_didIteratorError2 = true;
-				_iteratorError2 = err;
+				_didIteratorError = true;
+				_iteratorError = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion2 && _iterator2.return) {
-						_iterator2.return();
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
 					}
 				} finally {
-					if (_didIteratorError2) {
-						throw _iteratorError2;
+					if (_didIteratorError) {
+						throw _iteratorError;
 					}
 				}
 			}
@@ -474,9 +413,9 @@ var StringList = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+					var _iterator$next = iterator.next(),
+					    value = _iterator$next.value,
+					    done = _iterator$next.done;
 
 					return {
 						value: value && value[1],
@@ -564,9 +503,9 @@ var Headers = function (_StringList) {
 			return {
 				next: function next() {
 					while (1) {
-						var _iterator$next3 = iterator.next(),
-						    value = _iterator$next3.value,
-						    done = _iterator$next3.done;
+						var _iterator$next2 = iterator.next(),
+						    value = _iterator$next2.value,
+						    done = _iterator$next2.done;
 
 						var key = value && value[0];
 						if (done || history.indexOf(key) < 0) {
