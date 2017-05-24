@@ -9,8 +9,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _from = require('from');
-
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -932,8 +930,8 @@ function map(iterable) {
 	return result;
 }
 
-if (!_from.Array.from) {
-	_from.Array.from = map;
+if (!Array.from) {
+	Array.from = map;
 }
 
 function repeat(c) {
@@ -2253,9 +2251,6 @@ function fetch(input, init) {
 	});
 }
 
-// if (!window.fetch) {
-// 	window.fetch = j0Fetch;
-// }
 window.fetch = fetch;
 
 if (!window.Body) {
