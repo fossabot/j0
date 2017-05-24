@@ -64,10 +64,13 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
 
-var _window = window,
-    Array = _window.Array;
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

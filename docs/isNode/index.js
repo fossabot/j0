@@ -1,12 +1,6 @@
 (function(){
 'use strict';
 
-/* global window */
-
-var _window = window,
-    Node = _window.Node;
-
-
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }

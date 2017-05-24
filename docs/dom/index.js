@@ -13,6 +13,14 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+function isNode(x) {
+	return isInstanceOf(x, Node);
+}
+
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -76,24 +84,13 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
 
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    document = _window2.document;
-var _window3 = window,
-    Node = _window3.Node;
-
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
+	return map(iterable).join(separator);
 }
 
-function isNode(x) {
-	return isInstanceOf(x, Node);
-}
-
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

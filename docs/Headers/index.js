@@ -78,14 +78,13 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-function trim(string) {
-	return string.trim();
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
 }
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -480,7 +479,11 @@ function tests(Headers, testName) {
 
 tests(Headers$1, 'Headers/j0');
 
-function parse$2(rawHeaders) {
+function trim(string) {
+	return string.trim();
+}
+
+function parse(rawHeaders) {
 	var headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
@@ -502,7 +505,7 @@ describe('Headers/parse', function () {
 
 	it('should parse raw String', function () {
 		var src = '   Content-Length\t: 1000\nContent-Type  : text/html';
-		var headers = parse$2(src);
+		var headers = parse(src);
 		assert.deepEqual(map(headers.entries()), [['content-length', '1000'], ['content-type', 'text/html']]);
 	});
 });

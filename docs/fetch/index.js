@@ -15,10 +15,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -108,99 +104,6 @@ function find(iterable) {
 	return result;
 }
 
-function readBlob$$1(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
-function trim(string) {
-	return string.trim();
-}
-
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
-}
-
-/* global window */
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    ArrayBuffer = _window3.ArrayBuffer;
-var _window4 = window,
-    DataView = _window4.DataView;
-var _window5 = window,
-    FormData = _window5.FormData;
-var _window6 = window,
-    decodeURIComponent = _window6.decodeURIComponent;
-var _window7 = window,
-    TypeError$1 = _window7.TypeError;
-var _window8 = window,
-    Uint8Array = _window8.Uint8Array;
-var _window9 = window,
-    Uint8ClampedArray = _window9.Uint8ClampedArray;
-var _window10 = window,
-    Uint16Array = _window10.Uint16Array;
-var _window11 = window,
-    Uint32Array = _window11.Uint32Array;
-var _window12 = window,
-    Int8Array = _window12.Int8Array;
-var _window13 = window,
-    Int16Array = _window13.Int16Array;
-var _window14 = window,
-    Int32Array = _window14.Int32Array;
-var _window15 = window,
-    Float32Array = _window15.Float32Array;
-var _window16 = window,
-    Float64Array = _window16.Float64Array;
-var _window17 = window,
-    XMLHttpRequest = _window17.XMLHttpRequest;
-var _window18 = window,
-    Promise$1 = _window18.Promise;
-var _window19 = window,
-    Blob = _window19.Blob;
-var _window20 = window,
-    FileReader = _window20.FileReader;
-
-
 var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
 function isArrayBufferView(obj) {
 	return 0 <= find(viewClasses, function (constructor) {
@@ -210,6 +113,24 @@ function isArrayBufferView(obj) {
 
 var parseAsJSON = JSON.parse;
 
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -261,6 +182,56 @@ function arrayBufferToString(arrayBuffer) {
 		i += length - 1;
 	}
 	return chars.join('');
+}
+
+function readBlob(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
+function trim(string) {
+	return string.trim();
+}
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
 }
 
 function cloneBuffer(buf) {
@@ -316,10 +287,10 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
-				return readBlob$$1(blob, 'ArrayBuffer');
+				return readBlob(blob, 'ArrayBuffer');
 			});
 		}
 	}, {
@@ -330,13 +301,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return Promise.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return Promise.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -347,13 +318,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return readBlob$$1(this.bodyBlob, 'Text');
+				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return Promise.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -370,7 +341,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return Promise.reject(new TypeError('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -378,17 +349,6 @@ var Body = function () {
 
 	return Body;
 }();
-
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
 
 function filter(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -780,8 +740,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
+
 function fetch$1(input, init) {
-	return new Promise$1(function (resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {

@@ -1,13 +1,7 @@
 (function(){
 'use strict';
 
-/* global window */
-
-var _window = window,
-    FileReader = _window.FileReader;
-
-
-function readBlob$$1(data, type) {
+function readBlob(data, type) {
 	var reader = new FileReader();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
@@ -38,7 +32,7 @@ function readBlob$$1(data, type) {
 describe('FileReader/read', function () {
 
 	it('should be a function', function () {
-		return readBlob$$1;
+		return readBlob;
 	});
 });
 }())

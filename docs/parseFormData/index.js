@@ -70,14 +70,6 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-
-var _window = window,
-    FormData = _window.FormData;
-var _window2 = window,
-    decodeURIComponent = _window2.decodeURIComponent;
-
-
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
 

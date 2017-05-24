@@ -64,10 +64,7 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

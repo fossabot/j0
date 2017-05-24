@@ -1,6 +1,10 @@
 (function(){
 'use strict';
 
+function noop(x) {
+	return x;
+}
+
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -62,32 +66,6 @@ function forEach(iterable, fn, thisArg) {
 			}
 		}
 	}
-}
-
-/* global window */
-
-var _window = window,
-    Uint8Array = _window.Uint8Array;
-var _window2 = window,
-    Uint8ClampedArray = _window2.Uint8ClampedArray;
-var _window3 = window,
-    Uint16Array = _window3.Uint16Array;
-var _window4 = window,
-    Uint32Array = _window4.Uint32Array;
-var _window5 = window,
-    Int8Array = _window5.Int8Array;
-var _window6 = window,
-    Int16Array = _window6.Int16Array;
-var _window7 = window,
-    Int32Array = _window7.Int32Array;
-var _window8 = window,
-    Float32Array = _window8.Float32Array;
-var _window9 = window,
-    Float64Array = _window9.Float64Array;
-
-
-function noop(x) {
-	return x;
 }
 
 function find(iterable) {

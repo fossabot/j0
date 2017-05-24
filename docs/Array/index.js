@@ -40,6 +40,10 @@ describe('Array/@iterator', function () {
 	});
 });
 
+function noop(x) {
+	return x;
+}
+
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -103,20 +107,6 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    TypeError = _window2.TypeError;
-var _window3 = window,
-    Boolean = _window3.Boolean;
-
-
-function noop(x) {
-	return x;
-}
-
 function every(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 	var thisArg = arguments[2];
@@ -157,6 +147,24 @@ describe('Array/every', function () {
 	});
 });
 
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -358,17 +366,6 @@ describe('Array/forEach', function () {
 	});
 });
 
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
 var isArray = Array.isArray;
 
 describe('Array/from', function () {
@@ -469,12 +466,6 @@ describe('Array/includes', function () {
 		assert.equal(includes(string, 'f'), false);
 	});
 });
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
 
 describe('Array/join', function () {
 

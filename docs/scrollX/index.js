@@ -1,11 +1,8 @@
 (function(){
 'use strict';
 
-/* global window */
-var w = window;
-
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }

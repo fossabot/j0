@@ -9,13 +9,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var _from = require('from');
+
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -728,38 +730,6 @@ var runtime = createCommonjsModule(function (module) {
 	(typeof commonjsGlobal === 'undefined' ? 'undefined' : _typeof(commonjsGlobal)) === "object" ? commonjsGlobal : (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === "object" ? window : (typeof self === 'undefined' ? 'undefined' : _typeof(self)) === "object" ? self : commonjsGlobal);
 });
 
-function readBlob$$1(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
-function trim(string) {
-	return string.trim();
-}
-
 var iteratorKey = Symbol.iterator;
 
 function isFunction(x) {
@@ -823,78 +793,6 @@ function _forEach(iterable, fn, thisArg) {
 	}
 }
 
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	_forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
-}
-
-/* global window */
-var w = window;
-var _window = window,
-    String$1 = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    Object$1 = _window3.Object;
-var _window4 = window,
-    Date = _window4.Date;
-var _window5 = window,
-    parseInt = _window5.parseInt;
-var _window6 = window,
-    ArrayBuffer = _window6.ArrayBuffer;
-var _window7 = window,
-    DataView = _window7.DataView;
-var _window8 = window,
-    FormData = _window8.FormData;
-var _window9 = window,
-    setTimeout = _window9.setTimeout;
-var _window10 = window,
-    clearTimeout = _window10.clearTimeout;
-var _window11 = window,
-    decodeURIComponent = _window11.decodeURIComponent;
-var _window12 = window,
-    TypeError$1 = _window12.TypeError;
-var _window13 = window,
-    Uint8Array = _window13.Uint8Array;
-var _window14 = window,
-    Uint8ClampedArray = _window14.Uint8ClampedArray;
-var _window15 = window,
-    Uint16Array = _window15.Uint16Array;
-var _window16 = window,
-    Uint32Array = _window16.Uint32Array;
-var _window17 = window,
-    Int8Array = _window17.Int8Array;
-var _window18 = window,
-    Int16Array = _window18.Int16Array;
-var _window19 = window,
-    Int32Array = _window19.Int32Array;
-var _window20 = window,
-    Float32Array = _window20.Float32Array;
-var _window21 = window,
-    Float64Array = _window21.Float64Array;
-var _window22 = window,
-    XMLHttpRequest = _window22.XMLHttpRequest;
-var _window23 = window,
-    Promise$1 = _window23.Promise;
-var _window24 = window,
-    Blob = _window24.Blob;
-var _window25 = window,
-    FileReader = _window25.FileReader;
-
-
 function isString(x) {
 	return typeof x === 'string';
 }
@@ -933,7 +831,7 @@ var SymbolRegistry = function () {
 				}
 				return this.get(key, '');
 			}
-			throw new TypeError$1('Symbol.for was called with non-string: ' + key);
+			throw new TypeError('Symbol.for was called with non-string: ' + key);
 		}
 	}, {
 		key: 'keyFor',
@@ -956,7 +854,7 @@ var SymbolRegistry = function () {
 				return _this.get(key);
 			};
 			function define(key, value) {
-				Object$1.defineProperty(fn, key, { value: value });
+				Object.defineProperty(fn, key, { value: value });
 			}
 			_forEach(['iterator', 'match', 'replace', 'search', 'split', 'hasInstance', 'isConcatSpreadable', 'unscopables', 'species', 'toPrimitive', 'toStringTag'], function (key) {
 				define(key, fn(key));
@@ -976,8 +874,8 @@ var SymbolRegistry = function () {
 
 var J0Symbol = new SymbolRegistry().Symbol;
 
-if (!w.Symbol) {
-	w.Symbol = J0Symbol;
+if (!window.Symbol) {
+	window.Symbol = J0Symbol;
 }
 
 function generator() {
@@ -1002,6 +900,13 @@ if (!prototype[iteratorKey]) {
 	prototype[iteratorKey] = generator;
 }
 
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -1027,14 +932,8 @@ function map(iterable) {
 	return result;
 }
 
-if (!Array.from) {
-	Array.from = map;
-}
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
+if (!_from.Array.from) {
+	_from.Array.from = map;
 }
 
 function repeat(c) {
@@ -1052,11 +951,12 @@ if (!String.prototype.repeat) {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!w.immediateId) {
-	w.immediateId = 0;
+if (!window.immediateId) {
+	window.immediateId = 0;
 }
-w.immediateId += 1;
-var setImmediateNative = w.setImmediate;
+window.immediateId += 1;
+var _window = window,
+    setImmediateNative = _window.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1184,7 +1084,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError$1('A promise cannot be resolved with itself');
+					throw new TypeError('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -1333,7 +1233,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-w.Promise = w.Promise || J0Promise;
+window.Promise = window.Promise || J0Promise;
 
 function find(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
@@ -1497,13 +1397,13 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = w.Map;
+var MAP = window.Map;
 
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
 
-w.Map = MAP;
+window.Map = MAP;
 
 function generator$2() {
 	return this.entries();
@@ -1605,13 +1505,13 @@ var Set = function () {
 	return Set;
 }();
 
-var SET = w.Set;
+var SET = window.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 	SET = Set;
 }
 
-w.Set = SET;
+window.Set = SET;
 
 function generator$4() {
 	var _this8 = this;
@@ -1850,10 +1750,11 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var URLSearchParams$1 = w.URLSearchParams;
+var _window2 = window,
+    URLSearchParams$1 = _window2.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	w.URLSearchParams = URLSearchParams$2;
+	window.URLSearchParams = URLSearchParams$2;
 }
 
 function forEachKey(obj, fn, thisArg) {
@@ -1946,12 +1847,8 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!w.Headers) {
-	w.Headers = Headers$1;
-}
-
-function isUndefined(x) {
-	return typeof x === 'undefined';
+if (!window.Headers) {
+	window.Headers = Headers$1;
 }
 
 function isInstanceOf(instance, constructor) {
@@ -1981,7 +1878,7 @@ function consume(view, index, length) {
 		var shiftSize = availableBits * i++;
 		charCode |= (view[index + length] & mask) << shiftSize;
 	}
-	return String$1.fromCharCode(charCode);
+	return String.fromCharCode(charCode);
 }
 /* eslint-enable no-bitwise */
 
@@ -2008,6 +1905,56 @@ function arrayBufferToString(arrayBuffer) {
 		i += length - 1;
 	}
 	return chars.join('');
+}
+
+function readBlob(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
+function trim(string) {
+	return string.trim();
+}
+
+function parse(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	_forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
 }
 
 function cloneBuffer(buf) {
@@ -2063,10 +2010,10 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
-				return readBlob$$1(blob, 'ArrayBuffer');
+				return readBlob(blob, 'ArrayBuffer');
 			});
 		}
 	}, {
@@ -2077,13 +2024,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return Promise.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return Promise.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -2094,13 +2041,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return readBlob$$1(this.bodyBlob, 'Text');
+				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return Promise.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -2117,7 +2064,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return Promise.reject(new TypeError('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -2266,8 +2213,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-function fetch$1(input, init) {
-	return new Promise$1(function (resolve, reject) {
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
+
+function fetch(input, init) {
+	return new Promise(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {
@@ -2305,29 +2256,29 @@ function fetch$1(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0Fetch;
 // }
-w.fetch = fetch$1;
+window.fetch = fetch;
 
-if (!w.Body) {
-	w.Body = Body;
+if (!window.Body) {
+	window.Body = Body;
 }
 
-if (!w.Response) {
-	w.Response = Response;
+if (!window.Response) {
+	window.Response = Response;
 }
 
-if (!w.Request) {
-	w.Request = Request;
+if (!window.Request) {
+	window.Request = Request;
 }
 
-w.requestAnimationFrame = w.requestAnimationFrame || w.mozRequestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || function (fn) {
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
 	return setTimeout(function () {
 		fn(Date.now());
 	}, 30);
 };
 
-w.cancelAnimationFrame = w.cancelAnimationFrame || w.mozCancelAnimationFrame || function (id) {
+window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function (id) {
 	return clearTimeout(id);
 };
 
-w.global = w;
+window.global = window;
 }())

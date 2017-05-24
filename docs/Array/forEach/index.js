@@ -66,10 +66,28 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
+function noop(x) {
+	return x;
+}
 
-var _window = window,
-    Array = _window.Array;
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {

@@ -1,12 +1,6 @@
 (function(){
 'use strict';
 
-/* global window */
-
-var _window = window,
-    Array = _window.Array;
-
-
 var isArray = Array.isArray;
 
 describe('isArray', function () {

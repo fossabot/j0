@@ -9,7 +9,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var createNavigation = function () {
 	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-		var root, response, tree, pathname, basePath, rootBranch, parseBranch, nav;
+		var root, response, tree, _location, pathname, basePath, rootBranch, parseBranch, nav;
+
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
@@ -17,7 +18,7 @@ var createNavigation = function () {
 						parseBranch = function parseBranch(parent, name, base) {
 							var childElements = [];
 							forEachKey(parent, function (branch, key) {
-								push(childElements, parseBranch(branch, key, base ? base + '/' + name : name));
+								childElements.push(parseBranch(branch, key, base ? base + '/' + name : name));
 							});
 							var ul = 0 < childElements.length ? {
 								t: 'ul',
@@ -44,9 +45,9 @@ var createNavigation = function () {
 
 					case 7:
 						tree = _context.sent;
-						pathname = location.pathname;
+						_location = location, pathname = _location.pathname;
 						basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
-						rootBranch = reduce(pathname.replace(basePath, '').split('/'), function (parent, name) {
+						rootBranch = pathname.replace(basePath, '').split('/').reduce(function (parent, name) {
 							return name ? parent[name] : parent;
 						}, tree);
 						nav = parseBranch(rootBranch, '', '');
@@ -73,6 +74,28 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function forEachKey(obj, fn, thisArg) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			if (fn.call(thisArg, obj[key], key, obj)) {
+				return;
+			}
+		}
+	}
+}
+
+function isString(x) {
+	return typeof x === 'string';
+}
+
+function isInstanceOf(instance, constructor) {
+	return instance instanceof constructor;
+}
+
+function isNode(x) {
+	return isInstanceOf(x, Node);
+}
 
 var iteratorKey = Symbol.iterator;
 
@@ -137,62 +160,13 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-var w = window;
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
 
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    location = _window2.location;
-var _window3 = window,
-    navigator = _window3.navigator;
-var _window4 = window,
-    document = _window4.document;
-var _window5 = window,
-    setTimeout = _window5.setTimeout;
-var _window6 = window,
-    Node = _window6.Node;
-var _window7 = window,
-    Promise$1 = _window7.Promise;
-var _window8 = window,
-    fetch = _window8.fetch;
-
-
-var INTERVAL = 100;
-
-var getBody = new Promise$1(function (resolve) {
-	function get() {
-		var body = document.body;
-
-		if (body) {
-			resolve(body);
-		} else {
-			setTimeout(get, INTERVAL);
-		}
-	}
-	get();
-});
-
-function onError(error) {
-	onError.listener(error);
+	return map(iterable).join(separator);
 }
 
-onError.listener = function (error) {
-	console.error(error);
-};
-
-function isString(x) {
-	return typeof x === 'string';
-}
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
-
-function isNode(x) {
-	return isInstanceOf(x, Node);
-}
-
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -448,33 +422,33 @@ function _findAll(selector) {
 wrap.find = _find;
 wrap.findAll = _findAll;
 
-function reduce(iterable, fn) {
-	var initialValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	var thisArg = arguments[3];
-
-	var result = initialValue;
-	forEach(iterable, function (item, index) {
-		result = fn.call(thisArg, result, item, index, iterable);
-	});
-	return result;
+function onError(error) {
+	onError.listener(error);
 }
 
-function pop(array) {
-	return array.pop();
-}
+onError.listener = function (error) {
+	console.error(error);
+};
 
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
+var INTERVAL = 100;
+
+var getBody = new Promise(function (resolve) {
+	function get() {
+		var _document = document,
+		    body = _document.body;
+
+		if (body) {
+			resolve(body);
+		} else {
+			setTimeout(get, INTERVAL);
 		}
 	}
-}
+	get();
+});
 
 /* global chai */
-var mocha = w.mocha;
+var _window = window,
+    mocha = _window.mocha;
 
 
 function startMocha() {
@@ -488,7 +462,7 @@ function startMocha() {
 
 function showEnvironment() {
 	var environment = wrap.find('#environment');
-	forEach(Object.keys(navigator.constructor.prototype), function (key) {
+	Object.keys(navigator.constructor.prototype).forEach(function (key) {
 		var value = navigator[key];
 		environment.append({
 			t: 'tr',
@@ -505,28 +479,28 @@ function showEnvironment() {
 }
 
 function normalizeUrl(url) {
-	return reduce(url.split('/'), function (result, fragment) {
+	return url.split('/').reduce(function (result, fragment) {
 		switch (fragment) {
 			case '..':
-				pop(result);
+				result.pop();
 				break;
 			case '.':
 			case '':
 				break;
 			default:
-				push(result, fragment);
+				result.push(fragment);
 		}
 		return result;
 	}, []).join('/');
 }
 
 if (mocha) {
-	w.assert = chai.assert;
+	window.assert = chai.assert;
 	mocha.setup('bdd');
-	w.start = startMocha;
+	window.start = startMocha;
 }
 
 getBody.then(function () {
-	return Promise$1.all([mocha && showEnvironment(), createNavigation()]);
+	return Promise.all([mocha && showEnvironment(), createNavigation()]);
 }).catch(onError);
 }())

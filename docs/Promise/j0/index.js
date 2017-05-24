@@ -68,15 +68,28 @@ function forEach(iterable, fn, thisArg) {
 	}
 }
 
-/* global window */
-var w = window;
+function noop(x) {
+	return x;
+}
 
-var _window = window,
-    Array = _window.Array;
-var _window2 = window,
-    setTimeout$1 = _window2.setTimeout;
-var _window3 = window,
-    TypeError = _window3.TypeError;
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -89,11 +102,12 @@ function push(arrayLike) {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!w.immediateId) {
-	w.immediateId = 0;
+if (!window.immediateId) {
+	window.immediateId = 0;
 }
-w.immediateId += 1;
-var setImmediateNative = w.setImmediate;
+window.immediateId += 1;
+var _window = window,
+    setImmediateNative = _window.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -122,7 +136,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout$1(fn);
+	return setTimeout(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -138,7 +152,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout$1(function () {
+setTimeout(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -156,10 +170,6 @@ setTimeout$1(function () {
 var setImmediate = function setImmediate(fn) {
 	return setImmediateAvailable(fn);
 };
-
-function noop(x) {
-	return x;
-}
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;

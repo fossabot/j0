@@ -44,9 +44,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function generator() {
 	var _this = this;
@@ -85,36 +85,8 @@ describe('Array/@iterator', function () {
 	});
 });
 
-function readBlob$$1(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
-}
-
-function trim(string) {
-	return string.trim();
+function noop(x) {
+	return x;
 }
 
 var iteratorKey = Symbol.iterator;
@@ -180,88 +152,6 @@ function _forEach(iterable, fn, thisArg) {
 	}
 }
 
-function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
-
-	_forEach(trim(body).split('&'), function (data) {
-		if (data) {
-			var _data$split = data.split('='),
-			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
-			    parts = _data$split2.slice(1);
-
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
-		}
-	});
-	return form;
-}
-
-/* global window */
-var w = window;
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    Date$1 = _window3.Date;
-var _window4 = window,
-    parseInt = _window4.parseInt;
-var _window5 = window,
-    ArrayBuffer = _window5.ArrayBuffer;
-var _window6 = window,
-    DataView = _window6.DataView;
-var _window7 = window,
-    FormData = _window7.FormData;
-var _window8 = window,
-    document$1 = _window8.document;
-var _window9 = window,
-    setTimeout$1 = _window9.setTimeout;
-var _window10 = window,
-    Node = _window10.Node;
-var _window11 = window,
-    decodeURIComponent = _window11.decodeURIComponent;
-var _window12 = window,
-    TypeError$1 = _window12.TypeError;
-var _window13 = window,
-    Uint8Array = _window13.Uint8Array;
-var _window14 = window,
-    Uint8ClampedArray = _window14.Uint8ClampedArray;
-var _window15 = window,
-    Uint16Array = _window15.Uint16Array;
-var _window16 = window,
-    Uint32Array = _window16.Uint32Array;
-var _window17 = window,
-    Int8Array = _window17.Int8Array;
-var _window18 = window,
-    Int16Array = _window18.Int16Array;
-var _window19 = window,
-    Int32Array = _window19.Int32Array;
-var _window20 = window,
-    Float32Array = _window20.Float32Array;
-var _window21 = window,
-    Float64Array = _window21.Float64Array;
-var _window22 = window,
-    XMLHttpRequest = _window22.XMLHttpRequest;
-var _window23 = window,
-    Promise$1 = _window23.Promise;
-var _window24 = window,
-    Blob = _window24.Blob;
-var _window25 = window,
-    Boolean = _window25.Boolean;
-var _window26 = window,
-    requestAnimationFrame = _window26.requestAnimationFrame;
-var _window27 = window,
-    cancelAnimationFrame = _window27.cancelAnimationFrame;
-var _window28 = window,
-    FileReader = _window28.FileReader;
-
-
-function noop(x) {
-	return x;
-}
-
 function every(iterable) {
 	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
 	var thisArg = arguments[2];
@@ -302,6 +192,24 @@ describe('Array/every', function () {
 	});
 });
 
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	_forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -503,17 +411,6 @@ describe('Array/forEach', function () {
 	});
 });
 
-function map(iterable) {
-	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-	var thisArg = arguments[2];
-
-	var result = [];
-	_forEach(iterable, function (value, index) {
-		push(result, fn.call(thisArg, value, index, iterable));
-	});
-	return result;
-}
-
 var isArray = Array.isArray;
 
 describe('Array/from', function () {
@@ -614,12 +511,6 @@ describe('Array/includes', function () {
 		assert.equal(includes(string, 'f'), false);
 	});
 });
-
-function join(iterable) {
-	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
-
-	return map(iterable).join(separator);
-}
 
 describe('Array/join', function () {
 
@@ -949,7 +840,7 @@ function shift(arrayLike) {
 		arrayLike.length = length - 1;
 		return returnValue;
 	}
-	throw new TypeError$1('The object is not shift-able object');
+	throw new TypeError('The object is not shift-able object');
 }
 
 describe('Array/shift', function () {
@@ -1086,8 +977,36 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
+function readBlob(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
 function createArrayBuffer(data) {
-	return readBlob$$1(new Blob([data]), 'ArrayBuffer');
+	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
 
 describe('ArrayBuffer/toString', function () {
@@ -1122,7 +1041,29 @@ function isArrayBufferView(obj) {
 	});
 }
 
-var parse$2 = JSON.parse;
+var parse = JSON.parse;
+
+function trim(string) {
+	return string.trim();
+}
+
+function parse$1(body) {
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+
+	_forEach(trim(body).split('&'), function (data) {
+		if (data) {
+			var _data$split = data.split('='),
+			    _data$split2 = _toArray(_data$split),
+			    name = _data$split2[0],
+			    parts = _data$split2.slice(1);
+
+			name = decodeURIComponent(name.replace(/\+/g, ' '));
+			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			form.append(name, parts);
+		}
+	});
+	return form;
+}
 
 function cloneBuffer(buf) {
 	if (buf.slice) {
@@ -1177,10 +1118,10 @@ var Body$1 = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || Promise.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
-				return readBlob$$1(blob, 'ArrayBuffer');
+				return readBlob(blob, 'ArrayBuffer');
 			});
 		}
 	}, {
@@ -1191,13 +1132,13 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return Promise.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return Promise.resolve(new Blob([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return Promise.resolve(new Blob([this.bodyText]));
 			}
 		}
 	}, {
@@ -1208,30 +1149,30 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return readBlob$$1(this.bodyBlob, 'Text');
+				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return Promise.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return Promise.resolve(this.bodyText);
 			}
 		}
 	}, {
 		key: 'formData',
 		value: function formData() {
-			return this.text().then(parse);
+			return this.text().then(parse$1);
 		}
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(parse$2);
+			return this.text().then(parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return Promise.reject(new TypeError('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1332,7 +1273,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document$1.createTextNode(source);
+			this[nodeKey] = document.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -1345,7 +1286,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -1533,14 +1474,14 @@ function wrap(source) {
 }
 
 function find$3(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 
 	var element = rootElement.querySelector(selector);
 	return element && wrap(element);
 }
 
 function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
 
 	return map(rootElement.querySelectorAll(selector), wrap);
 }
@@ -1939,8 +1880,8 @@ function parse$3(rawHeaders) {
 	return headers;
 }
 
-function fetch$2(input, init) {
-	return new Promise$1(function (resolve, reject) {
+function fetch$1(input, init) {
+	return new Promise(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function () {
@@ -1999,7 +1940,7 @@ function tests$2(fetch) {
 	});
 }
 
-tests$2(fetch$2, 'J0Fetch');
+tests$2(fetch$1, 'J0Fetch');
 
 tests$2(fetch);
 
@@ -2020,7 +1961,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new Date$1(src);
+	var date = new Date(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();
@@ -2045,14 +1986,15 @@ describe('format', function () {
 
 var INTERVAL = 100;
 
-var getBody = new Promise$1(function (resolve) {
+var getBody = new Promise(function (resolve) {
 	function get() {
-		var body = document$1.body;
+		var _document = document,
+		    body = _document.body;
 
 		if (body) {
 			resolve(body);
 		} else {
-			setTimeout$1(get, INTERVAL);
+			setTimeout(get, INTERVAL);
 		}
 	}
 	get();
@@ -2254,7 +2196,7 @@ describe('HTMLCollection/@iterator', function () {
 });
 
 function innerHeight() {
-	return w.innerHeight;
+	return window.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -2265,7 +2207,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return w.innerWidth;
+	return window.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -2560,7 +2502,7 @@ describe('isUndefined', function () {
 describe('JSON/parse', function () {
 
 	it('should parse JSON string', function () {
-		assert.deepEqual(parse$2('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
+		assert.deepEqual(parse('[0, [1], {"a": "b"}]'), [0, [1], { a: 'b' }]);
 	});
 });
 
@@ -3168,7 +3110,7 @@ describe('Object/assign', function () {
 });
 
 function clone(obj) {
-	return parse$2(stringify(obj));
+	return parse(stringify(obj));
 }
 
 describe('Object/clone', function () {
@@ -3308,7 +3250,7 @@ describe('onError', function () {
 describe('FormData/parse', function () {
 
 	it('should parse string', function () {
-		var form = parse('a=b&c=d', {
+		var form = parse$1('a=b&c=d', {
 			data: {},
 			append: function append(key, value) {
 				this.data[key] = value;
@@ -3324,7 +3266,7 @@ describe('FormData/parse', function () {
 describe('polyfill', function () {
 
 	it('should add global', function () {
-		assert.equal(w.global, w);
+		assert.equal(window.global, window);
 	});
 });
 
@@ -3341,11 +3283,12 @@ describe('preventDefault', function () {
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!w.immediateId) {
-	w.immediateId = 0;
+if (!window.immediateId) {
+	window.immediateId = 0;
 }
-w.immediateId += 1;
-var setImmediateNative = w.setImmediate;
+window.immediateId += 1;
+var _window = window,
+    setImmediateNative = _window.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -3374,7 +3317,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout$1(fn);
+	return setTimeout(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -3390,7 +3333,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout$1(function () {
+setTimeout(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -3473,7 +3416,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError$1('A promise cannot be resolved with itself');
+					throw new TypeError('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -3757,7 +3700,7 @@ test$1(Promise, 'Promise');
 describe('FileReader/read', function () {
 
 	it('should be a function', function () {
-		return readBlob$$1;
+		return readBlob;
 	});
 });
 
@@ -3819,7 +3762,7 @@ describe('scrollTo', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -3831,7 +3774,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : w;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -4345,7 +4288,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = setTimeout$1(function () {
+			timer = setTimeout(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;

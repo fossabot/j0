@@ -5,12 +5,6 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
-/* global window */
-
-var _window = window,
-    TypeError = _window.TypeError;
-
-
 function shift(arrayLike) {
 	if (arrayLike.shift) {
 		return arrayLike.shift();

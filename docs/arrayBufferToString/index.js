@@ -1,45 +1,91 @@
 (function(){
 'use strict';
 
-function readBlob$$1(data, type) {
-	var reader = new FileReader();
-	var promise = new Promise(function (resolve, reject) {
-		reader.onload = function () {
-			resolve(reader.result);
-		};
-		reader.onerror = function () {
-			reject(reader.error);
-		};
-		switch (type) {
-			case 'ArrayBuffer':
-				reader.readAsArrayBuffer(data);
-				break;
-			case 'BinaryString':
-				reader.readAsBinaryString(data);
-				break;
-			case 'DataURL':
-				reader.readAsDataURL(data);
-				break;
-			default:
-				reader.readAsText(data);
-				break;
-		}
-	});
-	promise.reader = reader;
-	return promise;
+var iteratorKey = Symbol.iterator;
+
+function isFunction(x) {
+	return typeof x === 'function';
 }
 
-/* global window */
-var _window = window,
-    String = _window.String;
-var _window2 = window,
-    Array = _window2.Array;
-var _window3 = window,
-    Uint8Array = _window3.Uint8Array;
-var _window4 = window,
-    Blob = _window4.Blob;
-var _window5 = window,
-    FileReader = _window5.FileReader;
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+function forEach(iterable, fn, thisArg) {
+	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+	var length = iterable.length;
+
+	var iterator = iterable[iteratorKey] ? iterable[iteratorKey]() : iterable;
+	if (0 <= length) {
+		for (var index = fromIndex; index < length; index += 1) {
+			if (fn.call(thisArg, iterable[index], index, iterable)) {
+				return;
+			}
+		}
+	} else if (isFunction(iterator.next)) {
+		var _index = 0;
+		while (_index < MAX_SAFE_INTEGER) {
+			var _iterator$next = iterator.next(),
+			    value = _iterator$next.value,
+			    done = _iterator$next.done;
+
+			if (done || fromIndex <= _index && fn.call(thisArg, value, _index, iterable)) {
+				return;
+			}
+			_index += 1;
+		}
+	} else {
+		var _index2 = fromIndex;
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+
+		try {
+			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var _value = _step.value;
+
+				if (fn.call(thisArg, _value, _index2, iterable)) {
+					return;
+				}
+				_index2 += 1;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	}
+}
+
+function noop(x) {
+	return x;
+}
+
+function map(iterable) {
+	var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+	var thisArg = arguments[2];
+
+	var result = [];
+	forEach(iterable, function (value, index) {
+		push(result, fn.call(thisArg, value, index, iterable));
+	});
+	return result;
+}
+
+function join(iterable) {
+	var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
+
+	return map(iterable).join(separator);
+}
+
+console.log(Object, join);
 var arrayPush = Array.prototype.push;
 
 function push(arrayLike) {
@@ -93,8 +139,36 @@ function arrayBufferToString(arrayBuffer) {
 	return chars.join('');
 }
 
+function readBlob(data, type) {
+	var reader = new FileReader();
+	var promise = new Promise(function (resolve, reject) {
+		reader.onload = function () {
+			resolve(reader.result);
+		};
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+		switch (type) {
+			case 'ArrayBuffer':
+				reader.readAsArrayBuffer(data);
+				break;
+			case 'BinaryString':
+				reader.readAsBinaryString(data);
+				break;
+			case 'DataURL':
+				reader.readAsDataURL(data);
+				break;
+			default:
+				reader.readAsText(data);
+				break;
+		}
+	});
+	promise.reader = reader;
+	return promise;
+}
+
 function createArrayBuffer(data) {
-	return readBlob$$1(new Blob([data]), 'ArrayBuffer');
+	return readBlob(new Blob([data]), 'ArrayBuffer');
 }
 
 describe('ArrayBuffer/toString', function () {
