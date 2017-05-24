@@ -8,7 +8,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref32 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(duration, data) {
+	var _ref30 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(duration, data) {
 		return regeneratorRuntime.wrap(function _callee7$(_context7) {
 			while (1) {
 				switch (_context7.prev = _context7.next) {
@@ -29,8 +29,8 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x32, _x33) {
-		return _ref32.apply(this, arguments);
+	return function wait(_x33, _x34) {
+		return _ref30.apply(this, arguments);
 	};
 }();
 
@@ -97,6 +97,8 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var Number$1 = window.Number;
+
 function _forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
@@ -110,7 +112,7 @@ function _forEach(iterable, fn, thisArg) {
 		}
 	} else if (isFunction(iterator.next)) {
 		var _index = 0;
-		while (_index < Number.MAX_SAFE_INTEGER) {
+		while (_index < Number$1.MAX_SAFE_INTEGER) {
 			var _iterator$next2 = iterator.next(),
 			    value = _iterator$next2.value,
 			    done = _iterator$next2.done;
@@ -3185,75 +3187,23 @@ describe('noop', function () {
 	});
 });
 
-var MAX_SAFE_INTEGER = 9007199254740991;
+function test$3(MAX_SAFE_INTEGER) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
-describe('Number/MAX_SAFE_INTEGER', function () {
 
-	it('should evaluate to true', function () {
-		assert.equal(MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2);
-	});
-});
+	describe(name, function () {
 
-var parseInt = window.parseInt;
-
-var suffixes = ['th', 'st', 'nd', 'rd'];
-var TEN = 10;
-var HUNDRED = 100;
-
-function getOrdinalSuffix(n) {
-	var type = n % TEN;
-	var r2 = n % HUNDRED;
-	if (10 < r2 && r2 < 20 || 3 < type) {
-		type = 0;
-	}
-	return suffixes[type];
-}
-
-function toOrdinalString(n, radix) {
-	var i = parseInt(n, radix);
-	return '' + i + getOrdinalSuffix(i);
-}
-
-describe('Number/toOrdinalString', function () {
-
-	var tests = [[0, '0th'], [1, '1st'], [2, '2nd'], [3, '3rd'], [4, '4th'], [5, '5th'], [6, '6th'], [7, '7th'], [8, '8th'], [9, '9th'], [10, '10th'], [11, '11th'], [12, '12th'], [13, '13th'], [14, '14th'], [15, '15th'], [16, '16th'], [17, '17th'], [18, '18th'], [19, '19th'], [20, '20th'], [121, '121st'], [122, '122nd'], [123, '123rd'], [124, '124th']];
-
-	var _loop = function _loop(n, expected) {
-		it('should return ' + expected + ' if the argument is ' + n, function () {
-			assert.equal(toOrdinalString(n), expected);
+		it('should evaluate to true', function () {
+			assert.equal(MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2);
 		});
-	};
+	});
+}
 
-	var _iteratorNormalCompletion5 = true;
-	var _didIteratorError5 = false;
-	var _iteratorError5 = undefined;
+var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-	try {
-		for (var _iterator5 = tests[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-			var _ref27 = _step5.value;
+test$3(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-			var _ref28 = _slicedToArray(_ref27, 2);
-
-			var n = _ref28[0];
-			var expected = _ref28[1];
-
-			_loop(n, expected);
-		}
-	} catch (err) {
-		_didIteratorError5 = true;
-		_iteratorError5 = err;
-	} finally {
-		try {
-			if (!_iteratorNormalCompletion5 && _iterator5.return) {
-				_iterator5.return();
-			}
-		} finally {
-			if (_didIteratorError5) {
-				throw _iteratorError5;
-			}
-		}
-	}
-});
+test$3(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
 	for (var _len6 = arguments.length, sources = Array(_len6 > 1 ? _len6 - 1 : 0), _key8 = 1; _key8 < _len6; _key8++) {
@@ -3710,7 +3660,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$3(Promise, name) {
+function test$5(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3838,9 +3788,9 @@ function test$3(Promise, name) {
 	});
 }
 
-test$3(J0Promise, 'Promise/j0');
+test$5(J0Promise, 'Promise/j0');
 
-test$3(Promise, 'Promise');
+test$5(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -4377,7 +4327,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$4(_Symbol) {
+function test$6(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4421,9 +4371,9 @@ function test$4(_Symbol) {
 	});
 }
 
-test$4(Symbol, 'J0Symbol');
+test$6(Symbol, 'J0Symbol');
 
-test$4(Symbol);
+test$6(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4495,11 +4445,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return map(this.data, function (_ref30) {
-				var _ref31 = _slicedToArray(_ref30, 2),
-				    name = _ref31[0],
-				    _ref31$ = _ref31[1],
-				    value = _ref31$ === undefined ? '' : _ref31$;
+			return map(this.data, function (_ref28) {
+				var _ref29 = _slicedToArray(_ref28, 2),
+				    name = _ref29[0],
+				    _ref29$ = _ref29[1],
+				    value = _ref29$ === undefined ? '' : _ref29$;
 
 				return name + '=' + value;
 			}).join('&');

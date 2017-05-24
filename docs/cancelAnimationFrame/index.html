@@ -15,12 +15,41 @@
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span><span class="name">cancelAnimationFrame</span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">cancelAnimationFrame</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">requestAnimationFrame</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'cancelAnimationFrame'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">''</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">cancelAnimationFrame</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;cancel&#32;scheduled&#32;invocation'</span><span class="_2c">,</span>&#32;<span class="name">async</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">baseInterval</span>&#32;<span class="_3d">=</span>&#32;<span class="name">await</span>&#32;<span class="new">new</span>&#32;<span class="name">Promise</span><span class="_28">(</span><span class="_28">(</span><span class="name">resolve</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">requestAnimationFrame</span><span class="_28">(</span><span class="_28">(</span><span class="name">time1</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">requestAnimationFrame</span><span class="_28">(</span><span class="_28">(</span><span class="name">time2</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">resolve</span><span class="_28">(</span><span class="name">time2</span>&#32;<span class="_2b_2f_2d">-</span>&#32;<span class="name">time1</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="num">0</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">baseInterval</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">await</span>&#32;<span class="new">new</span>&#32;<span class="name">Promise</span><span class="_28">(</span><span class="_28">(</span><span class="name">resolve</span><span class="_2c">,</span>&#32;<span class="name">reject</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">margin</span>&#32;<span class="_3d">=</span>&#32;<span class="num">10</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">timer</span>&#32;<span class="_3d">=</span>&#32;<span class="name">setTimeout</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">reject</span><span class="_28">(</span><span class="new">new</span>&#32;<span class="name">Error</span><span class="_28">(</span><span class="string">'requestAnimationFrame&#32;didn\'t&#32;invoke&#32;the&#32;given&#32;function.'</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_2c">,</span>&#32;<span class="name">baseInterval</span>&#32;<span class="_2a">*</span>&#32;<span class="name">margin</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">requestAnimationFrame</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">clearTimeout</span><span class="_28">(</span><span class="name">timer</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">resolve</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">await</span>&#32;<span class="new">new</span>&#32;<span class="name">Promise</span><span class="_28">(</span><span class="_28">(</span><span class="name">resolve</span><span class="_2c">,</span>&#32;<span class="name">reject</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">margin</span>&#32;<span class="_3d">=</span>&#32;<span class="num">10</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">timer</span>&#32;<span class="_3d">=</span>&#32;<span class="name">setTimeout</span><span class="_28">(</span><span class="name">resolve</span><span class="_2c">,</span>&#32;<span class="name">baseInterval</span>&#32;<span class="_2a">*</span>&#32;<span class="name">margin</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">id</span>&#32;<span class="_3d">=</span>&#32;<span class="name">requestAnimationFrame</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">clearTimeout</span><span class="_28">(</span><span class="name">timer</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">reject</span><span class="_28">(</span><span class="new">new</span>&#32;<span class="name">Error</span><span class="_28">(</span><span class="string">'cancelAnimationFrame&#32;didn\'t&#32;cancel&#32;the&#32;invocation.'</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">cancelAnimationFrame</span><span class="_28">(</span><span class="name">id</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>

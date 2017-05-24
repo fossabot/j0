@@ -19,8 +19,9 @@
 <span class="linenum"></span>
 <span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'requestAnimationFrame'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">''</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">requestAnimationFrame</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;call&#32;the&#32;given&#32;function&#32;with&#32;timeStamp'</span><span class="_2c">,</span>&#32;<span class="name">async</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">timeStamp</span>&#32;<span class="_3d">=</span>&#32;<span class="name">await</span>&#32;<span class="new">new</span>&#32;<span class="name">Promise</span><span class="_28">(</span><span class="name">requestAnimationFrame</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_28">(</span><span class="num">0</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">timeStamp</span><span class="_2c">,</span>&#32;<span class="true">true</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>

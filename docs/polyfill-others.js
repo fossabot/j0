@@ -47,6 +47,8 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var Number = window.Number;
+
 function _forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
@@ -722,6 +724,12 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 }
 
 window$1.Set = SET;
+
+var J0MAX_SAFE_INTEGER = 9007199254740991;
+
+if (!Number.MAX_SAFE_INTEGER) {
+	Number.MAX_SAFE_INTEGER = J0MAX_SAFE_INTEGER;
+}
 
 function generator$4() {
 	var _this7 = this;
@@ -1514,9 +1522,6 @@ function fetch(input, init) {
 	});
 }
 
-// if (!window.fetch) {
-// 	window.fetch = j0Fetch;
-// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {

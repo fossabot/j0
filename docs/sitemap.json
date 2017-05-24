@@ -46,8 +46,9 @@
 		"@iterator": {}
 	},
 	"Number": {
-		"MAX_SAFE_INTEGER": {},
-		"toOrdinalString": {}
+		"MAX_SAFE_INTEGER": {
+			"j0": {}
+		}
 	},
 	"Object": {
 		"assign": {},

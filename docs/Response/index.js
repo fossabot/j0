@@ -71,6 +71,8 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var Number = window.Number;
+
 function forEach(iterable, fn, thisArg) {
 	var fromIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 	var length = iterable.length;
