@@ -7,8 +7,6 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -297,6 +295,23 @@ function toLowerCase(string) {
 
 var iteratorSymbol = Symbol.iterator;
 
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
+		}
+	}]);
+
+	return Iterator;
+}();
+
 var StringList = function () {
 	function StringList(iterable) {
 		_classCallCheck(this, StringList);
@@ -498,14 +513,11 @@ var Headers = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this2 = this,
-			    _ref13;
+			var _this2 = this;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
-			return _ref13 = {}, _defineProperty(_ref13, iteratorSymbol, function () {
-				return this;
-			}), _defineProperty(_ref13, 'next', function next() {
+			return new Iterator(function () {
 				while (1) {
 					var _iterator$next2 = iterator.next(),
 					    value = _iterator$next2.value,
@@ -520,7 +532,7 @@ var Headers = function (_StringList) {
 						};
 					}
 				}
-			}), _ref13;
+			});
 		}
 	}]);
 
@@ -560,8 +572,8 @@ var Request = function (_Body) {
 
 	_createClass(Request, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref14) {
-			var headers = _ref14.headers;
+		value: function inheritFrom(input, body, _ref13) {
+			var headers = _ref13.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');

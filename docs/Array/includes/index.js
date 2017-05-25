@@ -44,7 +44,7 @@ function test(includes) {
 	});
 }
 
-test(includes, 'j0includes');
+test(includes, 'Array.prototype.includes#j0');
 
 test(Array.prototype.includes);
 }())

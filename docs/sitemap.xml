@@ -2,34 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 	<url>
+		<loc>https://kei-ito.github.io/j0/Array/@iterator/j0polyfill/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/Array/@iterator/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/find/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/find/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/find/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/findIndex/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/findIndex/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/findIndex/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/from/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/from/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/from/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/includes/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/includes/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/includes/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Array/of/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Array/of/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Array/of/</loc>
@@ -57,6 +60,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Headers/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Iterator/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/JSON/</loc>

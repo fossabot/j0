@@ -12,7 +12,7 @@
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEachKey</span>&#32;<span class="name">from</span>&#32;<a href="../../Object/forEachKey"><span class="string"><span class="string">'../../Object/forEachKey'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">toLowerCase</span>&#32;<span class="name">from</span>&#32;<a href="../../String/toLowerCase"><span class="string"><span class="string">'../../String/toLowerCase'</span></span></a><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="name">iteratorSymbol</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Iterator</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;<span class="name">StringList</span>
 <span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
 <span class="linenum"></span>
@@ -55,27 +55,22 @@
 <span class="linenum"></span>&#9;<span class="name">entries</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">iterator</span>&#32;<span class="_3d">=</span>&#32;<span class="super">super</span><span class="_2e">.</span><span class="name">entries</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">history</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="_5b">[</span><span class="name">iteratorSymbol</span><span class="_5d">]</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="this">this</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">next</span><span class="_3a">:</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="while">while</span>&#32;<span class="_28">(</span><span class="num">1</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="new">new</span>&#32;<span class="name">Iterator</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="while">while</span>&#32;<span class="_28">(</span><span class="num">1</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">done</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">done</span>&#32;<span class="_7c_7c">||</span>&#32;<span class="name">history</span><span class="_2e">.</span><span class="name">indexOf</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="num">0</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">history</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="_5b">[</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">get</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_5d">]</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">done</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="name">key</span>&#32;<span class="_3d">=</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">done</span>&#32;<span class="_7c_7c">||</span>&#32;<span class="name">history</span><span class="_2e">.</span><span class="name">indexOf</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="num">0</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">history</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="_5b">[</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">get</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;&#9;<span class="name">done</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="_7d">}</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span>

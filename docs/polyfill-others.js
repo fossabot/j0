@@ -11,8 +11,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -23,20 +21,35 @@ var Array = window.Array;
 
 var iteratorSymbol = Symbol.iterator;
 
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
+		}
+	}]);
+
+	return Iterator;
+}();
+
 function generator() {
 	var _this = this;
 
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this[index],
+			done: length <= index++
+		};
+	});
 }
 
 var prototype = Array.prototype;
@@ -79,9 +92,17 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
+function passThrough(x) {
+	return x;
+}
+
 function arrayFrom(iterable) {
+	var mapFn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : passThrough;
+	var thisArg = arguments[2];
+
 	var result = [];
 	if (isUndefined(iterable.length)) {
+		var i = 0;
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
 		var _iteratorError = undefined;
@@ -90,7 +111,7 @@ function arrayFrom(iterable) {
 			for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 				var item = _step.value;
 
-				result.push(item);
+				result.push(mapFn.call(thisArg, item, i++));
 			}
 		} catch (err) {
 			_didIteratorError = true;
@@ -107,8 +128,8 @@ function arrayFrom(iterable) {
 			}
 		}
 	} else {
-		for (var i = 0, length = iterable.length; i < length; i++) {
-			result[i] = iterable[i];
+		for (var _i = 0, length = iterable.length; _i < length; _i++) {
+			result[_i] = mapFn.call(thisArg, iterable[_i], _i);
 		}
 	}
 	return result;
@@ -615,14 +636,14 @@ if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 
 window$1.Map = MAP;
 
-function generator$2() {
+function generator$1() {
 	return this.entries();
 }
 
 var prototype$4 = Map.prototype;
 
 if (!prototype$4[iteratorSymbol]) {
-	prototype$4[iteratorSymbol] = generator$2;
+	prototype$4[iteratorSymbol] = generator$1;
 }
 
 var Set = function () {
@@ -752,7 +773,7 @@ if (!Number.MAX_SAFE_INTEGER) {
 	Number.MAX_SAFE_INTEGER = J0MAX_SAFE_INTEGER;
 }
 
-function generator$4() {
+function generator$3() {
 	var _this5 = this;
 
 	var length = this.length;
@@ -772,12 +793,12 @@ var _NodeList = NodeList,
     prototype$5 = _NodeList.prototype;
 
 if (!prototype$5[iteratorSymbol]) {
-	prototype$5[iteratorSymbol] = generator$4;
+	prototype$5[iteratorSymbol] = generator$3;
 }
 
 var HTMLCollection = window.HTMLCollection;
 
-function generator$6() {
+function generator$5() {
 	var _this6 = this;
 
 	var length = this.length;
@@ -796,10 +817,10 @@ function generator$6() {
 var prototype$6 = HTMLCollection.prototype;
 
 if (!prototype$6[iteratorSymbol]) {
-	prototype$6[iteratorSymbol] = generator$6;
+	prototype$6[iteratorSymbol] = generator$5;
 }
 
-function generator$8() {
+function generator$7() {
 	var _this7 = this;
 
 	var length = this.length;
@@ -819,7 +840,7 @@ var _NamedNodeMap = NamedNodeMap,
     prototype$7 = _NamedNodeMap.prototype;
 
 if (!prototype$7[iteratorSymbol]) {
-	prototype$7[iteratorSymbol] = generator$8;
+	prototype$7[iteratorSymbol] = generator$7;
 }
 
 var StringList = function () {
@@ -1074,14 +1095,11 @@ var Headers = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this10 = this,
-			    _ref21;
+			var _this10 = this;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
-			return _ref21 = {}, _defineProperty(_ref21, iteratorSymbol, function () {
-				return this;
-			}), _defineProperty(_ref21, 'next', function next() {
+			return new Iterator(function () {
 				while (1) {
 					var _iterator$next5 = iterator.next(),
 					    value = _iterator$next5.value,
@@ -1096,7 +1114,7 @@ var Headers = function (_StringList2) {
 						};
 					}
 				}
-			}), _ref21;
+			});
 		}
 	}]);
 
@@ -1400,8 +1418,8 @@ var Request = function (_Body) {
 
 	_createClass(Request, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref22) {
-			var headers = _ref22.headers;
+		value: function inheritFrom(input, body, _ref21) {
+			var headers = _ref21.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -1542,12 +1560,12 @@ function fetch(input, init) {
 
 		try {
 			for (var _iterator5 = request.headers.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-				var _ref23 = _step5.value;
+				var _ref22 = _step5.value;
 
-				var _ref24 = _slicedToArray(_ref23, 2);
+				var _ref23 = _slicedToArray(_ref22, 2);
 
-				var name = _ref24[0];
-				var value = _ref24[1];
+				var name = _ref23[0];
+				var value = _ref23[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -1570,9 +1588,6 @@ function fetch(input, init) {
 	});
 }
 
-// if (!window.fetch) {
-// 	window.fetch = j0Fetch;
-// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {

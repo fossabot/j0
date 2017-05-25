@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x31, _x32) {
+	return function wait(_x33, _x34) {
 		return _ref31.apply(this, arguments);
 	};
 }();
@@ -37,8 +37,6 @@ var wait = function () {
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
@@ -48,42 +46,102 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function test$1(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it('should return an iterator', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var iterator = generator.call(array);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, array);
+		});
+
+		it('should return an iterator which is iterable in for-of syntax', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var iterator = generator.call(array);
+			var results = [];
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				for (var _iterator = iterator[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var value = _step.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+
+			assert.deepEqual(results, array);
+		});
+	});
+}
+
+var iteratorSymbol = Symbol.iterator;
+
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
+		}
+	}]);
+
+	return Iterator;
+}();
+
 function generator() {
 	var _this = this;
 
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this[index],
+			done: length <= index++
+		};
+	});
 }
 
-describe('Array/@iterator', function () {
+test$1(generator, 'Array.prototype[Symbol.iterator]#j0');
 
-	it('should return an iterator', function () {
-		var array = [1, 2, 3];
-		var iterator = generator.call(array);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
-
-			if (done) {
-				break;
-			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, array);
-	});
-});
+test$1(Array.prototype[Symbol.iterator]);
 
 function findIndex(fn, thisArg) {
 	for (var i = 0, length = this.length; i < length; i++) {
@@ -94,29 +152,37 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-function test$1(findIndex) {
+function test$3(find) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.find';
 
 
 	describe(name, function () {
 
 		it('should return 1', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === 1;
-			}), 1);
+			var expected = Date.now();
+			var array = [new Date(), expected, new Date().toISOString()];
+			var actual = find.call(array, function (x) {
+				return x === this.expected;
+			}, { expected: expected });
+			assert.equal(actual, expected);
 		});
 
 		it('should return undefined', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === 4;
-			}));
+			var _ref = [],
+			    expected = _ref[0];
+
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var actual = find.call(array, function () {
+				return false;
+			});
+			assert.equal(actual, expected);
 		});
 	});
 }
 
-test$1(findIndex, 'Array.prototype.find.j0');
+test$3(findIndex, 'Array.prototype.find#j0');
 
-test$1(Array.prototype.find);
+test$3(Array.prototype.find);
 
 function findIndex$2(fn, thisArg) {
 	for (var i = 0, length = this.length; i < length; i++) {
@@ -127,68 +193,171 @@ function findIndex$2(fn, thisArg) {
 	return -1;
 }
 
-function test$3(findIndex) {
+function test$5(findIndex) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.findIndex';
 
 
 	describe(name, function () {
 
 		it('should return 0', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === this.expected;
-			}, { expected: 1 }), 0);
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var expected = 1;
+			var actual = findIndex.call(array, function (x) {
+				return x === array[this.expected];
+			}, { expected: expected });
+			assert.equal(actual, expected);
 		});
 
 		it('should return -1', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === this.expected;
-			}, { expected: 4 }), -1);
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var expected = -1;
+			var actual = findIndex.call(array, function () {
+				return false;
+			});
+			assert.equal(actual, expected);
 		});
 	});
 }
 
-test$3(findIndex$2, 'Array.prototype.findIndex.j0');
+test$5(findIndex$2, 'Array.prototype.findIndex#j0');
 
-test$3(Array.prototype.findIndex);
+test$5(Array.prototype.findIndex);
 
-function test$5(arrayFrom) {
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
+
+function passThrough(x) {
+	return x;
+}
+
+function arrayFrom(iterable) {
+	var mapFn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : passThrough;
+	var thisArg = arguments[2];
+
+	var result = [];
+	if (isUndefined(iterable.length)) {
+		var i = 0;
+		var _iteratorNormalCompletion2 = true;
+		var _didIteratorError2 = false;
+		var _iteratorError2 = undefined;
+
+		try {
+			for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+				var item = _step2.value;
+
+				result.push(mapFn.call(thisArg, item, i++));
+			}
+		} catch (err) {
+			_didIteratorError2 = true;
+			_iteratorError2 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion2 && _iterator2.return) {
+					_iterator2.return();
+				}
+			} finally {
+				if (_didIteratorError2) {
+					throw _iteratorError2;
+				}
+			}
+		}
+	} else {
+		for (var _i = 0, length = iterable.length; _i < length; _i++) {
+			result[_i] = mapFn.call(thisArg, iterable[_i], _i);
+		}
+	}
+	return result;
+}
+
+function test$7(arrayFrom) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.from';
 
 
 	describe(name, function () {
 
 		it('should create a new array from an array-like object', function () {
-			var result = arrayFrom({
-				0: 1,
-				1: 2,
-				2: 3,
+			var v1 = new Date();
+			var v2 = Date.now();
+			var v3 = new Date().toISOString();
+			var actual = arrayFrom({
+				0: v1,
+				1: v2,
+				2: v3,
 				length: 3
 			});
-			assert.equal(Array.isArray(result), true);
-			assert.deepEqual(result, [1, 2, 3]);
+			var expected = [v1, v2, v3];
+			assert.equal(Array.isArray(actual), true);
+			assert.deepEqual(actual, expected);
 		});
 
 		it('should create a new array from an iterable object', function () {
+			var expected = [new Date(), Date.now(), new Date().toISOString()];
 			var iterable = _defineProperty({}, Symbol.iterator, function () {
 				var count = 0;
 				return {
 					next: function next() {
-						count += 1;
+						var value = expected[count++];
 						return {
-							value: count,
-							done: 5 <= count
+							value: value,
+							done: !value
 						};
 					}
 				};
 			});
-			var result = arrayFrom(iterable);
-			assert.equal(Array.isArray(result), true);
-			assert.deepEqual(result, [1, 2, 3, 4]);
+			var actual = arrayFrom(iterable);
+			assert.equal(Array.isArray(actual), true);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support map function and thisArg when pass an array-like object', function () {
+			var v1 = new Date();
+			var v2 = Date.now();
+			var v3 = new Date().toISOString();
+			function mapFn(value, index) {
+				return [value, index, this];
+			}
+			var thisArg = {};
+			var actual = arrayFrom({
+				0: v1,
+				1: v2,
+				2: v3,
+				length: 3
+			}, mapFn, thisArg);
+			var expected = [v1, v2, v3].map(mapFn, thisArg);
+			assert.equal(Array.isArray(actual), true);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support map function and thisArg when pass an iterable object', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var iterable = _defineProperty({}, Symbol.iterator, function () {
+				var count = 0;
+				return {
+					next: function next() {
+						var value = array[count++];
+						return {
+							value: value,
+							done: !value
+						};
+					}
+				};
+			});
+			var thisArg = {};
+			function mapFn(value, index) {
+				return [value, index, this];
+			}
+			var actual = arrayFrom(iterable, mapFn, thisArg);
+			var expected = array.map(mapFn, thisArg);
+			assert.equal(Array.isArray(actual), true);
+			assert.deepEqual(actual, expected);
 		});
 	});
 }
 
-test$5(Array.from);
+test$7(arrayFrom, 'Array.from#j0');
+
+test$7(Array.from);
 
 function includes(searchElement) {
 	var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -201,7 +370,7 @@ function includes(searchElement) {
 	return false;
 }
 
-function test$7(includes) {
+function test$9(includes) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
 
@@ -233,11 +402,19 @@ function test$7(includes) {
 	});
 }
 
-test$7(includes, 'j0includes');
+test$9(includes, 'Array.prototype.includes#j0');
 
-test$7(Array.prototype.includes);
+test$9(Array.prototype.includes);
 
-function test$9(arrayOf) {
+function arrayOf() {
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+
+	return args;
+}
+
+function test$11(arrayOf) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.of';
 
 
@@ -251,7 +428,9 @@ function test$9(arrayOf) {
 	});
 }
 
-test$9(Array.of);
+test$11(arrayOf, 'Array.of#j0');
+
+test$11(Array.of);
 
 var Uint8Array$1 = window.Uint8Array;
 
@@ -729,8 +908,8 @@ function debounce(fn) {
 	return function () {
 		var _this2 = this;
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
+		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+			args[_key2] = arguments[_key2];
 		}
 
 		clearTimeout(timer);
@@ -809,14 +988,14 @@ var J0Element = function () {
 					this.append(item);
 				}
 			}
-			for (var _i = 0, _length = e.length; _i < _length; _i++) {
-				var _item = e[_i];
+			for (var _i2 = 0, _length = e.length; _i2 < _length; _i2++) {
+				var _item = e[_i2];
 				if (_item) {
 					this.on(_item[0], _item[1]);
 				}
 			}
-			for (var _i2 = 0, _length2 = a.length; _i2 < _length2; _i2++) {
-				var _item2 = a[_i2];
+			for (var _i3 = 0, _length2 = a.length; _i3 < _length2; _i3++) {
+				var _item2 = a[_i3];
 				if (_item2) {
 					this.setAttribute.apply(this, _toConsumableArray(_item2));
 				}
@@ -870,8 +1049,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len2 = arguments.length, value = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-				value[_key2 - 1] = arguments[_key2];
+			for (var _len3 = arguments.length, value = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+				value[_key3 - 1] = arguments[_key3];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -1039,9 +1218,9 @@ describe('J0Element.prototype.text', function () {
 });
 
 function forEachKey(obj, fn, thisArg) {
-	for (var _key3 in obj) {
-		if (obj.hasOwnProperty(_key3)) {
-			if (fn.call(thisArg, obj[_key3], _key3, obj)) {
+	for (var _key4 in obj) {
+		if (obj.hasOwnProperty(_key4)) {
+			if (fn.call(thisArg, obj[_key4], _key4, obj)) {
 				return;
 			}
 		}
@@ -1052,40 +1231,38 @@ function toLowerCase(string) {
 	return ('' + string).toLowerCase();
 }
 
-var iteratorSymbol = Symbol.iterator;
-
 var StringList = function () {
 	function StringList(iterable) {
 		_classCallCheck(this, StringList);
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
+			var _iteratorNormalCompletion3 = true;
+			var _didIteratorError3 = false;
+			var _iteratorError3 = undefined;
 
 			try {
-				for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					var _ref5 = _step.value;
+				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+					var _ref6 = _step3.value;
 
-					var _ref6 = _slicedToArray(_ref5, 2);
+					var _ref7 = _slicedToArray(_ref6, 2);
 
-					var _key4 = _ref6[0];
-					var value = _ref6[1];
+					var _key5 = _ref7[0];
+					var value = _ref7[1];
 
-					this.append(_key4, value);
+					this.append(_key5, value);
 				}
 			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
+				_didIteratorError3 = true;
+				_iteratorError3 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion && _iterator.return) {
-						_iterator.return();
+					if (!_iteratorNormalCompletion3 && _iterator3.return) {
+						_iterator3.return();
 					}
 				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
+					if (_didIteratorError3) {
+						throw _iteratorError3;
 					}
 				}
 			}
@@ -1100,9 +1277,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref7) {
-				var _ref8 = _slicedToArray(_ref7, 1),
-				    itemName = _ref8[0];
+			return this.data.findIndex(function (_ref8) {
+				var _ref9 = _slicedToArray(_ref8, 1),
+				    itemName = _ref9[0];
 
 				return itemName === name;
 			});
@@ -1130,9 +1307,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref9) {
-				var _ref10 = _slicedToArray(_ref9, 1),
-				    itemName = _ref10[0];
+			this.data = this.data.filter(function (_ref10) {
+				var _ref11 = _slicedToArray(_ref10, 1),
+				    itemName = _ref11[0];
 
 				return itemName !== name;
 			});
@@ -1140,9 +1317,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref11) {
-				var _ref12 = _slicedToArray(_ref11, 1),
-				    itemName = _ref12[0];
+			var found = find(this.data, function (_ref12) {
+				var _ref13 = _slicedToArray(_ref12, 1),
+				    itemName = _ref13[0];
 
 				return itemName === name;
 			});
@@ -1152,10 +1329,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref13) {
-				var _ref14 = _slicedToArray(_ref13, 2),
-				    itemName = _ref14[0],
-				    value = _ref14[1];
+			this.data.forEach(function (_ref14) {
+				var _ref15 = _slicedToArray(_ref14, 2),
+				    itemName = _ref15[0],
+				    value = _ref15[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -1166,11 +1343,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref15) {
-				var _ref16 = _slicedToArray(_ref15, 2),
-				    name = _ref16[0],
-				    _ref16$ = _ref16[1],
-				    value = _ref16$ === undefined ? '' : _ref16$;
+			return this.data.map(function (_ref16) {
+				var _ref17 = _slicedToArray(_ref16, 2),
+				    name = _ref17[0],
+				    _ref17$ = _ref17[1],
+				    value = _ref17$ === undefined ? '' : _ref17$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -1255,29 +1432,26 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this5 = this,
-			    _ref17;
+			var _this5 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
-			return _ref17 = {}, _defineProperty(_ref17, iteratorSymbol, function () {
-				return this;
-			}), _defineProperty(_ref17, 'next', function next() {
+			return new Iterator(function () {
 				while (1) {
 					var _iterator$next3 = iterator.next(),
 					    value = _iterator$next3.value,
 					    done = _iterator$next3.done;
 
-					var _key5 = value && value[0];
-					if (done || history.indexOf(_key5) < 0) {
-						history.push(_key5);
+					var _key6 = value && value[0];
+					if (done || history.indexOf(_key6) < 0) {
+						history.push(_key6);
 						return {
-							value: [_key5, _this5.get(_key5)],
+							value: [_key6, _this5.get(_key6)],
 							done: done
 						};
 					}
 				}
-			}), _ref17;
+			});
 		}
 	}]);
 
@@ -1426,10 +1600,6 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
 var XMLHttpRequest = window.XMLHttpRequest;
 
 function fetch$1(input, init) {
@@ -1457,13 +1627,13 @@ function fetch$1(input, init) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		var _iteratorNormalCompletion2 = true;
-		var _didIteratorError2 = false;
-		var _iteratorError2 = undefined;
+		var _iteratorNormalCompletion4 = true;
+		var _didIteratorError4 = false;
+		var _iteratorError4 = undefined;
 
 		try {
-			for (var _iterator2 = request.headers.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-				var _ref19 = _step2.value;
+			for (var _iterator4 = request.headers.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+				var _ref19 = _step4.value;
 
 				var _ref20 = _slicedToArray(_ref19, 2);
 
@@ -1473,16 +1643,16 @@ function fetch$1(input, init) {
 				xhr.setRequestHeader(name, value);
 			}
 		} catch (err) {
-			_didIteratorError2 = true;
-			_iteratorError2 = err;
+			_didIteratorError4 = true;
+			_iteratorError4 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion2 && _iterator2.return) {
-					_iterator2.return();
+				if (!_iteratorNormalCompletion4 && _iterator4.return) {
+					_iterator4.return();
 				}
 			} finally {
-				if (_didIteratorError2) {
-					throw _iteratorError2;
+				if (_didIteratorError4) {
+					throw _iteratorError4;
 				}
 			}
 		}
@@ -1712,7 +1882,7 @@ function generator$2() {
 	};
 }
 
-function test$11(generator) {
+function test$13(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -1721,27 +1891,27 @@ function test$11(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion3 = true;
-			var _didIteratorError3 = false;
-			var _iteratorError3 = undefined;
+			var _iteratorNormalCompletion5 = true;
+			var _didIteratorError5 = false;
+			var _iteratorError5 = undefined;
 
 			try {
-				for (var _iterator3 = expected[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var element = _step3.value;
+				for (var _iterator5 = expected[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+					var element = _step5.value;
 
 					parent.appendChild(element);
 				}
 			} catch (err) {
-				_didIteratorError3 = true;
-				_iteratorError3 = err;
+				_didIteratorError5 = true;
+				_iteratorError5 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion3 && _iterator3.return) {
-						_iterator3.return();
+					if (!_iteratorNormalCompletion5 && _iterator5.return) {
+						_iterator5.return();
 					}
 				} finally {
-					if (_didIteratorError3) {
-						throw _iteratorError3;
+					if (_didIteratorError5) {
+						throw _iteratorError5;
 					}
 				}
 			}
@@ -1764,9 +1934,9 @@ function test$11(generator) {
 	});
 }
 
-test$11(generator$2, 'HTMLCollection/@iterator/j0');
+test$13(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$11(HTMLCollection.prototype[Symbol.iterator]);
+test$13(HTMLCollection.prototype[Symbol.iterator]);
 
 var window$1 = window.window;
 
@@ -2082,6 +2252,65 @@ describe('isUndefined', function () {
 	});
 });
 
+describe('Iterator', function () {
+
+	it('should return a function which returns an iterator', function () {
+		var value = 0;
+		var max = 5;
+		var iterator = new Iterator(function () {
+			return {
+				value: value,
+				done: max < value++
+			};
+		});
+		var result = iterator.next();
+		var results = [];
+		while (!result.done) {
+			results.push(result.value);
+			result = iterator.next();
+		}
+		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
+	});
+
+	it('should return a function which returns an iterator iterable in for-of syntax', function () {
+		var value = 0;
+		var max = 5;
+		var iterator = new Iterator(function () {
+			return {
+				value: value,
+				done: max < value++
+			};
+		});
+		var results = [];
+		var _iteratorNormalCompletion6 = true;
+		var _didIteratorError6 = false;
+		var _iteratorError6 = undefined;
+
+		try {
+			for (var _iterator6 = iterator[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+				var result = _step6.value;
+
+				results.push(result);
+			}
+		} catch (err) {
+			_didIteratorError6 = true;
+			_iteratorError6 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion6 && _iterator6.return) {
+					_iterator6.return();
+				}
+			} finally {
+				if (_didIteratorError6) {
+					throw _iteratorError6;
+				}
+			}
+		}
+
+		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
+	});
+});
+
 var storage = void 0;
 try {
 	storage = localStorage;
@@ -2147,32 +2376,32 @@ var Map$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion4 = true;
-			var _didIteratorError4 = false;
-			var _iteratorError4 = undefined;
+			var _iteratorNormalCompletion7 = true;
+			var _didIteratorError7 = false;
+			var _iteratorError7 = undefined;
 
 			try {
-				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-					var _ref21 = _step4.value;
+				for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+					var _ref21 = _step7.value;
 
 					var _ref22 = _slicedToArray(_ref21, 2);
 
-					var _key6 = _ref22[0];
+					var _key7 = _ref22[0];
 					var value = _ref22[1];
 
-					this.set(_key6, value);
+					this.set(_key7, value);
 				}
 			} catch (err) {
-				_didIteratorError4 = true;
-				_iteratorError4 = err;
+				_didIteratorError7 = true;
+				_iteratorError7 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion4 && _iterator4.return) {
-						_iterator4.return();
+					if (!_iteratorNormalCompletion7 && _iterator7.return) {
+						_iterator7.return();
 					}
 				} finally {
-					if (_didIteratorError4) {
-						throw _iteratorError4;
+					if (_didIteratorError7) {
+						throw _iteratorError7;
 					}
 				}
 			}
@@ -2456,27 +2685,27 @@ describe('NamedNodeMap/@iterator', function () {
 	it('should create an iterator', function () {
 		var parent = document.createElement('div');
 		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion5 = true;
-		var _didIteratorError5 = false;
-		var _iteratorError5 = undefined;
+		var _iteratorNormalCompletion8 = true;
+		var _didIteratorError8 = false;
+		var _iteratorError8 = undefined;
 
 		try {
-			for (var _iterator5 = expected[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-				var element = _step5.value;
+			for (var _iterator8 = expected[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+				var element = _step8.value;
 
 				parent.appendChild(element);
 			}
 		} catch (err) {
-			_didIteratorError5 = true;
-			_iteratorError5 = err;
+			_didIteratorError8 = true;
+			_iteratorError8 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion5 && _iterator5.return) {
-					_iterator5.return();
+				if (!_iteratorNormalCompletion8 && _iterator8.return) {
+					_iterator8.return();
 				}
 			} finally {
-				if (_didIteratorError5) {
-					throw _iteratorError5;
+				if (_didIteratorError8) {
+					throw _iteratorError8;
 				}
 			}
 		}
@@ -2519,27 +2748,27 @@ describe('NodeList/@iterator', function () {
 	it('should create an iterator', function () {
 		var parent = document.createElement('div');
 		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion6 = true;
-		var _didIteratorError6 = false;
-		var _iteratorError6 = undefined;
+		var _iteratorNormalCompletion9 = true;
+		var _didIteratorError9 = false;
+		var _iteratorError9 = undefined;
 
 		try {
-			for (var _iterator6 = expected[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-				var element = _step6.value;
+			for (var _iterator9 = expected[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+				var element = _step9.value;
 
 				parent.appendChild(element);
 			}
 		} catch (err) {
-			_didIteratorError6 = true;
-			_iteratorError6 = err;
+			_didIteratorError9 = true;
+			_iteratorError9 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion6 && _iterator6.return) {
-					_iterator6.return();
+				if (!_iteratorNormalCompletion9 && _iterator9.return) {
+					_iterator9.return();
 				}
 			} finally {
-				if (_didIteratorError6) {
-					throw _iteratorError6;
+				if (_didIteratorError9) {
+					throw _iteratorError9;
 				}
 			}
 		}
@@ -2590,7 +2819,7 @@ describe('noop', function () {
 	});
 });
 
-function test$13(MAX_SAFE_INTEGER) {
+function test$15(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -2604,13 +2833,13 @@ function test$13(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$13(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$15(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$13(Number.MAX_SAFE_INTEGER);
+test$15(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
-	for (var _len3 = arguments.length, sources = Array(_len3 > 1 ? _len3 - 1 : 0), _key7 = 1; _key7 < _len3; _key7++) {
-		sources[_key7 - 1] = arguments[_key7];
+	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key8 = 1; _key8 < _len4; _key8++) {
+		sources[_key8 - 1] = arguments[_key8];
 	}
 
 	sources.forEach(function (source) {
@@ -2653,8 +2882,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len4 = arguments.length, args = Array(_len4), _key8 = 0; _key8 < _len4; _key8++) {
-				args[_key8] = arguments[_key8];
+			for (var _len5 = arguments.length, args = Array(_len5), _key9 = 0; _key9 < _len5; _key9++) {
+				args[_key9] = arguments[_key9];
 			}
 
 			results.push(args);
@@ -2669,8 +2898,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len5 = arguments.length, args = Array(_len5), _key9 = 0; _key9 < _len5; _key9++) {
-				args[_key9] = arguments[_key9];
+			for (var _len6 = arguments.length, args = Array(_len6), _key10 = 0; _key10 < _len6; _key10++) {
+				args[_key10] = arguments[_key10];
 			}
 
 			results.push(args);
@@ -2683,8 +2912,8 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len6 = arguments.length, args = Array(_len6), _key10 = 0; _key10 < _len6; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len7 = arguments.length, args = Array(_len7), _key11 = 0; _key11 < _len7; _key11++) {
+				args[_key11] = arguments[_key11];
 			}
 
 			results.push(args);
@@ -3063,7 +3292,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$15(Promise, name) {
+function test$17(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3191,9 +3420,9 @@ function test$15(Promise, name) {
 	});
 }
 
-test$15(J0Promise, 'Promise/j0');
+test$17(J0Promise, 'Promise/j0');
 
-test$15(Promise, 'Promise');
+test$17(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -3333,27 +3562,27 @@ var Set$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion7 = true;
-			var _didIteratorError7 = false;
-			var _iteratorError7 = undefined;
+			var _iteratorNormalCompletion10 = true;
+			var _didIteratorError10 = false;
+			var _iteratorError10 = undefined;
 
 			try {
-				for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-					var value = _step7.value;
+				for (var _iterator10 = iterable[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+					var value = _step10.value;
 
 					this.add(value);
 				}
 			} catch (err) {
-				_didIteratorError7 = true;
-				_iteratorError7 = err;
+				_didIteratorError10 = true;
+				_iteratorError10 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion7 && _iterator7.return) {
-						_iterator7.return();
+					if (!_iteratorNormalCompletion10 && _iterator10.return) {
+						_iterator10.return();
 					}
 				} finally {
-					if (_didIteratorError7) {
-						throw _iteratorError7;
+					if (_didIteratorError10) {
+						throw _iteratorError10;
 					}
 				}
 			}
@@ -3500,8 +3729,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len7 = arguments.length, args = Array(_len7), _key11 = 0; _key11 < _len7; _key11++) {
-					args[_key11] = arguments[_key11];
+				for (var _len8 = arguments.length, args = Array(_len8), _key12 = 0; _key12 < _len8; _key12++) {
+					args[_key12] = arguments[_key12];
 				}
 
 				args[3] = this;
@@ -3749,7 +3978,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$16(_Symbol) {
+function test$18(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -3793,9 +4022,9 @@ function test$16(_Symbol) {
 	});
 }
 
-test$16(Symbol, 'J0Symbol');
+test$18(Symbol, 'J0Symbol');
 
-test$16(Symbol);
+test$18(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -3807,8 +4036,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len8 = arguments.length, args = Array(_len8), _key12 = 0; _key12 < _len8; _key12++) {
-			args[_key12] = arguments[_key12];
+		for (var _len9 = arguments.length, args = Array(_len9), _key13 = 0; _key13 < _len9; _key13++) {
+			args[_key13] = arguments[_key13];
 		}
 
 		lastArgs = args;

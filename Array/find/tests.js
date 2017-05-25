@@ -1,17 +1,31 @@
-function test(findIndex, name = 'Array.prototype.find') {
+function test(find, name = 'Array.prototype.find') {
 
 	describe(name, function () {
 
 		it('should return 1', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === 1;
-			}), 1);
+			const expected = Date.now();
+			const array = [
+				new Date(),
+				expected,
+				new Date().toISOString()
+			];
+			const actual = find.call(array, function (x) {
+				return x === this.expected;
+			}, {expected});
+			assert.equal(actual, expected);
 		});
 
 		it('should return undefined', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === 4;
-			}));
+			const [expected] = [];
+			const array = [
+				new Date(),
+				Date.now(),
+				new Date().toISOString()
+			];
+			const actual = find.call(array, function () {
+				return false;
+			});
+			assert.equal(actual, expected);
 		});
 
 	});

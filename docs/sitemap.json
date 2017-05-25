@@ -1,20 +1,22 @@
 {
 	"Array": {
-		"@iterator": {},
+		"@iterator": {
+			"j0polyfill": {}
+		},
 		"find": {
-			"j0": {}
+			"j0polyfill": {}
 		},
 		"findIndex": {
-			"j0": {}
+			"j0polyfill": {}
 		},
 		"from": {
-			"j0": {}
+			"j0polyfill": {}
 		},
 		"includes": {
-			"j0": {}
+			"j0polyfill": {}
 		},
 		"of": {
-			"j0": {}
+			"j0polyfill": {}
 		}
 	},
 	"Body": {
@@ -28,6 +30,7 @@
 	"Headers": {
 		"j0": {}
 	},
+	"Iterator": {},
 	"JSON": {},
 	"Map": {
 		"@iterator": {},

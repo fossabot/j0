@@ -17,20 +17,26 @@ function test(findIndex) {
 	describe(name, function () {
 
 		it('should return 0', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === this.expected;
-			}, { expected: 1 }), 0);
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var expected = 1;
+			var actual = findIndex.call(array, function (x) {
+				return x === array[this.expected];
+			}, { expected: expected });
+			assert.equal(actual, expected);
 		});
 
 		it('should return -1', function () {
-			assert.equal(findIndex.call([1, 2, 3], function (x) {
-				return x === this.expected;
-			}, { expected: 4 }), -1);
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			var expected = -1;
+			var actual = findIndex.call(array, function () {
+				return false;
+			});
+			assert.equal(actual, expected);
 		});
 	});
 }
 
-test(findIndex, 'Array.prototype.findIndex.j0');
+test(findIndex, 'Array.prototype.findIndex#j0');
 
 test(Array.prototype.findIndex);
 }())
