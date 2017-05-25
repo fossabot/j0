@@ -1,7 +1,7 @@
 import forEachKey from '../../Object/forEachKey';
 import toLowerCase from '../../String/toLowerCase';
 import {
-	iteratorSymbol,
+	Iterator,
 	StringList
 } from 'j0';
 
@@ -44,27 +44,22 @@ class Headers extends StringList {
 	entries() {
 		const iterator = super.entries();
 		const history = [];
-		return {
-			[iteratorSymbol]: function () {
-				return this;
-			},
-			next: () => {
-				while (1) {
-					const {
-						value,
+		return new Iterator(() => {
+			while (1) {
+				const {
+					value,
+					done
+				} = iterator.next();
+				const key = value && value[0];
+				if (done || history.indexOf(key) < 0) {
+					history.push(key);
+					return {
+						value: [key, this.get(key)],
 						done
-					} = iterator.next();
-					const key = value && value[0];
-					if (done || history.indexOf(key) < 0) {
-						history.push(key);
-						return {
-							value: [key, this.get(key)],
-							done
-						};
-					}
+					};
 				}
 			}
-		};
+		});
 	}
 
 }
