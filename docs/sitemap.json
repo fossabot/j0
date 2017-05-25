@@ -111,6 +111,7 @@
 	"onError": {},
 	"parseFormData": {},
 	"parseHeaders": {},
+	"passThrough": {},
 	"preventDefault": {},
 	"readBlob": {},
 	"requestAnimationFrame": {},

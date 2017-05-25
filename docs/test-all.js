@@ -2998,6 +2998,14 @@ describe('Headers/parse', function () {
 	});
 });
 
+describe('passThrough', function () {
+
+	it('should return the first argument', function () {
+		var value = Date.now();
+		assert.equal(passThrough(value), value);
+	});
+});
+
 function preventDefault(event) {
 	event.preventDefault();
 }

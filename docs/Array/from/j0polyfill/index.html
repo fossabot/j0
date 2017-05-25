@@ -9,16 +9,21 @@
 <h1 id="title"><a href="../../../">j0</a>/<a href="../../">Array</a>/<a href="../">from</a>/j0polyfill<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span><span class="name">isUndefined</span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">arrayFrom</span><span class="_28">(</span><span class="name">iterable</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">isUndefined</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">passThrough</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">arrayFrom</span><span class="_28">(</span><span class="name">iterable</span><span class="_2c">,</span>&#32;<span class="name">mapFn</span>&#32;<span class="_3d">=</span>&#32;<span class="name">passThrough</span><span class="_2c">,</span>&#32;<span class="name">thisArg</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="const">const</span>&#32;<span class="name">result</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">isUndefined</span><span class="_28">(</span><span class="name">iterable</span><span class="_2e">.</span><span class="name">length</span><span class="_29">)</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;<span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="const">const</span>&#32;<span class="name">item</span>&#32;<span class="name">of</span>&#32;<span class="name">iterable</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">result</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">item</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">result</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">mapFn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span>&#32;<span class="name">item</span><span class="_2c">,</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>&#32;<span class="else">else</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="name">let</span>&#32;<span class="name">i</span>&#32;<span class="_3d">=</span>&#32;<span class="num">0</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">length</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterable</span><span class="_3b">;</span>&#32;<span class="name">i</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">length</span><span class="_3b">;</span>&#32;<span class="name">i</span><span class="_2b_2b_2f_2d_2d">++</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">result</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterable</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">result</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span>&#32;<span class="_3d">=</span>&#32;<span class="name">mapFn</span><span class="_2e">.</span><span class="name">call</span><span class="_28">(</span><span class="name">thisArg</span><span class="_2c">,</span>&#32;<span class="name">iterable</span><span class="_5b">[</span><span class="name">i</span><span class="_5d">]</span><span class="_2c">,</span>&#32;<span class="name">i</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="name">result</span><span class="_3b">;</span>
@@ -31,7 +36,7 @@
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">arrayFrom</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">test</span>&#32;<span class="name">from</span>&#32;<a href="../tests"><span class="string"><span class="string">'../../tests'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="name">test</span><span class="_28">(</span><span class="name">arrayFrom</span><span class="_2c">,</span>&#32;<span class="string">'Array.from.j0'</span><span class="_29">)</span><span class="_3b">;</span></pre>
+<span class="linenum"></span><span class="name">test</span><span class="_28">(</span><span class="name">arrayFrom</span><span class="_2c">,</span>&#32;<span class="string">'Array.from#j0'</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Array/from/j0polyfill/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>

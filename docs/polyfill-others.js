@@ -1588,6 +1588,9 @@ function fetch(input, init) {
 	});
 }
 
+// if (!window.fetch) {
+// 	window.fetch = j0Fetch;
+// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {
