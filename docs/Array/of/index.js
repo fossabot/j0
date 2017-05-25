@@ -16,8 +16,9 @@ function test(arrayOf) {
 	describe(name, function () {
 
 		it('should create an array', function () {
-			var actual = arrayOf(1, 2, 3);
-			var expected = [1, 2, 3];
+			var expected = [new Date(), Date.now(), new Date().toString()];
+			var actual = arrayOf.apply(undefined, expected);
+			assert.equal(Array.isArray(actual), true);
 			assert.deepEqual(actual, expected);
 		});
 	});

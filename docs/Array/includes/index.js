@@ -4,7 +4,7 @@
 function includes(searchElement) {
 	var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-	for (var i = fromIndex, length = this.length; i < length; i++) {
+	for (var length = this.length, i = fromIndex < 0 ? length + fromIndex : fromIndex; i < length; i++) {
 		if (this[i] === searchElement) {
 			return true;
 		}
@@ -18,28 +18,22 @@ function test(includes) {
 
 	describe(name, function () {
 
-		it('should find an item', function () {
-			var array = [0, 1, 2, 3];
-			assert.equal(includes.call(array, 1), true);
-			assert.equal(includes.call(array, 4), false);
+		it('should return whether the array has the value', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[0]), true);
+			assert.equal(includes.call(array, array[array.length]), false);
 		});
 
-		it('should find an item from array-like', function () {
-			var arrayLike = {
-				0: 0,
-				1: 1,
-				2: 2,
-				3: 3,
-				length: 4
-			};
-			assert.equal(includes.call(arrayLike, 1), true);
-			assert.equal(includes.call(arrayLike, 4), false);
+		it('should support positive fromIndex', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[1], 1), true);
+			assert.equal(includes.call(array, array[1], 2), false);
 		});
 
-		it('should find a character from a string', function () {
-			var string = 'abcde';
-			assert.equal(includes.call(string, 'c'), true);
-			assert.equal(includes.call(string, 'f'), false);
+		it('should support negative fromIndex', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[1], -1), false);
+			assert.equal(includes.call(array, array[1], -2), true);
 		});
 	});
 }

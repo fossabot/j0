@@ -58,6 +58,79 @@ if (!prototype[iteratorSymbol]) {
 	prototype[iteratorSymbol] = generator;
 }
 
+function copyWithin(target) {
+	var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+	var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.length;
+	var length = this.length;
+
+	if (target < 0) {
+		target = length + target;
+	}
+	if (start < 0) {
+		start = length + start;
+	}
+	if (end < 0) {
+		end = length + end;
+	}
+	var copied = this.slice(start, end);
+	var total = copied.length;
+
+	if (length < target + total) {
+		total = length - target;
+	}
+	for (var i = 0; i < total; i++) {
+		this[target + i] = copied[i];
+	}
+	return this;
+}
+
+var prototype$1 = Array.prototype;
+
+if (!prototype$1.copyWithin) {
+	prototype$1.copyWithin = copyWithin;
+}
+
+function entries() {
+	var _this2 = this;
+
+	var index = 0;
+	return new Iterator(function () {
+		return {
+			value: [index, _this2[index]],
+			done: _this2.length < ++index
+		};
+	});
+}
+
+var prototype$2 = Array.prototype;
+
+if (!prototype$2.entries) {
+	prototype$2.entries = entries;
+}
+
+function copyWithin$1(value) {
+	var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+	var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.length;
+	var length = this.length;
+
+	if (start < 0) {
+		start = length + start;
+	}
+	if (end < 0) {
+		end = length + end;
+	}
+	for (var i = start; i < end; i++) {
+		this[i] = value;
+	}
+	return this;
+}
+
+var prototype$3 = Array.prototype;
+
+if (!prototype$3.fill) {
+	prototype$3.fill = copyWithin$1;
+}
+
 function findIndex(fn, thisArg) {
 	for (var i = 0, length = this.length; i < length; i++) {
 		var value = this[i];
@@ -67,10 +140,10 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-var prototype$1 = Array.prototype;
+var prototype$4 = Array.prototype;
 
-if (!prototype$1.find) {
-	prototype$1.find = findIndex;
+if (!prototype$4.find) {
+	prototype$4.find = findIndex;
 }
 
 function findIndex$1(fn, thisArg) {
@@ -82,10 +155,10 @@ function findIndex$1(fn, thisArg) {
 	return -1;
 }
 
-var prototype$2 = Array.prototype;
+var prototype$5 = Array.prototype;
 
-if (!prototype$2.findIndex) {
-	prototype$2.findIndex = findIndex$1;
+if (!prototype$5.findIndex) {
+	prototype$5.findIndex = findIndex$1;
 }
 
 function isUndefined(x) {
@@ -142,7 +215,7 @@ if (!Array.from) {
 function includes(searchElement) {
 	var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-	for (var i = fromIndex, length = this.length; i < length; i++) {
+	for (var length = this.length, i = fromIndex < 0 ? length + fromIndex : fromIndex; i < length; i++) {
 		if (this[i] === searchElement) {
 			return true;
 		}
@@ -150,10 +223,10 @@ function includes(searchElement) {
 	return false;
 }
 
-var prototype$3 = Array.prototype;
+var prototype$6 = Array.prototype;
 
-if (!prototype$3.includes) {
-	prototype$3.includes = includes;
+if (!prototype$6.includes) {
+	prototype$6.includes = includes;
 }
 
 function arrayOf() {
@@ -303,7 +376,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this2 = this;
+			var _this3 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -311,14 +384,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this2.resolve(value);
+				_this3.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this2.reject(error);
+				_this3.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -357,10 +430,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this3 = this;
+			var _this4 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this3.handle(deferred);
+				_this4.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -640,10 +713,10 @@ function generator$1() {
 	return this.entries();
 }
 
-var prototype$4 = Map.prototype;
+var prototype$7 = Map.prototype;
 
-if (!prototype$4[iteratorSymbol]) {
-	prototype$4[iteratorSymbol] = generator$1;
+if (!prototype$7[iteratorSymbol]) {
+	prototype$7[iteratorSymbol] = generator$1;
 }
 
 var Set = function () {
@@ -714,10 +787,10 @@ var Set = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this4);
+				fn.call(thisArg, value, value, _this5);
 			});
 		}
 	}, {
@@ -774,31 +847,6 @@ if (!Number.MAX_SAFE_INTEGER) {
 }
 
 function generator$3() {
-	var _this5 = this;
-
-	var length = this.length;
-
-	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this5[index],
-				done: length <= index++
-			};
-		}
-	};
-}
-
-var _NodeList = NodeList,
-    prototype$5 = _NodeList.prototype;
-
-if (!prototype$5[iteratorSymbol]) {
-	prototype$5[iteratorSymbol] = generator$3;
-}
-
-var HTMLCollection = window.HTMLCollection;
-
-function generator$5() {
 	var _this6 = this;
 
 	var length = this.length;
@@ -814,13 +862,16 @@ function generator$5() {
 	};
 }
 
-var prototype$6 = HTMLCollection.prototype;
+var _NodeList = NodeList,
+    prototype$8 = _NodeList.prototype;
 
-if (!prototype$6[iteratorSymbol]) {
-	prototype$6[iteratorSymbol] = generator$5;
+if (!prototype$8[iteratorSymbol]) {
+	prototype$8[iteratorSymbol] = generator$3;
 }
 
-function generator$7() {
+var HTMLCollection = window.HTMLCollection;
+
+function generator$5() {
 	var _this7 = this;
 
 	var length = this.length;
@@ -836,11 +887,33 @@ function generator$7() {
 	};
 }
 
-var _NamedNodeMap = NamedNodeMap,
-    prototype$7 = _NamedNodeMap.prototype;
+var prototype$9 = HTMLCollection.prototype;
 
-if (!prototype$7[iteratorSymbol]) {
-	prototype$7[iteratorSymbol] = generator$7;
+if (!prototype$9[iteratorSymbol]) {
+	prototype$9[iteratorSymbol] = generator$5;
+}
+
+function generator$7() {
+	var _this8 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return {
+		next: function next() {
+			return {
+				value: _this8[index],
+				done: length <= index++
+			};
+		}
+	};
+}
+
+var _NamedNodeMap = NamedNodeMap,
+    prototype$10 = _NamedNodeMap.prototype;
+
+if (!prototype$10[iteratorSymbol]) {
+	prototype$10[iteratorSymbol] = generator$7;
 }
 
 var StringList = function () {
@@ -1095,7 +1168,7 @@ var Headers = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this10 = this;
+			var _this11 = this;
 
 			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
 			var history = [];
@@ -1109,7 +1182,7 @@ var Headers = function (_StringList2) {
 					if (done || history.indexOf(key) < 0) {
 						history.push(key);
 						return {
-							value: [key, _this10.get(key)],
+							value: [key, _this11.get(key)],
 							done: done
 						};
 					}
@@ -1395,25 +1468,25 @@ var Request = function (_Body) {
 
 		var body = init.body;
 
-		var _this11 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+		var _this12 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 		if (input instanceof Request) {
-			body = _this11.inheritFrom(input, body, init);
+			body = _this12.inheritFrom(input, body, init);
 		} else {
-			_this11.url = '' + input;
+			_this12.url = '' + input;
 		}
-		_this11.credentials = init.credentials || _this11.credentials || 'omit';
-		if (init.headers || !_this11.headers) {
-			_this11.headers = new Headers(init.headers);
+		_this12.credentials = init.credentials || _this12.credentials || 'omit';
+		if (init.headers || !_this12.headers) {
+			_this12.headers = new Headers(init.headers);
 		}
-		_this11.method = (init.method || _this11.method || 'GET').toUpperCase();
-		_this11.mode = init.mode || _this11.mode || null;
-		_this11.referrer = null;
-		if ((_this11.method === 'GET' || _this11.method === 'HEAD') && body) {
+		_this12.method = (init.method || _this12.method || 'GET').toUpperCase();
+		_this12.mode = init.mode || _this12.mode || null;
+		_this12.referrer = null;
+		if ((_this12.method === 'GET' || _this12.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this11.initBody(body);
-		return _this11;
+		_this12.initBody(body);
+		return _this12;
 	}
 
 	_createClass(Request, [{
@@ -1459,16 +1532,16 @@ var Response = function (_Body2) {
 
 		_classCallCheck(this, Response);
 
-		var _this12 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+		var _this13 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-		_this12.type = 'default';
-		_this12.status = 'status' in init ? init.status : minOkStatus;
-		_this12.ok = _this12.status >= minOkStatus && _this12.status < maxOkStatus;
-		_this12.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this12.headers = new Headers(init.headers);
-		_this12.url = init.url || '';
-		_this12.initBody(body);
-		return _this12;
+		_this13.type = 'default';
+		_this13.status = 'status' in init ? init.status : minOkStatus;
+		_this13.ok = _this13.status >= minOkStatus && _this13.status < maxOkStatus;
+		_this13.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this13.headers = new Headers(init.headers);
+		_this13.url = init.url || '';
+		_this13.initBody(body);
+		return _this13;
 	}
 
 	_createClass(Response, [{

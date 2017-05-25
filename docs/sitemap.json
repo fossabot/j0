@@ -3,6 +3,15 @@
 		"@iterator": {
 			"j0polyfill": {}
 		},
+		"copyWithin": {
+			"j0polyfill": {}
+		},
+		"entries": {
+			"j0polyfill": {}
+		},
+		"fill": {
+			"j0polyfill": {}
+		},
 		"find": {
 			"j0polyfill": {}
 		},

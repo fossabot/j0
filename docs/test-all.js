@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x33, _x34) {
+	return function wait(_x40, _x41) {
 		return _ref31.apply(this, arguments);
 	};
 }();
@@ -143,6 +143,441 @@ test$1(generator, 'Array.prototype[Symbol.iterator]#j0');
 
 test$1(Array.prototype[Symbol.iterator]);
 
+function test$3(copyWithin) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.copyWithin';
+
+
+	describe(name, function () {
+
+		it('should support (2, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var actual = copyWithin.call(array, target);
+			var expected = [v1, v2, v1, v2, v3];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = 3;
+			var actual = copyWithin.call(array, target, start);
+			var expected = [v1, v2, v4, v5, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, 3, 4)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = 3;
+			var end = 4;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v4, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, 3, -1)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = 3;
+			var end = -1;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v4, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, -4, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = -4;
+			var actual = copyWithin.call(array, target, start);
+			var expected = [v1, v2, v2, v3, v4];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, -4, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = -4;
+			var end = 3;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v2, v3, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (2, -4, -2)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = 2;
+			var start = -4;
+			var end = -2;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v2, v3, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var actual = copyWithin.call(array, target);
+			var expected = [v1, v2, v1, v2, v3];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = 3;
+			var actual = copyWithin.call(array, target, start);
+			var expected = [v1, v2, v4, v5, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, 3, 4)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = 3;
+			var end = 4;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v4, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, 3, -1)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = 3;
+			var end = -1;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v4, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, -4, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = -4;
+			var actual = copyWithin.call(array, target, start);
+			var expected = [v1, v2, v2, v3, v4];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, -4, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = -4;
+			var end = 3;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v2, v3, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (-3, -4, -2)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var target = -3;
+			var start = -4;
+			var end = -2;
+			var actual = copyWithin.call(array, target, start, end);
+			var expected = [v1, v2, v2, v3, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+	});
+}
+
+function copyWithin(target) {
+	var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+	var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.length;
+	var length = this.length;
+
+	if (target < 0) {
+		target = length + target;
+	}
+	if (start < 0) {
+		start = length + start;
+	}
+	if (end < 0) {
+		end = length + end;
+	}
+	var copied = this.slice(start, end);
+	var total = copied.length;
+
+	if (length < target + total) {
+		total = length - target;
+	}
+	for (var i = 0; i < total; i++) {
+		this[target + i] = copied[i];
+	}
+	return this;
+}
+
+test$3(copyWithin, 'Array.prototype.copyWithin#j0');
+
+test$3(Array.prototype.copyWithin);
+
+function test$5(entries) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.entries';
+
+
+	describe(name, function () {
+
+		it('should return an iterator', function () {
+			var array = [Math.random(), Math.random(), Math.random()];
+			var iterator = entries.call(array);
+			var results = [];
+			while (1) {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			var expected = array.map(function (value, index) {
+				return [index, value];
+			});
+			assert.deepEqual(results, expected);
+		});
+	});
+}
+
+function entries() {
+	var _this2 = this;
+
+	var index = 0;
+	return new Iterator(function () {
+		return {
+			value: [index, _this2[index]],
+			done: _this2.length < ++index
+		};
+	});
+}
+
+test$5(entries, 'Array.prototype.entries#j0');
+
+test$5(Array.prototype.entries);
+
+function test$7(copyWithin) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.fill';
+
+
+	describe(name, function () {
+
+		it('should support (value, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var actual = copyWithin.call(array, value);
+			var expected = [value, value, value, value, value];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = 3;
+			var actual = copyWithin.call(array, value, start);
+			var expected = [v1, v2, v3, value, value];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, 3, 4)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = 3;
+			var end = 4;
+			var actual = copyWithin.call(array, value, start, end);
+			var expected = [v1, v2, v3, value, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, 3, -1)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = 3;
+			var end = -1;
+			var actual = copyWithin.call(array, value, start, end);
+			var expected = [v1, v2, v3, value, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, -4, 0)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = -4;
+			var actual = copyWithin.call(array, value, start);
+			var expected = [v1, value, value, value, value];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, -4, 3)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = -4;
+			var end = 3;
+			var actual = copyWithin.call(array, value, start, end);
+			var expected = [v1, value, value, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+
+		it('should support (value, -4, -2)', function () {
+			var v1 = Math.random();
+			var v2 = Math.random();
+			var v3 = Math.random();
+			var v4 = Math.random();
+			var v5 = Math.random();
+			var array = [v1, v2, v3, v4, v5];
+			var value = Math.random();
+			var start = -4;
+			var end = -2;
+			var actual = copyWithin.call(array, value, start, end);
+			var expected = [v1, value, value, v4, v5];
+			assert.equal(actual, array);
+			assert.deepEqual(actual, expected);
+		});
+	});
+}
+
+function copyWithin$2(value) {
+	var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+	var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.length;
+	var length = this.length;
+
+	if (start < 0) {
+		start = length + start;
+	}
+	if (end < 0) {
+		end = length + end;
+	}
+	for (var i = start; i < end; i++) {
+		this[i] = value;
+	}
+	return this;
+}
+
+test$7(copyWithin$2, 'Array.prototype.fill#j0');
+
+test$7(Array.prototype.fill);
+
 function findIndex(fn, thisArg) {
 	for (var i = 0, length = this.length; i < length; i++) {
 		var value = this[i];
@@ -152,7 +587,7 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-function test$3(find) {
+function test$9(find) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.find';
 
 
@@ -180,9 +615,9 @@ function test$3(find) {
 	});
 }
 
-test$3(findIndex, 'Array.prototype.find#j0');
+test$9(findIndex, 'Array.prototype.find#j0');
 
-test$3(Array.prototype.find);
+test$9(Array.prototype.find);
 
 function findIndex$2(fn, thisArg) {
 	for (var i = 0, length = this.length; i < length; i++) {
@@ -193,7 +628,7 @@ function findIndex$2(fn, thisArg) {
 	return -1;
 }
 
-function test$5(findIndex) {
+function test$11(findIndex) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.findIndex';
 
 
@@ -219,9 +654,9 @@ function test$5(findIndex) {
 	});
 }
 
-test$5(findIndex$2, 'Array.prototype.findIndex#j0');
+test$11(findIndex$2, 'Array.prototype.findIndex#j0');
 
-test$5(Array.prototype.findIndex);
+test$11(Array.prototype.findIndex);
 
 function isUndefined(x) {
 	return typeof x === 'undefined';
@@ -270,7 +705,7 @@ function arrayFrom(iterable) {
 	return result;
 }
 
-function test$7(arrayFrom) {
+function test$13(arrayFrom) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.from';
 
 
@@ -355,14 +790,14 @@ function test$7(arrayFrom) {
 	});
 }
 
-test$7(arrayFrom, 'Array.from#j0');
+test$13(arrayFrom, 'Array.from#j0');
 
-test$7(Array.from);
+test$13(Array.from);
 
 function includes(searchElement) {
 	var fromIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-	for (var i = fromIndex, length = this.length; i < length; i++) {
+	for (var length = this.length, i = fromIndex < 0 ? length + fromIndex : fromIndex; i < length; i++) {
 		if (this[i] === searchElement) {
 			return true;
 		}
@@ -370,41 +805,35 @@ function includes(searchElement) {
 	return false;
 }
 
-function test$9(includes) {
+function test$15(includes) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.prototype.includes';
 
 
 	describe(name, function () {
 
-		it('should find an item', function () {
-			var array = [0, 1, 2, 3];
-			assert.equal(includes.call(array, 1), true);
-			assert.equal(includes.call(array, 4), false);
+		it('should return whether the array has the value', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[0]), true);
+			assert.equal(includes.call(array, array[array.length]), false);
 		});
 
-		it('should find an item from array-like', function () {
-			var arrayLike = {
-				0: 0,
-				1: 1,
-				2: 2,
-				3: 3,
-				length: 4
-			};
-			assert.equal(includes.call(arrayLike, 1), true);
-			assert.equal(includes.call(arrayLike, 4), false);
+		it('should support positive fromIndex', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[1], 1), true);
+			assert.equal(includes.call(array, array[1], 2), false);
 		});
 
-		it('should find a character from a string', function () {
-			var string = 'abcde';
-			assert.equal(includes.call(string, 'c'), true);
-			assert.equal(includes.call(string, 'f'), false);
+		it('should support negative fromIndex', function () {
+			var array = [new Date(), Date.now(), new Date().toISOString()];
+			assert.equal(includes.call(array, array[1], -1), false);
+			assert.equal(includes.call(array, array[1], -2), true);
 		});
 	});
 }
 
-test$9(includes, 'Array.prototype.includes#j0');
+test$15(includes, 'Array.prototype.includes#j0');
 
-test$9(Array.prototype.includes);
+test$15(Array.prototype.includes);
 
 function arrayOf() {
 	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -414,23 +843,24 @@ function arrayOf() {
 	return args;
 }
 
-function test$11(arrayOf) {
+function test$17(arrayOf) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Array.of';
 
 
 	describe(name, function () {
 
 		it('should create an array', function () {
-			var actual = arrayOf(1, 2, 3);
-			var expected = [1, 2, 3];
+			var expected = [new Date(), Date.now(), new Date().toString()];
+			var actual = arrayOf.apply(undefined, expected);
+			assert.equal(Array.isArray(actual), true);
 			assert.deepEqual(actual, expected);
 		});
 	});
 }
 
-test$11(arrayOf, 'Array.of#j0');
+test$17(arrayOf, 'Array.of#j0');
 
-test$11(Array.of);
+test$17(Array.of);
 
 var Uint8Array$1 = window.Uint8Array;
 
@@ -906,7 +1336,7 @@ function debounce(fn) {
 
 	var timer = void 0;
 	return function () {
-		var _this2 = this;
+		var _this3 = this;
 
 		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 			args[_key2] = arguments[_key2];
@@ -914,7 +1344,7 @@ function debounce(fn) {
 
 		clearTimeout(timer);
 		timer = setTimeout(function () {
-			fn.call.apply(fn, [thisArg || _this2].concat(args));
+			fn.call.apply(fn, [thisArg || _this3].concat(args));
 		}, delay);
 	};
 }
@@ -1064,10 +1494,10 @@ var J0Element = function () {
 	}, {
 		key: 'on',
 		value: function on(eventName, fn) {
-			var _this3 = this;
+			var _this4 = this;
 
 			var wrapped = function wrapped(event) {
-				fn.call(_this3, event);
+				fn.call(_this4, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
 			this.events.push([eventName, fn, wrapped]);
@@ -1363,9 +1793,9 @@ var StringList = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+					var _iterator$next3 = iterator.next(),
+					    value = _iterator$next3.value,
+					    done = _iterator$next3.done;
 
 					return {
 						value: value && value[1],
@@ -1432,21 +1862,21 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+					var _iterator$next4 = iterator.next(),
+					    value = _iterator$next4.value,
+					    done = _iterator$next4.done;
 
 					var _key6 = value && value[0];
 					if (done || history.indexOf(_key6) < 0) {
 						history.push(_key6);
 						return {
-							value: [_key6, _this5.get(_key6)],
+							value: [_key6, _this6.get(_key6)],
 							done: done
 						};
 					}
@@ -1468,25 +1898,25 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this6 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this7 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this6.inheritFrom(input, body, init);
+			body = _this7.inheritFrom(input, body, init);
 		} else {
-			_this6.url = '' + input;
+			_this7.url = '' + input;
 		}
-		_this6.credentials = init.credentials || _this6.credentials || 'omit';
-		if (init.headers || !_this6.headers) {
-			_this6.headers = new Headers$1(init.headers);
+		_this7.credentials = init.credentials || _this7.credentials || 'omit';
+		if (init.headers || !_this7.headers) {
+			_this7.headers = new Headers$1(init.headers);
 		}
-		_this6.method = (init.method || _this6.method || 'GET').toUpperCase();
-		_this6.mode = init.mode || _this6.mode || null;
-		_this6.referrer = null;
-		if ((_this6.method === 'GET' || _this6.method === 'HEAD') && body) {
+		_this7.method = (init.method || _this7.method || 'GET').toUpperCase();
+		_this7.mode = init.mode || _this7.mode || null;
+		_this7.referrer = null;
+		if ((_this7.method === 'GET' || _this7.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this6.initBody(body);
-		return _this6;
+		_this7.initBody(body);
+		return _this7;
 	}
 
 	_createClass(Request$1, [{
@@ -1532,16 +1962,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this7 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this8 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this7.type = 'default';
-		_this7.status = 'status' in init ? init.status : minOkStatus;
-		_this7.ok = _this7.status >= minOkStatus && _this7.status < maxOkStatus;
-		_this7.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this7.headers = new Headers$1(init.headers);
-		_this7.url = init.url || '';
-		_this7.initBody(body);
-		return _this7;
+		_this8.type = 'default';
+		_this8.status = 'status' in init ? init.status : minOkStatus;
+		_this8.ok = _this8.status >= minOkStatus && _this8.status < maxOkStatus;
+		_this8.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this8.headers = new Headers$1(init.headers);
+		_this8.url = init.url || '';
+		_this8.initBody(body);
+		return _this8;
 	}
 
 	_createClass(Response$1, [{
@@ -1825,9 +2255,9 @@ function tests$4(Headers) {
 			var results = [];
 			var iterator = headers.entries();
 			while (1) {
-				var _iterator$next4 = iterator.next(),
-				    value = _iterator$next4.value,
-				    done = _iterator$next4.done;
+				var _iterator$next5 = iterator.next(),
+				    value = _iterator$next5.value,
+				    done = _iterator$next5.done;
 
 				if (done) {
 					break;
@@ -1848,9 +2278,9 @@ function tests$4(Headers) {
 			var results = [];
 			var iterator = headers.values();
 			while (1) {
-				var _iterator$next5 = iterator.next(),
-				    value = _iterator$next5.value,
-				    done = _iterator$next5.done;
+				var _iterator$next6 = iterator.next(),
+				    value = _iterator$next6.value,
+				    done = _iterator$next6.done;
 
 				if (done) {
 					break;
@@ -1867,7 +2297,7 @@ tests$4(Headers$1, 'Headers/j0');
 tests$4(Headers);
 
 function generator$2() {
-	var _this8 = this;
+	var _this9 = this;
 
 	var length = this.length;
 
@@ -1875,14 +2305,14 @@ function generator$2() {
 	return {
 		next: function next() {
 			return {
-				value: _this8[index],
+				value: _this9[index],
 				done: length <= index++
 			};
 		}
 	};
 }
 
-function test$13(generator) {
+function test$19(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -1920,9 +2350,9 @@ function test$13(generator) {
 			var results = [];
 			var index = 0;
 			while (1) {
-				var _iterator$next6 = iterator.next(),
-				    value = _iterator$next6.value,
-				    done = _iterator$next6.done;
+				var _iterator$next7 = iterator.next(),
+				    value = _iterator$next7.value,
+				    done = _iterator$next7.done;
 
 				if (done) {
 					break;
@@ -1934,9 +2364,9 @@ function test$13(generator) {
 	});
 }
 
-test$13(generator$2, 'HTMLCollection/@iterator/j0');
+test$19(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$13(HTMLCollection.prototype[Symbol.iterator]);
+test$19(HTMLCollection.prototype[Symbol.iterator]);
 
 var window$1 = window.window;
 
@@ -2357,9 +2787,9 @@ describe('Map/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next7 = iterator.next(),
-			    value = _iterator$next7.value,
-			    done = _iterator$next7.done;
+			var _iterator$next8 = iterator.next(),
+			    value = _iterator$next8.value,
+			    done = _iterator$next8.done;
 
 			if (done) {
 				break;
@@ -2478,9 +2908,9 @@ var Map$2 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next8 = iterator.next(),
-					    value = _iterator$next8.value,
-					    done = _iterator$next8.done;
+					var _iterator$next9 = iterator.next(),
+					    value = _iterator$next9.value,
+					    done = _iterator$next9.done;
 
 					return {
 						value: value && value[0],
@@ -2495,9 +2925,9 @@ var Map$2 = function () {
 			var iterator = this.entries();
 			return {
 				next: function next() {
-					var _iterator$next9 = iterator.next(),
-					    value = _iterator$next9.value,
-					    done = _iterator$next9.done;
+					var _iterator$next10 = iterator.next(),
+					    value = _iterator$next10.value,
+					    done = _iterator$next10.done;
 
 					return {
 						value: value && value[1],
@@ -2665,7 +3095,7 @@ describe('Math/cubicBezier', function () {
 });
 
 function generator$6() {
-	var _this9 = this;
+	var _this10 = this;
 
 	var length = this.length;
 
@@ -2673,7 +3103,7 @@ function generator$6() {
 	return {
 		next: function next() {
 			return {
-				value: _this9[index],
+				value: _this10[index],
 				done: length <= index++
 			};
 		}
@@ -2714,9 +3144,9 @@ describe('NamedNodeMap/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next10 = iterator.next(),
-			    value = _iterator$next10.value,
-			    done = _iterator$next10.done;
+			var _iterator$next11 = iterator.next(),
+			    value = _iterator$next11.value,
+			    done = _iterator$next11.done;
 
 			if (done) {
 				break;
@@ -2728,7 +3158,7 @@ describe('NamedNodeMap/@iterator', function () {
 });
 
 function generator$8() {
-	var _this10 = this;
+	var _this11 = this;
 
 	var length = this.length;
 
@@ -2736,7 +3166,7 @@ function generator$8() {
 	return {
 		next: function next() {
 			return {
-				value: _this10[index],
+				value: _this11[index],
 				done: length <= index++
 			};
 		}
@@ -2777,9 +3207,9 @@ describe('NodeList/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next11 = iterator.next(),
-			    value = _iterator$next11.value,
-			    done = _iterator$next11.done;
+			var _iterator$next12 = iterator.next(),
+			    value = _iterator$next12.value,
+			    done = _iterator$next12.done;
 
 			if (done) {
 				break;
@@ -2819,7 +3249,7 @@ describe('noop', function () {
 	});
 });
 
-function test$15(MAX_SAFE_INTEGER) {
+function test$21(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -2833,9 +3263,9 @@ function test$15(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$15(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$21(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$15(Number.MAX_SAFE_INTEGER);
+test$21(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
 	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key8 = 1; _key8 < _len4; _key8++) {
@@ -3123,7 +3553,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this11 = this;
+			var _this12 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -3131,14 +3561,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this11.resolve(value);
+				_this12.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this11.reject(error);
+				_this12.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -3177,10 +3607,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this12 = this;
+			var _this13 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this12.handle(deferred);
+				_this13.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -3300,7 +3730,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$17(Promise, name) {
+function test$23(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3428,9 +3858,9 @@ function test$17(Promise, name) {
 	});
 }
 
-test$17(J0Promise, 'Promise/j0');
+test$23(J0Promise, 'Promise/j0');
 
-test$17(Promise, 'Promise');
+test$23(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -3551,9 +3981,9 @@ describe('Set/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next12 = iterator.next(),
-			    value = _iterator$next12.value,
-			    done = _iterator$next12.done;
+			var _iterator$next13 = iterator.next(),
+			    value = _iterator$next13.value,
+			    done = _iterator$next13.done;
 
 			if (done) {
 				break;
@@ -3632,10 +4062,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this13 = this;
+			var _this14 = this;
 
 			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this13);
+				fn.call(thisArg, value, value, _this14);
 			});
 		}
 	}, {
@@ -3654,9 +4084,9 @@ var Set$2 = function () {
 			var iterator = this.values();
 			return {
 				next: function next() {
-					var _iterator$next13 = iterator.next(),
-					    value = _iterator$next13.value,
-					    done = _iterator$next13.done;
+					var _iterator$next14 = iterator.next(),
+					    value = _iterator$next14.value,
+					    done = _iterator$next14.done;
 
 					return {
 						value: !done && [value, value],
@@ -3764,9 +4194,9 @@ function tests$13(Set, name) {
 			var index = 0;
 			var results = [];
 			while (1) {
-				var _iterator$next14 = iterator.next(),
-				    value = _iterator$next14.value,
-				    done = _iterator$next14.done;
+				var _iterator$next15 = iterator.next(),
+				    value = _iterator$next15.value,
+				    done = _iterator$next15.done;
 
 				if (done) {
 					break;
@@ -3785,9 +4215,9 @@ function tests$13(Set, name) {
 			var index = 0;
 			var results = [];
 			while (1) {
-				var _iterator$next15 = iterator.next(),
-				    value = _iterator$next15.value,
-				    done = _iterator$next15.done;
+				var _iterator$next16 = iterator.next(),
+				    value = _iterator$next16.value,
+				    done = _iterator$next16.done;
 
 				if (done) {
 					break;
@@ -3950,9 +4380,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.entries();
 		while (1) {
-			var _iterator$next16 = iterator.next(),
-			    value = _iterator$next16.value,
-			    done = _iterator$next16.done;
+			var _iterator$next17 = iterator.next(),
+			    value = _iterator$next17.value,
+			    done = _iterator$next17.done;
 
 			if (done) {
 				break;
@@ -3973,9 +4403,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.values();
 		while (1) {
-			var _iterator$next17 = iterator.next(),
-			    value = _iterator$next17.value,
-			    done = _iterator$next17.done;
+			var _iterator$next18 = iterator.next(),
+			    value = _iterator$next18.value,
+			    done = _iterator$next18.done;
 
 			if (done) {
 				break;
@@ -3986,7 +4416,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$18(_Symbol) {
+function test$24(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4030,9 +4460,9 @@ function test$18(_Symbol) {
 	});
 }
 
-test$18(Symbol, 'J0Symbol');
+test$24(Symbol, 'J0Symbol');
 
-test$18(Symbol);
+test$24(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4190,9 +4620,9 @@ function tests$15(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.entries();
 			while (1) {
-				var _iterator$next18 = iterator.next(),
-				    value = _iterator$next18.value,
-				    done = _iterator$next18.done;
+				var _iterator$next19 = iterator.next(),
+				    value = _iterator$next19.value,
+				    done = _iterator$next19.done;
 
 				if (done) {
 					break;
@@ -4213,9 +4643,9 @@ function tests$15(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.values();
 			while (1) {
-				var _iterator$next19 = iterator.next(),
-				    value = _iterator$next19.value,
-				    done = _iterator$next19.done;
+				var _iterator$next20 = iterator.next(),
+				    value = _iterator$next20.value,
+				    done = _iterator$next20.done;
 
 				if (done) {
 					break;

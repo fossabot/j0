@@ -8,6 +8,24 @@
 		<loc>https://kei-ito.github.io/j0/Array/@iterator/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/Array/copyWithin/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/copyWithin/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/entries/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/entries/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/fill/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Array/fill/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/Array/find/j0polyfill/</loc>
 	</url>
 	<url>

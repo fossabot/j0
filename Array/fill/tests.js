@@ -2,7 +2,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 
 	describe(name, function () {
 
-		it('should support (2, 0)', function () {
+		it('should support (value, 0)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -16,7 +16,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, 3)', function () {
+		it('should support (value, 3)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -31,7 +31,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, 3, 4)', function () {
+		it('should support (value, 3, 4)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -47,7 +47,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, 3, -1)', function () {
+		it('should support (value, 3, -1)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -63,7 +63,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, -4, 0)', function () {
+		it('should support (value, -4, 0)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -78,7 +78,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, -4, 3)', function () {
+		it('should support (value, -4, 3)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
@@ -94,7 +94,7 @@ function test(copyWithin, name = 'Array.prototype.fill') {
 			assert.deepEqual(actual, expected);
 		});
 
-		it('should support (2, -4, -2)', function () {
+		it('should support (value, -4, -2)', function () {
 			const v1 = Math.random();
 			const v2 = Math.random();
 			const v3 = Math.random();
