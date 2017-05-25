@@ -3,8 +3,13 @@ function test(arrayOf, name = 'Array.of') {
 	describe(name, function () {
 
 		it('should create an array', function () {
-			const actual = arrayOf(1, 2, 3);
-			const expected = [1, 2, 3];
+			const expected = [
+				new Date(),
+				Date.now(),
+				new Date().toString()
+			];
+			const actual = arrayOf(...expected);
+			assert.equal(Array.isArray(actual), true);
 			assert.deepEqual(actual, expected);
 		});
 
