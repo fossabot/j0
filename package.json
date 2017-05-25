@@ -9,10 +9,9 @@
     "url": "https://github.com/kei-ito"
   },
   "repository": "kei-ito/j0",
-  "keywords": [
-    "blogs",
-    "library",
-    "frontend"
+  "browserslist": [
+    "not ie <= 10",
+    "ios 8"
   ],
   "scripts": {
     "start": "node build --server",
