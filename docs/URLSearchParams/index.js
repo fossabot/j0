@@ -227,7 +227,9 @@ var URLSearchParams$1 = function (_StringList) {
 	return URLSearchParams$1;
 }(StringList);
 
-function tests(URLSearchParams, testName) {
+function tests(URLSearchParams) {
+	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URLSearchParams';
+
 
 	describe(testName, function () {
 
@@ -336,7 +338,7 @@ function tests(URLSearchParams, testName) {
 	});
 }
 
-tests(URLSearchParams$1, 'J0URLSearchParams');
+tests(URLSearchParams$1, 'URLSearchParams#j0');
 
-tests(URLSearchParams, 'URLSearchParams');
+tests(URLSearchParams);
 }())

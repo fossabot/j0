@@ -84,7 +84,7 @@
 		"j0": {}
 	},
 	"URLSearchParams": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},

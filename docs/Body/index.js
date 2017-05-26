@@ -83,27 +83,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+var x$10 = URLSearchParams;
+
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$10 = Uint8ClampedArray;
+var x$11 = Uint8ClampedArray;
 
-var x$11 = Uint16Array;
+var x$12 = Uint16Array;
 
-var x$12 = Uint32Array;
+var x$13 = Uint32Array;
 
-var x$13 = Int8Array;
+var x$14 = Int8Array;
 
-var x$14 = Int16Array;
+var x$15 = Int16Array;
 
-var x$15 = Int32Array;
+var x$16 = Int32Array;
 
-var x$16 = Float32Array;
+var x$17 = Float32Array;
 
-var x$17 = Float64Array;
+var x$18 = Float64Array;
 
-var viewClasses = [x$5, x$10, x$11, x$12, x$13, x$14, x$15, x$16, x$17];
+var viewClasses = [x$5, x$11, x$12, x$13, x$14, x$15, x$16, x$17, x$18];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -185,7 +187,7 @@ var Body$1 = function () {
 				this.bodyBlob = body;
 			} else if (isInstanceOf(body, x$8)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, URLSearchParams)) {
+			} else if (isInstanceOf(body, x$10)) {
 				this.bodyText = body.toString();
 			} else if (isInstanceOf(body, x$3)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
@@ -201,7 +203,7 @@ var Body$1 = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof URLSearchParams) {
+				} else if (body instanceof x$10) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}

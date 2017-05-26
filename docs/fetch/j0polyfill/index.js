@@ -91,27 +91,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+var x$10 = URLSearchParams;
+
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$10 = Uint8ClampedArray;
+var x$11 = Uint8ClampedArray;
 
-var x$11 = Uint16Array;
+var x$12 = Uint16Array;
 
-var x$12 = Uint32Array;
+var x$13 = Uint32Array;
 
-var x$13 = Int8Array;
+var x$14 = Int8Array;
 
-var x$14 = Int16Array;
+var x$15 = Int16Array;
 
-var x$15 = Int32Array;
+var x$16 = Int32Array;
 
-var x$16 = Float32Array;
+var x$17 = Float32Array;
 
-var x$17 = Float64Array;
+var x$18 = Float64Array;
 
-var viewClasses = [x$5, x$10, x$11, x$12, x$13, x$14, x$15, x$16, x$17];
+var viewClasses = [x$5, x$11, x$12, x$13, x$14, x$15, x$16, x$17, x$18];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -193,7 +195,7 @@ var Body = function () {
 				this.bodyBlob = body;
 			} else if (isInstanceOf(body, x$8)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, URLSearchParams)) {
+			} else if (isInstanceOf(body, x$10)) {
 				this.bodyText = body.toString();
 			} else if (isInstanceOf(body, x$3)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
@@ -209,7 +211,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof URLSearchParams) {
+				} else if (body instanceof x$10) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -466,7 +468,7 @@ var StringList = function () {
 	return StringList;
 }();
 
-var x$18 = Object;
+var x$19 = Object;
 
 function toLowerCase(x) {
 	return x ? x.toLowerCase() : '';
@@ -480,7 +482,7 @@ var Headers$1 = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			x$18.keys(headers).forEach(function (key) {
+			x$19.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -668,10 +670,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$19 = Headers;
+var x$20 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new x$19();
+	var headers = new x$20();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -692,12 +694,12 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
-var x$20 = XMLHttpRequest;
+var x$21 = XMLHttpRequest;
 
 function fetch(input, init) {
 	return new x$6(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$20();
+		var xhr = new x$21();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,

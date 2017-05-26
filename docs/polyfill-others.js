@@ -1275,27 +1275,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
+var x$21 = URLSearchParams;
+
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$21 = Uint8ClampedArray;
+var x$22 = Uint8ClampedArray;
 
-var x$22 = Uint16Array;
+var x$23 = Uint16Array;
 
-var x$23 = Uint32Array;
+var x$24 = Uint32Array;
 
-var x$24 = Int8Array;
+var x$25 = Int8Array;
 
-var x$25 = Int16Array;
+var x$26 = Int16Array;
 
-var x$26 = Int32Array;
+var x$27 = Int32Array;
 
-var x$27 = Float32Array;
+var x$28 = Float32Array;
 
-var x$28 = Float64Array;
+var x$29 = Float64Array;
 
-var viewClasses = [x$16, x$21, x$22, x$23, x$24, x$25, x$26, x$27, x$28];
+var viewClasses = [x$16, x$22, x$23, x$24, x$25, x$26, x$27, x$28, x$29];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1377,7 +1379,7 @@ var Body = function () {
 				this.bodyBlob = body;
 			} else if (isInstanceOf(body, x$19)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, URLSearchParams)) {
+			} else if (isInstanceOf(body, x$21)) {
 				this.bodyText = body.toString();
 			} else if (isInstanceOf(body, x$15)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
@@ -1393,7 +1395,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof URLSearchParams) {
+				} else if (body instanceof x$21) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -1587,10 +1589,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$29 = Headers;
+var x$30 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new x$29();
+	var headers = new x$30();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -1607,12 +1609,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-var x$30 = XMLHttpRequest;
+var x$31 = XMLHttpRequest;
 
 function fetch(input, init) {
 	return new x$17(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$30();
+		var xhr = new x$31();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -1685,18 +1687,18 @@ if (!x$3.Request) {
 	x$3.Request = Request;
 }
 
-var x$31 = Date;
+var x$32 = Date;
 
 x$3.requestAnimationFrame = x$3.requestAnimationFrame || x$3.mozRequestAnimationFrame || x$3.webkitRequestAnimationFrame || x$3.msRequestAnimationFrame || function (fn) {
 	return x$4(function () {
-		fn(x$31.now());
+		fn(x$32.now());
 	}, 30);
 };
 
-var x$32 = clearTimeout;
+var x$33 = clearTimeout;
 
 x$3.cancelAnimationFrame = x$3.cancelAnimationFrame || x$3.mozCancelAnimationFrame || function (id) {
-	return x$32(id);
+	return x$33(id);
 };
 
 x$3.global = x$3;
