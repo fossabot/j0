@@ -1,10 +1,9 @@
-import trim from '../String/trim';
 import {
 	decodeURIComponent,
 	FormData
 } from 'j0';
 function parse(body, form = new FormData()) {
-	trim(body).split('&')
+	body.trim().split('&')
 	.forEach(function (data) {
 		if (data) {
 			let [name, ...parts] = data.split('=');

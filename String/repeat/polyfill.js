@@ -1,12 +1,6 @@
-import {parseInt} from 'j0';
-
-function repeat(c) {
-	const count = parseInt(c, 10);
-	const results = [];
-	for (let i = 0; i < count; i += 1) {
-		results.push(this);
-	}
-	return results.join('');
+import {String} from 'j0';
+import j0repeat from './j0polyfill';
+const {prototype} = String;
+if (!prototype.repeat) {
+	prototype.repeat = j0repeat;
 }
-
-export default repeat;

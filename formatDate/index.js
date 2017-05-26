@@ -1,5 +1,7 @@
-import {Date} from 'j0';
-import leftpad from '../String/leftpad';
+import {
+	Date,
+	leftpad
+} from 'j0';
 
 const century = 100;
 const shortenedLength = 3;

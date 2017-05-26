@@ -1,5 +1,4 @@
 import {Headers} from 'j0';
-import trim from '../String/trim';
 function parse(rawHeaders) {
 	const headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
@@ -9,7 +8,7 @@ function parse(rawHeaders) {
 	.forEach(function (line) {
 		const [key, ...parts] = line.split(':');
 		if (key) {
-			headers.append(trim(key), trim(parts.join(':')));
+			headers.append(key.trim(), parts.join(':').trim());
 		}
 	});
 	return headers;
