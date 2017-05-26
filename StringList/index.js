@@ -1,4 +1,7 @@
-import {iteratorSymbol} from 'j0';
+import {
+	iteratorSymbol,
+	Iterator
+} from 'j0';
 
 class StringList {
 
@@ -46,7 +49,8 @@ class StringList {
 	}
 
 	get(name) {
-		const found = find(this.data, function ([itemName]) {
+		const found = this.data
+		.find(function ([itemName]) {
 			return itemName === name;
 		});
 		return found ? found[1] : null;
@@ -74,20 +78,32 @@ class StringList {
 		return this.data[iteratorSymbol]();
 	}
 
+	keys() {
+		const iterator = this.entries();
+		return new Iterator(() => {
+			const {
+				value,
+				done
+			} = iterator.next();
+			return {
+				value: value && value[0],
+				done
+			};
+		});
+	}
+
 	values() {
 		const iterator = this.entries();
-		return {
-			next: function () {
-				const {
-					value,
-					done
-				} = iterator.next();
-				return {
-					value: value && value[1],
-					done
-				};
-			}
-		};
+		return new Iterator(() => {
+			const {
+				value,
+				done
+			} = iterator.next();
+			return {
+				value: value && value[1],
+				done
+			};
+		});
 	}
 
 	[iteratorSymbol]() {
