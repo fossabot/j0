@@ -1,3 +1,3 @@
 import Map from '..';
 import tests from '../../tests.js';
-tests(Map, 'J0Map');
+tests(Map, 'Map#j0');

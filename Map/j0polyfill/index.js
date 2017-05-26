@@ -1,4 +1,7 @@
-import Symbol from '../../Symbol';
+import {
+	Symbol,
+	Iterator
+} from 'j0';
 
 class Map {
 
@@ -68,28 +71,24 @@ class Map {
 
 	keys() {
 		const iterator = this.entries();
-		return {
-			next: function () {
-				const {value, done} = iterator.next();
-				return {
-					value: value && value[0],
-					done
-				};
-			}
-		};
+		return new Iterator(() => {
+			const {value, done} = iterator.next();
+			return {
+				value: value && value[0],
+				done
+			};
+		});
 	}
 
 	values() {
 		const iterator = this.entries();
-		return {
-			next: function () {
-				const {value, done} = iterator.next();
-				return {
-					value: value && value[1],
-					done
-				};
-			}
-		};
+		return new Iterator(() => {
+			const {value, done} = iterator.next();
+			return {
+				value: value && value[1],
+				done
+			};
+		});
 	}
 
 }

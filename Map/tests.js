@@ -1,6 +1,6 @@
 import Symbol from '../Symbol';
 
-function tests(Map, name) {
+function tests(Map, name = 'Map') {
 
 	describe(name, function () {
 
