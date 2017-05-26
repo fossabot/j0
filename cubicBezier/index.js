@@ -10,10 +10,9 @@ function cubicBezier(x1, y1, x2, y2, x) {
 		} else if (p(x1, x2, t) < x) {
 			// gotten x is lower than x
 			return getT(t, upper, depth + 1);
-		} else {
-			// gotten x is larger than x
-			return getT(lower, t, depth + 1);
 		}
+		// gotten x is larger than x
+		return getT(lower, t, depth + 1);
 	}
 	return p(y1, y2, getT(0, 1));
 }
