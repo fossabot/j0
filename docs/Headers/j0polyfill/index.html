@@ -9,20 +9,24 @@
 <h1 id="title"><a href="../../">j0</a>/<a href="../">Headers</a>/j0polyfill<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">forEachKey</span>&#32;<span class="name">from</span>&#32;<a href="../../Object/forEachKey"><span class="string"><span class="string">'../../Object/forEachKey'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">toLowerCase</span>&#32;<span class="name">from</span>&#32;<a href="../../String/toLowerCase"><span class="string"><span class="string">'../../String/toLowerCase'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;<span class="name">Iterator</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;<span class="name">StringList</span>
+<span class="linenum"></span>&#9;<span class="name">StringList</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Object</span>
 <span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
+<span class="linenum"></span>
+<span class="linenum"></span><span class="function">function</span>&#32;<span class="name">toLowerCase</span><span class="_28">(</span><span class="name">x</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="name">x</span><span class="_2e">.</span><span class="name">toLowerCase</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="class">class</span>&#32;<span class="name">Headers</span>&#32;<span class="extends">extends</span>&#32;<span class="name">StringList</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">constructor</span><span class="_28">(</span><span class="name">headers</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">init</span>&#32;<span class="_3d">=</span>&#32;<span class="_5b">[</span><span class="_5d">]</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">headers</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">forEachKey</span><span class="_28">(</span><span class="name">headers</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">key</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">init</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="_5b">[</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="name">value</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">Object</span><span class="_2e">.</span><span class="name">keys</span><span class="_28">(</span><span class="name">headers</span><span class="_29">)</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_2e">.</span><span class="name">forEach</span><span class="_28">(</span><span class="_28">(</span><span class="name">key</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">init</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="_5b">[</span><span class="name">key</span><span class="_2c">,</span>&#32;<span class="name">headers</span><span class="_5b">[</span><span class="name">key</span><span class="_5d">]</span><span class="_5d">]</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="super">super</span><span class="_28">(</span><span class="name">init</span><span class="_29">)</span><span class="_3b">;</span>

@@ -13,20 +13,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
-		}
-	}
-}
-
-function toLowerCase(string) {
-	return ('' + string).toLowerCase();
-}
-
 var iteratorSymbol = Symbol.iterator;
 
 var Iterator = function () {
@@ -212,6 +198,12 @@ var StringList = function () {
 	return StringList;
 }();
 
+var Object = window.Object;
+
+function toLowerCase(x) {
+	return x.toLowerCase();
+}
+
 var Headers = function (_StringList) {
 	_inherits(Headers, _StringList);
 
@@ -220,8 +212,8 @@ var Headers = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			forEachKey(headers, function (value, key) {
-				init.push([key, value]);
+			Object.keys(headers).forEach(function (key) {
+				init.push([key, headers[key]]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));

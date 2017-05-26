@@ -834,14 +834,6 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 
 window$1.Set = SET;
 
-var Number = window.Number;
-
-var J0MAX_SAFE_INTEGER = 9007199254740991;
-
-if (!Number.MAX_SAFE_INTEGER) {
-	Number.MAX_SAFE_INTEGER = J0MAX_SAFE_INTEGER;
-}
-
 var NodeList = window.NodeList;
 
 function generator$3() {
@@ -1115,18 +1107,10 @@ if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	window$1.URLSearchParams = URLSearchParams$2;
 }
 
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
-		}
-	}
-}
+var Object = window.Object;
 
-function toLowerCase(string) {
-	return ('' + string).toLowerCase();
+function toLowerCase(x) {
+	return x.toLowerCase();
 }
 
 var Headers = function (_StringList2) {
@@ -1137,8 +1121,8 @@ var Headers = function (_StringList2) {
 
 		var init = [];
 		if (headers) {
-			forEachKey(headers, function (value, key) {
-				init.push([key, value]);
+			Object.keys(headers).forEach(function (key) {
+				init.push([key, headers[key]]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
@@ -1672,6 +1656,9 @@ function fetch(input, init) {
 	});
 }
 
+// if (!window.fetch) {
+// 	window.fetch = j0fetch;
+// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {

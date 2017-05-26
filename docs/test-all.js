@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee8, this);
 	}));
 
-	return function wait(_x45, _x46) {
+	return function wait(_x44, _x45) {
 		return _ref32.apply(this, arguments);
 	};
 }();
@@ -1757,20 +1757,6 @@ describe('J0Element.prototype.text', function () {
 	});
 });
 
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
-		}
-	}
-}
-
-function toLowerCase(string) {
-	return ('' + string).toLowerCase();
-}
-
 var StringList = function () {
 	function StringList(iterable) {
 		_classCallCheck(this, StringList);
@@ -1937,6 +1923,12 @@ var StringList = function () {
 	return StringList;
 }();
 
+var Object = window.Object;
+
+function toLowerCase(x) {
+	return x.toLowerCase();
+}
+
 var Headers$1 = function (_StringList) {
 	_inherits(Headers$1, _StringList);
 
@@ -1945,8 +1937,8 @@ var Headers$1 = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			forEachKey(headers, function (value, key) {
-				init.push([key, value]);
+			Object.keys(headers).forEach(function (key) {
+				init.push([key, headers[key]]);
 			});
 		}
 		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
@@ -3480,138 +3472,6 @@ describe('noop', function () {
 	});
 });
 
-function test$30(MAX_SAFE_INTEGER) {
-	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
-
-
-	describe(name, function () {
-
-		it('should evaluate to true', function () {
-			assert.equal(MAX_SAFE_INTEGER + 1, MAX_SAFE_INTEGER + 2);
-		});
-	});
-}
-
-var J0MAX_SAFE_INTEGER = 9007199254740991;
-
-test$30(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
-
-test$30(Number.MAX_SAFE_INTEGER);
-
-function assign(target) {
-	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-		sources[_key4 - 1] = arguments[_key4];
-	}
-
-	sources.forEach(function (source) {
-		forEachKey(source, function (value, key) {
-			target[key] = value;
-		});
-	});
-	return target;
-}
-
-describe('Object/assign', function () {
-	it('should assign values', function () {
-		var target = {
-			a: 0,
-			b: 0,
-			c: 0
-		};
-		var src1 = { b: 1 };
-		var src2 = {
-			b: 2,
-			c: 3
-		};
-		var returnValue = assign(target, src1, src2);
-		var expected = {
-			a: 0,
-			b: 2,
-			c: 3
-		};
-		assert.equal(target, returnValue);
-		assert.deepEqual(returnValue, expected);
-	});
-});
-
-describe('Object/forEachKey', function () {
-
-	it('should iterate over an object', function () {
-		var obj = {
-			a: 0,
-			b: 1
-		};
-		var results = [];
-		forEachKey(obj, function () {
-			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-				args[_key5] = arguments[_key5];
-			}
-
-			results.push(args);
-		});
-		assert.deepEqual(results, [[0, 'a', obj], [1, 'b', obj]]);
-	});
-
-	it('should stop iteration if fn returns truthy value', function () {
-		var obj = {
-			a: 0,
-			b: 1
-		};
-		var results = [];
-		forEachKey(obj, function () {
-			for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-				args[_key6] = arguments[_key6];
-			}
-
-			results.push(args);
-			return true;
-		});
-		assert.deepEqual(results, [[0, 'a', obj]]);
-	});
-
-	it('should ignore properties which is not its own', function () {
-		var obj = [1, 2];
-		var results = [];
-		forEachKey(obj, function () {
-			for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-				args[_key7] = arguments[_key7];
-			}
-
-			results.push(args);
-		});
-		assert.deepEqual(results, [[1, '0', obj], [2, '1', obj]]);
-	});
-});
-
-var keys = Object.keys;
-
-describe('Object/keys', function () {
-
-	it('should return an array of keys', function () {
-		var data = {
-			a: 0,
-			b: 0,
-			c: 0
-		};
-		var actual = keys(data);
-		var expected = ['a', 'b', 'c'];
-		assert.deepEqual(actual, expected);
-	});
-});
-
-function toString(o) {
-	return Object.prototype.toString.call(o);
-}
-
-describe('Object/toString', function () {
-
-	it('should convert [] to [object Array]', function () {
-		var value = [];
-		var expected = '[object Array]';
-		assert.equal(toString(value), expected);
-	});
-});
-
 function onError(error) {
 	onError.listener(error);
 }
@@ -3963,7 +3823,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$32(Promise, name) {
+function test$30(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -4091,9 +3951,9 @@ function test$32(Promise, name) {
 	});
 }
 
-test$32(J0Promise, 'Promise/j0');
+test$30(J0Promise, 'Promise/j0');
 
-test$32(Promise, 'Promise');
+test$30(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -4400,8 +4260,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-					args[_key8] = arguments[_key8];
+				for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+					args[_key4] = arguments[_key4];
 				}
 
 				args[3] = this;
@@ -4530,10 +4390,14 @@ describe('String/repeat', function () {
 	});
 });
 
+function toLowerCase$1(string) {
+	return ('' + string).toLowerCase();
+}
+
 describe('toLowerCase', function () {
 
 	it('should convert cases', function () {
-		assert.equal(toLowerCase('ABc'), 'abc');
+		assert.equal(toLowerCase$1('ABc'), 'abc');
 	});
 });
 
@@ -4649,7 +4513,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$33(_Symbol) {
+function test$31(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4693,9 +4557,9 @@ function test$33(_Symbol) {
 	});
 }
 
-test$33(Symbol, 'J0Symbol');
+test$31(Symbol, 'J0Symbol');
 
-test$33(Symbol);
+test$31(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4707,8 +4571,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-			args[_key9] = arguments[_key9];
+		for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+			args[_key5] = arguments[_key5];
 		}
 
 		lastArgs = args;

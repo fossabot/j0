@@ -57,17 +57,6 @@
 			"j0polyfill": {}
 		}
 	},
-	"Number": {
-		"MAX_SAFE_INTEGER": {
-			"j0": {}
-		}
-	},
-	"Object": {
-		"assign": {},
-		"forEachKey": {},
-		"keys": {},
-		"toString": {}
-	},
 	"Promise": {
 		"j0": {}
 	},

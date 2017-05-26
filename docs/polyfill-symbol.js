@@ -15,6 +15,8 @@ var Date = window.Date;
 
 var TypeError = window.TypeError;
 
+var Object = window.Object;
+
 var hex = 16;
 
 var SymbolRegistry = function () {

@@ -16,7 +16,8 @@ var createNavigation = function () {
 					case 0:
 						parseBranch = function parseBranch(parent, name, base) {
 							var childElements = [];
-							forEachKey(parent, function (branch, key) {
+							Object.keys(parent).forEach(function (branch) {
+								var key = parent[branch];
 								childElements.push(parseBranch(branch, key, base ? base + '/' + name : name));
 							});
 							var ul = 0 < childElements.length ? {
@@ -73,16 +74,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function forEachKey(obj, fn, thisArg) {
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			if (fn.call(thisArg, obj[key], key, obj)) {
-				return;
-			}
-		}
-	}
-}
 
 var document = window.document;
 
@@ -391,6 +382,8 @@ var fetch = window.fetch;
 var location = window.location;
 
 var navigator = window.navigator;
+
+var Object = window.Object;
 
 /* global chai */
 var mocha = window$1.mocha;

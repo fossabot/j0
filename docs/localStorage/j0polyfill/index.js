@@ -55,6 +55,8 @@ function test$1(storage, testName) {
 	});
 }
 
+var Object = window.Object;
+
 var J0Storage = function () {
 	function J0Storage() {
 		_classCallCheck(this, J0Storage);
