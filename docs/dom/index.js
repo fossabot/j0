@@ -5,6 +5,8 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25,8 +27,23 @@ function isNode(x) {
 	return isInstanceOf(x, Node);
 }
 
+var Promise = window.Promise;
+
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
+var getBody = new Promise(function (resolve) {
+	var interval = 50;
+	function check() {
+		var body = document.body;
+
+		if (body) {
+			resolve(wrap(body));
+		} else {
+			setTimeout(check, interval);
+		}
+	}
+	setTimeout(check);
+});
 
 var J0Element = function () {
 
@@ -259,6 +276,32 @@ function _findAll(selector) {
 
 wrap.find = _find;
 wrap.findAll = _findAll;
+wrap.ready = function () {
+	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fn) {
+		return regeneratorRuntime.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						_context.next = 2;
+						return getBody;
+
+					case 2:
+						if (fn) {
+							fn();
+						}
+
+					case 3:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	}));
+
+	return function (_x5) {
+		return _ref.apply(this, arguments);
+	};
+}();
 
 // import '../*/test';
 describe('dom', function () {

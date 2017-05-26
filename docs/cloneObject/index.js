@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var JSON = window.JSON;
+
 function clone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }

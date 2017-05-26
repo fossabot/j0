@@ -9,6 +9,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
+var JSON = window.JSON;
+
 var Blob = window.Blob;
 
 var ArrayBuffer = window.ArrayBuffer;

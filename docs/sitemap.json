@@ -40,16 +40,12 @@
 		"j0polyfill": {}
 	},
 	"Iterator": {},
-	"JSON": {},
+	"J0Storage": {},
 	"Map": {
 		"@iterator": {
 			"j0polyfill": {}
 		},
 		"j0polyfill": {}
-	},
-	"Math": {
-		"clamp": {},
-		"cubicBezier": {}
 	},
 	"NamedNodeMap": {
 		"@iterator": {}
@@ -97,14 +93,15 @@
 	},
 	"arrayBufferToString": {},
 	"cancelAnimationFrame": {},
+	"clamp": {},
 	"cloneObject": {},
+	"cubicBezier": {},
 	"debounce": {},
 	"dom": {},
 	"fetch": {
 		"j0polyfill": {}
 	},
 	"formatDate": {},
-	"getBody": {},
 	"innerHeight": {},
 	"innerWidth": {},
 	"isArray": {},
@@ -115,7 +112,9 @@
 	"isNumber": {},
 	"isString": {},
 	"isUndefined": {},
-	"localStorage": {},
+	"localStorage": {
+		"j0polyfill": {}
+	},
 	"noop": {
 		"true": {}
 	},

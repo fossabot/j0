@@ -8,29 +8,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref31 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(duration, data) {
-		return regeneratorRuntime.wrap(function _callee7$(_context7) {
+	var _ref32 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(duration, data) {
+		return regeneratorRuntime.wrap(function _callee8$(_context8) {
 			while (1) {
-				switch (_context7.prev = _context7.next) {
+				switch (_context8.prev = _context8.next) {
 					case 0:
-						_context7.next = 2;
+						_context8.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context7.abrupt('return', data);
+						return _context8.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context7.stop();
+						return _context8.stop();
 				}
 			}
-		}, _callee7, this);
+		}, _callee8, this);
 	}));
 
-	return function wait(_x42, _x43) {
-		return _ref31.apply(this, arguments);
+	return function wait(_x43, _x44) {
+		return _ref32.apply(this, arguments);
 	};
 }();
 
@@ -1028,6 +1028,8 @@ describe('ArrayBuffer/toString', function () {
 	})));
 });
 
+var JSON = window.JSON;
+
 var Blob$1 = window.Blob;
 
 var ArrayBuffer = window.ArrayBuffer;
@@ -1211,7 +1213,7 @@ var Body$1 = function () {
 	return Body$1;
 }();
 
-function tests(Body) {
+function tests$1(Body) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Body';
 
 
@@ -1225,10 +1227,10 @@ function tests(Body) {
 	});
 }
 
-tests(Body$1, 'J0Body');
+tests$1(Body$1, 'J0Body');
 
 /* global Body */
-tests(Body);
+tests$1(Body);
 
 var cancelAnimationFrame = window.cancelAnimationFrame;
 
@@ -1288,6 +1290,42 @@ describe('cancelAnimationFrame', function () {
 	})));
 });
 
+function clamp(x) {
+	var L = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -Infinity;
+	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
+
+	if (H < L) {
+		var _ref6 = [H, L];
+		L = _ref6[0];
+		H = _ref6[1];
+	}
+	if (x < L) {
+		x = L;
+	} else if (H < x) {
+		x = H;
+	}
+	return x;
+}
+
+describe('Math/clamp', function () {
+
+	it('should return 1 if the arguments are [0, 1, 2]', function () {
+		assert.equal(clamp(0, 1, 2), 1);
+	});
+
+	it('should return 2 if the arguments are [0, 2]', function () {
+		assert.equal(clamp(0, 2), 2);
+	});
+
+	it('should return 2 if the arguments are [2, 1, 3]', function () {
+		assert.equal(clamp(2, 1, 3), 2);
+	});
+
+	it('should return 2 if the arguments are [2, 3, 1]', function () {
+		assert.equal(clamp(2, 3, 1), 2);
+	});
+});
+
 function clone(obj) {
 	return JSON.parse(JSON.stringify(obj));
 }
@@ -1327,6 +1365,39 @@ describe('Object/clone', function () {
 		var expected = { b: { a: 0 } };
 		assert.deepEqual(actual, expected);
 		assert.deepEqual(data.b, {});
+	});
+});
+
+function p(p1, p2, t) {
+	return (1 - 3 * p2 + 3 * p1) * t * t * t + 3 * (p2 - 2 * p1) * t * t + 3 * p1 * t;
+}
+
+function cubicBezier(x1, y1, x2, y2, x) {
+	function getT(lower, upper) {
+		var depth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+		var t = (lower + upper) / 2;
+		if (8 < depth) {
+			return t;
+		} else if (p(x1, x2, t) < x) {
+			// gotten x is lower than x
+			return getT(t, upper, depth + 1);
+		}
+		// gotten x is larger than x
+		return getT(lower, t, depth + 1);
+	}
+	return p(y1, y2, getT(0, 1));
+}
+
+describe('Math/cubicBezier', function () {
+
+	it('should be linear', function () {
+		var sum = 0;
+		for (var t = 0; t <= 1; t += 0.1) {
+			var d = cubicBezier(0, 0, 1, 1, t) - t;
+			sum += d * d;
+		}
+		assert.equal(sum < 0.0001, true);
 	});
 });
 
@@ -1386,6 +1457,19 @@ function isNode(x) {
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
+var getBody = new Promise$1(function (resolve) {
+	var interval = 50;
+	function check() {
+		var body = document$1.body;
+
+		if (body) {
+			resolve(wrap(body));
+		} else {
+			setTimeout(check, interval);
+		}
+	}
+	setTimeout(check);
+});
 
 var J0Element = function () {
 
@@ -1618,6 +1702,32 @@ function _findAll(selector) {
 
 wrap.find = find$1;
 wrap.findAll = _findAll;
+wrap.ready = function () {
+	var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(fn) {
+		return regeneratorRuntime.wrap(function _callee5$(_context5) {
+			while (1) {
+				switch (_context5.prev = _context5.next) {
+					case 0:
+						_context5.next = 2;
+						return getBody;
+
+					case 2:
+						if (fn) {
+							fn();
+						}
+
+					case 3:
+					case 'end':
+						return _context5.stop();
+				}
+			}
+		}, _callee5, this);
+	}));
+
+	return function (_x26) {
+		return _ref7.apply(this, arguments);
+	};
+}();
 
 // import '../*/test';
 describe('dom', function () {
@@ -1648,9 +1758,9 @@ describe('J0Element.prototype.text', function () {
 });
 
 function forEachKey(obj, fn, thisArg) {
-	for (var _key4 in obj) {
-		if (obj.hasOwnProperty(_key4)) {
-			if (fn.call(thisArg, obj[_key4], _key4, obj)) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			if (fn.call(thisArg, obj[key], key, obj)) {
 				return;
 			}
 		}
@@ -1673,14 +1783,14 @@ var StringList = function () {
 
 			try {
 				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _ref6 = _step3.value;
+					var _ref8 = _step3.value;
 
-					var _ref7 = _slicedToArray(_ref6, 2);
+					var _ref9 = _slicedToArray(_ref8, 2);
 
-					var _key5 = _ref7[0];
-					var value = _ref7[1];
+					var key = _ref9[0];
+					var value = _ref9[1];
 
-					this.append(_key5, value);
+					this.append(key, value);
 				}
 			} catch (err) {
 				_didIteratorError3 = true;
@@ -1707,9 +1817,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref8) {
-				var _ref9 = _slicedToArray(_ref8, 1),
-				    itemName = _ref9[0];
+			return this.data.findIndex(function (_ref10) {
+				var _ref11 = _slicedToArray(_ref10, 1),
+				    itemName = _ref11[0];
 
 				return itemName === name;
 			});
@@ -1737,9 +1847,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref10) {
-				var _ref11 = _slicedToArray(_ref10, 1),
-				    itemName = _ref11[0];
+			this.data = this.data.filter(function (_ref12) {
+				var _ref13 = _slicedToArray(_ref12, 1),
+				    itemName = _ref13[0];
 
 				return itemName !== name;
 			});
@@ -1747,9 +1857,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref12) {
-				var _ref13 = _slicedToArray(_ref12, 1),
-				    itemName = _ref13[0];
+			var found = this.data.find(function (_ref14) {
+				var _ref15 = _slicedToArray(_ref14, 1),
+				    itemName = _ref15[0];
 
 				return itemName === name;
 			});
@@ -1759,10 +1869,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref14) {
-				var _ref15 = _slicedToArray(_ref14, 2),
-				    itemName = _ref15[0],
-				    value = _ref15[1];
+			this.data.forEach(function (_ref16) {
+				var _ref17 = _slicedToArray(_ref16, 2),
+				    itemName = _ref17[0],
+				    value = _ref17[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -1773,11 +1883,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref16) {
-				var _ref17 = _slicedToArray(_ref16, 2),
-				    name = _ref17[0],
-				    _ref17$ = _ref17[1],
-				    value = _ref17$ === undefined ? '' : _ref17$;
+			return this.data.map(function (_ref18) {
+				var _ref19 = _slicedToArray(_ref18, 2),
+				    name = _ref19[0],
+				    _ref19$ = _ref19[1],
+				    value = _ref19$ === undefined ? '' : _ref19$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -1885,11 +1995,11 @@ var Headers$1 = function (_StringList) {
 					    value = _iterator$next5.value,
 					    done = _iterator$next5.done;
 
-					var _key6 = value && value[0];
-					if (done || history.indexOf(_key6) < 0) {
-						history.push(_key6);
+					var key = value && value[0];
+					if (done || history.indexOf(key) < 0) {
+						history.push(key);
 						return {
-							value: [_key6, _this6.get(_key6)],
+							value: [key, _this6.get(key)],
 							done: done
 						};
 					}
@@ -1934,8 +2044,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref18) {
-			var headers = _ref18.headers;
+		value: function inheritFrom(input, body, _ref20) {
+			var headers = _ref20.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -2076,12 +2186,12 @@ function fetch$1(input, init) {
 
 		try {
 			for (var _iterator4 = request.headers.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var _ref19 = _step4.value;
+				var _ref21 = _step4.value;
 
-				var _ref20 = _slicedToArray(_ref19, 2);
+				var _ref22 = _slicedToArray(_ref21, 2);
 
-				var name = _ref20[0];
-				var value = _ref20[1];
+				var name = _ref22[0];
+				var value = _ref22[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -2104,7 +2214,7 @@ function fetch$1(input, init) {
 	});
 }
 
-function tests$2(fetch) {
+function tests$3(fetch) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
 
 
@@ -2128,9 +2238,9 @@ function tests$2(fetch) {
 	});
 }
 
-tests$2(fetch$1, 'J0Fetch');
+tests$3(fetch$1, 'J0Fetch');
 
-tests$2(fetch);
+tests$3(fetch);
 
 var Date$1 = window.Date;
 
@@ -2174,33 +2284,7 @@ describe('format', function () {
 	});
 });
 
-var setTimeout$1 = window.setTimeout;
-
-var INTERVAL = 100;
-
-var getBody = new Promise$1(function (resolve) {
-	function get() {
-		var body = document$1.body;
-
-		if (body) {
-			resolve(body);
-		} else {
-			setTimeout$1(get, INTERVAL);
-		}
-	}
-	get();
-});
-
-describe('getBody', function () {
-
-	it('should return a promise', function () {
-		return getBody.then(function (body) {
-			assert.equal(!body.appendChild, false);
-		});
-	});
-});
-
-function tests$4(Headers) {
+function tests$5(Headers) {
 	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
 
 
@@ -2305,9 +2389,9 @@ function tests$4(Headers) {
 	});
 }
 
-tests$4(Headers$1, 'Headers/j0');
+tests$5(Headers$1, 'Headers/j0');
 
-tests$4(Headers);
+tests$5(Headers);
 
 function generator$2() {
 	var _this9 = this;
@@ -2754,40 +2838,109 @@ describe('Iterator', function () {
 	});
 });
 
-var storage = void 0;
-try {
-	storage = localStorage;
-	storage.is = 'available';
-} catch (err) {
-	storage = 0;
+function test$21(storage, testName) {
+
+	describe(testName, function () {
+
+		it('should set/get an item', function () {
+			var name = '' + Date.now();
+			var value = new Date().toISOString();
+			storage.setItem(name, value);
+			assert.equal(storage.getItem(name), value);
+		});
+
+		it('should remove an item', function () {
+			var name = '' + Date.now();
+			var value = new Date().toISOString();
+			storage.setItem(name, value);
+			assert.equal(storage.getItem(name), value);
+			storage.removeItem(name);
+			assert.equal(storage.getItem(name));
+		});
+
+		it('should clear all', function () {
+			var name1 = Date.now() + '1';
+			var name2 = Date.now() + '2';
+			var value = new Date().toISOString();
+			storage.setItem(name1, value);
+			storage.setItem(name2, value);
+			assert.equal(storage.getItem(name1), value);
+			assert.equal(storage.getItem(name2), value);
+			storage.clear();
+			assert.equal(storage.getItem(name1));
+			assert.equal(storage.getItem(name2));
+		});
+
+		it('should have key()', function () {
+			var name1 = Date.now() + '1';
+			var name2 = Date.now() + '2';
+			var value = new Date().toISOString();
+			storage.setItem(name1, value);
+			storage.setItem(name2, value);
+			var results = [];
+			for (var i = 0, length = storage.length; i < length; i++) {
+				results.push(storage.key(i));
+			}
+			assert.equal([name1, name2].every(function (name) {
+				return results.includes(name);
+			}), true);
+		});
+	});
 }
-if (storage) {
-	storage.removeItem('is');
-} else {
-	storage = {
-		removeItem: function removeItem(key) {
-			delete this[key];
+
+var J0Storage = function () {
+	function J0Storage() {
+		_classCallCheck(this, J0Storage);
+	}
+
+	_createClass(J0Storage, [{
+		key: 'clear',
+		value: function clear() {
+			var _this10 = this;
+
+			Object.keys(this).forEach(function (key) {
+				_this10.removeItem(key);
+			});
 		}
-	};
-}
-var localStorage$1 = storage;
+	}, {
+		key: 'getItem',
+		value: function getItem(keyName) {
+			return this[keyName];
+		}
+	}, {
+		key: 'key',
+		value: function key(n) {
+			return Object.keys(this)[n];
+		}
+	}, {
+		key: 'removeItem',
+		value: function removeItem(keyName) {
+			delete this[keyName];
+		}
+	}, {
+		key: 'setItem',
+		value: function setItem(keyName, keyValue) {
+			this[keyName] = '' + keyValue;
+		}
+	}, {
+		key: 'length',
+		get: function get() {
+			return Object.keys(this).length;
+		}
+	}]);
 
-var key = Date.now();
+	return J0Storage;
+}();
 
-describe('localStorage', function () {
+test$21(new J0Storage(), 'J0Storage');
 
-	it('should be writable/readable', function () {
-		localStorage$1[key] = key;
-		assert.equal(localStorage$1[key], key);
-	});
+var localStorage$1 = new J0Storage();
 
-	it('should remove data', function () {
-		localStorage$1.removeItem(key);
-		assert.equal(localStorage$1[key], {}[key]);
-	});
-});
+test$21(localStorage$1, 'localStorage#j0');
 
-function test$21(generator) {
+test$21(localStorage, 'localStorage');
+
+function test$24(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
 
 
@@ -2818,9 +2971,9 @@ function generator$4() {
 	return this.entries();
 }
 
-test$21(generator$4, 'Map.prototype[Symbol.iterator]#j0');
+test$24(generator$4, 'Map.prototype[Symbol.iterator]#j0');
 
-test$21(Map.prototype[Symbol.iterator]);
+test$24(Map.prototype[Symbol.iterator]);
 
 var Map$1 = function () {
 	function Map$1(iterable) {
@@ -2834,14 +2987,14 @@ var Map$1 = function () {
 
 			try {
 				for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-					var _ref21 = _step7.value;
+					var _ref23 = _step7.value;
 
-					var _ref22 = _slicedToArray(_ref21, 2);
+					var _ref24 = _slicedToArray(_ref23, 2);
 
-					var _key7 = _ref22[0];
-					var value = _ref22[1];
+					var key = _ref24[0];
+					var value = _ref24[1];
 
-					this.set(_key7, value);
+					this.set(key, value);
 				}
 			} catch (err) {
 				_didIteratorError7 = true;
@@ -2868,9 +3021,9 @@ var Map$1 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref23) {
-				var _ref24 = _slicedToArray(_ref23, 1),
-				    itemKey = _ref24[0];
+			return this.data.findIndex(function (_ref25) {
+				var _ref26 = _slicedToArray(_ref25, 1),
+				    itemKey = _ref26[0];
 
 				return itemKey === key;
 			});
@@ -2894,9 +3047,9 @@ var Map$1 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref25) {
-				var _ref26 = _slicedToArray(_ref25, 1),
-				    itemKey = _ref26[0];
+			var found = find(this.data, function (_ref27) {
+				var _ref28 = _slicedToArray(_ref27, 1),
+				    itemKey = _ref28[0];
 
 				return itemKey === key;
 			});
@@ -2964,7 +3117,7 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-function tests$6(Map) {
+function tests$7(Map) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
 
 
@@ -2999,34 +3152,34 @@ function tests$6(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee5() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee6() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee5$(_context5) {
+				return regeneratorRuntime.wrap(function _callee6$(_context6) {
 					while (1) {
-						switch (_context5.prev = _context5.next) {
+						switch (_context6.prev = _context6.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context5.next = 7;
+									_context6.next = 7;
 									break;
 								}
 
-								_context5.next = 4;
+								_context6.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context5.next = 1;
+								_context6.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context5.stop();
+								return _context6.stop();
 						}
 					}
-				}, _callee5, this);
+				}, _callee6, this);
 			}));
 			var map = new Map(iterable);
 			assert.deepEqual({
@@ -3040,82 +3193,12 @@ function tests$6(Map) {
 	});
 }
 
-tests$6(Map$1, 'Map#j0');
+tests$7(Map$1, 'Map#j0');
 
-tests$6(Map);
-
-function clamp(x) {
-	var L = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -Infinity;
-	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
-
-	if (H < L) {
-		var _ref27 = [H, L];
-		L = _ref27[0];
-		H = _ref27[1];
-	}
-	if (x < L) {
-		x = L;
-	} else if (H < x) {
-		x = H;
-	}
-	return x;
-}
-
-describe('Math/clamp', function () {
-
-	it('should return 1 if the arguments are [0, 1, 2]', function () {
-		assert.equal(clamp(0, 1, 2), 1);
-	});
-
-	it('should return 2 if the arguments are [0, 2]', function () {
-		assert.equal(clamp(0, 2), 2);
-	});
-
-	it('should return 2 if the arguments are [2, 1, 3]', function () {
-		assert.equal(clamp(2, 1, 3), 2);
-	});
-
-	it('should return 2 if the arguments are [2, 3, 1]', function () {
-		assert.equal(clamp(2, 3, 1), 2);
-	});
-});
-
-function p(p1, p2, t) {
-	return (1 - 3 * p2 + 3 * p1) * t * t * t + 3 * (p2 - 2 * p1) * t * t + 3 * p1 * t;
-}
-
-function cubicBezier(x1, y1, x2, y2, x) {
-	function getT(lower, upper) {
-		var depth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-		var t = (lower + upper) / 2;
-		if (8 < depth) {
-			return t;
-		} else if (p(x1, x2, t) < x) {
-			// gotten x is lower than x
-			return getT(t, upper, depth + 1);
-		} else {
-			// gotten x is larger than x
-			return getT(lower, t, depth + 1);
-		}
-	}
-	return p(y1, y2, getT(0, 1));
-}
-
-describe('Math/cubicBezier', function () {
-
-	it('should be linear', function () {
-		var sum = 0;
-		for (var t = 0; t <= 1; t += 0.1) {
-			var d = cubicBezier(0, 0, 1, 1, t) - t;
-			sum += d * d;
-		}
-		assert.equal(sum < 0.0001, true);
-	});
-});
+tests$7(Map);
 
 function generator$6() {
-	var _this10 = this;
+	var _this11 = this;
 
 	var length = this.length;
 
@@ -3123,7 +3206,7 @@ function generator$6() {
 	return {
 		next: function next() {
 			return {
-				value: _this10[index],
+				value: _this11[index],
 				done: length <= index++
 			};
 		}
@@ -3178,7 +3261,7 @@ describe('NamedNodeMap/@iterator', function () {
 });
 
 function generator$8() {
-	var _this11 = this;
+	var _this12 = this;
 
 	var length = this.length;
 
@@ -3186,7 +3269,7 @@ function generator$8() {
 	return {
 		next: function next() {
 			return {
-				value: _this11[index],
+				value: _this12[index],
 				done: length <= index++
 			};
 		}
@@ -3269,7 +3352,7 @@ describe('noop', function () {
 	});
 });
 
-function test$23(MAX_SAFE_INTEGER) {
+function test$26(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -3283,13 +3366,13 @@ function test$23(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$23(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$26(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$23(Number.MAX_SAFE_INTEGER);
+test$26(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
-	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key8 = 1; _key8 < _len4; _key8++) {
-		sources[_key8 - 1] = arguments[_key8];
+	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+		sources[_key4 - 1] = arguments[_key4];
 	}
 
 	sources.forEach(function (source) {
@@ -3332,8 +3415,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len5 = arguments.length, args = Array(_len5), _key9 = 0; _key9 < _len5; _key9++) {
-				args[_key9] = arguments[_key9];
+			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+				args[_key5] = arguments[_key5];
 			}
 
 			results.push(args);
@@ -3348,8 +3431,8 @@ describe('Object/forEachKey', function () {
 		};
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len6 = arguments.length, args = Array(_len6), _key10 = 0; _key10 < _len6; _key10++) {
-				args[_key10] = arguments[_key10];
+			for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+				args[_key6] = arguments[_key6];
 			}
 
 			results.push(args);
@@ -3362,8 +3445,8 @@ describe('Object/forEachKey', function () {
 		var obj = [1, 2];
 		var results = [];
 		forEachKey(obj, function () {
-			for (var _len7 = arguments.length, args = Array(_len7), _key11 = 0; _key11 < _len7; _key11++) {
-				args[_key11] = arguments[_key11];
+			for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+				args[_key7] = arguments[_key7];
 			}
 
 			results.push(args);
@@ -3466,6 +3549,8 @@ describe('preventDefault', function () {
 		assert.equal(isFunction(preventDefault), true);
 	});
 });
+
+var setTimeout$1 = window.setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
@@ -3573,7 +3658,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this12 = this;
+			var _this13 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -3581,14 +3666,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this12.resolve(value);
+				_this13.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this12.reject(error);
+				_this13.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -3627,10 +3712,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this13 = this;
+			var _this14 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this13.handle(deferred);
+				_this14.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -3750,7 +3835,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$25(Promise, name) {
+function test$28(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3878,9 +3963,9 @@ function test$25(Promise, name) {
 	});
 }
 
-test$25(J0Promise, 'Promise/j0');
+test$28(J0Promise, 'Promise/j0');
 
-test$25(Promise, 'Promise');
+test$28(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -3889,7 +3974,7 @@ describe('FileReader/read', function () {
 	});
 });
 
-function tests$9(Request, name) {
+function tests$10(Request, name) {
 
 	describe(name, function () {
 
@@ -3901,36 +3986,36 @@ function tests$9(Request, name) {
 	});
 }
 
-tests$9(Request$1, 'J0Request');
+tests$10(Request$1, 'J0Request');
 
-tests$9(Request, 'Request');
+tests$10(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
 		var timeStamp;
-		return regeneratorRuntime.wrap(function _callee6$(_context6) {
+		return regeneratorRuntime.wrap(function _callee7$(_context7) {
 			while (1) {
-				switch (_context6.prev = _context6.next) {
+				switch (_context7.prev = _context7.next) {
 					case 0:
-						_context6.next = 2;
+						_context7.next = 2;
 						return new Promise(requestAnimationFrame);
 
 					case 2:
-						timeStamp = _context6.sent;
+						timeStamp = _context7.sent;
 
 						assert(0 < timeStamp, true);
 
 					case 4:
 					case 'end':
-						return _context6.stop();
+						return _context7.stop();
 				}
 			}
-		}, _callee6, this);
+		}, _callee7, this);
 	})));
 });
 
-function tests$11(Response, name) {
+function tests$12(Response, name) {
 
 	describe(name, function () {
 
@@ -3942,9 +4027,9 @@ function tests$11(Response, name) {
 	});
 }
 
-tests$11(Response$1, 'J0Response');
+tests$12(Response$1, 'J0Response');
 
-tests$11(Response, 'Response');
+tests$12(Response, 'Response');
 
 describe('scrollBy', function () {
 
@@ -4082,10 +4167,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this14 = this;
+			var _this15 = this;
 
 			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this14);
+				fn.call(thisArg, value, value, _this15);
 			});
 		}
 	}, {
@@ -4125,7 +4210,7 @@ var Set$2 = function () {
 	return Set$2;
 }();
 
-function tests$13(Set, name) {
+function tests$14(Set, name) {
 
 	describe(name, function () {
 
@@ -4187,8 +4272,8 @@ function tests$13(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len8 = arguments.length, args = Array(_len8), _key12 = 0; _key12 < _len8; _key12++) {
-					args[_key12] = arguments[_key12];
+				for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+					args[_key8] = arguments[_key8];
 				}
 
 				args[3] = this;
@@ -4249,9 +4334,9 @@ function tests$13(Set, name) {
 	});
 }
 
-tests$13(Set$2, 'J0Set');
+tests$14(Set$2, 'J0Set');
 
-tests$13(Set, 'Set');
+tests$14(Set, 'Set');
 
 describe('setImmediate', function () {
 
@@ -4436,7 +4521,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$26(_Symbol) {
+function test$29(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4480,9 +4565,9 @@ function test$26(_Symbol) {
 	});
 }
 
-test$26(Symbol, 'J0Symbol');
+test$29(Symbol, 'J0Symbol');
 
-test$26(Symbol);
+test$29(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4494,8 +4579,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len9 = arguments.length, args = Array(_len9), _key13 = 0; _key13 < _len9; _key13++) {
-			args[_key13] = arguments[_key13];
+		for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+			args[_key9] = arguments[_key9];
 		}
 
 		lastArgs = args;
@@ -4554,11 +4639,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref29) {
-				var _ref30 = _slicedToArray(_ref29, 2),
-				    name = _ref30[0],
-				    _ref30$ = _ref30[1],
-				    value = _ref30$ === undefined ? '' : _ref30$;
+			return this.data.map(function (_ref30) {
+				var _ref31 = _slicedToArray(_ref30, 2),
+				    name = _ref31[0],
+				    _ref31$ = _ref31[1],
+				    value = _ref31$ === undefined ? '' : _ref31$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -4568,7 +4653,7 @@ var URLSearchParams$2 = function (_StringList2) {
 	return URLSearchParams$2;
 }(StringList);
 
-function tests$15(URLSearchParams, testName) {
+function tests$16(URLSearchParams, testName) {
 
 	describe(testName, function () {
 
@@ -4677,36 +4762,36 @@ function tests$15(URLSearchParams, testName) {
 	});
 }
 
-tests$15(URLSearchParams$2, 'J0URLSearchParams');
+tests$16(URLSearchParams$2, 'J0URLSearchParams');
 
-tests$15(URLSearchParams, 'URLSearchParams');
+tests$16(URLSearchParams, 'URLSearchParams');
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee8$(_context8) {
+		return regeneratorRuntime.wrap(function _callee9$(_context9) {
 			while (1) {
-				switch (_context8.prev = _context8.next) {
+				switch (_context9.prev = _context9.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context8.next = 6;
+						_context9.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context8.sent;
+						actual = _context9.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context8.stop();
+						return _context9.stop();
 				}
 			}
-		}, _callee8, this);
+		}, _callee9, this);
 	})));
 });
 }())

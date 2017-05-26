@@ -8,11 +8,11 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var createNavigation = function () {
-	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
 		var root, response, tree, pathname, basePath, rootBranch, parseBranch, nav;
-		return regeneratorRuntime.wrap(function _callee$(_context) {
+		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
-				switch (_context.prev = _context.next) {
+				switch (_context2.prev = _context2.next) {
 					case 0:
 						parseBranch = function parseBranch(parent, name, base) {
 							var childElements = [];
@@ -34,16 +34,16 @@ var createNavigation = function () {
 						};
 
 						root = wrap.find('#root').text;
-						_context.next = 4;
+						_context2.next = 4;
 						return fetch(root + '/sitemap.json');
 
 					case 4:
-						response = _context.sent;
-						_context.next = 7;
+						response = _context2.sent;
+						_context2.next = 7;
 						return response.json();
 
 					case 7:
-						tree = _context.sent;
+						tree = _context2.sent;
 						pathname = location.pathname;
 						basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
 						rootBranch = pathname.replace(basePath, '').split('/').reduce(function (parent, name) {
@@ -57,14 +57,14 @@ var createNavigation = function () {
 
 					case 13:
 					case 'end':
-						return _context.stop();
+						return _context2.stop();
 				}
 			}
-		}, _callee, this);
+		}, _callee2, this);
 	}));
 
 	return function createNavigation() {
-		return _ref.apply(this, arguments);
+		return _ref2.apply(this, arguments);
 	};
 }();
 
@@ -100,8 +100,23 @@ function isNode(x) {
 	return isInstanceOf(x, Node);
 }
 
+var Promise = window.Promise;
+
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
+var getBody = new Promise(function (resolve) {
+	var interval = 50;
+	function check() {
+		var body = document.body;
+
+		if (body) {
+			resolve(wrap(body));
+		} else {
+			setTimeout(check, interval);
+		}
+	}
+	setTimeout(check);
+});
 
 var J0Element = function () {
 
@@ -334,6 +349,32 @@ function _findAll(selector) {
 
 wrap.find = _find;
 wrap.findAll = _findAll;
+wrap.ready = function () {
+	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fn) {
+		return regeneratorRuntime.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						_context.next = 2;
+						return getBody;
+
+					case 2:
+						if (fn) {
+							fn();
+						}
+
+					case 3:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	}));
+
+	return function (_x5) {
+		return _ref.apply(this, arguments);
+	};
+}();
 
 function onError(error) {
 	onError.listener(error);
@@ -342,25 +383,6 @@ function onError(error) {
 onError.listener = function (error) {
 	console.error(error);
 };
-
-var Promise = window.Promise;
-
-var setTimeout = window.setTimeout;
-
-var INTERVAL = 100;
-
-var getBody = new Promise(function (resolve) {
-	function get() {
-		var body = document.body;
-
-		if (body) {
-			resolve(body);
-		} else {
-			setTimeout(get, INTERVAL);
-		}
-	}
-	get();
-});
 
 var window$1 = window.window;
 
@@ -423,7 +445,7 @@ if (mocha) {
 	window$1.start = startMocha;
 }
 
-getBody.then(function () {
+wrap.ready().then(function () {
 	return Promise.all([mocha && showEnvironment(), createNavigation()]);
 }).catch(onError);
 }())

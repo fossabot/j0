@@ -99,9 +99,7 @@ var J0Storage = function () {
 	return J0Storage;
 }();
 
-var localStorage$1 = new J0Storage();
+var localStorage = new J0Storage();
 
-test$1(localStorage$1, 'localStorage#j0');
-
-test$1(localStorage, 'localStorage');
+test$1(localStorage, 'localStorage#j0');
 }())

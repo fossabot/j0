@@ -555,9 +555,9 @@ function isThennable(value) {
 
 window$1.Promise = window$1.Promise || J0Promise;
 
-var Map$1 = function () {
-	function Map$1(iterable) {
-		_classCallCheck(this, Map$1);
+var Map = function () {
+	function Map(iterable) {
+		_classCallCheck(this, Map);
 
 		this.clear();
 		if (iterable) {
@@ -593,7 +593,7 @@ var Map$1 = function () {
 		}
 	}
 
-	_createClass(Map$1, [{
+	_createClass(Map, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -694,20 +694,22 @@ var Map$1 = function () {
 		}
 	}]);
 
-	return Map$1;
+	return Map;
 }();
 
 var MAP = window$1.Map;
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
-	MAP = Map$1;
+	MAP = Map;
 }
 window$1.Map = MAP;
+
+var Map$1 = window.Map;
 
 function generator$1() {
 	return this.entries();
 }
 
-var prototype$7 = Map.prototype;
+var prototype$7 = Map$1.prototype;
 
 if (!prototype$7[iteratorSymbol]) {
 	prototype$7[iteratorSymbol] = generator$1;
@@ -1204,6 +1206,8 @@ var Headers = function (_StringList2) {
 if (!window$1.Headers) {
 	window$1.Headers = Headers;
 }
+
+var JSON = window.JSON;
 
 var Blob = window.Blob;
 

@@ -205,7 +205,7 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-function tests(Map) {
+function tests$1(Map) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
 
 
@@ -281,7 +281,7 @@ function tests(Map) {
 	});
 }
 
-tests(Map$1, 'Map#j0');
+tests$1(Map$1, 'Map#j0');
 
-tests(Map);
+tests$1(Map);
 }())

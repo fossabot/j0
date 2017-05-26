@@ -83,7 +83,7 @@
 		<loc>https://kei-ito.github.io/j0/Iterator/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/JSON/</loc>
+		<loc>https://kei-ito.github.io/j0/J0Storage/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Map/@iterator/j0polyfill/</loc>
@@ -96,15 +96,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Map/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Math/clamp/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Math/cubicBezier/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/Math/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/NamedNodeMap/@iterator/</loc>
@@ -209,7 +200,13 @@
 		<loc>https://kei-ito.github.io/j0/cancelAnimationFrame/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/clamp/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/cloneObject/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/cubicBezier/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/debounce/</loc>
@@ -225,9 +222,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/formatDate/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/getBody/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/innerHeight/</loc>
@@ -258,6 +252,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isUndefined/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/localStorage/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/localStorage/</loc>

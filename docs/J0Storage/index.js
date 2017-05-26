@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function test$1(storage, testName) {
+function test(storage, testName) {
 
 	describe(testName, function () {
 
@@ -99,9 +99,5 @@ var J0Storage = function () {
 	return J0Storage;
 }();
 
-var localStorage$1 = new J0Storage();
-
-test$1(localStorage$1, 'localStorage#j0');
-
-test$1(localStorage, 'localStorage');
+test(new J0Storage(), 'J0Storage');
 }())
