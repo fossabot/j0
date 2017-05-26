@@ -862,7 +862,7 @@ test$17(arrayOf, 'Array.of#j0');
 
 test$17(Array.of);
 
-var Uint8Array$1 = window.Uint8Array;
+var x$1 = Uint8Array;
 
 var fromCharCode = String.fromCharCode;
 
@@ -872,7 +872,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array$1(arrayBuffer);
+	var view = new x$1(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -911,10 +911,10 @@ function arrayBufferToString(arrayBuffer) {
 	return strings.join('');
 }
 
-var FileReader = window.FileReader;
+var x$2 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new FileReader();
+	var reader = new x$2();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -941,7 +941,7 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var document$1 = window.document;
+var x$3 = document;
 
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
@@ -1001,7 +1001,7 @@ describe('ArrayBuffer/toString', function () {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
-						root = document$1.getElementById('root').text;
+						root = x$3.getElementById('root').text;
 						_context3.next = 3;
 						return fetch(root + '/arrayBufferToString/wagahaiha-nekodearu.txt');
 
@@ -1028,28 +1028,28 @@ describe('ArrayBuffer/toString', function () {
 	})));
 });
 
-var JSON = window.JSON;
+var x$4 = JSON;
 
-var Blob$1 = window.Blob;
+var x$5 = Blob;
 
-var ArrayBuffer = window.ArrayBuffer;
+var x$6 = ArrayBuffer;
 
-var DataView = window.DataView;
+var x$7 = DataView;
 
-var TypeError$1 = window.TypeError;
+var x$8 = TypeError;
 
-var Promise$1 = window.Promise;
+var x$9 = Promise;
 
-var FormData = window.FormData;
+var x$10 = FormData;
 
 function trim(string) {
 	return string.trim();
 }
 
-var decodeURIComponent = window.decodeURIComponent;
+var x$11 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$10();
 
 	trim(body).split('&').forEach(function (data) {
 		if (data) {
@@ -1058,8 +1058,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			name = x$11(name.replace(/\+/g, ' '));
+			parts = x$11(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -1074,23 +1074,23 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var Uint8ClampedArray$1 = window.Uint8ClampedArray;
+var x$12 = Uint8ClampedArray;
 
-var Uint16Array$1 = window.Uint16Array;
+var x$13 = Uint16Array;
 
-var Uint32Array$1 = window.Uint32Array;
+var x$14 = Uint32Array;
 
-var Int8Array$1 = window.Int8Array;
+var x$15 = Int8Array;
 
-var Int16Array$1 = window.Int16Array;
+var x$16 = Int16Array;
 
-var Int32Array$1 = window.Int32Array;
+var x$17 = Int32Array;
 
-var Float32Array$1 = window.Float32Array;
+var x$18 = Float32Array;
 
-var Float64Array$1 = window.Float64Array;
+var x$19 = Float64Array;
 
-var viewClasses = [Uint8Array$1, Uint8ClampedArray$1, Uint16Array$1, Uint32Array$1, Int8Array$1, Int16Array$1, Int32Array$1, Float32Array$1, Float64Array$1];
+var viewClasses = [x$1, x$12, x$13, x$14, x$15, x$16, x$17, x$18, x$19];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1101,8 +1101,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new Uint8Array$1(buf.byteLength);
-	view.set(new Uint8Array$1(buf));
+	var view = new x$1(buf.byteLength);
+	view.set(new x$1(buf));
 	return view.buffer;
 }
 
@@ -1121,17 +1121,17 @@ var Body$1 = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, Blob$1)) {
+			} else if (isInstanceOf(body, x$5)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, FormData)) {
+			} else if (isInstanceOf(body, x$10)) {
 				this.bodyFormData = body;
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, DataView)) {
+			} else if (isInstanceOf(body, x$7)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new Blob$1([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
+				this.bodyInit = new x$5([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$6) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -1150,7 +1150,7 @@ var Body$1 = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$9.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1164,13 +1164,13 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return x$9.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob$1([this.bodyArrayBuffer]));
+				return x$9.resolve(new x$5([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob$1([this.bodyText]));
+				return x$9.resolve(new x$5([this.bodyText]));
 			}
 		}
 	}, {
@@ -1183,11 +1183,11 @@ var Body$1 = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$9.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return x$9.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1198,13 +1198,13 @@ var Body$1 = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(JSON.parse);
+			return this.text().then(x$4.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return x$9.reject(new x$8('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1232,9 +1232,9 @@ tests$1(Body$1, 'J0Body');
 /* global Body */
 tests$1(Body);
 
-var cancelAnimationFrame = window.cancelAnimationFrame;
+var x$20 = cancelAnimationFrame;
 
-var requestAnimationFrame = window.requestAnimationFrame;
+var x$21 = requestAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
@@ -1246,8 +1246,8 @@ describe('cancelAnimationFrame', function () {
 					case 0:
 						_context4.next = 2;
 						return new Promise(function (resolve) {
-							requestAnimationFrame(function (time1) {
-								requestAnimationFrame(function (time2) {
+							x$21(function (time1) {
+								x$21(function (time2) {
 									resolve(time2 - time1);
 								});
 							});
@@ -1263,7 +1263,7 @@ describe('cancelAnimationFrame', function () {
 							var timer = setTimeout(function () {
 								reject(new Error('requestAnimationFrame didn\'t invoke the given function.'));
 							}, baseInterval * margin);
-							requestAnimationFrame(function () {
+							x$21(function () {
 								clearTimeout(timer);
 								resolve();
 							});
@@ -1274,11 +1274,11 @@ describe('cancelAnimationFrame', function () {
 						return new Promise(function (resolve, reject) {
 							var margin = 10;
 							var timer = setTimeout(resolve, baseInterval * margin);
-							var id = requestAnimationFrame(function () {
+							var id = x$21(function () {
 								clearTimeout(timer);
 								reject(new Error('cancelAnimationFrame didn\'t cancel the invocation.'));
 							});
-							cancelAnimationFrame(id);
+							x$20(id);
 						});
 
 					case 8:
@@ -1327,7 +1327,7 @@ describe('Math/clamp', function () {
 });
 
 function clone(obj) {
-	return JSON.parse(JSON.stringify(obj));
+	return x$4.parse(x$4.stringify(obj));
 }
 
 function noop() {
@@ -1449,18 +1449,18 @@ describe('debounce', function () {
 	});
 });
 
-var Node = window.Node;
+var x$22 = Node;
 
 function isNode(x) {
-	return isInstanceOf(x, Node);
+	return isInstanceOf(x, x$22);
 }
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
-var getBody = new Promise$1(function (resolve) {
+var getBody = new x$9(function (resolve) {
 	var interval = 50;
 	function check() {
-		var body = document$1.body;
+		var body = x$3.body;
 
 		if (body) {
 			resolve(wrap(body));
@@ -1482,7 +1482,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document$1.createTextNode(source);
+			this[nodeKey] = x$3.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -1495,7 +1495,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(x$3['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -1683,14 +1683,14 @@ function wrap(source) {
 }
 
 function find$1(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$3;
 
 	var element = rootElement.querySelector(selector);
 	return element && wrap(element);
 }
 
 function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document$1;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$3;
 
 	var list = rootElement.querySelectorAll(selector);
 	var result = [];
@@ -1923,10 +1923,10 @@ var StringList = function () {
 	return StringList;
 }();
 
-var Object = window.Object;
+var x$23 = Object;
 
 function toLowerCase(x) {
-	return x.toLowerCase();
+	return x ? x.toLowerCase() : '';
 }
 
 var Headers$1 = function (_StringList) {
@@ -1937,7 +1937,7 @@ var Headers$1 = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			Object.keys(headers).forEach(function (key) {
+			x$23.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -2125,10 +2125,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var Headers$2 = window.Headers;
+var x$24 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new Headers$2();
+	var headers = new x$24();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -2145,12 +2145,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var XMLHttpRequest = window.XMLHttpRequest;
+var x$25 = XMLHttpRequest;
 
 function fetch$1(input, init) {
-	return new Promise$1(function (resolve, reject) {
+	return new x$9(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new XMLHttpRequest();
+		var xhr = new x$25();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -2234,7 +2234,7 @@ tests$3(fetch$1, 'J0Fetch');
 
 tests$3(fetch);
 
-var Date$1 = window.Date;
+var x$26 = Date;
 
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -2253,7 +2253,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new Date$1(src);
+	var date = new x$26(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();
@@ -2457,10 +2457,10 @@ test$19(generator$2, 'HTMLCollection/@iterator/j0');
 
 test$19(HTMLCollection.prototype[Symbol.iterator]);
 
-var window$1 = window.window;
+var x$27 = window;
 
 function innerHeight() {
-	return window$1.innerHeight;
+	return x$27.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -2471,7 +2471,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return window$1.innerWidth;
+	return x$27.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -2481,9 +2481,9 @@ describe('innerWidth', function () {
 	});
 });
 
-var Array$1 = window.Array;
+var x$28 = Array;
 
-var isArray = Array$1.isArray;
+var isArray = x$28.isArray;
 
 describe('isArray', function () {
 
@@ -2890,7 +2890,7 @@ var J0Storage = function () {
 		value: function clear() {
 			var _this10 = this;
 
-			Object.keys(this).forEach(function (key) {
+			x$23.keys(this).forEach(function (key) {
 				_this10.removeItem(key);
 			});
 		}
@@ -2902,7 +2902,7 @@ var J0Storage = function () {
 	}, {
 		key: 'key',
 		value: function key(n) {
-			return Object.keys(this)[n];
+			return x$23.keys(this)[n];
 		}
 	}, {
 		key: 'removeItem',
@@ -2917,7 +2917,7 @@ var J0Storage = function () {
 	}, {
 		key: 'length',
 		get: function get() {
-			return Object.keys(this).length;
+			return x$23.keys(this).length;
 		}
 	}]);
 
@@ -3516,15 +3516,15 @@ describe('passThrough', function () {
 	});
 });
 
-var setTimeout$1 = window.setTimeout;
+var x$29 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window$1.immediateId) {
-	window$1.immediateId = 0;
+if (!x$27.immediateId) {
+	x$27.immediateId = 0;
 }
-window$1.immediateId += 1;
-var setImmediateNative = window$1.setImmediate;
+x$27.immediateId += 1;
+var setImmediateNative = x$27.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -3553,7 +3553,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout$1(fn);
+	return x$29(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -3569,7 +3569,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout$1(function () {
+x$29(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -3652,7 +3652,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError$1('A promise cannot be resolved with itself');
+					throw new x$8('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -3965,7 +3965,7 @@ describe('requestAnimationFrame', function () {
 				switch (_context7.prev = _context7.next) {
 					case 0:
 						_context7.next = 2;
-						return new Promise(requestAnimationFrame);
+						return new Promise(x$21);
 
 					case 2:
 						timeStamp = _context7.sent;
@@ -3998,7 +3998,7 @@ tests$12(Response$1, 'J0Response');
 tests$12(Response, 'Response');
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$27;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -4010,7 +4010,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$27;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -4537,7 +4537,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = setTimeout$1(function () {
+			timer = x$29(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;

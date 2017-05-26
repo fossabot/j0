@@ -16,8 +16,8 @@ var createNavigation = function () {
 					case 0:
 						parseBranch = function parseBranch(parent, name, base) {
 							var childElements = [];
-							Object.keys(parent).forEach(function (branch) {
-								var key = parent[branch];
+							x$8.keys(parent).forEach(function (key) {
+								var branch = parent[key];
 								childElements.push(parseBranch(branch, key, base ? base + '/' + name : name));
 							});
 							var ul = 0 < childElements.length ? {
@@ -36,7 +36,7 @@ var createNavigation = function () {
 
 						root = wrap.find('#root').text;
 						_context2.next = 4;
-						return fetch(root + '/sitemap.json');
+						return x$5(root + '/sitemap.json');
 
 					case 4:
 						response = _context2.sent;
@@ -45,7 +45,7 @@ var createNavigation = function () {
 
 					case 7:
 						tree = _context2.sent;
-						pathname = location.pathname;
+						pathname = x$6.pathname;
 						basePath = '/' + normalizeUrl(pathname + '/' + root) + '/';
 						rootBranch = pathname.replace(basePath, '').split('/').reduce(function (parent, name) {
 							return name ? parent[name] : parent;
@@ -75,30 +75,30 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var document = window.document;
+var x$1 = document;
 
 function isString(x) {
 	return typeof x === 'string';
 }
 
-var Node = window.Node;
+var x$2 = Node;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
 function isNode(x) {
-	return isInstanceOf(x, Node);
+	return isInstanceOf(x, x$2);
 }
 
-var Promise = window.Promise;
+var x$3 = Promise;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
-var getBody = new Promise(function (resolve) {
+var getBody = new x$3(function (resolve) {
 	var interval = 50;
 	function check() {
-		var body = document.body;
+		var body = x$1.body;
 
 		if (body) {
 			resolve(wrap(body));
@@ -120,7 +120,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document.createTextNode(source);
+			this[nodeKey] = x$1.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -133,7 +133,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(x$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -321,14 +321,14 @@ function wrap(source) {
 }
 
 function _find(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$1;
 
 	var element = rootElement.querySelector(selector);
 	return element && wrap(element);
 }
 
 function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$1;
 
 	var list = rootElement.querySelectorAll(selector);
 	var result = [];
@@ -375,33 +375,33 @@ onError.listener = function (error) {
 	console.error(error);
 };
 
-var window$1 = window.window;
+var x$4 = window;
 
-var fetch = window.fetch;
+var x$5 = fetch;
 
-var location = window.location;
+var x$6 = location;
 
-var navigator = window.navigator;
+var x$7 = navigator;
 
-var Object = window.Object;
+var x$8 = Object;
 
 /* global chai */
-var mocha = window$1.mocha;
+var mocha = x$4.mocha;
 
 
 function startMocha() {
 	mocha.run().once('end', function () {
 		var className = 0 < this.stats.failures ? 'failed' : 'passed';
-		document.body.classList.add('done');
-		document.body.classList.add(className);
-		document.title += '[' + className + ']';
+		x$1.body.classList.add('done');
+		x$1.body.classList.add(className);
+		x$1.title += '[' + className + ']';
 	});
 }
 
 function showEnvironment() {
 	var environment = wrap.find('#environment');
-	Object.keys(navigator.constructor.prototype).forEach(function (key) {
-		var value = navigator[key];
+	x$8.keys(x$7.constructor.prototype).forEach(function (key) {
+		var value = x$7[key];
 		environment.append({
 			t: 'tr',
 			a: [['class', typeof value === 'undefined' ? 'undefined' : _typeof(value)]],
@@ -433,12 +433,12 @@ function normalizeUrl(url) {
 }
 
 if (mocha) {
-	window$1.assert = chai.assert;
+	x$4.assert = chai.assert;
 	mocha.setup('bdd');
-	window$1.start = startMocha;
+	x$4.start = startMocha;
 }
 
 wrap.ready().then(function () {
-	return Promise.all([mocha && showEnvironment(), createNavigation()]);
+	return x$3.all([mocha && showEnvironment(), createNavigation()]);
 }).catch(onError);
 }())

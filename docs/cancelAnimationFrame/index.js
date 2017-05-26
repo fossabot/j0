@@ -3,9 +3,9 @@
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-var cancelAnimationFrame = window.cancelAnimationFrame;
+var x = cancelAnimationFrame;
 
-var requestAnimationFrame = window.requestAnimationFrame;
+var x$1 = requestAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
@@ -17,8 +17,8 @@ describe('cancelAnimationFrame', function () {
 					case 0:
 						_context.next = 2;
 						return new Promise(function (resolve) {
-							requestAnimationFrame(function (time1) {
-								requestAnimationFrame(function (time2) {
+							x$1(function (time1) {
+								x$1(function (time2) {
 									resolve(time2 - time1);
 								});
 							});
@@ -34,7 +34,7 @@ describe('cancelAnimationFrame', function () {
 							var timer = setTimeout(function () {
 								reject(new Error('requestAnimationFrame didn\'t invoke the given function.'));
 							}, baseInterval * margin);
-							requestAnimationFrame(function () {
+							x$1(function () {
 								clearTimeout(timer);
 								resolve();
 							});
@@ -45,11 +45,11 @@ describe('cancelAnimationFrame', function () {
 						return new Promise(function (resolve, reject) {
 							var margin = 10;
 							var timer = setTimeout(resolve, baseInterval * margin);
-							var id = requestAnimationFrame(function () {
+							var id = x$1(function () {
 								clearTimeout(timer);
 								reject(new Error('cancelAnimationFrame didn\'t cancel the invocation.'));
 							});
-							cancelAnimationFrame(id);
+							x(id);
 						});
 
 					case 8:

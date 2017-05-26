@@ -3,14 +3,14 @@
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-var Headers = window.Headers;
+var x = Headers;
 
 function trim(string) {
 	return string.trim();
 }
 
 function parse(rawHeaders) {
-	var headers = new Headers();
+	var headers = new x();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');

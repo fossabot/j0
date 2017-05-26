@@ -1,14 +1,14 @@
 (function(){
 'use strict';
 
-var Node = window.Node;
+var x = Node;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-function isNode(x) {
-	return isInstanceOf(x, Node);
+function isNode(x$$1) {
+	return isInstanceOf(x$$1, x);
 }
 
 describe('isNode', function () {

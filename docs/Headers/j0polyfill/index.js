@@ -198,10 +198,10 @@ var StringList = function () {
 	return StringList;
 }();
 
-var Object = window.Object;
+var x = Object;
 
-function toLowerCase(x) {
-	return x.toLowerCase();
+function toLowerCase(x$$1) {
+	return x$$1 ? x$$1.toLowerCase() : '';
 }
 
 var Headers = function (_StringList) {
@@ -212,7 +212,7 @@ var Headers = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			Object.keys(headers).forEach(function (key) {
+			x.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}

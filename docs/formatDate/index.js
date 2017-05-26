@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-var Date = window.Date;
+var x = Date;
 
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -20,7 +20,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new Date(src);
+	var date = new x(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();

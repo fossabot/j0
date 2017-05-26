@@ -5,17 +5,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var window$1 = window.window;
+var x = window;
 
 function isString(x) {
 	return typeof x === 'string';
 }
 
-var Date = window.Date;
+var x$1 = Date;
 
-var TypeError = window.TypeError;
+var x$2 = TypeError;
 
-var Object = window.Object;
+var x$3 = Object;
 
 var hex = 16;
 
@@ -23,7 +23,7 @@ var SymbolRegistry = function () {
 	function SymbolRegistry() {
 		_classCallCheck(this, SymbolRegistry);
 
-		this.seed = Date.now();
+		this.seed = x$1.now();
 		this.registry = [];
 	}
 
@@ -31,7 +31,7 @@ var SymbolRegistry = function () {
 		key: 'get',
 		value: function get() {
 			var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Date.now();
+			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$1.now();
 
 			var symbol = 'Symbol(' + key + ')' + (this.seed + this.registry.length).toString(hex);
 			this.registry.push([symbol, '' + key + salt]);
@@ -51,7 +51,7 @@ var SymbolRegistry = function () {
 				}
 				return this.get(key, '');
 			}
-			throw new TypeError('Symbol.for was called with non-string: ' + key);
+			throw new x$2('Symbol.for was called with non-string: ' + key);
 		}
 	}, {
 		key: 'keyFor',
@@ -74,7 +74,7 @@ var SymbolRegistry = function () {
 				return _this.get(key);
 			};
 			function define(key, value) {
-				Object.defineProperty(fn, key, { value: value });
+				x$3.defineProperty(fn, key, { value: value });
 			}
 			function defineReserved(key) {
 				define(key, fn(key));
@@ -107,7 +107,7 @@ var SymbolRegistry = function () {
 
 var J0Symbol = new SymbolRegistry().Symbol;
 
-if (!window$1.Symbol) {
-	window$1.Symbol = J0Symbol;
+if (!x.Symbol) {
+	x.Symbol = J0Symbol;
 }
 }())

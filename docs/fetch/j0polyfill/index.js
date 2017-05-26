@@ -17,24 +17,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-var JSON = window.JSON;
+var x = JSON;
 
-var Blob = window.Blob;
+var x$1 = Blob;
 
-var ArrayBuffer = window.ArrayBuffer;
+var x$2 = ArrayBuffer;
 
-var DataView = window.DataView;
+var x$3 = DataView;
 
-var TypeError$1 = window.TypeError;
+var x$4 = TypeError;
 
-var Uint8Array = window.Uint8Array;
+var x$5 = Uint8Array;
 
-var Promise$1 = window.Promise;
+var x$6 = Promise;
 
-var FileReader = window.FileReader;
+var x$7 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new FileReader();
+	var reader = new x$7();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -61,16 +61,16 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var FormData = window.FormData;
+var x$8 = FormData;
 
 function trim(string) {
 	return string.trim();
 }
 
-var decodeURIComponent = window.decodeURIComponent;
+var x$9 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$8();
 
 	trim(body).split('&').forEach(function (data) {
 		if (data) {
@@ -79,8 +79,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			name = x$9(name.replace(/\+/g, ' '));
+			parts = x$9(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -95,23 +95,23 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var Uint8ClampedArray = window.Uint8ClampedArray;
+var x$10 = Uint8ClampedArray;
 
-var Uint16Array = window.Uint16Array;
+var x$11 = Uint16Array;
 
-var Uint32Array = window.Uint32Array;
+var x$12 = Uint32Array;
 
-var Int8Array = window.Int8Array;
+var x$13 = Int8Array;
 
-var Int16Array = window.Int16Array;
+var x$14 = Int16Array;
 
-var Int32Array = window.Int32Array;
+var x$15 = Int32Array;
 
-var Float32Array = window.Float32Array;
+var x$16 = Float32Array;
 
-var Float64Array = window.Float64Array;
+var x$17 = Float64Array;
 
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+var viewClasses = [x$5, x$10, x$11, x$12, x$13, x$14, x$15, x$16, x$17];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -126,7 +126,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new x$5(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -169,8 +169,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new Uint8Array(buf.byteLength);
-	view.set(new Uint8Array(buf));
+	var view = new x$5(buf.byteLength);
+	view.set(new x$5(buf));
 	return view.buffer;
 }
 
@@ -189,17 +189,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, Blob)) {
+			} else if (isInstanceOf(body, x$1)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, FormData)) {
+			} else if (isInstanceOf(body, x$8)) {
 				this.bodyFormData = body;
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, DataView)) {
+			} else if (isInstanceOf(body, x$3)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new Blob([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
+				this.bodyInit = new x$1([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$2) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -218,7 +218,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$6.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -232,13 +232,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return x$6.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return x$6.resolve(new x$1([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return x$6.resolve(new x$1([this.bodyText]));
 			}
 		}
 	}, {
@@ -251,11 +251,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$6.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return x$6.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -266,13 +266,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(JSON.parse);
+			return this.text().then(x.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return x$6.reject(new x$4('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -466,63 +466,63 @@ var StringList = function () {
 	return StringList;
 }();
 
-var Object = window.Object;
+var x$18 = Object;
 
 function toLowerCase(x) {
-	return x.toLowerCase();
+	return x ? x.toLowerCase() : '';
 }
 
-var Headers = function (_StringList) {
-	_inherits(Headers, _StringList);
+var Headers$1 = function (_StringList) {
+	_inherits(Headers$1, _StringList);
 
-	function Headers(headers) {
-		_classCallCheck(this, Headers);
+	function Headers$1(headers) {
+		_classCallCheck(this, Headers$1);
 
 		var init = [];
 		if (headers) {
-			Object.keys(headers).forEach(function (key) {
+			x$18.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
-		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
+		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
 	}
 
-	_createClass(Headers, [{
+	_createClass(Headers$1, [{
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'indexOf', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'indexOf', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'has',
 		value: function has(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'has', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'has', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'append', this).call(this, toLowerCase(name), value);
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'append', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'set',
 		value: function set(name, value) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'set', this).call(this, toLowerCase(name), value);
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'set', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'delete', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'delete', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'get',
 		value: function get(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 		}
 	}, {
 		key: 'entries',
 		value: function entries() {
 			var _this2 = this;
 
-			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
+			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
@@ -543,7 +543,7 @@ var Headers = function (_StringList) {
 		}
 	}]);
 
-	return Headers;
+	return Headers$1;
 }(StringList);
 
 var Request = function (_Body) {
@@ -565,7 +565,7 @@ var Request = function (_Body) {
 		}
 		_this3.credentials = init.credentials || _this3.credentials || 'omit';
 		if (init.headers || !_this3.headers) {
-			_this3.headers = new Headers(init.headers);
+			_this3.headers = new Headers$1(init.headers);
 		}
 		_this3.method = (init.method || _this3.method || 'GET').toUpperCase();
 		_this3.mode = init.mode || _this3.mode || null;
@@ -588,7 +588,7 @@ var Request = function (_Body) {
 			this.url = input.url;
 			this.credentials = input.credentials;
 			if (!headers) {
-				this.headers = new Headers(input.headers);
+				this.headers = new Headers$1(input.headers);
 			}
 			this.method = input.method;
 			this.mode = input.mode;
@@ -626,7 +626,7 @@ var Response = function (_Body2) {
 		_this4.status = 'status' in init ? init.status : minOkStatus;
 		_this4.ok = _this4.status >= minOkStatus && _this4.status < maxOkStatus;
 		_this4.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this4.headers = new Headers(init.headers);
+		_this4.headers = new Headers$1(init.headers);
 		_this4.url = init.url || '';
 		_this4.initBody(body);
 		return _this4;
@@ -638,7 +638,7 @@ var Response = function (_Body2) {
 			return new Response(this.bodyInit, {
 				status: this.status,
 				statusText: this.statusText,
-				headers: new Headers(this.headers),
+				headers: new Headers$1(this.headers),
 				url: this.url
 			});
 		}
@@ -668,10 +668,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var Headers$2 = window.Headers;
+var x$19 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new Headers$2();
+	var headers = new x$19();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -692,12 +692,12 @@ function isUndefined(x) {
 	return typeof x === 'undefined';
 }
 
-var XMLHttpRequest = window.XMLHttpRequest;
+var x$20 = XMLHttpRequest;
 
 function fetch(input, init) {
-	return new Promise$1(function (resolve, reject) {
+	return new x$6(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new XMLHttpRequest();
+		var xhr = new x$20();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,

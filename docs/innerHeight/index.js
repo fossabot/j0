@@ -1,10 +1,10 @@
 (function(){
 'use strict';
 
-var window$1 = window.window;
+var x = window;
 
 function innerHeight() {
-	return window$1.innerHeight;
+	return x.innerHeight;
 }
 
 describe('innerHeight', function () {

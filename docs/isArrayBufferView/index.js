@@ -5,25 +5,25 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var Uint8Array$1 = window.Uint8Array;
+var x = Uint8Array;
 
-var Uint8ClampedArray$1 = window.Uint8ClampedArray;
+var x$1 = Uint8ClampedArray;
 
-var Uint16Array$1 = window.Uint16Array;
+var x$2 = Uint16Array;
 
-var Uint32Array$1 = window.Uint32Array;
+var x$3 = Uint32Array;
 
-var Int8Array$1 = window.Int8Array;
+var x$4 = Int8Array;
 
-var Int16Array$1 = window.Int16Array;
+var x$5 = Int16Array;
 
-var Int32Array$1 = window.Int32Array;
+var x$6 = Int32Array;
 
-var Float32Array$1 = window.Float32Array;
+var x$7 = Float32Array;
 
-var Float64Array$1 = window.Float64Array;
+var x$8 = Float64Array;
 
-var viewClasses = [Uint8Array$1, Uint8ClampedArray$1, Uint16Array$1, Uint32Array$1, Int8Array$1, Int16Array$1, Int32Array$1, Float32Array$1, Float64Array$1];
+var viewClasses = [x, x$1, x$2, x$3, x$4, x$5, x$6, x$7, x$8];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);

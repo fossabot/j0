@@ -17,24 +17,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-var JSON = window.JSON;
+var x = JSON;
 
-var Blob = window.Blob;
+var x$1 = Blob;
 
-var ArrayBuffer = window.ArrayBuffer;
+var x$2 = ArrayBuffer;
 
-var DataView = window.DataView;
+var x$3 = DataView;
 
-var TypeError = window.TypeError;
+var x$4 = TypeError;
 
-var Uint8Array = window.Uint8Array;
+var x$5 = Uint8Array;
 
-var Promise$1 = window.Promise;
+var x$6 = Promise;
 
-var FileReader = window.FileReader;
+var x$7 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new FileReader();
+	var reader = new x$7();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -61,16 +61,16 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var FormData = window.FormData;
+var x$8 = FormData;
 
 function trim(string) {
 	return string.trim();
 }
 
-var decodeURIComponent = window.decodeURIComponent;
+var x$9 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$8();
 
 	trim(body).split('&').forEach(function (data) {
 		if (data) {
@@ -79,8 +79,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			name = x$9(name.replace(/\+/g, ' '));
+			parts = x$9(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -95,23 +95,23 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var Uint8ClampedArray = window.Uint8ClampedArray;
+var x$10 = Uint8ClampedArray;
 
-var Uint16Array = window.Uint16Array;
+var x$11 = Uint16Array;
 
-var Uint32Array = window.Uint32Array;
+var x$12 = Uint32Array;
 
-var Int8Array = window.Int8Array;
+var x$13 = Int8Array;
 
-var Int16Array = window.Int16Array;
+var x$14 = Int16Array;
 
-var Int32Array = window.Int32Array;
+var x$15 = Int32Array;
 
-var Float32Array = window.Float32Array;
+var x$16 = Float32Array;
 
-var Float64Array = window.Float64Array;
+var x$17 = Float64Array;
 
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+var viewClasses = [x$5, x$10, x$11, x$12, x$13, x$14, x$15, x$16, x$17];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -126,7 +126,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new x$5(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -169,8 +169,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new Uint8Array(buf.byteLength);
-	view.set(new Uint8Array(buf));
+	var view = new x$5(buf.byteLength);
+	view.set(new x$5(buf));
 	return view.buffer;
 }
 
@@ -189,17 +189,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, Blob)) {
+			} else if (isInstanceOf(body, x$1)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, FormData)) {
+			} else if (isInstanceOf(body, x$8)) {
 				this.bodyFormData = body;
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, DataView)) {
+			} else if (isInstanceOf(body, x$3)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new Blob([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
+				this.bodyInit = new x$1([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$2) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -218,7 +218,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$6.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -232,13 +232,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return x$6.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return x$6.resolve(new x$1([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return x$6.resolve(new x$1([this.bodyText]));
 			}
 		}
 	}, {
@@ -251,11 +251,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$6.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return x$6.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -266,13 +266,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(JSON.parse);
+			return this.text().then(x.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError('Already used'));
+				return x$6.reject(new x$4('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -466,10 +466,10 @@ var StringList = function () {
 	return StringList;
 }();
 
-var Object = window.Object;
+var x$18 = Object;
 
 function toLowerCase(x) {
-	return x.toLowerCase();
+	return x ? x.toLowerCase() : '';
 }
 
 var Headers = function (_StringList) {
@@ -480,7 +480,7 @@ var Headers = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			Object.keys(headers).forEach(function (key) {
+			x$18.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}

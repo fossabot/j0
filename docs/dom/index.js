@@ -11,30 +11,30 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var document = window.document;
+var x$1 = document;
 
 function isString(x) {
 	return typeof x === 'string';
 }
 
-var Node = window.Node;
+var x$2 = Node;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
 function isNode(x) {
-	return isInstanceOf(x, Node);
+	return isInstanceOf(x, x$2);
 }
 
-var Promise = window.Promise;
+var x$3 = Promise;
 
 var nodeKey = Symbol('node');
 var eventsKey = Symbol('events');
-var getBody = new Promise(function (resolve) {
+var getBody = new x$3(function (resolve) {
 	var interval = 50;
 	function check() {
-		var body = document.body;
+		var body = x$1.body;
 
 		if (body) {
 			resolve(wrap(body));
@@ -56,7 +56,7 @@ var J0Element = function () {
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
-			this[nodeKey] = document.createTextNode(source);
+			this[nodeKey] = x$1.createTextNode(source);
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
@@ -69,7 +69,7 @@ var J0Element = function () {
 			    _source$e = source.e,
 			    e = _source$e === undefined ? [] : _source$e;
 
-			this[nodeKey] = wrap(document['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(x$1['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {
@@ -257,14 +257,14 @@ function wrap(source) {
 }
 
 function _find(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$1;
 
 	var element = rootElement.querySelector(selector);
 	return element && wrap(element);
 }
 
 function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$1;
 
 	var list = rootElement.querySelectorAll(selector);
 	var result = [];

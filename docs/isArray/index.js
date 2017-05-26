@@ -1,9 +1,9 @@
 (function(){
 'use strict';
 
-var Array = window.Array;
+var x = Array;
 
-var isArray = Array.isArray;
+var isArray = x.isArray;
 
 describe('isArray', function () {
 

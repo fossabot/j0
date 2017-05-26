@@ -1,17 +1,17 @@
 (function(){
 'use strict';
 
-var window$1 = window.window;
+var x$1 = window;
 
-var setTimeout$1 = window.setTimeout;
+var x$2 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window$1.immediateId) {
-	window$1.immediateId = 0;
+if (!x$1.immediateId) {
+	x$1.immediateId = 0;
 }
-window$1.immediateId += 1;
-var setImmediateNative = window$1.setImmediate;
+x$1.immediateId += 1;
+var setImmediateNative = x$1.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -40,7 +40,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout$1(fn);
+	return x$2(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -56,7 +56,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout$1(function () {
+x$2(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {

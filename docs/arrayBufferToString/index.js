@@ -5,7 +5,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var Uint8Array = window.Uint8Array;
+var x = Uint8Array;
 
 var fromCharCode = String.fromCharCode;
 
@@ -15,7 +15,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new x(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -54,10 +54,10 @@ function arrayBufferToString(arrayBuffer) {
 	return strings.join('');
 }
 
-var FileReader = window.FileReader;
+var x$1 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new FileReader();
+	var reader = new x$1();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -84,7 +84,7 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var document = window.document;
+var x$2 = document;
 
 function createArrayBuffer(data) {
 	return readBlob(new Blob([data]), 'ArrayBuffer');
@@ -144,7 +144,7 @@ describe('ArrayBuffer/toString', function () {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
-						root = document.getElementById('root').text;
+						root = x$2.getElementById('root').text;
 						_context3.next = 3;
 						return fetch(root + '/arrayBufferToString/wagahaiha-nekodearu.txt');
 

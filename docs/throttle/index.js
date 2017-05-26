@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-var setTimeout = window.setTimeout;
+var x = setTimeout;
 
 function isUndefined(x) {
 	return typeof x === 'undefined';
@@ -26,7 +26,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = setTimeout(function () {
+			timer = x(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;

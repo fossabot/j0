@@ -55,7 +55,7 @@ function test(storage, testName) {
 	});
 }
 
-var Object = window.Object;
+var x = Object;
 
 var J0Storage = function () {
 	function J0Storage() {
@@ -67,7 +67,7 @@ var J0Storage = function () {
 		value: function clear() {
 			var _this = this;
 
-			Object.keys(this).forEach(function (key) {
+			x.keys(this).forEach(function (key) {
 				_this.removeItem(key);
 			});
 		}
@@ -79,7 +79,7 @@ var J0Storage = function () {
 	}, {
 		key: 'key',
 		value: function key(n) {
-			return Object.keys(this)[n];
+			return x.keys(this)[n];
 		}
 	}, {
 		key: 'removeItem',
@@ -94,7 +94,7 @@ var J0Storage = function () {
 	}, {
 		key: 'length',
 		get: function get() {
-			return Object.keys(this).length;
+			return x.keys(this).length;
 		}
 	}]);
 

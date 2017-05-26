@@ -9,17 +9,17 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var window$1 = window.window;
+var x$1 = window;
 
-var setTimeout$1 = window.setTimeout;
+var x$2 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window$1.immediateId) {
-	window$1.immediateId = 0;
+if (!x$1.immediateId) {
+	x$1.immediateId = 0;
 }
-window$1.immediateId += 1;
-var setImmediateNative = window$1.setImmediate;
+x$1.immediateId += 1;
+var setImmediateNative = x$1.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -48,7 +48,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout$1(fn);
+	return x$2(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -64,7 +64,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout$1(function () {
+x$2(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -87,7 +87,7 @@ function noop(x) {
 	return x;
 }
 
-var TypeError = window.TypeError;
+var x$3 = TypeError;
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;
@@ -153,7 +153,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError('A promise cannot be resolved with itself');
+					throw new x$3('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {

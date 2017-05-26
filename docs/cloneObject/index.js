@@ -1,10 +1,10 @@
 (function(){
 'use strict';
 
-var JSON = window.JSON;
+var x = JSON;
 
 function clone(obj) {
-	return JSON.parse(JSON.stringify(obj));
+	return x.parse(x.stringify(obj));
 }
 
 function noop() {

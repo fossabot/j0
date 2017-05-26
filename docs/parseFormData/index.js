@@ -7,12 +7,12 @@ function trim(string) {
 	return string.trim();
 }
 
-var decodeURIComponent = window.decodeURIComponent;
+var x = decodeURIComponent;
 
-var FormData = window.FormData;
+var x$1 = FormData;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$1();
 
 	trim(body).split('&').forEach(function (data) {
 		if (data) {
@@ -21,8 +21,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			name = x(name.replace(/\+/g, ' '));
+			parts = x(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});

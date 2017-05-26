@@ -17,7 +17,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Array = window.Array;
+var x$1 = Array;
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -52,7 +52,7 @@ function generator() {
 	});
 }
 
-var prototype = Array.prototype;
+var prototype = x$1.prototype;
 
 if (!prototype[iteratorSymbol]) {
 	prototype[iteratorSymbol] = generator;
@@ -84,7 +84,7 @@ function copyWithin(target) {
 	return this;
 }
 
-var prototype$1 = Array.prototype;
+var prototype$1 = x$1.prototype;
 
 if (!prototype$1.copyWithin) {
 	prototype$1.copyWithin = copyWithin;
@@ -102,7 +102,7 @@ function entries() {
 	});
 }
 
-var prototype$2 = Array.prototype;
+var prototype$2 = x$1.prototype;
 
 if (!prototype$2.entries) {
 	prototype$2.entries = entries;
@@ -125,7 +125,7 @@ function copyWithin$1(value) {
 	return this;
 }
 
-var prototype$3 = Array.prototype;
+var prototype$3 = x$1.prototype;
 
 if (!prototype$3.fill) {
 	prototype$3.fill = copyWithin$1;
@@ -140,7 +140,7 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-var prototype$4 = Array.prototype;
+var prototype$4 = x$1.prototype;
 
 if (!prototype$4.find) {
 	prototype$4.find = findIndex;
@@ -155,7 +155,7 @@ function findIndex$1(fn, thisArg) {
 	return -1;
 }
 
-var prototype$5 = Array.prototype;
+var prototype$5 = x$1.prototype;
 
 if (!prototype$5.findIndex) {
 	prototype$5.findIndex = findIndex$1;
@@ -208,8 +208,8 @@ function arrayFrom(iterable) {
 	return result;
 }
 
-if (!Array.from) {
-	Array.from = arrayFrom;
+if (!x$1.from) {
+	x$1.from = arrayFrom;
 }
 
 function includes(searchElement) {
@@ -223,7 +223,7 @@ function includes(searchElement) {
 	return false;
 }
 
-var prototype$6 = Array.prototype;
+var prototype$6 = x$1.prototype;
 
 if (!prototype$6.includes) {
 	prototype$6.includes = includes;
@@ -237,14 +237,14 @@ function arrayOf() {
 	return args;
 }
 
-if (!Array.of) {
-	Array.of = arrayOf;
+if (!x$1.of) {
+	x$1.of = arrayOf;
 }
 
-var parseInt = window.parseInt;
+var x$2 = parseInt;
 
 function repeat(c) {
-	var count = parseInt(c, 10);
+	var count = x$2(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -256,21 +256,21 @@ if (!String.prototype.repeat) {
 	String.prototype.repeat = repeat;
 }
 
-var window$1 = window.window;
+var x$3 = window;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var setTimeout = window.setTimeout;
+var x$4 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!window$1.immediateId) {
-	window$1.immediateId = 0;
+if (!x$3.immediateId) {
+	x$3.immediateId = 0;
 }
-window$1.immediateId += 1;
-var setImmediateNative = window$1.setImmediate;
+x$3.immediateId += 1;
+var setImmediateNative = x$3.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -299,7 +299,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return setTimeout(fn);
+	return x$4(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -315,7 +315,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-setTimeout(function () {
+x$4(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -338,7 +338,7 @@ function noop(x) {
 	return x;
 }
 
-var TypeError$1 = window.TypeError;
+var x$5 = TypeError;
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;
@@ -404,7 +404,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new TypeError$1('A promise cannot be resolved with itself');
+					throw new x$5('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -553,11 +553,11 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-window$1.Promise = window$1.Promise || J0Promise;
+x$3.Promise = x$3.Promise || J0Promise;
 
-var Map = function () {
-	function Map(iterable) {
-		_classCallCheck(this, Map);
+var Map$1 = function () {
+	function Map$1(iterable) {
+		_classCallCheck(this, Map$1);
 
 		this.clear();
 		if (iterable) {
@@ -593,7 +593,7 @@ var Map = function () {
 		}
 	}
 
-	_createClass(Map, [{
+	_createClass(Map$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -694,30 +694,30 @@ var Map = function () {
 		}
 	}]);
 
-	return Map;
+	return Map$1;
 }();
 
-var MAP = window$1.Map;
+var MAP = x$3.Map;
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
-	MAP = Map;
+	MAP = Map$1;
 }
-window$1.Map = MAP;
+x$3.Map = MAP;
 
-var Map$1 = window.Map;
+var x$6 = Map;
 
 function generator$1() {
 	return this.entries();
 }
 
-var prototype$7 = Map$1.prototype;
+var prototype$7 = x$6.prototype;
 
 if (!prototype$7[iteratorSymbol]) {
 	prototype$7[iteratorSymbol] = generator$1;
 }
 
-var Set = function () {
-	function Set(iterable) {
-		_classCallCheck(this, Set);
+var Set$1 = function () {
+	function Set$1(iterable) {
+		_classCallCheck(this, Set$1);
 
 		this.clear();
 		if (iterable) {
@@ -748,7 +748,7 @@ var Set = function () {
 		}
 	}
 
-	_createClass(Set, [{
+	_createClass(Set$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -823,30 +823,30 @@ var Set = function () {
 		}
 	}]);
 
-	return Set;
+	return Set$1;
 }();
 
-var SET = window$1.Set;
+var SET = x$3.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
-	SET = Set;
+	SET = Set$1;
 }
 
-window$1.Set = SET;
+x$3.Set = SET;
 
-var Set$1 = window.Set;
+var x$7 = Set;
 
 function generator$3() {
 	return this.values();
 }
 
-var prototype$8 = Set$1.prototype;
+var prototype$8 = x$7.prototype;
 
 if (!prototype$8[iteratorSymbol]) {
 	prototype$8[iteratorSymbol] = generator$3;
 }
 
-var NodeList = window.NodeList;
+var x$8 = NodeList;
 
 function generator$5() {
 	var _this6 = this;
@@ -862,13 +862,13 @@ function generator$5() {
 	});
 }
 
-var prototype$9 = NodeList.prototype;
+var prototype$9 = x$8.prototype;
 
 if (!prototype$9[iteratorSymbol]) {
 	prototype$9[iteratorSymbol] = generator$5;
 }
 
-var HTMLCollection = window.HTMLCollection;
+var x$9 = HTMLCollection;
 
 function generator$7() {
 	var _this7 = this;
@@ -886,13 +886,13 @@ function generator$7() {
 	};
 }
 
-var prototype$10 = HTMLCollection.prototype;
+var prototype$10 = x$9.prototype;
 
 if (!prototype$10[iteratorSymbol]) {
 	prototype$10[iteratorSymbol] = generator$7;
 }
 
-var NamedNodeMap = window.NamedNodeMap;
+var x$10 = NamedNodeMap;
 
 function generator$9() {
 	var _this8 = this;
@@ -910,7 +910,7 @@ function generator$9() {
 	};
 }
 
-var prototype$11 = NamedNodeMap.prototype;
+var prototype$11 = x$10.prototype;
 
 if (!prototype$11[iteratorSymbol]) {
 	prototype$11[iteratorSymbol] = generator$9;
@@ -1113,69 +1113,69 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var URLSearchParams$1 = window$1.URLSearchParams;
+var URLSearchParams$1 = x$3.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	window$1.URLSearchParams = URLSearchParams$2;
+	x$3.URLSearchParams = URLSearchParams$2;
 }
 
-var Object = window.Object;
+var x$11 = Object;
 
 function toLowerCase(x) {
-	return x.toLowerCase();
+	return x ? x.toLowerCase() : '';
 }
 
-var Headers = function (_StringList2) {
-	_inherits(Headers, _StringList2);
+var Headers$1 = function (_StringList2) {
+	_inherits(Headers$1, _StringList2);
 
-	function Headers(headers) {
-		_classCallCheck(this, Headers);
+	function Headers$1(headers) {
+		_classCallCheck(this, Headers$1);
 
 		var init = [];
 		if (headers) {
-			Object.keys(headers).forEach(function (key) {
+			x$11.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
-		return _possibleConstructorReturn(this, (Headers.__proto__ || Object.getPrototypeOf(Headers)).call(this, init));
+		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
 	}
 
-	_createClass(Headers, [{
+	_createClass(Headers$1, [{
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'indexOf', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'indexOf', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'has',
 		value: function has(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'has', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'has', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'append',
 		value: function append(name, value) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'append', this).call(this, toLowerCase(name), value);
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'append', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'set',
 		value: function set(name, value) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'set', this).call(this, toLowerCase(name), value);
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'set', this).call(this, toLowerCase(name), value);
 		}
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'delete', this).call(this, toLowerCase(name));
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'delete', this).call(this, toLowerCase(name));
 		}
 	}, {
 		key: 'get',
 		value: function get(name) {
-			return _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
 		}
 	}, {
 		key: 'entries',
 		value: function entries() {
 			var _this11 = this;
 
-			var iterator = _get(Headers.prototype.__proto__ || Object.getPrototypeOf(Headers.prototype), 'entries', this).call(this);
+			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
@@ -1196,29 +1196,29 @@ var Headers = function (_StringList2) {
 		}
 	}]);
 
-	return Headers;
+	return Headers$1;
 }(StringList);
 
-if (!window$1.Headers) {
-	window$1.Headers = Headers;
+if (!x$3.Headers) {
+	x$3.Headers = Headers$1;
 }
 
-var JSON = window.JSON;
+var x$12 = JSON;
 
-var Blob = window.Blob;
+var x$13 = Blob;
 
-var ArrayBuffer = window.ArrayBuffer;
+var x$14 = ArrayBuffer;
 
-var DataView = window.DataView;
+var x$15 = DataView;
 
-var Uint8Array = window.Uint8Array;
+var x$16 = Uint8Array;
 
-var Promise$1 = window.Promise;
+var x$17 = Promise;
 
-var FileReader = window.FileReader;
+var x$18 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new FileReader();
+	var reader = new x$18();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -1245,16 +1245,16 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var FormData = window.FormData;
+var x$19 = FormData;
 
 function trim(string) {
 	return string.trim();
 }
 
-var decodeURIComponent = window.decodeURIComponent;
+var x$20 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$19();
 
 	trim(body).split('&').forEach(function (data) {
 		if (data) {
@@ -1263,8 +1263,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = decodeURIComponent(name.replace(/\+/g, ' '));
-			parts = decodeURIComponent(parts.join('=').replace(/\+/g, ' '));
+			name = x$20(name.replace(/\+/g, ' '));
+			parts = x$20(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -1279,23 +1279,23 @@ function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var Uint8ClampedArray = window.Uint8ClampedArray;
+var x$21 = Uint8ClampedArray;
 
-var Uint16Array = window.Uint16Array;
+var x$22 = Uint16Array;
 
-var Uint32Array = window.Uint32Array;
+var x$23 = Uint32Array;
 
-var Int8Array = window.Int8Array;
+var x$24 = Int8Array;
 
-var Int16Array = window.Int16Array;
+var x$25 = Int16Array;
 
-var Int32Array = window.Int32Array;
+var x$26 = Int32Array;
 
-var Float32Array = window.Float32Array;
+var x$27 = Float32Array;
 
-var Float64Array = window.Float64Array;
+var x$28 = Float64Array;
 
-var viewClasses = [Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array, Int8Array, Int16Array, Int32Array, Float32Array, Float64Array];
+var viewClasses = [x$16, x$21, x$22, x$23, x$24, x$25, x$26, x$27, x$28];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1310,7 +1310,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new Uint8Array(arrayBuffer);
+	var view = new x$16(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -1353,8 +1353,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new Uint8Array(buf.byteLength);
-	view.set(new Uint8Array(buf));
+	var view = new x$16(buf.byteLength);
+	view.set(new x$16(buf));
 	return view.buffer;
 }
 
@@ -1373,17 +1373,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, Blob)) {
+			} else if (isInstanceOf(body, x$13)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, FormData)) {
+			} else if (isInstanceOf(body, x$19)) {
 				this.bodyFormData = body;
 			} else if (isInstanceOf(body, URLSearchParams)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, DataView)) {
+			} else if (isInstanceOf(body, x$15)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new Blob([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, ArrayBuffer) || isArrayBufferView(body)) {
+				this.bodyInit = new x$13([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$14) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -1402,7 +1402,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || Promise$1.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$17.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1416,13 +1416,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return Promise$1.resolve(this.bodyBlob);
+				return x$17.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(new Blob([this.bodyArrayBuffer]));
+				return x$17.resolve(new x$13([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return Promise$1.resolve(new Blob([this.bodyText]));
+				return x$17.resolve(new x$13([this.bodyText]));
 			}
 		}
 	}, {
@@ -1435,11 +1435,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return Promise$1.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$17.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return Promise$1.resolve(this.bodyText);
+				return x$17.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1450,13 +1450,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(JSON.parse);
+			return this.text().then(x$12.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return Promise$1.reject(new TypeError$1('Already used'));
+				return x$17.reject(new x$5('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1484,7 +1484,7 @@ var Request = function (_Body) {
 		}
 		_this12.credentials = init.credentials || _this12.credentials || 'omit';
 		if (init.headers || !_this12.headers) {
-			_this12.headers = new Headers(init.headers);
+			_this12.headers = new Headers$1(init.headers);
 		}
 		_this12.method = (init.method || _this12.method || 'GET').toUpperCase();
 		_this12.mode = init.mode || _this12.mode || null;
@@ -1507,7 +1507,7 @@ var Request = function (_Body) {
 			this.url = input.url;
 			this.credentials = input.credentials;
 			if (!headers) {
-				this.headers = new Headers(input.headers);
+				this.headers = new Headers$1(input.headers);
 			}
 			this.method = input.method;
 			this.mode = input.mode;
@@ -1545,7 +1545,7 @@ var Response = function (_Body2) {
 		_this13.status = 'status' in init ? init.status : minOkStatus;
 		_this13.ok = _this13.status >= minOkStatus && _this13.status < maxOkStatus;
 		_this13.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this13.headers = new Headers(init.headers);
+		_this13.headers = new Headers$1(init.headers);
 		_this13.url = init.url || '';
 		_this13.initBody(body);
 		return _this13;
@@ -1557,7 +1557,7 @@ var Response = function (_Body2) {
 			return new Response(this.bodyInit, {
 				status: this.status,
 				statusText: this.statusText,
-				headers: new Headers(this.headers),
+				headers: new Headers$1(this.headers),
 				url: this.url
 			});
 		}
@@ -1587,10 +1587,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var Headers$2 = window.Headers;
+var x$29 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new Headers$2();
+	var headers = new x$29();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -1607,12 +1607,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-var XMLHttpRequest = window.XMLHttpRequest;
+var x$30 = XMLHttpRequest;
 
 function fetch(input, init) {
-	return new Promise$1(function (resolve, reject) {
+	return new x$17(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new XMLHttpRequest();
+		var xhr = new x$30();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -1671,33 +1671,33 @@ function fetch(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0fetch;
 // }
-window$1.fetch = fetch;
+x$3.fetch = fetch;
 
-if (!window$1.Body) {
-	window$1.Body = Body;
+if (!x$3.Body) {
+	x$3.Body = Body;
 }
 
-if (!window$1.Response) {
-	window$1.Response = Response;
+if (!x$3.Response) {
+	x$3.Response = Response;
 }
 
-if (!window$1.Request) {
-	window$1.Request = Request;
+if (!x$3.Request) {
+	x$3.Request = Request;
 }
 
-var Date = window.Date;
+var x$31 = Date;
 
-window$1.requestAnimationFrame = window$1.requestAnimationFrame || window$1.mozRequestAnimationFrame || window$1.webkitRequestAnimationFrame || window$1.msRequestAnimationFrame || function (fn) {
-	return setTimeout(function () {
-		fn(Date.now());
+x$3.requestAnimationFrame = x$3.requestAnimationFrame || x$3.mozRequestAnimationFrame || x$3.webkitRequestAnimationFrame || x$3.msRequestAnimationFrame || function (fn) {
+	return x$4(function () {
+		fn(x$31.now());
 	}, 30);
 };
 
-var clearTimeout = window.clearTimeout;
+var x$32 = clearTimeout;
 
-window$1.cancelAnimationFrame = window$1.cancelAnimationFrame || window$1.mozCancelAnimationFrame || function (id) {
-	return clearTimeout(id);
+x$3.cancelAnimationFrame = x$3.cancelAnimationFrame || x$3.mozCancelAnimationFrame || function (id) {
+	return x$32(id);
 };
 
-window$1.global = window$1;
+x$3.global = x$3;
 }())
