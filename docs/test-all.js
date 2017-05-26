@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee7, this);
 	}));
 
-	return function wait(_x40, _x41) {
+	return function wait(_x42, _x43) {
 		return _ref31.apply(this, arguments);
 	};
 }();
@@ -1747,7 +1747,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref12) {
+			var found = this.data.find(function (_ref12) {
 				var _ref13 = _slicedToArray(_ref12, 1),
 				    itemName = _ref13[0];
 
@@ -1788,21 +1788,34 @@ var StringList = function () {
 			return this.data[iteratorSymbol]();
 		}
 	}, {
+		key: 'keys',
+		value: function keys() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next3 = iterator.next(),
+				    value = _iterator$next3.value,
+				    done = _iterator$next3.done;
+
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
+		}
+	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+			return new Iterator(function () {
+				var _iterator$next4 = iterator.next(),
+				    value = _iterator$next4.value,
+				    done = _iterator$next4.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: iteratorSymbol,
@@ -1868,9 +1881,9 @@ var Headers$1 = function (_StringList) {
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
-					var _iterator$next4 = iterator.next(),
-					    value = _iterator$next4.value,
-					    done = _iterator$next4.done;
+					var _iterator$next5 = iterator.next(),
+					    value = _iterator$next5.value,
+					    done = _iterator$next5.done;
 
 					var _key6 = value && value[0];
 					if (done || history.indexOf(_key6) < 0) {
@@ -2255,9 +2268,9 @@ function tests$4(Headers) {
 			var results = [];
 			var iterator = headers.entries();
 			while (1) {
-				var _iterator$next5 = iterator.next(),
-				    value = _iterator$next5.value,
-				    done = _iterator$next5.done;
+				var _iterator$next6 = iterator.next(),
+				    value = _iterator$next6.value,
+				    done = _iterator$next6.done;
 
 				if (done) {
 					break;
@@ -2278,9 +2291,9 @@ function tests$4(Headers) {
 			var results = [];
 			var iterator = headers.values();
 			while (1) {
-				var _iterator$next6 = iterator.next(),
-				    value = _iterator$next6.value,
-				    done = _iterator$next6.done;
+				var _iterator$next7 = iterator.next(),
+				    value = _iterator$next7.value,
+				    done = _iterator$next7.done;
 
 				if (done) {
 					break;
@@ -2350,9 +2363,9 @@ function test$19(generator) {
 			var results = [];
 			var index = 0;
 			while (1) {
-				var _iterator$next7 = iterator.next(),
-				    value = _iterator$next7.value,
-				    done = _iterator$next7.done;
+				var _iterator$next8 = iterator.next(),
+				    value = _iterator$next8.value,
+				    done = _iterator$next8.done;
 
 				if (done) {
 					break;
@@ -2774,35 +2787,44 @@ describe('localStorage', function () {
 	});
 });
 
+function test$21(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it(name, function () {
+			var data = [[1, 2], [3, 4]];
+			var map = new Map(data);
+			var iterator = generator.call(map);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next9 = iterator.next(),
+				    value = _iterator$next9.value,
+				    done = _iterator$next9.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, data);
+		});
+	});
+}
+
 function generator$4() {
 	return this.entries();
 }
 
-describe('Map/@iterator', function () {
+test$21(generator$4, 'Map.prototype[Symbol.iterator]#j0');
 
-	it('should return an iterator', function () {
-		var data = [[1, 2], [3, 4]];
-		var map = new Map(data);
-		var iterator = generator$4.call(map);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next8 = iterator.next(),
-			    value = _iterator$next8.value,
-			    done = _iterator$next8.done;
+test$21(Map.prototype[Symbol.iterator]);
 
-			if (done) {
-				break;
-			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, data);
-	});
-});
-
-var Map$2 = function () {
-	function Map$2(iterable) {
-		_classCallCheck(this, Map$2);
+var Map$1 = function () {
+	function Map$1(iterable) {
+		_classCallCheck(this, Map$1);
 
 		this.clear();
 		if (iterable) {
@@ -2838,7 +2860,7 @@ var Map$2 = function () {
 		}
 	}
 
-	_createClass(Map$2, [{
+	_createClass(Map$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -2906,35 +2928,31 @@ var Map$2 = function () {
 		key: 'keys',
 		value: function keys() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next9 = iterator.next(),
-					    value = _iterator$next9.value,
-					    done = _iterator$next9.done;
+			return new Iterator(function () {
+				var _iterator$next10 = iterator.next(),
+				    value = _iterator$next10.value,
+				    done = _iterator$next10.done;
 
-					return {
-						value: value && value[0],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next10 = iterator.next(),
-					    value = _iterator$next10.value,
-					    done = _iterator$next10.done;
+			return new Iterator(function () {
+				var _iterator$next11 = iterator.next(),
+				    value = _iterator$next11.value,
+				    done = _iterator$next11.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'size',
@@ -2943,10 +2961,12 @@ var Map$2 = function () {
 		}
 	}]);
 
-	return Map$2;
+	return Map$1;
 }();
 
-function tests$6(Map, name) {
+function tests$6(Map) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
+
 
 	describe(name, function () {
 
@@ -3020,9 +3040,9 @@ function tests$6(Map, name) {
 	});
 }
 
-tests$6(Map$2, 'J0Map');
+tests$6(Map$1, 'Map#j0');
 
-tests$6(Map, 'Map');
+tests$6(Map);
 
 function clamp(x) {
 	var L = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -Infinity;
@@ -3144,9 +3164,9 @@ describe('NamedNodeMap/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next11 = iterator.next(),
-			    value = _iterator$next11.value,
-			    done = _iterator$next11.done;
+			var _iterator$next12 = iterator.next(),
+			    value = _iterator$next12.value,
+			    done = _iterator$next12.done;
 
 			if (done) {
 				break;
@@ -3207,9 +3227,9 @@ describe('NodeList/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next12 = iterator.next(),
-			    value = _iterator$next12.value,
-			    done = _iterator$next12.done;
+			var _iterator$next13 = iterator.next(),
+			    value = _iterator$next13.value,
+			    done = _iterator$next13.done;
 
 			if (done) {
 				break;
@@ -3249,7 +3269,7 @@ describe('noop', function () {
 	});
 });
 
-function test$21(MAX_SAFE_INTEGER) {
+function test$23(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -3263,9 +3283,9 @@ function test$21(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$21(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$23(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$21(Number.MAX_SAFE_INTEGER);
+test$23(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
 	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key8 = 1; _key8 < _len4; _key8++) {
@@ -3730,7 +3750,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$23(Promise, name) {
+function test$25(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3858,9 +3878,9 @@ function test$23(Promise, name) {
 	});
 }
 
-test$23(J0Promise, 'Promise/j0');
+test$25(J0Promise, 'Promise/j0');
 
-test$23(Promise, 'Promise');
+test$25(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -3981,9 +4001,9 @@ describe('Set/@iterator', function () {
 		var results = [];
 		var index = 0;
 		while (1) {
-			var _iterator$next13 = iterator.next(),
-			    value = _iterator$next13.value,
-			    done = _iterator$next13.done;
+			var _iterator$next14 = iterator.next(),
+			    value = _iterator$next14.value,
+			    done = _iterator$next14.done;
 
 			if (done) {
 				break;
@@ -4084,9 +4104,9 @@ var Set$2 = function () {
 			var iterator = this.values();
 			return {
 				next: function next() {
-					var _iterator$next14 = iterator.next(),
-					    value = _iterator$next14.value,
-					    done = _iterator$next14.done;
+					var _iterator$next15 = iterator.next(),
+					    value = _iterator$next15.value,
+					    done = _iterator$next15.done;
 
 					return {
 						value: !done && [value, value],
@@ -4194,9 +4214,9 @@ function tests$13(Set, name) {
 			var index = 0;
 			var results = [];
 			while (1) {
-				var _iterator$next15 = iterator.next(),
-				    value = _iterator$next15.value,
-				    done = _iterator$next15.done;
+				var _iterator$next16 = iterator.next(),
+				    value = _iterator$next16.value,
+				    done = _iterator$next16.done;
 
 				if (done) {
 					break;
@@ -4215,9 +4235,9 @@ function tests$13(Set, name) {
 			var index = 0;
 			var results = [];
 			while (1) {
-				var _iterator$next16 = iterator.next(),
-				    value = _iterator$next16.value,
-				    done = _iterator$next16.done;
+				var _iterator$next17 = iterator.next(),
+				    value = _iterator$next17.value,
+				    done = _iterator$next17.done;
 
 				if (done) {
 					break;
@@ -4380,9 +4400,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.entries();
 		while (1) {
-			var _iterator$next17 = iterator.next(),
-			    value = _iterator$next17.value,
-			    done = _iterator$next17.done;
+			var _iterator$next18 = iterator.next(),
+			    value = _iterator$next18.value,
+			    done = _iterator$next18.done;
 
 			if (done) {
 				break;
@@ -4403,9 +4423,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.values();
 		while (1) {
-			var _iterator$next18 = iterator.next(),
-			    value = _iterator$next18.value,
-			    done = _iterator$next18.done;
+			var _iterator$next19 = iterator.next(),
+			    value = _iterator$next19.value,
+			    done = _iterator$next19.done;
 
 			if (done) {
 				break;
@@ -4416,7 +4436,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$24(_Symbol) {
+function test$26(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4460,9 +4480,9 @@ function test$24(_Symbol) {
 	});
 }
 
-test$24(Symbol, 'J0Symbol');
+test$26(Symbol, 'J0Symbol');
 
-test$24(Symbol);
+test$26(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -4620,9 +4640,9 @@ function tests$15(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.entries();
 			while (1) {
-				var _iterator$next19 = iterator.next(),
-				    value = _iterator$next19.value,
-				    done = _iterator$next19.done;
+				var _iterator$next20 = iterator.next(),
+				    value = _iterator$next20.value,
+				    done = _iterator$next20.done;
 
 				if (done) {
 					break;
@@ -4643,9 +4663,9 @@ function tests$15(URLSearchParams, testName) {
 			var results = [];
 			var iterator = searchParams.values();
 			while (1) {
-				var _iterator$next20 = iterator.next(),
-				    value = _iterator$next20.value,
-				    done = _iterator$next20.done;
+				var _iterator$next21 = iterator.next(),
+				    value = _iterator$next21.value,
+				    done = _iterator$next21.done;
 
 				if (done) {
 					break;

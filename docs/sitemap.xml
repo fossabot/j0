@@ -65,7 +65,7 @@
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/HTMLCollection/@iterator/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/HTMLCollection/@iterator/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/HTMLCollection/@iterator/</loc>
@@ -86,10 +86,13 @@
 		<loc>https://kei-ito.github.io/j0/JSON/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/Map/@iterator/j0polyfill/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/Map/@iterator/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Map/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Map/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Map/</loc>

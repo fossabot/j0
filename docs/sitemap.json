@@ -33,7 +33,7 @@
 	},
 	"HTMLCollection": {
 		"@iterator": {
-			"j0": {}
+			"j0polyfill": {}
 		}
 	},
 	"Headers": {
@@ -42,8 +42,10 @@
 	"Iterator": {},
 	"JSON": {},
 	"Map": {
-		"@iterator": {},
-		"j0": {}
+		"@iterator": {
+			"j0polyfill": {}
+		},
+		"j0polyfill": {}
 	},
 	"Math": {
 		"clamp": {},

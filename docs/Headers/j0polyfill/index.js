@@ -132,7 +132,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref7) {
+			var found = this.data.find(function (_ref7) {
 				var _ref8 = _slicedToArray(_ref7, 1),
 				    itemName = _ref8[0];
 
@@ -173,21 +173,34 @@ var StringList = function () {
 			return this.data[iteratorSymbol]();
 		}
 	}, {
+		key: 'keys',
+		value: function keys() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
+		}
+	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next = iterator.next(),
-					    value = _iterator$next.value,
-					    done = _iterator$next.done;
+			return new Iterator(function () {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: iteratorSymbol,
@@ -253,9 +266,9 @@ var Headers = function (_StringList) {
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+					var _iterator$next3 = iterator.next(),
+					    value = _iterator$next3.value,
+					    done = _iterator$next3.done;
 
 					var key = value && value[0];
 					if (done || history.indexOf(key) < 0) {
@@ -341,9 +354,9 @@ function tests(Headers) {
 			var results = [];
 			var iterator = headers.entries();
 			while (1) {
-				var _iterator$next3 = iterator.next(),
-				    value = _iterator$next3.value,
-				    done = _iterator$next3.done;
+				var _iterator$next4 = iterator.next(),
+				    value = _iterator$next4.value,
+				    done = _iterator$next4.done;
 
 				if (done) {
 					break;
@@ -364,9 +377,9 @@ function tests(Headers) {
 			var results = [];
 			var iterator = headers.values();
 			while (1) {
-				var _iterator$next4 = iterator.next(),
-				    value = _iterator$next4.value,
-				    done = _iterator$next4.done;
+				var _iterator$next5 = iterator.next(),
+				    value = _iterator$next5.value,
+				    done = _iterator$next5.done;
 
 				if (done) {
 					break;

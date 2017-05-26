@@ -33,6 +33,4 @@ function generator() {
 }
 
 test(generator, 'Map.prototype[Symbol.iterator]#j0');
-
-test(Map.prototype[Symbol.iterator]);
 }())

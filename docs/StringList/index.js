@@ -9,6 +9,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var iteratorSymbol = Symbol.iterator;
 
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
+		}
+	}]);
+
+	return Iterator;
+}();
+
 var StringList = function () {
 	function StringList(iterable) {
 		_classCallCheck(this, StringList);
@@ -95,7 +112,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref7) {
+			var found = this.data.find(function (_ref7) {
 				var _ref8 = _slicedToArray(_ref7, 1),
 				    itemName = _ref8[0];
 
@@ -136,21 +153,34 @@ var StringList = function () {
 			return this.data[iteratorSymbol]();
 		}
 	}, {
+		key: 'keys',
+		value: function keys() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
+		}
+	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next = iterator.next(),
-					    value = _iterator$next.value,
-					    done = _iterator$next.done;
+			return new Iterator(function () {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: iteratorSymbol,
@@ -231,9 +261,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.entries();
 		while (1) {
-			var _iterator$next2 = iterator.next(),
-			    value = _iterator$next2.value,
-			    done = _iterator$next2.done;
+			var _iterator$next3 = iterator.next(),
+			    value = _iterator$next3.value,
+			    done = _iterator$next3.done;
 
 			if (done) {
 				break;
@@ -254,9 +284,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.values();
 		while (1) {
-			var _iterator$next3 = iterator.next(),
-			    value = _iterator$next3.value,
-			    done = _iterator$next3.done;
+			var _iterator$next4 = iterator.next(),
+			    value = _iterator$next4.value,
+			    done = _iterator$next4.done;
 
 			if (done) {
 				break;

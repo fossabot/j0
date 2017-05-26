@@ -9,6 +9,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var iteratorSymbol = Symbol.iterator;
+
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
+		}
+	}]);
+
+	return Iterator;
+}();
+
 var Map = function () {
 	function Map(iterable) {
 		_classCallCheck(this, Map);
@@ -115,35 +134,31 @@ var Map = function () {
 		key: 'keys',
 		value: function keys() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next = iterator.next(),
-					    value = _iterator$next.value,
-					    done = _iterator$next.done;
+			return new Iterator(function () {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-					return {
-						value: value && value[0],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+			return new Iterator(function () {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'size',
@@ -155,7 +170,9 @@ var Map = function () {
 	return Map;
 }();
 
-function tests(Map, name) {
+function tests(Map) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
+
 
 	describe(name, function () {
 
@@ -229,5 +246,5 @@ function tests(Map, name) {
 	});
 }
 
-tests(Map, 'J0Map');
+tests(Map, 'Map#j0');
 }())

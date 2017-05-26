@@ -9,35 +9,63 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function test(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it(name, function () {
+			var data = [[1, 2], [3, 4]];
+			var map = new Map(data);
+			var iterator = generator.call(map);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, data);
+		});
+	});
+}
+
 function generator() {
 	return this.entries();
 }
 
-describe('Map/@iterator', function () {
+test(generator, 'Map.prototype[Symbol.iterator]#j0');
 
-	it('should return an iterator', function () {
-		var data = [[1, 2], [3, 4]];
-		var map = new Map(data);
-		var iterator = generator.call(map);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
+test(Map.prototype[Symbol.iterator]);
 
-			if (done) {
-				break;
-			}
-			results[index++] = value;
+var iteratorSymbol = Symbol.iterator;
+
+var Iterator = function () {
+	function Iterator(fn) {
+		_classCallCheck(this, Iterator);
+
+		this.next = fn;
+	}
+
+	_createClass(Iterator, [{
+		key: iteratorSymbol,
+		value: function value() {
+			return this;
 		}
-		assert.deepEqual(results, data);
-	});
-});
+	}]);
 
-var Map$2 = function () {
-	function Map$2(iterable) {
-		_classCallCheck(this, Map$2);
+	return Iterator;
+}();
+
+var Map$1 = function () {
+	function Map$1(iterable) {
+		_classCallCheck(this, Map$1);
 
 		this.clear();
 		if (iterable) {
@@ -73,7 +101,7 @@ var Map$2 = function () {
 		}
 	}
 
-	_createClass(Map$2, [{
+	_createClass(Map$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -141,35 +169,31 @@ var Map$2 = function () {
 		key: 'keys',
 		value: function keys() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+			return new Iterator(function () {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-					return {
-						value: value && value[0],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next3 = iterator.next(),
-					    value = _iterator$next3.value,
-					    done = _iterator$next3.done;
+			return new Iterator(function () {
+				var _iterator$next3 = iterator.next(),
+				    value = _iterator$next3.value,
+				    done = _iterator$next3.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'size',
@@ -178,10 +202,12 @@ var Map$2 = function () {
 		}
 	}]);
 
-	return Map$2;
+	return Map$1;
 }();
 
-function tests(Map, name) {
+function tests(Map) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
+
 
 	describe(name, function () {
 
@@ -255,7 +281,7 @@ function tests(Map, name) {
 	});
 }
 
-tests(Map$2, 'J0Map');
+tests(Map$1, 'Map#j0');
 
-tests(Map, 'Map');
+tests(Map);
 }())

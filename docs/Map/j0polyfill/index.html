@@ -1,15 +1,18 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<title>j0/Map/j0</title>
+<title>j0/Map/j0polyfill</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.min.css" rel="stylesheet">
 <link href="../../page.css" rel="stylesheet">
 <link href="../../package.css" rel="stylesheet">
 <script id="root" type="text/plain">../..</script>
-<h1 id="title"><a href="../../">j0</a>/<a href="../">Map</a>/j0<span class="version j0_version"></span></h1>
+<h1 id="title"><a href="../../">j0</a>/<a href="../">Map</a>/j0polyfill<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Symbol</span>&#32;<span class="name">from</span>&#32;<a href="../../Symbol"><span class="string"><span class="string">'../../Symbol'</span></span></a><span class="_3b">;</span>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;<span class="name">Symbol</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;<span class="name">Iterator</span>
+<span class="linenum"></span><span class="_7d">}</span>&#32;<span class="name">from</span>&#32;<span class="string">'j0'</span><span class="_3b">;</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="class">class</span>&#32;<span class="name">Map</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
@@ -79,42 +82,38 @@
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">keys</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">iterator</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">entries</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">next</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">done</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">done</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="new">new</span>&#32;<span class="name">Iterator</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">done</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">done</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">values</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">iterator</span>&#32;<span class="_3d">=</span>&#32;<span class="this">this</span><span class="_2e">.</span><span class="name">entries</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">next</span><span class="_3a">:</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">done</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">1</span><span class="_5d">]</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;&#9;<span class="name">done</span>
-<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="return">return</span>&#32;<span class="new">new</span>&#32;<span class="name">Iterator</span><span class="_28">(</span><span class="_28">(</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="const">const</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_2c">,</span>&#32;<span class="name">done</span><span class="_7d">}</span>&#32;<span class="_3d">=</span>&#32;<span class="name">iterator</span><span class="_2e">.</span><span class="name">next</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">value</span><span class="_3a">:</span>&#32;<span class="name">value</span>&#32;<span class="_26_26">&&</span>&#32;<span class="name">value</span><span class="_5b">[</span><span class="num">1</span><span class="_5d">]</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">done</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="_7d">}</span>
 <span class="linenum"></span>
 <span class="linenum"></span><span class="export">export</span>&#32;<span class="default">default</span>&#32;<span class="name">Map</span><span class="_3b">;</span></pre>
-	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Map/j0/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Map/j0polyfill/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
 <h2>Tests</h2>
 <section class="TestCode">
 	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">Map</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
 <span class="linenum"></span><span class="import">import</span>&#32;<span class="name">tests</span>&#32;<span class="name">from</span>&#32;<a href="../tests.js"><span class="string"><span class="string">'../../tests.js'</span></span></a><span class="_3b">;</span>
-<span class="linenum"></span><span class="name">tests</span><span class="_28">(</span><span class="name">Map</span><span class="_2c">,</span>&#32;<span class="string">'J0Map'</span><span class="_29">)</span><span class="_3b">;</span></pre>
-	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Map/j0/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
+<span class="linenum"></span><span class="name">tests</span><span class="_28">(</span><span class="name">Map</span><span class="_2c">,</span>&#32;<span class="string">'Map#j0'</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/Map/j0polyfill/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>
 <div id="mocha"></div>

@@ -661,35 +661,31 @@ var Map$1 = function () {
 		key: 'keys',
 		value: function keys() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next = iterator.next(),
-					    value = _iterator$next.value,
-					    done = _iterator$next.done;
+			return new Iterator(function () {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
 
-					return {
-						value: value && value[0],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next2 = iterator.next(),
-					    value = _iterator$next2.value,
-					    done = _iterator$next2.done;
+			return new Iterator(function () {
+				var _iterator$next2 = iterator.next(),
+				    value = _iterator$next2.value,
+				    done = _iterator$next2.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: 'size',
@@ -702,11 +698,9 @@ var Map$1 = function () {
 }();
 
 var MAP = window$1.Map;
-
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
-
 window$1.Map = MAP;
 
 function generator$1() {
@@ -1002,7 +996,7 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = find(this.data, function (_ref13) {
+			var found = this.data.find(function (_ref13) {
 				var _ref14 = _slicedToArray(_ref13, 1),
 				    itemName = _ref14[0];
 
@@ -1043,21 +1037,34 @@ var StringList = function () {
 			return this.data[iteratorSymbol]();
 		}
 	}, {
+		key: 'keys',
+		value: function keys() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next4 = iterator.next(),
+				    value = _iterator$next4.value,
+				    done = _iterator$next4.done;
+
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
+		}
+	}, {
 		key: 'values',
 		value: function values() {
 			var iterator = this.entries();
-			return {
-				next: function next() {
-					var _iterator$next4 = iterator.next(),
-					    value = _iterator$next4.value,
-					    done = _iterator$next4.done;
+			return new Iterator(function () {
+				var _iterator$next5 = iterator.next(),
+				    value = _iterator$next5.value,
+				    done = _iterator$next5.done;
 
-					return {
-						value: value && value[1],
-						done: done
-					};
-				}
-			};
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
 		}
 	}, {
 		key: iteratorSymbol,
@@ -1174,9 +1181,9 @@ var Headers = function (_StringList2) {
 			var history = [];
 			return new Iterator(function () {
 				while (1) {
-					var _iterator$next5 = iterator.next(),
-					    value = _iterator$next5.value,
-					    done = _iterator$next5.done;
+					var _iterator$next6 = iterator.next(),
+					    value = _iterator$next6.value,
+					    done = _iterator$next6.done;
 
 					var key = value && value[0];
 					if (done || history.indexOf(key) < 0) {
