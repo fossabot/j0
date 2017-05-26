@@ -79,8 +79,8 @@ async function createNavigation() {
 	function parseBranch(parent, name, base) {
 		const childElements = [];
 		Object.keys(parent)
-		.forEach(function (branch) {
-			const key = parent[branch];
+		.forEach(function (key) {
+			const branch = parent[key];
 			childElements.push(parseBranch(branch, key, base ? `${base}/${name}` : name));
 		});
 		const ul = 0 < childElements.length ? {
