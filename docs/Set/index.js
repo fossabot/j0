@@ -5,37 +5,45 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function test(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Set.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it('should return an iterator', function () {
+			var data = [1, 2];
+			var set = new Set(data);
+			var iterator = generator.call(set);
+			var results = [];
+			while (1) {
+				var _iterator$next = iterator.next(),
+				    value = _iterator$next.value,
+				    done = _iterator$next.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, data);
+		});
+	});
+}
+
 function generator() {
 	return this.values();
 }
 
-describe('Set/@iterator', function () {
+test(generator, 'Set.prototype[Symbol.iterator]#j0');
 
-	it('should return an iterator', function () {
-		var data = [1, 2];
-		var map = new Set(data);
-		var iterator = generator.call(map);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next = iterator.next(),
-			    value = _iterator$next.value,
-			    done = _iterator$next.done;
-
-			if (done) {
-				break;
-			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, data);
-	});
-});
+test(Set.prototype[Symbol.iterator]);
 
 var iteratorSymbol = Symbol.iterator;
 
-var Set$2 = function () {
-	function Set$2(iterable) {
-		_classCallCheck(this, Set$2);
+var Set$1 = function () {
+	function Set$1(iterable) {
+		_classCallCheck(this, Set$1);
 
 		this.clear();
 		if (iterable) {
@@ -66,7 +74,7 @@ var Set$2 = function () {
 		}
 	}
 
-	_createClass(Set$2, [{
+	_createClass(Set$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -141,7 +149,7 @@ var Set$2 = function () {
 		}
 	}]);
 
-	return Set$2;
+	return Set$1;
 }();
 
 function tests(Set, name) {
@@ -268,7 +276,7 @@ function tests(Set, name) {
 	});
 }
 
-tests(Set$2, 'J0Set');
+tests(Set$1, 'J0Set');
 
 tests(Set, 'Set');
 }())

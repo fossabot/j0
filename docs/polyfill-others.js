@@ -834,9 +834,21 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 
 window$1.Set = SET;
 
-var NodeList = window.NodeList;
+var Set$1 = window.Set;
 
 function generator$3() {
+	return this.values();
+}
+
+var prototype$8 = Set$1.prototype;
+
+if (!prototype$8[iteratorSymbol]) {
+	prototype$8[iteratorSymbol] = generator$3;
+}
+
+var NodeList = window.NodeList;
+
+function generator$5() {
 	var _this6 = this;
 
 	var length = this.length;
@@ -850,15 +862,15 @@ function generator$3() {
 	});
 }
 
-var prototype$8 = NodeList.prototype;
+var prototype$9 = NodeList.prototype;
 
-if (!prototype$8[iteratorSymbol]) {
-	prototype$8[iteratorSymbol] = generator$3;
+if (!prototype$9[iteratorSymbol]) {
+	prototype$9[iteratorSymbol] = generator$5;
 }
 
 var HTMLCollection = window.HTMLCollection;
 
-function generator$5() {
+function generator$7() {
 	var _this7 = this;
 
 	var length = this.length;
@@ -874,15 +886,15 @@ function generator$5() {
 	};
 }
 
-var prototype$9 = HTMLCollection.prototype;
+var prototype$10 = HTMLCollection.prototype;
 
-if (!prototype$9[iteratorSymbol]) {
-	prototype$9[iteratorSymbol] = generator$5;
+if (!prototype$10[iteratorSymbol]) {
+	prototype$10[iteratorSymbol] = generator$7;
 }
 
 var NamedNodeMap = window.NamedNodeMap;
 
-function generator$7() {
+function generator$9() {
 	var _this8 = this;
 
 	var length = this.length;
@@ -898,10 +910,10 @@ function generator$7() {
 	};
 }
 
-var prototype$10 = NamedNodeMap.prototype;
+var prototype$11 = NamedNodeMap.prototype;
 
-if (!prototype$10[iteratorSymbol]) {
-	prototype$10[iteratorSymbol] = generator$7;
+if (!prototype$11[iteratorSymbol]) {
+	prototype$11[iteratorSymbol] = generator$9;
 }
 
 var StringList = function () {

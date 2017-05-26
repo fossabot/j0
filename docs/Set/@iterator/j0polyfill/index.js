@@ -32,6 +32,4 @@ function generator() {
 }
 
 test(generator, 'Set.prototype[Symbol.iterator]#j0');
-
-test(Set.prototype[Symbol.iterator]);
 }())

@@ -67,8 +67,10 @@
 		"j0polyfill": {}
 	},
 	"Set": {
-		"@iterator": {},
-		"j0": {}
+		"@iterator": {
+			"j0polyfill": {}
+		},
+		"j0polyfill": {}
 	},
 	"String": {
 		"leftpad": {},
@@ -108,22 +110,16 @@
 	"localStorage": {
 		"j0polyfill": {}
 	},
-	"noop": {
-		"true": {}
-	},
+	"noop": {},
 	"onError": {},
 	"parseFormData": {},
 	"parseHeaders": {},
 	"passThrough": {},
-	"preventDefault": {},
 	"readBlob": {},
 	"requestAnimationFrame": {},
-	"scrollBy": {},
-	"scrollTo": {},
 	"scrollX": {},
 	"scrollY": {},
 	"setImmediate": {},
-	"stopPropagation": {},
 	"throttle": {},
 	"wait": {}
 }

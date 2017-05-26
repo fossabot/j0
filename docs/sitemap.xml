@@ -134,10 +134,13 @@
 		<loc>https://kei-ito.github.io/j0/Response/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/Set/@iterator/j0polyfill/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/Set/@iterator/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Set/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Set/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Set/</loc>
@@ -245,9 +248,6 @@
 		<loc>https://kei-ito.github.io/j0/noop/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/noop/true/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/onError/</loc>
 	</url>
 	<url>
@@ -260,19 +260,10 @@
 		<loc>https://kei-ito.github.io/j0/passThrough/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/preventDefault/</loc>
-	</url>
-	<url>
 		<loc>https://kei-ito.github.io/j0/readBlob/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/requestAnimationFrame/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/scrollBy/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/scrollTo/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/scrollX/</loc>
@@ -282,9 +273,6 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/setImmediate/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/stopPropagation/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/throttle/</loc>

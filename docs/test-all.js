@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee8, this);
 	}));
 
-	return function wait(_x44, _x45) {
+	return function wait(_x45, _x46) {
 		return _ref32.apply(this, arguments);
 	};
 }();
@@ -3443,17 +3443,6 @@ test$28(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
 
 test$28(NodeList.prototype[Symbol.iterator]);
 
-function noopTrue() {
-	return true;
-}
-
-describe('noop/true', function () {
-
-	it('should return true', function () {
-		assert.equal(noopTrue(false), true);
-	});
-});
-
 function noop$1(x) {
 	return x;
 }
@@ -3524,17 +3513,6 @@ describe('passThrough', function () {
 	it('should return the first argument', function () {
 		var value = Date.now();
 		assert.equal(passThrough(value), value);
-	});
-});
-
-function preventDefault(event) {
-	event.preventDefault();
-}
-
-describe('preventDefault', function () {
-
-	it('should be a function', function () {
-		assert.equal(isFunction(preventDefault), true);
 	});
 });
 
@@ -4019,24 +3997,6 @@ tests$12(Response$1, 'J0Response');
 
 tests$12(Response, 'Response');
 
-describe('scrollBy', function () {
-
-	it('should receive two numbers', function () {
-		assert.doesNotThrow(function () {
-			scrollBy(1, 1);
-		});
-	});
-});
-
-describe('scrollTo', function () {
-
-	it('should receive two numbers', function () {
-		assert.doesNotThrow(function () {
-			scrollTo(1, 1);
-		});
-	});
-});
-
 function scrollX() {
 	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window$1;
 
@@ -4061,35 +4021,43 @@ describe('scrollY', function () {
 	});
 });
 
+function test$31(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Set.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it('should return an iterator', function () {
+			var data = [1, 2];
+			var set = new Set(data);
+			var iterator = generator.call(set);
+			var results = [];
+			while (1) {
+				var _iterator$next14 = iterator.next(),
+				    value = _iterator$next14.value,
+				    done = _iterator$next14.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, data);
+		});
+	});
+}
+
 function generator$10() {
 	return this.values();
 }
 
-describe('Set/@iterator', function () {
+test$31(generator$10, 'Set.prototype[Symbol.iterator]#j0');
 
-	it('should return an iterator', function () {
-		var data = [1, 2];
-		var map = new Set(data);
-		var iterator = generator$10.call(map);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next14 = iterator.next(),
-			    value = _iterator$next14.value,
-			    done = _iterator$next14.done;
+test$31(Set.prototype[Symbol.iterator]);
 
-			if (done) {
-				break;
-			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, data);
-	});
-});
-
-var Set$2 = function () {
-	function Set$2(iterable) {
-		_classCallCheck(this, Set$2);
+var Set$1 = function () {
+	function Set$1(iterable) {
+		_classCallCheck(this, Set$1);
 
 		this.clear();
 		if (iterable) {
@@ -4120,7 +4088,7 @@ var Set$2 = function () {
 		}
 	}
 
-	_createClass(Set$2, [{
+	_createClass(Set$1, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -4195,7 +4163,7 @@ var Set$2 = function () {
 		}
 	}]);
 
-	return Set$2;
+	return Set$1;
 }();
 
 function tests$14(Set, name) {
@@ -4322,7 +4290,7 @@ function tests$14(Set, name) {
 	});
 }
 
-tests$14(Set$2, 'J0Set');
+tests$14(Set$1, 'J0Set');
 
 tests$14(Set, 'Set');
 
@@ -4340,17 +4308,6 @@ describe('setImmediate', function () {
 		}).then(function () {
 			assert.equal(order, expected);
 		});
-	});
-});
-
-function stopPropagation(event) {
-	event.stopPropagation();
-}
-
-describe('stopPropagation', function () {
-
-	it('should be a function', function () {
-		assert.equal(isFunction(stopPropagation), true);
 	});
 });
 
@@ -4513,7 +4470,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$31(_Symbol) {
+function test$33(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4557,9 +4514,9 @@ function test$31(_Symbol) {
 	});
 }
 
-test$31(Symbol, 'J0Symbol');
+test$33(Symbol, 'J0Symbol');
 
-test$31(Symbol);
+test$33(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
