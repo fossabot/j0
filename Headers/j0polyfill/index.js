@@ -5,7 +5,7 @@ import {
 } from 'j0';
 
 function toLowerCase(x) {
-	return x.toLowerCase();
+	return x ? x.toLowerCase() : '';
 }
 
 class Headers extends StringList {
