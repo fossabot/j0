@@ -146,22 +146,13 @@
 		<loc>https://kei-ito.github.io/j0/Set/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/String/leftpad/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/String/polyfill/</loc>
+		<loc>https://kei-ito.github.io/j0/String/repeat/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/String/repeat/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/String/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/String/toLowerCase/</loc>
-	</url>
-	<url>
-		<loc>https://kei-ito.github.io/j0/String/trim/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/StringList/</loc>
@@ -237,6 +228,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isUndefined/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/leftpad/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/localStorage/j0polyfill/</loc>

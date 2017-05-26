@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee8, this);
 	}));
 
-	return function wait(_x46, _x47) {
+	return function wait(_x47, _x48) {
 		return _ref32.apply(this, arguments);
 	};
 }();
@@ -1042,16 +1042,12 @@ var x$9 = Promise;
 
 var x$10 = FormData;
 
-function trim(string) {
-	return string.trim();
-}
-
 var x$11 = decodeURIComponent;
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$10();
 
-	trim(body).split('&').forEach(function (data) {
+	body.trim().split('&').forEach(function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
@@ -2141,7 +2137,7 @@ function parse$2(rawHeaders) {
 		    parts = _line$split2.slice(1);
 
 		if (key) {
-			headers.append(trim(key), trim(parts.join(':')));
+			headers.append(key.trim(), parts.join(':').trim());
 		}
 	});
 	return headers;
@@ -2927,6 +2923,21 @@ var J0Storage = function () {
 }();
 
 test$21(new J0Storage(), 'J0Storage');
+
+describe('String/leftpad', function () {
+
+	it('should pad a string with 0', function () {
+		assert.equal(leftpad(1), '01');
+	});
+
+	it('should pad a string with 0 [length=10]', function () {
+		assert.equal(leftpad(1, 10), '0000000001');
+	});
+
+	it('should pad a string with * [length=10]', function () {
+		assert.equal(leftpad(1, 10, '*+='), '*********1');
+	});
+});
 
 var localStorage$1 = new J0Storage();
 
@@ -4313,59 +4324,35 @@ describe('setImmediate', function () {
 	});
 });
 
-describe('String/leftpad', function () {
+function test$33(repeat) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
-	it('should pad a string with 0', function () {
-		assert.equal(leftpad(1), '01');
+
+	describe(name, function () {
+
+		it('should repeat the string for specified times', function () {
+			var src = '3';
+			var count = 10;
+			var expected = '3333333333';
+			assert.equal(repeat.call(src, count), expected);
+		});
 	});
-
-	it('should pad a string with 0 [length=10]', function () {
-		assert.equal(leftpad(1, 10), '0000000001');
-	});
-
-	it('should pad a string with * [length=10]', function () {
-		assert.equal(leftpad(1, 10, '*+='), '*********1');
-	});
-});
-
-describe('String/polyfill', function () {
-
-	it('should have repeat', function () {
-		assert.equal('a'.repeat(2), 'aa');
-	});
-});
-
-function repeat(s, length) {
-	return s.repeat(length);
 }
 
-describe('String/repeat', function () {
+var x$31 = parseInt;
 
-	it('should repeat the string for specified times', function () {
-		var src = '3';
-		var count = 10;
-		var expected = '3333333333';
-		assert.equal(repeat(src, count), expected);
-	});
-});
-
-function toLowerCase$1(string) {
-	return ('' + string).toLowerCase();
+function repeat(c) {
+	var count = x$31(c, 10);
+	var results = [];
+	for (var i = 0; i < count; i += 1) {
+		results.push(this);
+	}
+	return results.join('');
 }
 
-describe('toLowerCase', function () {
+test$33(repeat, 'String.prototype.repeat#j0');
 
-	it('should convert cases', function () {
-		assert.equal(toLowerCase$1('ABc'), 'abc');
-	});
-});
-
-describe('String/trim', function () {
-
-	it('should trim spaces at beginning and ending', function () {
-		assert.equal(trim('\r\n\tab\tc\n\r\t'), 'ab\tc');
-	});
-});
+test$33(String.prototype.repeat);
 
 describe('StringList', function () {
 
@@ -4472,7 +4459,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$33(_Symbol) {
+function test$35(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4516,9 +4503,9 @@ function test$33(_Symbol) {
 	});
 }
 
-test$33(Symbol, 'J0Symbol');
+test$35(Symbol, 'J0Symbol');
 
-test$33(Symbol);
+test$35(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;

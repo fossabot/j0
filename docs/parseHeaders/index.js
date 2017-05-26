@@ -5,10 +5,6 @@ function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 var x = Headers;
 
-function trim(string) {
-	return string.trim();
-}
-
 function parse(rawHeaders) {
 	var headers = new x();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
@@ -21,7 +17,7 @@ function parse(rawHeaders) {
 		    parts = _line$split2.slice(1);
 
 		if (key) {
-			headers.append(trim(key), trim(parts.join(':')));
+			headers.append(key.trim(), parts.join(':').trim());
 		}
 	});
 	return headers;

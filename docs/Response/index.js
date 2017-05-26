@@ -63,16 +63,12 @@ function readBlob(data, type) {
 
 var x$8 = FormData;
 
-function trim(string) {
-	return string.trim();
-}
-
 var x$9 = decodeURIComponent;
 
 function parse(body) {
 	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$8();
 
-	trim(body).split('&').forEach(function (data) {
+	body.trim().split('&').forEach(function (data) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),

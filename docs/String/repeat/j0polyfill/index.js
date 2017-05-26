@@ -28,6 +28,4 @@ function repeat(c) {
 }
 
 test(repeat, 'String.prototype.repeat#j0');
-
-test(String.prototype.repeat);
 }())

@@ -9,28 +9,15 @@
 <h1 id="title"><a href="../../">j0</a>/<a href="../">String</a>/repeat<span class="version j0_version"></span></h1>
 <h2>Source</h2>
 <section class="Code">
-	<pre><span class="linenum"></span><span class="function">function</span>&#32;<span class="name">repeat</span><span class="_28">(</span><span class="name">s</span><span class="_2c">,</span>&#32;<span class="name">length</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;<span class="return">return</span>&#32;<span class="name">s</span><span class="_2e">.</span><span class="name">repeat</span><span class="_28">(</span><span class="name">length</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span><span class="_7d">}</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="export">export</span>&#32;<span class="default">default</span>&#32;<span class="name">repeat</span><span class="_3b">;</span></pre>
+	<pre><span class="linenum"></span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/String/repeat/index.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 
 <h2>Tests</h2>
 <section class="TestCode">
-	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="name">repeat</span>&#32;<span class="name">from</span>&#32;<span class="string">'..'</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="name">describe</span><span class="_28">(</span><span class="string">'String/repeat'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>
-<span class="linenum"></span>&#9;<span class="name">it</span><span class="_28">(</span><span class="string">'should&#32;repeat&#32;the&#32;string&#32;for&#32;specified&#32;times'</span><span class="_2c">,</span>&#32;<span class="function">function</span>&#32;<span class="_28">(</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">src</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'3'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">count</span>&#32;<span class="_3d">=</span>&#32;<span class="num">10</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="const">const</span>&#32;<span class="name">expected</span>&#32;<span class="_3d">=</span>&#32;<span class="string">'3333333333'</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">repeat</span><span class="_28">(</span><span class="name">src</span><span class="_2c">,</span>&#32;<span class="name">count</span><span class="_29">)</span><span class="_2c">,</span>&#32;<span class="name">expected</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
-<span class="linenum"></span>
-<span class="linenum"></span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span></pre>
+	<pre><span class="linenum"></span><span class="import">import</span>&#32;<span class="string">'../*/test'</span><span class="_3b">;</span>
+<span class="linenum"></span><span class="import">import</span>&#32;<span class="name">test</span>&#32;<span class="name">from</span>&#32;<a href="tests"><span class="string"><span class="string">'../tests'</span></span></a><span class="_3b">;</span>
+<span class="linenum"></span><span class="name">test</span><span class="_28">(</span><span class="name">String</span><span class="_2e">.</span><span class="name">prototype</span><span class="_2e">.</span><span class="name">repeat</span><span class="_29">)</span><span class="_3b">;</span></pre>
 	<a class="GitHubLink" href="https://github.com/kei-ito/j0/blob/master/String/repeat/index.test.js" target="_blank">view on GitHub<span class="fa fa-external-link"></span></a>
 </section>
 <h2>Result</h2>
