@@ -1,5 +1,5 @@
 import {window} from 'j0';
-import J0Set from './j0';
+import J0Set from './j0polyfill';
 
 let SET = window.Set;
 
