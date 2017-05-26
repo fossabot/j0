@@ -25,9 +25,10 @@ function rollupPlugin(options = {}) {
 			if (!id.startsWith(__dirname)) {
 				return;
 			}
-			if (id.startsWith(windowFallback)) {
-				const name = id.slice(windowFallback.length + 1);
-				return `export default window.${name}`;
+			if (0 <= id.indexOf(windowFallback)) {
+				const name = id.split(windowFallback).pop()
+				.slice(1);
+				return `const x = ${name};\nexport default x;`;
 			}
 			const importer = path.relative(__dirname, id).replace(/^([^/])/, '/$1');
 			const code = await readFile(importer, 'utf8');
