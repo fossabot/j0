@@ -1,5 +1,4 @@
 /* global chai */
-import forEachKey from '../../Object/forEachKey';
 import {
 	dom,
 	onError,
@@ -8,7 +7,8 @@ import {
 	location,
 	navigator,
 	document,
-	Promise
+	Promise,
+	Object
 } from 'j0';
 
 const {mocha} = window;
@@ -78,7 +78,9 @@ async function createNavigation() {
 	}, tree);
 	function parseBranch(parent, name, base) {
 		const childElements = [];
-		forEachKey(parent, function (branch, key) {
+		Object.keys(parent)
+		.forEach(function (branch) {
+			const key = parent[branch];
 			childElements.push(parseBranch(branch, key, base ? `${base}/${name}` : name));
 		});
 		const ul = 0 < childElements.length ? {

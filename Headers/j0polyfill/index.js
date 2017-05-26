@@ -1,17 +1,21 @@
-import forEachKey from '../../Object/forEachKey';
-import toLowerCase from '../../String/toLowerCase';
 import {
 	Iterator,
-	StringList
+	StringList,
+	Object
 } from 'j0';
+
+function toLowerCase(x) {
+	return x.toLowerCase();
+}
 
 class Headers extends StringList {
 
 	constructor(headers) {
 		const init = [];
 		if (headers) {
-			forEachKey(headers, function (value, key) {
-				init.push([key, value]);
+			Object.keys(headers)
+			.forEach((key) => {
+				init.push([key, headers[key]]);
 			});
 		}
 		super(init);
