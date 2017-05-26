@@ -148,6 +148,4 @@ function generator() {
 }
 
 test(generator, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
-
-test(NamedNodeMap.prototype[Symbol.iterator]);
 }())

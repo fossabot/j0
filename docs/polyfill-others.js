@@ -842,24 +842,23 @@ if (!Number.MAX_SAFE_INTEGER) {
 	Number.MAX_SAFE_INTEGER = J0MAX_SAFE_INTEGER;
 }
 
+var NodeList = window.NodeList;
+
 function generator$3() {
 	var _this6 = this;
 
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this6[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this6[index],
+			done: length <= index++
+		};
+	});
 }
 
-var _NodeList = NodeList,
-    prototype$8 = _NodeList.prototype;
+var prototype$8 = NodeList.prototype;
 
 if (!prototype$8[iteratorSymbol]) {
 	prototype$8[iteratorSymbol] = generator$3;
@@ -889,6 +888,8 @@ if (!prototype$9[iteratorSymbol]) {
 	prototype$9[iteratorSymbol] = generator$5;
 }
 
+var NamedNodeMap = window.NamedNodeMap;
+
 function generator$7() {
 	var _this8 = this;
 
@@ -905,8 +906,7 @@ function generator$7() {
 	};
 }
 
-var _NamedNodeMap = NamedNodeMap,
-    prototype$10 = _NamedNodeMap.prototype;
+var prototype$10 = NamedNodeMap.prototype;
 
 if (!prototype$10[iteratorSymbol]) {
 	prototype$10[iteratorSymbol] = generator$7;
@@ -1672,9 +1672,6 @@ function fetch(input, init) {
 	});
 }
 
-// if (!window.fetch) {
-// 	window.fetch = j0fetch;
-// }
 window$1.fetch = fetch;
 
 if (!window$1.Body) {

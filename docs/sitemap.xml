@@ -98,10 +98,16 @@
 		<loc>https://kei-ito.github.io/j0/Map/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/NamedNodeMap/@iterator/j0polyfill/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/NamedNodeMap/@iterator/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/NamedNodeMap/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/NodeList/@iterator/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/NodeList/@iterator/</loc>

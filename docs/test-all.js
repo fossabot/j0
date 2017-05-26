@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee8, this);
 	}));
 
-	return function wait(_x43, _x44) {
+	return function wait(_x45, _x46) {
 		return _ref32.apply(this, arguments);
 	};
 }();
@@ -3197,68 +3197,241 @@ tests$7(Map$1, 'Map#j0');
 
 tests$7(Map);
 
+function test$26(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it('should create an iterator', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion8 = true;
+			var _didIteratorError8 = false;
+			var _iteratorError8 = undefined;
+
+			try {
+				for (var _iterator8 = expected[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+					var element = _step8.value;
+
+					parent.appendChild(element);
+				}
+			} catch (err) {
+				_didIteratorError8 = true;
+				_iteratorError8 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion8 && _iterator8.return) {
+						_iterator8.return();
+					}
+				} finally {
+					if (_didIteratorError8) {
+						throw _iteratorError8;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			while (1) {
+				var _iterator$next12 = iterator.next(),
+				    value = _iterator$next12.value,
+				    done = _iterator$next12.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion9 = true;
+			var _didIteratorError9 = false;
+			var _iteratorError9 = undefined;
+
+			try {
+				for (var _iterator9 = expected[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+					var element = _step9.value;
+
+					parent.appendChild(element);
+				}
+			} catch (err) {
+				_didIteratorError9 = true;
+				_iteratorError9 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion9 && _iterator9.return) {
+						_iterator9.return();
+					}
+				} finally {
+					if (_didIteratorError9) {
+						throw _iteratorError9;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion10 = true;
+			var _didIteratorError10 = false;
+			var _iteratorError10 = undefined;
+
+			try {
+				for (var _iterator10 = iterator[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+					var value = _step10.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError10 = true;
+				_iteratorError10 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion10 && _iterator10.return) {
+						_iterator10.return();
+					}
+				} finally {
+					if (_didIteratorError10) {
+						throw _iteratorError10;
+					}
+				}
+			}
+
+			assert.deepEqual(results, expected);
+		});
+	});
+}
+
 function generator$6() {
 	var _this11 = this;
 
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this11[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this11[index],
+			done: length <= index++
+		};
+	});
 }
 
-describe('NamedNodeMap/@iterator', function () {
+test$26(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-	it('should create an iterator', function () {
-		var parent = document.createElement('div');
-		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion8 = true;
-		var _didIteratorError8 = false;
-		var _iteratorError8 = undefined;
+test$26(NamedNodeMap.prototype[Symbol.iterator]);
 
-		try {
-			for (var _iterator8 = expected[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-				var element = _step8.value;
+function test$28(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NodeList.prototype[Symbol.iterator]';
 
-				parent.appendChild(element);
-			}
-		} catch (err) {
-			_didIteratorError8 = true;
-			_iteratorError8 = err;
-		} finally {
+
+	describe(name, function () {
+
+		it('should create an iterator', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion11 = true;
+			var _didIteratorError11 = false;
+			var _iteratorError11 = undefined;
+
 			try {
-				if (!_iteratorNormalCompletion8 && _iterator8.return) {
-					_iterator8.return();
+				for (var _iterator11 = expected[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+					var element = _step11.value;
+
+					parent.appendChild(element);
 				}
+			} catch (err) {
+				_didIteratorError11 = true;
+				_iteratorError11 = err;
 			} finally {
-				if (_didIteratorError8) {
-					throw _iteratorError8;
+				try {
+					if (!_iteratorNormalCompletion11 && _iterator11.return) {
+						_iterator11.return();
+					}
+				} finally {
+					if (_didIteratorError11) {
+						throw _iteratorError11;
+					}
 				}
 			}
-		}
 
-		var iterator = generator$6.call(parent.childNodes);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next12 = iterator.next(),
-			    value = _iterator$next12.value,
-			    done = _iterator$next12.done;
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			while (1) {
+				var _iterator$next13 = iterator.next(),
+				    value = _iterator$next13.value,
+				    done = _iterator$next13.done;
 
-			if (done) {
-				break;
+				if (done) {
+					break;
+				}
+				results.push(value);
 			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, expected);
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion12 = true;
+			var _didIteratorError12 = false;
+			var _iteratorError12 = undefined;
+
+			try {
+				for (var _iterator12 = expected[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+					var element = _step12.value;
+
+					parent.appendChild(element);
+				}
+			} catch (err) {
+				_didIteratorError12 = true;
+				_iteratorError12 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion12 && _iterator12.return) {
+						_iterator12.return();
+					}
+				} finally {
+					if (_didIteratorError12) {
+						throw _iteratorError12;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion13 = true;
+			var _didIteratorError13 = false;
+			var _iteratorError13 = undefined;
+
+			try {
+				for (var _iterator13 = iterator[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+					var value = _step13.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError13 = true;
+				_iteratorError13 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion13 && _iterator13.return) {
+						_iterator13.return();
+					}
+				} finally {
+					if (_didIteratorError13) {
+						throw _iteratorError13;
+					}
+				}
+			}
+
+			assert.deepEqual(results, expected);
+		});
 	});
-});
+}
 
 function generator$8() {
 	var _this12 = this;
@@ -3266,62 +3439,17 @@ function generator$8() {
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this12[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this12[index],
+			done: length <= index++
+		};
+	});
 }
 
-describe('NodeList/@iterator', function () {
+test$28(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
 
-	it('should create an iterator', function () {
-		var parent = document.createElement('div');
-		var expected = [document.createElement('div'), document.createElement('div')];
-		var _iteratorNormalCompletion9 = true;
-		var _didIteratorError9 = false;
-		var _iteratorError9 = undefined;
-
-		try {
-			for (var _iterator9 = expected[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-				var element = _step9.value;
-
-				parent.appendChild(element);
-			}
-		} catch (err) {
-			_didIteratorError9 = true;
-			_iteratorError9 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion9 && _iterator9.return) {
-					_iterator9.return();
-				}
-			} finally {
-				if (_didIteratorError9) {
-					throw _iteratorError9;
-				}
-			}
-		}
-
-		var iterator = generator$8.call(parent.childNodes);
-		var results = [];
-		var index = 0;
-		while (1) {
-			var _iterator$next13 = iterator.next(),
-			    value = _iterator$next13.value,
-			    done = _iterator$next13.done;
-
-			if (done) {
-				break;
-			}
-			results[index++] = value;
-		}
-		assert.deepEqual(results, expected);
-	});
-});
+test$28(NodeList.prototype[Symbol.iterator]);
 
 function noopTrue() {
 	return true;
@@ -3352,7 +3480,7 @@ describe('noop', function () {
 	});
 });
 
-function test$26(MAX_SAFE_INTEGER) {
+function test$30(MAX_SAFE_INTEGER) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Number.MAX_SAFE_INTEGER';
 
 
@@ -3366,9 +3494,9 @@ function test$26(MAX_SAFE_INTEGER) {
 
 var J0MAX_SAFE_INTEGER = 9007199254740991;
 
-test$26(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
+test$30(J0MAX_SAFE_INTEGER, 'J0MAX_SAFE_INTEGER');
 
-test$26(Number.MAX_SAFE_INTEGER);
+test$30(Number.MAX_SAFE_INTEGER);
 
 function assign(target) {
 	for (var _len4 = arguments.length, sources = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
@@ -3835,7 +3963,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$28(Promise, name) {
+function test$32(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -3963,9 +4091,9 @@ function test$28(Promise, name) {
 	});
 }
 
-test$28(J0Promise, 'Promise/j0');
+test$32(J0Promise, 'Promise/j0');
 
-test$28(Promise, 'Promise');
+test$32(Promise, 'Promise');
 
 describe('FileReader/read', function () {
 
@@ -4105,27 +4233,27 @@ var Set$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion10 = true;
-			var _didIteratorError10 = false;
-			var _iteratorError10 = undefined;
+			var _iteratorNormalCompletion14 = true;
+			var _didIteratorError14 = false;
+			var _iteratorError14 = undefined;
 
 			try {
-				for (var _iterator10 = iterable[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-					var value = _step10.value;
+				for (var _iterator14 = iterable[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+					var value = _step14.value;
 
 					this.add(value);
 				}
 			} catch (err) {
-				_didIteratorError10 = true;
-				_iteratorError10 = err;
+				_didIteratorError14 = true;
+				_iteratorError14 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion10 && _iterator10.return) {
-						_iterator10.return();
+					if (!_iteratorNormalCompletion14 && _iterator14.return) {
+						_iterator14.return();
 					}
 				} finally {
-					if (_didIteratorError10) {
-						throw _iteratorError10;
+					if (_didIteratorError14) {
+						throw _iteratorError14;
 					}
 				}
 			}
@@ -4521,7 +4649,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$29(_Symbol) {
+function test$33(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -4565,9 +4693,9 @@ function test$29(_Symbol) {
 	});
 }
 
-test$29(Symbol, 'J0Symbol');
+test$33(Symbol, 'J0Symbol');
 
-test$29(Symbol);
+test$33(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;

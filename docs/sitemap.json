@@ -48,10 +48,14 @@
 		"j0polyfill": {}
 	},
 	"NamedNodeMap": {
-		"@iterator": {}
+		"@iterator": {
+			"j0polyfill": {}
+		}
 	},
 	"NodeList": {
-		"@iterator": {}
+		"@iterator": {
+			"j0polyfill": {}
+		}
 	},
 	"Number": {
 		"MAX_SAFE_INTEGER": {

@@ -6,7 +6,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function test(generator) {
-	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NodeList.prototype[Symbol.iterator]';
 
 
 	describe(name, function () {
@@ -147,7 +147,5 @@ function generator() {
 	});
 }
 
-test(generator, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
-
-test(NamedNodeMap.prototype[Symbol.iterator]);
+test(generator, 'NodeList.prototype[Symbol.iterator]#j0');
 }())
