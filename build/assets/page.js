@@ -3,7 +3,6 @@ import forEachKey from '../../Object/forEachKey';
 import {
 	dom,
 	onError,
-	getBody,
 	window,
 	fetch,
 	location,
@@ -113,7 +112,7 @@ if (mocha) {
 	window.start = startMocha;
 }
 
-getBody
+dom.ready()
 .then(function () {
 	return Promise.all([
 		mocha && showEnvironment(),

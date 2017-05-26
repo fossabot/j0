@@ -2,11 +2,24 @@ import {
 	document,
 	Symbol,
 	isString,
-	isNode
+	isNode,
+	Promise
 } from 'j0';
 
 const nodeKey = Symbol('node');
 const eventsKey = Symbol('events');
+const getBody = new Promise(function (resolve) {
+	const interval = 50;
+	function check() {
+		const {body} = document;
+		if (body) {
+			resolve(wrap(body));
+		} else {
+			setTimeout(check, interval);
+		}
+	}
+	setTimeout(check);
+});
 
 class J0Element {
 
@@ -185,5 +198,11 @@ function findAll(selector, rootElement = document) {
 
 wrap.find = find;
 wrap.findAll = findAll;
+wrap.ready = async function (fn) {
+	await getBody;
+	if (fn) {
+		fn();
+	}
+};
 
 export default wrap;
