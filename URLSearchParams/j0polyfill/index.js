@@ -1,4 +1,4 @@
-import StringList from '../../StringList';
+import {StringList} from 'j0';
 
 const separator = '&';
 const equal = '=';

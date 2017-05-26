@@ -1,4 +1,4 @@
-function tests(URLSearchParams, testName) {
+function tests(URLSearchParams, testName = 'URLSearchParams') {
 
 	describe(testName, function () {
 
