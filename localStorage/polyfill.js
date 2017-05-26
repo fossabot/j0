@@ -1,6 +1,11 @@
+import {
+	window,
+	Storage
+} from 'j0';
+
 let storage;
 try {
-	storage = localStorage;
+	storage = window.localStorage;
 	storage.is = 'available';
 } catch (err) {
 	storage = 0;
@@ -8,10 +13,6 @@ try {
 if (storage) {
 	storage.removeItem('is');
 } else {
-	storage = {
-		removeItem: function (key) {
-			delete this[key];
-		}
-	};
+	storage = new Storage();
 }
 export default storage;
