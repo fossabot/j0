@@ -1,6 +1,6 @@
 import {window} from 'j0';
-import j0Fetch from './j0';
+import j0fetch from './j0polyfill';
 // if (!window.fetch) {
-// 	window.fetch = j0Fetch;
+// 	window.fetch = j0fetch;
 // }
-window.fetch = j0Fetch;
+window.fetch = j0fetch;

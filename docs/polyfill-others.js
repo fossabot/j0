@@ -1662,7 +1662,7 @@ function fetch(input, init) {
 }
 
 // if (!window.fetch) {
-// 	window.fetch = j0Fetch;
+// 	window.fetch = j0fetch;
 // }
 window$1.fetch = fetch;
 

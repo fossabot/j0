@@ -1,5 +1,5 @@
-import Body from '../../Body/j0';
-import Headers from '../../Headers/j0';
+import Body from '../../Body/j0polyfill';
+import Headers from '../../Headers/j0polyfill';
 
 const minOkStatus = 200;
 const maxOkStatus = 300;

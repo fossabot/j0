@@ -29,7 +29,7 @@
 		}
 	},
 	"Body": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"HTMLCollection": {
 		"@iterator": {
@@ -37,7 +37,7 @@
 		}
 	},
 	"Headers": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"Iterator": {},
 	"JSON": {},
@@ -70,10 +70,10 @@
 		"j0": {}
 	},
 	"Request": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"Response": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"Set": {
 		"@iterator": {},
@@ -99,7 +99,7 @@
 	"debounce": {},
 	"dom": {},
 	"fetch": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"formatDate": {},
 	"getBody": {},

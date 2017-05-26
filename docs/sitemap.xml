@@ -59,7 +59,7 @@
 		<loc>https://kei-ito.github.io/j0/Array/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Body/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Body/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
@@ -74,7 +74,7 @@
 		<loc>https://kei-ito.github.io/j0/HTMLCollection/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Headers/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Headers/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Headers/</loc>
@@ -146,13 +146,13 @@
 		<loc>https://kei-ito.github.io/j0/Promise/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Request/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Request/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Request/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/Response/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/Response/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Response/</loc>
@@ -215,7 +215,7 @@
 		<loc>https://kei-ito.github.io/j0/dom/</loc>
 	</url>
 	<url>
-		<loc>https://kei-ito.github.io/j0/fetch/j0/</loc>
+		<loc>https://kei-ito.github.io/j0/fetch/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/fetch/</loc>

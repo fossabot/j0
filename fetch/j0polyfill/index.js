@@ -1,5 +1,5 @@
-import Request from '../../Request/j0';
-import Response from '../../Response/j0';
+import Request from '../../Request/j0polyfill';
+import Response from '../../Response/j0polyfill';
 import {
 	parseHeaders,
 	isUndefined,
