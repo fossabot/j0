@@ -17,5 +17,5 @@ $ npm install j0
 ## Usage
 
 ```
-import Promise from 'j0/Promise';
+import {Promise} from 'j0';
 ```
