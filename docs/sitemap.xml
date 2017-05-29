@@ -65,6 +65,9 @@
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/EventEmitter/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/HTMLCollection/@iterator/j0polyfill/</loc>
 	</url>
 	<url>
@@ -114,6 +117,15 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/NodeList/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Object/assign/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Object/assign/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Object/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Promise/j0/</loc>

@@ -17,7 +17,27 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var x$1 = Array;
+var x$1 = Object;
+
+function assign(target) {
+	for (var _len = arguments.length, objects = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+		objects[_key - 1] = arguments[_key];
+	}
+
+	objects.forEach(function (obj) {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				target[key] = obj[key];
+			}
+		}
+	});
+}
+
+if (!x$1.assign) {
+	x$1.assign = assign;
+}
+
+var x$2 = Array;
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -52,7 +72,7 @@ function generator() {
 	});
 }
 
-var prototype = x$1.prototype;
+var prototype = x$2.prototype;
 
 if (!prototype[iteratorSymbol]) {
 	prototype[iteratorSymbol] = generator;
@@ -84,7 +104,7 @@ function copyWithin(target) {
 	return this;
 }
 
-var prototype$1 = x$1.prototype;
+var prototype$1 = x$2.prototype;
 
 if (!prototype$1.copyWithin) {
 	prototype$1.copyWithin = copyWithin;
@@ -102,7 +122,7 @@ function entries() {
 	});
 }
 
-var prototype$2 = x$1.prototype;
+var prototype$2 = x$2.prototype;
 
 if (!prototype$2.entries) {
 	prototype$2.entries = entries;
@@ -125,7 +145,7 @@ function copyWithin$1(value) {
 	return this;
 }
 
-var prototype$3 = x$1.prototype;
+var prototype$3 = x$2.prototype;
 
 if (!prototype$3.fill) {
 	prototype$3.fill = copyWithin$1;
@@ -140,7 +160,7 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-var prototype$4 = x$1.prototype;
+var prototype$4 = x$2.prototype;
 
 if (!prototype$4.find) {
 	prototype$4.find = findIndex;
@@ -155,7 +175,7 @@ function findIndex$1(fn, thisArg) {
 	return -1;
 }
 
-var prototype$5 = x$1.prototype;
+var prototype$5 = x$2.prototype;
 
 if (!prototype$5.findIndex) {
 	prototype$5.findIndex = findIndex$1;
@@ -208,8 +228,8 @@ function arrayFrom(iterable) {
 	return result;
 }
 
-if (!x$1.from) {
-	x$1.from = arrayFrom;
+if (!x$2.from) {
+	x$2.from = arrayFrom;
 }
 
 function includes(searchElement) {
@@ -223,28 +243,28 @@ function includes(searchElement) {
 	return false;
 }
 
-var prototype$6 = x$1.prototype;
+var prototype$6 = x$2.prototype;
 
 if (!prototype$6.includes) {
 	prototype$6.includes = includes;
 }
 
 function arrayOf() {
-	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-		args[_key] = arguments[_key];
+	for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+		args[_key2] = arguments[_key2];
 	}
 
 	return args;
 }
 
-if (!x$1.of) {
-	x$1.of = arrayOf;
+if (!x$2.of) {
+	x$2.of = arrayOf;
 }
 
-var x$2 = parseInt;
+var x$3 = parseInt;
 
 function repeat(c) {
-	var count = x$2(c, 10);
+	var count = x$3(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -260,21 +280,21 @@ try {
 	prototype$7.repeat = repeat;
 }
 
-var x$3 = window;
+var x$4 = window;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var x$4 = setTimeout;
+var x$5 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!x$3.immediateId) {
-	x$3.immediateId = 0;
+if (!x$4.immediateId) {
+	x$4.immediateId = 0;
 }
-x$3.immediateId += 1;
-var setImmediateNative = x$3.setImmediate;
+x$4.immediateId += 1;
+var setImmediateNative = x$4.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -303,7 +323,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$4(fn);
+	return x$5(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -319,7 +339,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$4(function () {
+x$5(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -342,7 +362,7 @@ function noop(x) {
 	return x;
 }
 
-var x$5 = TypeError;
+var x$6 = TypeError;
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;
@@ -408,7 +428,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new x$5('A promise cannot be resolved with itself');
+					throw new x$6('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -557,7 +577,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-x$3.Promise = x$3.Promise || J0Promise;
+x$4.Promise = x$4.Promise || J0Promise;
 
 var Map$1 = function () {
 	function Map$1(iterable) {
@@ -631,7 +651,7 @@ var Map$1 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref5) {
+			var found = this.data.find(function (_ref5) {
 				var _ref6 = _slicedToArray(_ref5, 1),
 				    itemKey = _ref6[0];
 
@@ -701,19 +721,19 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = x$3.Map;
+var MAP = x$4.Map;
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
-x$3.Map = MAP;
+x$4.Map = MAP;
 
-var x$6 = Map;
+var x$7 = Map;
 
 function generator$1() {
 	return this.entries();
 }
 
-var prototype$8 = x$6.prototype;
+var prototype$8 = x$7.prototype;
 
 if (!prototype$8[iteratorSymbol]) {
 	prototype$8[iteratorSymbol] = generator$1;
@@ -830,27 +850,27 @@ var Set$1 = function () {
 	return Set$1;
 }();
 
-var SET = x$3.Set;
+var SET = x$4.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 	SET = Set$1;
 }
 
-x$3.Set = SET;
+x$4.Set = SET;
 
-var x$7 = Set;
+var x$8 = Set;
 
 function generator$3() {
 	return this.values();
 }
 
-var prototype$9 = x$7.prototype;
+var prototype$9 = x$8.prototype;
 
 if (!prototype$9[iteratorSymbol]) {
 	prototype$9[iteratorSymbol] = generator$3;
 }
 
-var x$8 = NodeList;
+var x$9 = NodeList;
 
 function generator$5() {
 	var _this6 = this;
@@ -866,13 +886,13 @@ function generator$5() {
 	});
 }
 
-var prototype$10 = x$8.prototype;
+var prototype$10 = x$9.prototype;
 
 if (!prototype$10[iteratorSymbol]) {
 	prototype$10[iteratorSymbol] = generator$5;
 }
 
-var x$9 = HTMLCollection;
+var x$10 = HTMLCollection;
 
 function generator$7() {
 	var _this7 = this;
@@ -890,13 +910,13 @@ function generator$7() {
 	};
 }
 
-var prototype$11 = x$9.prototype;
+var prototype$11 = x$10.prototype;
 
 if (!prototype$11[iteratorSymbol]) {
 	prototype$11[iteratorSymbol] = generator$7;
 }
 
-var x$10 = NamedNodeMap;
+var x$11 = NamedNodeMap;
 
 function generator$9() {
 	var _this8 = this;
@@ -912,7 +932,7 @@ function generator$9() {
 	});
 }
 
-var prototype$12 = x$10.prototype;
+var prototype$12 = x$11.prototype;
 
 if (!prototype$12[iteratorSymbol]) {
 	prototype$12[iteratorSymbol] = generator$9;
@@ -1115,13 +1135,11 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var URLSearchParams$1 = x$3.URLSearchParams;
+var URLSearchParams$1 = x$4.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	x$3.URLSearchParams = URLSearchParams$2;
+	x$4.URLSearchParams = URLSearchParams$2;
 }
-
-var x$11 = Object;
 
 function toLowerCase(x) {
 	return x ? x.toLowerCase() : '';
@@ -1135,7 +1153,7 @@ var Headers$1 = function (_StringList2) {
 
 		var init = [];
 		if (headers) {
-			x$11.keys(headers).forEach(function (key) {
+			x$1.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -1201,8 +1219,8 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!x$3.Headers) {
-	x$3.Headers = Headers$1;
+if (!x$4.Headers) {
+	x$4.Headers = Headers$1;
 }
 
 var x$12 = JSON;
@@ -1456,7 +1474,7 @@ var Body = function () {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$17.reject(new x$5('Already used'));
+				return x$17.reject(new x$6('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1671,33 +1689,33 @@ function fetch(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0fetch;
 // }
-x$3.fetch = fetch;
+x$4.fetch = fetch;
 
-if (!x$3.Body) {
-	x$3.Body = Body;
+if (!x$4.Body) {
+	x$4.Body = Body;
 }
 
-if (!x$3.Response) {
-	x$3.Response = Response;
+if (!x$4.Response) {
+	x$4.Response = Response;
 }
 
-if (!x$3.Request) {
-	x$3.Request = Request;
+if (!x$4.Request) {
+	x$4.Request = Request;
 }
 
 var x$32 = Date;
 
-x$3.requestAnimationFrame = x$3.requestAnimationFrame || x$3.mozRequestAnimationFrame || x$3.webkitRequestAnimationFrame || x$3.msRequestAnimationFrame || function (fn) {
-	return x$4(function () {
+x$4.requestAnimationFrame = x$4.requestAnimationFrame || x$4.mozRequestAnimationFrame || x$4.webkitRequestAnimationFrame || x$4.msRequestAnimationFrame || function (fn) {
+	return x$5(function () {
 		fn(x$32.now());
 	}, 30);
 };
 
 var x$33 = clearTimeout;
 
-x$3.cancelAnimationFrame = x$3.cancelAnimationFrame || x$3.mozCancelAnimationFrame || function (id) {
+x$4.cancelAnimationFrame = x$4.cancelAnimationFrame || x$4.mozCancelAnimationFrame || function (id) {
 	return x$33(id);
 };
 
-x$3.global = x$3;
+x$4.global = x$4;
 }())

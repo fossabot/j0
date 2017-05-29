@@ -1,3 +1,4 @@
+import '../../Object/polyfill';
 import '../../Array/polyfill';
 import '../../String/polyfill';
 import '../../Promise/polyfill';

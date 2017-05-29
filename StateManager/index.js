@@ -7,11 +7,14 @@ import State from './State';
 class StateManager {
 
 	constructor(config) {
-		Object.defineProperty(this, 'states', {value: new Map()});
 		Object.assign(
 			this,
 			{prefix: ''},
-			config
+			config,
+			{
+				states: new Map(),
+				listeners: []
+			}
 		);
 	}
 

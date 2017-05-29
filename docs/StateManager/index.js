@@ -220,8 +220,10 @@ var StateManager = function () {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		x$1.defineProperty(this, 'states', { value: new x$2() });
-		x$1.assign(this, { prefix: '' }, config);
+		x$1.assign(this, { prefix: '' }, config, {
+			states: new x$2(),
+			listeners: []
+		});
 	}
 
 	_createClass(StateManager, [{
@@ -287,12 +289,9 @@ describe('StateManager', function () {
 			}
 		}
 
-		results.sort(function (_ref4, _ref5) {
-			var nameA = _ref4.nameA;
-			var nameB = _ref5.nameB;
-
-			return nameA < nameB ? 1 : -1;
-		});
+		if (results[0].name === name2) {
+			results.reverse();
+		}
 		assert.equal(results[0].name, name1);
 		assert.equal(results[1].name, name2);
 	});

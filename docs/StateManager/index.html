@@ -18,11 +18,14 @@
 <span class="linenum"></span><span class="class">class</span>&#32;<span class="name">StateManager</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>
 <span class="linenum"></span>&#9;<span class="name">constructor</span><span class="_28">(</span><span class="name">config</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">Object</span><span class="_2e">.</span><span class="name">defineProperty</span><span class="_28">(</span><span class="this">this</span><span class="_2c">,</span>&#32;<span class="string">'states'</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">value</span><span class="_3a">:</span>&#32;<span class="new">new</span>&#32;<span class="name">Map</span><span class="_28">(</span><span class="_29">)</span><span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">Object</span><span class="_2e">.</span><span class="name">assign</span><span class="_28">(</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="this">this</span><span class="_2c">,</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="_7b">{</span><span class="name">prefix</span><span class="_3a">:</span>&#32;<span class="string">''</span><span class="_7d">}</span><span class="_2c">,</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="name">config</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">config</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">states</span><span class="_3a">:</span>&#32;<span class="new">new</span>&#32;<span class="name">Map</span><span class="_28">(</span><span class="_29">)</span><span class="_2c">,</span>
+<span class="linenum"></span>&#9;&#9;&#9;&#9;<span class="name">listeners</span><span class="_3a">:</span>&#32;<span class="_5b">[</span><span class="_5d">]</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span>
 <span class="linenum"></span>
@@ -68,9 +71,9 @@
 <span class="linenum"></span>&#9;&#9;<span class="for">for</span>&#32;<span class="_28">(</span><span class="const">const</span>&#32;<span class="_5b">[</span><span class="_2c">,</span>&#32;<span class="name">state</span><span class="_5d">]</span>&#32;<span class="name">of</span>&#32;<span class="name">states</span><span class="_2e">.</span><span class="name">states</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
 <span class="linenum"></span>&#9;&#9;&#9;<span class="name">results</span><span class="_2e">.</span><span class="name">push</span><span class="_28">(</span><span class="name">state</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
-<span class="linenum"></span>&#9;&#9;<span class="name">results</span><span class="_2e">.</span><span class="name">sort</span><span class="_28">(</span><span class="_28">(</span><span class="_7b">{</span><span class="name">nameA</span><span class="_7d">}</span><span class="_2c">,</span>&#32;<span class="_7b">{</span><span class="name">nameB</span><span class="_7d">}</span><span class="_29">)</span>&#32;<span class="_3d_3e">=&gt;</span>&#32;<span class="_7b">{</span>
-<span class="linenum"></span>&#9;&#9;&#9;<span class="return">return</span>&#32;<span class="name">nameA</span>&#32;<span class="_3c_2f_3e">&lt;</span>&#32;<span class="name">nameB</span>&#32;<span class="_3f">?</span>&#32;<span class="num">1</span>&#32;<span class="_3a">:</span>&#32;<span class="_2b_2f_2d">-</span><span class="num">1</span><span class="_3b">;</span>
-<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="if">if</span>&#32;<span class="_28">(</span><span class="name">results</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_2e">.</span><span class="name">name</span>&#32;<span class="_3d_3d_2f_21_3d">===</span>&#32;<span class="name">name2</span><span class="_29">)</span>&#32;<span class="_7b">{</span>
+<span class="linenum"></span>&#9;&#9;&#9;<span class="name">results</span><span class="_2e">.</span><span class="name">reverse</span><span class="_28">(</span><span class="_29">)</span><span class="_3b">;</span>
+<span class="linenum"></span>&#9;&#9;<span class="_7d">}</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">results</span><span class="_5b">[</span><span class="num">0</span><span class="_5d">]</span><span class="_2e">.</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">name1</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;&#9;<span class="name">assert</span><span class="_2e">.</span><span class="name">equal</span><span class="_28">(</span><span class="name">results</span><span class="_5b">[</span><span class="num">1</span><span class="_5d">]</span><span class="_2e">.</span><span class="name">name</span><span class="_2c">,</span>&#32;<span class="name">name2</span><span class="_29">)</span><span class="_3b">;</span>
 <span class="linenum"></span>&#9;<span class="_7d">}</span><span class="_29">)</span><span class="_3b">;</span>

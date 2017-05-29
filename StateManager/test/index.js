@@ -16,9 +16,9 @@ describe('StateManager', function () {
 		for (const [, state] of states.states) {
 			results.push(state);
 		}
-		results.sort(({nameA}, {nameB}) => {
-			return nameA < nameB ? 1 : -1;
-		});
+		if (results[0].name === name2) {
+			results.reverse();
+		}
 		assert.equal(results[0].name, name1);
 		assert.equal(results[1].name, name2);
 	});

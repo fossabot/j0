@@ -44,7 +44,7 @@ class Map {
 	}
 
 	get(key) {
-		const found = find(this.data, function ([itemKey]) {
+		const found = this.data.find(function ([itemKey]) {
 			return itemKey === key;
 		});
 		if (found) {

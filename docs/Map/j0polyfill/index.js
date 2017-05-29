@@ -100,7 +100,7 @@ var Map = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = find(this.data, function (_ref5) {
+			var found = this.data.find(function (_ref5) {
 				var _ref6 = _slicedToArray(_ref5, 1),
 				    itemKey = _ref6[0];
 
