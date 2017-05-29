@@ -72,6 +72,9 @@
 		},
 		"j0polyfill": {}
 	},
+	"StateManager": {
+		"State": {}
+	},
 	"String": {
 		"repeat": {
 			"j0polyfill": {}

@@ -8,7 +8,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref32 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(duration, data) {
+	var _ref37 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(duration, data) {
 		return regeneratorRuntime.wrap(function _callee8$(_context8) {
 			while (1) {
 				switch (_context8.prev = _context8.next) {
@@ -29,8 +29,8 @@ var wait = function () {
 		}, _callee8, this);
 	}));
 
-	return function wait(_x47, _x48) {
-		return _ref32.apply(this, arguments);
+	return function wait(_x48, _x49) {
+		return _ref37.apply(this, arguments);
 	};
 }();
 
@@ -4326,6 +4326,310 @@ describe('setImmediate', function () {
 	});
 });
 
+var x$31 = encodeURIComponent;
+
+var State = function () {
+	function State(stateName, definition, onEnter) {
+		_classCallCheck(this, State);
+
+		if (isInstanceOf(stateName, State)) {
+			x$24.assign(this, stateName);
+		} else {
+			var parts = [];
+			var pos = 0;
+			definition.replace(/\{(\w+):(.*?)\}/g, function (_ref30, name, expression, offset, source) {
+				var length = _ref30.length;
+
+				if (pos < offset) {
+					parts.push(source.slice(pos, offset));
+				}
+				parts.push([name, new RegExp('^' + expression + '$'), expression]);
+				pos = offset + length;
+			});
+			parts.push(definition.slice(pos));
+			var matcher = new RegExp(parts.map(function (part) {
+				if (isString(part)) {
+					return part;
+				}
+				return '(' + part[2] + ')';
+			}).join(''));
+			x$24.assign(this, {
+				name: stateName,
+				parts: parts,
+				matcher: matcher,
+				onEnter: onEnter
+			});
+		}
+	}
+
+	_createClass(State, [{
+		key: 'compose',
+		value: function compose(fn) {
+			var parts = this.parts;
+
+			var result = [];
+			for (var index = 0, length = parts.length; index < length; index++) {
+				var part = parts[index];
+				if (isString(part)) {
+					result.push(part);
+				} else {
+					var value = fn.apply(undefined, _toConsumableArray(part));
+					if (value) {
+						result.push(value);
+					} else {
+						return '';
+					}
+				}
+			}
+			return result.join('');
+		}
+	}, {
+		key: 'href',
+		value: function href() {
+			var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			return this.compose(function (key, pattern) {
+				var value = params[key];
+				if (value && pattern.test(value)) {
+					return x$31(value);
+				}
+			});
+		}
+	}, {
+		key: 'parse',
+		value: function parse(href) {
+			var _this16 = this;
+
+			var params = void 0;
+			href.replace(this.matcher, function (match) {
+				for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+					args[_key5 - 1] = arguments[_key5];
+				}
+
+				var index = 0;
+				params = {};
+				return _this16.compose(function (key) {
+					var value = args[index++];
+					params[key] = value;
+					return value;
+				});
+			});
+			return params;
+		}
+	}]);
+
+	return State;
+}();
+
+var hex$1 = 16;
+
+describe('State', function () {
+
+	it('should have a name', function () {
+		var name = '' + Date.now();
+		var definition = name;
+		var state = new State(name, definition);
+		assert.equal(state.name, name);
+	});
+
+	it('should have onEnter', function () {
+		var name = '' + Date.now();
+		var definition = name;
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		assert.equal(state.onEnter, onEnter);
+	});
+
+	it('should return href', function () {
+		var name = '' + Date.now();
+		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex$1);
+		var expected = name + '/' + param1 + '/' + param2;
+		assert.equal(state.href({
+			param1: param1,
+			param2: param2
+		}), expected);
+	});
+
+	it('should return an empty string when href() receives invalid parameters', function () {
+		var name = '' + Date.now();
+		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		var param1 = Date.now() + 'a';
+		var param2 = '' + Date.now().toString(hex$1);
+		var expected = '';
+		assert.equal(state.href({
+			param1: param1,
+			param2: param2
+		}), expected);
+	});
+
+	it('should return an empty string when href() doesn\'t receive parameters', function () {
+		var name = '' + Date.now();
+		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		var expected = '';
+		assert.equal(state.href(), expected);
+	});
+
+	it('should clone a state', function () {
+		var name = '' + Date.now();
+		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		var state2 = new State(state);
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex$1);
+		var expected = name + '/' + param1 + '/' + param2;
+		assert.equal(state2.name, name);
+		assert.equal(state2.onEnter, onEnter);
+		assert.equal(state2.href({
+			param1: param1,
+			param2: param2
+		}), expected);
+	});
+
+	it('should parse href patterns', function () {
+		var name = '' + Date.now();
+		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
+		function onEnter(params) {
+			return params;
+		}
+		var state = new State(name, definition, onEnter);
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex$1);
+		var params = {
+			param1: param1,
+			param2: param2
+		};
+		assert.deepEqual(state.parse(state.href(params)), params);
+	});
+});
+
+var x$32 = Map;
+
+var StateManager = function () {
+	function StateManager(config) {
+		_classCallCheck(this, StateManager);
+
+		x$24.defineProperty(this, 'states', { value: new x$32() });
+		x$24.assign(this, { prefix: '' }, config);
+	}
+
+	_createClass(StateManager, [{
+		key: 'define',
+		value: function define(name, definition, onEnter) {
+			this.states.set(name, new State(name, definition, onEnter));
+			return this;
+		}
+	}, {
+		key: 'href',
+		value: function href(name, params) {
+			var state = this.states.get(name);
+			var href = state && state.href(params) || this.fallback;
+			return '' + this.prefix + href;
+		}
+	}, {
+		key: 'otherwise',
+		value: function otherwise(name, params) {
+			this.fallback = this.href(name, params);
+			return this;
+		}
+	}]);
+
+	return StateManager;
+}();
+
+var hex = 16;
+
+describe('StateManager', function () {
+
+	it('should define a state', function () {
+		var states = new StateManager();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		states.define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}');
+		var results = [];
+		var _iteratorNormalCompletion15 = true;
+		var _didIteratorError15 = false;
+		var _iteratorError15 = undefined;
+
+		try {
+			for (var _iterator15 = states.states[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+				var _ref31 = _step15.value;
+
+				var _ref32 = _slicedToArray(_ref31, 2);
+
+				var state = _ref32[1];
+
+				results.push(state);
+			}
+		} catch (err) {
+			_didIteratorError15 = true;
+			_iteratorError15 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion15 && _iterator15.return) {
+					_iterator15.return();
+				}
+			} finally {
+				if (_didIteratorError15) {
+					throw _iteratorError15;
+				}
+			}
+		}
+
+		results.sort(function (_ref33, _ref34) {
+			var nameA = _ref33.nameA;
+			var nameB = _ref34.nameB;
+
+			return nameA < nameB ? 1 : -1;
+		});
+		assert.equal(results[0].name, name1);
+		assert.equal(results[1].name, name2);
+	});
+
+	it('should get a href', function () {
+		var states = new StateManager();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		states.define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}');
+		var param1 = '' + Date.now();
+		var param2 = Date.now().toString(hex);
+		var expected = 'stateB/' + param1 + '/' + param2;
+		assert.equal(states.href(name2, {
+			param1: param1,
+			param2: param2
+		}), expected);
+	});
+
+	it('should define fallback and return it when href() receives invalid parameters', function () {
+		var states = new StateManager();
+		var name0 = Date.now() + '-0';
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		states.define(name0, name0).define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}').otherwise(name0);
+		var param1 = '' + Date.now();
+		assert.equal(states.href(name2, { param1: param1 }), name0);
+		assert.equal(states.href(name2), name0);
+	});
+});
+
 function test$33(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
@@ -4341,10 +4645,10 @@ function test$33(repeat) {
 	});
 }
 
-var x$31 = parseInt;
+var x$33 = parseInt;
 
 function repeat(c) {
-	var count = x$31(c, 10);
+	var count = x$33(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -4519,8 +4823,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-			args[_key5] = arguments[_key5];
+		for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+			args[_key6] = arguments[_key6];
 		}
 
 		lastArgs = args;
@@ -4579,11 +4883,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref30) {
-				var _ref31 = _slicedToArray(_ref30, 2),
-				    name = _ref31[0],
-				    _ref31$ = _ref31[1],
-				    value = _ref31$ === undefined ? '' : _ref31$;
+			return this.data.map(function (_ref35) {
+				var _ref36 = _slicedToArray(_ref35, 2),
+				    name = _ref36[0],
+				    _ref36$ = _ref36[1],
+				    value = _ref36$ === undefined ? '' : _ref36$;
 
 				return name + '=' + value;
 			}).join('&');
