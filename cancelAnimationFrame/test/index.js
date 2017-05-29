@@ -13,6 +13,8 @@ describe('cancelAnimationFrame', function () {
 				});
 			});
 		});
+		const timeoutMargin = 50;
+		this.timeout(timeoutMargin * baseInterval);
 		assert.equal(0 < baseInterval, true);
 		await new Promise((resolve, reject) => {
 			const margin = 10;
