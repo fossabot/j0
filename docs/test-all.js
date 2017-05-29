@@ -1237,7 +1237,7 @@ var x$22 = requestAnimationFrame;
 describe('cancelAnimationFrame', function () {
 
 	it('should cancel scheduled invocation', _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
-		var baseInterval;
+		var baseInterval, timeoutMargin;
 		return regeneratorRuntime.wrap(function _callee4$(_context4) {
 			while (1) {
 				switch (_context4.prev = _context4.next) {
@@ -1253,9 +1253,11 @@ describe('cancelAnimationFrame', function () {
 
 					case 2:
 						baseInterval = _context4.sent;
+						timeoutMargin = 50;
 
+						this.timeout(timeoutMargin * baseInterval);
 						assert.equal(0 < baseInterval, true);
-						_context4.next = 6;
+						_context4.next = 8;
 						return new Promise(function (resolve, reject) {
 							var margin = 10;
 							var timer = setTimeout(function () {
@@ -1267,8 +1269,8 @@ describe('cancelAnimationFrame', function () {
 							});
 						});
 
-					case 6:
-						_context4.next = 8;
+					case 8:
+						_context4.next = 10;
 						return new Promise(function (resolve, reject) {
 							var margin = 10;
 							var timer = setTimeout(resolve, baseInterval * margin);
@@ -1279,7 +1281,7 @@ describe('cancelAnimationFrame', function () {
 							x$21(id);
 						});
 
-					case 8:
+					case 10:
 					case 'end':
 						return _context4.stop();
 				}

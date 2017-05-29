@@ -16,7 +16,9 @@ var createNavigation = function () {
 					case 0:
 						parseBranch = function parseBranch(parent, name, base) {
 							var childElements = [];
-							x$8.keys(parent).forEach(function (key) {
+							x$8.keys(parent).sort(function (a, b) {
+								return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
+							}).forEach(function (key) {
 								var branch = parent[key];
 								childElements.push(parseBranch(branch, key, base ? base + '/' + name : name));
 							});

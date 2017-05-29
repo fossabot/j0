@@ -241,21 +241,40 @@ if (!x$1.of) {
 	x$1.of = arrayOf;
 }
 
-var x$2 = window;
+var x$2 = parseInt;
+
+function repeat(c) {
+	var count = x$2(c, 10);
+	var results = [];
+	for (var i = 0; i < count; i += 1) {
+		results.push(this);
+	}
+	return results.join('');
+}
+
+var prototype$7 = String.prototype;
+
+try {
+	'0'.repeat(1);
+} catch (error) {
+	prototype$7.repeat = repeat;
+}
+
+var x$3 = window;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var x$3 = setTimeout;
+var x$4 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!x$2.immediateId) {
-	x$2.immediateId = 0;
+if (!x$3.immediateId) {
+	x$3.immediateId = 0;
 }
-x$2.immediateId += 1;
-var setImmediateNative = x$2.setImmediate;
+x$3.immediateId += 1;
+var setImmediateNative = x$3.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -284,7 +303,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$3(fn);
+	return x$4(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -300,7 +319,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$3(function () {
+x$4(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -323,7 +342,7 @@ function noop(x) {
 	return x;
 }
 
-var x$4 = TypeError;
+var x$5 = TypeError;
 
 /* eslint-disable no-underscore-dangle */
 var PENDING = 0;
@@ -389,7 +408,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new x$4('A promise cannot be resolved with itself');
+					throw new x$5('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -538,7 +557,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-x$2.Promise = x$2.Promise || J0Promise;
+x$3.Promise = x$3.Promise || J0Promise;
 
 var Map$1 = function () {
 	function Map$1(iterable) {
@@ -682,22 +701,22 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = x$2.Map;
+var MAP = x$3.Map;
 if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 	MAP = Map$1;
 }
-x$2.Map = MAP;
+x$3.Map = MAP;
 
-var x$5 = Map;
+var x$6 = Map;
 
 function generator$1() {
 	return this.entries();
 }
 
-var prototype$7 = x$5.prototype;
+var prototype$8 = x$6.prototype;
 
-if (!prototype$7[iteratorSymbol]) {
-	prototype$7[iteratorSymbol] = generator$1;
+if (!prototype$8[iteratorSymbol]) {
+	prototype$8[iteratorSymbol] = generator$1;
 }
 
 var Set$1 = function () {
@@ -811,27 +830,27 @@ var Set$1 = function () {
 	return Set$1;
 }();
 
-var SET = x$2.Set;
+var SET = x$3.Set;
 
 if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 	SET = Set$1;
 }
 
-x$2.Set = SET;
+x$3.Set = SET;
 
-var x$6 = Set;
+var x$7 = Set;
 
 function generator$3() {
 	return this.values();
 }
 
-var prototype$8 = x$6.prototype;
+var prototype$9 = x$7.prototype;
 
-if (!prototype$8[iteratorSymbol]) {
-	prototype$8[iteratorSymbol] = generator$3;
+if (!prototype$9[iteratorSymbol]) {
+	prototype$9[iteratorSymbol] = generator$3;
 }
 
-var x$7 = NodeList;
+var x$8 = NodeList;
 
 function generator$5() {
 	var _this6 = this;
@@ -847,13 +866,13 @@ function generator$5() {
 	});
 }
 
-var prototype$9 = x$7.prototype;
+var prototype$10 = x$8.prototype;
 
-if (!prototype$9[iteratorSymbol]) {
-	prototype$9[iteratorSymbol] = generator$5;
+if (!prototype$10[iteratorSymbol]) {
+	prototype$10[iteratorSymbol] = generator$5;
 }
 
-var x$8 = HTMLCollection;
+var x$9 = HTMLCollection;
 
 function generator$7() {
 	var _this7 = this;
@@ -871,13 +890,13 @@ function generator$7() {
 	};
 }
 
-var prototype$10 = x$8.prototype;
+var prototype$11 = x$9.prototype;
 
-if (!prototype$10[iteratorSymbol]) {
-	prototype$10[iteratorSymbol] = generator$7;
+if (!prototype$11[iteratorSymbol]) {
+	prototype$11[iteratorSymbol] = generator$7;
 }
 
-var x$9 = NamedNodeMap;
+var x$10 = NamedNodeMap;
 
 function generator$9() {
 	var _this8 = this;
@@ -885,20 +904,18 @@ function generator$9() {
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this8[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this8[index],
+			done: length <= index++
+		};
+	});
 }
 
-var prototype$11 = x$9.prototype;
+var prototype$12 = x$10.prototype;
 
-if (!prototype$11[iteratorSymbol]) {
-	prototype$11[iteratorSymbol] = generator$9;
+if (!prototype$12[iteratorSymbol]) {
+	prototype$12[iteratorSymbol] = generator$9;
 }
 
 var StringList = function () {
@@ -1098,13 +1115,13 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var URLSearchParams$1 = x$2.URLSearchParams;
+var URLSearchParams$1 = x$3.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	x$2.URLSearchParams = URLSearchParams$2;
+	x$3.URLSearchParams = URLSearchParams$2;
 }
 
-var x$10 = Object;
+var x$11 = Object;
 
 function toLowerCase(x) {
 	return x ? x.toLowerCase() : '';
@@ -1118,7 +1135,7 @@ var Headers$1 = function (_StringList2) {
 
 		var init = [];
 		if (headers) {
-			x$10.keys(headers).forEach(function (key) {
+			x$11.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -1184,26 +1201,26 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!x$2.Headers) {
-	x$2.Headers = Headers$1;
+if (!x$3.Headers) {
+	x$3.Headers = Headers$1;
 }
 
-var x$11 = JSON;
+var x$12 = JSON;
 
-var x$12 = Blob;
+var x$13 = Blob;
 
-var x$13 = ArrayBuffer;
+var x$14 = ArrayBuffer;
 
-var x$14 = DataView;
+var x$15 = DataView;
 
-var x$15 = Uint8Array;
+var x$16 = Uint8Array;
 
-var x$16 = Promise;
+var x$17 = Promise;
 
-var x$17 = FileReader;
+var x$18 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new x$17();
+	var reader = new x$18();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -1230,12 +1247,12 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var x$18 = FormData;
+var x$19 = FormData;
 
-var x$19 = decodeURIComponent;
+var x$20 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$18();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$19();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -1244,8 +1261,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = x$19(name.replace(/\+/g, ' '));
-			parts = x$19(parts.join('=').replace(/\+/g, ' '));
+			name = x$20(name.replace(/\+/g, ' '));
+			parts = x$20(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -1256,29 +1273,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$20 = URLSearchParams;
+var x$21 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$21 = Uint8ClampedArray;
+var x$22 = Uint8ClampedArray;
 
-var x$22 = Uint16Array;
+var x$23 = Uint16Array;
 
-var x$23 = Uint32Array;
+var x$24 = Uint32Array;
 
-var x$24 = Int8Array;
+var x$25 = Int8Array;
 
-var x$25 = Int16Array;
+var x$26 = Int16Array;
 
-var x$26 = Int32Array;
+var x$27 = Int32Array;
 
-var x$27 = Float32Array;
+var x$28 = Float32Array;
 
-var x$28 = Float64Array;
+var x$29 = Float64Array;
 
-var viewClasses = [x$15, x$21, x$22, x$23, x$24, x$25, x$26, x$27, x$28];
+var viewClasses = [x$16, x$22, x$23, x$24, x$25, x$26, x$27, x$28, x$29];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1293,7 +1310,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new x$15(arrayBuffer);
+	var view = new x$16(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -1336,8 +1353,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new x$15(buf.byteLength);
-	view.set(new x$15(buf));
+	var view = new x$16(buf.byteLength);
+	view.set(new x$16(buf));
 	return view.buffer;
 }
 
@@ -1356,17 +1373,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$12)) {
+			} else if (isInstanceOf(body, x$13)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$18)) {
+			} else if (isInstanceOf(body, x$19)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$20)) {
+			} else if (isInstanceOf(body, x$21)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$14)) {
+			} else if (isInstanceOf(body, x$15)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$12([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$13) || isArrayBufferView(body)) {
+				this.bodyInit = new x$13([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$14) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -1376,7 +1393,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$20) {
+				} else if (body instanceof x$21) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -1385,7 +1402,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$16.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$17.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1399,13 +1416,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$16.resolve(this.bodyBlob);
+				return x$17.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$16.resolve(new x$12([this.bodyArrayBuffer]));
+				return x$17.resolve(new x$13([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$16.resolve(new x$12([this.bodyText]));
+				return x$17.resolve(new x$13([this.bodyText]));
 			}
 		}
 	}, {
@@ -1418,11 +1435,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$16.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$17.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$16.resolve(this.bodyText);
+				return x$17.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1433,13 +1450,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$11.parse);
+			return this.text().then(x$12.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$16.reject(new x$4('Already used'));
+				return x$17.reject(new x$5('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1570,10 +1587,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$29 = Headers;
+var x$30 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new x$29();
+	var headers = new x$30();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -1590,12 +1607,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-var x$30 = XMLHttpRequest;
+var x$31 = XMLHttpRequest;
 
 function fetch(input, init) {
-	return new x$16(function (resolve, reject) {
+	return new x$17(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$30();
+		var xhr = new x$31();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -1654,33 +1671,33 @@ function fetch(input, init) {
 // if (!window.fetch) {
 // 	window.fetch = j0fetch;
 // }
-x$2.fetch = fetch;
+x$3.fetch = fetch;
 
-if (!x$2.Body) {
-	x$2.Body = Body;
+if (!x$3.Body) {
+	x$3.Body = Body;
 }
 
-if (!x$2.Response) {
-	x$2.Response = Response;
+if (!x$3.Response) {
+	x$3.Response = Response;
 }
 
-if (!x$2.Request) {
-	x$2.Request = Request;
+if (!x$3.Request) {
+	x$3.Request = Request;
 }
 
-var x$31 = Date;
+var x$32 = Date;
 
-x$2.requestAnimationFrame = x$2.requestAnimationFrame || x$2.mozRequestAnimationFrame || x$2.webkitRequestAnimationFrame || x$2.msRequestAnimationFrame || function (fn) {
-	return x$3(function () {
-		fn(x$31.now());
+x$3.requestAnimationFrame = x$3.requestAnimationFrame || x$3.mozRequestAnimationFrame || x$3.webkitRequestAnimationFrame || x$3.msRequestAnimationFrame || function (fn) {
+	return x$4(function () {
+		fn(x$32.now());
 	}, 30);
 };
 
-var x$32 = clearTimeout;
+var x$33 = clearTimeout;
 
-x$2.cancelAnimationFrame = x$2.cancelAnimationFrame || x$2.mozCancelAnimationFrame || function (id) {
-	return x$32(id);
+x$3.cancelAnimationFrame = x$3.cancelAnimationFrame || x$3.mozCancelAnimationFrame || function (id) {
+	return x$33(id);
 };
 
-x$2.global = x$2;
+x$3.global = x$3;
 }())
