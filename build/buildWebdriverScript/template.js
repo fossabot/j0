@@ -4,7 +4,7 @@ const console = require('j1/console').create('wdio');
 
 const lengthToRemoveArrowMark = -2;
 const waitBody = 3000;
-const timeout = 10000;
+const timeout = 20000;
 const retry = 10;
 
 browser.setViewportSize({
