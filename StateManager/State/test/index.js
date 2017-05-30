@@ -70,10 +70,45 @@ describe('State', function () {
 			param1,
 			param2
 		};
-		const instantiated = state.instantiate(params);
-		assert.equal(instantiated !== state, true);
-		assert.equal(instantiated.href, state.href(params));
-		assert.deepEqual(instantiated.params, params);
+		const instance = state.instantiate(params);
+		assert.equal(instance !== state, true);
+		assert.equal(instance.href, state.href(params));
+		assert.deepEqual(instance.params, params);
+	});
+
+	it('should return the two states are same or not', function () {
+		const path = '/{param1:\\d+}';
+		const state = new State({path});
+		const param1 = `${Date.now()}`;
+		const param2 = `${param1}${param1}`;
+		const instance1 = state.instantiate({param1});
+		const instance2 = state.instantiate({param1});
+		const instance3 = state.instantiate({param1: param2});
+		assert.equal(instance1 === instance2, false);
+		assert.equal(instance1.is(instance2), true);
+		assert.equal(instance1.is(instance3), false);
+		assert.equal(instance2.is(instance1), true);
+		assert.equal(instance2.is(instance3), false);
+		assert.equal(instance3.is(instance1), false);
+		assert.equal(instance3.is(instance2), false);
+	});
+
+	it('should return a state is a descendant of another state or not', function () {
+		const path1 = '/{param1:\\d+}';
+		const path2 = '/{param1:\\d+}/{param2:\\w+}';
+		const state1 = new State({path: path1});
+		const state2 = new State({path: path2});
+		const param1 = `${Date.now()}`;
+		const param2 = `${Date.now().toString(hex)}`;
+		const instance1 = state1.instantiate({param1});
+		const instance2 = state2.instantiate({
+			param1,
+			param2
+		});
+		assert.equal(instance1.isIn(instance2), false);
+		assert.equal(instance1.isAncestorOf(instance2), true);
+		assert.equal(instance2.isIn(instance1), true);
+		assert.equal(instance2.isAncestorOf(instance1), false);
 	});
 
 });

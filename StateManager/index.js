@@ -7,7 +7,8 @@ import {
 	history,
 	JSON,
 	addEventListener,
-	isString
+	isString,
+	Boolean
 } from 'j0';
 import State from './State';
 
@@ -59,18 +60,19 @@ class StateManager extends EventEmitter {
 		return this;
 	}
 
-	get(stateInfo) {
+	get(stateInfo, noFallback) {
 		const {name, params} = stateInfo;
 		const state = this.states.get(name);
 		const instantiated = state && state.instantiate(params);
 		if (instantiated) {
 			instantiated.href = `${this.prefix}${instantiated.href}`;
 		}
-		return instantiated || this.fallback;
+		return instantiated || (!noFallback && this.fallback);
 	}
 
-	href(stateInfo) {
-		return this.get(stateInfo).href;
+	href(stateInfo, noFallback) {
+		const state = this.get(stateInfo, noFallback);
+		return state ? state.href : '';
 	}
 
 	otherwise(stateInfo) {
@@ -82,7 +84,21 @@ class StateManager extends EventEmitter {
 	}
 
 	is(stateInfo) {
-		return this.current && this.current.href === this.href(stateInfo);
+		const {current} = this;
+		const state = this.get(stateInfo, true);
+		return Boolean(current && state && current.is(state));
+	}
+
+	isIn(stateInfo) {
+		const {current} = this;
+		const state = this.get(stateInfo, true);
+		return Boolean(current && state && current.isIn(state));
+	}
+
+	isAncestorOf(stateInfo) {
+		const {current} = this;
+		const state = this.get(stateInfo, true);
+		return Boolean(current && state && current.isAncestorOf(state));
 	}
 
 	setCurrent(stateInfo, method) {

@@ -93,6 +93,18 @@ class State {
 		}
 	}
 
+	is(state) {
+		return this.href === state.href;
+	}
+
+	isIn(state) {
+		return this.href.indexOf(state.href) === 0;
+	}
+
+	isAncestorOf(state) {
+		return state.isIn(this);
+	}
+
 }
 
 export default State;
