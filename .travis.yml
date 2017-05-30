@@ -18,6 +18,7 @@ addons:
     paths:
     - ./__errorShots
     bucket: ci-results
+    s3_region: ap-northeast-1
     secret:
       secure: SYaN2TZKNSca8CTE8FlKHAmRdO7ywuXNIbkzp7H2Jv6yM1lUjEnquhVEGtqoAGcGmVkHx9c7K6SUup75wNdtuth08KgkZ46X01gGNFES+M6FVBLsSHK2WRWgguPOisIz9YxQeFeX4LIG9scdKn+koYY3sSmNxFvdt/DR76cJlSMA1QNZ1q0yYBVOgAptqkckVexv7XqIEdMCXBw91gQtcdoMKhn6HKRe1GK6XDCU9gnv9kBQu7hfvMNzjGVdQuuCNYcGcaeYoWqK7azbH+3UQ0m+ECRGOZI/HPy/RjrloDhqziB2pas117FfLyGGoubmd84O6jVmY577JJsfBZZV9TdRG/5sHnyHrEhFHnoCwIguIx6f95TSDn8/swRc1a3uVwgjavDao6nJPDP/Zs0axIBPkTcTSDGASH8wAJx27IhlAs0/3mKwWPMzaoskmDBiU44j2XxsfM7Iid0zKfCyl/Dlk8pQvXnTrFQAcnErlfxwDe9VKXOvffyuZeL0xBHsi6tn8q/0RPx9ZssmMS46eBQroWR9AsE2YBSsPNPkF2AvUXIQVEBduAS3L6aZQDLnLz9T84I279+F20vQRJt4+EdD10YbH9oGe80B7BbNi9hvGJ7x2x27GKit6R2uiddtoQ6saIhQYc/BG7p0Yl7g9xoKUnjGa6ZSxBUIXgsp2Ns=
     key:

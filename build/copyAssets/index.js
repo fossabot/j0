@@ -1,34 +1,39 @@
 const path = require('path');
-const mu = require('mu2');
-const writeFile = require('j1/writeFile');
+const chokidar = require('chokidar');
 const cp = require('j1/cp');
 const promisify = require('j1/promisify');
-const changeExt = require('j1/changeExt');
 const console = require('j1/console').create('copyAssets');
 const glob = promisify(require('glob'));
-
 const transpileJs = require('../transpileJs');
-const transpileStyl = require('../transpileStyl');
 const constants = require('../constants');
+const {
+	serverMode,
+	dest
+} = constants;
 
-async function copyAssets(dirPath, baseDir = constants.dest) {
+function copy(from, to) {
+	if (serverMode) {
+		chokidar.watch(from, {awaitWriteFinish: {stabilityThreshold: 200}})
+		.on('change', function () {
+			cp(from, to);
+		});
+	}
+	return cp(from, to);
+}
+
+async function copyAssets(dirPath, baseDir = dest) {
 	const files = await glob(path.join(dirPath, '**', '*'));
 	console.debug(dirPath);
 	return Promise.all(files.map(function (filePath) {
 		const destPath = path.join(baseDir, path.relative(dirPath, filePath));
 		if (/\.min\.\w+$/.test(filePath)) {
-			return cp(filePath, destPath);
+			return copy(filePath, destPath);
 		}
 		switch (path.extname(filePath)) {
 		case '.js':
 			return transpileJs(filePath, destPath);
-		case '.styl':
-			return transpileStyl(filePath, changeExt(destPath, '.css'));
-		case '.html':
-		case '.css':
-			return writeFile(destPath, mu.compileAndRender(filePath, constants));
 		default:
-			return cp(filePath, destPath);
+			return copy(filePath, destPath);
 		}
 	}));
 }

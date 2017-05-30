@@ -1493,9 +1493,11 @@ var J0Element = function () {
 			    _source$c = source.c,
 			    c = _source$c === undefined ? [] : _source$c,
 			    _source$e = source.e,
-			    e = _source$e === undefined ? [] : _source$e;
+			    e = _source$e === undefined ? [] : _source$e,
+			    n = source.n,
+			    o = source.o;
 
-			this[nodeKey] = wrap(x$3['createElement' + (t.indexOf(':') < 0 ? '' : 'NS')](t)).node;
+			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t)).node;
 			for (var i = 0, length = c.length; i < length; i++) {
 				var item = c[i];
 				if (item) {

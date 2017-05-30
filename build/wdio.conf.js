@@ -214,7 +214,7 @@ exports.config = {
 	//
 	// Gets executed right after terminating the webdriver session. [config, capabilities, specs]
 	afterSession: function () {
-		return server.close();
+		return server && server.close();
 	},
 	//
 	// Gets executed after all workers got shut down and the process is about to exit. It is not
