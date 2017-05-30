@@ -220,7 +220,7 @@ var StateManager = function () {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		x$1.assign(this, { prefix: '' }, config, {
+		x$1.assign(this, { prefix: '#' }, config, {
 			states: new x$2(),
 			listeners: []
 		});
@@ -244,6 +244,12 @@ var StateManager = function () {
 		value: function otherwise(name, params) {
 			this.fallback = this.href(name, params);
 			return this;
+		}
+	}, {
+		key: 'start',
+		value: function start() {
+			var hashMode = this.prefix.charAt(0) === '#';
+			console.log(hashMode);
 		}
 	}]);
 
