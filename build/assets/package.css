@@ -1,3 +1,0 @@
-.j0_version::after {
-	content: '{{packageJSON.version}}';
-}

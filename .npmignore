@@ -1,5 +1,5 @@
 build
-doc
+docs
 wdio.conf.js
 node_modules
 __errorShots

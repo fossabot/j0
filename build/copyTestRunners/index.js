@@ -7,7 +7,7 @@ const writeFile = require('j1/writeFile');
 const fileSize = require('j1/fileSize');
 const readFile = promisify(fs.readFile, fs);
 
-async function copyTestRunners() {
+async function copyTestRunner() {
 	const buffer = Buffer.concat(
 		await Promise.all(
 			[
@@ -43,8 +43,8 @@ async function copyTestRunners() {
 }
 
 if (module.parent) {
-	module.exports = copyTestRunners;
+	module.exports = copyTestRunner;
 } else {
-	copyTestRunners()
+	copyTestRunner()
 	.catch(console.onError);
 }

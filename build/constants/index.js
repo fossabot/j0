@@ -21,18 +21,6 @@ const targetDirectories = fs.readdirSync(projectRoot)
 const serverMode = process.argv.includes('--server');
 const dest = path.join(projectRoot, 'docs');
 const format = 'es';
-const message = `
-j0 is free and open source software released under MIT license.
-The project is on <a href="https://github.com/kei-ito/j0">GitHub</a>.
-If you found any problems, please report <a href="https://github.com/kei-ito/j0/issues">issues</a>.
-`.trim();
-const ga = `
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");
-ga("create", "UA-56327919-7", "auto");ga("send", "pageview");
-`.trim();
 module.exports = {
 	packageJSON,
 	projectRoot,
@@ -40,7 +28,5 @@ module.exports = {
 	targetDirectories,
 	serverMode,
 	dest,
-	format,
-	message,
-	ga
+	format
 };

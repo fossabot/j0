@@ -6,7 +6,7 @@
 [![dependencies Status](https://david-dm.org/kei-ito/j0/status.svg)](https://david-dm.org/kei-ito/j0)
 [![devDependencies Status](https://david-dm.org/kei-ito/j0/dev-status.svg)](https://david-dm.org/kei-ito/j0?type=dev)
 
-[https://kei-ito.github.io/j0/](https://kei-ito.github.io/j0/)
+Test runner: [https://kei-ito.github.io/j0/](https://kei-ito.github.io/j0/)
 
 ## Installation
 

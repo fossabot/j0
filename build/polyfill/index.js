@@ -40,7 +40,7 @@ async function createPolyfill() {
 			'polyfill-others.js'
 		]
 		.map(async (name) => {
-			const src = path.join(projectRoot, 'docs', name);
+			const src = path.join(__dirname, '..', 'assets', name);
 			const code = await transpileJs(src);
 			return minify(code);
 		})
