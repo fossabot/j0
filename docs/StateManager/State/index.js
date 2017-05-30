@@ -124,6 +124,21 @@ var State = function () {
 				return state;
 			}
 		}
+	}, {
+		key: 'is',
+		value: function is(state) {
+			return this.href === state.href;
+		}
+	}, {
+		key: 'isIn',
+		value: function isIn(state) {
+			return this.href.indexOf(state.href) === 0;
+		}
+	}, {
+		key: 'isAncestorOf',
+		value: function isAncestorOf(state) {
+			return state.isIn(this);
+		}
 	}]);
 
 	return State;
@@ -199,10 +214,45 @@ describe('State', function () {
 			param1: param1,
 			param2: param2
 		};
-		var instantiated = state.instantiate(params);
-		assert.equal(instantiated !== state, true);
-		assert.equal(instantiated.href, state.href(params));
-		assert.deepEqual(instantiated.params, params);
+		var instance = state.instantiate(params);
+		assert.equal(instance !== state, true);
+		assert.equal(instance.href, state.href(params));
+		assert.deepEqual(instance.params, params);
+	});
+
+	it('should return the two states are same or not', function () {
+		var path = '/{param1:\\d+}';
+		var state = new State({ path: path });
+		var param1 = '' + Date.now();
+		var param2 = '' + param1 + param1;
+		var instance1 = state.instantiate({ param1: param1 });
+		var instance2 = state.instantiate({ param1: param1 });
+		var instance3 = state.instantiate({ param1: param2 });
+		assert.equal(instance1 === instance2, false);
+		assert.equal(instance1.is(instance2), true);
+		assert.equal(instance1.is(instance3), false);
+		assert.equal(instance2.is(instance1), true);
+		assert.equal(instance2.is(instance3), false);
+		assert.equal(instance3.is(instance1), false);
+		assert.equal(instance3.is(instance2), false);
+	});
+
+	it('should return a state is a descendant of another state or not', function () {
+		var path1 = '/{param1:\\d+}';
+		var path2 = '/{param1:\\d+}/{param2:\\w+}';
+		var state1 = new State({ path: path1 });
+		var state2 = new State({ path: path2 });
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex);
+		var instance1 = state1.instantiate({ param1: param1 });
+		var instance2 = state2.instantiate({
+			param1: param1,
+			param2: param2
+		});
+		assert.equal(instance1.isIn(instance2), false);
+		assert.equal(instance1.isAncestorOf(instance2), true);
+		assert.equal(instance2.isIn(instance1), true);
+		assert.equal(instance2.isAncestorOf(instance1), false);
 	});
 });
 }())

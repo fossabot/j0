@@ -8,29 +8,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref40 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(duration, data) {
-		return regeneratorRuntime.wrap(function _callee9$(_context9) {
+	var _ref44 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(duration, data) {
+		return regeneratorRuntime.wrap(function _callee13$(_context13) {
 			while (1) {
-				switch (_context9.prev = _context9.next) {
+				switch (_context13.prev = _context13.next) {
 					case 0:
-						_context9.next = 2;
+						_context13.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context9.abrupt('return', data);
+						return _context13.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context9.stop();
+						return _context13.stop();
 				}
 			}
-		}, _callee9, this);
+		}, _callee13, this);
 	}));
 
 	return function wait(_x53, _x54) {
-		return _ref40.apply(this, arguments);
+		return _ref44.apply(this, arguments);
 	};
 }();
 
@@ -4644,6 +4644,21 @@ var State = function () {
 				return state;
 			}
 		}
+	}, {
+		key: 'is',
+		value: function is(state) {
+			return this.href === state.href;
+		}
+	}, {
+		key: 'isIn',
+		value: function isIn(state) {
+			return this.href.indexOf(state.href) === 0;
+		}
+	}, {
+		key: 'isAncestorOf',
+		value: function isAncestorOf(state) {
+			return state.isIn(this);
+		}
 	}]);
 
 	return State;
@@ -4719,10 +4734,45 @@ describe('State', function () {
 			param1: param1,
 			param2: param2
 		};
-		var instantiated = state.instantiate(params);
-		assert.equal(instantiated !== state, true);
-		assert.equal(instantiated.href, state.href(params));
-		assert.deepEqual(instantiated.params, params);
+		var instance = state.instantiate(params);
+		assert.equal(instance !== state, true);
+		assert.equal(instance.href, state.href(params));
+		assert.deepEqual(instance.params, params);
+	});
+
+	it('should return the two states are same or not', function () {
+		var path = '/{param1:\\d+}';
+		var state = new State({ path: path });
+		var param1 = '' + Date.now();
+		var param2 = '' + param1 + param1;
+		var instance1 = state.instantiate({ param1: param1 });
+		var instance2 = state.instantiate({ param1: param1 });
+		var instance3 = state.instantiate({ param1: param2 });
+		assert.equal(instance1 === instance2, false);
+		assert.equal(instance1.is(instance2), true);
+		assert.equal(instance1.is(instance3), false);
+		assert.equal(instance2.is(instance1), true);
+		assert.equal(instance2.is(instance3), false);
+		assert.equal(instance3.is(instance1), false);
+		assert.equal(instance3.is(instance2), false);
+	});
+
+	it('should return a state is a descendant of another state or not', function () {
+		var path1 = '/{param1:\\d+}';
+		var path2 = '/{param1:\\d+}/{param2:\\w+}';
+		var state1 = new State({ path: path1 });
+		var state2 = new State({ path: path2 });
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex$1);
+		var instance1 = state1.instantiate({ param1: param1 });
+		var instance2 = state2.instantiate({
+			param1: param1,
+			param2: param2
+		});
+		assert.equal(instance1.isIn(instance2), false);
+		assert.equal(instance1.isAncestorOf(instance2), true);
+		assert.equal(instance2.isIn(instance1), true);
+		assert.equal(instance2.isAncestorOf(instance1), false);
 	});
 });
 
@@ -4733,6 +4783,8 @@ var x$33 = location;
 var x$34 = history;
 
 var x$35 = addEventListener;
+
+var x$36 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -4818,7 +4870,7 @@ var StateManager = function (_EventEmitter) {
 		}
 	}, {
 		key: 'get',
-		value: function get(stateInfo) {
+		value: function get(stateInfo, noFallback) {
 			var name = stateInfo.name,
 			    params = stateInfo.params;
 
@@ -4827,12 +4879,13 @@ var StateManager = function (_EventEmitter) {
 			if (instantiated) {
 				instantiated.href = '' + this.prefix + instantiated.href;
 			}
-			return instantiated || this.fallback;
+			return instantiated || !noFallback && this.fallback;
 		}
 	}, {
 		key: 'href',
-		value: function href(stateInfo) {
-			return this.get(stateInfo).href;
+		value: function href(stateInfo, noFallback) {
+			var state = this.get(stateInfo, noFallback);
+			return state ? state.href : '';
 		}
 	}, {
 		key: 'otherwise',
@@ -4846,7 +4899,26 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'is',
 		value: function is(stateInfo) {
-			return this.current && this.current.href === this.href(stateInfo);
+			var current = this.current;
+
+			var state = this.get(stateInfo, true);
+			return x$36(current && state && current.is(state));
+		}
+	}, {
+		key: 'isIn',
+		value: function isIn(stateInfo) {
+			var current = this.current;
+
+			var state = this.get(stateInfo, true);
+			return x$36(current && state && current.isIn(state));
+		}
+	}, {
+		key: 'isAncestorOf',
+		value: function isAncestorOf(stateInfo) {
+			var current = this.current;
+
+			var state = this.get(stateInfo, true);
+			return x$36(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -5048,6 +5120,224 @@ describe('StateManager', function () {
 			}
 		}, _callee8, this);
 	})));
+
+	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
+		var states, name0, name1, name2;
+		return regeneratorRuntime.wrap(function _callee9$(_context9) {
+			while (1) {
+				switch (_context9.prev = _context9.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: 'stateA/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 }).start();
+						_context9.next = 7;
+						return new Promise(function (resolve) {
+							states.once('change', resolve);
+						});
+
+					case 7:
+						assert.equal(states.is({ name: name0 }), true);
+						assert.equal(states.is({ name: name1 }), false);
+
+					case 9:
+					case 'end':
+						return _context9.stop();
+				}
+			}
+		}, _callee9, this);
+	})));
+
+	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+		var states, name0, name1, name2, param1, params;
+		return regeneratorRuntime.wrap(function _callee10$(_context10) {
+			while (1) {
+				switch (_context10.prev = _context10.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: 'stateA/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 });
+						_context10.next = 7;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).start();
+						});
+
+					case 7:
+						param1 = '' + Date.now();
+						params = { param1: param1 };
+						_context10.next = 11;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).go({
+								name: name1,
+								params: params
+							});
+						});
+
+					case 11:
+						assert.equal(states.current.name, name1);
+
+					case 12:
+					case 'end':
+						return _context10.stop();
+				}
+			}
+		}, _callee10, this);
+	})));
+
+	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
+		return regeneratorRuntime.wrap(function _callee11$(_context11) {
+			while (1) {
+				switch (_context11.prev = _context11.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: '/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: '/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 });
+						_context11.next = 7;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).start();
+						});
+
+					case 7:
+						toState0 = _context11.sent;
+
+						assert.equal(toState0.name, name0);
+						param1 = '' + Date.now();
+						param2 = Date.now() + '_param2';
+						params = {
+							param1: param1,
+							param2: param2
+						};
+						_context11.next = 14;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).go({
+								name: name2,
+								params: params
+							});
+						});
+
+					case 14:
+						toState1 = _context11.sent;
+
+						assert.equal(toState1.name, name2);
+						assert.equal(states.is({
+							name: name2,
+							params: params
+						}), true);
+						assert.equal(states.isIn({
+							name: name1,
+							params: { param1: param1 }
+						}), true);
+
+					case 18:
+					case 'end':
+						return _context11.stop();
+				}
+			}
+		}, _callee11, this);
+	})));
+
+	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
+		return regeneratorRuntime.wrap(function _callee12$(_context12) {
+			while (1) {
+				switch (_context12.prev = _context12.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: '/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: '/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 });
+						_context12.next = 7;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).start();
+						});
+
+					case 7:
+						toState0 = _context12.sent;
+
+						assert.equal(toState0.name, name0);
+						param1 = '' + Date.now();
+						param2 = Date.now() + '_param2';
+						params = {
+							param1: param1,
+							param2: param2
+						};
+						_context12.next = 14;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).go({
+								name: name2,
+								params: params
+							});
+						});
+
+					case 14:
+						toState1 = _context12.sent;
+
+						assert.equal(toState1.name, name2);
+						_context12.next = 18;
+						return new Promise(function (resolve) {
+							states.once('change', resolve);
+							history.back();
+						});
+
+					case 18:
+						toState2 = _context12.sent;
+
+						assert.equal(toState2.name, name0);
+
+					case 20:
+					case 'end':
+						return _context12.stop();
+				}
+			}
+		}, _callee12, this);
+	})));
 });
 
 function test$35(generator) {
@@ -5141,10 +5431,10 @@ function test$37(repeat) {
 	});
 }
 
-var x$36 = parseInt;
+var x$37 = parseInt;
 
 function repeat(c) {
-	var count = x$36(c, 10);
+	var count = x$37(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -5379,11 +5669,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref38) {
-				var _ref39 = _slicedToArray(_ref38, 2),
-				    name = _ref39[0],
-				    _ref39$ = _ref39[1],
-				    value = _ref39$ === undefined ? '' : _ref39$;
+			return this.data.map(function (_ref42) {
+				var _ref43 = _slicedToArray(_ref42, 2),
+				    name = _ref43[0],
+				    _ref43$ = _ref43[1],
+				    value = _ref43$ === undefined ? '' : _ref43$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -5509,31 +5799,31 @@ tests$16(URLSearchParams$2, 'URLSearchParams#j0');
 tests$16(URLSearchParams);
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee10$(_context10) {
+		return regeneratorRuntime.wrap(function _callee14$(_context14) {
 			while (1) {
-				switch (_context10.prev = _context10.next) {
+				switch (_context14.prev = _context14.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context10.next = 6;
+						_context14.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context10.sent;
+						actual = _context14.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context10.stop();
+						return _context14.stop();
 				}
 			}
-		}, _callee10, this);
+		}, _callee14, this);
 	})));
 });
 }())
