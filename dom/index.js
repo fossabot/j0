@@ -32,8 +32,12 @@ class J0Element {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			const {t = 'div', a = [], c = [], e = []} = source;
-			this[nodeKey] = wrap(document[`createElement${t.indexOf(':') < 0 ? '' : 'NS'}`](t)).node;
+			const {t = 'div', a = [], c = [], e = [], n, o} = source;
+			this[nodeKey] = wrap(
+				n
+				? document.createElementNS(n, t, o)
+				: document.createElement(t)
+			).node;
 			for (let i = 0, {length} = c; i < length; i++) {
 				const item = c[i];
 				if (item) {
