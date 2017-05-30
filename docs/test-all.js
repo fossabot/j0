@@ -29,7 +29,7 @@ var wait = function () {
 		}, _callee9, this);
 	}));
 
-	return function wait(_x52, _x53) {
+	return function wait(_x53, _x54) {
 		return _ref40.apply(this, arguments);
 	};
 }();
@@ -5050,7 +5050,83 @@ describe('StateManager', function () {
 	})));
 });
 
-function test$35(repeat) {
+function test$35(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype[Symbol.iterator]';
+
+
+	describe(name, function () {
+
+		it('should return an iterator', function () {
+			var string = '' + Date.now();
+			var iterator = generator.call(string);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next18 = iterator.next(),
+				    value = _iterator$next18.value,
+				    done = _iterator$next18.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, string.split(''));
+		});
+
+		it('should return an iterator which is iterable in for-of syntax', function () {
+			var string = '' + Date.now();
+			var iterator = generator.call(string);
+			var results = [];
+			var _iteratorNormalCompletion17 = true;
+			var _didIteratorError17 = false;
+			var _iteratorError17 = undefined;
+
+			try {
+				for (var _iterator17 = iterator[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+					var value = _step17.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError17 = true;
+				_iteratorError17 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion17 && _iterator17.return) {
+						_iterator17.return();
+					}
+				} finally {
+					if (_didIteratorError17) {
+						throw _iteratorError17;
+					}
+				}
+			}
+
+			assert.deepEqual(results, string.split(''));
+		});
+	});
+}
+
+function generator$12() {
+	var _this20 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return new Iterator(function () {
+		return {
+			value: _this20[index],
+			done: length <= index++
+		};
+	});
+}
+
+test$35(generator$12, 'String.prototype[Symbol.iterator]#j0');
+
+test$35(String.prototype[Symbol.iterator]);
+
+function test$37(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
 
@@ -5076,9 +5152,9 @@ function repeat(c) {
 	return results.join('');
 }
 
-test$35(repeat, 'String.prototype.repeat#j0');
+test$37(repeat, 'String.prototype.repeat#j0');
 
-test$35(String.prototype.repeat);
+test$37(String.prototype.repeat);
 
 describe('StringList', function () {
 
@@ -5149,9 +5225,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.entries();
 		while (1) {
-			var _iterator$next18 = iterator.next(),
-			    value = _iterator$next18.value,
-			    done = _iterator$next18.done;
+			var _iterator$next19 = iterator.next(),
+			    value = _iterator$next19.value,
+			    done = _iterator$next19.done;
 
 			if (done) {
 				break;
@@ -5172,9 +5248,9 @@ describe('StringList', function () {
 		var results = [];
 		var iterator = searchParams.values();
 		while (1) {
-			var _iterator$next19 = iterator.next(),
-			    value = _iterator$next19.value,
-			    done = _iterator$next19.done;
+			var _iterator$next20 = iterator.next(),
+			    value = _iterator$next20.value,
+			    done = _iterator$next20.done;
 
 			if (done) {
 				break;
@@ -5185,7 +5261,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$37(_Symbol) {
+function test$39(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -5229,9 +5305,9 @@ function test$37(_Symbol) {
 	});
 }
 
-test$37(Symbol, 'J0Symbol');
+test$39(Symbol, 'J0Symbol');
 
-test$37(Symbol);
+test$39(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -5391,9 +5467,9 @@ function tests$16(URLSearchParams) {
 			var results = [];
 			var iterator = searchParams.entries();
 			while (1) {
-				var _iterator$next20 = iterator.next(),
-				    value = _iterator$next20.value,
-				    done = _iterator$next20.done;
+				var _iterator$next21 = iterator.next(),
+				    value = _iterator$next21.value,
+				    done = _iterator$next21.done;
 
 				if (done) {
 					break;
@@ -5414,9 +5490,9 @@ function tests$16(URLSearchParams) {
 			var results = [];
 			var iterator = searchParams.values();
 			while (1) {
-				var _iterator$next21 = iterator.next(),
-				    value = _iterator$next21.value,
-				    done = _iterator$next21.done;
+				var _iterator$next22 = iterator.next(),
+				    value = _iterator$next22.value,
+				    done = _iterator$next22.done;
 
 				if (done) {
 					break;

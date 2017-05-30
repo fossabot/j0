@@ -82,6 +82,9 @@
 		"State": {}
 	},
 	"String": {
+		"@iterator": {
+			"j0polyfill": {}
+		},
 		"repeat": {
 			"j0polyfill": {}
 		}

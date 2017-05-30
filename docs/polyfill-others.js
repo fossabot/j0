@@ -261,6 +261,26 @@ if (!x$2.of) {
 	x$2.of = arrayOf;
 }
 
+function generator$1() {
+	var _this3 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return new Iterator(function () {
+		return {
+			value: _this3[index],
+			done: length <= index++
+		};
+	});
+}
+
+var prototype$7 = String.prototype;
+
+if (!prototype$7[iteratorSymbol]) {
+	prototype$7[iteratorSymbol] = generator$1;
+}
+
 var x$3 = parseInt;
 
 function repeat(c) {
@@ -272,12 +292,12 @@ function repeat(c) {
 	return results.join('');
 }
 
-var prototype$7 = String.prototype;
+var prototype$8 = String.prototype;
 
 try {
 	'0'.repeat(1);
 } catch (error) {
-	prototype$7.repeat = repeat;
+	prototype$8.repeat = repeat;
 }
 
 var x$4 = window;
@@ -400,7 +420,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this3 = this;
+			var _this4 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -408,14 +428,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this3.resolve(value);
+				_this4.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this3.reject(error);
+				_this4.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -454,10 +474,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this4.handle(deferred);
+				_this5.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -729,14 +749,14 @@ x$4.Map = MAP;
 
 var x$7 = Map;
 
-function generator$1() {
+function generator$2() {
 	return this.entries();
 }
 
-var prototype$8 = x$7.prototype;
+var prototype$9 = x$7.prototype;
 
-if (!prototype$8[iteratorSymbol]) {
-	prototype$8[iteratorSymbol] = generator$1;
+if (!prototype$9[iteratorSymbol]) {
+	prototype$9[iteratorSymbol] = generator$2;
 }
 
 var Set$1 = function () {
@@ -807,10 +827,10 @@ var Set$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this5 = this;
+			var _this6 = this;
 
 			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this5);
+				fn.call(thisArg, value, value, _this6);
 			});
 		}
 	}, {
@@ -860,42 +880,42 @@ x$4.Set = SET;
 
 var x$8 = Set;
 
-function generator$3() {
+function generator$4() {
 	return this.values();
 }
 
-var prototype$9 = x$8.prototype;
+var prototype$10 = x$8.prototype;
 
-if (!prototype$9[iteratorSymbol]) {
-	prototype$9[iteratorSymbol] = generator$3;
+if (!prototype$10[iteratorSymbol]) {
+	prototype$10[iteratorSymbol] = generator$4;
 }
 
 var x$9 = NodeList;
 
-function generator$5() {
-	var _this6 = this;
+function generator$6() {
+	var _this7 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this6[index],
+			value: _this7[index],
 			done: length <= index++
 		};
 	});
 }
 
-var prototype$10 = x$9.prototype;
+var prototype$11 = x$9.prototype;
 
-if (!prototype$10[iteratorSymbol]) {
-	prototype$10[iteratorSymbol] = generator$5;
+if (!prototype$11[iteratorSymbol]) {
+	prototype$11[iteratorSymbol] = generator$6;
 }
 
 var x$10 = HTMLCollection;
 
-function generator$7() {
-	var _this7 = this;
+function generator$8() {
+	var _this8 = this;
 
 	var length = this.length;
 
@@ -903,39 +923,39 @@ function generator$7() {
 	return {
 		next: function next() {
 			return {
-				value: _this7[index],
+				value: _this8[index],
 				done: length <= index++
 			};
 		}
 	};
 }
 
-var prototype$11 = x$10.prototype;
+var prototype$12 = x$10.prototype;
 
-if (!prototype$11[iteratorSymbol]) {
-	prototype$11[iteratorSymbol] = generator$7;
+if (!prototype$12[iteratorSymbol]) {
+	prototype$12[iteratorSymbol] = generator$8;
 }
 
 var x$11 = NamedNodeMap;
 
-function generator$9() {
-	var _this8 = this;
+function generator$10() {
+	var _this9 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this8[index],
+			value: _this9[index],
 			done: length <= index++
 		};
 	});
 }
 
-var prototype$12 = x$11.prototype;
+var prototype$13 = x$11.prototype;
 
-if (!prototype$12[iteratorSymbol]) {
-	prototype$12[iteratorSymbol] = generator$9;
+if (!prototype$13[iteratorSymbol]) {
+	prototype$13[iteratorSymbol] = generator$10;
 }
 
 var StringList = function () {
@@ -1193,7 +1213,7 @@ var Headers$1 = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this11 = this;
+			var _this12 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -1207,7 +1227,7 @@ var Headers$1 = function (_StringList2) {
 					if (done || history.indexOf(key) < 0) {
 						history.push(key);
 						return {
-							value: [key, _this11.get(key)],
+							value: [key, _this12.get(key)],
 							done: done
 						};
 					}
@@ -1493,25 +1513,25 @@ var Request = function (_Body) {
 
 		var body = init.body;
 
-		var _this12 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+		var _this13 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 		if (input instanceof Request) {
-			body = _this12.inheritFrom(input, body, init);
+			body = _this13.inheritFrom(input, body, init);
 		} else {
-			_this12.url = '' + input;
+			_this13.url = '' + input;
 		}
-		_this12.credentials = init.credentials || _this12.credentials || 'omit';
-		if (init.headers || !_this12.headers) {
-			_this12.headers = new Headers$1(init.headers);
+		_this13.credentials = init.credentials || _this13.credentials || 'omit';
+		if (init.headers || !_this13.headers) {
+			_this13.headers = new Headers$1(init.headers);
 		}
-		_this12.method = (init.method || _this12.method || 'GET').toUpperCase();
-		_this12.mode = init.mode || _this12.mode || null;
-		_this12.referrer = null;
-		if ((_this12.method === 'GET' || _this12.method === 'HEAD') && body) {
+		_this13.method = (init.method || _this13.method || 'GET').toUpperCase();
+		_this13.mode = init.mode || _this13.mode || null;
+		_this13.referrer = null;
+		if ((_this13.method === 'GET' || _this13.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this12.initBody(body);
-		return _this12;
+		_this13.initBody(body);
+		return _this13;
 	}
 
 	_createClass(Request, [{
@@ -1557,16 +1577,16 @@ var Response = function (_Body2) {
 
 		_classCallCheck(this, Response);
 
-		var _this13 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+		var _this14 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-		_this13.type = 'default';
-		_this13.status = 'status' in init ? init.status : minOkStatus;
-		_this13.ok = _this13.status >= minOkStatus && _this13.status < maxOkStatus;
-		_this13.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this13.headers = new Headers$1(init.headers);
-		_this13.url = init.url || '';
-		_this13.initBody(body);
-		return _this13;
+		_this14.type = 'default';
+		_this14.status = 'status' in init ? init.status : minOkStatus;
+		_this14.ok = _this14.status >= minOkStatus && _this14.status < maxOkStatus;
+		_this14.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this14.headers = new Headers$1(init.headers);
+		_this14.url = init.url || '';
+		_this14.initBody(body);
+		return _this14;
 	}
 
 	_createClass(Response, [{
