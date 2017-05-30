@@ -8,29 +8,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref35 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(duration, data) {
-		return regeneratorRuntime.wrap(function _callee8$(_context8) {
+	var _ref40 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(duration, data) {
+		return regeneratorRuntime.wrap(function _callee9$(_context9) {
 			while (1) {
-				switch (_context8.prev = _context8.next) {
+				switch (_context9.prev = _context9.next) {
 					case 0:
-						_context8.next = 2;
+						_context9.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context8.abrupt('return', data);
+						return _context9.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context8.stop();
+						return _context9.stop();
 				}
 			}
-		}, _callee8, this);
+		}, _callee9, this);
 	}));
 
-	return function wait(_x49, _x50) {
-		return _ref35.apply(this, arguments);
+	return function wait(_x52, _x53) {
+		return _ref40.apply(this, arguments);
 	};
 }();
 
@@ -1051,12 +1051,12 @@ function parse(body) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
-			    name = _data$split2[0],
+			    _name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = x$11(name.replace(/\+/g, ' '));
+			_name = x$11(_name.replace(/\+/g, ' '));
 			parts = x$11(parts.join('=').replace(/\+/g, ' '));
-			form.append(name, parts);
+			form.append(_name, parts);
 		}
 	});
 	return form;
@@ -1770,12 +1770,16 @@ var EventEmitter = function () {
 
 	_createClass(EventEmitter, [{
 		key: 'emit',
-		value: function emit(type, data) {
+		value: function emit(type) {
 			var _this5 = this;
+
+			for (var _len4 = arguments.length, data = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+				data[_key4 - 1] = arguments[_key4];
+			}
 
 			this[listenersKey].slice().forEach(function (fn) {
 				if (fn[listenerTypeKey] === type) {
-					fn.call(_this5, data);
+					fn.apply(_this5, data);
 					if (fn[onceKey]) {
 						_this5.off(type, fn);
 					}
@@ -1823,16 +1827,32 @@ describe('EventEmitter', function () {
 		var value2 = Date.now() + '-4';
 		var value3 = Date.now() + '-5';
 		var results = [];
-		emitter.on(name1, function (data) {
+		emitter.on(name1, function () {
+			for (var _len5 = arguments.length, data = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+				data[_key5] = arguments[_key5];
+			}
+
 			results.push([data, '1']);
-		}).on(name1, function (data) {
+		}).on(name1, function () {
+			for (var _len6 = arguments.length, data = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+				data[_key6] = arguments[_key6];
+			}
+
 			results.push([data, '2']);
-		}).on(name2, function (data) {
+		}).on(name2, function () {
+			for (var _len7 = arguments.length, data = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+				data[_key7] = arguments[_key7];
+			}
+
 			results.push([data, '3']);
-		}).on(name2, function (data) {
+		}).on(name2, function () {
+			for (var _len8 = arguments.length, data = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+				data[_key8] = arguments[_key8];
+			}
+
 			results.push([data, '4']);
-		}).emit(name1, value1).emit(name1, value2).emit(name2, value3);
-		assert.deepEqual(results, [[value1, '1'], [value1, '2'], [value2, '1'], [value2, '2'], [value3, '3'], [value3, '4']]);
+		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value2, value3], '1'], [[value2, value3], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
 	});
 
 	it('should call listeners once', function () {
@@ -1843,16 +1863,32 @@ describe('EventEmitter', function () {
 		var value2 = Date.now() + '-4';
 		var value3 = Date.now() + '-5';
 		var results = [];
-		emitter.once(name1, function (data) {
+		emitter.once(name1, function () {
+			for (var _len9 = arguments.length, data = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+				data[_key9] = arguments[_key9];
+			}
+
 			results.push([data, '1']);
-		}).once(name1, function (data) {
+		}).once(name1, function () {
+			for (var _len10 = arguments.length, data = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+				data[_key10] = arguments[_key10];
+			}
+
 			results.push([data, '2']);
-		}).once(name2, function (data) {
+		}).once(name2, function () {
+			for (var _len11 = arguments.length, data = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+				data[_key11] = arguments[_key11];
+			}
+
 			results.push([data, '3']);
-		}).once(name2, function (data) {
+		}).once(name2, function () {
+			for (var _len12 = arguments.length, data = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+				data[_key12] = arguments[_key12];
+			}
+
 			results.push([data, '4']);
-		}).emit(name1, value1).emit(name1, value2).emit(name2, value3);
-		assert.deepEqual(results, [[value1, '1'], [value1, '2'], [value3, '3'], [value3, '4']]);
+		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
 	});
 
 	it('should remove listeners', function () {
@@ -1863,16 +1899,32 @@ describe('EventEmitter', function () {
 		var value2 = Date.now() + '-4';
 		var value3 = Date.now() + '-5';
 		var results = [];
-		emitter.once(name1, function (data) {
+		emitter.once(name1, function () {
+			for (var _len13 = arguments.length, data = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+				data[_key13] = arguments[_key13];
+			}
+
 			results.push([data, '1']);
-		}).once(name1, function (data) {
+		}).once(name1, function () {
+			for (var _len14 = arguments.length, data = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+				data[_key14] = arguments[_key14];
+			}
+
 			results.push([data, '2']);
-		}).once(name2, function (data) {
+		}).once(name2, function () {
+			for (var _len15 = arguments.length, data = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+				data[_key15] = arguments[_key15];
+			}
+
 			results.push([data, '3']);
-		}).once(name2, function (data) {
+		}).once(name2, function () {
+			for (var _len16 = arguments.length, data = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+				data[_key16] = arguments[_key16];
+			}
+
 			results.push([data, '4']);
-		}).off(name2).emit(name1, value1).emit(name1, value2).emit(name2, value3);
-		assert.deepEqual(results, [[value1, '1'], [value1, '2']]);
+		}).off(name2).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2']]);
 	});
 });
 
@@ -2301,10 +2353,10 @@ function fetch$1(input, init) {
 
 				var _ref22 = _slicedToArray(_ref21, 2);
 
-				var name = _ref22[0];
+				var _name2 = _ref22[0];
 				var value = _ref22[1];
 
-				xhr.setRequestHeader(name, value);
+				xhr.setRequestHeader(_name2, value);
 			}
 		} catch (err) {
 			_didIteratorError4 = true;
@@ -3596,8 +3648,8 @@ describe('noop', function () {
 });
 
 function assign(target) {
-	for (var _len4 = arguments.length, objects = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-		objects[_key4 - 1] = arguments[_key4];
+	for (var _len17 = arguments.length, objects = Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
+		objects[_key17 - 1] = arguments[_key17];
 	}
 
 	objects.forEach(function (obj) {
@@ -4402,8 +4454,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-					args[_key5] = arguments[_key5];
+				for (var _len18 = arguments.length, args = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+					args[_key18] = arguments[_key18];
 				}
 
 				args[3] = this;
@@ -4488,15 +4540,15 @@ describe('setImmediate', function () {
 var x$31 = encodeURIComponent;
 
 var State = function () {
-	function State(stateName, definition, onEnter) {
+	function State(stateInfo) {
 		_classCallCheck(this, State);
 
-		if (isInstanceOf(stateName, State)) {
-			x$24.assign(this, stateName);
-		} else {
+		if (!isInstanceOf(stateInfo, State)) {
+			var path = stateInfo.path;
+
 			var parts = [];
 			var pos = 0;
-			definition.replace(/\{(\w+):(.*?)\}/g, function (_ref30, name, expression, offset, source) {
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref30, name, expression, offset, source) {
 				var length = _ref30.length;
 
 				if (pos < offset) {
@@ -4505,20 +4557,21 @@ var State = function () {
 				parts.push([name, new RegExp('^' + expression + '$'), expression]);
 				pos = offset + length;
 			});
-			parts.push(definition.slice(pos));
+			if (pos < path.length) {
+				parts.push(path.slice(pos));
+			}
 			var matcher = new RegExp(parts.map(function (part) {
 				if (isString(part)) {
 					return part;
 				}
 				return '(' + part[2] + ')';
 			}).join(''));
-			x$24.assign(this, {
-				name: stateName,
+			x$24.assign(stateInfo, {
 				parts: parts,
-				matcher: matcher,
-				onEnter: onEnter
+				matcher: matcher
 			});
 		}
+		x$24.assign(this, stateInfo);
 	}
 
 	_createClass(State, [{
@@ -4556,13 +4609,15 @@ var State = function () {
 		}
 	}, {
 		key: 'parse',
-		value: function parse(href) {
+		value: function parse() {
 			var _this17 = this;
+
+			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
 			var params = void 0;
 			href.replace(this.matcher, function (match) {
-				for (var _len6 = arguments.length, args = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-					args[_key6 - 1] = arguments[_key6];
+				for (var _len19 = arguments.length, args = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
+					args[_key19 - 1] = arguments[_key19];
 				}
 
 				var index = 0;
@@ -4575,6 +4630,20 @@ var State = function () {
 			});
 			return params;
 		}
+	}, {
+		key: 'instantiate',
+		value: function instantiate() {
+			var src = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			var params = isString(src) ? this.parse(src) : src;
+			var href = this.href(params);
+			if (href) {
+				var state = new State(this);
+				state.params = params;
+				state.href = href;
+				return state;
+			}
+		}
 	}]);
 
 	return State;
@@ -4584,33 +4653,12 @@ var hex$1 = 16;
 
 describe('State', function () {
 
-	it('should have a name', function () {
-		var name = '' + Date.now();
-		var definition = name;
-		var state = new State(name, definition);
-		assert.equal(state.name, name);
-	});
-
-	it('should have onEnter', function () {
-		var name = '' + Date.now();
-		var definition = name;
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
-		assert.equal(state.onEnter, onEnter);
-	});
-
 	it('should return href', function () {
-		var name = '' + Date.now();
-		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
 		var param1 = '' + Date.now();
 		var param2 = '' + Date.now().toString(hex$1);
-		var expected = name + '/' + param1 + '/' + param2;
+		var expected = '/' + param1 + '/' + param2;
 		assert.equal(state.href({
 			param1: param1,
 			param2: param2
@@ -4618,12 +4666,8 @@ describe('State', function () {
 	});
 
 	it('should return an empty string when href() receives invalid parameters', function () {
-		var name = '' + Date.now();
-		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
 		var param1 = Date.now() + 'a';
 		var param2 = '' + Date.now().toString(hex$1);
 		var expected = '';
@@ -4634,29 +4678,20 @@ describe('State', function () {
 	});
 
 	it('should return an empty string when href() doesn\'t receive parameters', function () {
-		var name = '' + Date.now();
-		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
 		var expected = '';
 		assert.equal(state.href(), expected);
 	});
 
 	it('should clone a state', function () {
-		var name = '' + Date.now();
-		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
 		var state2 = new State(state);
 		var param1 = '' + Date.now();
 		var param2 = '' + Date.now().toString(hex$1);
 		var expected = name + '/' + param1 + '/' + param2;
-		assert.equal(state2.name, name);
-		assert.equal(state2.onEnter, onEnter);
+		assert.equal(state !== state2, true);
 		assert.equal(state2.href({
 			param1: param1,
 			param2: param2
@@ -4664,12 +4699,8 @@ describe('State', function () {
 	});
 
 	it('should parse href patterns', function () {
-		var name = '' + Date.now();
-		var definition = name + '/{param1:\\d+}/{param2:\\w+}';
-		function onEnter(params) {
-			return params;
-		}
-		var state = new State(name, definition, onEnter);
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
 		var param1 = '' + Date.now();
 		var param2 = '' + Date.now().toString(hex$1);
 		var params = {
@@ -4678,85 +4709,237 @@ describe('State', function () {
 		};
 		assert.deepEqual(state.parse(state.href(params)), params);
 	});
+
+	it('should instantiate a state', function () {
+		var path = '/{param1:\\d+}/{param2:\\w+}';
+		var state = new State({ path: path });
+		var param1 = '' + Date.now();
+		var param2 = '' + Date.now().toString(hex$1);
+		var params = {
+			param1: param1,
+			param2: param2
+		};
+		var instantiated = state.instantiate(params);
+		assert.equal(instantiated !== state, true);
+		assert.equal(instantiated.href, state.href(params));
+		assert.deepEqual(instantiated.params, params);
+	});
 });
 
 var x$32 = Map;
 
-var StateManager = function () {
+var x$33 = location;
+
+var x$34 = history;
+
+var x$35 = addEventListener;
+
+var StateManager = function (_EventEmitter) {
+	_inherits(StateManager, _EventEmitter);
+
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		x$24.assign(this, { prefix: '#' }, config, {
+		var _this18 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+
+		x$24.assign(_this18, { prefix: '#' }, config, {
 			states: new x$32(),
 			listeners: []
 		});
+		if (!_this18.parser) {
+			if (_this18.prefix.charAt(0) === '#') {
+				_this18.parser = function (url) {
+					return url.hash.slice(this.prefix.length);
+				};
+			} else {
+				_this18.parser = function (url) {
+					var pathname = url.pathname,
+					    search = url.search,
+					    hash = url.hash;
+
+					return ('' + pathname + search + hash).slice(this.prefix.length);
+				};
+			}
+		}
+		return _this18;
 	}
 
 	_createClass(StateManager, [{
+		key: 'parseURL',
+		value: function parseURL() {
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$33;
+
+			var stateString = this.parser(url);
+			var _iteratorNormalCompletion15 = true;
+			var _didIteratorError15 = false;
+			var _iteratorError15 = undefined;
+
+			try {
+				for (var _iterator15 = this.states[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+					var _ref31 = _step15.value;
+
+					var _ref32 = _slicedToArray(_ref31, 2);
+
+					var state = _ref32[1];
+
+					var params = state.parse(stateString);
+					if (params) {
+						return state.instantiate(params);
+					}
+				}
+			} catch (err) {
+				_didIteratorError15 = true;
+				_iteratorError15 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion15 && _iterator15.return) {
+						_iterator15.return();
+					}
+				} finally {
+					if (_didIteratorError15) {
+						throw _iteratorError15;
+					}
+				}
+			}
+
+			return this.fallback;
+		}
+	}, {
 		key: 'define',
-		value: function define(name, definition, onEnter) {
-			this.states.set(name, new State(name, definition, onEnter));
+		value: function define(stateInfo) {
+			var name = stateInfo.name;
+
+			if (isString(name) && name) {
+				this.states.set(name, new State(stateInfo));
+			} else {
+				throw new Error('Invalid name');
+			}
 			return this;
+		}
+	}, {
+		key: 'get',
+		value: function get(stateInfo) {
+			var name = stateInfo.name,
+			    params = stateInfo.params;
+
+			var state = this.states.get(name);
+			var instantiated = state && state.instantiate(params);
+			if (instantiated) {
+				instantiated.href = '' + this.prefix + instantiated.href;
+			}
+			return instantiated || this.fallback;
 		}
 	}, {
 		key: 'href',
-		value: function href(name, params) {
-			var state = this.states.get(name);
-			var href = state && state.href(params) || this.fallback;
-			return '' + this.prefix + href;
+		value: function href(stateInfo) {
+			return this.get(stateInfo).href;
 		}
 	}, {
 		key: 'otherwise',
-		value: function otherwise(name, params) {
-			this.fallback = this.href(name, params);
+		value: function otherwise(stateInfo) {
+			this.fallback = this.get(stateInfo);
+			if (!this.fallback) {
+				throw new Error('Failed to set fallback: ' + x$4.stringify(stateInfo) + ' is not exist.');
+			}
 			return this;
+		}
+	}, {
+		key: 'is',
+		value: function is(stateInfo) {
+			return this.current && this.current.href === this.href(stateInfo);
+		}
+	}, {
+		key: 'setCurrent',
+		value: function setCurrent(stateInfo, method) {
+			var newState = this.get(stateInfo);
+			if (this.is(newState)) {
+				return;
+			}
+			this.emit('change', newState, this.current);
+			this.current = newState;
+			x$34[method](newState.name, newState.params, newState.href);
+		}
+	}, {
+		key: 'go',
+		value: function go(stateInfo) {
+			this.setCurrent(stateInfo, 'pushState');
+		}
+	}, {
+		key: 'replace',
+		value: function replace(stateInfo) {
+			this.setCurrent(stateInfo, 'replaceState');
 		}
 	}, {
 		key: 'start',
 		value: function start() {
-			var hashMode = this.prefix.charAt(0) === '#';
-			console.log(hashMode);
+			var _this19 = this;
+
+			var debounceDuration = 30;
+			var onStateChange = debounce(function () {
+				_this19.replace(_this19.parseURL());
+			}, debounceDuration);
+			x$35('hashchange', onStateChange);
+			x$35('pushstate', onStateChange);
+			x$35('popstate', onStateChange);
+			onStateChange();
 		}
 	}]);
 
 	return StateManager;
-}();
+}(EventEmitter);
 
 var hex = 16;
+var initialState = location.pathname;
+
+function resetState() {
+	history.replaceState(null, {}, initialState);
+}
 
 describe('StateManager', function () {
 
+	before(resetState);
+	after(resetState);
+	beforeEach(resetState);
+	afterEach(resetState);
+
 	it('should define a state', function () {
-		var states = new StateManager();
+		var prefix = 'prefix' + Date.now() + '/';
+		var states = new StateManager({ prefix: prefix });
 		var name1 = Date.now() + '-1';
 		var name2 = Date.now() + '-2';
-		states.define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}');
+		states.define({
+			name: name1,
+			path: 'stateA/{param1:\\d+}'
+		}).define({
+			name: name2,
+			path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+		});
 		var results = [];
-		var _iteratorNormalCompletion15 = true;
-		var _didIteratorError15 = false;
-		var _iteratorError15 = undefined;
+		var _iteratorNormalCompletion16 = true;
+		var _didIteratorError16 = false;
+		var _iteratorError16 = undefined;
 
 		try {
-			for (var _iterator15 = states.states[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
-				var _ref31 = _step15.value;
+			for (var _iterator16 = states.states[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+				var _ref33 = _step16.value;
 
-				var _ref32 = _slicedToArray(_ref31, 2);
+				var _ref34 = _slicedToArray(_ref33, 2);
 
-				var state = _ref32[1];
+				var state = _ref34[1];
 
 				results.push(state);
 			}
 		} catch (err) {
-			_didIteratorError15 = true;
-			_iteratorError15 = err;
+			_didIteratorError16 = true;
+			_iteratorError16 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion15 && _iterator15.return) {
-					_iterator15.return();
+				if (!_iteratorNormalCompletion16 && _iterator16.return) {
+					_iterator16.return();
 				}
 			} finally {
-				if (_didIteratorError15) {
-					throw _iteratorError15;
+				if (_didIteratorError16) {
+					throw _iteratorError16;
 				}
 			}
 		}
@@ -4769,29 +4952,102 @@ describe('StateManager', function () {
 	});
 
 	it('should get a href', function () {
-		var states = new StateManager();
+		var prefix = 'prefix' + Date.now() + '/';
+		var states = new StateManager({ prefix: prefix });
 		var name1 = Date.now() + '-1';
 		var name2 = Date.now() + '-2';
-		states.define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}');
+		states.define({
+			name: name1,
+			path: 'stateA/{param1:\\d+}'
+		}).define({
+			name: name2,
+			path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+		});
 		var param1 = '' + Date.now();
 		var param2 = Date.now().toString(hex);
-		var expected = 'stateB/' + param1 + '/' + param2;
-		assert.equal(states.href(name2, {
-			param1: param1,
-			param2: param2
+		var expected = prefix + 'stateB/' + param1 + '/' + param2;
+		assert.equal(states.href({
+			name: name2,
+			params: {
+				param1: param1,
+				param2: param2
+			}
 		}), expected);
 	});
 
 	it('should define fallback and return it when href() receives invalid parameters', function () {
-		var states = new StateManager();
-		var name0 = Date.now() + '-0';
+		var prefix = 'prefix' + Date.now() + '/';
+		var states = new StateManager({ prefix: prefix });
+		var name0 = Date.now() + '-defaultState';
 		var name1 = Date.now() + '-1';
 		var name2 = Date.now() + '-2';
-		states.define(name0, name0).define(name1, 'stateA/{param1:\\d+}').define(name2, 'stateB/{param1:\\d+}/{param2:\\w+}').otherwise(name0);
+		states.define({
+			name: name0,
+			path: name0
+		}).define({
+			name: name1,
+			path: 'stateA/{param1:\\d+}'
+		}).define({
+			name: name2,
+			path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+		}).otherwise({ name: name0 });
 		var param1 = '' + Date.now();
-		assert.equal(states.href(name2, { param1: param1 }), name0);
-		assert.equal(states.href(name2), name0);
+		assert.equal(states.href({
+			name: name2,
+			params: { param1: param1 }
+		}), '' + prefix + name0);
+		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
+
+	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
+		var states, name0, name1, name2, _ref36, _ref37, toState, fromState;
+
+		return regeneratorRuntime.wrap(function _callee8$(_context8) {
+			while (1) {
+				switch (_context8.prev = _context8.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: 'stateA/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 });
+						_context8.next = 7;
+						return new Promise(function (resolve) {
+							states.on('change', function () {
+								for (var _len20 = arguments.length, data = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+									data[_key20] = arguments[_key20];
+								}
+
+								resolve(data);
+							}).start();
+						});
+
+					case 7:
+						_ref36 = _context8.sent;
+						_ref37 = _slicedToArray(_ref36, 2);
+						toState = _ref37[0];
+						fromState = _ref37[1];
+
+						assert.deepEqual(toState, states.fallback);
+						assert.equal(!fromState, true);
+
+					case 13:
+					case 'end':
+						return _context8.stop();
+				}
+			}
+		}, _callee8, this);
+	})));
 });
 
 function test$35(repeat) {
@@ -4809,10 +5065,10 @@ function test$35(repeat) {
 	});
 }
 
-var x$33 = parseInt;
+var x$36 = parseInt;
 
 function repeat(c) {
-	var count = x$33(c, 10);
+	var count = x$36(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -4987,8 +5243,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-			args[_key7] = arguments[_key7];
+		for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+			args[_key21] = arguments[_key21];
 		}
 
 		lastArgs = args;
@@ -5047,11 +5303,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref33) {
-				var _ref34 = _slicedToArray(_ref33, 2),
-				    name = _ref34[0],
-				    _ref34$ = _ref34[1],
-				    value = _ref34$ === undefined ? '' : _ref34$;
+			return this.data.map(function (_ref38) {
+				var _ref39 = _slicedToArray(_ref38, 2),
+				    name = _ref39[0],
+				    _ref39$ = _ref39[1],
+				    value = _ref39$ === undefined ? '' : _ref39$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -5177,31 +5433,31 @@ tests$16(URLSearchParams$2, 'URLSearchParams#j0');
 tests$16(URLSearchParams);
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee9$(_context9) {
+		return regeneratorRuntime.wrap(function _callee10$(_context10) {
 			while (1) {
-				switch (_context9.prev = _context9.next) {
+				switch (_context10.prev = _context10.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context9.next = 6;
+						_context10.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context9.sent;
+						actual = _context10.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context9.stop();
+						return _context10.stop();
 				}
 			}
-		}, _callee9, this);
+		}, _callee10, this);
 	})));
 });
 }())
