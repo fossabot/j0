@@ -100,9 +100,31 @@ var J0Element = function () {
 	/* eslint-enable max-statements */
 
 	_createClass(J0Element, [{
+		key: 'prepend',
+		value: function prepend() {
+			var _this = this;
+
+			for (var _len = arguments.length, elements = Array(_len), _key = 0; _key < _len; _key++) {
+				elements[_key] = arguments[_key];
+			}
+
+			elements.forEach(function (element) {
+				_this.insertBefore(element, _this.firstChild);
+			});
+			return this;
+		}
+	}, {
 		key: 'append',
-		value: function append(element) {
-			this.node.appendChild(wrap(element).node);
+		value: function append() {
+			var _this2 = this;
+
+			for (var _len2 = arguments.length, elements = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				elements[_key2] = arguments[_key2];
+			}
+
+			elements.forEach(function (element) {
+				_this2.node.appendChild(wrap(element).node);
+			});
 			return this;
 		}
 	}, {
@@ -143,8 +165,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len = arguments.length, value = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-				value[_key - 1] = arguments[_key];
+			for (var _len3 = arguments.length, value = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+				value[_key3 - 1] = arguments[_key3];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -158,10 +180,10 @@ var J0Element = function () {
 	}, {
 		key: 'on',
 		value: function on(eventName, fn) {
-			var _this = this;
+			var _this3 = this;
 
 			var wrapped = function wrapped(event) {
-				fn.call(_this, event);
+				fn.call(_this3, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
 			this.events.push([eventName, fn, wrapped]);
@@ -252,6 +274,16 @@ var J0Element = function () {
 		key: 'attributes',
 		get: function get() {
 			return this.node.attributes;
+		}
+	}, {
+		key: 'firstChild',
+		get: function get() {
+			return wrap(this.node.firstChild);
+		}
+	}, {
+		key: 'lastChild',
+		get: function get() {
+			return wrap(this.node.lastChild);
 		}
 	}]);
 

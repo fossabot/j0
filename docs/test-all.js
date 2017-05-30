@@ -1522,9 +1522,31 @@ var J0Element = function () {
 	/* eslint-enable max-statements */
 
 	_createClass(J0Element, [{
+		key: 'prepend',
+		value: function prepend() {
+			var _this4 = this;
+
+			for (var _len3 = arguments.length, elements = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				elements[_key3] = arguments[_key3];
+			}
+
+			elements.forEach(function (element) {
+				_this4.insertBefore(element, _this4.firstChild);
+			});
+			return this;
+		}
+	}, {
 		key: 'append',
-		value: function append(element) {
-			this.node.appendChild(wrap(element).node);
+		value: function append() {
+			var _this5 = this;
+
+			for (var _len4 = arguments.length, elements = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+				elements[_key4] = arguments[_key4];
+			}
+
+			elements.forEach(function (element) {
+				_this5.node.appendChild(wrap(element).node);
+			});
 			return this;
 		}
 	}, {
@@ -1565,8 +1587,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len3 = arguments.length, value = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-				value[_key3 - 1] = arguments[_key3];
+			for (var _len5 = arguments.length, value = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+				value[_key5 - 1] = arguments[_key5];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -1580,10 +1602,10 @@ var J0Element = function () {
 	}, {
 		key: 'on',
 		value: function on(eventName, fn) {
-			var _this4 = this;
+			var _this6 = this;
 
 			var wrapped = function wrapped(event) {
-				fn.call(_this4, event);
+				fn.call(_this6, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
 			this.events.push([eventName, fn, wrapped]);
@@ -1674,6 +1696,16 @@ var J0Element = function () {
 		key: 'attributes',
 		get: function get() {
 			return this.node.attributes;
+		}
+	}, {
+		key: 'firstChild',
+		get: function get() {
+			return wrap(this.node.firstChild);
+		}
+	}, {
+		key: 'lastChild',
+		get: function get() {
+			return wrap(this.node.lastChild);
 		}
 	}]);
 
@@ -1773,17 +1805,17 @@ var EventEmitter = function () {
 	_createClass(EventEmitter, [{
 		key: 'emit',
 		value: function emit(type) {
-			var _this5 = this;
+			var _this7 = this;
 
-			for (var _len4 = arguments.length, data = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-				data[_key4 - 1] = arguments[_key4];
+			for (var _len6 = arguments.length, data = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+				data[_key6 - 1] = arguments[_key6];
 			}
 
 			this[listenersKey].slice().forEach(function (fn) {
 				if (fn[listenerTypeKey] === type) {
-					fn.apply(_this5, data);
+					fn.apply(_this7, data);
 					if (fn[onceKey]) {
-						_this5.off(type, fn);
+						_this7.off(type, fn);
 					}
 				}
 			});
@@ -1830,26 +1862,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.on(name1, function () {
-			for (var _len5 = arguments.length, data = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-				data[_key5] = arguments[_key5];
-			}
-
-			results.push([data, '1']);
-		}).on(name1, function () {
-			for (var _len6 = arguments.length, data = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-				data[_key6] = arguments[_key6];
-			}
-
-			results.push([data, '2']);
-		}).on(name2, function () {
 			for (var _len7 = arguments.length, data = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
 				data[_key7] = arguments[_key7];
 			}
 
-			results.push([data, '3']);
-		}).on(name2, function () {
+			results.push([data, '1']);
+		}).on(name1, function () {
 			for (var _len8 = arguments.length, data = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
 				data[_key8] = arguments[_key8];
+			}
+
+			results.push([data, '2']);
+		}).on(name2, function () {
+			for (var _len9 = arguments.length, data = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+				data[_key9] = arguments[_key9];
+			}
+
+			results.push([data, '3']);
+		}).on(name2, function () {
+			for (var _len10 = arguments.length, data = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+				data[_key10] = arguments[_key10];
 			}
 
 			results.push([data, '4']);
@@ -1866,26 +1898,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len9 = arguments.length, data = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-				data[_key9] = arguments[_key9];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
-			for (var _len10 = arguments.length, data = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-				data[_key10] = arguments[_key10];
-			}
-
-			results.push([data, '2']);
-		}).once(name2, function () {
 			for (var _len11 = arguments.length, data = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
 				data[_key11] = arguments[_key11];
 			}
 
-			results.push([data, '3']);
-		}).once(name2, function () {
+			results.push([data, '1']);
+		}).once(name1, function () {
 			for (var _len12 = arguments.length, data = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
 				data[_key12] = arguments[_key12];
+			}
+
+			results.push([data, '2']);
+		}).once(name2, function () {
+			for (var _len13 = arguments.length, data = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+				data[_key13] = arguments[_key13];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len14 = arguments.length, data = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+				data[_key14] = arguments[_key14];
 			}
 
 			results.push([data, '4']);
@@ -1902,26 +1934,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len13 = arguments.length, data = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-				data[_key13] = arguments[_key13];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
-			for (var _len14 = arguments.length, data = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-				data[_key14] = arguments[_key14];
-			}
-
-			results.push([data, '2']);
-		}).once(name2, function () {
 			for (var _len15 = arguments.length, data = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
 				data[_key15] = arguments[_key15];
 			}
 
-			results.push([data, '3']);
-		}).once(name2, function () {
+			results.push([data, '1']);
+		}).once(name1, function () {
 			for (var _len16 = arguments.length, data = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
 				data[_key16] = arguments[_key16];
+			}
+
+			results.push([data, '2']);
+		}).once(name2, function () {
+			for (var _len17 = arguments.length, data = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+				data[_key17] = arguments[_key17];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len18 = arguments.length, data = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+				data[_key18] = arguments[_key18];
 			}
 
 			results.push([data, '4']);
@@ -2150,7 +2182,7 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this7 = this;
+			var _this9 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -2164,7 +2196,7 @@ var Headers$1 = function (_StringList) {
 					if (done || history.indexOf(key) < 0) {
 						history.push(key);
 						return {
-							value: [key, _this7.get(key)],
+							value: [key, _this9.get(key)],
 							done: done
 						};
 					}
@@ -2186,25 +2218,25 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this8 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this10 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this8.inheritFrom(input, body, init);
+			body = _this10.inheritFrom(input, body, init);
 		} else {
-			_this8.url = '' + input;
+			_this10.url = '' + input;
 		}
-		_this8.credentials = init.credentials || _this8.credentials || 'omit';
-		if (init.headers || !_this8.headers) {
-			_this8.headers = new Headers$1(init.headers);
+		_this10.credentials = init.credentials || _this10.credentials || 'omit';
+		if (init.headers || !_this10.headers) {
+			_this10.headers = new Headers$1(init.headers);
 		}
-		_this8.method = (init.method || _this8.method || 'GET').toUpperCase();
-		_this8.mode = init.mode || _this8.mode || null;
-		_this8.referrer = null;
-		if ((_this8.method === 'GET' || _this8.method === 'HEAD') && body) {
+		_this10.method = (init.method || _this10.method || 'GET').toUpperCase();
+		_this10.mode = init.mode || _this10.mode || null;
+		_this10.referrer = null;
+		if ((_this10.method === 'GET' || _this10.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this8.initBody(body);
-		return _this8;
+		_this10.initBody(body);
+		return _this10;
 	}
 
 	_createClass(Request$1, [{
@@ -2250,16 +2282,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this9 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this11 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this9.type = 'default';
-		_this9.status = 'status' in init ? init.status : minOkStatus;
-		_this9.ok = _this9.status >= minOkStatus && _this9.status < maxOkStatus;
-		_this9.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this9.headers = new Headers$1(init.headers);
-		_this9.url = init.url || '';
-		_this9.initBody(body);
-		return _this9;
+		_this11.type = 'default';
+		_this11.status = 'status' in init ? init.status : minOkStatus;
+		_this11.ok = _this11.status >= minOkStatus && _this11.status < maxOkStatus;
+		_this11.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this11.headers = new Headers$1(init.headers);
+		_this11.url = init.url || '';
+		_this11.initBody(body);
+		return _this11;
 	}
 
 	_createClass(Response$1, [{
@@ -2559,7 +2591,7 @@ tests$5(Headers$1, 'Headers/j0');
 tests$5(Headers);
 
 function generator$2() {
-	var _this10 = this;
+	var _this12 = this;
 
 	var length = this.length;
 
@@ -2567,7 +2599,7 @@ function generator$2() {
 	return {
 		next: function next() {
 			return {
-				value: _this10[index],
+				value: _this12[index],
 				done: length <= index++
 			};
 		}
@@ -3061,10 +3093,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this11 = this;
+			var _this13 = this;
 
 			x$24.keys(this).forEach(function (key) {
-				_this11.removeItem(key);
+				_this13.removeItem(key);
 			});
 		}
 	}, {
@@ -3487,14 +3519,14 @@ function test$26(generator) {
 }
 
 function generator$6() {
-	var _this12 = this;
+	var _this14 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this12[index],
+			value: _this14[index],
 			done: length <= index++
 		};
 	});
@@ -3614,14 +3646,14 @@ function test$28(generator) {
 }
 
 function generator$8() {
-	var _this13 = this;
+	var _this15 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this13[index],
+			value: _this15[index],
 			done: length <= index++
 		};
 	});
@@ -3650,8 +3682,8 @@ describe('noop', function () {
 });
 
 function assign(target) {
-	for (var _len17 = arguments.length, objects = Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
-		objects[_key17 - 1] = arguments[_key17];
+	for (var _len19 = arguments.length, objects = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
+		objects[_key19 - 1] = arguments[_key19];
 	}
 
 	objects.forEach(function (obj) {
@@ -3852,7 +3884,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this14 = this;
+			var _this16 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -3860,14 +3892,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this14.resolve(value);
+				_this16.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this14.reject(error);
+				_this16.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -3906,10 +3938,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this15 = this;
+			var _this17 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this15.handle(deferred);
+				_this17.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -4351,10 +4383,10 @@ var Set$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this16 = this;
+			var _this18 = this;
 
 			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this16);
+				fn.call(thisArg, value, value, _this18);
 			});
 		}
 	}, {
@@ -4456,8 +4488,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len18 = arguments.length, args = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-					args[_key18] = arguments[_key18];
+				for (var _len20 = arguments.length, args = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+					args[_key20] = arguments[_key20];
 				}
 
 				args[3] = this;
@@ -4612,19 +4644,19 @@ var State = function () {
 	}, {
 		key: 'parse',
 		value: function parse() {
-			var _this17 = this;
+			var _this19 = this;
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
 			var params = void 0;
 			href.replace(this.matcher, function (match) {
-				for (var _len19 = arguments.length, args = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
-					args[_key19 - 1] = arguments[_key19];
+				for (var _len21 = arguments.length, args = Array(_len21 > 1 ? _len21 - 1 : 0), _key21 = 1; _key21 < _len21; _key21++) {
+					args[_key21 - 1] = arguments[_key21];
 				}
 
 				var index = 0;
 				params = {};
-				return _this17.compose(function (key) {
+				return _this19.compose(function (key) {
 					var value = args[index++];
 					params[key] = value;
 					return value;
@@ -4794,19 +4826,19 @@ var StateManager = function (_EventEmitter) {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		var _this18 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+		var _this20 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		x$24.assign(_this18, { prefix: '#' }, config, {
+		x$24.assign(_this20, { prefix: '#' }, config, {
 			states: new x$32(),
 			listeners: []
 		});
-		if (!_this18.parser) {
-			if (_this18.prefix.charAt(0) === '#') {
-				_this18.parser = function (url) {
+		if (!_this20.parser) {
+			if (_this20.prefix.charAt(0) === '#') {
+				_this20.parser = function (url) {
 					return url.hash.slice(this.prefix.length);
 				};
 			} else {
-				_this18.parser = function (url) {
+				_this20.parser = function (url) {
 					var pathname = url.pathname,
 					    search = url.search,
 					    hash = url.hash;
@@ -4815,7 +4847,7 @@ var StateManager = function (_EventEmitter) {
 				};
 			}
 		}
-		return _this18;
+		return _this20;
 	}
 
 	_createClass(StateManager, [{
@@ -4946,11 +4978,11 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'start',
 		value: function start() {
-			var _this19 = this;
+			var _this21 = this;
 
 			var debounceDuration = 30;
 			var onStateChange = debounce(function () {
-				_this19.replace(_this19.parseURL());
+				_this21.replace(_this21.parseURL());
 			}, debounceDuration);
 			x$35('hashchange', onStateChange);
 			x$35('pushstate', onStateChange);
@@ -5098,8 +5130,8 @@ describe('StateManager', function () {
 						_context8.next = 7;
 						return new Promise(function (resolve) {
 							states.on('change', function () {
-								for (var _len20 = arguments.length, data = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-									data[_key20] = arguments[_key20];
+								for (var _len22 = arguments.length, data = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+									data[_key22] = arguments[_key22];
 								}
 
 								resolve(data);
@@ -5401,14 +5433,14 @@ function test$35(generator) {
 }
 
 function generator$12() {
-	var _this20 = this;
+	var _this22 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this20[index],
+			value: _this22[index],
 			done: length <= index++
 		};
 	});
@@ -5611,8 +5643,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
-			args[_key21] = arguments[_key21];
+		for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
+			args[_key23] = arguments[_key23];
 		}
 
 		lastArgs = args;

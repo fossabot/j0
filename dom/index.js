@@ -110,8 +110,25 @@ class J0Element {
 		return this.node.attributes;
 	}
 
-	append(element) {
-		this.node.appendChild(wrap(element).node);
+	get firstChild() {
+		return wrap(this.node.firstChild);
+	}
+
+	get lastChild() {
+		return wrap(this.node.lastChild);
+	}
+
+	prepend(...elements) {
+		elements.forEach((element) => {
+			this.insertBefore(element, this.firstChild);
+		});
+		return this;
+	}
+
+	append(...elements) {
+		elements.forEach((element) => {
+			this.node.appendChild(wrap(element).node);
+		});
 		return this;
 	}
 
