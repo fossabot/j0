@@ -1,37 +1,117 @@
 import {
 	Map,
-	Object
+	Object,
+	EventEmitter,
+	debounce,
+	location,
+	history,
+	JSON,
+	addEventListener,
+	isString
 } from 'j0';
 import State from './State';
 
-class StateManager {
+class StateManager extends EventEmitter {
 
 	constructor(config) {
+		super();
 		Object.assign(
 			this,
-			{prefix: ''},
+			{prefix: '#'},
 			config,
 			{
 				states: new Map(),
 				listeners: []
 			}
 		);
+		if (!this.parser) {
+			if (this.prefix.charAt(0) === '#') {
+				this.parser = function (url) {
+					return url.hash.slice(this.prefix.length);
+				};
+			} else {
+				this.parser = function (url) {
+					const {pathname, search, hash} = url;
+					return `${pathname}${search}${hash}`.slice(this.prefix.length);
+				};
+			}
+		}
 	}
 
-	define(name, definition, onEnter) {
-		this.states.set(name, new State(name, definition, onEnter));
+	parseURL(url = location) {
+		const stateString = this.parser(url);
+		for (const [, state] of this.states) {
+			const params = state.parse(stateString);
+			if (params) {
+				return state.instantiate(params);
+			}
+		}
+		return this.fallback;
+	}
+
+	define(stateInfo) {
+		const {name} = stateInfo;
+		if (isString(name) && name) {
+			this.states.set(name, new State(stateInfo));
+		} else {
+			throw new Error('Invalid name');
+		}
 		return this;
 	}
 
-	href(name, params) {
+	get(stateInfo) {
+		const {name, params} = stateInfo;
 		const state = this.states.get(name);
-		const href = (state && state.href(params)) || this.fallback;
-		return `${this.prefix}${href}`;
+		const instantiated = state && state.instantiate(params);
+		if (instantiated) {
+			instantiated.href = `${this.prefix}${instantiated.href}`;
+		}
+		return instantiated || this.fallback;
 	}
 
-	otherwise(name, params) {
-		this.fallback = this.href(name, params);
+	href(stateInfo) {
+		return this.get(stateInfo).href;
+	}
+
+	otherwise(stateInfo) {
+		this.fallback = this.get(stateInfo);
+		if (!this.fallback) {
+			throw new Error(`Failed to set fallback: ${JSON.stringify(stateInfo)} is not exist.`);
+		}
 		return this;
+	}
+
+	is(stateInfo) {
+		return this.current && this.current.href === this.href(stateInfo);
+	}
+
+	setCurrent(stateInfo, method) {
+		const newState = this.get(stateInfo);
+		if (this.is(newState)) {
+			return;
+		}
+		this.emit('change', newState, this.current);
+		this.current = newState;
+		history[method](newState.name, newState.params, newState.href);
+	}
+
+	go(stateInfo) {
+		this.setCurrent(stateInfo, 'pushState');
+	}
+
+	replace(stateInfo) {
+		this.setCurrent(stateInfo, 'replaceState');
+	}
+
+	start() {
+		const debounceDuration = 30;
+		const onStateChange = debounce(() => {
+			this.replace(this.parseURL());
+		}, debounceDuration);
+		addEventListener('hashchange', onStateChange);
+		addEventListener('pushstate', onStateChange);
+		addEventListener('popstate', onStateChange);
+		onStateChange();
 	}
 
 }

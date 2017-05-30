@@ -7,20 +7,21 @@ import {
 
 class State {
 
-	constructor(stateName, definition, onEnter) {
-		if (isInstanceOf(stateName, State)) {
-			Object.assign(this, stateName);
-		} else {
+	constructor(stateInfo) {
+		if (!isInstanceOf(stateInfo, State)) {
+			const {path} = stateInfo;
 			const parts = [];
 			let pos = 0;
-			definition.replace(/\{(\w+):(.*?)\}/g, ({length}, name, expression, offset, source) => {
+			path.replace(/\{(\w+):(.*?)\}/g, ({length}, name, expression, offset, source) => {
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
 				}
 				parts.push([name, new RegExp(`^${expression}$`), expression]);
 				pos = offset + length;
 			});
-			parts.push(definition.slice(pos));
+			if (pos < path.length) {
+				parts.push(path.slice(pos));
+			}
 			const matcher = new RegExp(
 				parts
 				.map((part) => {
@@ -31,13 +32,12 @@ class State {
 				})
 				.join('')
 			);
-			Object.assign(this, {
-				name: stateName,
+			Object.assign(stateInfo, {
 				parts,
-				matcher,
-				onEnter
+				matcher
 			});
 		}
+		Object.assign(this, stateInfo);
 	}
 
 	compose(fn) {
@@ -68,7 +68,7 @@ class State {
 		});
 	}
 
-	parse(href) {
+	parse(href = '') {
 		let params;
 		href.replace(this.matcher, (match, ...args) => {
 			let index = 0;
@@ -80,6 +80,17 @@ class State {
 			});
 		});
 		return params;
+	}
+
+	instantiate(src = {}) {
+		const params = isString(src) ? this.parse(src) : src;
+		const href = this.href(params);
+		if (href) {
+			const state = new State(this);
+			state.params = params;
+			state.href = href;
+			return state;
+		}
 	}
 
 }
