@@ -8,6 +8,7 @@ const glob = promisify(require('glob'));
 
 const buildHTML = require('./buildHTML');
 const buildSiteMap = require('./buildSiteMap');
+const copyTestRunners = require('./copyTestRunners');
 const copyAssets = require('./copyAssets');
 const createPolyfill = require('./polyfill');
 const {
@@ -44,19 +45,20 @@ function buildInOrder(modulePaths) {
 
 async function start() {
 	await rm(dest);
-	const modulePaths = [].concat(...await Promise.all(targetDirectories.map(function (dir) {
+	const modulePaths = [].concat(...await Promise.all(targetDirectories.map((dir) => {
 		return glob(path.join(dir, '**', 'test', 'index.js'), {
 			ignore: [
 				path.join(__dirname, '**', '*')
 			]
 		});
 	})))
-	.map(function (absoluteTestScriptPath) {
+	.map((absoluteTestScriptPath) => {
 		return path.relative(projectRoot, path.join(path.dirname(absoluteTestScriptPath), '..'));
 	});
 	console.info(`Found ${modulePaths.length} test scripts`);
 	await buildInOrder(modulePaths);
 	await buildSiteMap();
+	await copyTestRunners();
 	await copyAssets(path.join(__dirname, 'assets'));
 	if (serverMode) {
 		const server = new SableServer({

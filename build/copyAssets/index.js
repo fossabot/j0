@@ -16,6 +16,9 @@ async function copyAssets(dirPath, baseDir = constants.dest) {
 	console.debug(dirPath);
 	return Promise.all(files.map(function (filePath) {
 		const destPath = path.join(baseDir, path.relative(dirPath, filePath));
+		if (/\.min\.\w+$/.test(filePath)) {
+			return cp(filePath, destPath);
+		}
 		switch (path.extname(filePath)) {
 		case '.js':
 			return transpileJs(filePath, destPath);
