@@ -11,28 +11,28 @@ describe('EventEmitter', function () {
 		const value3 = `${Date.now()}-5`;
 		const results = [];
 		emitter
-		.on(name1, function (data) {
+		.on(name1, function (...data) {
 			results.push([data, '1']);
 		})
-		.on(name1, function (data) {
+		.on(name1, function (...data) {
 			results.push([data, '2']);
 		})
-		.on(name2, function (data) {
+		.on(name2, function (...data) {
 			results.push([data, '3']);
 		})
-		.on(name2, function (data) {
+		.on(name2, function (...data) {
 			results.push([data, '4']);
 		})
-		.emit(name1, value1)
-		.emit(name1, value2)
-		.emit(name2, value3);
+		.emit(name1, value1, value2)
+		.emit(name1, value2, value3)
+		.emit(name2, value3, value1);
 		assert.deepEqual(results, [
-			[value1, '1'],
-			[value1, '2'],
-			[value2, '1'],
-			[value2, '2'],
-			[value3, '3'],
-			[value3, '4']
+			[[value1, value2], '1'],
+			[[value1, value2], '2'],
+			[[value2, value3], '1'],
+			[[value2, value3], '2'],
+			[[value3, value1], '3'],
+			[[value3, value1], '4']
 		]);
 	});
 
@@ -45,26 +45,26 @@ describe('EventEmitter', function () {
 		const value3 = `${Date.now()}-5`;
 		const results = [];
 		emitter
-		.once(name1, function (data) {
+		.once(name1, function (...data) {
 			results.push([data, '1']);
 		})
-		.once(name1, function (data) {
+		.once(name1, function (...data) {
 			results.push([data, '2']);
 		})
-		.once(name2, function (data) {
+		.once(name2, function (...data) {
 			results.push([data, '3']);
 		})
-		.once(name2, function (data) {
+		.once(name2, function (...data) {
 			results.push([data, '4']);
 		})
-		.emit(name1, value1)
-		.emit(name1, value2)
-		.emit(name2, value3);
+		.emit(name1, value1, value2)
+		.emit(name1, value2, value3)
+		.emit(name2, value3, value1);
 		assert.deepEqual(results, [
-			[value1, '1'],
-			[value1, '2'],
-			[value3, '3'],
-			[value3, '4']
+			[[value1, value2], '1'],
+			[[value1, value2], '2'],
+			[[value3, value1], '3'],
+			[[value3, value1], '4']
 		]);
 	});
 
@@ -77,25 +77,25 @@ describe('EventEmitter', function () {
 		const value3 = `${Date.now()}-5`;
 		const results = [];
 		emitter
-		.once(name1, function (data) {
+		.once(name1, function (...data) {
 			results.push([data, '1']);
 		})
-		.once(name1, function (data) {
+		.once(name1, function (...data) {
 			results.push([data, '2']);
 		})
-		.once(name2, function (data) {
+		.once(name2, function (...data) {
 			results.push([data, '3']);
 		})
-		.once(name2, function (data) {
+		.once(name2, function (...data) {
 			results.push([data, '4']);
 		})
 		.off(name2)
-		.emit(name1, value1)
-		.emit(name1, value2)
-		.emit(name2, value3);
+		.emit(name1, value1, value2)
+		.emit(name1, value2, value3)
+		.emit(name2, value3, value1);
 		assert.deepEqual(results, [
-			[value1, '1'],
-			[value1, '2']
+			[[value1, value2], '1'],
+			[[value1, value2], '2']
 		]);
 	});
 

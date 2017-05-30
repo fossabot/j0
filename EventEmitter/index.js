@@ -12,12 +12,12 @@ class EventEmitter {
 		this[listenersKey] = [];
 	}
 
-	emit(type, data) {
+	emit(type, ...data) {
 		this[listenersKey]
 		.slice()
 		.forEach((fn) => {
 			if (fn[listenerTypeKey] === type) {
-				fn.call(this, data);
+				fn.apply(this, data);
 				if (fn[onceKey]) {
 					this.off(type, fn);
 				}
