@@ -2,11 +2,6 @@
 const chalk = require('chalk');
 const console = require('j1/console').create('wdio');
 
-const lengthToRemoveArrowMark = -2;
-const waitBody = 3000;
-const timeout = 20000;
-const retry = 10;
-
 browser.setViewportSize({
 	width: 600,
 	height: 600
@@ -15,16 +10,21 @@ browser.setViewportSize({
 describe('Test All', function () {
 
 	before(function () {
-		const started = Date.now();
-		this.timeout(timeout);
-		console.info('start');
-		this.retries(retry);
 		browser.url('PAGE_URL');
-		browser.waitForExist('body.done', waitBody);
-		console.info(`end: ${Date.now() - started}ms`);
+		browser.waitForExist('body');
+	});
+
+	it('should end the tests', function () {
+		const retry = 10;
+		const interval = 6000;
+		this.timeout(interval * retry);
+		this.retries(retry);
+		browser.waitForExist('body.done', interval);
 	});
 
 	it('should pass the tests', function () {
+		const lengthToRemoveArrowMark = -2;
+		const timeout = 3000;
 		const start = Date.now();
 		const failed = [];
 		$$('.suite')
