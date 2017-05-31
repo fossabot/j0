@@ -1,25 +1,32 @@
 import dom from '../..';
 
-describe('J0Element.prototype.text', function () {
+describe('J0Element.prototype.next', function () {
 
-	it('should return its textContent', function () {
-		const text = `${Date.now()}`;
-		const element = dom(text);
-		assert.equal(element.text(), text);
-	});
-
-	it('should set its textContent', function () {
-		const text1 = `${Date.now()}-1`;
+	it('should insert a new child before an existing child', function () {
 		const element1 = dom();
-		const text2 = `${Date.now()}-2`;
-		const element2 = dom({
+		const element2 = dom();
+		const element = dom({
 			c: [
-				element1,
-				text2
+				element1
 			]
 		});
-		element1.text(text1);
-		assert.equal(element2.text(), `${text1}${text2}`);
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		const element1 = dom();
+		const element2 = dom();
+		const element = dom({
+			c: [
+				element2,
+				element1
+			]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
 	});
 
 });

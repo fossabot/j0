@@ -142,14 +142,22 @@ class J0Element {
 		return wrap(this.node.firstChild);
 	}
 
+	set firstChild(element) {
+		this.insertBefore(element, this.firstChild);
+	}
+
 	get lastChild() {
 		return wrap(this.node.lastChild);
+	}
+
+	set lastChild(element) {
+		this.node.appendChild(wrap(element).node);
 	}
 
 	prepend(...elements) {
 		elements
 		.forEach((element) => {
-			this.insertBefore(element, this.firstChild);
+			this.firstChild = element;
 		});
 		return this;
 	}
@@ -157,7 +165,7 @@ class J0Element {
 	append(...elements) {
 		elements
 		.forEach((element) => {
-			this.node.appendChild(wrap(element).node);
+			this.lastChild = element;
 		});
 		return this;
 	}
