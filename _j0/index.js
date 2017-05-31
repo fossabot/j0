@@ -9,7 +9,7 @@ const glob = promisify(require('glob'));
 const buildSiteMap = require('./buildSiteMap');
 const copyTestRunners = require('./copyTestRunners');
 const copyAssets = require('./copyAssets');
-const createPolyfill = require('./polyfill');
+const buildPolyfill = require('./buildPolyfill');
 const {
 	projectRoot,
 	dest,
@@ -50,7 +50,7 @@ async function start() {
 		});
 		await server.start();
 	} else {
-		await createPolyfill();
+		await buildPolyfill();
 	}
 }
 

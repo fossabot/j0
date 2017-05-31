@@ -2,11 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const UglifyJS = require('uglify-js');
 const console = require('j1/console').create('polyfill');
+const rm = require('j1/rm');
 const writeFile = require('j1/writeFile');
 const promisify = require('j1/promisify');
 const readFile = promisify(fs.readFile, fs);
 const transpileJs = require('../transpileJs');
 const {projectRoot} = require('../constants');
+const destDir = path.join(__dirname, '..', 'polyfill');
 
 function minify(code) {
 	const {code: minifiedCode} = UglifyJS.minify(code);
@@ -30,10 +32,11 @@ async function generatePackageJSON() {
 			main: 'polyfill.min.js'
 		}
 	);
-	await writeFile(path.join(__dirname, 'package.json'), JSON.stringify(data, null, 2));
+	await writeFile(path.join(destDir, 'package.json'), JSON.stringify(data, null, 2));
 }
 
 async function createPolyfill() {
+	await rm(destDir);
 	const codes = await Promise.all(
 		[
 			'polyfill-symbol.js',
@@ -47,7 +50,7 @@ async function createPolyfill() {
 		})
 	);
 	const code = codes.join('\n');
-	await writeFile(path.join(__dirname, 'polyfill.min.js'), code);
+	await writeFile(path.join(destDir, 'polyfill.min.js'), code);
 	await generatePackageJSON();
 }
 
