@@ -8,11 +8,12 @@ import {
 	isNode,
 	isUndefined,
 	Promise,
-	CustomEvent
+	CustomEvent,
+	Set
 } from 'j0';
 
 const nodeKey = Symbol();
-const eventsKey = Symbol();
+const listenersKey = Symbol();
 const getBody = new Promise(function (resolve) {
 	const interval = 50;
 	function check() {
@@ -72,7 +73,7 @@ class J0Element {
 				this.attr(a);
 			}
 		}
-		this[eventsKey] = [];
+		this[listenersKey] = new Set();
 	}
 	/* eslint-enable max-statements */
 
@@ -225,7 +226,20 @@ class J0Element {
 			fn.call(this, event);
 		};
 		this.node.addEventListener(eventName, wrapped);
-		this.listeners.push([eventName, fn, wrapped]);
+		this.listeners.add([eventName, fn, wrapped]);
+		return this;
+	}
+
+	once(eventName, fn) {
+		const item = [eventName, fn];
+		const wrapped = (event) => {
+			this.node.removeEventListener(eventName, wrapped);
+			this.listeners.delete(item);
+			fn.call(this, event);
+		};
+		item.push(wrapped);
+		this.node.addEventListener(eventName, wrapped);
+		this.listeners.add(item);
 		return this;
 	}
 
@@ -237,14 +251,14 @@ class J0Element {
 	}
 
 	removeEventListener(eventName, fn) {
-		const {listeners} = this;
-		for (let i = listeners.length; i--;) {
-			const [e, f, wrapped] = listeners[i];
+		this.listeners
+		.forEach((item) => {
+			const [e, f, wrapped] = item;
 			if (e === eventName && (!fn || fn === f)) {
-				this.node.removeEventListener(eventName, wrapped);
-				listeners.splice(i, 1);
+				this.node.removeEventListener(e, wrapped);
+				this.listeners.delete(item);
 			}
-		}
+		});
 	}
 
 	off(eventName, fn) {
@@ -254,10 +268,11 @@ class J0Element {
 	emit(eventName, detail) {
 		const event = new CustomEvent(eventName, {detail});
 		this.node.dispatchEvent(event);
+		return this;
 	}
 
 	get listeners() {
-		return this[eventsKey];
+		return this[listenersKey];
 	}
 
 	get attributes() {
@@ -265,11 +280,11 @@ class J0Element {
 	}
 
 	find(selector) {
-		return find(selector, this);
+		return find(selector, this.node);
 	}
 
 	findAll(selector) {
-		return findAll(selector, this);
+		return findAll(selector, this.node);
 	}
 
 }
