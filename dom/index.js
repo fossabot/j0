@@ -130,14 +130,6 @@ class J0Element {
 		.map(wrap);
 	}
 
-	get events() {
-		return this[eventsKey];
-	}
-
-	get attributes() {
-		return this.node.attributes;
-	}
-
 	get firstChild() {
 		return wrap(this.node.firstChild);
 	}
@@ -168,6 +160,14 @@ class J0Element {
 			this.lastChild = element;
 		});
 		return this;
+	}
+
+	get events() {
+		return this[eventsKey];
+	}
+
+	get attributes() {
+		return this.node.attributes;
 	}
 
 	remove() {
