@@ -26,10 +26,11 @@ async function generatePackageJSON() {
 			license,
 			version,
 			author,
-			repository
+			repository,
+			main: 'polyfill.min.js'
 		}
 	);
-	await writeFile(path.join(projectRoot, 'polyfill', 'package.json'), JSON.stringify(data, null, 2));
+	await writeFile(path.join(__dirname, 'package.json'), JSON.stringify(data, null, 2));
 }
 
 async function createPolyfill() {
@@ -46,7 +47,7 @@ async function createPolyfill() {
 		})
 	);
 	const code = codes.join('\n');
-	await writeFile(path.join(projectRoot, 'polyfill', 'polyfill.min.js'), code);
+	await writeFile(path.join(__dirname, 'polyfill.min.js'), code);
 	await generatePackageJSON();
 }
 
