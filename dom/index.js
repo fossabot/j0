@@ -1,7 +1,9 @@
 import {
+	Object,
 	Array,
 	document,
 	Symbol,
+	isArray,
 	isString,
 	isNode,
 	isUndefined,
@@ -23,6 +25,25 @@ const getBody = new Promise(function (resolve) {
 	setTimeout(check);
 });
 
+function superForEach(...args) {
+	const fn = args.pop();
+	if (isString(args[0])) {
+		fn(...args);
+	} else {
+		args
+		.forEach((arg) => {
+			if (isArray(arg)) {
+				superForEach(...arg, fn);
+			} else {
+				Object.keys(arg)
+				.forEach((key) => {
+					superForEach(key, arg[key], fn);
+				});
+			}
+		});
+	}
+}
+
 class J0Element {
 
 	/* eslint-disable max-statements */
@@ -34,17 +55,14 @@ class J0Element {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			const {t = 'div', a = [], c = [], e = [], n, o} = source;
+			const {t = 'div', a, c, e = [], n, o} = source;
 			this[nodeKey] = wrap(
 				n
 				? document.createElementNS(n, t, o)
 				: document.createElement(t)
 			).node;
-			for (let i = 0, {length} = c; i < length; i++) {
-				const item = c[i];
-				if (item) {
-					this.append(item);
-				}
+			if (c) {
+				this.append(...c);
 			}
 			for (let i = 0, {length} = e; i < length; i++) {
 				const item = e[i];
@@ -52,11 +70,8 @@ class J0Element {
 					this.on(item[0], item[1]);
 				}
 			}
-			for (let i = 0, {length} = a; i < length; i++) {
-				const item = a[i];
-				if (item) {
-					this.setAttribute(...item);
-				}
+			if (a) {
+				this.attr(a);
 			}
 		}
 		this[eventsKey] = [];
@@ -175,14 +190,6 @@ class J0Element {
 		return this;
 	}
 
-	get events() {
-		return this[eventsKey];
-	}
-
-	get attributes() {
-		return this.node.attributes;
-	}
-
 	remove() {
 		const {parent} = this;
 		if (parent) {
@@ -208,6 +215,13 @@ class J0Element {
 		return this.node.getAttribute(name);
 	}
 
+	attr(...args) {
+		superForEach(...args, (...params) => {
+			this.setAttribute(...params);
+		});
+		return this;
+	}
+
 	on(eventName, fn) {
 		const wrapped = (event) => {
 			fn.call(this, event);
@@ -226,6 +240,21 @@ class J0Element {
 				events.splice(i, 1);
 			}
 		}
+	}
+
+	setListener(...args) {
+		superForEach(...args, (...params) => {
+			this.on(...params);
+		});
+		return this;
+	}
+
+	get listeners() {
+		return this[eventsKey];
+	}
+
+	get attributes() {
+		return this.node.attributes;
 	}
 
 	find(selector) {
