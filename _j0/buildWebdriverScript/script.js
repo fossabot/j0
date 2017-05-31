@@ -1,6 +1,9 @@
 /* global browser, $$ */
+const path = require('path');
 const chalk = require('chalk');
 const console = require('j1/console').create('wdio');
+const writeFile = require('j1/writeFile');
+const formatDate = require('j1/formatDate');
 
 browser.setViewportSize({
 	width: 600,
@@ -64,6 +67,18 @@ describe('Test All', function () {
 			});
 			throw new Error('failed');
 		}
+	});
+
+	it('should take a screenshot', async function () {
+		const rawData = browser.screenshot();
+		const data = Buffer.from(rawData.value, 'base64');
+		const dest = path.join(
+			__dirname,
+			'..',
+			'__errorShots',
+			`${formatDate(new Date(), '%YYYY-%MM-%DD-%hh-%mm-%ss')}.png`
+		);
+		await writeFile(dest, data);
 	});
 
 });
