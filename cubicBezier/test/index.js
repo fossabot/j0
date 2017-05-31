@@ -1,6 +1,6 @@
 import cubicBezier from '..';
 
-describe('Math/cubicBezier', function () {
+describe('cubicBezier', function () {
 
 	it('should be linear', function () {
 		let sum = 0;

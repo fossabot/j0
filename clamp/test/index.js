@@ -1,6 +1,7 @@
+/* eslint-disable no-magic-numbers */
 import clamp from '..';
 
-describe('Math/clamp', function () {
+describe('clamp', function () {
 
 	it('should return 1 if the arguments are [0, 1, 2]', function () {
 		assert.equal(clamp(0, 1, 2), 1);
