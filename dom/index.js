@@ -1,13 +1,15 @@
 import {
+	Array,
 	document,
 	Symbol,
 	isString,
 	isNode,
+	isUndefined,
 	Promise
 } from 'j0';
 
-const nodeKey = Symbol('node');
-const eventsKey = Symbol('events');
+const nodeKey = Symbol();
+const eventsKey = Symbol();
 const getBody = new Promise(function (resolve) {
 	const interval = 50;
 	function check() {
@@ -61,16 +63,30 @@ class J0Element {
 	}
 	/* eslint-enable max-statements */
 
+	equals(element) {
+		return this.node === wrap(element).node;
+	}
+
 	get node() {
 		return this[nodeKey];
 	}
 
-	get text() {
-		return this.node.textContent;
+	text(text) {
+		const {node} = this;
+		if (isUndefined(text)) {
+			return node.textContent;
+		}
+		node.textContent = text;
+		return this;
 	}
 
-	set text(text = '') {
-		this.node.textContent = text;
+	html(html) {
+		const {node} = this;
+		if (isUndefined(html)) {
+			return node.innerHTML;
+		}
+		node.innerHTML = html;
+		return this;
 	}
 
 	get parent() {
@@ -78,9 +94,21 @@ class J0Element {
 		return parentNode && wrap(parentNode);
 	}
 
+	set parent(source) {
+		wrap(source).append(this);
+	}
+
+	insertBefore(newElement, referenceElement) {
+		this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
+	}
+
 	get previous() {
 		const {previousSibling} = this.node;
 		return previousSibling && wrap(previousSibling);
+	}
+
+	set previous(element) {
+		this.parent.insertBefore(element, this);
 	}
 
 	get next() {
@@ -88,17 +116,17 @@ class J0Element {
 		return nextSibling && wrap(nextSibling);
 	}
 
-	set parent(source) {
-		wrap(source).append(this);
+	set next(element) {
+		this.parent.insertBefore(element, this.next);
 	}
 
 	get childNodes() {
-		return [...this.node.childNodes]
+		return Array.from(this.node.childNodes)
 		.map(wrap);
 	}
 
 	get children() {
-		return [...this.node.children]
+		return Array.from(this.node.children)
 		.map(wrap);
 	}
 
@@ -119,29 +147,19 @@ class J0Element {
 	}
 
 	prepend(...elements) {
-		elements.forEach((element) => {
+		elements
+		.forEach((element) => {
 			this.insertBefore(element, this.firstChild);
 		});
 		return this;
 	}
 
 	append(...elements) {
-		elements.forEach((element) => {
+		elements
+		.forEach((element) => {
 			this.node.appendChild(wrap(element).node);
 		});
 		return this;
-	}
-
-	insertBefore(newElement, referenceElement) {
-		this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
-	}
-
-	before(element) {
-		this.parent.insertBefore(element, this);
-	}
-
-	after(element) {
-		this.parent.insertBefore(element, this.next);
 	}
 
 	remove() {
