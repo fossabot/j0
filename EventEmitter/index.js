@@ -1,25 +1,24 @@
 import {
-	Symbol
+	Symbol,
+	Set
 } from 'j0';
 
 const listenersKey = Symbol();
-const onceKey = Symbol();
-const listenerTypeKey = Symbol();
 
 class EventEmitter {
 
 	constructor() {
-		this[listenersKey] = [];
+		this[listenersKey] = new Set();
 	}
 
 	emit(type, ...data) {
 		this[listenersKey]
-		.slice()
-		.forEach((fn) => {
-			if (fn[listenerTypeKey] === type) {
+		.forEach((item, index, listeners) => {
+			const [eventType, fn, once] = item;
+			if (eventType === type) {
 				fn.apply(this, data);
-				if (fn[onceKey]) {
-					this.off(type, fn);
+				if (once) {
+					listeners.delete(item);
 				}
 			}
 		});
@@ -27,25 +26,24 @@ class EventEmitter {
 	}
 
 	off(type, targetFn) {
-		const listeners = this[listenersKey];
-		for (let index = listeners.length; index--;) {
-			const fn = listeners[index];
-			if (fn[listenerTypeKey] === type && (!targetFn || fn === targetFn)) {
-				listeners.splice(index, 1);
+		this[listenersKey]
+		.forEach((item, index, listeners) => {
+			const [eventType, fn] = item;
+			if (eventType === type && (!targetFn || fn === targetFn)) {
+				listeners.delete(item);
 			}
-		}
+		});
 		return this;
 	}
 
 	on(type, fn) {
-		fn[listenerTypeKey] = type;
-		this[listenersKey].push(fn);
+		this[listenersKey].add([type, fn]);
 		return this;
 	}
 
 	once(type, fn) {
-		fn[onceKey] = true;
-		return this.on(type, fn);
+		this[listenersKey].add([type, fn, true]);
+		return this;
 	}
 
 }
