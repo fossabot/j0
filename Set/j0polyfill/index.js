@@ -44,13 +44,14 @@ class Set {
 
 	forEach(fn, thisArg) {
 		this.data
+		.slice()
 		.forEach((value) => {
 			fn.call(thisArg, value, value, this);
 		});
 	}
 
 	values() {
-		return this.data[iteratorSymbol]();
+		return this.data.slice()[iteratorSymbol]();
 	}
 
 	[iteratorSymbol]() {

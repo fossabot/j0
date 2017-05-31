@@ -1,13 +1,19 @@
 import {
+	Object,
+	Array,
 	document,
 	Symbol,
+	isArray,
 	isString,
 	isNode,
-	Promise
+	isUndefined,
+	Promise,
+	CustomEvent,
+	Set
 } from 'j0';
 
-const nodeKey = Symbol('node');
-const eventsKey = Symbol('events');
+const nodeKey = Symbol();
+const listenersKey = Symbol();
 const getBody = new Promise(function (resolve) {
 	const interval = 50;
 	function check() {
@@ -21,6 +27,25 @@ const getBody = new Promise(function (resolve) {
 	setTimeout(check);
 });
 
+function superForEach(...args) {
+	const fn = args.pop();
+	if (isString(args[0])) {
+		fn(...args);
+	} else {
+		args
+		.forEach((arg) => {
+			if (isArray(arg)) {
+				superForEach(...arg, fn);
+			} else {
+				Object.keys(arg)
+				.forEach((key) => {
+					superForEach(key, arg[key], fn);
+				});
+			}
+		});
+	}
+}
+
 class J0Element {
 
 	/* eslint-disable max-statements */
@@ -32,45 +57,50 @@ class J0Element {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			const {t = 'div', a = [], c = [], e = [], n, o} = source;
+			const {t, a, c, e, n, o} = source;
 			this[nodeKey] = wrap(
 				n
 				? document.createElementNS(n, t, o)
-				: document.createElement(t)
+				: document.createElement(t || 'div')
 			).node;
-			for (let i = 0, {length} = c; i < length; i++) {
-				const item = c[i];
-				if (item) {
-					this.append(item);
-				}
+			if (c) {
+				this.append(...c);
 			}
-			for (let i = 0, {length} = e; i < length; i++) {
-				const item = e[i];
-				if (item) {
-					this.on(item[0], item[1]);
-				}
+			if (e) {
+				this.on(e);
 			}
-			for (let i = 0, {length} = a; i < length; i++) {
-				const item = a[i];
-				if (item) {
-					this.setAttribute(...item);
-				}
+			if (a) {
+				this.attr(a);
 			}
 		}
-		this[eventsKey] = [];
+		this[listenersKey] = new Set();
 	}
 	/* eslint-enable max-statements */
+
+	equals(element) {
+		return this.node === wrap(element).node;
+	}
 
 	get node() {
 		return this[nodeKey];
 	}
 
-	get text() {
-		return this.node.textContent;
+	text(text) {
+		const {node} = this;
+		if (isUndefined(text)) {
+			return node.textContent;
+		}
+		node.textContent = text;
+		return this;
 	}
 
-	set text(text = '') {
-		this.node.textContent = text;
+	html(html) {
+		const {node} = this;
+		if (isUndefined(html)) {
+			return node.innerHTML;
+		}
+		node.innerHTML = html;
+		return this;
 	}
 
 	get parent() {
@@ -78,70 +108,85 @@ class J0Element {
 		return parentNode && wrap(parentNode);
 	}
 
-	get previous() {
-		const {previousSibling} = this.node;
-		return previousSibling && wrap(previousSibling);
-	}
-
-	get next() {
-		const {nextSibling} = this.node;
-		return nextSibling && wrap(nextSibling);
-	}
-
 	set parent(source) {
 		wrap(source).append(this);
-	}
-
-	get childNodes() {
-		return [...this.node.childNodes]
-		.map(wrap);
-	}
-
-	get children() {
-		return [...this.node.children]
-		.map(wrap);
-	}
-
-	get events() {
-		return this[eventsKey];
-	}
-
-	get attributes() {
-		return this.node.attributes;
-	}
-
-	get firstChild() {
-		return wrap(this.node.firstChild);
-	}
-
-	get lastChild() {
-		return wrap(this.node.lastChild);
-	}
-
-	prepend(...elements) {
-		elements.forEach((element) => {
-			this.insertBefore(element, this.firstChild);
-		});
-		return this;
-	}
-
-	append(...elements) {
-		elements.forEach((element) => {
-			this.node.appendChild(wrap(element).node);
-		});
-		return this;
 	}
 
 	insertBefore(newElement, referenceElement) {
 		this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
 	}
 
-	before(element) {
+	get previous() {
+		const {previousSibling} = this.node;
+		return previousSibling ? wrap(previousSibling) : null;
+	}
+
+	set previous(element) {
 		this.parent.insertBefore(element, this);
 	}
 
-	after(element) {
+	get next() {
+		const {nextSibling} = this.node;
+		return nextSibling ? wrap(nextSibling) : null;
+	}
+
+	set next(element) {
 		this.parent.insertBefore(element, this.next);
+	}
+
+	get childNodes() {
+		return Array.from(this.node.childNodes)
+		.map(wrap);
+	}
+
+	get children() {
+		return Array.from(this.node.children)
+		.map(wrap);
+	}
+
+	get firstChild() {
+		const {firstChild} = this.node;
+		return firstChild ? wrap(firstChild) : null;
+	}
+
+	set firstChild(element) {
+		const {firstChild} = this;
+		if (firstChild) {
+			firstChild.previous = element;
+		} else {
+			this.append(element);
+		}
+	}
+
+	get lastChild() {
+		const {lastChild} = this.node;
+		return lastChild ? wrap(lastChild) : null;
+	}
+
+	set lastChild(element) {
+		const {lastChild} = this;
+		if (lastChild) {
+			this.lastChild.next = element;
+		} else {
+			this.append(element);
+		}
+	}
+
+	prepend(...elements) {
+		elements
+		.forEach((element) => {
+			this.firstChild = element;
+		});
+		return this;
+	}
+
+	append(...elements) {
+		const {node} = this;
+		elements
+		.forEach((element) => {
+			node.appendChild(wrap(element).node);
+		});
+		return this;
 	}
 
 	remove() {
@@ -169,32 +214,77 @@ class J0Element {
 		return this.node.getAttribute(name);
 	}
 
-	on(eventName, fn) {
+	attr(...args) {
+		superForEach(...args, (...params) => {
+			this.setAttribute(...params);
+		});
+		return this;
+	}
+
+	addEventListener(eventName, fn) {
 		const wrapped = (event) => {
 			fn.call(this, event);
 		};
 		this.node.addEventListener(eventName, wrapped);
-		this.events.push([eventName, fn, wrapped]);
+		this.listeners.add([eventName, fn, wrapped]);
 		return this;
 	}
 
-	off(eventName, fn) {
-		const {events} = this;
-		for (let i = events.length; i--;) {
-			const [e, f, wrapped] = events[i];
+	once(eventName, fn) {
+		const item = [eventName, fn];
+		const wrapped = (event) => {
+			this.node.removeEventListener(eventName, wrapped);
+			this.listeners.delete(item);
+			fn.call(this, event);
+		};
+		item.push(wrapped);
+		this.node.addEventListener(eventName, wrapped);
+		this.listeners.add(item);
+		return this;
+	}
+
+	on(...args) {
+		superForEach(...args, (...params) => {
+			this.addEventListener(...params);
+		});
+		return this;
+	}
+
+	removeEventListener(eventName, fn) {
+		this.listeners
+		.forEach((item) => {
+			const [e, f, wrapped] = item;
 			if (e === eventName && (!fn || fn === f)) {
-				this.node.removeEventListener(eventName, wrapped);
-				events.splice(i, 1);
+				this.node.removeEventListener(e, wrapped);
+				this.listeners.delete(item);
 			}
-		}
+		});
+	}
+
+	off(eventName, fn) {
+		this.removeEventListener(eventName, fn);
+	}
+
+	emit(eventName, detail) {
+		const event = new CustomEvent(eventName, {detail});
+		this.node.dispatchEvent(event);
+		return this;
+	}
+
+	get listeners() {
+		return this[listenersKey];
+	}
+
+	get attributes() {
+		return this.node.attributes;
 	}
 
 	find(selector) {
-		return find(selector, this);
+		return find(selector, this.node);
 	}
 
 	findAll(selector) {
-		return findAll(selector, this);
+		return findAll(selector, this.node);
 	}
 
 }
@@ -217,13 +307,15 @@ function findAll(selector, rootElement = document) {
 	return result;
 }
 
-wrap.find = find;
-wrap.findAll = findAll;
-wrap.ready = async function (fn) {
-	await getBody;
-	if (fn) {
-		fn();
+Object.assign(wrap, {
+	find,
+	findAll,
+	ready: async function (fn) {
+		await getBody;
+		if (fn) {
+			fn();
+		}
 	}
-};
+});
 
 export default wrap;

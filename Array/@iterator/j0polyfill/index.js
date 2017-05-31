@@ -1,11 +1,12 @@
 import {Iterator} from 'j0';
 
 function generator() {
-	const {length} = this;
+	const array = this.slice();
+	const {length} = array;
 	let index = 0;
 	return new Iterator(() => {
 		return {
-			value: this[index],
+			value: array[index],
 			done: length <= index++
 		};
 	});
