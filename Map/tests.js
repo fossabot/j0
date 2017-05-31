@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import Symbol from '../Symbol';
 
 function tests(Map, name = 'Map') {
@@ -55,6 +56,27 @@ function tests(Map, name = 'Map') {
 				keys: [0],
 				values: [1]
 			});
+		});
+
+		it('should support forEach()', function () {
+			const map = new Map([
+				[1, 2],
+				[3, 4],
+				[5, 6]
+			]);
+			const context = {};
+			const results = [];
+			map
+			.forEach(function (...args) {
+				map.delete(args[1]);
+				args.push(this);
+				results.push(args);
+			}, context);
+			assert.deepEqual(results, [
+				[2, 1, map, context],
+				[4, 3, map, context],
+				[6, 5, map, context]
+			]);
 		});
 
 	});

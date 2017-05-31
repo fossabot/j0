@@ -1,25 +1,30 @@
+/* eslint-disable no-magic-numbers */
+
 function tests(Set, name) {
 
 	describe(name, function () {
 
 		it('should support constructor arguments', function () {
-			const data = [1, 2, 3];
+			const data = [
+				Date,
+				new Date(),
+				Date.now()
+			];
 			const set = new Set(data);
-			assert.equal(set.size, 3);
+			assert.equal(set.size, data.length);
 		});
 
 		it('should have add()', function () {
 			const set = new Set();
-			set.add(1);
-			set.add(2);
-			set.add(3);
-			const returnValue = set.add(4);
-			assert.equal(set.size, 4);
+			set.add(Date);
+			set.add(new Date());
+			set.add(Date.now());
+			assert.equal(set.size, 3);
 		});
 
 		it('should return itself', function () {
 			const set = new Set();
-			assert.equal(set.add(1), set);
+			assert.equal(set.add(Date), set);
 		});
 
 		it('should keep uniqueness', function () {
@@ -61,6 +66,7 @@ function tests(Set, name) {
 			const context = {};
 			set.forEach(function (...args) {
 				args[3] = this;
+				set.delete(args[0]);
 				results[index++] = args;
 			}, context);
 			assert.deepEqual(results, [
@@ -97,6 +103,7 @@ function tests(Set, name) {
 			const results = [];
 			while (1) {
 				const {value, done} = iterator.next();
+				set.delete(value);
 				if (done) {
 					break;
 				}
@@ -118,6 +125,7 @@ function tests(Set, name) {
 			const results = [];
 			while (1) {
 				const {value, done} = iterator.next();
+				set.delete(value);
 				if (done) {
 					break;
 				}

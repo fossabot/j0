@@ -66,7 +66,11 @@ class Map {
 	}
 
 	forEach(fn, thisArg) {
-		this.data.forEach(fn, thisArg);
+		this.data
+		.slice()
+		.forEach(([key, value]) => {
+			fn.call(thisArg, value, key, this);
+		});
 	}
 
 	keys() {
