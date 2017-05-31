@@ -104,7 +104,7 @@ class J0Element {
 
 	get previous() {
 		const {previousSibling} = this.node;
-		return previousSibling && wrap(previousSibling);
+		return previousSibling ? wrap(previousSibling) : null;
 	}
 
 	set previous(element) {
@@ -113,7 +113,7 @@ class J0Element {
 
 	get next() {
 		const {nextSibling} = this.node;
-		return nextSibling && wrap(nextSibling);
+		return nextSibling ? wrap(nextSibling) : null;
 	}
 
 	set next(element) {
@@ -131,19 +131,31 @@ class J0Element {
 	}
 
 	get firstChild() {
-		return wrap(this.node.firstChild);
+		const {firstChild} = this.node;
+		return firstChild ? wrap(firstChild) : null;
 	}
 
 	set firstChild(element) {
-		this.insertBefore(element, this.firstChild);
+		const {firstChild} = this;
+		if (firstChild) {
+			firstChild.previous = element;
+		} else {
+			this.append(element);
+		}
 	}
 
 	get lastChild() {
-		return wrap(this.node.lastChild);
+		const {lastChild} = this.node;
+		return lastChild ? wrap(lastChild) : null;
 	}
 
 	set lastChild(element) {
-		this.node.appendChild(wrap(element).node);
+		const {lastChild} = this;
+		if (lastChild) {
+			this.lastChild.next = element;
+		} else {
+			this.append(element);
+		}
 	}
 
 	prepend(...elements) {
@@ -155,9 +167,10 @@ class J0Element {
 	}
 
 	append(...elements) {
+		const {node} = this;
 		elements
 		.forEach((element) => {
-			this.lastChild = element;
+			node.appendChild(wrap(element).node);
 		});
 		return this;
 	}

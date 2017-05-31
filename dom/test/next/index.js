@@ -1,6 +1,6 @@
 import dom from '../..';
 
-describe('J0Element.prototype.previous', function () {
+describe('J0Element.prototype.next', function () {
 
 	it('should insert a new child before an existing child', function () {
 		const element1 = dom();
@@ -10,9 +10,9 @@ describe('J0Element.prototype.previous', function () {
 				element1
 			]
 		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
-		assert.equal(element.firstChild.equals(element2), true);
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
 	});
 
 	it('should replace an existing child', function () {
@@ -20,13 +20,13 @@ describe('J0Element.prototype.previous', function () {
 		const element2 = dom();
 		const element = dom({
 			c: [
-				element1,
-				element2
+				element2,
+				element1
 			]
 		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
-		assert.equal(element.firstChild.equals(element2), true);
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
 	});
 
 	it('should return null', function () {
@@ -38,7 +38,7 @@ describe('J0Element.prototype.previous', function () {
 				element2
 			]
 		});
-		assert.equal(element1.previous, null);
+		assert.equal(element2.next, null);
 	});
 
 });
