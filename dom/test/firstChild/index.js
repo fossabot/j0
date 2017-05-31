@@ -29,7 +29,6 @@ describe('J0Element.prototype.firstChild', function () {
 		});
 		assert.equal(element.firstChild.equals(element1), true);
 		element.firstChild = element2;
-		console.log('element.firstChild');
 		assert.equal(element.firstChild.equals(element2), true);
 	});
 

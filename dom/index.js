@@ -7,7 +7,8 @@ import {
 	isString,
 	isNode,
 	isUndefined,
-	Promise
+	Promise,
+	CustomEvent
 } from 'j0';
 
 const nodeKey = Symbol();
@@ -55,20 +56,17 @@ class J0Element {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			const {t = 'div', a, c, e = [], n, o} = source;
+			const {t, a, c, e, n, o} = source;
 			this[nodeKey] = wrap(
 				n
 				? document.createElementNS(n, t, o)
-				: document.createElement(t)
+				: document.createElement(t || 'div')
 			).node;
 			if (c) {
 				this.append(...c);
 			}
-			for (let i = 0, {length} = e; i < length; i++) {
-				const item = e[i];
-				if (item) {
-					this.on(item[0], item[1]);
-				}
+			if (e) {
+				this.on(e);
 			}
 			if (a) {
 				this.attr(a);
@@ -222,31 +220,40 @@ class J0Element {
 		return this;
 	}
 
-	on(eventName, fn) {
+	addEventListener(eventName, fn) {
 		const wrapped = (event) => {
 			fn.call(this, event);
 		};
 		this.node.addEventListener(eventName, wrapped);
-		this.events.push([eventName, fn, wrapped]);
+		this.listeners.push([eventName, fn, wrapped]);
 		return this;
 	}
 
-	off(eventName, fn) {
-		const {events} = this;
-		for (let i = events.length; i--;) {
-			const [e, f, wrapped] = events[i];
+	on(...args) {
+		superForEach(...args, (...params) => {
+			this.addEventListener(...params);
+		});
+		return this;
+	}
+
+	removeEventListener(eventName, fn) {
+		const {listeners} = this;
+		for (let i = listeners.length; i--;) {
+			const [e, f, wrapped] = listeners[i];
 			if (e === eventName && (!fn || fn === f)) {
 				this.node.removeEventListener(eventName, wrapped);
-				events.splice(i, 1);
+				listeners.splice(i, 1);
 			}
 		}
 	}
 
-	setListener(...args) {
-		superForEach(...args, (...params) => {
-			this.on(...params);
-		});
-		return this;
+	off(eventName, fn) {
+		this.removeEventListener(eventName, fn);
+	}
+
+	emit(eventName, detail) {
+		const event = new CustomEvent(eventName, {detail});
+		this.node.dispatchEvent(event);
 	}
 
 	get listeners() {
@@ -285,13 +292,15 @@ function findAll(selector, rootElement = document) {
 	return result;
 }
 
-wrap.find = find;
-wrap.findAll = findAll;
-wrap.ready = async function (fn) {
-	await getBody;
-	if (fn) {
-		fn();
+Object.assign(wrap, {
+	find,
+	findAll,
+	ready: async function (fn) {
+		await getBody;
+		if (fn) {
+			fn();
+		}
 	}
-};
+});
 
 export default wrap;
