@@ -1,6 +1,6 @@
 import read from '..';
 
-describe('FileReader/read', function () {
+describe('readBlob', function () {
 
 	it('should be a function', function () {
 		return read;

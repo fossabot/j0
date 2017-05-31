@@ -1,6 +1,6 @@
 import parse from '..';
 
-describe('FormData/parse', function () {
+describe('parseFormData', function () {
 
 	it('should parse string', function () {
 		const form = parse('a=b&c=d', {

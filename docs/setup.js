@@ -7,9 +7,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var x$1 = window;
 
@@ -17,25 +17,39 @@ var x$2 = fetch;
 
 var x$3 = document;
 
+var x$4 = Object;
+
+var x$5 = Array;
+
+var isArray = x$5.isArray;
+
 function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$4 = Node;
+var x$6 = Node;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
 function isNode(x) {
-	return isInstanceOf(x, x$4);
+	return isInstanceOf(x, x$6);
 }
 
-var x$5 = Promise;
+function isUndefined(x) {
+	return typeof x === 'undefined';
+}
 
-var nodeKey = Symbol('node');
-var eventsKey = Symbol('events');
-var getBody = new x$5(function (resolve) {
+var x$7 = Promise;
+
+var x$8 = CustomEvent;
+
+var x$9 = Set;
+
+var nodeKey = Symbol();
+var listenersKey = Symbol();
+var getBody = new x$7(function (resolve) {
 	var interval = 50;
 	function check() {
 		var body = x$3.body;
@@ -48,6 +62,27 @@ var getBody = new x$5(function (resolve) {
 	}
 	setTimeout(check);
 });
+
+function superForEach() {
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+
+	var fn = args.pop();
+	if (isString(args[0])) {
+		fn.apply(undefined, args);
+	} else {
+		args.forEach(function (arg) {
+			if (isArray(arg)) {
+				superForEach.apply(undefined, _toConsumableArray(arg).concat([fn]));
+			} else {
+				x$4.keys(arg).forEach(function (key) {
+					superForEach(key, arg[key], fn);
+				});
+			}
+		});
+	}
+}
 
 var J0Element = function () {
 
@@ -64,67 +99,53 @@ var J0Element = function () {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			var _source$t = source.t,
-			    t = _source$t === undefined ? 'div' : _source$t,
-			    _source$a = source.a,
-			    a = _source$a === undefined ? [] : _source$a,
-			    _source$c = source.c,
-			    c = _source$c === undefined ? [] : _source$c,
-			    _source$e = source.e,
-			    e = _source$e === undefined ? [] : _source$e,
+			var t = source.t,
+			    a = source.a,
+			    c = source.c,
+			    e = source.e,
 			    n = source.n,
 			    o = source.o;
 
-			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t)).node;
-			for (var i = 0, length = c.length; i < length; i++) {
-				var item = c[i];
-				if (item) {
-					this.append(item);
-				}
+			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
+			if (c) {
+				this.append.apply(this, _toConsumableArray(c));
 			}
-			for (var _i = 0, _length = e.length; _i < _length; _i++) {
-				var _item = e[_i];
-				if (_item) {
-					this.on(_item[0], _item[1]);
-				}
+			if (e) {
+				this.on(e);
 			}
-			for (var _i2 = 0, _length2 = a.length; _i2 < _length2; _i2++) {
-				var _item2 = a[_i2];
-				if (_item2) {
-					this.setAttribute.apply(this, _toConsumableArray(_item2));
-				}
+			if (a) {
+				this.attr(a);
 			}
 		}
-		this[eventsKey] = [];
+		this[listenersKey] = new x$9();
 	}
 	/* eslint-enable max-statements */
 
 	_createClass(J0Element, [{
-		key: 'prepend',
-		value: function prepend() {
-			var _this = this;
+		key: 'equals',
+		value: function equals(element) {
+			return this.node === wrap(element).node;
+		}
+	}, {
+		key: 'text',
+		value: function text(_text) {
+			var node = this.node;
 
-			for (var _len = arguments.length, elements = Array(_len), _key = 0; _key < _len; _key++) {
-				elements[_key] = arguments[_key];
+			if (isUndefined(_text)) {
+				return node.textContent;
 			}
-
-			elements.forEach(function (element) {
-				_this.insertBefore(element, _this.firstChild);
-			});
+			node.textContent = _text;
 			return this;
 		}
 	}, {
-		key: 'append',
-		value: function append() {
-			var _this2 = this;
+		key: 'html',
+		value: function html(_html) {
+			var node = this.node;
 
-			for (var _len2 = arguments.length, elements = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				elements[_key2] = arguments[_key2];
+			if (isUndefined(_html)) {
+				return node.innerHTML;
 			}
-
-			elements.forEach(function (element) {
-				_this2.node.appendChild(wrap(element).node);
-			});
+			node.innerHTML = _html;
 			return this;
 		}
 	}, {
@@ -133,14 +154,32 @@ var J0Element = function () {
 			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
 		}
 	}, {
-		key: 'before',
-		value: function before(element) {
-			this.parent.insertBefore(element, this);
+		key: 'prepend',
+		value: function prepend() {
+			var _this = this;
+
+			for (var _len2 = arguments.length, elements = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				elements[_key2] = arguments[_key2];
+			}
+
+			elements.forEach(function (element) {
+				_this.firstChild = element;
+			});
+			return this;
 		}
 	}, {
-		key: 'after',
-		value: function after(element) {
-			this.parent.insertBefore(element, this.next);
+		key: 'append',
+		value: function append() {
+			var node = this.node;
+
+			for (var _len3 = arguments.length, elements = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				elements[_key3] = arguments[_key3];
+			}
+
+			elements.forEach(function (element) {
+				node.appendChild(wrap(element).node);
+			});
+			return this;
 		}
 	}, {
 		key: 'remove',
@@ -165,8 +204,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len3 = arguments.length, value = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-				value[_key3 - 1] = arguments[_key3];
+			for (var _len4 = arguments.length, value = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+				value[_key4 - 1] = arguments[_key4];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -178,58 +217,104 @@ var J0Element = function () {
 			return this.node.getAttribute(name);
 		}
 	}, {
-		key: 'on',
-		value: function on(eventName, fn) {
+		key: 'attr',
+		value: function attr() {
+			var _this2 = this;
+
+			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+				args[_key5] = arguments[_key5];
+			}
+
+			superForEach.apply(undefined, args.concat([function () {
+				_this2.setAttribute.apply(_this2, arguments);
+			}]));
+			return this;
+		}
+	}, {
+		key: 'addEventListener',
+		value: function addEventListener(eventName, fn) {
 			var _this3 = this;
 
 			var wrapped = function wrapped(event) {
 				fn.call(_this3, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
-			this.events.push([eventName, fn, wrapped]);
+			this.listeners.add([eventName, fn, wrapped]);
 			return this;
+		}
+	}, {
+		key: 'once',
+		value: function once(eventName, fn) {
+			var _this4 = this;
+
+			var item = [eventName, fn];
+			var wrapped = function wrapped(event) {
+				_this4.node.removeEventListener(eventName, wrapped);
+				_this4.listeners.delete(item);
+				fn.call(_this4, event);
+			};
+			item.push(wrapped);
+			this.node.addEventListener(eventName, wrapped);
+			this.listeners.add(item);
+			return this;
+		}
+	}, {
+		key: 'on',
+		value: function on() {
+			var _this5 = this;
+
+			for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+				args[_key6] = arguments[_key6];
+			}
+
+			superForEach.apply(undefined, args.concat([function () {
+				_this5.addEventListener.apply(_this5, arguments);
+			}]));
+			return this;
+		}
+	}, {
+		key: 'removeEventListener',
+		value: function removeEventListener(eventName, fn) {
+			var _this6 = this;
+
+			this.listeners.forEach(function (item) {
+				var _item = _slicedToArray(item, 3),
+				    e = _item[0],
+				    f = _item[1],
+				    wrapped = _item[2];
+
+				if (e === eventName && (!fn || fn === f)) {
+					_this6.node.removeEventListener(e, wrapped);
+					_this6.listeners.delete(item);
+				}
+			});
 		}
 	}, {
 		key: 'off',
 		value: function off(eventName, fn) {
-			var events = this.events;
-
-			for (var i = events.length; i--;) {
-				var _events$i = _slicedToArray(events[i], 3),
-				    e = _events$i[0],
-				    f = _events$i[1],
-				    wrapped = _events$i[2];
-
-				if (e === eventName && (!fn || fn === f)) {
-					this.node.removeEventListener(eventName, wrapped);
-					events.splice(i, 1);
-				}
-			}
+			this.removeEventListener(eventName, fn);
+		}
+	}, {
+		key: 'emit',
+		value: function emit(eventName, detail) {
+			var event = new x$8(eventName, { detail: detail });
+			this.node.dispatchEvent(event);
+			return this;
 		}
 	}, {
 		key: 'find',
 		value: function find(selector) {
-			return _find(selector, this);
+			return _find(selector, this.node);
 		}
 	}, {
 		key: 'findAll',
 		value: function findAll(selector) {
-			return _findAll(selector, this);
+			return _findAll(selector, this.node);
 		}
 	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
-		}
-	}, {
-		key: 'text',
-		get: function get() {
-			return this.node.textContent;
-		},
-		set: function set() {
-			var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-			this.node.textContent = text;
 		}
 	}, {
 		key: 'parent',
@@ -246,44 +331,72 @@ var J0Element = function () {
 		get: function get() {
 			var previousSibling = this.node.previousSibling;
 
-			return previousSibling && wrap(previousSibling);
+			return previousSibling ? wrap(previousSibling) : null;
+		},
+		set: function set(element) {
+			this.parent.insertBefore(element, this);
 		}
 	}, {
 		key: 'next',
 		get: function get() {
 			var nextSibling = this.node.nextSibling;
 
-			return nextSibling && wrap(nextSibling);
+			return nextSibling ? wrap(nextSibling) : null;
+		},
+		set: function set(element) {
+			this.parent.insertBefore(element, this.next);
 		}
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return [].concat(_toConsumableArray(this.node.childNodes)).map(wrap);
+			return x$5.from(this.node.childNodes).map(wrap);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return [].concat(_toConsumableArray(this.node.children)).map(wrap);
+			return x$5.from(this.node.children).map(wrap);
 		}
 	}, {
-		key: 'events',
+		key: 'firstChild',
 		get: function get() {
-			return this[eventsKey];
+			var firstChild = this.node.firstChild;
+
+			return firstChild ? wrap(firstChild) : null;
+		},
+		set: function set(element) {
+			var firstChild = this.firstChild;
+
+			if (firstChild) {
+				firstChild.previous = element;
+			} else {
+				this.append(element);
+			}
+		}
+	}, {
+		key: 'lastChild',
+		get: function get() {
+			var lastChild = this.node.lastChild;
+
+			return lastChild ? wrap(lastChild) : null;
+		},
+		set: function set(element) {
+			var lastChild = this.lastChild;
+
+			if (lastChild) {
+				this.lastChild.next = element;
+			} else {
+				this.append(element);
+			}
+		}
+	}, {
+		key: 'listeners',
+		get: function get() {
+			return this[listenersKey];
 		}
 	}, {
 		key: 'attributes',
 		get: function get() {
 			return this.node.attributes;
-		}
-	}, {
-		key: 'firstChild',
-		get: function get() {
-			return wrap(this.node.firstChild);
-		}
-	}, {
-		key: 'lastChild',
-		get: function get() {
-			return wrap(this.node.lastChild);
 		}
 	}]);
 
@@ -312,67 +425,72 @@ function _findAll(selector) {
 	return result;
 }
 
-wrap.find = _find;
-wrap.findAll = _findAll;
-wrap.ready = function () {
-	var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fn) {
-		return regeneratorRuntime.wrap(function _callee$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						_context.next = 2;
-						return getBody;
+x$4.assign(wrap, {
+	find: _find,
+	findAll: _findAll,
+	ready: function () {
+		var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fn) {
+			return regeneratorRuntime.wrap(function _callee$(_context) {
+				while (1) {
+					switch (_context.prev = _context.next) {
+						case 0:
+							_context.next = 2;
+							return getBody;
 
-					case 2:
-						if (fn) {
-							fn();
-						}
+						case 2:
+							if (fn) {
+								fn();
+							}
 
-					case 3:
-					case 'end':
-						return _context.stop();
+						case 3:
+						case 'end':
+							return _context.stop();
+					}
 				}
-			}
-		}, _callee, this);
-	}));
+			}, _callee, this);
+		}));
 
-	return function (_x5) {
-		return _ref.apply(this, arguments);
-	};
-}();
+		function ready(_x4) {
+			return _ref.apply(this, arguments);
+		}
 
-var x$6 = console;
+		return ready;
+	}()
+});
+
+var x$10 = console;
 
 wrap.ready().then(_asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	var response, _ref3, version;
+	var url, response, _ref3, version;
 
 	return regeneratorRuntime.wrap(function _callee2$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
-					_context2.next = 2;
-					return x$2(wrap(x$3.getElementById('root')).text + '/package.json');
+					url = wrap(x$3.getElementById('root')).text() + '/package.json';
+					_context2.next = 3;
+					return x$2(url);
 
-				case 2:
+				case 3:
 					response = _context2.sent;
-					_context2.next = 5;
+					_context2.next = 6;
 					return response.json();
 
-				case 5:
+				case 6:
 					_ref3 = _context2.sent;
 					version = _ref3.version;
 
 					wrap.findAll('.version').forEach(function (element) {
-						element.text = version;
+						element.text(version);
 					});
 
-				case 8:
+				case 9:
 				case 'end':
 					return _context2.stop();
 			}
 		}
 	}, _callee2, this);
-}))).catch(x$6.error);
+}))).catch(x$10.error);
 x$1.assert = x$1.chai.assert;
 x$1.mocha.setup('bdd');
 }())

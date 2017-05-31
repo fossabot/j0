@@ -59,14 +59,13 @@ var Iterator = function () {
 }();
 
 function generator() {
-	var _this = this;
-
-	var length = this.length;
+	var array = this.slice();
+	var length = array.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this[index],
+			value: array[index],
 			done: length <= index++
 		};
 	});
@@ -111,13 +110,13 @@ if (!prototype$1.copyWithin) {
 }
 
 function entries() {
-	var _this2 = this;
+	var _this = this;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: [index, _this2[index]],
-			done: _this2.length < ++index
+			value: [index, _this[index]],
+			done: _this.length < ++index
 		};
 	});
 }
@@ -262,14 +261,14 @@ if (!x$2.of) {
 }
 
 function generator$1() {
-	var _this3 = this;
+	var _this2 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this3[index],
+			value: _this2[index],
 			done: length <= index++
 		};
 	});
@@ -420,7 +419,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this4 = this;
+			var _this3 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -428,14 +427,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this4.resolve(value);
+				_this3.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this4.reject(error);
+				_this3.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -474,10 +473,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this5 = this;
+			var _this4 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this5.handle(deferred);
+				_this4.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -599,6 +598,28 @@ function isThennable(value) {
 
 x$4.Promise = x$4.Promise || J0Promise;
 
+var x$7 = CustomEvent;
+
+var x$8 = Event;
+
+var x$9 = document;
+
+function CustomEvent$2(event) {
+	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+		bubbles: false,
+		cancelable: false
+	};
+
+	var evt = x$9.createEvent('CustomEvent');
+	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+	return evt;
+}
+CustomEvent$2.prototype = x$8.prototype;
+
+if (!isFunction(x$7)) {
+	x$4.CustomEvent = CustomEvent$2;
+}
+
 var Map$1 = function () {
 	function Map$1(iterable) {
 		_classCallCheck(this, Map$1);
@@ -699,7 +720,15 @@ var Map$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			this.data.forEach(fn, thisArg);
+			var _this5 = this;
+
+			this.data.slice().forEach(function (_ref7) {
+				var _ref8 = _slicedToArray(_ref7, 2),
+				    key = _ref8[0],
+				    value = _ref8[1];
+
+				fn.call(thisArg, value, key, _this5);
+			});
 		}
 	}, {
 		key: 'keys',
@@ -747,13 +776,13 @@ if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 }
 x$4.Map = MAP;
 
-var x$7 = Map;
+var x$10 = Map;
 
 function generator$2() {
 	return this.entries();
 }
 
-var prototype$9 = x$7.prototype;
+var prototype$9 = x$10.prototype;
 
 if (!prototype$9[iteratorSymbol]) {
 	prototype$9[iteratorSymbol] = generator$2;
@@ -829,14 +858,14 @@ var Set$1 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this6 = this;
 
-			this.data.forEach(function (value) {
+			this.data.slice().forEach(function (value) {
 				fn.call(thisArg, value, value, _this6);
 			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
-			return this.data[iteratorSymbol]();
+			return this.data.slice()[iteratorSymbol]();
 		}
 	}, {
 		key: iteratorSymbol,
@@ -878,19 +907,19 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 
 x$4.Set = SET;
 
-var x$8 = Set;
+var x$11 = Set;
 
 function generator$4() {
 	return this.values();
 }
 
-var prototype$10 = x$8.prototype;
+var prototype$10 = x$11.prototype;
 
 if (!prototype$10[iteratorSymbol]) {
 	prototype$10[iteratorSymbol] = generator$4;
 }
 
-var x$9 = NodeList;
+var x$12 = NodeList;
 
 function generator$6() {
 	var _this7 = this;
@@ -906,13 +935,13 @@ function generator$6() {
 	});
 }
 
-var prototype$11 = x$9.prototype;
+var prototype$11 = x$12.prototype;
 
 if (!prototype$11[iteratorSymbol]) {
 	prototype$11[iteratorSymbol] = generator$6;
 }
 
-var x$10 = HTMLCollection;
+var x$13 = HTMLCollection;
 
 function generator$8() {
 	var _this8 = this;
@@ -930,13 +959,13 @@ function generator$8() {
 	};
 }
 
-var prototype$12 = x$10.prototype;
+var prototype$12 = x$13.prototype;
 
 if (!prototype$12[iteratorSymbol]) {
 	prototype$12[iteratorSymbol] = generator$8;
 }
 
-var x$11 = NamedNodeMap;
+var x$14 = NamedNodeMap;
 
 function generator$10() {
 	var _this9 = this;
@@ -952,7 +981,7 @@ function generator$10() {
 	});
 }
 
-var prototype$13 = x$11.prototype;
+var prototype$13 = x$14.prototype;
 
 if (!prototype$13[iteratorSymbol]) {
 	prototype$13[iteratorSymbol] = generator$10;
@@ -970,12 +999,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-					var _ref7 = _step4.value;
+					var _ref9 = _step4.value;
 
-					var _ref8 = _slicedToArray(_ref7, 2);
+					var _ref10 = _slicedToArray(_ref9, 2);
 
-					var key = _ref8[0];
-					var value = _ref8[1];
+					var key = _ref10[0];
+					var value = _ref10[1];
 
 					this.append(key, value);
 				}
@@ -1004,9 +1033,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref9) {
-				var _ref10 = _slicedToArray(_ref9, 1),
-				    itemName = _ref10[0];
+			return this.data.findIndex(function (_ref11) {
+				var _ref12 = _slicedToArray(_ref11, 1),
+				    itemName = _ref12[0];
 
 				return itemName === name;
 			});
@@ -1034,9 +1063,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref11) {
-				var _ref12 = _slicedToArray(_ref11, 1),
-				    itemName = _ref12[0];
+			this.data = this.data.filter(function (_ref13) {
+				var _ref14 = _slicedToArray(_ref13, 1),
+				    itemName = _ref14[0];
 
 				return itemName !== name;
 			});
@@ -1044,9 +1073,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref13) {
-				var _ref14 = _slicedToArray(_ref13, 1),
-				    itemName = _ref14[0];
+			var found = this.data.find(function (_ref15) {
+				var _ref16 = _slicedToArray(_ref15, 1),
+				    itemName = _ref16[0];
 
 				return itemName === name;
 			});
@@ -1056,10 +1085,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref15) {
-				var _ref16 = _slicedToArray(_ref15, 2),
-				    itemName = _ref16[0],
-				    value = _ref16[1];
+			this.data.forEach(function (_ref17) {
+				var _ref18 = _slicedToArray(_ref17, 2),
+				    itemName = _ref18[0],
+				    value = _ref18[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -1070,11 +1099,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref17) {
-				var _ref18 = _slicedToArray(_ref17, 2),
-				    name = _ref18[0],
-				    _ref18$ = _ref18[1],
-				    value = _ref18$ === undefined ? '' : _ref18$;
+			return this.data.map(function (_ref19) {
+				var _ref20 = _slicedToArray(_ref19, 2),
+				    name = _ref20[0],
+				    _ref20$ = _ref20[1],
+				    value = _ref20$ === undefined ? '' : _ref20$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -1141,11 +1170,11 @@ var URLSearchParams$2 = function (_StringList) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref19) {
-				var _ref20 = _slicedToArray(_ref19, 2),
-				    name = _ref20[0],
-				    _ref20$ = _ref20[1],
-				    value = _ref20$ === undefined ? '' : _ref20$;
+			return this.data.map(function (_ref21) {
+				var _ref22 = _slicedToArray(_ref21, 2),
+				    name = _ref22[0],
+				    _ref22$ = _ref22[1],
+				    value = _ref22$ === undefined ? '' : _ref22$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -1243,22 +1272,22 @@ if (!x$4.Headers) {
 	x$4.Headers = Headers$1;
 }
 
-var x$12 = JSON;
+var x$15 = JSON;
 
-var x$13 = Blob;
+var x$16 = Blob;
 
-var x$14 = ArrayBuffer;
+var x$17 = ArrayBuffer;
 
-var x$15 = DataView;
+var x$18 = DataView;
 
-var x$16 = Uint8Array;
+var x$19 = Uint8Array;
 
-var x$17 = Promise;
+var x$20 = Promise;
 
-var x$18 = FileReader;
+var x$21 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new x$18();
+	var reader = new x$21();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -1285,12 +1314,12 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var x$19 = FormData;
+var x$22 = FormData;
 
-var x$20 = decodeURIComponent;
+var x$23 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$19();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$22();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -1299,8 +1328,8 @@ function parse(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = x$20(name.replace(/\+/g, ' '));
-			parts = x$20(parts.join('=').replace(/\+/g, ' '));
+			name = x$23(name.replace(/\+/g, ' '));
+			parts = x$23(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -1311,29 +1340,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$21 = URLSearchParams;
+var x$24 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$22 = Uint8ClampedArray;
+var x$25 = Uint8ClampedArray;
 
-var x$23 = Uint16Array;
+var x$26 = Uint16Array;
 
-var x$24 = Uint32Array;
+var x$27 = Uint32Array;
 
-var x$25 = Int8Array;
+var x$28 = Int8Array;
 
-var x$26 = Int16Array;
+var x$29 = Int16Array;
 
-var x$27 = Int32Array;
+var x$30 = Int32Array;
 
-var x$28 = Float32Array;
+var x$31 = Float32Array;
 
-var x$29 = Float64Array;
+var x$32 = Float64Array;
 
-var viewClasses = [x$16, x$22, x$23, x$24, x$25, x$26, x$27, x$28, x$29];
+var viewClasses = [x$19, x$25, x$26, x$27, x$28, x$29, x$30, x$31, x$32];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1348,7 +1377,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new x$16(arrayBuffer);
+	var view = new x$19(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -1391,8 +1420,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new x$16(buf.byteLength);
-	view.set(new x$16(buf));
+	var view = new x$19(buf.byteLength);
+	view.set(new x$19(buf));
 	return view.buffer;
 }
 
@@ -1411,17 +1440,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$13)) {
+			} else if (isInstanceOf(body, x$16)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$19)) {
+			} else if (isInstanceOf(body, x$22)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$21)) {
+			} else if (isInstanceOf(body, x$24)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$15)) {
+			} else if (isInstanceOf(body, x$18)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$13([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$14) || isArrayBufferView(body)) {
+				this.bodyInit = new x$16([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$17) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -1431,7 +1460,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$21) {
+				} else if (body instanceof x$24) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -1440,7 +1469,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$17.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$20.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1454,13 +1483,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$17.resolve(this.bodyBlob);
+				return x$20.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$17.resolve(new x$13([this.bodyArrayBuffer]));
+				return x$20.resolve(new x$16([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$17.resolve(new x$13([this.bodyText]));
+				return x$20.resolve(new x$16([this.bodyText]));
 			}
 		}
 	}, {
@@ -1473,11 +1502,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$17.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$20.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$17.resolve(this.bodyText);
+				return x$20.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1488,13 +1517,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$12.parse);
+			return this.text().then(x$15.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$17.reject(new x$6('Already used'));
+				return x$20.reject(new x$6('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1536,8 +1565,8 @@ var Request = function (_Body) {
 
 	_createClass(Request, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref21) {
-			var headers = _ref21.headers;
+		value: function inheritFrom(input, body, _ref23) {
+			var headers = _ref23.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -1625,10 +1654,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$30 = Headers;
+var x$33 = Headers;
 
 function parse$1(rawHeaders) {
-	var headers = new x$30();
+	var headers = new x$33();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -1645,12 +1674,12 @@ function parse$1(rawHeaders) {
 	return headers;
 }
 
-var x$31 = XMLHttpRequest;
+var x$34 = XMLHttpRequest;
 
 function fetch(input, init) {
-	return new x$17(function (resolve, reject) {
+	return new x$20(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$31();
+		var xhr = new x$34();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -1678,12 +1707,12 @@ function fetch(input, init) {
 
 		try {
 			for (var _iterator5 = request.headers.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-				var _ref22 = _step5.value;
+				var _ref24 = _step5.value;
 
-				var _ref23 = _slicedToArray(_ref22, 2);
+				var _ref25 = _slicedToArray(_ref24, 2);
 
-				var name = _ref23[0];
-				var value = _ref23[1];
+				var name = _ref25[0];
+				var value = _ref25[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -1723,18 +1752,18 @@ if (!x$4.Request) {
 	x$4.Request = Request;
 }
 
-var x$32 = Date;
+var x$35 = Date;
 
 x$4.requestAnimationFrame = x$4.requestAnimationFrame || x$4.mozRequestAnimationFrame || x$4.webkitRequestAnimationFrame || x$4.msRequestAnimationFrame || function (fn) {
 	return x$5(function () {
-		fn(x$32.now());
+		fn(x$35.now());
 	}, 30);
 };
 
-var x$33 = clearTimeout;
+var x$36 = clearTimeout;
 
 x$4.cancelAnimationFrame = x$4.cancelAnimationFrame || x$4.mozCancelAnimationFrame || function (id) {
-	return x$33(id);
+	return x$36(id);
 };
 
 x$4.global = x$4;

@@ -65,6 +65,12 @@
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/CustomEvent/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/CustomEvent/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/EventEmitter/</loc>
 	</url>
 	<url>
@@ -246,6 +252,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isNumber/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/isObject/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isString/</loc>

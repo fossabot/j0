@@ -7,30 +7,30 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var wait = function () {
-	var _ref44 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(duration, data) {
-		return regeneratorRuntime.wrap(function _callee13$(_context13) {
+var wait$1 = function () {
+	var _ref55 = _asyncToGenerator(regeneratorRuntime.mark(function _callee16(duration, data) {
+		return regeneratorRuntime.wrap(function _callee16$(_context16) {
 			while (1) {
-				switch (_context13.prev = _context13.next) {
+				switch (_context16.prev = _context16.next) {
 					case 0:
-						_context13.next = 2;
+						_context16.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context13.abrupt('return', data);
+						return _context16.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context13.stop();
+						return _context16.stop();
 				}
 			}
-		}, _callee13, this);
+		}, _callee16, this);
 	}));
 
-	return function wait(_x53, _x54) {
-		return _ref44.apply(this, arguments);
+	return function wait$1(_x54, _x55) {
+		return _ref55.apply(this, arguments);
 	};
 }();
 
@@ -126,14 +126,13 @@ var Iterator = function () {
 }();
 
 function generator() {
-	var _this = this;
-
-	var length = this.length;
+	var array = this.slice();
+	var length = array.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this[index],
+			value: array[index],
 			done: length <= index++
 		};
 	});
@@ -426,13 +425,13 @@ function test$5(entries) {
 }
 
 function entries() {
-	var _this2 = this;
+	var _this = this;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: [index, _this2[index]],
-			done: _this2.length < ++index
+			value: [index, _this[index]],
+			done: _this.length < ++index
 		};
 	});
 }
@@ -1401,13 +1400,45 @@ describe('Math/cubicBezier', function () {
 	});
 });
 
+function test$19(CustomEvent) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'CustomEvent';
+
+
+	describe(name, function () {
+
+		it('should create an event', function () {
+			var type = '' + Date.now();
+			var event = new CustomEvent(type);
+			assert.equal(event.type, type);
+		});
+	});
+}
+
+var x$23 = Event;
+
+function CustomEvent$1(event) {
+	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+		bubbles: false,
+		cancelable: false
+	};
+
+	var evt = x$3.createEvent('CustomEvent');
+	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+	return evt;
+}
+CustomEvent$1.prototype = x$23.prototype;
+
+test$19(CustomEvent$1, 'CustomEvent#j0');
+
+test$19(CustomEvent);
+
 function debounce(fn) {
 	var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 	var thisArg = arguments[2];
 
 	var timer = void 0;
 	return function () {
-		var _this3 = this;
+		var _this2 = this;
 
 		for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 			args[_key2] = arguments[_key2];
@@ -1415,7 +1446,7 @@ function debounce(fn) {
 
 		clearTimeout(timer);
 		timer = setTimeout(function () {
-			fn.call.apply(fn, [thisArg || _this3].concat(args));
+			fn.call.apply(fn, [thisArg || _this2].concat(args));
 		}, delay);
 	};
 }
@@ -1449,14 +1480,24 @@ describe('debounce', function () {
 	});
 });
 
-var x$23 = Node;
+var x$24 = Object;
+
+var x$25 = Array;
+
+var isArray = x$25.isArray;
+
+var x$26 = Node;
 
 function isNode(x) {
-	return isInstanceOf(x, x$23);
+	return isInstanceOf(x, x$26);
 }
 
-var nodeKey = Symbol('node');
-var eventsKey = Symbol('events');
+var x$27 = CustomEvent;
+
+var x$28 = Set;
+
+var nodeKey = Symbol();
+var listenersKey = Symbol();
 var getBody = new x$9(function (resolve) {
 	var interval = 50;
 	function check() {
@@ -1470,6 +1511,27 @@ var getBody = new x$9(function (resolve) {
 	}
 	setTimeout(check);
 });
+
+function superForEach() {
+	for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+		args[_key3] = arguments[_key3];
+	}
+
+	var fn = args.pop();
+	if (isString(args[0])) {
+		fn.apply(undefined, args);
+	} else {
+		args.forEach(function (arg) {
+			if (isArray(arg)) {
+				superForEach.apply(undefined, _toConsumableArray(arg).concat([fn]));
+			} else {
+				x$24.keys(arg).forEach(function (key) {
+					superForEach(key, arg[key], fn);
+				});
+			}
+		});
+	}
+}
 
 var J0Element = function () {
 
@@ -1486,67 +1548,53 @@ var J0Element = function () {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			var _source$t = source.t,
-			    t = _source$t === undefined ? 'div' : _source$t,
-			    _source$a = source.a,
-			    a = _source$a === undefined ? [] : _source$a,
-			    _source$c = source.c,
-			    c = _source$c === undefined ? [] : _source$c,
-			    _source$e = source.e,
-			    e = _source$e === undefined ? [] : _source$e,
+			var t = source.t,
+			    a = source.a,
+			    c = source.c,
+			    e = source.e,
 			    n = source.n,
 			    o = source.o;
 
-			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t)).node;
-			for (var i = 0, length = c.length; i < length; i++) {
-				var item = c[i];
-				if (item) {
-					this.append(item);
-				}
+			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
+			if (c) {
+				this.append.apply(this, _toConsumableArray(c));
 			}
-			for (var _i2 = 0, _length = e.length; _i2 < _length; _i2++) {
-				var _item = e[_i2];
-				if (_item) {
-					this.on(_item[0], _item[1]);
-				}
+			if (e) {
+				this.on(e);
 			}
-			for (var _i3 = 0, _length2 = a.length; _i3 < _length2; _i3++) {
-				var _item2 = a[_i3];
-				if (_item2) {
-					this.setAttribute.apply(this, _toConsumableArray(_item2));
-				}
+			if (a) {
+				this.attr(a);
 			}
 		}
-		this[eventsKey] = [];
+		this[listenersKey] = new x$28();
 	}
 	/* eslint-enable max-statements */
 
 	_createClass(J0Element, [{
-		key: 'prepend',
-		value: function prepend() {
-			var _this4 = this;
+		key: 'equals',
+		value: function equals(element) {
+			return this.node === wrap(element).node;
+		}
+	}, {
+		key: 'text',
+		value: function text(_text) {
+			var node = this.node;
 
-			for (var _len3 = arguments.length, elements = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				elements[_key3] = arguments[_key3];
+			if (isUndefined(_text)) {
+				return node.textContent;
 			}
-
-			elements.forEach(function (element) {
-				_this4.insertBefore(element, _this4.firstChild);
-			});
+			node.textContent = _text;
 			return this;
 		}
 	}, {
-		key: 'append',
-		value: function append() {
-			var _this5 = this;
+		key: 'html',
+		value: function html(_html) {
+			var node = this.node;
 
-			for (var _len4 = arguments.length, elements = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-				elements[_key4] = arguments[_key4];
+			if (isUndefined(_html)) {
+				return node.innerHTML;
 			}
-
-			elements.forEach(function (element) {
-				_this5.node.appendChild(wrap(element).node);
-			});
+			node.innerHTML = _html;
 			return this;
 		}
 	}, {
@@ -1555,14 +1603,32 @@ var J0Element = function () {
 			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
 		}
 	}, {
-		key: 'before',
-		value: function before(element) {
-			this.parent.insertBefore(element, this);
+		key: 'prepend',
+		value: function prepend() {
+			var _this3 = this;
+
+			for (var _len4 = arguments.length, elements = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+				elements[_key4] = arguments[_key4];
+			}
+
+			elements.forEach(function (element) {
+				_this3.firstChild = element;
+			});
+			return this;
 		}
 	}, {
-		key: 'after',
-		value: function after(element) {
-			this.parent.insertBefore(element, this.next);
+		key: 'append',
+		value: function append() {
+			var node = this.node;
+
+			for (var _len5 = arguments.length, elements = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+				elements[_key5] = arguments[_key5];
+			}
+
+			elements.forEach(function (element) {
+				node.appendChild(wrap(element).node);
+			});
+			return this;
 		}
 	}, {
 		key: 'remove',
@@ -1587,8 +1653,8 @@ var J0Element = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len5 = arguments.length, value = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-				value[_key5 - 1] = arguments[_key5];
+			for (var _len6 = arguments.length, value = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+				value[_key6 - 1] = arguments[_key6];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -1600,58 +1666,104 @@ var J0Element = function () {
 			return this.node.getAttribute(name);
 		}
 	}, {
-		key: 'on',
-		value: function on(eventName, fn) {
-			var _this6 = this;
+		key: 'attr',
+		value: function attr() {
+			var _this4 = this;
+
+			for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+				args[_key7] = arguments[_key7];
+			}
+
+			superForEach.apply(undefined, args.concat([function () {
+				_this4.setAttribute.apply(_this4, arguments);
+			}]));
+			return this;
+		}
+	}, {
+		key: 'addEventListener',
+		value: function addEventListener(eventName, fn) {
+			var _this5 = this;
 
 			var wrapped = function wrapped(event) {
-				fn.call(_this6, event);
+				fn.call(_this5, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
-			this.events.push([eventName, fn, wrapped]);
+			this.listeners.add([eventName, fn, wrapped]);
 			return this;
+		}
+	}, {
+		key: 'once',
+		value: function once(eventName, fn) {
+			var _this6 = this;
+
+			var item = [eventName, fn];
+			var wrapped = function wrapped(event) {
+				_this6.node.removeEventListener(eventName, wrapped);
+				_this6.listeners.delete(item);
+				fn.call(_this6, event);
+			};
+			item.push(wrapped);
+			this.node.addEventListener(eventName, wrapped);
+			this.listeners.add(item);
+			return this;
+		}
+	}, {
+		key: 'on',
+		value: function on() {
+			var _this7 = this;
+
+			for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+				args[_key8] = arguments[_key8];
+			}
+
+			superForEach.apply(undefined, args.concat([function () {
+				_this7.addEventListener.apply(_this7, arguments);
+			}]));
+			return this;
+		}
+	}, {
+		key: 'removeEventListener',
+		value: function removeEventListener(eventName, fn) {
+			var _this8 = this;
+
+			this.listeners.forEach(function (item) {
+				var _item = _slicedToArray(item, 3),
+				    e = _item[0],
+				    f = _item[1],
+				    wrapped = _item[2];
+
+				if (e === eventName && (!fn || fn === f)) {
+					_this8.node.removeEventListener(e, wrapped);
+					_this8.listeners.delete(item);
+				}
+			});
 		}
 	}, {
 		key: 'off',
 		value: function off(eventName, fn) {
-			var events = this.events;
-
-			for (var i = events.length; i--;) {
-				var _events$i = _slicedToArray(events[i], 3),
-				    e = _events$i[0],
-				    f = _events$i[1],
-				    wrapped = _events$i[2];
-
-				if (e === eventName && (!fn || fn === f)) {
-					this.node.removeEventListener(eventName, wrapped);
-					events.splice(i, 1);
-				}
-			}
+			this.removeEventListener(eventName, fn);
+		}
+	}, {
+		key: 'emit',
+		value: function emit(eventName, detail) {
+			var event = new x$27(eventName, { detail: detail });
+			this.node.dispatchEvent(event);
+			return this;
 		}
 	}, {
 		key: 'find',
 		value: function find(selector) {
-			return _find(selector, this);
+			return _find(selector, this.node);
 		}
 	}, {
 		key: 'findAll',
 		value: function findAll(selector) {
-			return _findAll(selector, this);
+			return _findAll(selector, this.node);
 		}
 	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
-		}
-	}, {
-		key: 'text',
-		get: function get() {
-			return this.node.textContent;
-		},
-		set: function set() {
-			var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-			this.node.textContent = text;
 		}
 	}, {
 		key: 'parent',
@@ -1668,44 +1780,72 @@ var J0Element = function () {
 		get: function get() {
 			var previousSibling = this.node.previousSibling;
 
-			return previousSibling && wrap(previousSibling);
+			return previousSibling ? wrap(previousSibling) : null;
+		},
+		set: function set(element) {
+			this.parent.insertBefore(element, this);
 		}
 	}, {
 		key: 'next',
 		get: function get() {
 			var nextSibling = this.node.nextSibling;
 
-			return nextSibling && wrap(nextSibling);
+			return nextSibling ? wrap(nextSibling) : null;
+		},
+		set: function set(element) {
+			this.parent.insertBefore(element, this.next);
 		}
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return [].concat(_toConsumableArray(this.node.childNodes)).map(wrap);
+			return x$25.from(this.node.childNodes).map(wrap);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return [].concat(_toConsumableArray(this.node.children)).map(wrap);
+			return x$25.from(this.node.children).map(wrap);
 		}
 	}, {
-		key: 'events',
+		key: 'firstChild',
 		get: function get() {
-			return this[eventsKey];
+			var firstChild = this.node.firstChild;
+
+			return firstChild ? wrap(firstChild) : null;
+		},
+		set: function set(element) {
+			var firstChild = this.firstChild;
+
+			if (firstChild) {
+				firstChild.previous = element;
+			} else {
+				this.append(element);
+			}
+		}
+	}, {
+		key: 'lastChild',
+		get: function get() {
+			var lastChild = this.node.lastChild;
+
+			return lastChild ? wrap(lastChild) : null;
+		},
+		set: function set(element) {
+			var lastChild = this.lastChild;
+
+			if (lastChild) {
+				this.lastChild.next = element;
+			} else {
+				this.append(element);
+			}
+		}
+	}, {
+		key: 'listeners',
+		get: function get() {
+			return this[listenersKey];
 		}
 	}, {
 		key: 'attributes',
 		get: function get() {
 			return this.node.attributes;
-		}
-	}, {
-		key: 'firstChild',
-		get: function get() {
-			return wrap(this.node.firstChild);
-		}
-	}, {
-		key: 'lastChild',
-		get: function get() {
-			return wrap(this.node.lastChild);
 		}
 	}]);
 
@@ -1734,88 +1874,727 @@ function _findAll(selector) {
 	return result;
 }
 
-wrap.find = _find;
-wrap.findAll = _findAll;
-wrap.ready = function () {
-	var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(fn) {
-		return regeneratorRuntime.wrap(function _callee5$(_context5) {
+x$24.assign(wrap, {
+	find: _find,
+	findAll: _findAll,
+	ready: function () {
+		var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(fn) {
+			return regeneratorRuntime.wrap(function _callee5$(_context5) {
+				while (1) {
+					switch (_context5.prev = _context5.next) {
+						case 0:
+							_context5.next = 2;
+							return getBody;
+
+						case 2:
+							if (fn) {
+								fn();
+							}
+
+						case 3:
+						case 'end':
+							return _context5.stop();
+					}
+				}
+			}, _callee5, this);
+		}));
+
+		function ready(_x27) {
+			return _ref7.apply(this, arguments);
+		}
+
+		return ready;
+	}()
+});
+
+describe('J0Element.prototype.append', function () {
+
+	it('should append nodes', function () {
+		var element1 = wrap(Date.now() + '-1');
+		var element2 = wrap();
+		var element3 = wrap(Date.now() + '-2');
+		var element = wrap({
+			c: [element1]
+		});
+		element.append(element2, element3);
+		assert.deepEqual(element.childNodes, [element1, element2, element3]);
+	});
+});
+
+describe('J0Element.prototype.attr', function () {
+
+	it('should set an attribute', function () {
+		var element = wrap();
+		var key = 'attr-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.attr(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+	});
+
+	it('should set a "data-" prefixed attribute', function () {
+		var element = wrap();
+		var key = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.attr(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+	});
+
+	it('should set attributes by an object', function () {
+		var _element$attr;
+
+		var element = wrap();
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		element.attr((_element$attr = {}, _defineProperty(_element$attr, key1, value1), _defineProperty(_element$attr, key2, value2), _element$attr));
+		assert.equal(element.getAttribute(key1), value1);
+		assert.equal(element.getAttribute(key2), value2);
+	});
+
+	it('should set attributes by arrays', function () {
+		var element = wrap();
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		element.attr([key1, value1], [key2, value2]);
+		assert.equal(element.getAttribute(key1), value1);
+		assert.equal(element.getAttribute(key2), value2);
+	});
+
+	it('should set attributes by an array of arrays', function () {
+		var element = wrap();
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		element.attr([[key1, value1], [key2, value2]]);
+		assert.equal(element.getAttribute(key1), value1);
+		assert.equal(element.getAttribute(key2), value2);
+	});
+
+	it('should set attributes by an array of objects', function () {
+		var element = wrap();
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		element.attr([_defineProperty({}, key1, value1), _defineProperty({}, key2, value2)]);
+		assert.equal(element.getAttribute(key1), value1);
+		assert.equal(element.getAttribute(key2), value2);
+	});
+});
+
+describe('J0Element.prototype.childNodes', function () {
+
+	it('should return all nodes under the element', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+	});
+});
+
+describe('J0Element.prototype.children', function () {
+
+	it('should return all elements under the element', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.children, [element2]);
+	});
+});
+
+describe('J0Element.prototype.empty', function () {
+
+	it('should remove childNodes', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+		assert.equal(element.empty(), element);
+		assert.deepEqual(element.childNodes, []);
+	});
+});
+
+describe('J0Element.prototype.equals', function () {
+
+	it('should return whether the given wraps the same element or not', function () {
+		var element1 = wrap();
+		var element2 = wrap(element1);
+		var element3 = wrap();
+		assert.equal(element1.equals(element1), true);
+		assert.equal(element1.equals(element2), true);
+		assert.equal(element1.equals(element3), false);
+		assert.equal(element2.equals(element1), true);
+		assert.equal(element2.equals(element2), true);
+		assert.equal(element2.equals(element3), false);
+		assert.equal(element3.equals(element1), false);
+		assert.equal(element3.equals(element2), false);
+		assert.equal(element3.equals(element3), true);
+	});
+});
+
+/* eslint-disable no-empty-function */
+function wait(duration) {
+	var defaultDuration = 20;
+	return new Promise(function (resolve) {
+		setTimeout(resolve, duration || defaultDuration);
+	});
+}
+
+describe('J0Element.prototype.on', function () {
+
+	it('should set an listener', function () {
+		var element = wrap();
+		var key = 'event-' + Date.now();
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key, fn]]);
+	});
+
+	it('should set listeners', function () {
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on([key1, fn1], [key2, fn2]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should set listeners by an array of arrays', function () {
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on([[key1, fn1], [key2, fn2]]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should set listeners by an array of objects', function () {
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on([_defineProperty({}, key1, fn1), _defineProperty({}, key2, fn2)]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should set listeners by an object', function () {
+		var _element$on;
+
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on((_element$on = {}, _defineProperty(_element$on, key1, fn1), _defineProperty(_element$on, key2, fn2), _element$on));
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+});
+
+describe('J0Element.prototype.off', function () {
+
+	it('should remove an listener', function () {
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on([key1, fn1], [key1, fn2], [key2, fn2]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
+		element.off(key1, fn2);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should remove listeners', function () {
+		var element = wrap();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on([key1, fn1], [key1, fn2], [key2, fn2]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
+		element.off(key1);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key2, fn2]]);
+	});
+});
+
+describe('J0Element.prototype.emit', function () {
+
+	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+		var element, key, data, event;
+		return regeneratorRuntime.wrap(function _callee6$(_context6) {
 			while (1) {
-				switch (_context5.prev = _context5.next) {
+				switch (_context6.prev = _context6.next) {
 					case 0:
-						_context5.next = 2;
-						return getBody;
+						element = wrap();
+						key = 'event-' + Date.now();
+						data = new Date();
+						_context6.next = 5;
+						return new Promise(function (resolve) {
+							element.on(key, resolve).emit(key, data);
+						});
 
-					case 2:
-						if (fn) {
-							fn();
-						}
+					case 5:
+						event = _context6.sent;
 
-					case 3:
+						assert.equal(event.detail, data);
+
+					case 7:
 					case 'end':
-						return _context5.stop();
+						return _context6.stop();
 				}
 			}
-		}, _callee5, this);
-	}));
+		}, _callee6, this);
+	})));
 
-	return function (_x26) {
-		return _ref7.apply(this, arguments);
-	};
-}();
+	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
+		var element, key, data1, data2, results, onCall;
+		return regeneratorRuntime.wrap(function _callee7$(_context7) {
+			while (1) {
+				switch (_context7.prev = _context7.next) {
+					case 0:
+						onCall = function onCall(_ref14) {
+							var detail = _ref14.detail;
 
-// import '../*/test';
-describe('dom', function () {
+							results.push(detail);
+						};
+
+						element = wrap();
+						key = 'event-' + Date.now();
+						data1 = new Date();
+						data2 = Date.now();
+						results = [];
+
+						element.on(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
+						_context7.next = 9;
+						return wait();
+
+					case 9:
+						assert.deepEqual(results, [data1, data1, data2, data2]);
+
+					case 10:
+					case 'end':
+						return _context7.stop();
+				}
+			}
+		}, _callee7, this);
+	})));
+});
+
+describe('J0Element.prototype.once', function () {
+
+	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
+		var element, key, data1, data2, results, onCall;
+		return regeneratorRuntime.wrap(function _callee8$(_context8) {
+			while (1) {
+				switch (_context8.prev = _context8.next) {
+					case 0:
+						onCall = function onCall(_ref16) {
+							var detail = _ref16.detail;
+
+							results.push(detail);
+						};
+
+						element = wrap();
+						key = 'event-' + Date.now();
+						data1 = new Date();
+						data2 = Date.now();
+						results = [];
+
+						element.once(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
+						_context8.next = 9;
+						return wait();
+
+					case 9:
+						assert.deepEqual(results, [data1, data1, data2]);
+
+					case 10:
+					case 'end':
+						return _context8.stop();
+				}
+			}
+		}, _callee8, this);
+	})));
+});
+
+describe('J0Element.prototype.find', function () {
+
+	it('should return the first matched elements', function () {
+		var className = 'c' + Date.now();
+		var element1 = wrap({
+			a: [['class', className]]
+		});
+		var element2 = wrap({
+			a: [['class', className]]
+		});
+		var element3 = wrap({
+			a: [['class', className]]
+		});
+		var element = wrap({
+			c: [element2, {
+				c: [element3]
+			}]
+		});
+		wrap({
+			c: [element1, element]
+		});
+		assert.deepEqual(element.find('.' + className), element2);
+	});
+});
+
+describe('J0Element.prototype.findAll', function () {
+
+	it('should return an array of matched elements', function () {
+		var className = 'c' + Date.now();
+		var element1 = wrap({
+			a: [['class', className]]
+		});
+		var element2 = wrap({
+			a: [['class', className]]
+		});
+		var element3 = wrap({
+			a: [['class', className]]
+		});
+		var element = wrap({
+			c: [element2, {
+				c: [element3]
+			}]
+		});
+		wrap({
+			c: [element1, element]
+		});
+		assert.deepEqual(element.findAll('.' + className), [element2, element3]);
+	});
+});
+
+describe('J0Element.prototype.firstChild', function () {
+
+	it('should return null', function () {
+		var element = wrap();
+		assert.equal(element.firstChild, null);
+	});
+
+	it('should return the first child', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+	});
+
+	it('should set the first child', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.firstChild = element2;
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+});
+
+describe('J0Element.prototype.html', function () {
+
+	it('should return its innerHTML', function () {
+		var text = '' + Date.now();
+		var element = wrap({
+			c: [{
+				t: 'span',
+				c: [text]
+			}]
+		});
+		var expected = '<span>' + text + '</span>';
+		assert.equal(element.html(), expected);
+	});
+
+	it('should set its innerHTML', function () {
+		var text = '' + Date.now();
+		var element = wrap({
+			c: [{}, {}, text]
+		});
+		element.html('<s>' + text + '</s>');
+		var expected = '<s>' + text + '</s>';
+		assert.equal(element.html(), expected);
+	});
+});
+
+describe('J0Element.prototype.insertBefore', function () {
+
+	it('should insert a new child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.insertBefore(element2, element1);
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.insertBefore(element2, element1);
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+});
+
+describe('J0Element.prototype.lastChild', function () {
+
+	it('should return null', function () {
+		var element = wrap();
+		assert.equal(element.lastChild, null);
+	});
+
+	it('should return the first child', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should set the first child', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element.lastChild = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+});
+
+describe('J0Element.prototype.next', function () {
+
+	it('should insert a new child before an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element2, element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should return null', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element2.next, null);
+	});
+});
+
+describe('J0Element.prototype.parent', function () {
+
+	it('should return its parent', function () {
+		var element1 = wrap();
+		var element2 = wrap({ c: [element1] });
+		assert.equal(element1.parent.equals(element2), true);
+	});
+
+	it('should set its parent', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		element1.parent = element2;
+		assert.equal(element1.parent.equals(element2), true);
+	});
+});
+
+describe('J0Element.prototype.prepend', function () {
+
+	it('should prepend nodes', function () {
+		var element1 = wrap(Date.now() + '-1');
+		var element2 = wrap();
+		var element3 = wrap(Date.now() + '-2');
+		var element = wrap({
+			c: [element1]
+		});
+		element.prepend(element2, element3);
+		assert.deepEqual(element.childNodes, [element3, element2, element1]);
+	});
+});
+
+describe('J0Element.prototype.previous', function () {
+
+	it('should insert a new child before an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element1.previous = element2;
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element1.previous = element2;
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+
+	it('should return null', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		wrap({
+			c: [element1, element2]
+		});
+		assert.equal(element1.previous, null);
+	});
+});
+
+describe('J0Element.prototype.remove', function () {
+
+	it('should remove itself from its parent', function () {
+		var element1 = wrap('' + Date.now());
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+		assert.equal(element1.remove(), element1);
+		assert.equal(element1.remove(), element1);
+		assert.deepEqual(element.childNodes, [element2]);
+	});
+});
+
+describe('J0Element.prototype.next', function () {
+
+	it('should insert a new child before an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		var element1 = wrap();
+		var element2 = wrap();
+		var element = wrap({
+			c: [element2, element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.next = element2;
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+});
+
+describe('dom (J0Element)', function () {
 
 	it('should create a new J0Element', function () {
 		assert.equal('node' in wrap(), true);
 	});
 });
 
-describe('J0Element.prototype.text', function () {
-
-	it('should return its textContent', function () {
-		var text = '' + Date.now();
-		var element = wrap(text);
-		assert.equal(element.text, text);
-	});
-
-	it('should set its textContent', function () {
-		var text1 = Date.now() + '-1';
-		var element1 = wrap();
-		var text2 = Date.now() + '-2';
-		var element2 = wrap({
-			c: [element1, text2]
-		});
-		element1.text = text1;
-		assert.equal(element2.text, '' + text1 + text2);
-	});
-});
-
-var listenersKey = Symbol();
-var onceKey = Symbol();
-var listenerTypeKey = Symbol();
+var listenersKey$1 = Symbol();
 
 var EventEmitter = function () {
 	function EventEmitter() {
 		_classCallCheck(this, EventEmitter);
 
-		this[listenersKey] = [];
+		this[listenersKey$1] = new x$28();
 	}
 
 	_createClass(EventEmitter, [{
 		key: 'emit',
 		value: function emit(type) {
-			var _this7 = this;
+			var _this9 = this;
 
-			for (var _len6 = arguments.length, data = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-				data[_key6 - 1] = arguments[_key6];
+			for (var _len9 = arguments.length, data = Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+				data[_key9 - 1] = arguments[_key9];
 			}
 
-			this[listenersKey].slice().forEach(function (fn) {
-				if (fn[listenerTypeKey] === type) {
-					fn.apply(_this7, data);
-					if (fn[onceKey]) {
-						_this7.off(type, fn);
+			this[listenersKey$1].forEach(function (item, index, listeners) {
+				var _item2 = _slicedToArray(item, 3),
+				    eventType = _item2[0],
+				    fn = _item2[1],
+				    once = _item2[2];
+
+				if (eventType === type) {
+					fn.apply(_this9, data);
+					if (once) {
+						listeners.delete(item);
 					}
 				}
 			});
@@ -1824,27 +2603,28 @@ var EventEmitter = function () {
 	}, {
 		key: 'off',
 		value: function off(type, targetFn) {
-			var listeners = this[listenersKey];
-			for (var index = listeners.length; index--;) {
-				var fn = listeners[index];
-				if (fn[listenerTypeKey] === type && (!targetFn || fn === targetFn)) {
-					listeners.splice(index, 1);
+			this[listenersKey$1].forEach(function (item, index, listeners) {
+				var _item3 = _slicedToArray(item, 2),
+				    eventType = _item3[0],
+				    fn = _item3[1];
+
+				if (eventType === type && (!targetFn || fn === targetFn)) {
+					listeners.delete(item);
 				}
-			}
+			});
 			return this;
 		}
 	}, {
 		key: 'on',
 		value: function on(type, fn) {
-			fn[listenerTypeKey] = type;
-			this[listenersKey].push(fn);
+			this[listenersKey$1].add([type, fn]);
 			return this;
 		}
 	}, {
 		key: 'once',
 		value: function once(type, fn) {
-			fn[onceKey] = true;
-			return this.on(type, fn);
+			this[listenersKey$1].add([type, fn, true]);
+			return this;
 		}
 	}]);
 
@@ -1862,26 +2642,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.on(name1, function () {
-			for (var _len7 = arguments.length, data = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-				data[_key7] = arguments[_key7];
+			for (var _len10 = arguments.length, data = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+				data[_key10] = arguments[_key10];
 			}
 
 			results.push([data, '1']);
 		}).on(name1, function () {
-			for (var _len8 = arguments.length, data = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-				data[_key8] = arguments[_key8];
+			for (var _len11 = arguments.length, data = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+				data[_key11] = arguments[_key11];
 			}
 
 			results.push([data, '2']);
 		}).on(name2, function () {
-			for (var _len9 = arguments.length, data = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-				data[_key9] = arguments[_key9];
+			for (var _len12 = arguments.length, data = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+				data[_key12] = arguments[_key12];
 			}
 
 			results.push([data, '3']);
 		}).on(name2, function () {
-			for (var _len10 = arguments.length, data = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-				data[_key10] = arguments[_key10];
+			for (var _len13 = arguments.length, data = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+				data[_key13] = arguments[_key13];
 			}
 
 			results.push([data, '4']);
@@ -1898,31 +2678,51 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len11 = arguments.length, data = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-				data[_key11] = arguments[_key11];
+			for (var _len14 = arguments.length, data = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+				data[_key14] = arguments[_key14];
 			}
 
 			results.push([data, '1']);
 		}).once(name1, function () {
-			for (var _len12 = arguments.length, data = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-				data[_key12] = arguments[_key12];
+			for (var _len15 = arguments.length, data = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+				data[_key15] = arguments[_key15];
 			}
 
 			results.push([data, '2']);
 		}).once(name2, function () {
-			for (var _len13 = arguments.length, data = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-				data[_key13] = arguments[_key13];
+			for (var _len16 = arguments.length, data = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+				data[_key16] = arguments[_key16];
 			}
 
 			results.push([data, '3']);
 		}).once(name2, function () {
-			for (var _len14 = arguments.length, data = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-				data[_key14] = arguments[_key14];
+			for (var _len17 = arguments.length, data = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+				data[_key17] = arguments[_key17];
 			}
 
 			results.push([data, '4']);
 		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
 		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
+	});
+
+	it('should call listeners once even if the functions are same', function () {
+		var emitter = new EventEmitter();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		var value1 = Date.now() + '-3';
+		var value2 = Date.now() + '-4';
+		var value3 = Date.now() + '-5';
+		var results = [];
+		var count = 0;
+		function listener() {
+			for (var _len18 = arguments.length, data = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+				data[_key18] = arguments[_key18];
+			}
+
+			results.push([data, count++]);
+		}
+		emitter.once(name1, listener).once(name1, listener).once(name2, listener).once(name2, listener).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], 0], [[value1, value2], 1], [[value3, value1], 2], [[value3, value1], 3]]);
 	});
 
 	it('should remove listeners', function () {
@@ -1934,26 +2734,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len15 = arguments.length, data = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-				data[_key15] = arguments[_key15];
+			for (var _len19 = arguments.length, data = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
+				data[_key19] = arguments[_key19];
 			}
 
 			results.push([data, '1']);
 		}).once(name1, function () {
-			for (var _len16 = arguments.length, data = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
-				data[_key16] = arguments[_key16];
+			for (var _len20 = arguments.length, data = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+				data[_key20] = arguments[_key20];
 			}
 
 			results.push([data, '2']);
 		}).once(name2, function () {
-			for (var _len17 = arguments.length, data = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
-				data[_key17] = arguments[_key17];
+			for (var _len21 = arguments.length, data = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+				data[_key21] = arguments[_key21];
 			}
 
 			results.push([data, '3']);
 		}).once(name2, function () {
-			for (var _len18 = arguments.length, data = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-				data[_key18] = arguments[_key18];
+			for (var _len22 = arguments.length, data = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+				data[_key22] = arguments[_key22];
 			}
 
 			results.push([data, '4']);
@@ -1974,12 +2774,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-					var _ref8 = _step3.value;
+					var _ref17 = _step3.value;
 
-					var _ref9 = _slicedToArray(_ref8, 2);
+					var _ref18 = _slicedToArray(_ref17, 2);
 
-					var key = _ref9[0];
-					var value = _ref9[1];
+					var key = _ref18[0];
+					var value = _ref18[1];
 
 					this.append(key, value);
 				}
@@ -2008,9 +2808,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref10) {
-				var _ref11 = _slicedToArray(_ref10, 1),
-				    itemName = _ref11[0];
+			return this.data.findIndex(function (_ref19) {
+				var _ref20 = _slicedToArray(_ref19, 1),
+				    itemName = _ref20[0];
 
 				return itemName === name;
 			});
@@ -2038,9 +2838,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref12) {
-				var _ref13 = _slicedToArray(_ref12, 1),
-				    itemName = _ref13[0];
+			this.data = this.data.filter(function (_ref21) {
+				var _ref22 = _slicedToArray(_ref21, 1),
+				    itemName = _ref22[0];
 
 				return itemName !== name;
 			});
@@ -2048,9 +2848,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref14) {
-				var _ref15 = _slicedToArray(_ref14, 1),
-				    itemName = _ref15[0];
+			var found = this.data.find(function (_ref23) {
+				var _ref24 = _slicedToArray(_ref23, 1),
+				    itemName = _ref24[0];
 
 				return itemName === name;
 			});
@@ -2060,10 +2860,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref16) {
-				var _ref17 = _slicedToArray(_ref16, 2),
-				    itemName = _ref17[0],
-				    value = _ref17[1];
+			this.data.forEach(function (_ref25) {
+				var _ref26 = _slicedToArray(_ref25, 2),
+				    itemName = _ref26[0],
+				    value = _ref26[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -2074,11 +2874,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref18) {
-				var _ref19 = _slicedToArray(_ref18, 2),
-				    name = _ref19[0],
-				    _ref19$ = _ref19[1],
-				    value = _ref19$ === undefined ? '' : _ref19$;
+			return this.data.map(function (_ref27) {
+				var _ref28 = _slicedToArray(_ref27, 2),
+				    name = _ref28[0],
+				    _ref28$ = _ref28[1],
+				    value = _ref28$ === undefined ? '' : _ref28$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -2127,8 +2927,6 @@ var StringList = function () {
 
 	return StringList;
 }();
-
-var x$24 = Object;
 
 function toLowerCase(x) {
 	return x ? x.toLowerCase() : '';
@@ -2182,7 +2980,7 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this9 = this;
+			var _this11 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -2196,7 +2994,7 @@ var Headers$1 = function (_StringList) {
 					if (done || history.indexOf(key) < 0) {
 						history.push(key);
 						return {
-							value: [key, _this9.get(key)],
+							value: [key, _this11.get(key)],
 							done: done
 						};
 					}
@@ -2218,31 +3016,31 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this10 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this12 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this10.inheritFrom(input, body, init);
+			body = _this12.inheritFrom(input, body, init);
 		} else {
-			_this10.url = '' + input;
+			_this12.url = '' + input;
 		}
-		_this10.credentials = init.credentials || _this10.credentials || 'omit';
-		if (init.headers || !_this10.headers) {
-			_this10.headers = new Headers$1(init.headers);
+		_this12.credentials = init.credentials || _this12.credentials || 'omit';
+		if (init.headers || !_this12.headers) {
+			_this12.headers = new Headers$1(init.headers);
 		}
-		_this10.method = (init.method || _this10.method || 'GET').toUpperCase();
-		_this10.mode = init.mode || _this10.mode || null;
-		_this10.referrer = null;
-		if ((_this10.method === 'GET' || _this10.method === 'HEAD') && body) {
+		_this12.method = (init.method || _this12.method || 'GET').toUpperCase();
+		_this12.mode = init.mode || _this12.mode || null;
+		_this12.referrer = null;
+		if ((_this12.method === 'GET' || _this12.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this10.initBody(body);
-		return _this10;
+		_this12.initBody(body);
+		return _this12;
 	}
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref20) {
-			var headers = _ref20.headers;
+		value: function inheritFrom(input, body, _ref29) {
+			var headers = _ref29.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -2282,16 +3080,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this11 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this13 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this11.type = 'default';
-		_this11.status = 'status' in init ? init.status : minOkStatus;
-		_this11.ok = _this11.status >= minOkStatus && _this11.status < maxOkStatus;
-		_this11.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this11.headers = new Headers$1(init.headers);
-		_this11.url = init.url || '';
-		_this11.initBody(body);
-		return _this11;
+		_this13.type = 'default';
+		_this13.status = 'status' in init ? init.status : minOkStatus;
+		_this13.ok = _this13.status >= minOkStatus && _this13.status < maxOkStatus;
+		_this13.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this13.headers = new Headers$1(init.headers);
+		_this13.url = init.url || '';
+		_this13.initBody(body);
+		return _this13;
 	}
 
 	_createClass(Response$1, [{
@@ -2330,10 +3128,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$25 = Headers;
+var x$29 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$25();
+	var headers = new x$29();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -2350,12 +3148,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$26 = XMLHttpRequest;
+var x$30 = XMLHttpRequest;
 
 function fetch$1(input, init) {
 	return new x$9(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$26();
+		var xhr = new x$30();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -2383,12 +3181,12 @@ function fetch$1(input, init) {
 
 		try {
 			for (var _iterator4 = request.headers.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-				var _ref21 = _step4.value;
+				var _ref30 = _step4.value;
 
-				var _ref22 = _slicedToArray(_ref21, 2);
+				var _ref31 = _slicedToArray(_ref30, 2);
 
-				var _name2 = _ref22[0];
-				var value = _ref22[1];
+				var _name2 = _ref31[0];
+				var value = _ref31[1];
 
 				xhr.setRequestHeader(_name2, value);
 			}
@@ -2439,7 +3237,7 @@ tests$3(fetch$1, 'J0Fetch');
 
 tests$3(fetch);
 
-var x$27 = Date;
+var x$31 = Date;
 
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -2458,7 +3256,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new x$27(src);
+	var date = new x$31(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();
@@ -2591,7 +3389,7 @@ tests$5(Headers$1, 'Headers/j0');
 tests$5(Headers);
 
 function generator$2() {
-	var _this12 = this;
+	var _this14 = this;
 
 	var length = this.length;
 
@@ -2599,14 +3397,14 @@ function generator$2() {
 	return {
 		next: function next() {
 			return {
-				value: _this12[index],
+				value: _this14[index],
 				done: length <= index++
 			};
 		}
 	};
 }
 
-function test$19(generator) {
+function test$21(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -2658,14 +3456,14 @@ function test$19(generator) {
 	});
 }
 
-test$19(generator$2, 'HTMLCollection/@iterator/j0');
+test$21(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$19(HTMLCollection.prototype[Symbol.iterator]);
+test$21(HTMLCollection.prototype[Symbol.iterator]);
 
-var x$28 = window;
+var x$32 = window;
 
 function innerHeight() {
-	return x$28.innerHeight;
+	return x$32.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -2676,7 +3474,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$28.innerWidth;
+	return x$32.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -2685,10 +3483,6 @@ describe('innerWidth', function () {
 		assert.equal(0 <= innerWidth(), true);
 	});
 });
-
-var x$29 = Array;
-
-var isArray = x$29.isArray;
 
 describe('isArray', function () {
 
@@ -2906,6 +3700,45 @@ describe('isNumber', function () {
 	});
 });
 
+function isObject(x) {
+	return isInstanceOf(x, x$24);
+}
+
+describe('isObject', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isObject(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isObject(null), false);
+	});
+
+	it('should return true if the arguments are [NaN]', function () {
+		assert.equal(isObject(NaN), false);
+	});
+
+	it('should return true if the arguments are [123]', function () {
+		assert.equal(isObject(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isObject('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isObject({}), true);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isObject([]), true);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isObject(function () {}), true);
+	});
+});
+
 describe('isString', function () {
 
 	it('should return false if the arguments are []', function () {
@@ -3035,7 +3868,7 @@ describe('Iterator', function () {
 	});
 });
 
-function test$21(storage, testName) {
+function test$23(storage, testName) {
 
 	describe(testName, function () {
 
@@ -3093,10 +3926,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this13 = this;
+			var _this15 = this;
 
 			x$24.keys(this).forEach(function (key) {
-				_this13.removeItem(key);
+				_this15.removeItem(key);
 			});
 		}
 	}, {
@@ -3129,7 +3962,7 @@ var J0Storage = function () {
 	return J0Storage;
 }();
 
-test$21(new J0Storage(), 'J0Storage');
+test$23(new J0Storage(), 'J0Storage');
 
 describe('String/leftpad', function () {
 
@@ -3148,11 +3981,11 @@ describe('String/leftpad', function () {
 
 var localStorage$1 = new J0Storage();
 
-test$21(localStorage$1, 'localStorage#j0');
+test$23(localStorage$1, 'localStorage#j0');
 
-test$21(localStorage, 'localStorage');
+test$23(localStorage, 'localStorage');
 
-function test$24(generator) {
+function test$26(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
 
 
@@ -3183,9 +4016,9 @@ function generator$4() {
 	return this.entries();
 }
 
-test$24(generator$4, 'Map.prototype[Symbol.iterator]#j0');
+test$26(generator$4, 'Map.prototype[Symbol.iterator]#j0');
 
-test$24(Map.prototype[Symbol.iterator]);
+test$26(Map.prototype[Symbol.iterator]);
 
 var Map$1 = function () {
 	function Map$1(iterable) {
@@ -3199,12 +4032,12 @@ var Map$1 = function () {
 
 			try {
 				for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-					var _ref23 = _step7.value;
+					var _ref32 = _step7.value;
 
-					var _ref24 = _slicedToArray(_ref23, 2);
+					var _ref33 = _slicedToArray(_ref32, 2);
 
-					var key = _ref24[0];
-					var value = _ref24[1];
+					var key = _ref33[0];
+					var value = _ref33[1];
 
 					this.set(key, value);
 				}
@@ -3233,9 +4066,9 @@ var Map$1 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref25) {
-				var _ref26 = _slicedToArray(_ref25, 1),
-				    itemKey = _ref26[0];
+			return this.data.findIndex(function (_ref34) {
+				var _ref35 = _slicedToArray(_ref34, 1),
+				    itemKey = _ref35[0];
 
 				return itemKey === key;
 			});
@@ -3259,9 +4092,9 @@ var Map$1 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref27) {
-				var _ref28 = _slicedToArray(_ref27, 1),
-				    itemKey = _ref28[0];
+			var found = this.data.find(function (_ref36) {
+				var _ref37 = _slicedToArray(_ref36, 1),
+				    itemKey = _ref37[0];
 
 				return itemKey === key;
 			});
@@ -3287,7 +4120,15 @@ var Map$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			this.data.forEach(fn, thisArg);
+			var _this16 = this;
+
+			this.data.slice().forEach(function (_ref38) {
+				var _ref39 = _slicedToArray(_ref38, 2),
+				    key = _ref39[0],
+				    value = _ref39[1];
+
+				fn.call(thisArg, value, key, _this16);
+			});
 		}
 	}, {
 		key: 'keys',
@@ -3329,6 +4170,9 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
+/* eslint-disable no-magic-numbers */
+
+
 function tests$7(Map) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
 
@@ -3364,34 +4208,34 @@ function tests$7(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee6() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee9() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee6$(_context6) {
+				return regeneratorRuntime.wrap(function _callee9$(_context9) {
 					while (1) {
-						switch (_context6.prev = _context6.next) {
+						switch (_context9.prev = _context9.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context6.next = 7;
+									_context9.next = 7;
 									break;
 								}
 
-								_context6.next = 4;
+								_context9.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context6.next = 1;
+								_context9.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context6.stop();
+								return _context9.stop();
 						}
 					}
-				}, _callee6, this);
+				}, _callee9, this);
 			}));
 			var map = new Map(iterable);
 			assert.deepEqual({
@@ -3402,6 +4246,22 @@ function tests$7(Map) {
 				values: [1]
 			});
 		});
+
+		it('should support forEach()', function () {
+			var map = new Map([[1, 2], [3, 4], [5, 6]]);
+			var context = {};
+			var results = [];
+			map.forEach(function () {
+				for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
+					args[_key23] = arguments[_key23];
+				}
+
+				map.delete(args[1]);
+				args.push(this);
+				results.push(args);
+			}, context);
+			assert.deepEqual(results, [[2, 1, map, context], [4, 3, map, context], [6, 5, map, context]]);
+		});
 	});
 }
 
@@ -3409,7 +4269,7 @@ tests$7(Map$1, 'Map#j0');
 
 tests$7(Map);
 
-function test$26(generator) {
+function test$28(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
 
 
@@ -3519,24 +4379,24 @@ function test$26(generator) {
 }
 
 function generator$6() {
-	var _this14 = this;
+	var _this17 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this14[index],
+			value: _this17[index],
 			done: length <= index++
 		};
 	});
 }
 
-test$26(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
+test$28(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-test$26(NamedNodeMap.prototype[Symbol.iterator]);
+test$28(NamedNodeMap.prototype[Symbol.iterator]);
 
-function test$28(generator) {
+function test$30(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NodeList.prototype[Symbol.iterator]';
 
 
@@ -3646,22 +4506,22 @@ function test$28(generator) {
 }
 
 function generator$8() {
-	var _this15 = this;
+	var _this18 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this15[index],
+			value: _this18[index],
 			done: length <= index++
 		};
 	});
 }
 
-test$28(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
+test$30(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
 
-test$28(NodeList.prototype[Symbol.iterator]);
+test$30(NodeList.prototype[Symbol.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -3682,8 +4542,8 @@ describe('noop', function () {
 });
 
 function assign(target) {
-	for (var _len19 = arguments.length, objects = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
-		objects[_key19 - 1] = arguments[_key19];
+	for (var _len24 = arguments.length, objects = Array(_len24 > 1 ? _len24 - 1 : 0), _key24 = 1; _key24 < _len24; _key24++) {
+		objects[_key24 - 1] = arguments[_key24];
 	}
 
 	objects.forEach(function (obj) {
@@ -3695,7 +4555,7 @@ function assign(target) {
 	});
 }
 
-function test$30(assign) {
+function test$32(assign) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Object.assign';
 
 
@@ -3717,9 +4577,9 @@ function test$30(assign) {
 	});
 }
 
-test$30(assign, 'Object.assign#j0');
+test$32(assign, 'Object.assign#j0');
 
-test$30(Object.assign);
+test$32(Object.assign);
 
 function onError(error) {
 	onError.listener(error);
@@ -3743,7 +4603,7 @@ describe('onError', function () {
 	});
 });
 
-describe('FormData/parse', function () {
+describe('parseFormData', function () {
 
 	it('should parse string', function () {
 		var form = parse('a=b&c=d', {
@@ -3776,15 +4636,15 @@ describe('passThrough', function () {
 	});
 });
 
-var x$30 = setTimeout;
+var x$33 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!x$28.immediateId) {
-	x$28.immediateId = 0;
+if (!x$32.immediateId) {
+	x$32.immediateId = 0;
 }
-x$28.immediateId += 1;
-var setImmediateNative = x$28.setImmediate;
+x$32.immediateId += 1;
+var setImmediateNative = x$32.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -3813,7 +4673,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$30(fn);
+	return x$33(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -3829,7 +4689,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$30(function () {
+x$33(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -3884,7 +4744,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this16 = this;
+			var _this19 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -3892,14 +4752,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this16.resolve(value);
+				_this19.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this16.reject(error);
+				_this19.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -3938,10 +4798,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this17 = this;
+			var _this20 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this17.handle(deferred);
+				_this20.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -4061,7 +4921,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$32(Promise, name) {
+function test$34(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -4189,11 +5049,11 @@ function test$32(Promise, name) {
 	});
 }
 
-test$32(J0Promise, 'Promise/j0');
+test$34(J0Promise, 'Promise/j0');
 
-test$32(Promise, 'Promise');
+test$34(Promise, 'Promise');
 
-describe('FileReader/read', function () {
+describe('readBlob', function () {
 
 	it('should be a function', function () {
 		return readBlob;
@@ -4218,26 +5078,26 @@ tests$10(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
 		var timeStamp;
-		return regeneratorRuntime.wrap(function _callee7$(_context7) {
+		return regeneratorRuntime.wrap(function _callee10$(_context10) {
 			while (1) {
-				switch (_context7.prev = _context7.next) {
+				switch (_context10.prev = _context10.next) {
 					case 0:
-						_context7.next = 2;
+						_context10.next = 2;
 						return new Promise(x$22);
 
 					case 2:
-						timeStamp = _context7.sent;
+						timeStamp = _context10.sent;
 
 						assert(0 < timeStamp, true);
 
 					case 4:
 					case 'end':
-						return _context7.stop();
+						return _context10.stop();
 				}
 			}
-		}, _callee7, this);
+		}, _callee10, this);
 	})));
 });
 
@@ -4258,7 +5118,7 @@ tests$12(Response$1, 'J0Response');
 tests$12(Response, 'Response');
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$28;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$32;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -4270,7 +5130,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$28;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$32;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -4281,7 +5141,7 @@ describe('scrollY', function () {
 	});
 });
 
-function test$33(generator) {
+function test$35(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Set.prototype[Symbol.iterator]';
 
 
@@ -4311,13 +5171,13 @@ function generator$10() {
 	return this.values();
 }
 
-test$33(generator$10, 'Set.prototype[Symbol.iterator]#j0');
+test$35(generator$10, 'Set.prototype[Symbol.iterator]#j0');
 
-test$33(Set.prototype[Symbol.iterator]);
+test$35(Set.prototype[Symbol.iterator]);
 
-var Set$1 = function () {
-	function Set$1(iterable) {
-		_classCallCheck(this, Set$1);
+var Set$2 = function () {
+	function Set$2(iterable) {
+		_classCallCheck(this, Set$2);
 
 		this.clear();
 		if (iterable) {
@@ -4348,7 +5208,7 @@ var Set$1 = function () {
 		}
 	}
 
-	_createClass(Set$1, [{
+	_createClass(Set$2, [{
 		key: 'clear',
 		value: function clear() {
 			this.data = [];
@@ -4383,16 +5243,16 @@ var Set$1 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this18 = this;
+			var _this21 = this;
 
-			this.data.forEach(function (value) {
-				fn.call(thisArg, value, value, _this18);
+			this.data.slice().forEach(function (value) {
+				fn.call(thisArg, value, value, _this21);
 			});
 		}
 	}, {
 		key: 'values',
 		value: function values() {
-			return this.data[iteratorSymbol]();
+			return this.data.slice()[iteratorSymbol]();
 		}
 	}, {
 		key: iteratorSymbol,
@@ -4423,31 +5283,32 @@ var Set$1 = function () {
 		}
 	}]);
 
-	return Set$1;
+	return Set$2;
 }();
+
+/* eslint-disable no-magic-numbers */
 
 function tests$14(Set, name) {
 
 	describe(name, function () {
 
 		it('should support constructor arguments', function () {
-			var data = [1, 2, 3];
+			var data = [Date, new Date(), Date.now()];
 			var set = new Set(data);
-			assert.equal(set.size, 3);
+			assert.equal(set.size, data.length);
 		});
 
 		it('should have add()', function () {
 			var set = new Set();
-			set.add(1);
-			set.add(2);
-			set.add(3);
-			var returnValue = set.add(4);
-			assert.equal(set.size, 4);
+			set.add(Date);
+			set.add(new Date());
+			set.add(Date.now());
+			assert.equal(set.size, 3);
 		});
 
 		it('should return itself', function () {
 			var set = new Set();
-			assert.equal(set.add(1), set);
+			assert.equal(set.add(Date), set);
 		});
 
 		it('should keep uniqueness', function () {
@@ -4488,11 +5349,12 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len20 = arguments.length, args = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-					args[_key20] = arguments[_key20];
+				for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
+					args[_key25] = arguments[_key25];
 				}
 
 				args[3] = this;
+				set.delete(args[0]);
 				results[index++] = args;
 			}, context);
 			assert.deepEqual(results, [[1, 1, set, context], [2, 2, set, context], [3, 3, set, context]]);
@@ -4519,6 +5381,7 @@ function tests$14(Set, name) {
 				    value = _iterator$next16.value,
 				    done = _iterator$next16.done;
 
+				set.delete(value);
 				if (done) {
 					break;
 				}
@@ -4540,6 +5403,7 @@ function tests$14(Set, name) {
 				    value = _iterator$next17.value,
 				    done = _iterator$next17.done;
 
+				set.delete(value);
 				if (done) {
 					break;
 				}
@@ -4550,7 +5414,7 @@ function tests$14(Set, name) {
 	});
 }
 
-tests$14(Set$1, 'J0Set');
+tests$14(Set$2, 'J0Set');
 
 tests$14(Set, 'Set');
 
@@ -4571,7 +5435,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$31 = encodeURIComponent;
+var x$34 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -4582,8 +5446,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref30, name, expression, offset, source) {
-				var length = _ref30.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref41, name, expression, offset, source) {
+				var length = _ref41.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -4637,26 +5501,26 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$31(value);
+					return x$34(value);
 				}
 			});
 		}
 	}, {
 		key: 'parse',
 		value: function parse() {
-			var _this19 = this;
+			var _this22 = this;
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
 			var params = void 0;
 			href.replace(this.matcher, function (match) {
-				for (var _len21 = arguments.length, args = Array(_len21 > 1 ? _len21 - 1 : 0), _key21 = 1; _key21 < _len21; _key21++) {
-					args[_key21 - 1] = arguments[_key21];
+				for (var _len26 = arguments.length, args = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
+					args[_key26 - 1] = arguments[_key26];
 				}
 
 				var index = 0;
 				params = {};
-				return _this19.compose(function (key) {
+				return _this22.compose(function (key) {
 					var value = args[index++];
 					params[key] = value;
 					return value;
@@ -4810,15 +5674,15 @@ describe('State', function () {
 	});
 });
 
-var x$32 = Map;
+var x$35 = Map;
 
-var x$33 = location;
+var x$36 = location;
 
-var x$34 = history;
+var x$37 = history;
 
-var x$35 = addEventListener;
+var x$38 = addEventListener;
 
-var x$36 = Boolean;
+var x$39 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -4826,19 +5690,19 @@ var StateManager = function (_EventEmitter) {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		var _this20 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+		var _this23 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		x$24.assign(_this20, { prefix: '#' }, config, {
-			states: new x$32(),
+		x$24.assign(_this23, { prefix: '#' }, config, {
+			states: new x$35(),
 			listeners: []
 		});
-		if (!_this20.parser) {
-			if (_this20.prefix.charAt(0) === '#') {
-				_this20.parser = function (url) {
+		if (!_this23.parser) {
+			if (_this23.prefix.charAt(0) === '#') {
+				_this23.parser = function (url) {
 					return url.hash.slice(this.prefix.length);
 				};
 			} else {
-				_this20.parser = function (url) {
+				_this23.parser = function (url) {
 					var pathname = url.pathname,
 					    search = url.search,
 					    hash = url.hash;
@@ -4847,13 +5711,13 @@ var StateManager = function (_EventEmitter) {
 				};
 			}
 		}
-		return _this20;
+		return _this23;
 	}
 
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$33;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$36;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion15 = true;
@@ -4862,11 +5726,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator15 = this.states[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
-					var _ref31 = _step15.value;
+					var _ref42 = _step15.value;
 
-					var _ref32 = _slicedToArray(_ref31, 2);
+					var _ref43 = _slicedToArray(_ref42, 2);
 
-					var state = _ref32[1];
+					var state = _ref43[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -4936,7 +5800,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$36(current && state && current.is(state));
+			return x$39(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -4944,7 +5808,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$36(current && state && current.isIn(state));
+			return x$39(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -4952,7 +5816,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$36(current && state && current.isAncestorOf(state));
+			return x$39(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -4963,7 +5827,7 @@ var StateManager = function (_EventEmitter) {
 			}
 			this.emit('change', newState, this.current);
 			this.current = newState;
-			x$34[method](newState.name, newState.params, newState.href);
+			x$37[method](newState.name, newState.params, newState.href);
 		}
 	}, {
 		key: 'go',
@@ -4978,15 +5842,15 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'start',
 		value: function start() {
-			var _this21 = this;
+			var _this24 = this;
 
 			var debounceDuration = 30;
 			var onStateChange = debounce(function () {
-				_this21.replace(_this21.parseURL());
+				_this24.replace(_this24.parseURL());
 			}, debounceDuration);
-			x$35('hashchange', onStateChange);
-			x$35('pushstate', onStateChange);
-			x$35('popstate', onStateChange);
+			x$38('hashchange', onStateChange);
+			x$38('pushstate', onStateChange);
+			x$38('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -5027,11 +5891,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator16 = states.states[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
-				var _ref33 = _step16.value;
+				var _ref44 = _step16.value;
 
-				var _ref34 = _slicedToArray(_ref33, 2);
+				var _ref45 = _slicedToArray(_ref44, 2);
 
-				var state = _ref34[1];
+				var state = _ref45[1];
 
 				results.push(state);
 			}
@@ -5105,12 +5969,12 @@ describe('StateManager', function () {
 		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
 
-	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
-		var states, name0, name1, name2, _ref36, _ref37, toState, fromState;
+	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+		var states, name0, name1, name2, _ref47, _ref48, toState, fromState;
 
-		return regeneratorRuntime.wrap(function _callee8$(_context8) {
+		return regeneratorRuntime.wrap(function _callee11$(_context11) {
 			while (1) {
-				switch (_context8.prev = _context8.next) {
+				switch (_context11.prev = _context11.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5127,11 +5991,11 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context8.next = 7;
+						_context11.next = 7;
 						return new Promise(function (resolve) {
 							states.on('change', function () {
-								for (var _len22 = arguments.length, data = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
-									data[_key22] = arguments[_key22];
+								for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
+									data[_key27] = arguments[_key27];
 								}
 
 								resolve(data);
@@ -5139,27 +6003,27 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref36 = _context8.sent;
-						_ref37 = _slicedToArray(_ref36, 2);
-						toState = _ref37[0];
-						fromState = _ref37[1];
+						_ref47 = _context11.sent;
+						_ref48 = _slicedToArray(_ref47, 2);
+						toState = _ref48[0];
+						fromState = _ref48[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
 
 					case 13:
 					case 'end':
-						return _context8.stop();
+						return _context11.stop();
 				}
 			}
-		}, _callee8, this);
+		}, _callee11, this);
 	})));
 
-	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
+	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
 		var states, name0, name1, name2;
-		return regeneratorRuntime.wrap(function _callee9$(_context9) {
+		return regeneratorRuntime.wrap(function _callee12$(_context12) {
 			while (1) {
-				switch (_context9.prev = _context9.next) {
+				switch (_context12.prev = _context12.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5176,7 +6040,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 }).start();
-						_context9.next = 7;
+						_context12.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve);
 						});
@@ -5187,17 +6051,17 @@ describe('StateManager', function () {
 
 					case 9:
 					case 'end':
-						return _context9.stop();
+						return _context12.stop();
 				}
 			}
-		}, _callee9, this);
+		}, _callee12, this);
 	})));
 
-	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
 		var states, name0, name1, name2, param1, params;
-		return regeneratorRuntime.wrap(function _callee10$(_context10) {
+		return regeneratorRuntime.wrap(function _callee13$(_context13) {
 			while (1) {
-				switch (_context10.prev = _context10.next) {
+				switch (_context13.prev = _context13.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5214,7 +6078,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context10.next = 7;
+						_context13.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
@@ -5222,7 +6086,7 @@ describe('StateManager', function () {
 					case 7:
 						param1 = '' + Date.now();
 						params = { param1: param1 };
-						_context10.next = 11;
+						_context13.next = 11;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name1,
@@ -5235,17 +6099,17 @@ describe('StateManager', function () {
 
 					case 12:
 					case 'end':
-						return _context10.stop();
+						return _context13.stop();
 				}
 			}
-		}, _callee10, this);
+		}, _callee13, this);
 	})));
 
-	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
-		return regeneratorRuntime.wrap(function _callee11$(_context11) {
+		return regeneratorRuntime.wrap(function _callee14$(_context14) {
 			while (1) {
-				switch (_context11.prev = _context11.next) {
+				switch (_context14.prev = _context14.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5262,13 +6126,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context11.next = 7;
+						_context14.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context11.sent;
+						toState0 = _context14.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -5277,7 +6141,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context11.next = 14;
+						_context14.next = 14;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -5286,7 +6150,7 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context11.sent;
+						toState1 = _context14.sent;
 
 						assert.equal(toState1.name, name2);
 						assert.equal(states.is({
@@ -5300,17 +6164,17 @@ describe('StateManager', function () {
 
 					case 18:
 					case 'end':
-						return _context11.stop();
+						return _context14.stop();
 				}
 			}
-		}, _callee11, this);
+		}, _callee14, this);
 	})));
 
-	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
-		return regeneratorRuntime.wrap(function _callee12$(_context12) {
+		return regeneratorRuntime.wrap(function _callee15$(_context15) {
 			while (1) {
-				switch (_context12.prev = _context12.next) {
+				switch (_context15.prev = _context15.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5327,13 +6191,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context12.next = 7;
+						_context15.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context12.sent;
+						toState0 = _context15.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -5342,7 +6206,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context12.next = 14;
+						_context15.next = 14;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -5351,30 +6215,30 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context12.sent;
+						toState1 = _context15.sent;
 
 						assert.equal(toState1.name, name2);
-						_context12.next = 18;
+						_context15.next = 18;
 						return new Promise(function (resolve) {
 							states.once('change', resolve);
 							history.back();
 						});
 
 					case 18:
-						toState2 = _context12.sent;
+						toState2 = _context15.sent;
 
 						assert.equal(toState2.name, name0);
 
 					case 20:
 					case 'end':
-						return _context12.stop();
+						return _context15.stop();
 				}
 			}
-		}, _callee12, this);
+		}, _callee15, this);
 	})));
 });
 
-function test$35(generator) {
+function test$37(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype[Symbol.iterator]';
 
 
@@ -5433,24 +6297,24 @@ function test$35(generator) {
 }
 
 function generator$12() {
-	var _this22 = this;
+	var _this25 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this22[index],
+			value: _this25[index],
 			done: length <= index++
 		};
 	});
 }
 
-test$35(generator$12, 'String.prototype[Symbol.iterator]#j0');
+test$37(generator$12, 'String.prototype[Symbol.iterator]#j0');
 
-test$35(String.prototype[Symbol.iterator]);
+test$37(String.prototype[Symbol.iterator]);
 
-function test$37(repeat) {
+function test$39(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
 
@@ -5465,10 +6329,10 @@ function test$37(repeat) {
 	});
 }
 
-var x$37 = parseInt;
+var x$40 = parseInt;
 
 function repeat(c) {
-	var count = x$37(c, 10);
+	var count = x$40(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -5476,9 +6340,9 @@ function repeat(c) {
 	return results.join('');
 }
 
-test$37(repeat, 'String.prototype.repeat#j0');
+test$39(repeat, 'String.prototype.repeat#j0');
 
-test$37(String.prototype.repeat);
+test$39(String.prototype.repeat);
 
 describe('StringList', function () {
 
@@ -5585,7 +6449,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$39(_Symbol) {
+function test$41(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -5629,9 +6493,9 @@ function test$39(_Symbol) {
 	});
 }
 
-test$39(Symbol, 'J0Symbol');
+test$41(Symbol, 'J0Symbol');
 
-test$39(Symbol);
+test$41(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -5643,8 +6507,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
-			args[_key23] = arguments[_key23];
+		for (var _len28 = arguments.length, args = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
+			args[_key28] = arguments[_key28];
 		}
 
 		lastArgs = args;
@@ -5652,7 +6516,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$30(function () {
+			timer = x$33(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
@@ -5703,11 +6567,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref42) {
-				var _ref43 = _slicedToArray(_ref42, 2),
-				    name = _ref43[0],
-				    _ref43$ = _ref43[1],
-				    value = _ref43$ === undefined ? '' : _ref43$;
+			return this.data.map(function (_ref53) {
+				var _ref54 = _slicedToArray(_ref53, 2),
+				    name = _ref54[0],
+				    _ref54$ = _ref54[1],
+				    value = _ref54$ === undefined ? '' : _ref54$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -5833,31 +6697,31 @@ tests$16(URLSearchParams$2, 'URLSearchParams#j0');
 tests$16(URLSearchParams);
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee14$(_context14) {
+		return regeneratorRuntime.wrap(function _callee17$(_context17) {
 			while (1) {
-				switch (_context14.prev = _context14.next) {
+				switch (_context17.prev = _context17.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context14.next = 6;
-						return wait(duration, data);
+						_context17.next = 6;
+						return wait$1(duration, data);
 
 					case 6:
-						actual = _context14.sent;
+						actual = _context17.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context14.stop();
+						return _context17.stop();
 				}
 			}
-		}, _callee14, this);
+		}, _callee17, this);
 	})));
 });
 }())

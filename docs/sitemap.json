@@ -31,6 +31,9 @@
 	"Body": {
 		"j0polyfill": {}
 	},
+	"CustomEvent": {
+		"j0polyfill": {}
+	},
 	"EventEmitter": {},
 	"HTMLCollection": {
 		"@iterator": {
@@ -115,6 +118,7 @@
 	"isInstanceOf": {},
 	"isNode": {},
 	"isNumber": {},
+	"isObject": {},
 	"isString": {},
 	"isUndefined": {},
 	"leftpad": {},
