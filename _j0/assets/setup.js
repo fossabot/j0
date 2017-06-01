@@ -140,7 +140,9 @@ async function graphicalEqual({
 	}
 	const img = document.createElement('img');
 	await new Promise(function (resolve, reject) {
-		img.onerror = reject;
+		img.onerror = function (event) {
+			reject(event.error || event);
+		};
 		img.onload = resolve;
 		img.src = url;
 	});
