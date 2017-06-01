@@ -10,7 +10,7 @@ function test(atan, name = 'Math.atan') {
 				fn: atan,
 				xRange: [-10, 10],
 				yRange: [-Math.PI / 2, Math.PI / 2],
-				xGrid: [-1, 0, 1],
+				xGrid: [-5, 0, 5],
 				yGrid: [0]
 			});
 		});

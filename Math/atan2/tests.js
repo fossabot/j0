@@ -12,7 +12,7 @@ function test(atan2, name = 'Math.atan2') {
 				},
 				xRange: [-10, 10],
 				yRange: [0, Math.PI],
-				xGrid: [-0.5, 0, 0.5],
+				xGrid: [-5, 0, 5],
 				yGrid: [Math.PI / 2]
 			});
 		});
@@ -26,8 +26,8 @@ function test(atan2, name = 'Math.atan2') {
 				},
 				xRange: [-10, 10],
 				yRange: [-Math.PI, 0],
-				xGrid: [-0.5, 0, 0.5],
-				yGrid: [Math.PI / 2]
+				xGrid: [-5, 0, 5],
+				yGrid: [-Math.PI / 2]
 			});
 		});
 
