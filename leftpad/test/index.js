@@ -1,6 +1,6 @@
 import leftpad from '..';
 
-describe('String/leftpad', function () {
+describe('leftpad', function () {
 
 	it('should pad a string with 0', function () {
 		assert.equal(leftpad(1), '01');

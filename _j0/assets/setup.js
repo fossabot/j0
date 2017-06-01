@@ -76,7 +76,7 @@ function labelText(value) {
 	return value.toFixed(0);
 }
 
-const canvasDefaultThreshold = 100000;
+const canvasDefaultThreshold = 160000;
 const downloader = false;
 async function graphicalEqual({
 	name,
