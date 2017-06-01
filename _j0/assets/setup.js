@@ -1,3 +1,13 @@
+/* eslint no-prototype-builtins: "off" */
+function assign(obj, values) {
+	for (const key in values) {
+		if (values.hasOwnProperty(key)) {
+			obj[key] = values[key];
+		}
+	}
+	return obj;
+}
+
 function setVersion() {
 	const xhr = new XMLHttpRequest();
 	xhr.open('GET', `${window.root}/package.json`);
@@ -24,18 +34,24 @@ function getCanvasContext(name) {
 	const lineHeight = 22;
 	canvas.setAttribute('class', window.canvasTestClass);
 	canvas.setAttribute('data-name', name);
-	canvas.width = size;
-	canvas.height = size;
-	canvas.style.userSelect = 'none';
-	canvas.style.transition = 'width 0.2s, height 0.2s';
-	canvas.style.border = 'solid 1px #000';
-	canvas.style.margin = '16px';
-	canvas.style.width = `${size / 2}px`;
-	canvas.style.height = `${size / 2}px`;
-	canvas.style.cursor = 'pointer';
+	assign(canvas, {
+		width: size,
+		height: size
+	});
+	assign(canvas.style, {
+		userSelect: 'none',
+		transition: 'width 0.2s, height 0.2s',
+		border: 'solid 1px #000',
+		margin: '16px',
+		width: `${size / 2}px`,
+		height: `${size / 2}px`,
+		cursor: 'pointer'
+	});
 	const ctx = canvas.getContext('2d');
-	ctx.font = '20px Courier';
-	ctx.lineHeight = lineHeight;
+	assign(ctx, {
+		font: '20px Courier',
+		lineHeight
+	});
 	return ctx;
 }
 
@@ -101,19 +117,23 @@ async function graphicalEqual({
 		}
 		context.stroke();
 		if (drawLabel) {
-			context.lineWidth = 8;
-			context.strokeStyle = '#fff';
-			context.fillStyle = '#000';
-			context.textAlign = 'center';
-			context.textBaseline = 'bottom';
+			assign(context, {
+				lineWidth: 8,
+				strokeStyle: '#fff',
+				fillStyle: '#000',
+				textAlign: 'center',
+				textBaseline: 'bottom'
+			});
 			for (let {length: i} = xGrid; i--;) {
 				const value = xGrid[i];
 				const label = labelText(value);
 				context.strokeText(label, imageX(value), height);
 				context.fillText(label, imageX(value), height);
 			}
-			context.textAlign = 'left';
-			context.textBaseline = 'middle';
+			assign(context, {
+				textAlign: 'left',
+				textBaseline: 'middle'
+			});
 			for (let {length: i} = yGrid; i--;) {
 				const value = yGrid[i];
 				const label = labelText(value);
@@ -122,32 +142,38 @@ async function graphicalEqual({
 			}
 		}
 	}
-	function isOutside(y) {
-		return y < minY || maxY < y;
+	function isInside(y) {
+		return minY - yScale < y && y < maxY + yScale;
 	}
 	function drawGraph(context) {
 		context.moveTo(imageX(minX), imageY(fn(minX)));
 		const step = 0.5;
-		const d = 0.0000001;
+		const d = 0.000001;
 		let state = false;
 		function draw(x, y) {
-			if (isOutside(y)) {
+			if (x < minX || maxX < x) {
+				return;
+			}
+			if (isInside(y)) {
+				if (state) {
+					context.lineTo(imageX(x), imageY(y));
+				} else {
+					context.beginPath();
+					state = true;
+					context.moveTo(imageX(x), imageY(y));
+				}
+			} else {
 				if (state) {
 					context.stroke();
 				}
 				state = false;
-			} else if (state) {
-				context.lineTo(imageX(x), imageY(y));
-			} else {
-				context.beginPath();
-				state = true;
-				context.moveTo(imageX(x), imageY(y));
 			}
 		}
 		for (let iX = 0; iX <= width; iX += step) {
 			const x = minX + xScale * iX / width;
 			const x1 = x - d;
 			draw(x1, fn(x1));
+			draw(x, fn(x));
 			const x2 = x + d;
 			draw(x2, fn(x2));
 		}
@@ -157,9 +183,6 @@ async function graphicalEqual({
 	}
 	ctx.fillStyle = '#fff';
 	ctx.fillRect(0, 0, width, height);
-	// Draw grid lines
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = '#000';
 	// Draw graph
 	ctx.lineWidth = 4;
 	ctx.strokeStyle = expectedColor;
@@ -173,10 +196,11 @@ async function graphicalEqual({
 			// // downloader
 			if (!(/#/).test(name)) {
 				ctx.canvas.toBlob(function (blob) {
-					const a = document.createElement('a');
-					a.href = URL.createObjectURL(blob);
-					a.download = `${name.replace(/Math\./, '')}.png`;
-					a.click();
+					assign(document.createElement('a'), {
+						href: URL.createObjectURL(blob),
+						download: `${name.replace(/Math\./, '')}.png`
+					})
+					.click();
 				});
 			}
 		}
@@ -184,11 +208,13 @@ async function graphicalEqual({
 	}
 	const img = document.createElement('img');
 	await new Promise(function (resolve, reject) {
-		img.onerror = function (event) {
-			reject(event.error || event);
-		};
-		img.onload = resolve;
-		img.src = url;
+		assign(img, {
+			onerror: function (event) {
+				reject(event.error || event);
+			},
+			onload: resolve,
+			src: url
+		});
 	});
 	const expectedCanvasContext = getCanvasContext(name);
 	expectedCanvasContext.drawImage(img, 0, 0, width, height);
@@ -196,17 +222,23 @@ async function graphicalEqual({
 		ctx.getImageData(0, 0, width, height).data,
 		expectedCanvasContext.getImageData(0, 0, width, height).data
 	);
-	expectedCanvasContext.lineWidth = 2;
-	expectedCanvasContext.strokeStyle = actualColor;
+	assign(expectedCanvasContext, {
+		lineWidth: 2,
+		strokeStyle: actualColor
+	});
 	drawGraph(expectedCanvasContext);
-	expectedCanvasContext.lineWidth = 1;
-	expectedCanvasContext.strokeStyle = '#000';
+	assign(expectedCanvasContext, {
+		lineWidth: 1,
+		strokeStyle: '#000'
+	});
 	drawGridLines(expectedCanvasContext, true);
-	expectedCanvasContext.textBaseline = 'top';
-	expectedCanvasContext.textAlign = 'center';
-	expectedCanvasContext.lineWidth = 8;
-	expectedCanvasContext.strokeStyle = '#fff';
-	expectedCanvasContext.fillStyle = expectedColor;
+	assign(expectedCanvasContext, {
+		textBaseline: 'top',
+		textAlign: 'center',
+		lineWidth: 8,
+		strokeStyle: '#fff',
+		fillStyle: expectedColor
+	});
 	expectedCanvasContext.strokeText('Expected', width / 2, 0);
 	expectedCanvasContext.fillText('Expected', width / 2, 0);
 	expectedCanvasContext.fillStyle = actualColor;

@@ -6,7 +6,7 @@ function test(hypot, name = 'Math.hypot') {
 		it(`[id:${name}-y=3] should draw expected graph`, async function () {
 			await assert.graphicalEqual({
 				name: `${name}-y=3`,
-				url: `${window.root}/Math/hypot/hypot3.png`,
+				url: `${window.root}/Math/hypot/hypot-y=3.png`,
 				fn: function (x) {
 					return hypot(x, 3);
 				},
