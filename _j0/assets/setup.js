@@ -49,9 +49,12 @@ function canvasDiff(a, b) {
 }
 
 function labelText(value) {
-	if (value < 1) {
+	const absValue = value < 0 ? -value : value;
+	if (value === 0) {
+		return '0';
+	} else if (absValue < 1) {
 		return value.toFixed(2);
-	} else if (value < 10) {
+	} else if (absValue < 10) {
 		return value.toFixed(1);
 	}
 	return value.toFixed(0);

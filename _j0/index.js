@@ -17,6 +17,15 @@ const {
 	serverMode
 } = require('./constants');
 
+async function copy(absolutePath) {
+	const relativePath = path.relative(projectRoot, absolutePath)
+	.replace(/test\//g, '');
+	await cp(
+		absolutePath,
+		path.join(dest, relativePath)
+	);
+}
+
 async function start() {
 	await rm(dest);
 	await Promise.all([
@@ -31,14 +40,7 @@ async function start() {
 		.filter((absolutePath) => {
 			return path.extname(absolutePath) !== '.js';
 		})
-		.map((absolutePath) => {
-			const relativePath = path.relative(projectRoot, absolutePath)
-			.replace(/test\//g, '');
-			return cp(
-				absolutePath,
-				path.join(dest, relativePath)
-			);
-		})
+		.map(copy)
 	]);
 	await buildSiteMap();
 	await copyTestRunners();
