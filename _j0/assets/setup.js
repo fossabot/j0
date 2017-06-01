@@ -26,10 +26,13 @@ function getCanvasContext(name) {
 	canvas.setAttribute('data-name', name);
 	canvas.width = size;
 	canvas.height = size;
+	canvas.style.userSelect = 'none';
+	canvas.style.transition = 'width 0.2s, height 0.2s';
 	canvas.style.border = 'solid 1px #000';
 	canvas.style.margin = '16px';
 	canvas.style.width = `${size / 2}px`;
 	canvas.style.height = `${size / 2}px`;
+	canvas.style.cursor = 'pointer';
 	const ctx = canvas.getContext('2d');
 	ctx.font = '20px Courier';
 	ctx.lineHeight = lineHeight;
@@ -129,7 +132,6 @@ async function graphicalEqual({
 	ctx.strokeStyle = expectedColor;
 	drawGraph(ctx);
 	if (!url) {
-		ctx.canvas.style.cursor = 'pointer';
 		document.body.appendChild(ctx.canvas);
 		ctx.canvas.addEventListener('click', function () {
 			window.open(ctx.canvas.toDataURL());
@@ -148,7 +150,7 @@ async function graphicalEqual({
 		ctx.getImageData(0, 0, width, height).data,
 		expectedCanvasContext.getImageData(0, 0, width, height).data
 	);
-	expectedCanvasContext.lineWidth = 4;
+	expectedCanvasContext.lineWidth = 2;
 	expectedCanvasContext.strokeStyle = actualColor;
 	drawGraph(expectedCanvasContext);
 	expectedCanvasContext.lineWidth = 1;
@@ -164,6 +166,16 @@ async function graphicalEqual({
 	expectedCanvasContext.fillStyle = actualColor;
 	expectedCanvasContext.strokeText('Actual', width / 2, expectedCanvasContext.lineHeight);
 	expectedCanvasContext.fillText('Actual', width / 2, expectedCanvasContext.lineHeight);
+	expectedCanvasContext.canvas.addEventListener('click', function () {
+		this.clicked = !this.clicked;
+		if (this.clicked) {
+			this.style.width = `${width}px`;
+			this.style.height = `${height}px`;
+		} else {
+			this.style.width = `${width / 2}px`;
+			this.style.height = `${height / 2}px`;
+		}
+	});
 	document.body.appendChild(expectedCanvasContext.canvas);
 	if (threshold < sum) {
 		throw new Error(`The function seems to be wrong. Diff: ${sum}`);
