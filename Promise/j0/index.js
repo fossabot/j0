@@ -1,8 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import isFunction from '../../isFunction';
-import setImmediate from '../../setImmediate';
-import noop from '../../noop';
-import {TypeError} from 'j0';
+import {
+	isFunction,
+	setImmediate,
+	TypeError,
+	noop
+} from 'j0';
 
 const PENDING = 0;
 const RESOLVED = 1;
