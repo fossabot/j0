@@ -9,13 +9,22 @@ const glob = promisify(require('glob'));
 const buildSiteMap = require('./buildSiteMap');
 const copyTestRunners = require('./copyTestRunners');
 const copyAssets = require('./copyAssets');
-const createPolyfill = require('./polyfill');
+const buildPolyfill = require('./buildPolyfill');
 const {
 	projectRoot,
 	dest,
 	targetDirectories,
 	serverMode
 } = require('./constants');
+
+async function copy(absolutePath) {
+	const relativePath = path.relative(projectRoot, absolutePath)
+	.replace(/test\//g, '');
+	await cp(
+		absolutePath,
+		path.join(dest, relativePath)
+	);
+}
 
 async function start() {
 	await rm(dest);
@@ -31,14 +40,7 @@ async function start() {
 		.filter((absolutePath) => {
 			return path.extname(absolutePath) !== '.js';
 		})
-		.map((absolutePath) => {
-			const relativePath = path.relative(projectRoot, absolutePath)
-			.replace(/test\//g, '');
-			return cp(
-				absolutePath,
-				path.join(dest, relativePath)
-			);
-		})
+		.map(copy)
 	]);
 	await buildSiteMap();
 	await copyTestRunners();
@@ -50,7 +52,7 @@ async function start() {
 		});
 		await server.start();
 	} else {
-		await createPolyfill();
+		await buildPolyfill();
 	}
 }
 

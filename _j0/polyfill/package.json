@@ -7,5 +7,6 @@
     "email": "kei.itof@gmail.com",
     "url": "https://github.com/kei-ito"
   },
-  "repository": "kei-ito/j0"
+  "repository": "kei-ito/j0",
+  "main": "polyfill.min.js"
 }

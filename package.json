@@ -15,8 +15,8 @@
   ],
   "scripts": {
     "start": "node _j0 --server",
-    "polyfill": "node _j0/polyfill",
-    "build": "node _j0 && npm run polyfill",
+    "polyfill": "node _j0/buildPolyfill",
+    "build": "node _j0",
     "test": "wdio _j0/wdio.conf.js"
   },
   "main": "_j0/rollup",
