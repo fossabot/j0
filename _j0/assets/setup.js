@@ -256,7 +256,9 @@ async function graphicalEqual({
 	});
 	document.body.appendChild(expectedCanvasContext.canvas);
 	if (threshold < sum) {
-		throw new Error(`The function seems to be wrong. Diff: ${sum}`);
+		const error = new Error(`The function seems to be wrong. Diff: ${sum}`);
+		error.code = 'EDIFF';
+		throw error;
 	}
 }
 
