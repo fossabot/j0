@@ -60,7 +60,8 @@ function labelText(value) {
 	return value.toFixed(0);
 }
 
-const canvasDefaultThreshold = 36000;
+const canvasDefaultThreshold = 100000;
+const downloader = false;
 async function graphicalEqual({
 	name,
 	url,
@@ -81,6 +82,11 @@ async function graphicalEqual({
 		return width * (x - minX) / xScale;
 	}
 	function imageY(y) {
+		if (maxY < y) {
+			y = maxY + yScale;
+		} else if (y < minY) {
+			y = minY - yScale;
+		}
 		return height * (1 - (y - minY) / yScale);
 	}
 	function drawGridLines(context, drawLabel) {
@@ -116,14 +122,38 @@ async function graphicalEqual({
 			}
 		}
 	}
+	function isOutside(y) {
+		return y < minY || maxY < y;
+	}
 	function drawGraph(context) {
-		context.beginPath();
 		context.moveTo(imageX(minX), imageY(fn(minX)));
-		for (let iX = 0; iX <= width; iX++) {
-			const x = minX + xScale * iX / width;
-			context.lineTo(imageX(x), imageY(fn(x)));
+		const step = 0.5;
+		const d = 0.0000001;
+		let state = false;
+		function draw(x, y) {
+			if (isOutside(y)) {
+				if (state) {
+					context.stroke();
+				}
+				state = false;
+			} else if (state) {
+				context.lineTo(imageX(x), imageY(y));
+			} else {
+				context.beginPath();
+				state = true;
+				context.moveTo(imageX(x), imageY(y));
+			}
 		}
-		context.stroke();
+		for (let iX = 0; iX <= width; iX += step) {
+			const x = minX + xScale * iX / width;
+			const x1 = x - d;
+			draw(x1, fn(x1));
+			const x2 = x + d;
+			draw(x2, fn(x2));
+		}
+		if (state) {
+			context.stroke();
+		}
 	}
 	ctx.fillStyle = '#fff';
 	ctx.fillRect(0, 0, width, height);
@@ -134,11 +164,22 @@ async function graphicalEqual({
 	ctx.lineWidth = 4;
 	ctx.strokeStyle = expectedColor;
 	drawGraph(ctx);
-	if (!url) {
+	if (downloader || !url) {
 		document.body.appendChild(ctx.canvas);
 		ctx.canvas.addEventListener('click', function () {
 			window.open(ctx.canvas.toDataURL());
 		});
+		if (downloader) {
+			// // downloader
+			if (!(/#/).test(name)) {
+				ctx.canvas.toBlob(function (blob) {
+					const a = document.createElement('a');
+					a.href = URL.createObjectURL(blob);
+					a.download = `${name.replace(/Math\./, '')}.png`;
+					a.click();
+				});
+			}
+		}
 		throw new Error('No url for expected graph');
 	}
 	const img = document.createElement('img');

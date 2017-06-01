@@ -6,7 +6,7 @@ function test(floor, name = 'Math.floor') {
 		it(`[id:${name}] should draw expected graph`, async function () {
 			await assert.graphicalEqual({
 				name,
-				// url: `${window.root}/Math/floor/floor.png`,
+				url: `${window.root}/Math/floor/floor.png`,
 				fn: floor,
 				xRange: [-5, 5],
 				yRange: [-5, 5],
