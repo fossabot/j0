@@ -8,29 +8,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref55 = _asyncToGenerator(regeneratorRuntime.mark(function _callee16(duration, data) {
-		return regeneratorRuntime.wrap(function _callee16$(_context16) {
+	var _ref90 = _asyncToGenerator(regeneratorRuntime.mark(function _callee51(duration, data) {
+		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
-				switch (_context16.prev = _context16.next) {
+				switch (_context51.prev = _context51.next) {
 					case 0:
-						_context16.next = 2;
+						_context51.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context16.abrupt('return', data);
+						return _context51.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context16.stop();
+						return _context51.stop();
 				}
 			}
-		}, _callee16, this);
+		}, _callee51, this);
 	}));
 
-	return function wait$1(_x54, _x55) {
-		return _ref55.apply(this, arguments);
+	return function wait$1(_x97, _x98) {
+		return _ref90.apply(this, arguments);
 	};
 }();
 
@@ -1306,7 +1306,8 @@ function clamp(x) {
 	return x;
 }
 
-describe('Math/clamp', function () {
+/* eslint-disable no-magic-numbers */
+describe('clamp', function () {
 
 	it('should return 1 if the arguments are [0, 1, 2]', function () {
 		assert.equal(clamp(0, 1, 2), 1);
@@ -1388,7 +1389,7 @@ function cubicBezier(x1, y1, x2, y2, x) {
 	return p(y1, y2, getT(0, 1));
 }
 
-describe('Math/cubicBezier', function () {
+describe('cubicBezier', function () {
 
 	it('should be linear', function () {
 		var sum = 0;
@@ -3964,7 +3965,7 @@ var J0Storage = function () {
 
 test$23(new J0Storage(), 'J0Storage');
 
-describe('String/leftpad', function () {
+describe('leftpad', function () {
 
 	it('should pad a string with 0', function () {
 		assert.equal(leftpad(1), '01');
@@ -4269,7 +4270,1588 @@ tests$7(Map$1, 'Map#j0');
 
 tests$7(Map);
 
-function test$28(generator) {
+function test$28(abs) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.abs';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+			return regeneratorRuntime.wrap(function _callee10$(_context10) {
+				while (1) {
+					switch (_context10.prev = _context10.next) {
+						case 0:
+							_context10.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/abs/abs.png',
+								fn: abs,
+								xRange: [-1, 1],
+								yRange: [-1, 1],
+								xGrid: [0],
+								yGrid: [0]
+							});
+
+						case 2:
+						case 'end':
+							return _context10.stop();
+					}
+				}
+			}, _callee10, this);
+		})));
+	});
+}
+
+test$28(Math.abs);
+
+/* eslint-disable no-magic-numbers */
+function test$30(acos) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.acos';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+			return regeneratorRuntime.wrap(function _callee11$(_context11) {
+				while (1) {
+					switch (_context11.prev = _context11.next) {
+						case 0:
+							_context11.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/acos/acos.png',
+								fn: acos,
+								xRange: [-1, 1],
+								yRange: [0, Math.PI],
+								xGrid: [-0.5, 0, 0.5],
+								yGrid: [Math.PI / 2]
+							});
+
+						case 2:
+						case 'end':
+							return _context11.stop();
+					}
+				}
+			}, _callee11, this);
+		})));
+	});
+}
+
+test$30(Math.acos);
+
+/* eslint-disable no-magic-numbers */
+function test$32(acosh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.acosh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+			return regeneratorRuntime.wrap(function _callee12$(_context12) {
+				while (1) {
+					switch (_context12.prev = _context12.next) {
+						case 0:
+							_context12.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/acosh/acosh.png',
+								fn: acosh,
+								xRange: [0, 10],
+								yRange: [0, 4],
+								xGrid: [1, 3, 5, 7, 9],
+								yGrid: [1, 2, 3]
+							});
+
+						case 2:
+						case 'end':
+							return _context12.stop();
+					}
+				}
+			}, _callee12, this);
+		})));
+	});
+}
+
+var x$33 = Math;
+
+function acosh(x) {
+	return x$33.log(x + x$33.sqrt(x * x - 1));
+}
+
+test$32(acosh, 'Math.acosh#j0');
+
+test$32(Math.acosh);
+
+/* eslint-disable no-magic-numbers */
+function test$34(asin) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.asin';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+			return regeneratorRuntime.wrap(function _callee13$(_context13) {
+				while (1) {
+					switch (_context13.prev = _context13.next) {
+						case 0:
+							_context13.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/asin/asin.png',
+								fn: asin,
+								xRange: [-1, 1],
+								yRange: [-Math.PI / 2, Math.PI / 2],
+								xGrid: [-0.5, 0, 0.5],
+								yGrid: [0]
+							});
+
+						case 2:
+						case 'end':
+							return _context13.stop();
+					}
+				}
+			}, _callee13, this);
+		})));
+	});
+}
+
+test$34(Math.asin);
+
+/* eslint-disable no-magic-numbers */
+function test$36(asinh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.asinh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+			return regeneratorRuntime.wrap(function _callee14$(_context14) {
+				while (1) {
+					switch (_context14.prev = _context14.next) {
+						case 0:
+							_context14.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/asinh/asinh.png',
+								fn: asinh,
+								xRange: [-16, 16],
+								yRange: [-4, 4],
+								xGrid: [-15, -10, -5, 0, 5, 10, 15],
+								yGrid: [-3, -2, -1, 0, 1, 2, 3]
+							});
+
+						case 2:
+						case 'end':
+							return _context14.stop();
+					}
+				}
+			}, _callee14, this);
+		})));
+	});
+}
+
+function asinh(x) {
+	if (x === -Infinity) {
+		return x;
+	}
+	return x$33.log(x + x$33.sqrt(x * x + 1));
+}
+
+test$36(asinh, 'Math.asinh#j0');
+
+test$36(Math.asinh);
+
+/* eslint-disable no-magic-numbers */
+function test$38(atan) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atan';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+			return regeneratorRuntime.wrap(function _callee15$(_context15) {
+				while (1) {
+					switch (_context15.prev = _context15.next) {
+						case 0:
+							_context15.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/atan/atan.png',
+								fn: atan,
+								xRange: [-10, 10],
+								yRange: [-Math.PI / 2, Math.PI / 2],
+								xGrid: [-5, 0, 5],
+								yGrid: [0]
+							});
+
+						case 2:
+						case 'end':
+							return _context15.stop();
+					}
+				}
+			}, _callee15, this);
+		})));
+	});
+}
+
+test$38(Math.atan);
+
+/* eslint-disable no-magic-numbers */
+function test$40(atan2) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atan2';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
+			return regeneratorRuntime.wrap(function _callee16$(_context16) {
+				while (1) {
+					switch (_context16.prev = _context16.next) {
+						case 0:
+							_context16.next = 2;
+							return assert.graphicalEqual({
+								name: name + '+',
+								url: window.root + '/Math/atan2/atan2+.png',
+								fn: function fn(x) {
+									return atan2(1, x);
+								},
+								xRange: [-10, 10],
+								yRange: [0, Math.PI],
+								xGrid: [-5, 0, 5],
+								yGrid: [Math.PI / 2]
+							});
+
+						case 2:
+						case 'end':
+							return _context16.stop();
+					}
+				}
+			}, _callee16, this);
+		})));
+
+		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+			return regeneratorRuntime.wrap(function _callee17$(_context17) {
+				while (1) {
+					switch (_context17.prev = _context17.next) {
+						case 0:
+							_context17.next = 2;
+							return assert.graphicalEqual({
+								name: name + '-',
+								url: window.root + '/Math/atan2/atan2-.png',
+								fn: function fn(x) {
+									return atan2(-1, x);
+								},
+								xRange: [-10, 10],
+								yRange: [-Math.PI, 0],
+								xGrid: [-5, 0, 5],
+								yGrid: [-Math.PI / 2]
+							});
+
+						case 2:
+						case 'end':
+							return _context17.stop();
+					}
+				}
+			}, _callee17, this);
+		})));
+	});
+}
+
+test$40(Math.atan2);
+
+/* eslint-disable no-magic-numbers */
+function test$42(atanh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atanh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
+			return regeneratorRuntime.wrap(function _callee18$(_context18) {
+				while (1) {
+					switch (_context18.prev = _context18.next) {
+						case 0:
+							_context18.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/atanh/atanh.png',
+								fn: atanh,
+								xRange: [-1, 1],
+								yRange: [-5, 5],
+								xGrid: [-0.5, 0, 0.5],
+								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+							});
+
+						case 2:
+						case 'end':
+							return _context18.stop();
+					}
+				}
+			}, _callee18, this);
+		})));
+	});
+}
+
+function atanh(x) {
+	return x$33.log((1 + x) / (1 - x)) / 2;
+}
+
+test$42(atanh, 'Math.atanh#j0');
+
+test$42(Math.atanh);
+
+/* eslint-disable no-magic-numbers */
+function test$44(cbrt) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cbrt';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
+			return regeneratorRuntime.wrap(function _callee19$(_context19) {
+				while (1) {
+					switch (_context19.prev = _context19.next) {
+						case 0:
+							_context19.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/cbrt/cbrt.png',
+								fn: cbrt,
+								xRange: [-64, 64],
+								yRange: [-4, 4],
+								xGrid: [-27, -8, 0, 8, 27],
+								yGrid: [-3, -2, -1, 0, 1, 2, 3]
+							});
+
+						case 2:
+						case 'end':
+							return _context19.stop();
+					}
+				}
+			}, _callee19, this);
+		})));
+	});
+}
+
+/* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
+function cbrt(x) {
+	var root = x$33.pow(x$33.abs(x), 1 / 3);
+	return x < 0 ? -root : root;
+}
+
+test$44(cbrt, 'Math.cbrt#j0');
+
+test$44(Math.cbrt);
+
+/* eslint-disable no-magic-numbers */
+function test$46(ceil) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.ceil';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+			return regeneratorRuntime.wrap(function _callee20$(_context20) {
+				while (1) {
+					switch (_context20.prev = _context20.next) {
+						case 0:
+							_context20.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/ceil/ceil.png',
+								fn: ceil,
+								xRange: [-5, 5],
+								yRange: [-5, 5],
+								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+							});
+
+						case 2:
+						case 'end':
+							return _context20.stop();
+					}
+				}
+			}, _callee20, this);
+		})));
+	});
+}
+
+test$46(Math.ceil);
+
+/* eslint-disable no-magic-numbers */
+function test$48(clz32) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.clz32';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
+			return regeneratorRuntime.wrap(function _callee21$(_context21) {
+				while (1) {
+					switch (_context21.prev = _context21.next) {
+						case 0:
+							_context21.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/clz32/clz32.png',
+								fn: clz32,
+								xRange: [0, 0xffffff],
+								yRange: [0, 33],
+								xGrid: [0x1fffff, 0x7fffff],
+								yGrid: [1, 10, 20, 30]
+							});
+
+						case 2:
+						case 'end':
+							return _context21.stop();
+					}
+				}
+			}, _callee21, this);
+		})));
+	});
+}
+
+/* eslint no-magic-numbers: ["warn", {ignore: [-1, 0, 1, 31, 32]}], no-bitwise: "off" */
+function clz32(x) {
+	if (x <= -1) {
+		return 0;
+	}
+	if (x === null || x <= 1) {
+		return 32;
+	}
+	return 31 - x$33.floor(x$33.log(x >>> 0) * x$33.LOG2E);
+}
+
+test$48(clz32, 'Math.clz32#j0');
+
+test$48(Math.clz32);
+
+/* eslint-disable no-magic-numbers */
+function test$50(cos) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cos';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
+			return regeneratorRuntime.wrap(function _callee22$(_context22) {
+				while (1) {
+					switch (_context22.prev = _context22.next) {
+						case 0:
+							_context22.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/cos/cos.png',
+								fn: cos,
+								xRange: [0, 2 * Math.PI],
+								yRange: [-1, 1],
+								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
+								yGrid: [-0.5, 0, 0.5]
+							});
+
+						case 2:
+						case 'end':
+							return _context22.stop();
+					}
+				}
+			}, _callee22, this);
+		})));
+	});
+}
+
+test$50(Math.cos);
+
+/* eslint-disable no-magic-numbers */
+function test$52(cosh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cosh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
+			return regeneratorRuntime.wrap(function _callee23$(_context23) {
+				while (1) {
+					switch (_context23.prev = _context23.next) {
+						case 0:
+							_context23.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/cosh/cosh.png',
+								fn: cosh,
+								xRange: [-12, 12],
+								yRange: [0, 25000],
+								xGrid: [-10, -5, 0, 5, 10],
+								yGrid: [5000, 10000, 15000, 20000]
+							});
+
+						case 2:
+						case 'end':
+							return _context23.stop();
+					}
+				}
+			}, _callee23, this);
+		})));
+	});
+}
+
+function cosh(x) {
+	var y = x$33.exp(x);
+	return (y + 1 / y) / 2;
+}
+
+test$52(cosh, 'Math.cosh#j0');
+
+test$52(Math.cosh);
+
+function test$54(E) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.E';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 2.718281828459045', function () {
+			var expected = 2.718281828459045;
+			assert.approxEqual(E, expected);
+		});
+	});
+}
+
+test$54(Math.E);
+
+/* eslint-disable no-magic-numbers */
+function test$56(exp) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.exp';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
+			return regeneratorRuntime.wrap(function _callee24$(_context24) {
+				while (1) {
+					switch (_context24.prev = _context24.next) {
+						case 0:
+							_context24.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/exp/exp.png',
+								fn: exp,
+								xRange: [-10, 3],
+								yRange: [0, 9],
+								xGrid: [0, 1],
+								yGrid: [1, Math.E]
+							});
+
+						case 2:
+						case 'end':
+							return _context24.stop();
+					}
+				}
+			}, _callee24, this);
+		})));
+	});
+}
+
+test$56(Math.exp);
+
+/* eslint-disable no-magic-numbers */
+function test$58(expm1) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.expm1';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
+			return regeneratorRuntime.wrap(function _callee25$(_context25) {
+				while (1) {
+					switch (_context25.prev = _context25.next) {
+						case 0:
+							_context25.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/expm1/expm1.png',
+								fn: expm1,
+								xRange: [-10, 3],
+								yRange: [-1, 8],
+								xGrid: [0, 1],
+								yGrid: [0, Math.E - 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context25.stop();
+					}
+				}
+			}, _callee25, this);
+		})));
+	});
+}
+
+function expm1(x) {
+	return x$33.exp(x) - 1;
+}
+
+test$58(expm1, 'Math.expm1#j0');
+
+test$58(Math.expm1);
+
+/* eslint-disable no-magic-numbers */
+function test$60(floor) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.floor';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
+			return regeneratorRuntime.wrap(function _callee26$(_context26) {
+				while (1) {
+					switch (_context26.prev = _context26.next) {
+						case 0:
+							_context26.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/floor/floor.png',
+								fn: floor,
+								xRange: [-5, 5],
+								yRange: [-5, 5],
+								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+							});
+
+						case 2:
+						case 'end':
+							return _context26.stop();
+					}
+				}
+			}, _callee26, this);
+		})));
+	});
+}
+
+test$60(Math.floor);
+
+/* eslint-disable no-magic-numbers */
+function test$62(fround) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.fround';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
+			var d;
+			return regeneratorRuntime.wrap(function _callee27$(_context27) {
+				while (1) {
+					switch (_context27.prev = _context27.next) {
+						case 0:
+							d = 1;
+							_context27.next = 3;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/fround/fround.png',
+								fn: fround,
+								xRange: [-d, d],
+								yRange: [-d, d],
+								xGrid: [-d / 2, 0, d / 2],
+								yGrid: [-d / 2, 0, d / 2]
+							});
+
+						case 3:
+						case 'end':
+							return _context27.stop();
+					}
+				}
+			}, _callee27, this);
+		})));
+
+		it('should return 1.3370000123977661', function () {
+			assert.equal(fround(1.337), 1.3370000123977661);
+		});
+	});
+}
+
+function fround(x) {
+	return new x$19([x])[0];
+}
+
+test$62(fround, 'Math.fround#j0');
+
+test$62(Math.fround);
+
+/* eslint-disable no-magic-numbers */
+function test$64(hypot) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.hypot';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
+			return regeneratorRuntime.wrap(function _callee28$(_context28) {
+				while (1) {
+					switch (_context28.prev = _context28.next) {
+						case 0:
+							_context28.next = 2;
+							return assert.graphicalEqual({
+								name: name + '-y=3',
+								url: window.root + '/Math/hypot/hypot-y=3.png',
+								fn: function fn(x) {
+									return hypot(x, 3);
+								},
+								xRange: [-6, 6],
+								yRange: [2, 8],
+								xGrid: [-4, -2, 0, 2, 4],
+								yGrid: [3, 4, 5, 6, 7]
+							});
+
+						case 2:
+						case 'end':
+							return _context28.stop();
+					}
+				}
+			}, _callee28, this);
+		})));
+	});
+}
+
+function hypot() {
+	var sum = 0;
+
+	for (var _len24 = arguments.length, args = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
+		args[_key24] = arguments[_key24];
+	}
+
+	for (var i = 0, length = args.length; i < length; i++) {
+		var value = args[i];
+		sum += value * value;
+	}
+	return x$33.sqrt(sum);
+}
+
+test$64(hypot, 'Math.hypot#j0');
+
+test$64(Math.hypot);
+
+/* eslint-disable no-magic-numbers */
+function test$66(imul) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.imul';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
+			return regeneratorRuntime.wrap(function _callee29$(_context29) {
+				while (1) {
+					switch (_context29.prev = _context29.next) {
+						case 0:
+							_context29.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/imul/imul.png',
+								fn: function fn(x) {
+									return imul(x, 1);
+								},
+								xRange: [-10, 10],
+								yRange: [-10, 10],
+								xGrid: [0],
+								yGrid: [0]
+							});
+
+						case 2:
+						case 'end':
+							return _context29.stop();
+					}
+				}
+			}, _callee29, this);
+		})));
+
+		it('imul(2, 4) should be 8', function () {
+			assert.equal(imul(2, 4), 8);
+		});
+
+		it('imul(-1, 8) should be -8', function () {
+			assert.equal(imul(-1, 8), -8);
+		});
+
+		it('imul(-2, -2) should be 4', function () {
+			assert.equal(imul(-2, -2), 4);
+		});
+
+		// it('imul(0xffffffff, 5) should be -5', function () {
+		// 	assert.equal(imul(0xffffffff, 5), -5);
+		// });
+		//
+		// it('imul(0xfffffffe, 5) should be -10', function () {
+		// 	assert.equal(imul(0xfffffffe, 5), -10);
+		// });
+	});
+}
+
+/* eslint-disable no-bitwise, no-magic-numbers */
+function imul(a, b) {
+	var ah = a >>> 16 & 0xffff;
+	var al = a & 0xffff;
+	var bh = b >>> 16 & 0xffff;
+	var bl = b & 0xffff;
+	return al * bl + (ah * bl + al * bh << 16 >>> 0) | 0;
+}
+
+test$66(imul, 'Math.imul#j0');
+
+test$66(Math.imul);
+
+function test$68(LN10) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LN10';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 2.302585092994046', function () {
+			var expected = 2.302585092994046;
+			assert.approxEqual(LN10, expected);
+		});
+	});
+}
+
+test$68(Math.LN10);
+
+function test$70(LN2) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LN2';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 0.6931471805599453', function () {
+			var expected = 0.6931471805599453;
+			assert.approxEqual(LN2, expected);
+		});
+	});
+}
+
+test$70(Math.LN2);
+
+/* eslint-disable no-magic-numbers */
+function test$72(log) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
+			return regeneratorRuntime.wrap(function _callee30$(_context30) {
+				while (1) {
+					switch (_context30.prev = _context30.next) {
+						case 0:
+							_context30.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/log/log.png',
+								fn: log,
+								xRange: [0, 10],
+								yRange: [-10, 4],
+								xGrid: [1 / Math.E, 1, Math.E],
+								yGrid: [-1, 0, 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context30.stop();
+					}
+				}
+			}, _callee30, this);
+		})));
+	});
+}
+
+test$72(Math.log);
+
+/* eslint-disable no-magic-numbers */
+function test$74(log10) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log10';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
+			return regeneratorRuntime.wrap(function _callee31$(_context31) {
+				while (1) {
+					switch (_context31.prev = _context31.next) {
+						case 0:
+							_context31.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/log10/log10.png',
+								fn: log10,
+								xRange: [0, 100],
+								yRange: [-5, 2],
+								xGrid: [0.1, 1, 10],
+								yGrid: [-1, 0, 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context31.stop();
+					}
+				}
+			}, _callee31, this);
+		})));
+	});
+}
+
+function log10(x) {
+	return x$33.log(x) / x$33.LN10;
+}
+
+test$74(log10, 'Math.log10#j0');
+
+test$74(Math.log10);
+
+function test$76(LOG10E) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LOG10E';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 0.4342944819032518', function () {
+			var expected = 0.4342944819032518;
+			assert.approxEqual(LOG10E, expected);
+		});
+	});
+}
+
+test$76(Math.LOG10E);
+
+/* eslint-disable no-magic-numbers */
+function test$78(log1p) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log1p';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
+			return regeneratorRuntime.wrap(function _callee32$(_context32) {
+				while (1) {
+					switch (_context32.prev = _context32.next) {
+						case 0:
+							_context32.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/log1p/log1p.png',
+								fn: log1p,
+								xRange: [-1, 9],
+								yRange: [-10, 4],
+								xGrid: [1 / Math.E - 1, 0, Math.E - 1],
+								yGrid: [-1, 0, 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context32.stop();
+					}
+				}
+			}, _callee32, this);
+		})));
+	});
+}
+
+function log1p(x) {
+	return x$33.log(x + 1);
+}
+
+test$78(log1p, 'Math.log1p#j0');
+
+test$78(Math.log1p);
+
+/* eslint-disable no-magic-numbers */
+function test$80(log2) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log2';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
+			return regeneratorRuntime.wrap(function _callee33$(_context33) {
+				while (1) {
+					switch (_context33.prev = _context33.next) {
+						case 0:
+							_context33.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/log2/log2.png',
+								fn: log2,
+								xRange: [0, 8],
+								yRange: [-5, 3],
+								xGrid: [1 / 2, 1, 2],
+								yGrid: [-1, 0, 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context33.stop();
+					}
+				}
+			}, _callee33, this);
+		})));
+	});
+}
+
+function log2(x) {
+	return x$33.log(x) / x$33.LN2;
+}
+
+test$80(log2, 'Math.log2#j0');
+
+test$80(Math.log2);
+
+function test$82(LOG2E) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LOG2E';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 1.4426950408889633', function () {
+			var expected = 1.4426950408889633;
+			assert.approxEqual(LOG2E, expected);
+		});
+	});
+}
+
+test$82(Math.LOG2E);
+
+/* eslint-disable no-magic-numbers */
+function test$84(max) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.max';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
+			return regeneratorRuntime.wrap(function _callee34$(_context34) {
+				while (1) {
+					switch (_context34.prev = _context34.next) {
+						case 0:
+							_context34.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/max/max.png',
+								fn: function fn(x) {
+									return max(0, x);
+								},
+								xRange: [-1, 1],
+								yRange: [-1, 1],
+								xGrid: [-0.5, 0, 0.5],
+								yGrid: [-0.5, 0, 0.5]
+							});
+
+						case 2:
+						case 'end':
+							return _context34.stop();
+					}
+				}
+			}, _callee34, this);
+		})));
+	});
+}
+
+test$84(Math.max);
+
+/* eslint-disable no-magic-numbers */
+function test$86(min) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.min';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
+			return regeneratorRuntime.wrap(function _callee35$(_context35) {
+				while (1) {
+					switch (_context35.prev = _context35.next) {
+						case 0:
+							_context35.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/min/min.png',
+								fn: function fn(x) {
+									return min(0, x);
+								},
+								xRange: [-1, 1],
+								yRange: [-1, 1],
+								xGrid: [-0.5, 0, 0.5],
+								yGrid: [-0.5, 0, 0.5]
+							});
+
+						case 2:
+						case 'end':
+							return _context35.stop();
+					}
+				}
+			}, _callee35, this);
+		})));
+	});
+}
+
+test$86(Math.min);
+
+function test$88(PI) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.PI';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 3.141592653589793', function () {
+			var expected = 3.141592653589793;
+			assert.approxEqual(PI, expected);
+		});
+	});
+}
+
+test$88(Math.PI);
+
+/* eslint-disable no-magic-numbers */
+function test$90(pow) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.pow';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
+			return regeneratorRuntime.wrap(function _callee36$(_context36) {
+				while (1) {
+					switch (_context36.prev = _context36.next) {
+						case 0:
+							_context36.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/pow/pow.png',
+								fn: function fn(x) {
+									return pow(2, x);
+								},
+								xRange: [-2, 2],
+								yRange: [0, 4],
+								xGrid: [-1, 0, 1],
+								yGrid: [1, 2, 3]
+							});
+
+						case 2:
+						case 'end':
+							return _context36.stop();
+					}
+				}
+			}, _callee36, this);
+		})));
+	});
+}
+
+test$90(Math.pow);
+
+/* eslint-disable no-magic-numbers */
+function test$92(random) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.random';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', function () {
+			var timeout = 5000;
+			this.timeout(timeout);
+			return assert.graphicalEqual({
+				name: name,
+				url: window.root + '/Math/random/random.png',
+				fn: random,
+				xRange: [0, 1],
+				yRange: [0, 1],
+				xGrid: [],
+				yGrid: [0.5]
+			}).catch(function (error) {
+				if (error.code === 'EDIFF') {
+					return;
+				}
+				throw error;
+			});
+		});
+	});
+}
+
+test$92(Math.random);
+
+/* eslint-disable no-magic-numbers */
+function test$94(round) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.round';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
+			return regeneratorRuntime.wrap(function _callee37$(_context37) {
+				while (1) {
+					switch (_context37.prev = _context37.next) {
+						case 0:
+							_context37.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/round/round.png',
+								fn: round,
+								xRange: [-5, 5],
+								yRange: [-5, 5],
+								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+							});
+
+						case 2:
+						case 'end':
+							return _context37.stop();
+					}
+				}
+			}, _callee37, this);
+		})));
+	});
+}
+
+test$94(Math.round);
+
+/* eslint-disable no-magic-numbers */
+function test$96(sign) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sign';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
+			return regeneratorRuntime.wrap(function _callee38$(_context38) {
+				while (1) {
+					switch (_context38.prev = _context38.next) {
+						case 0:
+							_context38.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/sign/sign.png',
+								fn: sign,
+								xRange: [-3, 3],
+								yRange: [-1.1, 1.1],
+								xGrid: [-2, -1, 0, 1, 2],
+								yGrid: [-1, 0, 1]
+							});
+
+						case 2:
+						case 'end':
+							return _context38.stop();
+					}
+				}
+			}, _callee38, this);
+		})));
+	});
+}
+
+var x$34 = isNaN;
+
+function sign(x) {
+	x = +x;
+	if (x === 0 || x$34(x)) {
+		return x;
+	}
+	return x > 0 ? 1 : -1;
+}
+
+test$96(sign, 'Math.sign#j0');
+
+test$96(Math.sign);
+
+/* eslint-disable no-magic-numbers */
+function test$98(sin) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sin';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
+			return regeneratorRuntime.wrap(function _callee39$(_context39) {
+				while (1) {
+					switch (_context39.prev = _context39.next) {
+						case 0:
+							_context39.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/sin/sin.png',
+								fn: sin,
+								xRange: [0, 2 * Math.PI],
+								yRange: [-1, 1],
+								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
+								yGrid: [-0.5, 0, 0.5]
+							});
+
+						case 2:
+						case 'end':
+							return _context39.stop();
+					}
+				}
+			}, _callee39, this);
+		})));
+	});
+}
+
+test$98(Math.sin);
+
+/* eslint-disable no-magic-numbers */
+function test$100(sinh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sinh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
+			return regeneratorRuntime.wrap(function _callee40$(_context40) {
+				while (1) {
+					switch (_context40.prev = _context40.next) {
+						case 0:
+							_context40.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/sinh/sinh.png',
+								fn: sinh,
+								xRange: [-12, 12],
+								yRange: [-5000, 5000],
+								xGrid: [-10, -5, 0, 5, 10],
+								yGrid: [-4000, -2000, 0, 2000, 4000]
+							});
+
+						case 2:
+						case 'end':
+							return _context40.stop();
+					}
+				}
+			}, _callee40, this);
+		})));
+	});
+}
+
+function sinh(x) {
+	var y = x$33.exp(x);
+	return (y - 1 / y) / 2;
+}
+
+test$100(sinh, 'Math.sinh#j0');
+
+test$100(Math.sinh);
+
+/* eslint-disable no-magic-numbers */
+function test$102(sqrt) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sqrt';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
+			return regeneratorRuntime.wrap(function _callee41$(_context41) {
+				while (1) {
+					switch (_context41.prev = _context41.next) {
+						case 0:
+							_context41.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/sqrt/sqrt.png',
+								fn: sqrt,
+								xRange: [0, 10],
+								yRange: [0, 4],
+								xGrid: [1, 4, 9],
+								yGrid: [1, 2, 3]
+							});
+
+						case 2:
+						case 'end':
+							return _context41.stop();
+					}
+				}
+			}, _callee41, this);
+		})));
+	});
+}
+
+test$102(Math.sqrt);
+
+function test$104(SQRT1_2) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.SQRT1_2';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 0.7071067811865476', function () {
+			var expected = 0.7071067811865476;
+			assert.approxEqual(SQRT1_2, expected);
+		});
+	});
+}
+
+test$104(Math.SQRT1_2);
+
+function test$106(SQRT2) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.SQRT2';
+
+
+	describe(name, function () {
+
+		it('should be approximately equal to 1.4142135623730951', function () {
+			var expected = 1.4142135623730951;
+			assert.approxEqual(SQRT2, expected);
+		});
+	});
+}
+
+test$106(Math.SQRT2);
+
+/* eslint-disable no-magic-numbers */
+function test$108(tan) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.tan';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
+			return regeneratorRuntime.wrap(function _callee42$(_context42) {
+				while (1) {
+					switch (_context42.prev = _context42.next) {
+						case 0:
+							_context42.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/tan/tan.png',
+								fn: tan,
+								xRange: [0, 2 * Math.PI],
+								yRange: [-5, 5],
+								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
+								yGrid: [-2, -1, 0, 1, 2]
+							});
+
+						case 2:
+						case 'end':
+							return _context42.stop();
+					}
+				}
+			}, _callee42, this);
+		})));
+	});
+}
+
+test$108(Math.tan);
+
+/* eslint-disable no-magic-numbers */
+function test$110(tanh) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.tanh';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
+			return regeneratorRuntime.wrap(function _callee43$(_context43) {
+				while (1) {
+					switch (_context43.prev = _context43.next) {
+						case 0:
+							_context43.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/tanh/tanh.png',
+								fn: tanh,
+								xRange: [-6, 6],
+								yRange: [-1, 1],
+								xGrid: [-4, -2, 0, 2, 4],
+								yGrid: [-0.5, 0, 0.5]
+							});
+
+						case 2:
+						case 'end':
+							return _context43.stop();
+					}
+				}
+			}, _callee43, this);
+		})));
+	});
+}
+
+function tanh(x) {
+	if (x === Infinity) {
+		return 1;
+	} else if (x === -Infinity) {
+		return -1;
+	}
+	var y = x$33.exp(2 * x);
+	return (y - 1) / (y + 1);
+}
+
+test$110(tanh, 'Math.tanh#j0');
+
+test$110(Math.tanh);
+
+/* eslint-disable no-magic-numbers */
+function test$112(trunc) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.trunc';
+
+
+	describe(name, function () {
+
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
+			return regeneratorRuntime.wrap(function _callee44$(_context44) {
+				while (1) {
+					switch (_context44.prev = _context44.next) {
+						case 0:
+							_context44.next = 2;
+							return assert.graphicalEqual({
+								name: name,
+								url: window.root + '/Math/trunc/trunc.png',
+								fn: trunc,
+								xRange: [-10, 10],
+								yRange: [-10, 10],
+								xGrid: [0],
+								yGrid: [0]
+							});
+
+						case 2:
+						case 'end':
+							return _context44.stop();
+					}
+				}
+			}, _callee44, this);
+		})));
+
+		it('trunc(13.37) should be 13', function () {
+			assert.equal(trunc(13.37), 13);
+		});
+
+		it('trunc(42.84) should be 42', function () {
+			assert.equal(trunc(42.84), 42);
+		});
+
+		it('trunc(0.123) should be 0', function () {
+			assert.equal(trunc(0.123), 0);
+		});
+
+		it('trunc(-0.123) should be -0', function () {
+			assert.equal(trunc(-0.123), -0);
+		});
+
+		it('trunc(\'-1.123\') should be -1', function () {
+			assert.equal(trunc('-1.123'), -1);
+		});
+
+		it('trunc(NaN) should be NaN', function () {
+			assert.equal(isNaN(trunc(NaN)), true);
+		});
+
+		it('trunc(\'foo\') should be NaN', function () {
+			assert.equal(isNaN(trunc('foo')), true);
+		});
+
+		it('trunc() should be NaN', function () {
+			assert.equal(isNaN(trunc()), true);
+		});
+	});
+}
+
+/* eslint-disable no-bitwise, no-magic-numbers */
+function trunc(x) {
+	return x - x % 1;
+}
+
+test$112(trunc, 'Math.trunc#j0');
+
+test$112(Math.trunc);
+
+function test$114(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
 
 
@@ -4392,11 +5974,11 @@ function generator$6() {
 	});
 }
 
-test$28(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
+test$114(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-test$28(NamedNodeMap.prototype[Symbol.iterator]);
+test$114(NamedNodeMap.prototype[Symbol.iterator]);
 
-function test$30(generator) {
+function test$116(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NodeList.prototype[Symbol.iterator]';
 
 
@@ -4519,9 +6101,9 @@ function generator$8() {
 	});
 }
 
-test$30(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
+test$116(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
 
-test$30(NodeList.prototype[Symbol.iterator]);
+test$116(NodeList.prototype[Symbol.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -4542,8 +6124,8 @@ describe('noop', function () {
 });
 
 function assign(target) {
-	for (var _len24 = arguments.length, objects = Array(_len24 > 1 ? _len24 - 1 : 0), _key24 = 1; _key24 < _len24; _key24++) {
-		objects[_key24 - 1] = arguments[_key24];
+	for (var _len25 = arguments.length, objects = Array(_len25 > 1 ? _len25 - 1 : 0), _key25 = 1; _key25 < _len25; _key25++) {
+		objects[_key25 - 1] = arguments[_key25];
 	}
 
 	objects.forEach(function (obj) {
@@ -4555,7 +6137,7 @@ function assign(target) {
 	});
 }
 
-function test$32(assign) {
+function test$118(assign) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Object.assign';
 
 
@@ -4577,9 +6159,9 @@ function test$32(assign) {
 	});
 }
 
-test$32(assign, 'Object.assign#j0');
+test$118(assign, 'Object.assign#j0');
 
-test$32(Object.assign);
+test$118(Object.assign);
 
 function onError(error) {
 	onError.listener(error);
@@ -4636,7 +6218,7 @@ describe('passThrough', function () {
 	});
 });
 
-var x$33 = setTimeout;
+var x$35 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
@@ -4673,7 +6255,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$33(fn);
+	return x$35(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -4689,7 +6271,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$33(function () {
+x$35(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -4921,7 +6503,7 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-function test$34(Promise, name) {
+function test$120(Promise, name) {
 
 	function onUnexpectedFullfill() {
 		throw new Error('onFulfilled was called unexpectedly');
@@ -5049,9 +6631,9 @@ function test$34(Promise, name) {
 	});
 }
 
-test$34(J0Promise, 'Promise/j0');
+test$120(J0Promise, 'Promise/j0');
 
-test$34(Promise, 'Promise');
+test$120(Promise, 'Promise');
 
 describe('readBlob', function () {
 
@@ -5078,26 +6660,26 @@ tests$10(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
 		var timeStamp;
-		return regeneratorRuntime.wrap(function _callee10$(_context10) {
+		return regeneratorRuntime.wrap(function _callee45$(_context45) {
 			while (1) {
-				switch (_context10.prev = _context10.next) {
+				switch (_context45.prev = _context45.next) {
 					case 0:
-						_context10.next = 2;
+						_context45.next = 2;
 						return new Promise(x$22);
 
 					case 2:
-						timeStamp = _context10.sent;
+						timeStamp = _context45.sent;
 
 						assert(0 < timeStamp, true);
 
 					case 4:
 					case 'end':
-						return _context10.stop();
+						return _context45.stop();
 				}
 			}
-		}, _callee10, this);
+		}, _callee45, this);
 	})));
 });
 
@@ -5141,7 +6723,7 @@ describe('scrollY', function () {
 	});
 });
 
-function test$35(generator) {
+function test$121(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Set.prototype[Symbol.iterator]';
 
 
@@ -5171,9 +6753,9 @@ function generator$10() {
 	return this.values();
 }
 
-test$35(generator$10, 'Set.prototype[Symbol.iterator]#j0');
+test$121(generator$10, 'Set.prototype[Symbol.iterator]#j0');
 
-test$35(Set.prototype[Symbol.iterator]);
+test$121(Set.prototype[Symbol.iterator]);
 
 var Set$2 = function () {
 	function Set$2(iterable) {
@@ -5349,8 +6931,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
-					args[_key25] = arguments[_key25];
+				for (var _len26 = arguments.length, args = Array(_len26), _key26 = 0; _key26 < _len26; _key26++) {
+					args[_key26] = arguments[_key26];
 				}
 
 				args[3] = this;
@@ -5435,7 +7017,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$34 = encodeURIComponent;
+var x$36 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -5446,8 +7028,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref41, name, expression, offset, source) {
-				var length = _ref41.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref76, name, expression, offset, source) {
+				var length = _ref76.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -5501,7 +7083,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$34(value);
+					return x$36(value);
 				}
 			});
 		}
@@ -5514,8 +7096,8 @@ var State = function () {
 
 			var params = void 0;
 			href.replace(this.matcher, function (match) {
-				for (var _len26 = arguments.length, args = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
-					args[_key26 - 1] = arguments[_key26];
+				for (var _len27 = arguments.length, args = Array(_len27 > 1 ? _len27 - 1 : 0), _key27 = 1; _key27 < _len27; _key27++) {
+					args[_key27 - 1] = arguments[_key27];
 				}
 
 				var index = 0;
@@ -5674,15 +7256,15 @@ describe('State', function () {
 	});
 });
 
-var x$35 = Map;
+var x$37 = Map;
 
-var x$36 = location;
+var x$38 = location;
 
-var x$37 = history;
+var x$39 = history;
 
-var x$38 = addEventListener;
+var x$40 = addEventListener;
 
-var x$39 = Boolean;
+var x$41 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -5693,7 +7275,7 @@ var StateManager = function (_EventEmitter) {
 		var _this23 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
 		x$24.assign(_this23, { prefix: '#' }, config, {
-			states: new x$35(),
+			states: new x$37(),
 			listeners: []
 		});
 		if (!_this23.parser) {
@@ -5717,7 +7299,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$36;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$38;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion15 = true;
@@ -5726,11 +7308,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator15 = this.states[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
-					var _ref42 = _step15.value;
+					var _ref77 = _step15.value;
 
-					var _ref43 = _slicedToArray(_ref42, 2);
+					var _ref78 = _slicedToArray(_ref77, 2);
 
-					var state = _ref43[1];
+					var state = _ref78[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -5800,7 +7382,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$39(current && state && current.is(state));
+			return x$41(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -5808,7 +7390,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$39(current && state && current.isIn(state));
+			return x$41(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -5816,7 +7398,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$39(current && state && current.isAncestorOf(state));
+			return x$41(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -5827,7 +7409,7 @@ var StateManager = function (_EventEmitter) {
 			}
 			this.emit('change', newState, this.current);
 			this.current = newState;
-			x$37[method](newState.name, newState.params, newState.href);
+			x$39[method](newState.name, newState.params, newState.href);
 		}
 	}, {
 		key: 'go',
@@ -5848,9 +7430,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this24.replace(_this24.parseURL());
 			}, debounceDuration);
-			x$38('hashchange', onStateChange);
-			x$38('pushstate', onStateChange);
-			x$38('popstate', onStateChange);
+			x$40('hashchange', onStateChange);
+			x$40('pushstate', onStateChange);
+			x$40('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -5891,11 +7473,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator16 = states.states[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
-				var _ref44 = _step16.value;
+				var _ref79 = _step16.value;
 
-				var _ref45 = _slicedToArray(_ref44, 2);
+				var _ref80 = _slicedToArray(_ref79, 2);
 
-				var state = _ref45[1];
+				var state = _ref80[1];
 
 				results.push(state);
 			}
@@ -5969,12 +7551,12 @@ describe('StateManager', function () {
 		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
 
-	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
-		var states, name0, name1, name2, _ref47, _ref48, toState, fromState;
+	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
+		var states, name0, name1, name2, _ref82, _ref83, toState, fromState;
 
-		return regeneratorRuntime.wrap(function _callee11$(_context11) {
+		return regeneratorRuntime.wrap(function _callee46$(_context46) {
 			while (1) {
-				switch (_context11.prev = _context11.next) {
+				switch (_context46.prev = _context46.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -5991,11 +7573,11 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context11.next = 7;
+						_context46.next = 7;
 						return new Promise(function (resolve) {
 							states.on('change', function () {
-								for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
-									data[_key27] = arguments[_key27];
+								for (var _len28 = arguments.length, data = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
+									data[_key28] = arguments[_key28];
 								}
 
 								resolve(data);
@@ -6003,27 +7585,27 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref47 = _context11.sent;
-						_ref48 = _slicedToArray(_ref47, 2);
-						toState = _ref48[0];
-						fromState = _ref48[1];
+						_ref82 = _context46.sent;
+						_ref83 = _slicedToArray(_ref82, 2);
+						toState = _ref83[0];
+						fromState = _ref83[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
 
 					case 13:
 					case 'end':
-						return _context11.stop();
+						return _context46.stop();
 				}
 			}
-		}, _callee11, this);
+		}, _callee46, this);
 	})));
 
-	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
 		var states, name0, name1, name2;
-		return regeneratorRuntime.wrap(function _callee12$(_context12) {
+		return regeneratorRuntime.wrap(function _callee47$(_context47) {
 			while (1) {
-				switch (_context12.prev = _context12.next) {
+				switch (_context47.prev = _context47.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -6040,7 +7622,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 }).start();
-						_context12.next = 7;
+						_context47.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve);
 						});
@@ -6051,17 +7633,17 @@ describe('StateManager', function () {
 
 					case 9:
 					case 'end':
-						return _context12.stop();
+						return _context47.stop();
 				}
 			}
-		}, _callee12, this);
+		}, _callee47, this);
 	})));
 
-	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
 		var states, name0, name1, name2, param1, params;
-		return regeneratorRuntime.wrap(function _callee13$(_context13) {
+		return regeneratorRuntime.wrap(function _callee48$(_context48) {
 			while (1) {
-				switch (_context13.prev = _context13.next) {
+				switch (_context48.prev = _context48.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -6078,7 +7660,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context13.next = 7;
+						_context48.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
@@ -6086,7 +7668,7 @@ describe('StateManager', function () {
 					case 7:
 						param1 = '' + Date.now();
 						params = { param1: param1 };
-						_context13.next = 11;
+						_context48.next = 11;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name1,
@@ -6099,17 +7681,17 @@ describe('StateManager', function () {
 
 					case 12:
 					case 'end':
-						return _context13.stop();
+						return _context48.stop();
 				}
 			}
-		}, _callee13, this);
+		}, _callee48, this);
 	})));
 
-	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
-		return regeneratorRuntime.wrap(function _callee14$(_context14) {
+		return regeneratorRuntime.wrap(function _callee49$(_context49) {
 			while (1) {
-				switch (_context14.prev = _context14.next) {
+				switch (_context49.prev = _context49.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -6126,13 +7708,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context14.next = 7;
+						_context49.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context14.sent;
+						toState0 = _context49.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -6141,7 +7723,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context14.next = 14;
+						_context49.next = 14;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -6150,7 +7732,7 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context14.sent;
+						toState1 = _context49.sent;
 
 						assert.equal(toState1.name, name2);
 						assert.equal(states.is({
@@ -6164,17 +7746,17 @@ describe('StateManager', function () {
 
 					case 18:
 					case 'end':
-						return _context14.stop();
+						return _context49.stop();
 				}
 			}
-		}, _callee14, this);
+		}, _callee49, this);
 	})));
 
-	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
-		return regeneratorRuntime.wrap(function _callee15$(_context15) {
+		return regeneratorRuntime.wrap(function _callee50$(_context50) {
 			while (1) {
-				switch (_context15.prev = _context15.next) {
+				switch (_context50.prev = _context50.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -6191,13 +7773,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context15.next = 7;
+						_context50.next = 7;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context15.sent;
+						toState0 = _context50.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -6206,7 +7788,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context15.next = 14;
+						_context50.next = 14;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -6215,30 +7797,30 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context15.sent;
+						toState1 = _context50.sent;
 
 						assert.equal(toState1.name, name2);
-						_context15.next = 18;
+						_context50.next = 18;
 						return new Promise(function (resolve) {
 							states.once('change', resolve);
 							history.back();
 						});
 
 					case 18:
-						toState2 = _context15.sent;
+						toState2 = _context50.sent;
 
 						assert.equal(toState2.name, name0);
 
 					case 20:
 					case 'end':
-						return _context15.stop();
+						return _context50.stop();
 				}
 			}
-		}, _callee15, this);
+		}, _callee50, this);
 	})));
 });
 
-function test$37(generator) {
+function test$123(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype[Symbol.iterator]';
 
 
@@ -6310,11 +7892,11 @@ function generator$12() {
 	});
 }
 
-test$37(generator$12, 'String.prototype[Symbol.iterator]#j0');
+test$123(generator$12, 'String.prototype[Symbol.iterator]#j0');
 
-test$37(String.prototype[Symbol.iterator]);
+test$123(String.prototype[Symbol.iterator]);
 
-function test$39(repeat) {
+function test$125(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
 
@@ -6329,10 +7911,10 @@ function test$39(repeat) {
 	});
 }
 
-var x$40 = parseInt;
+var x$42 = parseInt;
 
 function repeat(c) {
-	var count = x$40(c, 10);
+	var count = x$42(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -6340,9 +7922,9 @@ function repeat(c) {
 	return results.join('');
 }
 
-test$39(repeat, 'String.prototype.repeat#j0');
+test$125(repeat, 'String.prototype.repeat#j0');
 
-test$39(String.prototype.repeat);
+test$125(String.prototype.repeat);
 
 describe('StringList', function () {
 
@@ -6449,7 +8031,7 @@ describe('StringList', function () {
 	});
 });
 
-function test$41(_Symbol) {
+function test$127(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -6493,9 +8075,9 @@ function test$41(_Symbol) {
 	});
 }
 
-test$41(Symbol, 'J0Symbol');
+test$127(Symbol, 'J0Symbol');
 
-test$41(Symbol);
+test$127(Symbol);
 
 function throttle(fn) {
 	var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -6507,8 +8089,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len28 = arguments.length, args = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
-			args[_key28] = arguments[_key28];
+		for (var _len29 = arguments.length, args = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
+			args[_key29] = arguments[_key29];
 		}
 
 		lastArgs = args;
@@ -6516,7 +8098,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$33(function () {
+			timer = x$35(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
@@ -6567,11 +8149,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref53) {
-				var _ref54 = _slicedToArray(_ref53, 2),
-				    name = _ref54[0],
-				    _ref54$ = _ref54[1],
-				    value = _ref54$ === undefined ? '' : _ref54$;
+			return this.data.map(function (_ref88) {
+				var _ref89 = _slicedToArray(_ref88, 2),
+				    name = _ref89[0],
+				    _ref89$ = _ref89[1],
+				    value = _ref89$ === undefined ? '' : _ref89$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -6697,31 +8279,31 @@ tests$16(URLSearchParams$2, 'URLSearchParams#j0');
 tests$16(URLSearchParams);
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee17$(_context17) {
+		return regeneratorRuntime.wrap(function _callee52$(_context52) {
 			while (1) {
-				switch (_context17.prev = _context17.next) {
+				switch (_context52.prev = _context52.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.9;
-						_context17.next = 6;
+						_context52.next = 6;
 						return wait$1(duration, data);
 
 					case 6:
-						actual = _context17.sent;
+						actual = _context52.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context17.stop();
+						return _context52.stop();
 				}
 			}
-		}, _callee17, this);
+		}, _callee52, this);
 	})));
 });
 }())

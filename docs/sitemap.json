@@ -51,6 +51,85 @@
 		},
 		"j0polyfill": {}
 	},
+	"Math": {
+		"abs": {},
+		"acos": {},
+		"acosh": {
+			"j0polyfill": {}
+		},
+		"asin": {},
+		"asinh": {
+			"j0polyfill": {}
+		},
+		"atan": {},
+		"atan2": {},
+		"atanh": {
+			"j0polyfill": {}
+		},
+		"cbrt": {
+			"j0polyfill": {}
+		},
+		"ceil": {},
+		"clz32": {
+			"j0polyfill": {}
+		},
+		"cos": {},
+		"cosh": {
+			"j0polyfill": {}
+		},
+		"E": {},
+		"exp": {},
+		"expm1": {
+			"j0polyfill": {}
+		},
+		"floor": {},
+		"fround": {
+			"j0polyfill": {}
+		},
+		"hypot": {
+			"j0polyfill": {}
+		},
+		"imul": {
+			"j0polyfill": {}
+		},
+		"LN10": {},
+		"LN2": {},
+		"log": {},
+		"log10": {
+			"j0polyfill": {}
+		},
+		"LOG10E": {},
+		"log1p": {
+			"j0polyfill": {}
+		},
+		"log2": {
+			"j0polyfill": {}
+		},
+		"LOG2E": {},
+		"max": {},
+		"min": {},
+		"PI": {},
+		"pow": {},
+		"random": {},
+		"round": {},
+		"sign": {
+			"j0polyfill": {}
+		},
+		"sin": {},
+		"sinh": {
+			"j0polyfill": {}
+		},
+		"sqrt": {},
+		"SQRT1_2": {},
+		"SQRT2": {},
+		"tan": {},
+		"tanh": {
+			"j0polyfill": {}
+		},
+		"trunc": {
+			"j0polyfill": {}
+		}
+	},
 	"NamedNodeMap": {
 		"@iterator": {
 			"j0polyfill": {}

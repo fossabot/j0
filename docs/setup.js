@@ -3,494 +3,330 @@
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var graphicalEqual = function () {
+	var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref) {
+		var name = _ref.name,
+		    url = _ref.url,
+		    fn = _ref.fn,
+		    xRange = _ref.xRange,
+		    yRange = _ref.yRange,
+		    _ref$xGrid = _ref.xGrid,
+		    xGrid = _ref$xGrid === undefined ? [] : _ref$xGrid,
+		    _ref$yGrid = _ref.yGrid,
+		    yGrid = _ref$yGrid === undefined ? [] : _ref$yGrid,
+		    _ref$threshold = _ref.threshold,
+		    threshold = _ref$threshold === undefined ? canvasDefaultThreshold : _ref$threshold;
+
+		var ctx, expectedColor, actualColor, _ctx$canvas, width, height, _xRange, minX, maxX, _yRange, minY, maxY, xScale, yScale, imageX, imageY, drawGridLines, isInside, drawGraph, img, expectedCanvasContext, sum, error;
+
+		return regeneratorRuntime.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						drawGraph = function drawGraph(context) {
+							context.moveTo(imageX(minX), imageY(fn(minX)));
+							var step = 0.5;
+							var d = 0.000001;
+							var state = false;
+							function draw(x, y) {
+								if (x < minX || maxX < x) {
+									return;
+								}
+								if (isInside(y)) {
+									if (state) {
+										context.lineTo(imageX(x), imageY(y));
+									} else {
+										context.beginPath();
+										state = true;
+										context.moveTo(imageX(x), imageY(y));
+									}
+								} else {
+									if (state) {
+										context.stroke();
+									}
+									state = false;
+								}
+							}
+							for (var iX = 0; iX <= width; iX += step) {
+								var x = minX + xScale * iX / width;
+								var x1 = x - d;
+								draw(x1, fn(x1));
+								draw(x, fn(x));
+								var x2 = x + d;
+								draw(x2, fn(x2));
+							}
+							if (state) {
+								context.stroke();
+							}
+						};
+
+						isInside = function isInside(y) {
+							return minY - yScale < y && y < maxY + yScale;
+						};
+
+						drawGridLines = function drawGridLines(context, drawLabel) {
+							context.beginPath();
+							for (var i = xGrid.length; i--;) {
+								context.moveTo(imageX(xGrid[i]), 0);
+								context.lineTo(imageX(xGrid[i]), height);
+							}
+							for (var _i = yGrid.length; _i--;) {
+								context.moveTo(0, imageY(yGrid[_i]));
+								context.lineTo(width, imageY(yGrid[_i]));
+							}
+							context.stroke();
+							if (drawLabel) {
+								assign(context, {
+									lineWidth: 8,
+									strokeStyle: '#fff',
+									fillStyle: '#000',
+									textAlign: 'center',
+									textBaseline: 'bottom'
+								});
+								for (var _i2 = xGrid.length; _i2--;) {
+									var value = xGrid[_i2];
+									var label = labelText(value);
+									context.strokeText(label, imageX(value), height);
+									context.fillText(label, imageX(value), height);
+								}
+								assign(context, {
+									textAlign: 'left',
+									textBaseline: 'middle'
+								});
+								for (var _i3 = yGrid.length; _i3--;) {
+									var _value = yGrid[_i3];
+									var _label = labelText(_value);
+									context.strokeText(_label, 0, imageY(_value));
+									context.fillText(_label, 0, imageY(_value));
+								}
+							}
+						};
+
+						imageY = function imageY(y) {
+							if (maxY < y) {
+								y = maxY + yScale;
+							} else if (y < minY) {
+								y = minY - yScale;
+							}
+							return height * (1 - (y - minY) / yScale);
+						};
+
+						imageX = function imageX(x) {
+							return width * (x - minX) / xScale;
+						};
+
+						ctx = getCanvasContext(name);
+						expectedColor = '#f00';
+						actualColor = '#090';
+						_ctx$canvas = ctx.canvas, width = _ctx$canvas.width, height = _ctx$canvas.height;
+						_xRange = _slicedToArray(xRange, 2), minX = _xRange[0], maxX = _xRange[1], _yRange = _slicedToArray(yRange, 2), minY = _yRange[0], maxY = _yRange[1];
+						xScale = maxX - minX, yScale = maxY - minY;
+
+						ctx.fillStyle = '#fff';
+						ctx.fillRect(0, 0, width, height);
+						// Draw graph
+						ctx.lineWidth = 4;
+						ctx.strokeStyle = expectedColor;
+						drawGraph(ctx);
+
+						if (!(downloader || !url)) {
+							_context.next = 21;
+							break;
+						}
+
+						document.body.appendChild(ctx.canvas);
+						ctx.canvas.addEventListener('click', function () {
+							window.open(ctx.canvas.toDataURL());
+						});
+						if (downloader) {
+							// // downloader
+							if (!/#/.test(name)) {
+								ctx.canvas.toBlob(function (blob) {
+									assign(document.createElement('a'), {
+										href: URL.createObjectURL(blob),
+										download: name.replace(/Math\./, '') + '.png'
+									}).click();
+								});
+							}
+						}
+						throw new Error('No url for expected graph');
+
+					case 21:
+						img = document.createElement('img');
+						_context.next = 24;
+						return new Promise(function (resolve, reject) {
+							assign(img, {
+								onerror: function onerror(event) {
+									reject(event.error || event);
+								},
+								onload: resolve,
+								src: url
+							});
+						});
+
+					case 24:
+						expectedCanvasContext = getCanvasContext(name);
+
+						expectedCanvasContext.drawImage(img, 0, 0, width, height);
+						sum = canvasDiff(ctx.getImageData(0, 0, width, height).data, expectedCanvasContext.getImageData(0, 0, width, height).data);
+
+						assign(expectedCanvasContext, {
+							lineWidth: 2,
+							strokeStyle: actualColor
+						});
+						drawGraph(expectedCanvasContext);
+						assign(expectedCanvasContext, {
+							lineWidth: 1,
+							strokeStyle: '#000'
+						});
+						drawGridLines(expectedCanvasContext, true);
+						assign(expectedCanvasContext, {
+							textBaseline: 'top',
+							textAlign: 'center',
+							lineWidth: 8,
+							strokeStyle: '#fff',
+							fillStyle: expectedColor
+						});
+						expectedCanvasContext.strokeText('Expected', width / 2, 0);
+						expectedCanvasContext.fillText('Expected', width / 2, 0);
+						expectedCanvasContext.fillStyle = actualColor;
+						expectedCanvasContext.strokeText('Actual', width / 2, expectedCanvasContext.lineHeight);
+						expectedCanvasContext.fillText('Actual', width / 2, expectedCanvasContext.lineHeight);
+						expectedCanvasContext.canvas.addEventListener('click', function () {
+							this.clicked = !this.clicked;
+							if (this.clicked) {
+								this.style.width = width + 'px';
+								this.style.height = height + 'px';
+							} else {
+								this.style.width = width / 2 + 'px';
+								this.style.height = height / 2 + 'px';
+							}
+						});
+						document.body.appendChild(expectedCanvasContext.canvas);
+
+						if (!(threshold < sum)) {
+							_context.next = 43;
+							break;
+						}
+
+						error = new Error('The function seems to be wrong. Diff: ' + sum);
+
+						error.code = 'EDIFF';
+						throw error;
+
+					case 43:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _callee, this);
+	}));
+
+	return function graphicalEqual(_x2) {
+		return _ref2.apply(this, arguments);
+	};
+}();
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var x$1 = window;
-
-var x$2 = fetch;
-
-var x$3 = document;
-
-var x$4 = Object;
-
-var x$5 = Array;
-
-var isArray = x$5.isArray;
-
-function isString(x) {
-	return typeof x === 'string';
-}
-
-var x$6 = Node;
-
-function isInstanceOf(instance, constructor) {
-	return instance instanceof constructor;
-}
-
-function isNode(x) {
-	return isInstanceOf(x, x$6);
-}
-
-function isUndefined(x) {
-	return typeof x === 'undefined';
-}
-
-var x$7 = Promise;
-
-var x$8 = CustomEvent;
-
-var x$9 = Set;
-
-var nodeKey = Symbol();
-var listenersKey = Symbol();
-var getBody = new x$7(function (resolve) {
-	var interval = 50;
-	function check() {
-		var body = x$3.body;
-
-		if (body) {
-			resolve(wrap(body));
-		} else {
-			setTimeout(check, interval);
+/* eslint no-prototype-builtins: "off" */
+function assign(obj, values) {
+	for (var key in values) {
+		if (values.hasOwnProperty(key)) {
+			obj[key] = values[key];
 		}
 	}
-	setTimeout(check);
-});
-
-function superForEach() {
-	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-		args[_key] = arguments[_key];
-	}
-
-	var fn = args.pop();
-	if (isString(args[0])) {
-		fn.apply(undefined, args);
-	} else {
-		args.forEach(function (arg) {
-			if (isArray(arg)) {
-				superForEach.apply(undefined, _toConsumableArray(arg).concat([fn]));
-			} else {
-				x$4.keys(arg).forEach(function (key) {
-					superForEach(key, arg[key], fn);
-				});
-			}
-		});
-	}
+	return obj;
 }
 
-var J0Element = function () {
+function setVersion() {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', window.root + '/package.json');
+	xhr.onload = function () {
+		var _JSON$parse = JSON.parse(xhr.response),
+		    version = _JSON$parse.version;
 
-	/* eslint-disable max-statements */
-	function J0Element() {
-		var source = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-		_classCallCheck(this, J0Element);
-
-		if (source instanceof J0Element) {
-			this[nodeKey] = source.node;
-		} else if (isString(source)) {
-			this[nodeKey] = x$3.createTextNode(source);
-		} else if (isNode(source)) {
-			this[nodeKey] = source;
-		} else {
-			var t = source.t,
-			    a = source.a,
-			    c = source.c,
-			    e = source.e,
-			    n = source.n,
-			    o = source.o;
-
-			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
-			if (c) {
-				this.append.apply(this, _toConsumableArray(c));
-			}
-			if (e) {
-				this.on(e);
-			}
-			if (a) {
-				this.attr(a);
-			}
+		var elements = document.querySelectorAll('.version');
+		for (var i = elements.length; i--;) {
+			elements[i].textContent = version;
 		}
-		this[listenersKey] = new x$9();
+	};
+	xhr.send();
+}
+
+function approxEqual(a, b) {
+	var threshold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : assert.approxThreshold;
+
+	if (Math.abs(a - b) < threshold) {
+		return;
 	}
-	/* eslint-enable max-statements */
-
-	_createClass(J0Element, [{
-		key: 'equals',
-		value: function equals(element) {
-			return this.node === wrap(element).node;
-		}
-	}, {
-		key: 'text',
-		value: function text(_text) {
-			var node = this.node;
-
-			if (isUndefined(_text)) {
-				return node.textContent;
-			}
-			node.textContent = _text;
-			return this;
-		}
-	}, {
-		key: 'html',
-		value: function html(_html) {
-			var node = this.node;
-
-			if (isUndefined(_html)) {
-				return node.innerHTML;
-			}
-			node.innerHTML = _html;
-			return this;
-		}
-	}, {
-		key: 'insertBefore',
-		value: function insertBefore(newElement, referenceElement) {
-			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
-		}
-	}, {
-		key: 'prepend',
-		value: function prepend() {
-			var _this = this;
-
-			for (var _len2 = arguments.length, elements = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				elements[_key2] = arguments[_key2];
-			}
-
-			elements.forEach(function (element) {
-				_this.firstChild = element;
-			});
-			return this;
-		}
-	}, {
-		key: 'append',
-		value: function append() {
-			var node = this.node;
-
-			for (var _len3 = arguments.length, elements = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				elements[_key3] = arguments[_key3];
-			}
-
-			elements.forEach(function (element) {
-				node.appendChild(wrap(element).node);
-			});
-			return this;
-		}
-	}, {
-		key: 'remove',
-		value: function remove() {
-			var parent = this.parent;
-
-			if (parent) {
-				parent.node.removeChild(this.node);
-			}
-			return this;
-		}
-	}, {
-		key: 'empty',
-		value: function empty() {
-			var childNodes = this.childNodes;
-
-			for (var i = 0, length = childNodes.length; i < length; i++) {
-				childNodes[i].remove();
-			}
-			return this;
-		}
-	}, {
-		key: 'setAttribute',
-		value: function setAttribute(name) {
-			for (var _len4 = arguments.length, value = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-				value[_key4 - 1] = arguments[_key4];
-			}
-
-			this.node.setAttribute(name, value.join(' '));
-			return this;
-		}
-	}, {
-		key: 'getAttribute',
-		value: function getAttribute(name) {
-			return this.node.getAttribute(name);
-		}
-	}, {
-		key: 'attr',
-		value: function attr() {
-			var _this2 = this;
-
-			for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-				args[_key5] = arguments[_key5];
-			}
-
-			superForEach.apply(undefined, args.concat([function () {
-				_this2.setAttribute.apply(_this2, arguments);
-			}]));
-			return this;
-		}
-	}, {
-		key: 'addEventListener',
-		value: function addEventListener(eventName, fn) {
-			var _this3 = this;
-
-			var wrapped = function wrapped(event) {
-				fn.call(_this3, event);
-			};
-			this.node.addEventListener(eventName, wrapped);
-			this.listeners.add([eventName, fn, wrapped]);
-			return this;
-		}
-	}, {
-		key: 'once',
-		value: function once(eventName, fn) {
-			var _this4 = this;
-
-			var item = [eventName, fn];
-			var wrapped = function wrapped(event) {
-				_this4.node.removeEventListener(eventName, wrapped);
-				_this4.listeners.delete(item);
-				fn.call(_this4, event);
-			};
-			item.push(wrapped);
-			this.node.addEventListener(eventName, wrapped);
-			this.listeners.add(item);
-			return this;
-		}
-	}, {
-		key: 'on',
-		value: function on() {
-			var _this5 = this;
-
-			for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-				args[_key6] = arguments[_key6];
-			}
-
-			superForEach.apply(undefined, args.concat([function () {
-				_this5.addEventListener.apply(_this5, arguments);
-			}]));
-			return this;
-		}
-	}, {
-		key: 'removeEventListener',
-		value: function removeEventListener(eventName, fn) {
-			var _this6 = this;
-
-			this.listeners.forEach(function (item) {
-				var _item = _slicedToArray(item, 3),
-				    e = _item[0],
-				    f = _item[1],
-				    wrapped = _item[2];
-
-				if (e === eventName && (!fn || fn === f)) {
-					_this6.node.removeEventListener(e, wrapped);
-					_this6.listeners.delete(item);
-				}
-			});
-		}
-	}, {
-		key: 'off',
-		value: function off(eventName, fn) {
-			this.removeEventListener(eventName, fn);
-		}
-	}, {
-		key: 'emit',
-		value: function emit(eventName, detail) {
-			var event = new x$8(eventName, { detail: detail });
-			this.node.dispatchEvent(event);
-			return this;
-		}
-	}, {
-		key: 'find',
-		value: function find(selector) {
-			return _find(selector, this.node);
-		}
-	}, {
-		key: 'findAll',
-		value: function findAll(selector) {
-			return _findAll(selector, this.node);
-		}
-	}, {
-		key: 'node',
-		get: function get() {
-			return this[nodeKey];
-		}
-	}, {
-		key: 'parent',
-		get: function get() {
-			var parentNode = this.node.parentNode;
-
-			return parentNode && wrap(parentNode);
-		},
-		set: function set(source) {
-			wrap(source).append(this);
-		}
-	}, {
-		key: 'previous',
-		get: function get() {
-			var previousSibling = this.node.previousSibling;
-
-			return previousSibling ? wrap(previousSibling) : null;
-		},
-		set: function set(element) {
-			this.parent.insertBefore(element, this);
-		}
-	}, {
-		key: 'next',
-		get: function get() {
-			var nextSibling = this.node.nextSibling;
-
-			return nextSibling ? wrap(nextSibling) : null;
-		},
-		set: function set(element) {
-			this.parent.insertBefore(element, this.next);
-		}
-	}, {
-		key: 'childNodes',
-		get: function get() {
-			return x$5.from(this.node.childNodes).map(wrap);
-		}
-	}, {
-		key: 'children',
-		get: function get() {
-			return x$5.from(this.node.children).map(wrap);
-		}
-	}, {
-		key: 'firstChild',
-		get: function get() {
-			var firstChild = this.node.firstChild;
-
-			return firstChild ? wrap(firstChild) : null;
-		},
-		set: function set(element) {
-			var firstChild = this.firstChild;
-
-			if (firstChild) {
-				firstChild.previous = element;
-			} else {
-				this.append(element);
-			}
-		}
-	}, {
-		key: 'lastChild',
-		get: function get() {
-			var lastChild = this.node.lastChild;
-
-			return lastChild ? wrap(lastChild) : null;
-		},
-		set: function set(element) {
-			var lastChild = this.lastChild;
-
-			if (lastChild) {
-				this.lastChild.next = element;
-			} else {
-				this.append(element);
-			}
-		}
-	}, {
-		key: 'listeners',
-		get: function get() {
-			return this[listenersKey];
-		}
-	}, {
-		key: 'attributes',
-		get: function get() {
-			return this.node.attributes;
-		}
-	}]);
-
-	return J0Element;
-}();
-
-function wrap(source) {
-	return new J0Element(source);
+	throw new Error('expected ' + a + ' to be approximately equal to ' + b);
 }
 
-function _find(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$3;
-
-	var element = rootElement.querySelector(selector);
-	return element && wrap(element);
+function getCanvasContext(name) {
+	var canvas = document.createElement('canvas');
+	var size = 400;
+	var lineHeight = 22;
+	canvas.setAttribute('class', window.canvasTestClass);
+	canvas.setAttribute('data-name', name);
+	assign(canvas, {
+		width: size,
+		height: size
+	});
+	assign(canvas.style, {
+		userSelect: 'none',
+		transition: 'width 0.2s, height 0.2s',
+		border: 'solid 1px #000',
+		margin: '16px',
+		width: size / 2 + 'px',
+		height: size / 2 + 'px',
+		cursor: 'pointer'
+	});
+	var ctx = canvas.getContext('2d');
+	assign(ctx, {
+		font: '20px Courier',
+		lineHeight: lineHeight
+	});
+	return ctx;
 }
 
-function _findAll(selector) {
-	var rootElement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$3;
-
-	var list = rootElement.querySelectorAll(selector);
-	var result = [];
-	for (var i = 0, length = list.length; i < length; i++) {
-		result.push(wrap(list[i]));
+function canvasDiff(a, b) {
+	var sum = 0;
+	for (var i = a.length; i--;) {
+		var d = a[i] - b[i];
+		sum += d < 0 ? -d : d;
 	}
-	return result;
+	return sum;
 }
 
-x$4.assign(wrap, {
-	find: _find,
-	findAll: _findAll,
-	ready: function () {
-		var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(fn) {
-			return regeneratorRuntime.wrap(function _callee$(_context) {
-				while (1) {
-					switch (_context.prev = _context.next) {
-						case 0:
-							_context.next = 2;
-							return getBody;
+function labelText(value) {
+	var absValue = value < 0 ? -value : value;
+	if (value === 0) {
+		return '0';
+	} else if (absValue < 1) {
+		return value.toFixed(2);
+	} else if (absValue < 10) {
+		return value.toFixed(1);
+	}
+	return value.toFixed(0);
+}
 
-						case 2:
-							if (fn) {
-								fn();
-							}
+var canvasDefaultThreshold = 160000;
+var downloader = false;
 
-						case 3:
-						case 'end':
-							return _context.stop();
-					}
-				}
-			}, _callee, this);
-		}));
 
-		function ready(_x4) {
-			return _ref.apply(this, arguments);
-		}
+function setAssert() {
+	var assert = window.chai.assert;
 
-		return ready;
-	}()
-});
+	assert.approxThreshold = 0.000000000000001;
+	assert.approxEqual = approxEqual;
+	assert.graphicalEqual = graphicalEqual;
+	window.assert = assert;
+}
 
-var x$10 = console;
-
-wrap.ready().then(_asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	var url, response, _ref3, version;
-
-	return regeneratorRuntime.wrap(function _callee2$(_context2) {
-		while (1) {
-			switch (_context2.prev = _context2.next) {
-				case 0:
-					url = wrap(x$3.getElementById('root')).text() + '/package.json';
-					_context2.next = 3;
-					return x$2(url);
-
-				case 3:
-					response = _context2.sent;
-					_context2.next = 6;
-					return response.json();
-
-				case 6:
-					_ref3 = _context2.sent;
-					version = _ref3.version;
-
-					wrap.findAll('.version').forEach(function (element) {
-						element.text(version);
-					});
-
-				case 9:
-				case 'end':
-					return _context2.stop();
-			}
-		}
-	}, _callee2, this);
-}))).catch(x$10.error);
-x$1.assert = x$1.chai.assert;
-x$1.mocha.setup('bdd');
+window.root = document.getElementById('root').textContent;
+window.canvasTestClass = 'Canvas' + Date.now();
+window.mocha.setup('bdd');
+setAssert();
+setVersion();
 }())
