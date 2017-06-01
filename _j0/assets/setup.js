@@ -26,6 +26,7 @@ function getCanvasContext(name) {
 	canvas.setAttribute('data-name', name);
 	canvas.width = size;
 	canvas.height = size;
+	canvas.style.border = 'solid 1px #000';
 	canvas.style.margin = '16px';
 	canvas.style.width = `${size / 2}px`;
 	canvas.style.height = `${size / 2}px`;
@@ -44,7 +45,16 @@ function canvasDiff(a, b) {
 	return sum;
 }
 
-const canvasDefaultThreshold = 10000;
+function labelText(value) {
+	if (value < 1) {
+		return value.toFixed(2);
+	} else if (value < 10) {
+		return value.toFixed(1);
+	}
+	return value.toFixed(0);
+}
+
+const canvasDefaultThreshold = 30000;
 async function graphicalEqual({
 	name,
 	url,
@@ -62,12 +72,12 @@ async function graphicalEqual({
 	const [[minX, maxX], [minY, maxY]] = [xRange, yRange];
 	const [xScale, yScale] = [maxX - minX, maxY - minY];
 	function imageX(x) {
-		return width * (x - minY) / yScale;
+		return width * (x - minX) / xScale;
 	}
 	function imageY(y) {
 		return height * (1 - (y - minY) / yScale);
 	}
-	function drawGridLines(context) {
+	function drawGridLines(context, drawLabel) {
 		context.beginPath();
 		for (let {length: i} = xGrid; i--;) {
 			context.moveTo(imageX(xGrid[i]), 0);
@@ -78,6 +88,27 @@ async function graphicalEqual({
 			context.lineTo(width, imageY(yGrid[i]));
 		}
 		context.stroke();
+		if (drawLabel) {
+			context.lineWidth = 8;
+			context.strokeStyle = '#fff';
+			context.fillStyle = '#000';
+			context.textAlign = 'center';
+			context.textBaseline = 'bottom';
+			for (let {length: i} = xGrid; i--;) {
+				const value = xGrid[i];
+				const label = labelText(value);
+				context.strokeText(label, imageX(value), height);
+				context.fillText(label, imageX(value), height);
+			}
+			context.textAlign = 'left';
+			context.textBaseline = 'middle';
+			for (let {length: i} = yGrid; i--;) {
+				const value = yGrid[i];
+				const label = labelText(value);
+				context.strokeText(label, 0, imageY(value));
+				context.fillText(label, 0, imageY(value));
+			}
+		}
 	}
 	function drawGraph(context) {
 		context.beginPath();
@@ -93,7 +124,6 @@ async function graphicalEqual({
 	// Draw grid lines
 	ctx.lineWidth = 1;
 	ctx.strokeStyle = '#000';
-	drawGridLines(ctx);
 	// Draw graph
 	ctx.lineWidth = 4;
 	ctx.strokeStyle = expectedColor;
@@ -104,7 +134,7 @@ async function graphicalEqual({
 		ctx.canvas.addEventListener('click', function () {
 			window.open(ctx.canvas.toDataURL());
 		});
-		return;
+		throw new Error('No url for expected graph');
 	}
 	const img = document.createElement('img');
 	await new Promise(function (resolve, reject) {
@@ -121,6 +151,9 @@ async function graphicalEqual({
 	expectedCanvasContext.lineWidth = 4;
 	expectedCanvasContext.strokeStyle = actualColor;
 	drawGraph(expectedCanvasContext);
+	expectedCanvasContext.lineWidth = 1;
+	expectedCanvasContext.strokeStyle = '#000';
+	drawGridLines(expectedCanvasContext, true);
 	expectedCanvasContext.textBaseline = 'top';
 	expectedCanvasContext.textAlign = 'center';
 	expectedCanvasContext.lineWidth = 8;
@@ -133,7 +166,7 @@ async function graphicalEqual({
 	expectedCanvasContext.fillText('Actual', width / 2, expectedCanvasContext.lineHeight);
 	document.body.appendChild(expectedCanvasContext.canvas);
 	if (threshold < sum) {
-		throw new Error('The function seems to be wrong.');
+		throw new Error(`The function seems to be wrong. Diff: ${sum}`);
 	}
 }
 

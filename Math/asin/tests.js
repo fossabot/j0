@@ -1,15 +1,16 @@
-function test(abs, name = 'Math.abs') {
+/* eslint-disable no-magic-numbers */
+function test(asin, name = 'Math.asin') {
 
 	describe(name, function () {
 
 		it(`[id:${name}] should draw expected graph`, async function () {
 			await assert.graphicalEqual({
 				name,
-				url: `${window.root}/Math/abs/abs.png`,
-				fn: abs,
+				url: `${window.root}/Math/asin/asin.png`,
+				fn: asin,
 				xRange: [-1, 1],
-				yRange: [-1, 1],
-				xGrid: [0],
+				yRange: [-Math.PI / 2, Math.PI / 2],
+				xGrid: [-0.5, 0, 0.5],
 				yGrid: [0]
 			});
 		});

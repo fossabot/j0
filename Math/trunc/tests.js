@@ -3,6 +3,18 @@ function test(trunc, name = 'Math.trunc') {
 
 	describe(name, function () {
 
+		it(`[id:${name}] should draw expected graph`, async function () {
+			await assert.graphicalEqual({
+				name,
+				url: `${window.root}/Math/trunc/trunc.png`,
+				fn: trunc,
+				xRange: [-10, 10],
+				yRange: [-10, 10],
+				xGrid: [0],
+				yGrid: [0]
+			});
+		});
+
 		it('trunc(13.37) should be 13', function () {
 			assert.equal(trunc(13.37), 13);
 		});
