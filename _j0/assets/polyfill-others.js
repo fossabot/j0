@@ -1,3 +1,4 @@
+import '../../console/polyfill';
 import '../../Math/polyfill';
 import '../../Object/polyfill';
 import '../../Array/polyfill';

@@ -26,6 +26,12 @@ class CharRegExp extends Lazy {
 		return this[exprKey];
 	}
 
+	get globalized() {
+		return this.getLazy(leadingKey, () => {
+			return new RegExp(this.expr, 'g');
+		});
+	}
+
 	get leading() {
 		return this.getLazy(leadingKey, () => {
 			return new RegExp(`^${this.source}+`);
@@ -38,12 +44,20 @@ class CharRegExp extends Lazy {
 		});
 	}
 
+	test(string) {
+		return this.expr.test(string);
+	}
+
 	testLeading(string) {
 		return this.leading.test(string);
 	}
 
 	testTrailing(string) {
 		return this.trailing.test(string);
+	}
+
+	remove(string) {
+		return string.replace(this.globalized, '');
 	}
 
 	removeLeading(string) {
