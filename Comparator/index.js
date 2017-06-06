@@ -1,7 +1,8 @@
 import {
 	Error,
 	Symbol,
-	Object
+	Object,
+	isInstanceOf
 } from 'j0';
 
 const OPERATOR = Symbol('OPERATOR');
@@ -42,20 +43,19 @@ const operators = {
 	'>=': GTE
 };
 
-Object.keys(operators)
-.forEach(function (key) {
-	operators[key][OPERATOR] = key;
-});
-
 class Comparator {
 
 	constructor(operator, value) {
-		this.fn = operators[operator];
-		if (!this.fn) {
-			throw new Error(`Unknown operator: ${operator}`);
+		if (isInstanceOf(operator, Comparator)) {
+			Object.assign(this, operator);
+		} else {
+			this.fn = operators[operator];
+			if (!this.fn) {
+				throw new Error(`Unknown operator: ${operator}`);
+			}
+			this.operator = operator;
+			this.value = value;
 		}
-		this.operator = operator;
-		this.value = value;
 	}
 
 	test(x) {
@@ -70,6 +70,15 @@ class Comparator {
 		return `${this.operator} ${this.value}`;
 	}
 
+	equals(x) {
+		return `${this}` === `${x}`;
+	}
+
 }
+
+Object.keys(operators)
+.forEach(function (key) {
+	operators[key][OPERATOR] = key;
+});
 
 export default Comparator;
