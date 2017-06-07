@@ -1,6 +1,5 @@
 import {
 	Symbol,
-	Object,
 	isInstanceOf
 } from 'j0';
 
@@ -9,13 +8,6 @@ const OR = Symbol('OR');
 const XOR = Symbol('XOR');
 const NOT = Symbol('NOT');
 const SOLO = Symbol('SOLO');
-const keys = {
-	AND,
-	OR,
-	XOR,
-	NOT,
-	SOLO
-};
 const nestable = [
 	AND,
 	OR,
@@ -71,8 +63,6 @@ class ConditionalSet {
 			throw new Error(`Invalid condition count: ${conditions.length}`);
 		}
 		this.conditions = conditions;
-		Object.assign(this, keys);
-		this.normalize();
 	}
 
 	includes(...args) {
@@ -103,6 +93,26 @@ class ConditionalSet {
 		}
 	}
 
+	static solo(fn) {
+		return new ConditionalSet(SOLO, fn);
+	}
+
+	static and(...args) {
+		return new ConditionalSet(AND, ...args);
+	}
+
+	static or(...args) {
+		return new ConditionalSet(OR, ...args);
+	}
+
+	static xor(...args) {
+		return new ConditionalSet(XOR, ...args);
+	}
+
+	static not(...args) {
+		return new ConditionalSet(NOT, ...args);
+	}
+
 }
-Object.assign(ConditionalSet, keys);
+
 export default ConditionalSet;

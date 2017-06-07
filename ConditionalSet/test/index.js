@@ -4,8 +4,7 @@ import ConditionalSet from '..';
 describe('ConditionalSet', function () {
 
 	it('should create a set', function () {
-		const set = new ConditionalSet(
-			ConditionalSet.AND,
+		const set = ConditionalSet.and(
 			function (x) {
 				return 0 < x;
 			}
@@ -28,8 +27,7 @@ describe('ConditionalSet', function () {
 		});
 
 		it('[id:ConditionalSet1] should draw an expected diagram (AND)', async function () {
-			const set = new ConditionalSet(
-				ConditionalSet.AND,
+			const set = ConditionalSet.and(
 				function (x, y) {
 					return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
 				},
@@ -53,8 +51,7 @@ describe('ConditionalSet', function () {
 		});
 
 		it('[id:ConditionalSet2] should draw an expected diagram (OR)', async function () {
-			const set = new ConditionalSet(
-				ConditionalSet.OR,
+			const set = ConditionalSet.or(
 				function (x, y) {
 					return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
 				},
@@ -78,8 +75,7 @@ describe('ConditionalSet', function () {
 		});
 
 		it('[id:ConditionalSet3] should draw an expected diagram (XOR)', async function () {
-			const set = new ConditionalSet(
-				ConditionalSet.XOR,
+			const set = ConditionalSet.xor(
 				function (x, y) {
 					return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
 				},
@@ -103,8 +99,7 @@ describe('ConditionalSet', function () {
 		});
 
 		it('[id:ConditionalSet4] should draw an expected diagram (NOT)', async function () {
-			const set = new ConditionalSet(
-				ConditionalSet.NOT,
+			const set = ConditionalSet.not(
 				function (x, y) {
 					return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
 				},
@@ -128,10 +123,8 @@ describe('ConditionalSet', function () {
 		});
 
 		it('[id:ConditionalSet5] should draw an expected diagram (Complex)', async function () {
-			const set = new ConditionalSet(
-				ConditionalSet.AND,
-				new ConditionalSet(
-					ConditionalSet.OR,
+			const set = ConditionalSet.and(
+				ConditionalSet.or(
 					function (x, y) {
 						return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
 					},
@@ -139,8 +132,7 @@ describe('ConditionalSet', function () {
 						return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
 					}
 				),
-				new ConditionalSet(
-					ConditionalSet.NOT,
+				ConditionalSet.not(
 					function (x, y) {
 						return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
 					}
