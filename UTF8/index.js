@@ -2,8 +2,7 @@
 import {
 	Encoding,
 	isUndefined,
-	Error,
-	TokenStream
+	Error
 } from 'j0';
 
 import {
@@ -17,7 +16,7 @@ const UTF8 = new Encoding({
 		'utf-8',
 		'utf8'
 	],
-	decoder: class UTF8Decoder extends Encoding.Decoder {
+	Decoder: class UTF8Decoder extends Encoding.Decoder {
 
 		constructor() {
 			super();
@@ -38,7 +37,7 @@ const UTF8 = new Encoding({
 			}
 			if (this.bytesNeeded === 0) {
 				if (0x00 <= byte && byte <= 0x7F) {
-					return new TokenStream([byte]);
+					return [byte];
 				} else if (0xC2 <= byte && byte <= 0xDF) {
 					this.bytesNeeded = 1;
 					this.codePoint = byte & 0x1F;
@@ -82,17 +81,17 @@ const UTF8 = new Encoding({
 			this.codePoint = 0;
 			this.bytesNeeded = 0;
 			this.bytesSeen = 0;
-			return new TokenStream([codePoint]);
+			return [codePoint];
 		}
 
 	},
-	encoder: class UTF8Decoder extends Encoding.Decoder {
+	Encoder: class UTF8Decoder extends Encoding.Decoder {
 
 		handler(stream, codePoint) {
 			if (isUndefined(codePoint)) {
 				return this.FINISHED;
 			} else if (ASCIICodePoint.includes(codePoint)) {
-				return new TokenStream([codePoint]);
+				return [codePoint];
 			}
 			let count;
 			let offset;
@@ -106,7 +105,7 @@ const UTF8 = new Encoding({
 				count = 3;
 				offset = 0xF0;
 			}
-			const bytes = new TokenStream([(codePoint >> (6 * count)) + offset]);
+			const bytes = [(codePoint >> (6 * count)) + offset];
 			while (0 < count) {
 				const temp = codePoint >> (6 * --count);
 				bytes.push(0x80 | (temp & 0x3F));

@@ -3,9 +3,9 @@ import {
 	Symbol,
 	Object,
 	isUndefined,
+	isArray,
 	isInstanceOf,
 	isChildClassOf,
-	TokenStream,
 	Error,
 	stringToCodePoints
 } from 'j0';
@@ -57,8 +57,8 @@ class EncoderDecoder {
 		const result = encoderDecoderInstance.handler(input, token);
 		if (result === CONTINUE || result === FINISHED) {
 			return result;
-		} else if (isInstanceOf(result, TokenStream)) {
-			output.push(result);
+		} else if (isArray(result)) {
+			output.push(...result);
 		} else if (isInstanceOf(result, Error)) {
 			switch (mode) {
 			case MODE_REPLACEMENT:
