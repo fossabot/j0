@@ -27,8 +27,7 @@ const constants = {
 
 class EncoderDecoder {
 
-	constructor(handler) {
-		this.handler = handler;
+	constructor() {
 		Object.assign(this, constants);
 	}
 
