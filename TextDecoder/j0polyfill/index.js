@@ -4,17 +4,23 @@ import {
 	isUndefined,
 	String,
 	Array,
-	getEncoding
+	getEncoding,
+	RangeError,
+	Object
 } from 'j0';
 
 class TextDecoder {
 
 	constructor(label = 'utf-8', options = {}) {
-		this.encoding = 'utf-8';
-		this.fatal = false;
-		this.ignoreBOM = Boolean(options.ignoreBOM);
-		this.errorMode = 'replacement';
-		this.Decoder = getEncoding(this.encoding).Decoder;
+		const encoding = getEncoding(label);
+		if (!encoding) {
+			throw new RangeError(`Unknown encoding: ${label}`);
+		}
+		Object.assign(this, {
+			encoding,
+			errorMode: options.fatal ? 'fatal' : 'replacement',
+			ignoreBOM: Boolean(options.ignoreBOM)
+		});
 	}
 
 	decode(input, options = {}) {
@@ -27,7 +33,7 @@ class TextDecoder {
 			stream = Array.from(input);
 		}
 		const output = [];
-		this.Decoder.run(stream, output);
+		this.encoding.Decoder.run(stream, output);
 		return this.serialize(output);
 	}
 
@@ -35,7 +41,7 @@ class TextDecoder {
 		const output = [];
 		while (true) {
 			const token = stream.shift();
-			if (['utf-8', 'utf-16be', 'utf-16le'].includes(this.encoding) && !this.ignoreBOM && this.BOMSeenFlag) {
+			if (['UTF-8', 'UTF-16BE', 'UTF-16LE'].includes(this.encoding) && !this.ignoreBOM && this.BOMSeenFlag) {
 				if (token === 0xFEFF) {
 					this.BOMSeenFlag = true;
 				} else if (isUndefined(token)) {
