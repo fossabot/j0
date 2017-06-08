@@ -2,9 +2,9 @@
 import {
 	Boolean,
 	isUndefined,
-	UTF8,
 	String,
-	Array
+	Array,
+	getEncoding
 } from 'j0';
 
 class TextDecoder {
@@ -14,7 +14,7 @@ class TextDecoder {
 		this.fatal = false;
 		this.ignoreBOM = Boolean(options.ignoreBOM);
 		this.errorMode = 'replacement';
-		this.Decoder = UTF8.Decoder;
+		this.Decoder = getEncoding(this.encoding).Decoder;
 	}
 
 	decode(input, options = {}) {

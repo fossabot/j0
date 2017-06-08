@@ -1,15 +1,15 @@
 import {
-	UTF8,
 	stringToCodePoints,
 	createTypedArray,
-	Uint8Array
+	Uint8Array,
+	getEncoding
 } from 'j0';
 
 class TextEncoder {
 
 	constructor() {
 		this.encoding = 'utf-8';
-		this.Encoder = UTF8.Encoder;
+		this.Encoder = getEncoding(this.encoding).Encoder;
 	}
 
 	encode(inputString = '') {
