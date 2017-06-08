@@ -114,7 +114,7 @@ class UTF8Encoder extends Encoder {
 }
 
 export default new Encoding({
-	name: 'UTF8',
+	name: 'UTF-8',
 	labels: new Set([
 		'unicode-1-1-utf-8',
 		'utf-8',

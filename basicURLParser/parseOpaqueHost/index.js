@@ -1,12 +1,24 @@
-/* eslint-disable no-control-regex */
+/* eslint-disable no-magic-numbers */
 // https://url.spec.whatwg.org/#concept-opaque-host-parser
-import {C0ControlPercentEncodeSet} from '../../codePoints';
+import {
+	ConditionalSet
+} from 'j0';
+import {
+	C0ControlPercentEncodeSet,
+	forbiddenHost
+} from '../../codePoints';
 import {FAILURE} from '../constants';
 import utf8PercentEncode from '../utf8PercentEncode';
 import validationError from '../validationError';
+const forbiddenHostWithoutPercent = ConditionalSet.and(
+	forbiddenHost,
+	function (x) {
+		return x !== 0x25;
+	}
+);
 
 function parseOpaqueHost(input) {
-	if (!input || (/[\x00\x09\x0A\x0D\x20\x23\x2F\x3A\x3F\x40\x5B\x5C\x5D]/).test(input)) {
+	if (!input || forbiddenHostWithoutPercent.includes(input)) {
 		validationError('parseOpaqueHost', input);
 		return FAILURE;
 	}
