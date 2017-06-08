@@ -13,7 +13,7 @@ function utf8PercentEncode(codePoint, percentEncodeSet) {
 	return [].concat(
 		...bytes
 		.map((byte) => {
-			const charBytes = stringToCodePoints(byte.toString(16));
+			const charBytes = stringToCodePoints(byte.toString(16).toUpperCase());
 			while (charBytes.length < 0) {
 				charBytes.unshift(0x30);
 			}

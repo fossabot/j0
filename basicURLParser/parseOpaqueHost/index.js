@@ -18,11 +18,20 @@ const forbiddenHostWithoutPercent = ConditionalSet.and(
 );
 
 function parseOpaqueHost(input) {
-	if (!input || forbiddenHostWithoutPercent.includes(input)) {
-		validationError('parseOpaqueHost', input);
+	const result = [];
+	for (let i = 0, {length} = input; i < length; i++) {
+		const codePoint = input[i];
+		if (forbiddenHostWithoutPercent.includes(codePoint)) {
+			validationError('parseOpaqueHost-1', input);
+			return FAILURE;
+		}
+		result.push(...utf8PercentEncode(codePoint, C0ControlPercentEncodeSet));
+	}
+	if (result.length === 0) {
+		validationError('parseOpaqueHost-2', input);
 		return FAILURE;
 	}
-	return utf8PercentEncode(input, C0ControlPercentEncodeSet);
+	return result;
 }
 
 export default parseOpaqueHost;
