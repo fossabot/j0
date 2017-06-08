@@ -1,7 +1,9 @@
+/* eslint-disable max-lines, complexity, max-statements */
 // https://url.spec.whatwg.org/#concept-basic-url-parser
 import {
 	isUndefined,
-	Object
+	Object,
+	stringToCodePoints
 } from 'j0';
 
 import {
@@ -70,35 +72,46 @@ function isIncludesCredentials() {
 	return true;
 }
 
-function basicURLParser(input, options = {}) {
+function basicURLParser(inputString, options = {}) {
+	let input = stringToCodePoints(inputString);
 	const {
 		base = null,
-		state: stateOverride
+		state: stateOverride,
+		encoding: encodingOverride
 	} = options;
-	let {
-		url,
-		encoding
-	} = options;
+	let {url} = options;
 	const stateOverrideIsGiven = !isUndefined(stateOverride);
+	const encodingOverrideIsGiven = !isUndefined(encodingOverride);
 	if (isUndefined(url)) {
 		url = {};
-		if (C0ControlOrSpace.test(input)) {
-			validationError('C0ControlOrSpace', input);
-			input = C0ControlOrSpace.removeLeadingAndTrailing(input);
+		input = input
+		.filter((codePoint) => {
+			if (C0ControlOrSpace.includes(codePoint)) {
+				validationError('C0ControlOrSpace', inputString);
+				return false;
+			}
+			return true;
+		});
+	}
+	input = input
+	.filter((codePoint) => {
+		if (ASCIITabOrNewline.includes(codePoint)) {
+			validationError('ASCIITabOrNewline', inputString);
+			return false;
 		}
-	}
-	if (ASCIITabOrNewline.test(input)) {
-		validationError('ASCIITabOrNewline', input);
-		input = ASCIITabOrNewline.remove(input);
-	}
+		return true;
+	});
 	let state = stateOverrideIsGiven ? stateOverride : STATE_SCHEME_START;
-	encoding = isUndefined(encoding) ? ENCODING_UTF8 : getAnOutputEncoding(encoding);
+	let encoding = ENCODING_UTF8;
+	if (encodingOverrideIsGiven) {
+		encoding = getAnOutputEncoding(encoding);
+	}
 	let buffer = '';
 	let atFlag;
 	let braketFlag;
 	let passwordTokenSeenFlag;
 	function append(c) {
-		buffer += c.toLowerCase();
+		buffer += String.fromCodePoint(c).toLowerCase();
 	}
 	for (let pointer = 0, {length} = input; pointer < length; pointer++) {
 		const c = input[pointer] || EOF;
@@ -111,7 +124,7 @@ function basicURLParser(input, options = {}) {
 			} else if (stateOverrideIsGiven) {
 				state = STATE_NO_SCHEME;
 			} else {
-				validationError('SCHEME_START', input);
+				validationError('SCHEME_START', inputString);
 				return FAILURE;
 			}
 			break;
@@ -136,7 +149,7 @@ function basicURLParser(input, options = {}) {
 				}
 				if (url.scheme === SCHEME_FILE) {
 					if (remaining.startsWith('//')) {
-						validationError('SCHEME-1', input);
+						validationError('SCHEME-1', inputString);
 					}
 					state = STATE_FILE;
 				} else if (isSpecialURL(url) && base !== null && base.scheme === url.scheme) {
@@ -151,7 +164,7 @@ function basicURLParser(input, options = {}) {
 					state = STATE_CANNOT_BE_A_BASE_URL_PATH;
 				}
 			} else if (stateOverrideIsGiven) {
-				validationError('SCHEME-2', input);
+				validationError('SCHEME-2', inputString);
 				return FAILURE;
 			} else {
 				buffer = '';
@@ -161,7 +174,7 @@ function basicURLParser(input, options = {}) {
 			break;
 		case STATE_NO_SCHEME:
 			if (base === null || base[FLAG_CANNOT_BE_A_BASE_URL] && c !== '#') {
-				validationError('NO_SCHEME', input);
+				validationError('NO_SCHEME', inputString);
 				return FAILURE;
 			} else if (base[FLAG_CANNOT_BE_A_BASE_URL] && c === '#') {
 				url.scheme = base.scheme;
@@ -183,7 +196,7 @@ function basicURLParser(input, options = {}) {
 				state = STATE_SPECIAL_AUTHORITY_IGNORE_SLASHES;
 				pointer++;
 			} else {
-				validationError('SPECIAL_RELATIVE_OR_AUTHORITY', input);
+				validationError('SPECIAL_RELATIVE_OR_AUTHORITY', inputString);
 				state = STATE_RELATIVE;
 				pointer--;
 			}
@@ -223,7 +236,7 @@ function basicURLParser(input, options = {}) {
 				break;
 			default:
 				if (isSpecialURL(url) && c === '\\') {
-					validationError('RELATIVE', input);
+					validationError('RELATIVE', inputString);
 					state = STATE_RELATIVE_SLASH;
 				} else {
 					url.username = base.username;
@@ -240,7 +253,7 @@ function basicURLParser(input, options = {}) {
 		case STATE_RELATIVE_SLASH:
 			if (isSpecialURL(url) && (c === '/' || c === '\\')) {
 				if (c === '\\') {
-					validationError('RELATIVE_SLASH', input);
+					validationError('RELATIVE_SLASH', inputString);
 				}
 				state = STATE_SPECIAL_AUTHORITY_IGNORE_SLASHES;
 			} else if (c === '/') {
@@ -259,7 +272,7 @@ function basicURLParser(input, options = {}) {
 				state = STATE_SPECIAL_AUTHORITY_IGNORE_SLASHES;
 				pointer++;
 			} else {
-				validationError('SPECIAL_AUTHORITY_SLASHES', input);
+				validationError('SPECIAL_AUTHORITY_SLASHES', inputString);
 				state = STATE_SPECIAL_AUTHORITY_IGNORE_SLASHES;
 				pointer--;
 			}
@@ -268,12 +281,12 @@ function basicURLParser(input, options = {}) {
 			if (c !== '/' && c !== '\\') {
 				state = STATE_AUTHORITY;
 			} else {
-				validationError('SPECIAL_AUTHORITY_IGNORE_SLASHES', input);
+				validationError('SPECIAL_AUTHORITY_IGNORE_SLASHES', inputString);
 			}
 			break;
 		case STATE_AUTHORITY:
 			if (c === '@') {
-				validationError('AUTHORITY-1', input);
+				validationError('AUTHORITY-1', inputString);
 				if (atFlag) {
 					buffer = `%40${buffer}`;
 				}
@@ -296,7 +309,7 @@ function basicURLParser(input, options = {}) {
 				(isSpecialURL(url) && c === '\\')
 			) {
 				if (atFlag && !buffer) {
-					validationError('AUTHORITY-2', input);
+					validationError('AUTHORITY-2', inputString);
 					return FAILURE;
 				}
 				pointer -= buffer.length + 1;
@@ -313,7 +326,7 @@ function basicURLParser(input, options = {}) {
 				state = STATE_FILE_HOST;
 			} else if (c === ':' && !braketFlag) {
 				if (!buffer) {
-					validationError('HOST-1', input);
+					validationError('HOST-1', inputString);
 					return FAILURE;
 				}
 				const host = parseHost(buffer, isSpecialURL(url));
@@ -326,7 +339,7 @@ function basicURLParser(input, options = {}) {
 			}
 			break;
 		default:
-			validationError('UNKNOWN', input);
+			validationError('UNKNOWN', inputString);
 			return;
 		}
 	}

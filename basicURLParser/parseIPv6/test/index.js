@@ -1,4 +1,7 @@
 /* eslint-disable no-magic-numbers */
+import {
+	stringToCodePoints
+} from 'j0';
 import parseIPv6 from '..';
 import {FAILURE} from '../../constants';
 
@@ -11,7 +14,7 @@ describe('basicURLParser/parseIPv6', function () {
 	});
 
 	it('should parse 0123:4567:89ab:def:0000:0000:0123:4567', function () {
-		const actual = parseIPv6('0123:4567:89ab:cdef:0000:0000:0123:4567');
+		const src = '0123:4567:89ab:cdef:0000:0000:0123:4567';
 		const expected = [
 			0x0123,
 			0x4567,
@@ -22,11 +25,19 @@ describe('basicURLParser/parseIPv6', function () {
 			0x0123,
 			0x4567
 		];
+		const actual = parseIPv6(stringToCodePoints(src));
+		console.log(
+			Array.from(actual)
+			.map((x) => {
+				return `0x${x.toString(16)}`;
+			})
+			.join(', ')
+		);
 		assert.deepEqual(Array.from(actual), expected);
 	});
 
 	it('should parse 123:4567:89ab:def:0000:0000:123:4567', function () {
-		const actual = parseIPv6('123:4567:89ab:cdef:0000:0000:123:4567');
+		const src = '123:4567:89ab:cdef:0000:0000:123:4567';
 		const expected = [
 			0x0123,
 			0x4567,
@@ -37,11 +48,12 @@ describe('basicURLParser/parseIPv6', function () {
 			0x0123,
 			0x4567
 		];
+		const actual = parseIPv6(stringToCodePoints(src));
 		assert.deepEqual(Array.from(actual), expected);
 	});
 
 	it('should parse 123:4567:89ab:def::0000:123:4567', function () {
-		const actual = parseIPv6('123:4567:89ab:cdef::0000:123:4567');
+		const src = '123:4567:89ab:cdef::0000:123:4567';
 		const expected = [
 			0x0123,
 			0x4567,
@@ -52,11 +64,12 @@ describe('basicURLParser/parseIPv6', function () {
 			0x0123,
 			0x4567
 		];
+		const actual = parseIPv6(stringToCodePoints(src));
 		assert.deepEqual(Array.from(actual), expected);
 	});
 
 	it('should parse 123:4567:89ab:def::123:4567', function () {
-		const actual = parseIPv6('123:4567:89ab:cdef::123:4567');
+		const src = '123:4567:89ab:cdef::123:4567';
 		const expected = [
 			0x0123,
 			0x4567,
@@ -67,11 +80,12 @@ describe('basicURLParser/parseIPv6', function () {
 			0x0123,
 			0x4567
 		];
+		const actual = parseIPv6(stringToCodePoints(src));
 		assert.deepEqual(Array.from(actual), expected);
 	});
 
 	it('should parse 123:4567:89ab:def::192.1.2.3', function () {
-		const actual = parseIPv6('123:4567:89ab:cdef::192.1.2.3');
+		const src = '123:4567:89ab:cdef::192.1.2.3';
 		const expected = [
 			0x0123,
 			0x4567,
@@ -82,6 +96,7 @@ describe('basicURLParser/parseIPv6', function () {
 			192 * 256 + 1,
 			2 * 256 + 3
 		];
+		const actual = parseIPv6(stringToCodePoints(src));
 		assert.deepEqual(Array.from(actual), expected);
 	});
 

@@ -1,30 +1,29 @@
 /* eslint-disable no-magic-numbers, no-bitwise, max-depth, complexity, max-statements */
 import {
 	Uint16Array,
-	parseInt
+	isUndefined
 } from 'j0';
-import {
-	FAILURE,
-	EOF
-} from '../constants';
+import {FAILURE} from '../constants';
 import {
 	ASCIIHexDigit,
 	ASCIIDigit
 } from '../../codePoints';
 import validationError from '../validationError';
+import parseHexCodePoint from '../parseHexCodePoint';
+import parseDecCodePoint from '../parseDecCodePoint';
 
 function parseIPv6(input) {
 	const address = new Uint16Array(8);
 	let pieceIndex = 0;
 	let compress = null;
 	let pointer = 0;
-	let c = input.charAt(pointer);
+	let c = input[pointer];
 	function increment(by) {
 		pointer += by;
-		c = input.charAt(pointer) || EOF;
+		c = input[pointer];
 	}
-	if (c === ':') {
-		if (input.charAt(pointer + 1) !== ':') {
+	if (c === 0x3A) {
+		if (input[pointer + 1] !== 0x3A) {
 			validationError('parseIPv6-1', input);
 			return FAILURE;
 		}
@@ -32,12 +31,12 @@ function parseIPv6(input) {
 		pieceIndex++;
 		compress = pieceIndex;
 	}
-	while (c !== EOF) {
+	while (!isUndefined(c)) {
 		if (pieceIndex === 8) {
 			validationError('parseIPv6-2', input);
 			return FAILURE;
 		}
-		if (c === ':') {
+		if (c === 0x3A) {
 			if (compress !== null) {
 				validationError('parseIPv6-3', input);
 				return FAILURE;
@@ -48,12 +47,12 @@ function parseIPv6(input) {
 		} else {
 			let value = 0;
 			let length = 0;
-			while (length < 4 && ASCIIHexDigit.test(c)) {
-				value = (value << 4) + parseInt(c, 16);
+			while (length < 4 && ASCIIHexDigit.includes(c)) {
+				value = (value << 4) + parseHexCodePoint(c);
 				increment(1);
 				length++;
 			}
-			if (c === '.') {
+			if (c === 0x2E) {
 				if (length === 0) {
 					validationError('parseIPv6-4', input);
 					return FAILURE;
@@ -64,22 +63,22 @@ function parseIPv6(input) {
 					return FAILURE;
 				}
 				let numbersSeen = 0;
-				while (c !== EOF) {
+				while (!isUndefined(c)) {
 					let ipv4Piece = null;
 					if (0 < numbersSeen) {
-						if (c === '.' && numbersSeen < 4) {
+						if (c === 0x2E && numbersSeen < 4) {
 							increment(1);
 						} else {
 							validationError('parseIPv6-5', input);
 							return FAILURE;
 						}
 					}
-					if (!ASCIIDigit.test(c)) {
+					if (!ASCIIDigit.includes(c)) {
 						validationError('parseIPv6-6', input);
 						return FAILURE;
 					}
-					while (ASCIIDigit.test(c)) {
-						const number = parseInt(c, 10);
+					while (ASCIIDigit.includes(c)) {
+						const number = parseDecCodePoint(c);
 						if (ipv4Piece === null) {
 							ipv4Piece = number;
 						} else if (ipv4Piece === 0) {
@@ -105,13 +104,13 @@ function parseIPv6(input) {
 					return FAILURE;
 				}
 				break;
-			} else if (c === ':') {
+			} else if (c === 0x3A) {
 				increment(1);
-				if (c === EOF) {
+				if (isUndefined(c)) {
 					validationError('parseIPv6-10', input);
 					return FAILURE;
 				}
-			} else if (c !== EOF) {
+			} else if (!isUndefined(c)) {
 				validationError('parseIPv6-10', input);
 				return FAILURE;
 			}
