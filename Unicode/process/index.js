@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers */
+/* eslint-disable no-magic-numbers, max-params, max-statements */
 import {
 	console
 } from 'j0';
@@ -21,7 +21,7 @@ function punycode() {
 	return [];
 }
 
-function processUnicode(
+function process(
 	domainName,
 	useSTD3ASCIIRules,
 	checkHyphens,
