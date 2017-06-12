@@ -1,6 +1,7 @@
 import {
 	UnicodeData
 } from '../data';
+import canonicallySort from '../canonicallySort';
 
 function compatiblyDecompose(codePoints) {
 	for (let i = codePoints.length; i--;) {
@@ -12,7 +13,7 @@ function compatiblyDecompose(codePoints) {
 			}
 		}
 	}
-	return codePoints;
+	return canonicallySort(codePoints);
 }
 
 export default compatiblyDecompose;
