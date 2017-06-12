@@ -1,7 +1,6 @@
 import canonicallyDecompose from '../canonicallyDecompose';
 import canonicallyCompose from '../canonicallyCompose';
 import compatiblyDecompose from '../compatiblyDecompose';
-import compatiblyCompose from '../compatiblyCompose';
 
 function normalize(codePoints, form = 'NFC') {
 	switch (form) {
@@ -12,7 +11,7 @@ function normalize(codePoints, form = 'NFC') {
 	case 'NFKD':
 		return compatiblyDecompose(codePoints);
 	case 'NFKC':
-		return compatiblyCompose(compatiblyDecompose(codePoints));
+		return canonicallyCompose(compatiblyDecompose(codePoints));
 	default:
 	}
 	return codePoints;
