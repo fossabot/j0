@@ -4,10 +4,6 @@ import {
 } from 'j0';
 import utf8PercentEncode from '..';
 
-function hex(arr) {
-	return String.fromCodePoint(...arr);
-}
-
 describe('basicURLParser/utf8PercentEncode', function () {
 
 	it('should encode @', function () {

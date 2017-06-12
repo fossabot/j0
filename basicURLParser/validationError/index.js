@@ -1,7 +1,7 @@
 import {console} from 'j0';
 
-function validationError(step, params) {
-	console.info(`ValidationError:${step}:${params}`);
+function validationError(...args) {
+	console.info(`ValidationError:${args.join(':')}`);
 }
 
 export default validationError;
