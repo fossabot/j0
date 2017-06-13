@@ -43,6 +43,7 @@
     "selenium-webdriver": "^3.4.0",
     "stylus": "^0.54.5",
     "uglify-js": "^3.0.11",
+    "unorm": "^1.4.1",
     "wdio-mocha-framework": "^0.5.10",
     "wdio-selenium-standalone-service": "0.0.8",
     "wdio-spec-reporter": "^0.1.0",

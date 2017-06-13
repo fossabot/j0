@@ -1,12 +1,9 @@
 import {
-	String,
-	stringToCodePoints
+	unorm
 } from 'j0';
-import unicodeNormalize from '../../../Unicode/normalize';
 
 function normalize(form) {
-	const normalized = unicodeNormalize(stringToCodePoints(this), form);
-	return String.fromCodePoint(...normalized);
+	return unorm[form.toLowerCase()](this);
 }
 
 export default normalize;
