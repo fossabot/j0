@@ -12,6 +12,7 @@ import {
 	DISALLOWED_STD3_VALID,
 	DISALLOWED_STD3_MAPPED
 } from '../statuses';
+import normalize from '../normalize';
 
 function startsWithXN(label) {
 	return label[0] === 0x78 && label[1] === 0x6E && label[2] === 0x2D && label[3] === 0x2D;
@@ -53,7 +54,7 @@ function process(
 		default:
 		}
 	}
-	// SKIPPED 2. Normalize
+	domainName = normalize(domainName, 'NFC');
 	const dots = [0];
 	for (let i = domainName.length; i--;) {
 		const codePoint = domainName[i];
