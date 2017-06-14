@@ -4,7 +4,8 @@
 import {
 	URL as _URL,
 	Object,
-	isUndefined
+	isUndefined,
+	encodeURIComponent
 } from 'j0';
 
 const EOF = undefined;
@@ -525,6 +526,14 @@ class URL {
 
 	get hostname() {
 		return this._host;
+	}
+
+	get username() {
+		return this._username;
+	}
+
+	get password() {
+		return this._password;
 	}
 
 	set hostname(hostname) {
