@@ -65,6 +65,9 @@
 		<loc>https://kei-ito.github.io/j0/Body/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/ConditionalSet/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/CustomEvent/j0polyfill/</loc>
 	</url>
 	<url>
@@ -93,6 +96,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/J0Storage/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/Lazy/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Map/@iterator/j0polyfill/</loc>
@@ -359,10 +365,40 @@
 		<loc>https://kei-ito.github.io/j0/String/@iterator/</loc>
 	</url>
 	<url>
+		<loc>https://kei-ito.github.io/j0/String/codePointAt/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/codePointAt/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/endsWith/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/endsWith/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/fromCodePoint/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/fromCodePoint/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/normalize/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/normalize/</loc>
+	</url>
+	<url>
 		<loc>https://kei-ito.github.io/j0/String/repeat/j0polyfill/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/String/repeat/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/startsWith/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/String/startsWith/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/String/</loc>
@@ -375,6 +411,12 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/Symbol/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/URL/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/URL/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/URLSearchParams/j0polyfill/</loc>
@@ -393,6 +435,21 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/cloneObject/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/codePoints/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/console/info/j0polyfill/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/console/info/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/console/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/createTypedArray/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/cubicBezier/</loc>
@@ -423,6 +480,9 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isArrayBufferView/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/isChildClassOf/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/isFunction/</loc>
@@ -483,6 +543,12 @@
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/setImmediate/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/stringToCodePoints/</loc>
+	</url>
+	<url>
+		<loc>https://kei-ito.github.io/j0/thermalRGB/</loc>
 	</url>
 	<url>
 		<loc>https://kei-ito.github.io/j0/throttle/</loc>

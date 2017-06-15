@@ -31,6 +31,7 @@
 	"Body": {
 		"j0polyfill": {}
 	},
+	"ConditionalSet": {},
 	"CustomEvent": {
 		"j0polyfill": {}
 	},
@@ -45,6 +46,7 @@
 	},
 	"Iterator": {},
 	"J0Storage": {},
+	"Lazy": {},
 	"Map": {
 		"@iterator": {
 			"j0polyfill": {}
@@ -167,13 +169,31 @@
 		"@iterator": {
 			"j0polyfill": {}
 		},
+		"codePointAt": {
+			"j0polyfill": {}
+		},
+		"endsWith": {
+			"j0polyfill": {}
+		},
+		"fromCodePoint": {
+			"j0polyfill": {}
+		},
+		"normalize": {
+			"j0polyfill": {}
+		},
 		"repeat": {
+			"j0polyfill": {}
+		},
+		"startsWith": {
 			"j0polyfill": {}
 		}
 	},
 	"StringList": {},
 	"Symbol": {
 		"j0": {}
+	},
+	"URL": {
+		"j0polyfill": {}
 	},
 	"URLSearchParams": {
 		"j0polyfill": {}
@@ -182,6 +202,13 @@
 	"cancelAnimationFrame": {},
 	"clamp": {},
 	"cloneObject": {},
+	"codePoints": {},
+	"console": {
+		"info": {
+			"j0polyfill": {}
+		}
+	},
+	"createTypedArray": {},
 	"cubicBezier": {},
 	"debounce": {},
 	"dom": {},
@@ -193,6 +220,7 @@
 	"innerWidth": {},
 	"isArray": {},
 	"isArrayBufferView": {},
+	"isChildClassOf": {},
 	"isFunction": {},
 	"isInstanceOf": {},
 	"isNode": {},
@@ -214,6 +242,8 @@
 	"scrollX": {},
 	"scrollY": {},
 	"setImmediate": {},
+	"stringToCodePoints": {},
+	"thermalRGB": {},
 	"throttle": {},
 	"wait": {}
 }
