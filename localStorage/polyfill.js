@@ -6,7 +6,7 @@ import {
 let storage;
 try {
 	storage = window.localStorage;
-	storage.is = 'available';
+	storage.setItem('is', 'available');
 } catch (err) {
 	storage = 0;
 }
