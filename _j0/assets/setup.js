@@ -1,12 +1,8 @@
-/* eslint no-prototype-builtins: "off" */
-function assign(obj, values) {
-	for (const key in values) {
-		if (values.hasOwnProperty(key)) {
-			obj[key] = values[key];
-		}
-	}
-	return obj;
-}
+/* eslint no-prototype-builtins: "off", max-statements: "off", no-magic-numbers: "off" */
+import {
+	thermalRGB,
+	Object
+} from 'j0';
 
 function setVersion() {
 	const xhr = new XMLHttpRequest();
@@ -34,11 +30,11 @@ function getCanvasContext(name) {
 	const lineHeight = 22;
 	canvas.setAttribute('class', window.canvasTestClass);
 	canvas.setAttribute('data-name', name);
-	assign(canvas, {
+	Object.assign(canvas, {
 		width: size,
 		height: size
 	});
-	assign(canvas.style, {
+	Object.assign(canvas.style, {
 		userSelect: 'none',
 		transition: 'width 0.2s, height 0.2s',
 		border: 'solid 1px #000',
@@ -48,7 +44,7 @@ function getCanvasContext(name) {
 		cursor: 'pointer'
 	});
 	const ctx = canvas.getContext('2d');
-	assign(ctx, {
+	Object.assign(ctx, {
 		font: '20px Courier',
 		lineHeight
 	});
@@ -84,6 +80,7 @@ async function graphicalEqual({
 	fn,
 	xRange,
 	yRange,
+	zRange,
 	xGrid = [],
 	yGrid = [],
 	threshold = canvasDefaultThreshold
@@ -117,7 +114,7 @@ async function graphicalEqual({
 		}
 		context.stroke();
 		if (drawLabel) {
-			assign(context, {
+			Object.assign(context, {
 				lineWidth: 8,
 				strokeStyle: '#fff',
 				fillStyle: '#000',
@@ -130,7 +127,7 @@ async function graphicalEqual({
 				context.strokeText(label, imageX(value), height);
 				context.fillText(label, imageX(value), height);
 			}
-			assign(context, {
+			Object.assign(context, {
 				textAlign: 'left',
 				textBaseline: 'middle'
 			});
@@ -145,7 +142,7 @@ async function graphicalEqual({
 	function isInside(y) {
 		return minY - yScale < y && y < maxY + yScale;
 	}
-	function drawGraph(context) {
+	function drawXYGraph(context) {
 		context.moveTo(imageX(minX), imageY(fn(minX)));
 		const step = 0.5;
 		const d = 0.000001;
@@ -181,6 +178,22 @@ async function graphicalEqual({
 			context.stroke();
 		}
 	}
+	function drawXYZGraph(context) {
+		const [minZ, maxZ] = zRange;
+		const zScale = maxZ - minZ;
+		for (let x = 0; x < width; x += 2) {
+			for (let y = 0; y < height; y += 2) {
+				const z = fn(
+					minX + xScale * x / width,
+					minY + yScale * (1 - y / width)
+				);
+				const r = (z - minZ) / zScale;
+				context.fillStyle = thermalRGB.css(r);
+				context.fillRect(x, y, 2, 2);
+			}
+		}
+	}
+	const drawGraph = zRange ? drawXYZGraph : drawXYGraph;
 	ctx.fillStyle = '#fff';
 	ctx.fillRect(0, 0, width, height);
 	// Draw graph
@@ -190,13 +203,19 @@ async function graphicalEqual({
 	if (downloader || !url) {
 		document.body.appendChild(ctx.canvas);
 		ctx.canvas.addEventListener('click', function () {
-			window.open(ctx.canvas.toDataURL());
+			ctx.canvas.toBlob(function (blob) {
+				Object.assign(document.createElement('a'), {
+					href: URL.createObjectURL(blob),
+					download: `${name.replace(/Math\./, '')}.png`
+				})
+				.click();
+			});
 		});
 		if (downloader) {
-			// // downloader
+			// downloader
 			if (!(/#/).test(name)) {
 				ctx.canvas.toBlob(function (blob) {
-					assign(document.createElement('a'), {
+					Object.assign(document.createElement('a'), {
 						href: URL.createObjectURL(blob),
 						download: `${name.replace(/Math\./, '')}.png`
 					})
@@ -208,7 +227,7 @@ async function graphicalEqual({
 	}
 	const img = document.createElement('img');
 	await new Promise(function (resolve, reject) {
-		assign(img, {
+		Object.assign(img, {
 			onerror: function (event) {
 				reject(event.error || event);
 			},
@@ -222,28 +241,30 @@ async function graphicalEqual({
 		ctx.getImageData(0, 0, width, height).data,
 		expectedCanvasContext.getImageData(0, 0, width, height).data
 	);
-	assign(expectedCanvasContext, {
+	Object.assign(expectedCanvasContext, {
 		lineWidth: 2,
 		strokeStyle: actualColor
 	});
 	drawGraph(expectedCanvasContext);
-	assign(expectedCanvasContext, {
+	Object.assign(expectedCanvasContext, {
 		lineWidth: 1,
 		strokeStyle: '#000'
 	});
 	drawGridLines(expectedCanvasContext, true);
-	assign(expectedCanvasContext, {
+	Object.assign(expectedCanvasContext, {
 		textBaseline: 'top',
 		textAlign: 'center',
 		lineWidth: 8,
 		strokeStyle: '#fff',
 		fillStyle: expectedColor
 	});
-	expectedCanvasContext.strokeText('Expected', width / 2, 0);
-	expectedCanvasContext.fillText('Expected', width / 2, 0);
-	expectedCanvasContext.fillStyle = actualColor;
-	expectedCanvasContext.strokeText('Actual', width / 2, expectedCanvasContext.lineHeight);
-	expectedCanvasContext.fillText('Actual', width / 2, expectedCanvasContext.lineHeight);
+	if (!zRange) {
+		expectedCanvasContext.strokeText('Expected', width / 2, 0);
+		expectedCanvasContext.fillText('Expected', width / 2, 0);
+		expectedCanvasContext.fillStyle = actualColor;
+		expectedCanvasContext.strokeText('Actual', width / 2, expectedCanvasContext.lineHeight);
+		expectedCanvasContext.fillText('Actual', width / 2, expectedCanvasContext.lineHeight);
+	}
 	expectedCanvasContext.canvas.addEventListener('click', function () {
 		this.clicked = !this.clicked;
 		if (this.clicked) {

@@ -7,13 +7,12 @@ function test(hypot, name = 'Math.hypot') {
 			await assert.graphicalEqual({
 				name: `${name}-y=3`,
 				url: `${window.root}/Math/hypot/hypot-y=3.png`,
-				fn: function (x) {
-					return hypot(x, 3);
+				fn: function (x, y) {
+					return hypot(x, y);
 				},
-				xRange: [-6, 6],
-				yRange: [2, 8],
-				xGrid: [-4, -2, 0, 2, 4],
-				yGrid: [3, 4, 5, 6, 7]
+				xRange: [-1, 1],
+				yRange: [-1, 1],
+				zRange: [0, 1]
 			});
 		});
 

@@ -1,8 +1,10 @@
+import '../../console/polyfill';
 import '../../Math/polyfill';
 import '../../Object/polyfill';
 import '../../Array/polyfill';
 import '../../String/polyfill';
 import '../../Promise/polyfill';
+import '../../URL/polyfill';
 import '../../CustomEvent/polyfill';
 import '../../Map/polyfill';
 import '../../Set/polyfill';
