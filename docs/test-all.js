@@ -10989,7 +10989,7 @@ describe('wait', function () {
 						start = Date.now();
 						data = start;
 						duration = 100;
-						margin = 0.9;
+						margin = 0.8;
 						_context59.next = 6;
 						return wait$1(duration, data);
 

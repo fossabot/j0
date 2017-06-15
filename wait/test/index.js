@@ -4,7 +4,7 @@ describe('wait', function () {
 		const start = Date.now();
 		const data = start;
 		const duration = 100;
-		const margin = 0.9;
+		const margin = 0.8;
 		const actual = await wait(duration, data);
 		assert.equal(actual, data);
 		assert.equal(margin * duration < (Date.now() - start), true);
