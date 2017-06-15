@@ -3,6 +3,8 @@ import ConditionalSet from '..';
 
 describe('ConditionalSet', function () {
 
+	this.timeout(10000);
+
 	it('should create a set', function () {
 		const set = ConditionalSet.and(
 			function (x) {
