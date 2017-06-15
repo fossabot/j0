@@ -1314,11 +1314,28 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-x$10.Promise = x$10.Promise || J0Promise;
+if (!x$10.Promise) {
+	x$10.Promise = J0Promise;
+}
 
-var x$13 = URL;
+var x$13 = Storage;
 
-var x$14 = encodeURIComponent;
+var storage = void 0;
+try {
+	storage = x$10.localStorage;
+	storage.setItem('is', 'available');
+} catch (err) {
+	storage = 0;
+}
+if (storage) {
+	storage.removeItem('is');
+} else {
+	storage = new x$13();
+}
+
+var x$14 = URL;
+
+var x$15 = encodeURIComponent;
 
 /* eslint-disable no-undefined, complexity, max-statements, max-lines */
 /* eslint-disable no-magic-numbers, no-continue, no-labels, no-lonely-if */
@@ -1369,7 +1386,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$14(c);
+	return x$15(c);
 }
 
 function percentEscapeQuery(c) {
@@ -1380,7 +1397,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$14(c);
+	return x$15(c);
 }
 
 function parse(input, stateOverride, base) {
@@ -1923,8 +1940,8 @@ var URL$1 = function () {
 }();
 
 x$5.defineProperties(URL$1, {
-	createObjectURL: { value: x$13.createObjectURL },
-	revokeObjectURL: { value: x$13.revokeObjectURL }
+	createObjectURL: { value: x$14.createObjectURL },
+	revokeObjectURL: { value: x$14.revokeObjectURL }
 });
 
 try {
@@ -1937,11 +1954,11 @@ try {
 	x$10.URL = URL$1;
 }
 
-var x$15 = CustomEvent;
+var x$16 = CustomEvent;
 
-var x$16 = Event;
+var x$17 = Event;
 
-var x$17 = document;
+var x$18 = document;
 
 function CustomEvent$2(event) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -1949,13 +1966,13 @@ function CustomEvent$2(event) {
 		cancelable: false
 	};
 
-	var evt = x$17.createEvent('CustomEvent');
+	var evt = x$18.createEvent('CustomEvent');
 	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	return evt;
 }
-CustomEvent$2.prototype = x$16.prototype;
+CustomEvent$2.prototype = x$17.prototype;
 
-if (!isFunction(x$15)) {
+if (!isFunction(x$16)) {
 	x$10.CustomEvent = CustomEvent$2;
 }
 
@@ -2115,13 +2132,13 @@ if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
 }
 x$10.Map = MAP;
 
-var x$18 = Map;
+var x$19 = Map;
 
 function generator$2() {
 	return this.entries();
 }
 
-var prototype$13 = x$18.prototype;
+var prototype$13 = x$19.prototype;
 
 if (!prototype$13[iteratorSymbol]) {
 	prototype$13[iteratorSymbol] = generator$2;
@@ -2246,19 +2263,19 @@ if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
 
 x$10.Set = SET;
 
-var x$19 = Set;
+var x$20 = Set;
 
 function generator$4() {
 	return this.values();
 }
 
-var prototype$14 = x$19.prototype;
+var prototype$14 = x$20.prototype;
 
 if (!prototype$14[iteratorSymbol]) {
 	prototype$14[iteratorSymbol] = generator$4;
 }
 
-var x$20 = NodeList;
+var x$21 = NodeList;
 
 function generator$6() {
 	var _this7 = this;
@@ -2274,13 +2291,13 @@ function generator$6() {
 	});
 }
 
-var prototype$15 = x$20.prototype;
+var prototype$15 = x$21.prototype;
 
 if (!prototype$15[iteratorSymbol]) {
 	prototype$15[iteratorSymbol] = generator$6;
 }
 
-var x$21 = HTMLCollection;
+var x$22 = HTMLCollection;
 
 function generator$8() {
 	var _this8 = this;
@@ -2298,13 +2315,13 @@ function generator$8() {
 	};
 }
 
-var prototype$16 = x$21.prototype;
+var prototype$16 = x$22.prototype;
 
 if (!prototype$16[iteratorSymbol]) {
 	prototype$16[iteratorSymbol] = generator$8;
 }
 
-var x$22 = NamedNodeMap;
+var x$23 = NamedNodeMap;
 
 function generator$10() {
 	var _this9 = this;
@@ -2320,7 +2337,7 @@ function generator$10() {
 	});
 }
 
-var prototype$17 = x$22.prototype;
+var prototype$17 = x$23.prototype;
 
 if (!prototype$17[iteratorSymbol]) {
 	prototype$17[iteratorSymbol] = generator$10;
@@ -2611,22 +2628,22 @@ if (!x$10.Headers) {
 	x$10.Headers = Headers$1;
 }
 
-var x$23 = JSON;
+var x$24 = JSON;
 
-var x$24 = Blob;
+var x$25 = Blob;
 
-var x$25 = ArrayBuffer;
+var x$26 = ArrayBuffer;
 
-var x$26 = DataView;
+var x$27 = DataView;
 
-var x$27 = Uint8Array;
+var x$28 = Uint8Array;
 
-var x$28 = Promise;
+var x$29 = Promise;
 
-var x$29 = FileReader;
+var x$30 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new x$29();
+	var reader = new x$30();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -2653,12 +2670,12 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var x$30 = FormData;
+var x$31 = FormData;
 
-var x$31 = decodeURIComponent;
+var x$32 = decodeURIComponent;
 
 function parse$1(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$30();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$31();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -2667,8 +2684,8 @@ function parse$1(body) {
 			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			name = x$31(name.replace(/\+/g, ' '));
-			parts = x$31(parts.join('=').replace(/\+/g, ' '));
+			name = x$32(name.replace(/\+/g, ' '));
+			parts = x$32(parts.join('=').replace(/\+/g, ' '));
 			form.append(name, parts);
 		}
 	});
@@ -2679,27 +2696,27 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$32 = URLSearchParams;
+var x$33 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$33 = Uint8ClampedArray;
+var x$34 = Uint8ClampedArray;
 
-var x$34 = Uint16Array;
+var x$35 = Uint16Array;
 
-var x$35 = Uint32Array;
+var x$36 = Uint32Array;
 
-var x$36 = Int8Array;
+var x$37 = Int8Array;
 
-var x$37 = Int16Array;
+var x$38 = Int16Array;
 
-var x$38 = Int32Array;
+var x$39 = Int32Array;
 
-var x$39 = Float64Array;
+var x$40 = Float64Array;
 
-var viewClasses = [x$27, x$33, x$34, x$35, x$36, x$37, x$38, x$3, x$39];
+var viewClasses = [x$28, x$34, x$35, x$36, x$37, x$38, x$39, x$3, x$40];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -2714,7 +2731,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new x$27(arrayBuffer);
+	var view = new x$28(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -2757,8 +2774,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new x$27(buf.byteLength);
-	view.set(new x$27(buf));
+	var view = new x$28(buf.byteLength);
+	view.set(new x$28(buf));
 	return view.buffer;
 }
 
@@ -2777,17 +2794,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$24)) {
+			} else if (isInstanceOf(body, x$25)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$30)) {
+			} else if (isInstanceOf(body, x$31)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$32)) {
+			} else if (isInstanceOf(body, x$33)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$26)) {
+			} else if (isInstanceOf(body, x$27)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$24([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$25) || isArrayBufferView(body)) {
+				this.bodyInit = new x$25([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$26) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -2797,7 +2814,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$32) {
+				} else if (body instanceof x$33) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -2806,7 +2823,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$28.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$29.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -2820,13 +2837,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$28.resolve(this.bodyBlob);
+				return x$29.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$28.resolve(new x$24([this.bodyArrayBuffer]));
+				return x$29.resolve(new x$25([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$28.resolve(new x$24([this.bodyText]));
+				return x$29.resolve(new x$25([this.bodyText]));
 			}
 		}
 	}, {
@@ -2839,11 +2856,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$28.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$29.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$28.resolve(this.bodyText);
+				return x$29.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -2854,13 +2871,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$23.parse);
+			return this.text().then(x$24.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$28.reject(new x$12('Already used'));
+				return x$29.reject(new x$12('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -2991,10 +3008,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$40 = Headers;
+var x$41 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$40();
+	var headers = new x$41();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -3011,12 +3028,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$41 = XMLHttpRequest;
+var x$42 = XMLHttpRequest;
 
 function fetch(input, init) {
-	return new x$28(function (resolve, reject) {
+	return new x$29(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$41();
+		var xhr = new x$42();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -3089,18 +3106,18 @@ if (!x$10.Request) {
 	x$10.Request = Request;
 }
 
-var x$42 = Date;
+var x$43 = Date;
 
 x$10.requestAnimationFrame = x$10.requestAnimationFrame || x$10.mozRequestAnimationFrame || x$10.webkitRequestAnimationFrame || x$10.msRequestAnimationFrame || function (fn) {
 	return x$11(function () {
-		fn(x$42.now());
+		fn(x$43.now());
 	}, 30);
 };
 
-var x$43 = clearTimeout;
+var x$44 = clearTimeout;
 
 x$10.cancelAnimationFrame = x$10.cancelAnimationFrame || x$10.mozCancelAnimationFrame || function (id) {
-	return x$43(id);
+	return x$44(id);
 };
 
 x$10.global = x$10;

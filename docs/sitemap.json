@@ -148,7 +148,7 @@
 		}
 	},
 	"Promise": {
-		"j0": {}
+		"j0polyfill": {}
 	},
 	"Request": {
 		"j0polyfill": {}
