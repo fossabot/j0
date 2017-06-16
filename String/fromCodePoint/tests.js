@@ -11,7 +11,7 @@ function test(fromCodePoint, name = 'String.fromCodePoint') {
 			['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]
 		]
 		.forEach(([expected, from, to]) => {
-			it(`should be return "${expected}" from [${from.toString(16)}-${to.toString(16)}]`, function () {
+			it(`should be return a string made from [${from.toString(16)}-${to.toString(16)}]`, function () {
 				const codePoints = [];
 				for (let i = from; i <= to; i++) {
 					codePoints.push(i);

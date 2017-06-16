@@ -1,5 +1,4 @@
 /* eslint-disable no-magic-numbers */
-
 function test(codePointAt, name = 'String.prototype.codePointAt') {
 
 	describe(name, function () {
@@ -11,7 +10,7 @@ function test(codePointAt, name = 'String.prototype.codePointAt') {
 			['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]
 		]
 		.forEach(([string, from, to]) => {
-			it(`should be return [${from.toString(16)}, ..., ${to.toString(16)}] from "${string}"`, function () {
+			it(`should be return [${from.toString(16)}, ..., ${to.toString(16)}]`, function () {
 				const codePoints = [];
 				for (let i = 0, {length} = string; i < length; i++) {
 					const codePoint = codePointAt.call(string, i);

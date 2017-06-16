@@ -5,7 +5,7 @@ const buildWebdriverScript = require('./buildWebdriverScript');
 const {dest} = require('./constants');
 
 /* eslint-disable no-process-env */
-const BROWSER = process.env.BROWSER ? process.env.BROWSER : 'phantomjs';
+const BROWSER = process.env.BROWSER ? process.env.BROWSER : 'chrome';
 /* eslint-enable no-process-env */
 
 let server;
@@ -56,7 +56,13 @@ exports.config = {
 			// grid with only 5 firefox instances available you can make sure that not more than
 			// 5 instances get started at a time.
 			maxInstances: 3,
-			browserName: BROWSER
+			browserName: 'chrome',
+			chromeOptions: {
+				args: [
+					'headless',
+					'disable-gpu'
+				]
+			}
 		}
 	],
 	//
