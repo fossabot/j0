@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* global browser, $$ */
 const path = require('path');
 const chalk = require('chalk');
@@ -13,6 +14,7 @@ browser.setViewportSize({
 describe('Test All', function () {
 
 	before(function () {
+		this.timeout(30000);
 		browser.url('PAGE_URL');
 		browser.waitForExist('body');
 	});
@@ -27,7 +29,6 @@ describe('Test All', function () {
 
 	it('should pass the tests', function () {
 		const lengthToRemoveArrowMark = -2;
-		const timeout = 3000;
 		const start = Date.now();
 		const failed = [];
 		$$('.suite')
@@ -47,7 +48,7 @@ describe('Test All', function () {
 					console.error(`[failed] ${description}`);
 					tests.push(description);
 				}
-				this.timeout(timeout + Date.now() - start);
+				this.timeout(3000 + Date.now() - start);
 			});
 			if (0 < tests.length) {
 				failed.push({

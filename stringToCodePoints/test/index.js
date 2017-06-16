@@ -9,7 +9,7 @@ describe('stringToCodePoints', function () {
 		['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]
 	]
 	.forEach(([string, from, to]) => {
-		it(`should be return [${from.toString(16)}, ..., ${to.toString(16)}] from "${string}"`, function () {
+		it(`should be return [${from.toString(16)}, ..., ${to.toString(16)}]`, function () {
 			const codePoints = stringToCodePoints(string);
 			const expectedCodePoints = [];
 			for (let i = from; i <= to; i++) {
