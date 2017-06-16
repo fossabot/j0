@@ -9134,7 +9134,6 @@ test$125(generator$12, 'String.prototype[Symbol.iterator]#j0');
 test$125(String.prototype[Symbol.iterator]);
 
 /* eslint-disable no-magic-numbers */
-
 function test$127(codePointAt) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.codePointAt';
 
@@ -9147,7 +9146,7 @@ function test$127(codePointAt) {
 			    from = _ref97[1],
 			    to = _ref97[2];
 
-			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + '] from "' + string + '"', function () {
+			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
 				for (var i = 0, length = string.length; i < length; i++) {
 					var codePoint = codePointAt.call(string, i);
@@ -9219,7 +9218,7 @@ function test$131(fromCodePoint) {
 			    from = _ref99[1],
 			    to = _ref99[2];
 
-			it('should be return "' + expected + '" from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
+			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
 				for (var i = from; i <= to; i++) {
 					codePoints.push(i);
@@ -9969,7 +9968,7 @@ describe('stringToCodePoints', function () {
 		    from = _ref102[1],
 		    to = _ref102[2];
 
-		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + '] from "' + string + '"', function () {
+		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
 			var expectedCodePoints = [];
 			for (var i = from; i <= to; i++) {
