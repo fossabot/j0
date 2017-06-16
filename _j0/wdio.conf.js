@@ -4,10 +4,6 @@ const SableServer = require('sable');
 const buildWebdriverScript = require('./buildWebdriverScript');
 const {dest} = require('./constants');
 
-/* eslint-disable no-process-env */
-const BROWSER = process.env.BROWSER ? process.env.BROWSER : 'chrome';
-/* eslint-enable no-process-env */
-
 let server;
 
 exports.config = {

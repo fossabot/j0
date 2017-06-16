@@ -2,9 +2,6 @@ dist: trusty
 language: java
 jdk:
 - oraclejdk8
-env:
-  matrix:
-  - BROWSER=phantomjs
 addons:
   chrome: stable
   apt:
