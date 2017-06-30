@@ -7,6 +7,7 @@ function assign(target, ...objects) {
 			}
 		}
 	});
+	return target;
 }
 
 export default assign;
