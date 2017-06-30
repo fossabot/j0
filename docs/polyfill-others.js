@@ -267,7 +267,11 @@ function generator() {
 
 var prototype = x$6.prototype;
 
-if (!prototype[iteratorSymbol]) {
+try {
+	if ([1][iteratorSymbol]().next().value !== 1) {
+		throw 0;
+	}
+} catch (e) {
 	prototype[iteratorSymbol] = generator;
 }
 
@@ -317,7 +321,11 @@ function entries() {
 
 var prototype$2 = x$6.prototype;
 
-if (!prototype$2.entries) {
+try {
+	if ([1].entries().next().value.join(',') !== '0,1') {
+		throw 0;
+	}
+} catch (e) {
 	prototype$2.entries = entries;
 }
 
@@ -2128,7 +2136,7 @@ var Map$1 = function () {
 
 var MAP = x$10.Map;
 try {
-	if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
+	if (!MAP || !(new MAP([[0, 0]]).size === 1) || new Map([[1, 2]]).values().next().value !== 2) {
 		throw 0;
 	}
 } catch (e) {
@@ -2261,7 +2269,7 @@ var Set$1 = function () {
 
 var SET = x$10.Set;
 try {
-	if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
+	if (!SET || !(new SET([0]).size === 1) || new SET([0]).values().next().value !== 1) {
 		throw 0;
 	}
 } catch (e) {
@@ -2278,7 +2286,11 @@ function generator$4() {
 
 var prototype$14 = x$20.prototype;
 
-if (!prototype$14[iteratorSymbol]) {
+try {
+	if (new x$20([1])[iteratorSymbol]().next().value !== 1) {
+		throw 0;
+	}
+} catch (e) {
 	prototype$14[iteratorSymbol] = generator$4;
 }
 

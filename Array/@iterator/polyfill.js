@@ -4,6 +4,10 @@ import {
 } from 'j0';
 import j0Generator from './j0polyfill';
 const {prototype} = Array;
-if (!prototype[iteratorSymbol]) {
+try {
+	if ([1][iteratorSymbol]().next().value !== 1) {
+		throw 0;
+	}
+} catch (e) {
 	prototype[iteratorSymbol] = j0Generator;
 }

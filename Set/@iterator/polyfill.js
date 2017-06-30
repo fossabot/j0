@@ -4,6 +4,10 @@ import {
 } from 'j0';
 import generator from './j0polyfill';
 const {prototype} = Set;
-if (!prototype[iteratorSymbol]) {
+try {
+	if (new Set([1])[iteratorSymbol]().next().value !== 1) {
+		throw 0;
+	}
+} catch (e) {
 	prototype[iteratorSymbol] = generator;
 }
