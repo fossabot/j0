@@ -11,7 +11,11 @@ const {projectRoot} = require('../constants');
 const destDir = path.join(__dirname, '..', 'polyfill');
 
 function minify(code) {
-	const {code: minifiedCode} = UglifyJS.minify(code);
+	const {code: minifiedCode} = UglifyJS.minify(code, {
+		output: {
+			max_line_len: 120
+		}
+	});
 	return minifiedCode;
 }
 

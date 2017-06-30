@@ -2127,7 +2127,11 @@ var Map$1 = function () {
 }();
 
 var MAP = x$10.Map;
-if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
+try {
+	if (!MAP || !(new MAP([[0, 0]]).size === 1) || !MAP.prototype.forEach) {
+		throw 0;
+	}
+} catch (e) {
 	MAP = Map$1;
 }
 x$10.Map = MAP;
@@ -2256,8 +2260,11 @@ var Set$1 = function () {
 }();
 
 var SET = x$10.Set;
-
-if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
+try {
+	if (!SET || !(new SET([0]).size === 1) || !SET.prototype.forEach) {
+		throw 0;
+	}
+} catch (e) {
 	SET = Set$1;
 }
 

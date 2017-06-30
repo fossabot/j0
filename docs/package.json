@@ -1,7 +1,7 @@
 {
   "name": "j0",
   "license": "MIT",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A library of wrappers and utility functions",
   "author": {
     "name": "Kei Ito",
@@ -10,17 +10,18 @@
   },
   "repository": "kei-ito/j0",
   "browserslist": [
-    "not ie <= 10",
+    "> 5%",
     "ios 8"
   ],
   "scripts": {
     "start": "node _j0 --server",
     "polyfill": "node _j0/buildPolyfill",
-    "build": "node _j0",
+    "build": "node _j0 && npm run polyfill",
     "test": "wdio _j0/wdio.conf.js"
   },
   "main": "_j0/rollup",
   "devDependencies": {
+    "@kei-ito/editor-settings": "0.0.7",
     "autoprefixer": "^7.1.0",
     "babel-core": "^6.24.1",
     "babel-preset-env": "^1.4.0",
