@@ -12,8 +12,7 @@ const EOF = undefined;
 const ALPHA = /[a-zA-Z]/;
 const ALPHANUMERIC = /[a-zA-Z0-9+\-.]/;
 
-const relative = Object.create(null);
-Object.assign(relative, {
+const relative = {
 	ftp: 21,
 	file: 0,
 	gopher: 70,
@@ -21,15 +20,14 @@ Object.assign(relative, {
 	https: 443,
 	ws: 80,
 	wss: 443
-});
+};
 
-const relativePathDotMapping = Object.create(null);
-Object.assign(relative, {
+const relativePathDotMapping = {
 	'%2e': '.',
 	'.%2e': '..',
 	'%2e.': '..',
 	'%2e%2e': '..'
-});
+};
 
 function isRelativeScheme(scheme) {
 	return !isUndefined(relative[scheme]);
