@@ -1357,8 +1357,7 @@ var EOF = undefined;
 var ALPHA = /[a-zA-Z]/;
 var ALPHANUMERIC = /[a-zA-Z0-9+\-.]/;
 
-var relative = x$5.create(null);
-x$5.assign(relative, {
+var relative = {
 	ftp: 21,
 	file: 0,
 	gopher: 70,
@@ -1366,15 +1365,14 @@ x$5.assign(relative, {
 	https: 443,
 	ws: 80,
 	wss: 443
-});
+};
 
-var relativePathDotMapping = x$5.create(null);
-x$5.assign(relative, {
+var relativePathDotMapping = {
 	'%2e': '.',
 	'.%2e': '..',
 	'%2e.': '..',
 	'%2e%2e': '..'
-});
+};
 
 function isRelativeScheme(scheme) {
 	return !isUndefined(relative[scheme]);
