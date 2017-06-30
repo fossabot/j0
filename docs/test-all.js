@@ -7372,6 +7372,7 @@ function assign(target) {
 			}
 		}
 	});
+	return target;
 }
 
 function test$120(assign) {
@@ -7383,15 +7384,14 @@ function test$120(assign) {
 		it('should assign properties', function () {
 			var _assign, _assign2, _assert$deepEqual;
 
-			var target = {};
 			var key1 = Date.now() + '_1';
 			var key2 = Date.now() + '_2';
 			var key3 = Date.now() + '_3';
 			var value1 = Date.now() + '_4';
 			var value2 = Date.now() + '_5';
 			var value3 = Date.now() + '_6';
-			assign(target, (_assign = {}, _defineProperty(_assign, key1, value1), _defineProperty(_assign, key2, value2), _assign), (_assign2 = {}, _defineProperty(_assign2, key2, value3), _defineProperty(_assign2, key3, value2), _assign2));
-			assert.deepEqual(target, (_assert$deepEqual = {}, _defineProperty(_assert$deepEqual, key1, value1), _defineProperty(_assert$deepEqual, key2, value3), _defineProperty(_assert$deepEqual, key3, value2), _assert$deepEqual));
+			var result = assign({}, (_assign = {}, _defineProperty(_assign, key1, value1), _defineProperty(_assign, key2, value2), _assign), (_assign2 = {}, _defineProperty(_assign2, key2, value3), _defineProperty(_assign2, key3, value2), _assign2));
+			assert.deepEqual(result, (_assert$deepEqual = {}, _defineProperty(_assert$deepEqual, key1, value1), _defineProperty(_assert$deepEqual, key2, value3), _defineProperty(_assert$deepEqual, key3, value2), _assert$deepEqual));
 		});
 	});
 }

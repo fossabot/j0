@@ -225,9 +225,14 @@ function assign(target) {
 			}
 		}
 	});
+	return target;
 }
 
-if (!x$5.assign) {
+try {
+	if (x$5.assign({ a: 1 }, { a: 2 }).a !== 2) {
+		throw 0;
+	}
+} catch (e) {
 	x$5.assign = assign;
 }
 
