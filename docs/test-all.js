@@ -8644,9 +8644,9 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
+			x$39[method](newState.name, newState.params, newState.href);
 			this.emit('change', newState, this.current);
 			this.current = newState;
-			x$39[method](newState.name, newState.params, newState.href);
 		}
 	}, {
 		key: 'go',
