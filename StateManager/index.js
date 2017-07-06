@@ -106,9 +106,9 @@ class StateManager extends EventEmitter {
 		if (this.is(newState)) {
 			return;
 		}
-		this.emit('change', newState, this.current);
 		this.current = newState;
 		history[method](newState.name, newState.params, newState.href);
+		this.emit('change', newState, this.current);
 	}
 
 	go(stateInfo) {
