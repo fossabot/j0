@@ -243,6 +243,7 @@
 	"scrollY": {},
 	"setImmediate": {},
 	"stringToCodePoints": {},
+	"template": {},
 	"thermalRGB": {},
 	"throttle": {},
 	"wait": {}
