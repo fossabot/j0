@@ -8,6 +8,49 @@ function wait(duration) {
 	});
 }
 
+describe('J0Element.eventFilter', function () {
+
+	after(function () {
+		delete dom.eventFilter;
+	});
+
+	it('should set a filter', function () {
+		const actual = [];
+		dom.eventFilter = function (...args) {
+			actual.push(this, ...args);
+		};
+		const element = dom();
+		const key = `event-${Date.now()}`;
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(
+			Array.from(element.listeners)
+			.map((item) => {
+				return item.slice(0, 2);
+			}),
+			[[key, fn]]
+		);
+	});
+
+	it('should set a filter and skip addEventListener', function () {
+		const actual = [];
+		dom.eventFilter = function (...args) {
+			actual.push(this, ...args);
+			return true;
+		};
+		const element = dom();
+		const key = `event-${Date.now()}`;
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(Array.from(element.listeners), []);
+	});
+
+});
+
 describe('J0Element.prototype.on', function () {
 
 	it('should set an listener', function () {
