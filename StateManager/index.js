@@ -60,8 +60,7 @@ class StateManager extends EventEmitter {
 		return this;
 	}
 
-	get(stateInfo, noFallback) {
-		const {name, params} = stateInfo;
+	get({name, params} = {}, noFallback) {
 		const state = this.states.get(name);
 		const instantiated = state && state.instantiate(params);
 		if (instantiated) {
