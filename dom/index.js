@@ -280,6 +280,10 @@ class J0Element {
 		return this.node.attributes;
 	}
 
+	get style() {
+		return this.node.style;
+	}
+
 	find(selector) {
 		return find(selector, this.node);
 	}
