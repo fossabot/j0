@@ -13,7 +13,6 @@ import {
 } from 'j0';
 
 const nodeKey = Symbol();
-const listenersKey = Symbol();
 const getBody = new Promise(function (resolve) {
 	const interval = 50;
 	function check() {
@@ -48,8 +47,13 @@ function superForEach(...args) {
 
 class J0Element {
 
-	/* eslint-disable max-statements */
 	constructor(source = {}) {
+		Object.assign(
+			this,
+			{
+				listeners: new Set()
+			}
+		);
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
@@ -73,9 +77,7 @@ class J0Element {
 				this.attr(a);
 			}
 		}
-		this[listenersKey] = new Set();
 	}
-	/* eslint-enable max-statements */
 
 	equals(element) {
 		return this.node === wrap(element).node;
@@ -272,10 +274,6 @@ class J0Element {
 		const event = new CustomEvent(eventName, {detail});
 		this.node.dispatchEvent(event);
 		return this;
-	}
-
-	get listeners() {
-		return this[listenersKey];
 	}
 
 	get attributes() {

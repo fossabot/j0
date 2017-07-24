@@ -53,6 +53,23 @@ describe('J0Element.eventFilter', function () {
 
 describe('J0Element.prototype.on', function () {
 
+	it('should initialize with event listener', function () {
+		const key = `event-${Date.now()}`;
+		function fn() {}
+		const element = dom({
+			e: [
+				[key, fn]
+			]
+		});
+		assert.deepEqual(
+			Array.from(element.listeners)
+			.map((item) => {
+				return item.slice(0, 2);
+			}),
+			[[key, fn]]
+		);
+	});
+
 	it('should set an listener', function () {
 		const element = dom();
 		const key = `event-${Date.now()}`;
