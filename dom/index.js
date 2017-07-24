@@ -61,7 +61,7 @@ class J0Element {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			const {t, a, c, e, n, o} = source;
+			const {t, a, c, e, n, o} = source || {};
 			this[nodeKey] = wrap(
 				n
 				? document.createElementNS(n, t, o)
