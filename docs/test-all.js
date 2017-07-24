@@ -2636,7 +2636,6 @@ var x$27 = CustomEvent;
 var x$28 = Set;
 
 var nodeKey = Symbol();
-var listenersKey = Symbol();
 var getBody = new x$9(function (resolve) {
 	var interval = 50;
 	function check() {
@@ -2673,13 +2672,14 @@ function superForEach() {
 }
 
 var J0Element = function () {
-
-	/* eslint-disable max-statements */
 	function J0Element() {
 		var source = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 		_classCallCheck(this, J0Element);
 
+		x$24.assign(this, {
+			listeners: new x$28()
+		});
 		if (source instanceof J0Element) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
@@ -2705,9 +2705,7 @@ var J0Element = function () {
 				this.attr(a);
 			}
 		}
-		this[listenersKey] = new x$28();
 	}
-	/* eslint-enable max-statements */
 
 	_createClass(J0Element, [{
 		key: 'equals',
@@ -2985,11 +2983,6 @@ var J0Element = function () {
 			}
 		}
 	}, {
-		key: 'listeners',
-		get: function get() {
-			return this[listenersKey];
-		}
-	}, {
 		key: 'attributes',
 		get: function get() {
 			return this.node.attributes;
@@ -3256,6 +3249,17 @@ describe('J0Element.eventFilter', function () {
 });
 
 describe('J0Element.prototype.on', function () {
+
+	it('should initialize with event listener', function () {
+		var key = 'event-' + Date.now();
+		function fn() {}
+		var element = wrap({
+			e: [[key, fn]]
+		});
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key, fn]]);
+	});
 
 	it('should set an listener', function () {
 		var element = wrap();
@@ -3772,13 +3776,13 @@ describe('dom (J0Element)', function () {
 	});
 });
 
-var listenersKey$1 = Symbol();
+var listenersKey = Symbol();
 
 var EventEmitter = function () {
 	function EventEmitter() {
 		_classCallCheck(this, EventEmitter);
 
-		this[listenersKey$1] = new x$28();
+		this[listenersKey] = new x$28();
 	}
 
 	_createClass(EventEmitter, [{
@@ -3790,7 +3794,7 @@ var EventEmitter = function () {
 				data[_key22 - 1] = arguments[_key22];
 			}
 
-			this[listenersKey$1].forEach(function (item, index, listeners) {
+			this[listenersKey].forEach(function (item, index, listeners) {
 				var _item2 = _slicedToArray(item, 3),
 				    eventType = _item2[0],
 				    fn = _item2[1],
@@ -3808,7 +3812,7 @@ var EventEmitter = function () {
 	}, {
 		key: 'off',
 		value: function off(type, targetFn) {
-			this[listenersKey$1].forEach(function (item, index, listeners) {
+			this[listenersKey].forEach(function (item, index, listeners) {
 				var _item3 = _slicedToArray(item, 2),
 				    eventType = _item3[0],
 				    fn = _item3[1];
@@ -3822,13 +3826,13 @@ var EventEmitter = function () {
 	}, {
 		key: 'on',
 		value: function on(type, fn) {
-			this[listenersKey$1].add([type, fn]);
+			this[listenersKey].add([type, fn]);
 			return this;
 		}
 	}, {
 		key: 'once',
 		value: function once(type, fn) {
-			this[listenersKey$1].add([type, fn, true]);
+			this[listenersKey].add([type, fn, true]);
 			return this;
 		}
 	}]);
