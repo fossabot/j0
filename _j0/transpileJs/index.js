@@ -60,7 +60,7 @@ async function transpileJS(scriptPath, destPath) {
 	}
 	try {
 		const bundle = await rollup.rollup(options);
-		const {code} = bundle.generate({format: format});
+		const {code} = await bundle.generate({format: format});
 		return destPath ? writeFile(destPath, code) : code;
 	} catch (error) {
 		console.error(`Failed to transpile ${scriptPath}`);
