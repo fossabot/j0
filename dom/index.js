@@ -290,6 +290,10 @@ class J0Element {
 		return findAll(selector, this.node);
 	}
 
+	getBB() {
+		return this.node.getBoundingClientRect();
+	}
+
 }
 
 function wrap(source) {
