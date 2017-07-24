@@ -9,7 +9,8 @@ import {
 	isUndefined,
 	Promise,
 	CustomEvent,
-	Set
+	Set,
+	getComputedStyle
 } from 'j0';
 
 const nodeKey = Symbol();
@@ -284,7 +285,7 @@ class J0Element {
 		return findAll(selector, this.node);
 	}
 
-	getBB() {
+	get bb() {
 		return this.node.getBoundingClientRect();
 	}
 
@@ -342,6 +343,10 @@ class J0Element {
 			});
 		}
 		return args.length === 0;
+	}
+
+	get computedStyle() {
+		return getComputedStyle(this.node);
 	}
 
 }
