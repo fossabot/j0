@@ -301,34 +301,47 @@ class J0Element {
 	}
 
 	addClass(...args) {
-		args
-		.forEach((arg) => {
-			this.classList.add(arg);
-		});
+		const {classList} = this;
+		if (classList) {
+			args
+			.forEach((arg) => {
+				this.classList.add(arg);
+			});
+		}
 		return this;
 	}
 
 	removeClass(...args) {
-		args
-		.forEach((arg) => {
-			this.classList.remove(arg);
-		});
+		const {classList} = this;
+		if (classList) {
+			args
+			.forEach((arg) => {
+				this.classList.remove(arg);
+			});
+		}
 		return this;
 	}
 
 	toggleClass(...args) {
-		args
-		.forEach((arg) => {
-			this.classList.toggle(arg);
-		});
+		const {classList} = this;
+		if (classList) {
+			args
+			.forEach((arg) => {
+				this.classList.toggle(arg);
+			});
+		}
 		return this;
 	}
 
 	hasClass(...args) {
-		return args
-		.every((arg) => {
-			return this.classList.contains(arg);
-		});
+		const {classList} = this;
+		if (classList) {
+			return args
+			.every((arg) => {
+				return this.classList.contains(arg);
+			});
+		}
+		return args.length === 0;
 	}
 
 }
