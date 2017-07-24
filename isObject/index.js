@@ -1,8 +1,8 @@
-import {
-	Object,
-	isInstanceOf
-} from 'j0';
 function isObject(x) {
-	return isInstanceOf(x, Object);
+	if (x === null) {
+		return false;
+	}
+	const type = typeof x;
+	return type === 'object' || type === 'function';
 }
 export default isObject;
