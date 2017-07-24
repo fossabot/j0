@@ -276,14 +276,6 @@ class J0Element {
 		return this;
 	}
 
-	get attributes() {
-		return this.node.attributes;
-	}
-
-	get style() {
-		return this.node.style;
-	}
-
 	find(selector) {
 		return find(selector, this.node);
 	}
@@ -294,6 +286,49 @@ class J0Element {
 
 	getBB() {
 		return this.node.getBoundingClientRect();
+	}
+
+	get attributes() {
+		return this.node.attributes;
+	}
+
+	get style() {
+		return this.node.style;
+	}
+
+	get classList() {
+		return this.node.classList;
+	}
+
+	addClass(...args) {
+		args
+		.forEach((arg) => {
+			this.classList.add(arg);
+		});
+		return this;
+	}
+
+	removeClass(...args) {
+		args
+		.forEach((arg) => {
+			this.classList.remove(arg);
+		});
+		return this;
+	}
+
+	toggleClass(...args) {
+		args
+		.forEach((arg) => {
+			this.classList.toggle(arg);
+		});
+		return this;
+	}
+
+	hasClass(...args) {
+		return args
+		.every((arg) => {
+			return this.classList.contains(arg);
+		});
 	}
 
 }
