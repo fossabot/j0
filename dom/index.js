@@ -355,10 +355,11 @@ Object.assign(wrap, {
 	find,
 	findAll,
 	ready: async function (fn) {
-		await getBody;
+		const body = await getBody;
 		if (fn) {
-			fn();
+			fn(body);
 		}
+		return body;
 	}
 });
 
