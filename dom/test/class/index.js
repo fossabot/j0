@@ -204,4 +204,10 @@ describe('J0Element.prototype.hasClass', function () {
 		assert.equal(element.hasClass(class1, class3), false);
 	});
 
+	it('should check nodes which has no classList', function () {
+		const element = dom(document);
+		assert.equal(element.hasClass(), true);
+		assert.equal(element.hasClass(`_${Date.now()}`), false);
+	});
+
 });

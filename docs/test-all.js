@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref111 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
+	var _ref112 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -34,7 +34,7 @@ var wait$1 = function () {
 	}));
 
 	return function wait$1(_x107, _x108) {
-		return _ref111.apply(this, arguments);
+		return _ref112.apply(this, arguments);
 	};
 }();
 
@@ -2687,12 +2687,13 @@ var J0Element = function () {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			var t = source.t,
-			    a = source.a,
-			    c = source.c,
-			    e = source.e,
-			    n = source.n,
-			    o = source.o;
+			var _ref15 = source || {},
+			    t = _ref15.t,
+			    a = _ref15.a,
+			    c = _ref15.c,
+			    e = _ref15.e,
+			    n = _ref15.n,
+			    o = _ref15.o;
 
 			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
 			if (c) {
@@ -2910,13 +2911,17 @@ var J0Element = function () {
 		value: function addClass() {
 			var _this9 = this;
 
-			for (var _len20 = arguments.length, args = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-				args[_key20] = arguments[_key20];
-			}
+			var classList = this.classList;
 
-			args.forEach(function (arg) {
-				_this9.classList.add(arg);
-			});
+			if (classList) {
+				for (var _len20 = arguments.length, args = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+					args[_key20] = arguments[_key20];
+				}
+
+				args.forEach(function (arg) {
+					_this9.classList.add(arg);
+				});
+			}
 			return this;
 		}
 	}, {
@@ -2924,13 +2929,17 @@ var J0Element = function () {
 		value: function removeClass() {
 			var _this10 = this;
 
-			for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
-				args[_key21] = arguments[_key21];
-			}
+			var classList = this.classList;
 
-			args.forEach(function (arg) {
-				_this10.classList.remove(arg);
-			});
+			if (classList) {
+				for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+					args[_key21] = arguments[_key21];
+				}
+
+				args.forEach(function (arg) {
+					_this10.classList.remove(arg);
+				});
+			}
 			return this;
 		}
 	}, {
@@ -2938,13 +2947,17 @@ var J0Element = function () {
 		value: function toggleClass() {
 			var _this11 = this;
 
-			for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
-				args[_key22] = arguments[_key22];
-			}
+			var classList = this.classList;
 
-			args.forEach(function (arg) {
-				_this11.classList.toggle(arg);
-			});
+			if (classList) {
+				for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+					args[_key22] = arguments[_key22];
+				}
+
+				args.forEach(function (arg) {
+					_this11.classList.toggle(arg);
+				});
+			}
 			return this;
 		}
 	}, {
@@ -2952,13 +2965,18 @@ var J0Element = function () {
 		value: function hasClass() {
 			var _this12 = this;
 
+			var classList = this.classList;
+
 			for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
 				args[_key23] = arguments[_key23];
 			}
 
-			return args.every(function (arg) {
-				return _this12.classList.contains(arg);
-			});
+			if (classList) {
+				return args.every(function (arg) {
+					return _this12.classList.contains(arg);
+				});
+			}
+			return args.length === 0;
 		}
 	}, {
 		key: 'node',
@@ -3083,7 +3101,8 @@ x$24.assign(wrap, {
 	find: _find,
 	findAll: _findAll,
 	ready: function () {
-		var _ref15 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
+		var _ref16 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
+			var body;
 			return regeneratorRuntime.wrap(function _callee10$(_context10) {
 				while (1) {
 					switch (_context10.prev = _context10.next) {
@@ -3092,11 +3111,14 @@ x$24.assign(wrap, {
 							return getBody;
 
 						case 2:
-							if (fn) {
-								fn();
-							}
+							body = _context10.sent;
 
-						case 3:
+							if (fn) {
+								fn(body);
+							}
+							return _context10.abrupt('return', body);
+
+						case 5:
 						case 'end':
 							return _context10.stop();
 					}
@@ -3105,7 +3127,7 @@ x$24.assign(wrap, {
 		}));
 
 		function ready(_x28) {
-			return _ref15.apply(this, arguments);
+			return _ref16.apply(this, arguments);
 		}
 
 		return ready;
@@ -3331,6 +3353,12 @@ describe('J0Element.prototype.hasClass', function () {
 		assert.equal(element.hasClass(class1), true);
 		assert.equal(element.hasClass(class1, class2), true);
 		assert.equal(element.hasClass(class1, class3), false);
+	});
+
+	it('should check nodes which has no classList', function () {
+		var element = wrap(document);
+		assert.equal(element.hasClass(), true);
+		assert.equal(element.hasClass('_' + Date.now()), false);
 	});
 });
 
@@ -3571,8 +3599,8 @@ describe('J0Element.prototype.emit', function () {
 			while (1) {
 				switch (_context12.prev = _context12.next) {
 					case 0:
-						onCall = function onCall(_ref22) {
-							var detail = _ref22.detail;
+						onCall = function onCall(_ref23) {
+							var detail = _ref23.detail;
 
 							results.push(detail);
 						};
@@ -3607,8 +3635,8 @@ describe('J0Element.prototype.once', function () {
 			while (1) {
 				switch (_context13.prev = _context13.next) {
 					case 0:
-						onCall = function onCall(_ref24) {
-							var detail = _ref24.detail;
+						onCall = function onCall(_ref25) {
+							var detail = _ref25.detail;
 
 							results.push(detail);
 						};
@@ -4155,12 +4183,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator23 = iterable[Symbol.iterator](), _step23; !(_iteratorNormalCompletion23 = (_step23 = _iterator23.next()).done); _iteratorNormalCompletion23 = true) {
-					var _ref25 = _step23.value;
+					var _ref26 = _step23.value;
 
-					var _ref26 = _slicedToArray(_ref25, 2);
+					var _ref27 = _slicedToArray(_ref26, 2);
 
-					var key = _ref26[0];
-					var value = _ref26[1];
+					var key = _ref27[0];
+					var value = _ref27[1];
 
 					this.append(key, value);
 				}
@@ -4189,9 +4217,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref27) {
-				var _ref28 = _slicedToArray(_ref27, 1),
-				    itemName = _ref28[0];
+			return this.data.findIndex(function (_ref28) {
+				var _ref29 = _slicedToArray(_ref28, 1),
+				    itemName = _ref29[0];
 
 				return itemName === name;
 			});
@@ -4219,9 +4247,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref29) {
-				var _ref30 = _slicedToArray(_ref29, 1),
-				    itemName = _ref30[0];
+			this.data = this.data.filter(function (_ref30) {
+				var _ref31 = _slicedToArray(_ref30, 1),
+				    itemName = _ref31[0];
 
 				return itemName !== name;
 			});
@@ -4229,9 +4257,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref31) {
-				var _ref32 = _slicedToArray(_ref31, 1),
-				    itemName = _ref32[0];
+			var found = this.data.find(function (_ref32) {
+				var _ref33 = _slicedToArray(_ref32, 1),
+				    itemName = _ref33[0];
 
 				return itemName === name;
 			});
@@ -4241,10 +4269,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref33) {
-				var _ref34 = _slicedToArray(_ref33, 2),
-				    itemName = _ref34[0],
-				    value = _ref34[1];
+			this.data.forEach(function (_ref34) {
+				var _ref35 = _slicedToArray(_ref34, 2),
+				    itemName = _ref35[0],
+				    value = _ref35[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4255,11 +4283,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref35) {
-				var _ref36 = _slicedToArray(_ref35, 2),
-				    name = _ref36[0],
-				    _ref36$ = _ref36[1],
-				    value = _ref36$ === undefined ? '' : _ref36$;
+			return this.data.map(function (_ref36) {
+				var _ref37 = _slicedToArray(_ref36, 2),
+				    name = _ref37[0],
+				    _ref37$ = _ref37[1],
+				    value = _ref37$ === undefined ? '' : _ref37$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -4420,8 +4448,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref37) {
-			var headers = _ref37.headers;
+		value: function inheritFrom(input, body, _ref38) {
+			var headers = _ref38.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -4562,12 +4590,12 @@ function fetch$1(input, init) {
 
 		try {
 			for (var _iterator24 = request.headers.entries()[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
-				var _ref38 = _step24.value;
+				var _ref39 = _step24.value;
 
-				var _ref39 = _slicedToArray(_ref38, 2);
+				var _ref40 = _slicedToArray(_ref39, 2);
 
-				var _name2 = _ref39[0];
-				var value = _ref39[1];
+				var _name2 = _ref40[0];
+				var value = _ref40[1];
 
 				xhr.setRequestHeader(_name2, value);
 			}
@@ -5121,7 +5149,11 @@ describe('isNumber', function () {
 });
 
 function isObject(x) {
-	return isInstanceOf(x, x$24);
+	if (x === null) {
+		return false;
+	}
+	var type = typeof x === 'undefined' ? 'undefined' : _typeof(x);
+	return type === 'object' || type === 'function';
 }
 
 describe('isObject', function () {
@@ -5513,12 +5545,12 @@ var Map$1 = function () {
 
 			try {
 				for (var _iterator27 = iterable[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-					var _ref40 = _step27.value;
+					var _ref41 = _step27.value;
 
-					var _ref41 = _slicedToArray(_ref40, 2);
+					var _ref42 = _slicedToArray(_ref41, 2);
 
-					var key = _ref41[0];
-					var value = _ref41[1];
+					var key = _ref42[0];
+					var value = _ref42[1];
 
 					this.set(key, value);
 				}
@@ -5547,9 +5579,9 @@ var Map$1 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref42) {
-				var _ref43 = _slicedToArray(_ref42, 1),
-				    itemKey = _ref43[0];
+			return this.data.findIndex(function (_ref43) {
+				var _ref44 = _slicedToArray(_ref43, 1),
+				    itemKey = _ref44[0];
 
 				return itemKey === key;
 			});
@@ -5573,9 +5605,9 @@ var Map$1 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref44) {
-				var _ref45 = _slicedToArray(_ref44, 1),
-				    itemKey = _ref45[0];
+			var found = this.data.find(function (_ref45) {
+				var _ref46 = _slicedToArray(_ref45, 1),
+				    itemKey = _ref46[0];
 
 				return itemKey === key;
 			});
@@ -5603,10 +5635,10 @@ var Map$1 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this21 = this;
 
-			this.data.slice().forEach(function (_ref46) {
-				var _ref47 = _slicedToArray(_ref46, 2),
-				    key = _ref47[0],
-				    value = _ref47[1];
+			this.data.slice().forEach(function (_ref47) {
+				var _ref48 = _slicedToArray(_ref47, 2),
+				    key = _ref48[0],
+				    value = _ref48[1];
 
 				fn.call(thisArg, value, key, _this21);
 			});
@@ -8507,8 +8539,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref84, name, expression, offset, source) {
-				var length = _ref84.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref85, name, expression, offset, source) {
+				var length = _ref85.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -8787,11 +8819,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator35 = this.states[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
-					var _ref85 = _step35.value;
+					var _ref86 = _step35.value;
 
-					var _ref86 = _slicedToArray(_ref85, 2);
+					var _ref87 = _slicedToArray(_ref86, 2);
 
-					var state = _ref86[1];
+					var state = _ref87[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -8830,9 +8862,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref87 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref87.name,
-			    params = _ref87.params;
+			var _ref88 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref88.name,
+			    params = _ref88.params;
 
 			var noFallback = arguments[1];
 
@@ -8956,11 +8988,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator36 = states.states[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
-				var _ref88 = _step36.value;
+				var _ref89 = _step36.value;
 
-				var _ref89 = _slicedToArray(_ref88, 2);
+				var _ref90 = _slicedToArray(_ref89, 2);
 
-				var state = _ref89[1];
+				var state = _ref90[1];
 
 				results.push(state);
 			}
@@ -9035,7 +9067,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-		var states, name0, name1, name2, _ref91, _ref92, toState, fromState;
+		var states, name0, name1, name2, _ref92, _ref93, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
@@ -9068,10 +9100,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref91 = _context51.sent;
-						_ref92 = _slicedToArray(_ref91, 2);
-						toState = _ref92[0];
-						fromState = _ref92[1];
+						_ref92 = _context51.sent;
+						_ref93 = _slicedToArray(_ref92, 2);
+						toState = _ref93[0];
+						fromState = _ref93[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -9386,11 +9418,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref97) {
-			var _ref98 = _slicedToArray(_ref97, 3),
-			    string = _ref98[0],
-			    from = _ref98[1],
-			    to = _ref98[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref98) {
+			var _ref99 = _slicedToArray(_ref98, 3),
+			    string = _ref99[0],
+			    from = _ref99[1],
+			    to = _ref99[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -9458,11 +9490,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
-			var _ref100 = _slicedToArray(_ref99, 3),
-			    expected = _ref100[0],
-			    from = _ref100[1],
-			    to = _ref100[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref100) {
+			var _ref101 = _slicedToArray(_ref100, 3),
+			    expected = _ref101[0],
+			    from = _ref101[1],
+			    to = _ref101[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10208,11 +10240,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref102) {
-		var _ref103 = _slicedToArray(_ref102, 3),
-		    string = _ref103[0],
-		    from = _ref103[1],
-		    to = _ref103[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref103) {
+		var _ref104 = _slicedToArray(_ref103, 3),
+		    string = _ref104[0],
+		    from = _ref104[1],
+		    to = _ref104[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -10603,18 +10635,18 @@ function test$141(URL) {
 		// 		['hash', '']
 		// 	]
 		// ],
-		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref105, index) {
-			var _ref106 = _slicedToArray(_ref105, 2),
-			    input = _ref106[0],
-			    tests = _ref106[1];
+		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref106, index) {
+			var _ref107 = _slicedToArray(_ref106, 2),
+			    input = _ref107[0],
+			    tests = _ref107[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new (Function.prototype.bind.apply(URL, [null].concat(_toConsumableArray(input))))();
-					tests.forEach(function (_ref107) {
-						var _ref108 = _slicedToArray(_ref107, 2),
-						    key = _ref108[0],
-						    expected = _ref108[1];
+					tests.forEach(function (_ref108) {
+						var _ref109 = _slicedToArray(_ref108, 2),
+						    key = _ref109[0],
+						    expected = _ref109[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -11273,11 +11305,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref109) {
-				var _ref110 = _slicedToArray(_ref109, 2),
-				    name = _ref110[0],
-				    _ref110$ = _ref110[1],
-				    value = _ref110$ === undefined ? '' : _ref110$;
+			return this.data.map(function (_ref110) {
+				var _ref111 = _slicedToArray(_ref110, 2),
+				    name = _ref111[0],
+				    _ref111$ = _ref111[1],
+				    value = _ref111$ === undefined ? '' : _ref111$;
 
 				return name + '=' + value;
 			}).join('&');
