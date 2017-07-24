@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref110 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
+	var _ref111 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -33,8 +33,8 @@ var wait$1 = function () {
 		}, _callee58, this);
 	}));
 
-	return function wait$1(_x106, _x107) {
-		return _ref110.apply(this, arguments);
+	return function wait$1(_x107, _x108) {
+		return _ref111.apply(this, arguments);
 	};
 }();
 
@@ -2903,6 +2903,11 @@ var J0Element = function () {
 			return _findAll(selector, this.node);
 		}
 	}, {
+		key: 'getBB',
+		value: function getBB() {
+			return this.node.getBoundingClientRect();
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -3529,6 +3534,18 @@ describe('J0Element.prototype.firstChild', function () {
 		assert.equal(element.firstChild.equals(element1), true);
 		element.firstChild = element2;
 		assert.equal(element.firstChild.equals(element2), true);
+	});
+});
+
+describe('J0Element.prototype.getBB', function () {
+
+	it('should get a bounding box', function () {
+		var _wrap$getBB = wrap().getBB(),
+		    left = _wrap$getBB.left,
+		    top = _wrap$getBB.top;
+
+		assert.equal(left, 0);
+		assert.equal(top, 0);
 	});
 });
 
@@ -8636,9 +8653,12 @@ var StateManager = function (_EventEmitter) {
 		}
 	}, {
 		key: 'get',
-		value: function get(stateInfo, noFallback) {
-			var name = stateInfo.name,
-			    params = stateInfo.params;
+		value: function get() {
+			var _ref87 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref87.name,
+			    params = _ref87.params;
+
+			var noFallback = arguments[1];
 
 			var state = this.states.get(name);
 			var instantiated = state && state.instantiate(params);
@@ -8760,11 +8780,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator36 = states.states[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
-				var _ref87 = _step36.value;
+				var _ref88 = _step36.value;
 
-				var _ref88 = _slicedToArray(_ref87, 2);
+				var _ref89 = _slicedToArray(_ref88, 2);
 
-				var state = _ref88[1];
+				var state = _ref89[1];
 
 				results.push(state);
 			}
@@ -8839,7 +8859,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-		var states, name0, name1, name2, _ref90, _ref91, toState, fromState;
+		var states, name0, name1, name2, _ref91, _ref92, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
@@ -8872,10 +8892,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref90 = _context51.sent;
-						_ref91 = _slicedToArray(_ref90, 2);
-						toState = _ref91[0];
-						fromState = _ref91[1];
+						_ref91 = _context51.sent;
+						_ref92 = _slicedToArray(_ref91, 2);
+						toState = _ref92[0];
+						fromState = _ref92[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -9190,11 +9210,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref96) {
-			var _ref97 = _slicedToArray(_ref96, 3),
-			    string = _ref97[0],
-			    from = _ref97[1],
-			    to = _ref97[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref97) {
+			var _ref98 = _slicedToArray(_ref97, 3),
+			    string = _ref98[0],
+			    from = _ref98[1],
+			    to = _ref98[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -9262,11 +9282,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref98) {
-			var _ref99 = _slicedToArray(_ref98, 3),
-			    expected = _ref99[0],
-			    from = _ref99[1],
-			    to = _ref99[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
+			var _ref100 = _slicedToArray(_ref99, 3),
+			    expected = _ref100[0],
+			    from = _ref100[1],
+			    to = _ref100[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10012,11 +10032,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref101) {
-		var _ref102 = _slicedToArray(_ref101, 3),
-		    string = _ref102[0],
-		    from = _ref102[1],
-		    to = _ref102[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref102) {
+		var _ref103 = _slicedToArray(_ref102, 3),
+		    string = _ref103[0],
+		    from = _ref103[1],
+		    to = _ref103[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -10407,18 +10427,18 @@ function test$141(URL) {
 		// 		['hash', '']
 		// 	]
 		// ],
-		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref104, index) {
-			var _ref105 = _slicedToArray(_ref104, 2),
-			    input = _ref105[0],
-			    tests = _ref105[1];
+		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref105, index) {
+			var _ref106 = _slicedToArray(_ref105, 2),
+			    input = _ref106[0],
+			    tests = _ref106[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new (Function.prototype.bind.apply(URL, [null].concat(_toConsumableArray(input))))();
-					tests.forEach(function (_ref106) {
-						var _ref107 = _slicedToArray(_ref106, 2),
-						    key = _ref107[0],
-						    expected = _ref107[1];
+					tests.forEach(function (_ref107) {
+						var _ref108 = _slicedToArray(_ref107, 2),
+						    key = _ref108[0],
+						    expected = _ref108[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -11077,11 +11097,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref108) {
-				var _ref109 = _slicedToArray(_ref108, 2),
-				    name = _ref109[0],
-				    _ref109$ = _ref109[1],
-				    value = _ref109$ === undefined ? '' : _ref109$;
+			return this.data.map(function (_ref109) {
+				var _ref110 = _slicedToArray(_ref109, 2),
+				    name = _ref110[0],
+				    _ref110$ = _ref110[1],
+				    value = _ref110$ === undefined ? '' : _ref110$;
 
 				return name + '=' + value;
 			}).join('&');
