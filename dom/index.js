@@ -88,21 +88,21 @@ class J0Element {
 		return this[nodeKey];
 	}
 
-	text(text) {
-		const {node} = this;
-		if (isUndefined(text)) {
-			return node.textContent;
-		}
-		node.textContent = text;
+	get text() {
+		return this.node.textContent;
+	}
+
+	setText(text) {
+		this.node.textContent = text;
 		return this;
 	}
 
-	html(html) {
-		const {node} = this;
-		if (isUndefined(html)) {
-			return node.innerHTML;
-		}
-		node.innerHTML = html;
+	get html() {
+		return this.node.innerHTML;
+	}
+
+	setHTML(html) {
+		this.node.innerHTML = html;
 		return this;
 	}
 
@@ -111,8 +111,9 @@ class J0Element {
 		return parentNode && wrap(parentNode);
 	}
 
-	set parent(source) {
+	setParent(source) {
 		wrap(source).append(this);
+		return this;
 	}
 
 	insertBefore(newElement, referenceElement) {
@@ -124,8 +125,9 @@ class J0Element {
 		return previousSibling ? wrap(previousSibling) : null;
 	}
 
-	set previous(element) {
+	setPrevious(element) {
 		this.parent.insertBefore(element, this);
+		return this;
 	}
 
 	get next() {
@@ -133,8 +135,9 @@ class J0Element {
 		return nextSibling ? wrap(nextSibling) : null;
 	}
 
-	set next(element) {
+	setNext(element) {
 		this.parent.insertBefore(element, this.next);
+		return this;
 	}
 
 	get childNodes() {
@@ -152,13 +155,14 @@ class J0Element {
 		return firstChild ? wrap(firstChild) : null;
 	}
 
-	set firstChild(element) {
+	setFirstChild(element) {
 		const {firstChild} = this;
 		if (firstChild) {
-			firstChild.previous = element;
+			firstChild.setPrevious(element);
 		} else {
 			this.append(element);
 		}
+		return this;
 	}
 
 	get lastChild() {
@@ -166,19 +170,20 @@ class J0Element {
 		return lastChild ? wrap(lastChild) : null;
 	}
 
-	set lastChild(element) {
+	setLastChild(element) {
 		const {lastChild} = this;
 		if (lastChild) {
-			this.lastChild.next = element;
+			this.lastChild.setNext(element);
 		} else {
 			this.append(element);
 		}
+		return this;
 	}
 
 	prepend(...elements) {
 		elements
 		.forEach((element) => {
-			this.firstChild = element;
+			this.setFirstChild(element);
 		});
 		return this;
 	}
@@ -295,6 +300,11 @@ class J0Element {
 
 	get style() {
 		return this.node.style;
+	}
+
+	setStyle(styles) {
+		Object.assign(this.style, styles);
+		return this;
 	}
 
 	get classList() {

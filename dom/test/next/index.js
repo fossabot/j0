@@ -11,7 +11,7 @@ describe('J0Element.prototype.next', function () {
 			]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
+		element1.setNext(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 
@@ -25,7 +25,7 @@ describe('J0Element.prototype.next', function () {
 			]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
+		element1.setNext(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 

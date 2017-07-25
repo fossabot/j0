@@ -33,7 +33,7 @@ var wait$1 = function () {
 		}, _callee58, this);
 	}));
 
-	return function wait$1(_x107, _x108) {
+	return function wait$1(_x108, _x109) {
 		return _ref112.apply(this, arguments);
 	};
 }();
@@ -2635,6 +2635,8 @@ var x$27 = CustomEvent;
 
 var x$28 = Set;
 
+var x$29 = getComputedStyle;
+
 var nodeKey = Symbol();
 var getBody = new x$9(function (resolve) {
 	var interval = 50;
@@ -2714,31 +2716,63 @@ var J0Element = function () {
 			return this.node === wrap(element).node;
 		}
 	}, {
-		key: 'text',
-		value: function text(_text) {
-			var node = this.node;
-
-			if (isUndefined(_text)) {
-				return node.textContent;
-			}
-			node.textContent = _text;
+		key: 'setText',
+		value: function setText(text) {
+			this.node.textContent = text;
 			return this;
 		}
 	}, {
-		key: 'html',
-		value: function html(_html) {
-			var node = this.node;
-
-			if (isUndefined(_html)) {
-				return node.innerHTML;
-			}
-			node.innerHTML = _html;
+		key: 'setHTML',
+		value: function setHTML(html) {
+			this.node.innerHTML = html;
+			return this;
+		}
+	}, {
+		key: 'setParent',
+		value: function setParent(source) {
+			wrap(source).append(this);
 			return this;
 		}
 	}, {
 		key: 'insertBefore',
 		value: function insertBefore(newElement, referenceElement) {
 			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
+		}
+	}, {
+		key: 'setPrevious',
+		value: function setPrevious(element) {
+			this.parent.insertBefore(element, this);
+			return this;
+		}
+	}, {
+		key: 'setNext',
+		value: function setNext(element) {
+			this.parent.insertBefore(element, this.next);
+			return this;
+		}
+	}, {
+		key: 'setFirstChild',
+		value: function setFirstChild(element) {
+			var firstChild = this.firstChild;
+
+			if (firstChild) {
+				firstChild.setPrevious(element);
+			} else {
+				this.append(element);
+			}
+			return this;
+		}
+	}, {
+		key: 'setLastChild',
+		value: function setLastChild(element) {
+			var lastChild = this.lastChild;
+
+			if (lastChild) {
+				this.lastChild.setNext(element);
+			} else {
+				this.append(element);
+			}
+			return this;
 		}
 	}, {
 		key: 'prepend',
@@ -2750,7 +2784,7 @@ var J0Element = function () {
 			}
 
 			elements.forEach(function (element) {
-				_this3.firstChild = element;
+				_this3.setFirstChild(element);
 			});
 			return this;
 		}
@@ -2902,9 +2936,10 @@ var J0Element = function () {
 			return _findAll(selector, this.node);
 		}
 	}, {
-		key: 'getBB',
-		value: function getBB() {
-			return this.node.getBoundingClientRect();
+		key: 'setStyle',
+		value: function setStyle(styles) {
+			x$24.assign(this.style, styles);
+			return this;
 		}
 	}, {
 		key: 'addClass',
@@ -2979,9 +3014,26 @@ var J0Element = function () {
 			return args.length === 0;
 		}
 	}, {
+		key: 'clone',
+		value: function clone() {
+			var deep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+			return wrap(this.node.cloneNode(deep));
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
+		}
+	}, {
+		key: 'text',
+		get: function get() {
+			return this.node.textContent;
+		}
+	}, {
+		key: 'html',
+		get: function get() {
+			return this.node.innerHTML;
 		}
 	}, {
 		key: 'parent',
@@ -2989,9 +3041,6 @@ var J0Element = function () {
 			var parentNode = this.node.parentNode;
 
 			return parentNode && wrap(parentNode);
-		},
-		set: function set(source) {
-			wrap(source).append(this);
 		}
 	}, {
 		key: 'previous',
@@ -2999,9 +3048,6 @@ var J0Element = function () {
 			var previousSibling = this.node.previousSibling;
 
 			return previousSibling ? wrap(previousSibling) : null;
-		},
-		set: function set(element) {
-			this.parent.insertBefore(element, this);
 		}
 	}, {
 		key: 'next',
@@ -3009,9 +3055,6 @@ var J0Element = function () {
 			var nextSibling = this.node.nextSibling;
 
 			return nextSibling ? wrap(nextSibling) : null;
-		},
-		set: function set(element) {
-			this.parent.insertBefore(element, this.next);
 		}
 	}, {
 		key: 'childNodes',
@@ -3029,15 +3072,6 @@ var J0Element = function () {
 			var firstChild = this.node.firstChild;
 
 			return firstChild ? wrap(firstChild) : null;
-		},
-		set: function set(element) {
-			var firstChild = this.firstChild;
-
-			if (firstChild) {
-				firstChild.previous = element;
-			} else {
-				this.append(element);
-			}
 		}
 	}, {
 		key: 'lastChild',
@@ -3045,15 +3079,11 @@ var J0Element = function () {
 			var lastChild = this.node.lastChild;
 
 			return lastChild ? wrap(lastChild) : null;
-		},
-		set: function set(element) {
-			var lastChild = this.lastChild;
-
-			if (lastChild) {
-				this.lastChild.next = element;
-			} else {
-				this.append(element);
-			}
+		}
+	}, {
+		key: 'bb',
+		get: function get() {
+			return this.node.getBoundingClientRect();
 		}
 	}, {
 		key: 'attributes',
@@ -3069,6 +3099,11 @@ var J0Element = function () {
 		key: 'classList',
 		get: function get() {
 			return this.node.classList;
+		}
+	}, {
+		key: 'computedStyle',
+		get: function get() {
+			return x$29(this.node);
 		}
 	}]);
 
@@ -3126,7 +3161,7 @@ x$24.assign(wrap, {
 			}, _callee10, this);
 		}));
 
-		function ready(_x28) {
+		function ready(_x29) {
 			return _ref16.apply(this, arguments);
 		}
 
@@ -3222,6 +3257,18 @@ describe('J0Element.prototype.attr', function () {
 		element.attr([_defineProperty({}, key1, value1), _defineProperty({}, key2, value2)]);
 		assert.equal(element.getAttribute(key1), value1);
 		assert.equal(element.getAttribute(key2), value2);
+	});
+});
+
+describe('J0Element.prototype.bb', function () {
+
+	it('should get a bounding box', function () {
+		var _wrap$bb = wrap().bb,
+		    left = _wrap$bb.left,
+		    top = _wrap$bb.top;
+
+		assert.equal(left, 0);
+		assert.equal(top, 0);
 	});
 });
 
@@ -3359,6 +3406,37 @@ describe('J0Element.prototype.hasClass', function () {
 		var element = wrap(document);
 		assert.equal(element.hasClass(), true);
 		assert.equal(element.hasClass('_' + Date.now()), false);
+	});
+});
+
+describe('J0Element.prototype.clone', function () {
+
+	it('should clone a text node', function () {
+		var text = '' + Date.now();
+		var element1 = wrap(text);
+		assert.equal(element1.text, text);
+		var element2 = element1.clone();
+		assert.equal(element2.text, text);
+	});
+
+	it('should clone an element node', function () {
+		var text = '' + Date.now();
+		var element1 = wrap({
+			c: [text]
+		});
+		assert.equal(element1.text, text);
+		var element2 = element1.clone();
+		assert.equal(element2.text, text);
+	});
+
+	it('should clone an element node shallowly', function () {
+		var text = '' + Date.now();
+		var element1 = wrap({
+			c: [text]
+		});
+		assert.equal(element1.text, text);
+		var element2 = element1.clone(false);
+		assert.equal(element2.text, '');
 	});
 });
 
@@ -3736,20 +3814,8 @@ describe('J0Element.prototype.firstChild', function () {
 			c: [element1]
 		});
 		assert.equal(element.firstChild.equals(element1), true);
-		element.firstChild = element2;
+		element.setFirstChild(element2);
 		assert.equal(element.firstChild.equals(element2), true);
-	});
-});
-
-describe('J0Element.prototype.getBB', function () {
-
-	it('should get a bounding box', function () {
-		var _wrap$getBB = wrap().getBB(),
-		    left = _wrap$getBB.left,
-		    top = _wrap$getBB.top;
-
-		assert.equal(left, 0);
-		assert.equal(top, 0);
 	});
 });
 
@@ -3764,7 +3830,7 @@ describe('J0Element.prototype.html', function () {
 			}]
 		});
 		var expected = '<span>' + text + '</span>';
-		assert.equal(element.html(), expected);
+		assert.equal(element.html, expected);
 	});
 
 	it('should set its innerHTML', function () {
@@ -3772,9 +3838,9 @@ describe('J0Element.prototype.html', function () {
 		var element = wrap({
 			c: [{}, {}, text]
 		});
-		element.html('<s>' + text + '</s>');
+		element.setHTML('<s>' + text + '</s>');
 		var expected = '<s>' + text + '</s>';
-		assert.equal(element.html(), expected);
+		assert.equal(element.html, expected);
 	});
 });
 
@@ -3826,7 +3892,7 @@ describe('J0Element.prototype.lastChild', function () {
 			c: [element1]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element.lastChild = element2;
+		element.setLastChild(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 });
@@ -3840,7 +3906,7 @@ describe('J0Element.prototype.next', function () {
 			c: [element1]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
+		element1.setNext(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 
@@ -3851,7 +3917,7 @@ describe('J0Element.prototype.next', function () {
 			c: [element2, element1]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
+		element1.setNext(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 
@@ -3876,7 +3942,7 @@ describe('J0Element.prototype.parent', function () {
 	it('should set its parent', function () {
 		var element1 = wrap();
 		var element2 = wrap();
-		element1.parent = element2;
+		element1.setParent(element2);
 		assert.equal(element1.parent.equals(element2), true);
 	});
 });
@@ -3904,7 +3970,7 @@ describe('J0Element.prototype.previous', function () {
 			c: [element1]
 		});
 		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
+		element1.setPrevious(element2);
 		assert.equal(element.firstChild.equals(element2), true);
 	});
 
@@ -3915,7 +3981,7 @@ describe('J0Element.prototype.previous', function () {
 			c: [element1, element2]
 		});
 		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
+		element1.setPrevious(element2);
 		assert.equal(element.firstChild.equals(element2), true);
 	});
 
@@ -3944,28 +4010,28 @@ describe('J0Element.prototype.remove', function () {
 	});
 });
 
-describe('J0Element.prototype.next', function () {
+describe('J0Element.prototype.text', function () {
 
-	it('should insert a new child before an existing child', function () {
-		var element1 = wrap();
-		var element2 = wrap();
+	it('should return its textContent', function () {
+		var text = '' + Date.now();
 		var element = wrap({
-			c: [element1]
+			c: [{
+				t: 'span',
+				c: [text]
+			}]
 		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
-		assert.equal(element.lastChild.equals(element2), true);
+		var expected = text;
+		assert.equal(element.text, expected);
 	});
 
-	it('should replace an existing child', function () {
-		var element1 = wrap();
-		var element2 = wrap();
+	it('should set its textContent', function () {
+		var text = '' + Date.now();
 		var element = wrap({
-			c: [element2, element1]
+			c: [{}, {}, text]
 		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.next = element2;
-		assert.equal(element.lastChild.equals(element2), true);
+		element.setText('<s>' + text + '</s>');
+		var expected = '<s>' + text + '</s>';
+		assert.equal(element.text, expected);
 	});
 });
 
@@ -4537,10 +4603,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$29 = Headers;
+var x$30 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$29();
+	var headers = new x$30();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4557,12 +4623,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$30 = XMLHttpRequest;
+var x$31 = XMLHttpRequest;
 
 function fetch$1(input, init) {
 	return new x$9(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$30();
+		var xhr = new x$31();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -4646,7 +4712,7 @@ tests$3(fetch$1, 'J0Fetch');
 
 tests$3(fetch);
 
-var x$31 = Date;
+var x$32 = Date;
 
 function leftpad(x) {
 	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -4665,7 +4731,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template) {
-	var date = new x$31(src);
+	var date = new x$32(src);
 	if (0 < date) {
 		var Y = date.getFullYear();
 		var M = date.getMonth();
@@ -4869,10 +4935,10 @@ test$23(generator$2, 'HTMLCollection/@iterator/j0');
 
 test$23(HTMLCollection.prototype[Symbol.iterator]);
 
-var x$32 = window;
+var x$33 = window;
 
 function innerHeight() {
-	return x$32.innerHeight;
+	return x$33.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -4883,7 +4949,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$32.innerWidth;
+	return x$33.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -5884,10 +5950,10 @@ function test$34(acosh) {
 	});
 }
 
-var x$33 = Math;
+var x$34 = Math;
 
 function acosh(x) {
-	return x$33.log(x + x$33.sqrt(x * x - 1));
+	return x$34.log(x + x$34.sqrt(x * x - 1));
 }
 
 test$34(acosh, 'Math.acosh#j0');
@@ -5966,7 +6032,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$33.log(x + x$33.sqrt(x * x + 1));
+	return x$34.log(x + x$34.sqrt(x * x + 1));
 }
 
 test$38(asinh, 'Math.asinh#j0');
@@ -6105,7 +6171,7 @@ function test$44(atanh) {
 }
 
 function atanh(x) {
-	return x$33.log((1 + x) / (1 - x)) / 2;
+	return x$34.log((1 + x) / (1 - x)) / 2;
 }
 
 test$44(atanh, 'Math.atanh#j0');
@@ -6147,7 +6213,7 @@ function test$46(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$33.pow(x$33.abs(x), 1 / 3);
+	var root = x$34.pow(x$34.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -6231,7 +6297,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$33.floor(x$33.log(x >>> 0) * x$33.LOG2E);
+	return 31 - x$34.floor(x$34.log(x >>> 0) * x$34.LOG2E);
 }
 
 test$50(clz32, 'Math.clz32#j0');
@@ -6307,7 +6373,7 @@ function test$54(cosh) {
 }
 
 function cosh(x) {
-	var y = x$33.exp(x);
+	var y = x$34.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -6399,7 +6465,7 @@ function test$60(expm1) {
 }
 
 function expm1(x) {
-	return x$33.exp(x) - 1;
+	return x$34.exp(x) - 1;
 }
 
 test$60(expm1, 'Math.expm1#j0');
@@ -6533,7 +6599,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$33.sqrt(sum);
+	return x$34.sqrt(sum);
 }
 
 test$66(hypot, 'Math.hypot#j0');
@@ -6707,7 +6773,7 @@ function test$76(log10) {
 }
 
 function log10(x) {
-	return x$33.log(x) / x$33.LN10;
+	return x$34.log(x) / x$34.LN10;
 }
 
 test$76(log10, 'Math.log10#j0');
@@ -6763,7 +6829,7 @@ function test$80(log1p) {
 }
 
 function log1p(x) {
-	return x$33.log(x + 1);
+	return x$34.log(x + 1);
 }
 
 test$80(log1p, 'Math.log1p#j0');
@@ -6804,7 +6870,7 @@ function test$82(log2) {
 }
 
 function log2(x) {
-	return x$33.log(x) / x$33.LN2;
+	return x$34.log(x) / x$34.LN2;
 }
 
 test$82(log2, 'Math.log2#j0');
@@ -7050,11 +7116,11 @@ function test$98(sign) {
 	});
 }
 
-var x$34 = isNaN;
+var x$35 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$34(x)) {
+	if (x === 0 || x$35(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -7133,7 +7199,7 @@ function test$102(sinh) {
 }
 
 function sinh(x) {
-	var y = x$33.exp(x);
+	var y = x$34.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -7280,7 +7346,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$33.exp(2 * x);
+	var y = x$34.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -7729,15 +7795,15 @@ describe('passThrough', function () {
 	});
 });
 
-var x$35 = setTimeout;
+var x$36 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!x$32.immediateId) {
-	x$32.immediateId = 0;
+if (!x$33.immediateId) {
+	x$33.immediateId = 0;
 }
-x$32.immediateId += 1;
-var setImmediateNative = x$32.setImmediate;
+x$33.immediateId += 1;
+var setImmediateNative = x$33.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -7766,7 +7832,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$35(fn);
+	return x$36(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -7782,7 +7848,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$35(function () {
+x$36(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -8211,7 +8277,7 @@ tests$12(Response$1, 'J0Response');
 tests$12(Response, 'Response');
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$32;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$33;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -8223,7 +8289,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$32;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$33;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -8528,7 +8594,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$36 = encodeURIComponent;
+var x$37 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -8594,7 +8660,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$36(value);
+					return x$37(value);
 				}
 			});
 		}
@@ -8767,15 +8833,15 @@ describe('State', function () {
 	});
 });
 
-var x$37 = Map;
+var x$38 = Map;
 
-var x$38 = location;
+var x$39 = location;
 
-var x$39 = history;
+var x$40 = history;
 
-var x$40 = addEventListener;
+var x$41 = addEventListener;
 
-var x$41 = Boolean;
+var x$42 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -8786,7 +8852,7 @@ var StateManager = function (_EventEmitter) {
 		var _this28 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
 		x$24.assign(_this28, { prefix: '#' }, config, {
-			states: new x$37(),
+			states: new x$38(),
 			listeners: []
 		});
 		if (!_this28.parser) {
@@ -8810,7 +8876,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$38;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$39;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion35 = true;
@@ -8896,7 +8962,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$41(current && state && current.is(state));
+			return x$42(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -8904,7 +8970,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$41(current && state && current.isIn(state));
+			return x$42(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -8912,7 +8978,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$41(current && state && current.isAncestorOf(state));
+			return x$42(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -8921,7 +8987,7 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
-			x$39[method](newState.name, newState.params, newState.href);
+			x$40[method](newState.name, newState.params, newState.href);
 			var oldState = this.current;
 			this.current = newState;
 			this.emit('change', newState, oldState);
@@ -8945,9 +9011,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this29.replace(_this29.parseURL());
 			}, debounceDuration);
-			x$40('hashchange', onStateChange);
-			x$40('pushstate', onStateChange);
-			x$40('popstate', onStateChange);
+			x$41('hashchange', onStateChange);
+			x$41('pushstate', onStateChange);
+			x$41('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -9507,9 +9573,9 @@ function test$131(fromCodePoint) {
 	});
 }
 
-var x$42 = isFinite;
+var x$43 = isFinite;
 
-var x$43 = RangeError;
+var x$44 = RangeError;
 
 /* eslint-disable no-magic-numbers, no-bitwise */
 
@@ -9523,8 +9589,8 @@ function fromCodePoint() {
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var codePoint = args[i];
-		if (!x$42(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
-			throw new x$43('Invalid code point: ' + codePoint);
+		if (!x$43(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
+			throw new x$44('Invalid code point: ' + codePoint);
 		}
 		if (codePoint <= 0xFFFF) {
 			chars.push(fromCharCode(codePoint));
@@ -9991,7 +10057,7 @@ function normalize(form) {
 	return unorm[form.toLowerCase()](this);
 }
 
-var x$44 = fetch;
+var x$45 = fetch;
 
 var forms = ['NFC', 'NFD', 'NFKC', 'NFKD'];
 
@@ -10012,7 +10078,7 @@ function test$133(normalize) {
 							this.timeout(10000);
 							root = document.getElementById('root').textContent;
 							_context56.next = 4;
-							return x$44(root + '/String/normalize/tests.json');
+							return x$45(root + '/String/normalize/tests.json');
 
 						case 4:
 							response = _context56.sent;
@@ -10081,10 +10147,10 @@ function test$135(repeat) {
 	});
 }
 
-var x$45 = parseInt;
+var x$46 = parseInt;
 
 function repeat(c) {
-	var count = x$45(c, 10);
+	var count = x$46(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -10495,7 +10561,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$33.floor(clamp(256 * v, 0, 255));
+		return x$34.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -10566,7 +10632,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$35(function () {
+			timer = x$36(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
@@ -10677,7 +10743,7 @@ function test$141(URL) {
 	});
 }
 
-var x$46 = URL;
+var x$47 = URL;
 
 /* eslint-disable no-undefined, complexity, max-statements, max-lines */
 /* eslint-disable no-magic-numbers, no-continue, no-labels, no-lonely-if */
@@ -10726,7 +10792,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$36(c);
+	return x$37(c);
 }
 
 function percentEscapeQuery(c) {
@@ -10737,7 +10803,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$36(c);
+	return x$37(c);
 }
 
 function parse$3(input, stateOverride, base) {
@@ -11280,8 +11346,8 @@ var URL$1 = function () {
 }();
 
 x$24.defineProperties(URL$1, {
-	createObjectURL: { value: x$46.createObjectURL },
-	revokeObjectURL: { value: x$46.revokeObjectURL }
+	createObjectURL: { value: x$47.createObjectURL },
+	revokeObjectURL: { value: x$47.revokeObjectURL }
 });
 
 test$141(URL$1, 'URL#j0');

@@ -13,7 +13,7 @@ describe('J0Element.prototype.html', function () {
 			]
 		});
 		const expected = `<span>${text}</span>`;
-		assert.equal(element.html(), expected);
+		assert.equal(element.html, expected);
 	});
 
 	it('should set its innerHTML', function () {
@@ -25,9 +25,9 @@ describe('J0Element.prototype.html', function () {
 				text
 			]
 		});
-		element.html(`<s>${text}</s>`);
+		element.setHTML(`<s>${text}</s>`);
 		const expected = `<s>${text}</s>`;
-		assert.equal(element.html(), expected);
+		assert.equal(element.html, expected);
 	});
 
 });

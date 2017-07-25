@@ -28,7 +28,7 @@ describe('J0Element.prototype.lastChild', function () {
 			]
 		});
 		assert.equal(element.lastChild.equals(element1), true);
-		element.lastChild = element2;
+		element.setLastChild(element2);
 		assert.equal(element.lastChild.equals(element2), true);
 	});
 

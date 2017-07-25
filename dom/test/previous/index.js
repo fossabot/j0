@@ -11,7 +11,7 @@ describe('J0Element.prototype.previous', function () {
 			]
 		});
 		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
+		element1.setPrevious(element2);
 		assert.equal(element.firstChild.equals(element2), true);
 	});
 
@@ -25,7 +25,7 @@ describe('J0Element.prototype.previous', function () {
 			]
 		});
 		assert.equal(element.firstChild.equals(element1), true);
-		element1.previous = element2;
+		element1.setPrevious(element2);
 		assert.equal(element.firstChild.equals(element2), true);
 	});
 
