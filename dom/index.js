@@ -349,6 +349,10 @@ class J0Element {
 		return getComputedStyle(this.node);
 	}
 
+	clone(deep = true) {
+		return wrap(this.node.cloneNode(deep));
+	}
+
 }
 
 function wrap(source) {
