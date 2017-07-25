@@ -2856,7 +2856,7 @@ var J0Element = function () {
 		value: function addEventListener(eventName, fn) {
 			var _this5 = this;
 
-			if (wrap.eventFilter && wrap.eventFilter.call(this, eventName)) {
+			if (wrap.eventFilter && wrap.eventFilter.call(this, eventName, fn)) {
 				return this;
 			}
 			var wrapped = function wrapped(event) {
@@ -3500,7 +3500,7 @@ describe('J0Element.eventFilter', function () {
 		function fn() {}
 		assert.deepEqual(Array.from(element.listeners), []);
 		element.on(key, fn);
-		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(actual, [element, key, fn]);
 		assert.deepEqual(Array.from(element.listeners).map(function (item) {
 			return item.slice(0, 2);
 		}), [[key, fn]]);
@@ -3521,7 +3521,7 @@ describe('J0Element.eventFilter', function () {
 		function fn() {}
 		assert.deepEqual(Array.from(element.listeners), []);
 		element.on(key, fn);
-		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(actual, [element, key, fn]);
 		assert.deepEqual(Array.from(element.listeners), []);
 	});
 });
