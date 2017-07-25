@@ -229,7 +229,7 @@ class J0Element {
 	}
 
 	addEventListener(eventName, fn) {
-		if (wrap.eventFilter && wrap.eventFilter.call(this, eventName)) {
+		if (wrap.eventFilter && wrap.eventFilter.call(this, eventName, fn)) {
 			return this;
 		}
 		const wrapped = (event) => {

@@ -24,7 +24,7 @@ describe('J0Element.eventFilter', function () {
 		function fn() {}
 		assert.deepEqual(Array.from(element.listeners), []);
 		element.on(key, fn);
-		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(actual, [element, key, fn]);
 		assert.deepEqual(
 			Array.from(element.listeners)
 			.map((item) => {
@@ -45,7 +45,7 @@ describe('J0Element.eventFilter', function () {
 		function fn() {}
 		assert.deepEqual(Array.from(element.listeners), []);
 		element.on(key, fn);
-		assert.deepEqual(actual, [element, key]);
+		assert.deepEqual(actual, [element, key, fn]);
 		assert.deepEqual(Array.from(element.listeners), []);
 	});
 
