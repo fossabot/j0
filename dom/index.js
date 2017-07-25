@@ -6,7 +6,6 @@ import {
 	isArray,
 	isString,
 	isNode,
-	isUndefined,
 	Promise,
 	CustomEvent,
 	Set,
