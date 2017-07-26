@@ -1,7 +1,6 @@
 const path = require('path');
 const SableServer = require('sable');
 const console = require('j1/console').create('wdio');
-const promisify = require('j1/promisify');
 
 const buildWebdriverScript = require('./buildWebdriverScript');
 const {docsDir} = require('./constants');
@@ -236,11 +235,18 @@ exports.config = {
 };
 
 if (process.argv.includes('--BrowserStack')) {
-	const browserstack = require('browserstack-local');
-	const bsLocal = new browserstack.Local();
+	const browserstackOpts = {
+		// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
+		forceLocal: true,
+		onlyAutomate: true,
+		proxyHost: 'localhost',
+		proxyPort: 4000
+	};
 	Object.assign(
 		exports.config,
 		{
+			services: ['browserstack'],
+			browserstackLocal: true,
 			onPrepare: async function () {
 				console.info('onPrepare: create a server');
 				server = new SableServer({
@@ -251,24 +257,12 @@ if (process.argv.includes('--BrowserStack')) {
 				console.info('onPrepare: start the server');
 				await server.start();
 				const {port} = server.address();
+				browserstackOpts.proxyPort = port;
 				console.info(`onPrepare: buildWebdriverScript port: ${port}`);
 				await buildWebdriverScript(port);
-				console.info('onPrepare: start BrowserStackLocal');
-				await promisify(bsLocal.start, bsLocal)({
-					verbose: true,
-					onlyAutomate: true,
-					proxyHost: 'localhost',
-					proxyPort: port
-				});
 				console.info('onPrepare: done');
 			},
-			afterSession: async function () {
-				console.info('afterSession: close the server');
-				await Promise.resolve(server && server.close());
-				console.info('afterSession: stop bsLocal');
-				await Promise.resolve(bsLocal && bsLocal.stop());
-				console.info('afterSession: done');
-			},
+			browserstackOpts,
 			capabilities: [
 				{
 					'os': 'OS X',
