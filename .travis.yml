@@ -27,7 +27,7 @@ install:
 script:
 - set -e
 - npm run build
-- npm install wdio-browserstack-service
+- npm install browserstack-local
 - npm test -- --BrowserStack
 notifications:
   slack:
