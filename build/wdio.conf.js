@@ -233,3 +233,37 @@ exports.config = {
 		return exitCode;
 	}
 };
+
+if (process.argv.includes('--BrowserStack')) {
+	Object.assign(
+		exports.config,
+		{
+			services: ['browserstack'],
+			user: process.env.BROWSERSTACK_USERNAME,
+			key: process.env.BROWSERSTACK_ACCESS_KEY,
+			browserstackLocal: true,
+			capabilities: [
+				{
+					'os': 'OS X',
+					'os_version': 'Sierra',
+					'browser': 'Safari',
+					'browser_version': '10.0',
+					'resolution': '1024x768'
+				},
+				{
+					'os': 'Windows',
+					'os_version': '10',
+					'browser': 'IE',
+					'browser_version': '11.0',
+					'resolution': '1024x768'
+				},
+				{
+					'device': 'iPhone 6'
+				},
+				{
+					'device': 'Google Nexus 6'
+				}
+			]
+		}
+	);
+}
