@@ -27,7 +27,7 @@ install:
 script:
 - set -e
 - npm run build
-- npm test
+# - npm test
 - npm install wdio-browserstack-service
 - npm test -- --BrowserStack
 notifications:

@@ -261,12 +261,6 @@ if (process.argv.includes('--BrowserStack')) {
 					'browser': 'IE',
 					'browser_version': '11.0',
 					'resolution': '1024x768'
-				},
-				{
-					'device': 'iPhone 6'
-				},
-				{
-					'device': 'Google Nexus 6'
 				}
 			]
 			.map((capability) => {
