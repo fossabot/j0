@@ -20,8 +20,11 @@ install:
 - unzip chromedriver_linux64.zip
 - npm install
 script:
+- set -e
 - npm run build
-- npm test && npm test -- --BrowserStack
+- npm test
+- npm install wdio-browserstack-service
+- npm test -- --BrowserStack
 notifications:
   slack:
     secure: dJr827OKb0wZgq/cX8C06PzxcTho1kyDkD5gtq3FWyN8i+0pa52jV22MHYMhbKl/Er7Tl1UYQTIvU+uK3AG5e32htRv89ggC+0KOUS23WQIhlUrf7YT09P9yOWNEbGyPs6s8FkcD1hJZhdqD4O6jPX1ZBTS7/k5wD/N9m189KFZBrCaw9c25eNQdliiVHkVc/ST1OPswUvbwaHH6w5zZx6pLsL/52tvBedoDgwK6vftOM8c2aahJYwyJx1d8MI2PkK2xb0eri/qBlBsQ9BuYIqBFvNVtl2/ykc6OQ6rdUi+YN05fehYLtWYHeJ7aKG8IGyMPvWCk86Rqh/WYiImGtrVYyaBzeaTwsaRWtOJozqIlec5DBJZAbCquEZMrLubYrucN9o0TKMX3Wh759PHLFJHFmLs/5p2sLcDE0rXtm+BI5ur/aJxfaeyVXITyTgb/us5sCMT/5/Va3Ymzn89R28vvqWrK4dKfg41Zk0RP2LZET4k+1mOP75jT4dbMY0+Y83k11qvhpVsVulp5M7H+lzXSUEt51WhRLc37+YkGD3Zaao0QiLSJj+Rg9Ahzs00ANFDnLpXDjJ0QI8oIh4gTTzLyrQjhS4vBAQdIZrkV3oimjwXIWgplfxaalSMMZpMoij5Tl1rhtkGfGUe5HtXGNsYQbUUUYd0Oqg7r7cLOJVo=
