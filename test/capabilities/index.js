@@ -16,17 +16,7 @@ if (useBrowserStack) {
 			browser_version: '11.0',
 			resolution: '1024x768'
 		}
-	]
-	.map((capability) => {
-		return Object.assign(
-			capability,
-			{
-				// 'browserstack.local': true
-				'browserstack.user': useBrowserStack.user,
-				'browserstack.key': useBrowserStack.key
-			}
-		);
-	});
+	];
 } else {
 	module.exports = [
 		{
