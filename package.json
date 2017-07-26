@@ -14,10 +14,10 @@
     "ios 8"
   ],
   "scripts": {
-    "start": "node _j0 --server",
-    "polyfill": "node _j0/buildPolyfill",
-    "build": "node _j0 && npm run polyfill",
-    "test": "wdio _j0/wdio.conf.js"
+    "start": "node build --server",
+    "polyfill": "node build/generatePolyfill",
+    "build": "node build && npm run polyfill",
+    "test": "wdio build/wdio.conf.js"
   },
   "main": "rollup",
   "devDependencies": {

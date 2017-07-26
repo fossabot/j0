@@ -44,3 +44,8 @@ async function rollupScripts() {
 }
 
 module.exports = rollupScripts;
+
+if (!module.parent) {
+	rollupScripts()
+	.catch(console.onError);
+}
