@@ -19,7 +19,6 @@
     "build": "node build && npm run polyfill",
     "test": "wdio build/wdio.conf.js"
   },
-  "main": "rollup",
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-preset-env": "^1.4.0",

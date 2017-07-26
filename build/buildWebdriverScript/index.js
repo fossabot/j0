@@ -16,5 +16,8 @@ module.exports = buildWebdriverScript;
 
 if (!module.parent) {
 	buildWebdriverScript(4000)
-	.catch(console.onError);
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
 }

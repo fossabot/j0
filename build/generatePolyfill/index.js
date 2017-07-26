@@ -52,5 +52,8 @@ module.exports = generatePolyfill;
 
 if (!module.parent) {
 	generatePolyfill()
-	.catch(console.onError);
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
 }

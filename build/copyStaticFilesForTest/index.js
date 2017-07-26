@@ -27,3 +27,11 @@ async function copyStaticFilesForTest() {
 }
 
 module.exports = copyStaticFilesForTest;
+
+if (!module.parent) {
+	copyStaticFilesForTest()
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
+}

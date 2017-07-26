@@ -13,5 +13,8 @@ module.exports = build;
 
 if (!module.parent) {
 	build()
-	.catch(console.onError);
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
 }

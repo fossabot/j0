@@ -5,7 +5,7 @@ const promisify = require('j1/promisify');
 const writeFile = require('j1/writeFile');
 const globImport = require('rollup-plugin-glob-import');
 const commonjs = require('rollup-plugin-commonjs');
-const j0 = require('../../rollup');
+const j0 = require('../..');
 const babel = require('babel-core');
 const glob = promisify(require('glob'));
 const {
@@ -47,5 +47,8 @@ module.exports = rollupScripts;
 
 if (!module.parent) {
 	rollupScripts()
-	.catch(console.onError);
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
 }

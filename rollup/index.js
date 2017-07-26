@@ -8,7 +8,8 @@ const {createFilter} = require('rollup-pluginutils');
 function rollupPlugin(options = {}) {
 	const {include, exclude} = options;
 	const filter = createFilter(include, exclude);
-	const windowFallback = path.join(__dirname, 'window-fallback');
+	const j0prefix = __dirname;
+	const windowFallback = path.join(j0prefix, 'window-fallback');
 	return {
 		resolveId: (importee, importer) => {
 			if (!filter(importee)) {
@@ -19,10 +20,10 @@ function rollupPlugin(options = {}) {
 			} else if (importee !== 'j0') {
 				return null;
 			}
-			return path.join(__dirname, importer);
+			return path.join(j0prefix, importer);
 		},
 		load: async (id) => {
-			if (!id.startsWith(__dirname)) {
+			if (!id.startsWith(j0prefix)) {
 				return;
 			}
 			if (0 <= id.indexOf(windowFallback)) {
@@ -30,7 +31,7 @@ function rollupPlugin(options = {}) {
 				.slice(1);
 				return `const x = ${name};\nexport default x;`;
 			}
-			const importer = path.relative(__dirname, id).replace(/^([^/])/, '/$1');
+			const importer = path.relative(j0prefix, id).replace(/^([^/])/, '/$1');
 			const code = await readFile(importer, 'utf8');
 			const ast = acorn.parse(code, {
 				sourceType: 'module',

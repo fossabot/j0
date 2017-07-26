@@ -21,5 +21,8 @@ module.exports = copyDependencies;
 
 if (!module.parent) {
 	copyDependencies()
-	.catch(console.onError);
+	.catch((error) => {
+		console.onError(error);
+		process.exit(1);
+	});
 }

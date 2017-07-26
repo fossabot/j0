@@ -13,6 +13,7 @@
     "> 5%",
     "ios 8"
   ],
+  "main": "rollup/index.js",
   "scripts": {
     "start": "sable docs & node build --watch",
     "polyfill": "node build/generatePolyfill",
