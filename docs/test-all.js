@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref112 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
+	var _ref113 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -34,7 +34,7 @@ var wait$1 = function () {
 	}));
 
 	return function wait$1(_x108, _x109) {
-		return _ref112.apply(this, arguments);
+		return _ref113.apply(this, arguments);
 	};
 }();
 
@@ -4805,7 +4805,7 @@ function tests$5(Headers) {
 			var value = 'b';
 			headers.append(name, value);
 			headers.append(name, value);
-			assert.deepEqual(headers.get(name), [value, value].join(','));
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value, value]);
 		});
 
 		it('should have set()', function () {
@@ -4815,7 +4815,7 @@ function tests$5(Headers) {
 			var value2 = 'c';
 			headers.set(name, value1);
 			headers.set(name, value2);
-			assert.deepEqual(headers.get(name), value2);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value2]);
 		});
 
 		it('should have get()', function () {
@@ -4825,7 +4825,7 @@ function tests$5(Headers) {
 			var value2 = 'c';
 			headers.append(name, value1);
 			headers.append(name, value2);
-			assert.equal(headers.get(name), value1 + ',' + value2);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value1, value2]);
 		});
 
 		it('should have delete()', function () {
@@ -4851,6 +4851,8 @@ function tests$5(Headers) {
 			var results = [];
 			var iterator = headers.entries();
 			while (1) {
+				var _ref41;
+
 				var _iterator$next6 = iterator.next(),
 				    value = _iterator$next6.value,
 				    done = _iterator$next6.done;
@@ -4858,9 +4860,11 @@ function tests$5(Headers) {
 				if (done) {
 					break;
 				}
-				results[index++] = value;
+				results[index++] = (_ref41 = []).concat.apply(_ref41, _toConsumableArray(value.map(function (result) {
+					return result.split(/\s*,\s*/);
+				})));
 			}
-			assert.deepEqual(results, [[name, value1 + ',' + value2]]);
+			assert.deepEqual(results, [[name, value1, value2]]);
 		});
 
 		it('should have values()', function () {
@@ -4883,7 +4887,9 @@ function tests$5(Headers) {
 				}
 				results[index++] = value;
 			}
-			assert.deepEqual(results, [value1 + ',' + value2]);
+			assert.deepEqual(results.map(function (result) {
+				return result.split(/\s*,\s*/);
+			}), [[value1, value2]]);
 		});
 	});
 }
@@ -5655,12 +5661,12 @@ var Map$1 = function () {
 
 			try {
 				for (var _iterator27 = iterable[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-					var _ref41 = _step27.value;
+					var _ref42 = _step27.value;
 
-					var _ref42 = _slicedToArray(_ref41, 2);
+					var _ref43 = _slicedToArray(_ref42, 2);
 
-					var key = _ref42[0];
-					var value = _ref42[1];
+					var key = _ref43[0];
+					var value = _ref43[1];
 
 					this.set(key, value);
 				}
@@ -5689,9 +5695,9 @@ var Map$1 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref43) {
-				var _ref44 = _slicedToArray(_ref43, 1),
-				    itemKey = _ref44[0];
+			return this.data.findIndex(function (_ref44) {
+				var _ref45 = _slicedToArray(_ref44, 1),
+				    itemKey = _ref45[0];
 
 				return itemKey === key;
 			});
@@ -5715,9 +5721,9 @@ var Map$1 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref45) {
-				var _ref46 = _slicedToArray(_ref45, 1),
-				    itemKey = _ref46[0];
+			var found = this.data.find(function (_ref46) {
+				var _ref47 = _slicedToArray(_ref46, 1),
+				    itemKey = _ref47[0];
 
 				return itemKey === key;
 			});
@@ -5745,10 +5751,10 @@ var Map$1 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this21 = this;
 
-			this.data.slice().forEach(function (_ref47) {
-				var _ref48 = _slicedToArray(_ref47, 2),
-				    key = _ref48[0],
-				    value = _ref48[1];
+			this.data.slice().forEach(function (_ref48) {
+				var _ref49 = _slicedToArray(_ref48, 2),
+				    key = _ref49[0],
+				    value = _ref49[1];
 
 				fn.call(thisArg, value, key, _this21);
 			});
@@ -8628,8 +8634,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref85, name, expression, offset, source) {
-				var length = _ref85.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref86, name, expression, offset, source) {
+				var length = _ref86.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -8908,11 +8914,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator35 = this.states[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
-					var _ref86 = _step35.value;
+					var _ref87 = _step35.value;
 
-					var _ref87 = _slicedToArray(_ref86, 2);
+					var _ref88 = _slicedToArray(_ref87, 2);
 
-					var state = _ref87[1];
+					var state = _ref88[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -8951,9 +8957,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref88 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref88.name,
-			    params = _ref88.params;
+			var _ref89 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref89.name,
+			    params = _ref89.params;
 
 			var noFallback = arguments[1];
 
@@ -9077,11 +9083,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator36 = states.states[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
-				var _ref89 = _step36.value;
+				var _ref90 = _step36.value;
 
-				var _ref90 = _slicedToArray(_ref89, 2);
+				var _ref91 = _slicedToArray(_ref90, 2);
 
-				var state = _ref90[1];
+				var state = _ref91[1];
 
 				results.push(state);
 			}
@@ -9156,7 +9162,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-		var states, name0, name1, name2, _ref92, _ref93, toState, fromState;
+		var states, name0, name1, name2, _ref93, _ref94, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
@@ -9189,10 +9195,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref92 = _context51.sent;
-						_ref93 = _slicedToArray(_ref92, 2);
-						toState = _ref93[0];
-						fromState = _ref93[1];
+						_ref93 = _context51.sent;
+						_ref94 = _slicedToArray(_ref93, 2);
+						toState = _ref94[0];
+						fromState = _ref94[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -9507,11 +9513,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref98) {
-			var _ref99 = _slicedToArray(_ref98, 3),
-			    string = _ref99[0],
-			    from = _ref99[1],
-			    to = _ref99[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
+			var _ref100 = _slicedToArray(_ref99, 3),
+			    string = _ref100[0],
+			    from = _ref100[1],
+			    to = _ref100[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -9579,11 +9585,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref100) {
-			var _ref101 = _slicedToArray(_ref100, 3),
-			    expected = _ref101[0],
-			    from = _ref101[1],
-			    to = _ref101[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref101) {
+			var _ref102 = _slicedToArray(_ref101, 3),
+			    expected = _ref102[0],
+			    from = _ref102[1],
+			    to = _ref102[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10329,11 +10335,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref103) {
-		var _ref104 = _slicedToArray(_ref103, 3),
-		    string = _ref104[0],
-		    from = _ref104[1],
-		    to = _ref104[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref104) {
+		var _ref105 = _slicedToArray(_ref104, 3),
+		    string = _ref105[0],
+		    from = _ref105[1],
+		    to = _ref105[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -10724,18 +10730,18 @@ function test$141(URL) {
 		// 		['hash', '']
 		// 	]
 		// ],
-		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref106, index) {
-			var _ref107 = _slicedToArray(_ref106, 2),
-			    input = _ref107[0],
-			    tests = _ref107[1];
+		[['http://foo.com:b@d:2/', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['username', 'foo.com'], ['password', 'b'], ['hostname', 'd'], ['port', '2'], ['host', 'd:2'], ['pathname', '/'], ['search', ''], ['hash', '']]]].forEach(function (_ref107, index) {
+			var _ref108 = _slicedToArray(_ref107, 2),
+			    input = _ref108[0],
+			    tests = _ref108[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new (Function.prototype.bind.apply(URL, [null].concat(_toConsumableArray(input))))();
-					tests.forEach(function (_ref108) {
-						var _ref109 = _slicedToArray(_ref108, 2),
-						    key = _ref109[0],
-						    expected = _ref109[1];
+					tests.forEach(function (_ref109) {
+						var _ref110 = _slicedToArray(_ref109, 2),
+						    key = _ref110[0],
+						    expected = _ref110[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -11394,11 +11400,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref110) {
-				var _ref111 = _slicedToArray(_ref110, 2),
-				    name = _ref111[0],
-				    _ref111$ = _ref111[1],
-				    value = _ref111$ === undefined ? '' : _ref111$;
+			return this.data.map(function (_ref111) {
+				var _ref112 = _slicedToArray(_ref111, 2),
+				    name = _ref112[0],
+				    _ref112$ = _ref112[1],
+				    value = _ref112$ === undefined ? '' : _ref112$;
 
 				return name + '=' + value;
 			}).join('&');
