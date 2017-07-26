@@ -8,6 +8,7 @@ const j0 = require('../../rollup');
 const babel = require('babel-core');
 const glob = promisify(require('glob'));
 const {
+	projectDir,
 	docsDir
 } = require('../constants');
 
@@ -28,12 +29,12 @@ async function rollupScripts() {
 		});
 		$console.info('generate');
 		const {code} = await bundle.generate({format: 'es'});
-		$console.log(bundle.modules.length);
+		$console.info(`dependencies: ${bundle.modules.length}`);
 		$console.info('transpile');
 		const {code: babeledCode} = babel.transform(code, {presets: ['env']});
 		const wrappedCode = `(function(){\n${babeledCode}\n}())`;
 		const dest = entry.replace(/\.rollup\.js/, '.js');
-		$console.info(`write to ${dest}`);
+		$console.info(`write to ${path.relative(projectDir, dest)}`);
 		await writeFile(dest, wrappedCode);
 		$console.info('done');
 	}
