@@ -33,6 +33,7 @@ async function test(capabilities = require('./capabilities')) {
 	const title = await driver.getTitle();
 	console.info(title);
 	assert.equal((/webdriver/i).test(title), true);
+	await driver.quit();
 	await test(capabilities);
 }
 
