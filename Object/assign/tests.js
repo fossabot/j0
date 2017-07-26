@@ -9,8 +9,11 @@ function test(assign, name = 'Object.assign') {
 			const value1 = `${Date.now()}_4`;
 			const value2 = `${Date.now()}_5`;
 			const value3 = `${Date.now()}_6`;
+			const seed = {
+				[key1]: value3
+			};
 			const result = assign(
-				{},
+				seed,
 				{
 					[key1]: value1,
 					[key2]: value2
@@ -20,6 +23,7 @@ function test(assign, name = 'Object.assign') {
 					[key3]: value2
 				}
 			);
+			assert.equal(result, seed);
 			assert.deepEqual(result, {
 				[key1]: value1,
 				[key2]: value3,
