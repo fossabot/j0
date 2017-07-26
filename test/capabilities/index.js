@@ -21,9 +21,9 @@ if (useBrowserStack) {
 		return Object.assign(
 			capability,
 			{
+				// 'browserstack.local': true
 				'browserstack.user': useBrowserStack.user,
-				'browserstack.key': useBrowserStack.key,
-				'browserstack.local': true
+				'browserstack.key': useBrowserStack.key
 			}
 		);
 	});
