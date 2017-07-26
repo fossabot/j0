@@ -15,7 +15,7 @@
   ],
   "main": "rollup/index.js",
   "scripts": {
-    "start": "sable docs & node build --watch",
+    "start": "node build --watch",
     "polyfill": "node build/generatePolyfill",
     "build": "node build && npm run polyfill",
     "test": "wdio build/wdio.conf.js"
@@ -33,7 +33,6 @@
     "rollup": "^0.45.2",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-glob-import": "0.0.4",
-    "rollup-watch": "^3.2.2",
     "sable": "^0.1.2",
     "selenium-standalone": "^6.4.1",
     "selenium-webdriver": "^3.4.0",
