@@ -244,11 +244,8 @@ if (process.argv.includes('--BrowserStack')) {
 			browserstackLocal: true,
 			browserstackOpts: {
 				// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
-				localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER
-			},
-			desiredCapabilities: {
-				project: process.env.TRAVIS_REPO_SLUG,
-				build: process.env.TRAVIS_BUILD_NUMBER
+				localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
+				forceLocal: true
 			},
 			capabilities: [
 				{
@@ -272,6 +269,15 @@ if (process.argv.includes('--BrowserStack')) {
 					'device': 'Google Nexus 6'
 				}
 			]
+			.map((capability) => {
+				return Object.assign(
+					capability,
+					{
+						project: process.env.TRAVIS_REPO_SLUG,
+						build: process.env.TRAVIS_BUILD_NUMBER
+					}
+				);
+			})
 		}
 	);
 }
