@@ -1,1 +1,1 @@
-import '../../Symbol/polyfill/index.js';
+import '../lib/Symbol/polyfill.js';

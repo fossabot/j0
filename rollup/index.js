@@ -50,7 +50,7 @@ function rollupPlugin(options = {}) {
 			.map((name) => {
 				let j0ModulePath;
 				try {
-					j0ModulePath = require.resolve(`../../${name}`);
+					j0ModulePath = require.resolve(`../lib/${name}`);
 				} catch (error) {
 					j0ModulePath = path.join(windowFallback, name);
 				}

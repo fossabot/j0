@@ -4,6 +4,7 @@ const console = require('j1/console').create('rollupScripts');
 const promisify = require('j1/promisify');
 const writeFile = require('j1/writeFile');
 const globImport = require('rollup-plugin-glob-import');
+const commonjs = require('rollup-plugin-commonjs');
 const j0 = require('../../rollup');
 const babel = require('babel-core');
 const glob = promisify(require('glob'));
@@ -24,7 +25,8 @@ async function rollupScripts() {
 			entry,
 			plugins: [
 				j0(),
-				globImport()
+				globImport(),
+				commonjs()
 			]
 		});
 		$console.info('generate');

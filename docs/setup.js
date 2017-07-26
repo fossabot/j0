@@ -4,19 +4,19 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var graphicalEqual = function () {
-	var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref) {
-		var name = _ref.name,
-		    url = _ref.url,
-		    fn = _ref.fn,
-		    xRange = _ref.xRange,
-		    yRange = _ref.yRange,
-		    zRange = _ref.zRange,
-		    _ref$xGrid = _ref.xGrid,
-		    xGrid = _ref$xGrid === undefined ? [] : _ref$xGrid,
-		    _ref$yGrid = _ref.yGrid,
-		    yGrid = _ref$yGrid === undefined ? [] : _ref$yGrid,
-		    _ref$threshold = _ref.threshold,
-		    threshold = _ref$threshold === undefined ? canvasDefaultThreshold : _ref$threshold;
+	var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref2) {
+		var name = _ref2.name,
+		    url = _ref2.url,
+		    fn = _ref2.fn,
+		    xRange = _ref2.xRange,
+		    yRange = _ref2.yRange,
+		    zRange = _ref2.zRange,
+		    _ref2$xGrid = _ref2.xGrid,
+		    xGrid = _ref2$xGrid === undefined ? [] : _ref2$xGrid,
+		    _ref2$yGrid = _ref2.yGrid,
+		    yGrid = _ref2$yGrid === undefined ? [] : _ref2$yGrid,
+		    _ref2$threshold = _ref2.threshold,
+		    threshold = _ref2$threshold === undefined ? canvasDefaultThreshold : _ref2$threshold;
 
 		var ctx, expectedColor, actualColor, _ctx$canvas, width, height, _xRange, minX, maxX, _yRange, minY, maxY, xScale, yScale, imageX, imageY, drawGridLines, isInside, drawXYGraph, drawXYZGraph, drawGraph, img, expectedCanvasContext, sum, error;
 
@@ -34,7 +34,7 @@ var graphicalEqual = function () {
 								for (var y = 0; y < height; y += 2) {
 									var z = fn(minX + xScale * x / width, minY + yScale * (1 - y / width));
 									var r = (z - minZ) / zScale;
-									context.fillStyle = x$1.css(r);
+									context.fillStyle = thermalRGB.css(r);
 									context.fillRect(x, y, 2, 2);
 								}
 							}
@@ -93,7 +93,7 @@ var graphicalEqual = function () {
 							}
 							context.stroke();
 							if (drawLabel) {
-								x$2(context, {
+								assign(context, {
 									lineWidth: 8,
 									strokeStyle: '#fff',
 									fillStyle: '#000',
@@ -106,7 +106,7 @@ var graphicalEqual = function () {
 									context.strokeText(label, imageX(value), height);
 									context.fillText(label, imageX(value), height);
 								}
-								x$2(context, {
+								assign(context, {
 									textAlign: 'left',
 									textBaseline: 'middle'
 								});
@@ -155,7 +155,7 @@ var graphicalEqual = function () {
 						x$4.body.appendChild(ctx.canvas);
 						ctx.canvas.addEventListener('click', function () {
 							ctx.canvas.toBlob(function (blob) {
-								x$2(x$4.createElement('a'), {
+								assign(x$4.createElement('a'), {
 									href: x$6.createObjectURL(blob),
 									download: name.replace(/Math\./, '') + '.png'
 								}).click();
@@ -165,7 +165,7 @@ var graphicalEqual = function () {
 							// downloader
 							if (!/#/.test(name)) {
 								ctx.canvas.toBlob(function (blob) {
-									x$2(x$4.createElement('a'), {
+									assign(x$4.createElement('a'), {
 										href: x$6.createObjectURL(blob),
 										download: name.replace(/Math\./, '') + '.png'
 									}).click();
@@ -178,7 +178,7 @@ var graphicalEqual = function () {
 						img = x$4.createElement('img');
 						_context.next = 26;
 						return new Promise(function (resolve, reject) {
-							x$2(img, {
+							assign(img, {
 								onerror: function onerror(event) {
 									reject(event.error || event);
 								},
@@ -193,17 +193,17 @@ var graphicalEqual = function () {
 						expectedCanvasContext.drawImage(img, 0, 0, width, height);
 						sum = canvasDiff(ctx.getImageData(0, 0, width, height).data, expectedCanvasContext.getImageData(0, 0, width, height).data);
 
-						x$2(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							lineWidth: 2,
 							strokeStyle: actualColor
 						});
 						drawGraph(expectedCanvasContext);
-						x$2(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							lineWidth: 1,
 							strokeStyle: '#000'
 						});
 						drawGridLines(expectedCanvasContext, true);
-						x$2(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							textBaseline: 'top',
 							textAlign: 'center',
 							lineWidth: 8,
@@ -247,16 +247,50 @@ var graphicalEqual = function () {
 		}, _callee, this);
 	}));
 
-	return function graphicalEqual(_x2) {
-		return _ref2.apply(this, arguments);
+	return function graphicalEqual(_x4) {
+		return _ref3.apply(this, arguments);
 	};
 }();
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-var x$1 = thermalRGB;
+function clamp(x) {
+	var L = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -Infinity;
+	var H = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
 
-var x$2 = assign;
+	if (H < L) {
+		var _ref = [H, L];
+		L = _ref[0];
+		H = _ref[1];
+	}
+	if (x < L) {
+		x = L;
+	} else if (H < x) {
+		x = H;
+	}
+	return x;
+}
+
+var x$1 = Math;
+
+/* eslint no-magic-numbers: "off" */
+function thermalRGB(value) {
+	var ratio = value * 2;
+	var b = clamp(1 - ratio, 0, 1);
+	var r = clamp(ratio - 1, 0, 1);
+	var g = clamp(0.8 - b - r, 0, 1);
+	return [r, g, b];
+}
+function css(value) {
+	return 'rgb(' + thermalRGB(value).map(function (v) {
+		return x$1.floor(clamp(256 * v, 0, 255));
+	}).join(',') + ')';
+}
+thermalRGB.css = css;
+
+var x$2 = Object;
+
+var assign = x$2.assign;
 
 var x$3 = XMLHttpRequest;
 
@@ -296,11 +330,11 @@ function getCanvasContext(name) {
 	var lineHeight = 22;
 	canvas.setAttribute('class', x$5.canvasTestClass);
 	canvas.setAttribute('data-name', name);
-	x$2(canvas, {
+	assign(canvas, {
 		width: size,
 		height: size
 	});
-	x$2(canvas.style, {
+	assign(canvas.style, {
 		userSelect: 'none',
 		transition: 'width 0.2s, height 0.2s',
 		border: 'solid 1px #000',
@@ -310,7 +344,7 @@ function getCanvasContext(name) {
 		cursor: 'pointer'
 	});
 	var ctx = canvas.getContext('2d');
-	x$2(ctx, {
+	assign(ctx, {
 		font: '20px Courier',
 		lineHeight: lineHeight
 	});
