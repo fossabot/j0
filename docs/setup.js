@@ -30,12 +30,12 @@ var graphicalEqual = function () {
 							    maxZ = _zRange[1];
 
 							var zScale = maxZ - minZ;
-							for (var _x6 = 0; _x6 < width; _x6 += 2) {
+							for (var x = 0; x < width; x += 2) {
 								for (var y = 0; y < height; y += 2) {
-									var z = fn(minX + xScale * _x6 / width, minY + yScale * (1 - y / width));
+									var z = fn(minX + xScale * x / width, minY + yScale * (1 - y / width));
 									var r = (z - minZ) / zScale;
 									context.fillStyle = thermalRGB.css(r);
-									context.fillRect(_x6, y, 2, 2);
+									context.fillRect(x, y, 2, 2);
 								}
 							}
 						};
@@ -65,11 +65,11 @@ var graphicalEqual = function () {
 								}
 							}
 							for (var iX = 0; iX <= width; iX += step) {
-								var _x5 = minX + xScale * iX / width;
-								var x1 = _x5 - d;
+								var x = minX + xScale * iX / width;
+								var x1 = x - d;
 								draw(x1, fn(x1));
-								draw(_x5, fn(_x5));
-								var x2 = _x5 + d;
+								draw(x, fn(x));
+								var x2 = x + d;
 								draw(x2, fn(x2));
 							}
 							if (state) {
@@ -93,7 +93,7 @@ var graphicalEqual = function () {
 							}
 							context.stroke();
 							if (drawLabel) {
-								x$1.assign(context, {
+								assign(context, {
 									lineWidth: 8,
 									strokeStyle: '#fff',
 									fillStyle: '#000',
@@ -106,7 +106,7 @@ var graphicalEqual = function () {
 									context.strokeText(label, imageX(value), height);
 									context.fillText(label, imageX(value), height);
 								}
-								x$1.assign(context, {
+								assign(context, {
 									textAlign: 'left',
 									textBaseline: 'middle'
 								});
@@ -152,11 +152,11 @@ var graphicalEqual = function () {
 							break;
 						}
 
-						document.body.appendChild(ctx.canvas);
+						x$4.body.appendChild(ctx.canvas);
 						ctx.canvas.addEventListener('click', function () {
 							ctx.canvas.toBlob(function (blob) {
-								x$1.assign(document.createElement('a'), {
-									href: URL.createObjectURL(blob),
+								assign(x$4.createElement('a'), {
+									href: x$6.createObjectURL(blob),
 									download: name.replace(/Math\./, '') + '.png'
 								}).click();
 							});
@@ -165,8 +165,8 @@ var graphicalEqual = function () {
 							// downloader
 							if (!/#/.test(name)) {
 								ctx.canvas.toBlob(function (blob) {
-									x$1.assign(document.createElement('a'), {
-										href: URL.createObjectURL(blob),
+									assign(x$4.createElement('a'), {
+										href: x$6.createObjectURL(blob),
 										download: name.replace(/Math\./, '') + '.png'
 									}).click();
 								});
@@ -175,10 +175,10 @@ var graphicalEqual = function () {
 						throw new Error('No url for expected graph');
 
 					case 23:
-						img = document.createElement('img');
+						img = x$4.createElement('img');
 						_context.next = 26;
 						return new Promise(function (resolve, reject) {
-							x$1.assign(img, {
+							assign(img, {
 								onerror: function onerror(event) {
 									reject(event.error || event);
 								},
@@ -193,17 +193,17 @@ var graphicalEqual = function () {
 						expectedCanvasContext.drawImage(img, 0, 0, width, height);
 						sum = canvasDiff(ctx.getImageData(0, 0, width, height).data, expectedCanvasContext.getImageData(0, 0, width, height).data);
 
-						x$1.assign(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							lineWidth: 2,
 							strokeStyle: actualColor
 						});
 						drawGraph(expectedCanvasContext);
-						x$1.assign(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							lineWidth: 1,
 							strokeStyle: '#000'
 						});
 						drawGridLines(expectedCanvasContext, true);
-						x$1.assign(expectedCanvasContext, {
+						assign(expectedCanvasContext, {
 							textBaseline: 'top',
 							textAlign: 'center',
 							lineWidth: 8,
@@ -227,7 +227,7 @@ var graphicalEqual = function () {
 								this.style.height = height / 2 + 'px';
 							}
 						});
-						document.body.appendChild(expectedCanvasContext.canvas);
+						x$4.body.appendChild(expectedCanvasContext.canvas);
 
 						if (!(threshold < sum)) {
 							_context.next = 41;
@@ -271,7 +271,7 @@ function clamp(x) {
 	return x;
 }
 
-var x = Math;
+var x$1 = Math;
 
 /* eslint no-magic-numbers: "off" */
 function thermalRGB(value) {
@@ -283,22 +283,31 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x.floor(clamp(256 * v, 0, 255));
+		return x$1.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
 
-var x$1 = Object;
+var x$2 = Object;
 
-/* eslint no-prototype-builtins: "off", max-statements: "off", no-magic-numbers: "off" */
+var assign = x$2.assign;
+
+var x$3 = XMLHttpRequest;
+
+var x$4 = document;
+
+var x$5 = window;
+
+var x$6 = URL;
+
 function setVersion() {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', window.root + '/package.json');
+	var xhr = new x$3();
+	xhr.open('GET', x$5.root + '/package.json');
 	xhr.onload = function () {
 		var _JSON$parse = JSON.parse(xhr.response),
 		    version = _JSON$parse.version;
 
-		var elements = document.querySelectorAll('.version');
+		var elements = x$4.querySelectorAll('.version');
 		for (var i = elements.length; i--;) {
 			elements[i].textContent = version;
 		}
@@ -316,16 +325,16 @@ function approxEqual(a, b) {
 }
 
 function getCanvasContext(name) {
-	var canvas = document.createElement('canvas');
+	var canvas = x$4.createElement('canvas');
 	var size = 400;
 	var lineHeight = 22;
-	canvas.setAttribute('class', window.canvasTestClass);
+	canvas.setAttribute('class', x$5.canvasTestClass);
 	canvas.setAttribute('data-name', name);
-	x$1.assign(canvas, {
+	assign(canvas, {
 		width: size,
 		height: size
 	});
-	x$1.assign(canvas.style, {
+	assign(canvas.style, {
 		userSelect: 'none',
 		transition: 'width 0.2s, height 0.2s',
 		border: 'solid 1px #000',
@@ -335,7 +344,7 @@ function getCanvasContext(name) {
 		cursor: 'pointer'
 	});
 	var ctx = canvas.getContext('2d');
-	x$1.assign(ctx, {
+	assign(ctx, {
 		font: '20px Courier',
 		lineHeight: lineHeight
 	});
@@ -368,17 +377,17 @@ var downloader = false;
 
 
 function setAssert() {
-	var assert = window.chai.assert;
+	var assert = x$5.chai.assert;
 
 	assert.approxThreshold = 0.000000000000001;
 	assert.approxEqual = approxEqual;
 	assert.graphicalEqual = graphicalEqual;
-	window.assert = assert;
+	x$5.assert = assert;
 }
 
-window.root = document.getElementById('root').textContent;
-window.canvasTestClass = 'Canvas' + Date.now();
-window.mocha.setup('bdd');
+x$5.root = x$4.getElementById('root').textContent;
+x$5.canvasTestClass = 'Canvas' + Date.now();
+x$5.mocha.setup('bdd');
 setAssert();
 setVersion();
 }())

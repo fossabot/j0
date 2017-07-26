@@ -2568,6 +2568,8 @@ if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
 	x$10.URLSearchParams = URLSearchParams$2;
 }
 
+var keys = x$5.keys;
+
 function toLowerCase(x) {
 	return x ? x.toLowerCase() : '';
 }
@@ -2580,7 +2582,7 @@ var Headers$1 = function (_StringList2) {
 
 		var init = [];
 		if (headers) {
-			x$5.keys(headers).forEach(function (key) {
+			keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}

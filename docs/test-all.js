@@ -2648,6 +2648,8 @@ describe('debounce', function () {
 	});
 });
 
+var keys = x$4.keys;
+
 var x$25 = Array;
 
 var isArray = x$25.isArray;
@@ -2692,7 +2694,7 @@ function superForEach() {
 			if (isArray(arg)) {
 				superForEach.apply(undefined, _toConsumableArray(arg).concat([fn]));
 			} else {
-				x$4.keys(arg).forEach(function (key) {
+				keys(arg).forEach(function (key) {
 					superForEach(key, arg[key], fn);
 				});
 			}
@@ -2706,7 +2708,7 @@ var J0Element = function () {
 
 		_classCallCheck(this, J0Element);
 
-		x$4.assign(this, {
+		assign(this, {
 			listeners: new x$28()
 		});
 		if (source instanceof J0Element) {
@@ -2965,7 +2967,7 @@ var J0Element = function () {
 	}, {
 		key: 'setStyle',
 		value: function setStyle(styles) {
-			x$4.assign(this.style, styles);
+			assign(this.style, styles);
 			return this;
 		}
 	}, {
@@ -3159,7 +3161,7 @@ function _findAll(selector) {
 	return result;
 }
 
-x$4.assign(wrap, {
+assign(wrap, {
 	find: _find,
 	findAll: _findAll,
 	ready: function () {
@@ -4442,7 +4444,7 @@ var Headers$1 = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			x$4.keys(headers).forEach(function (key) {
+			keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -5473,7 +5475,7 @@ var J0Storage = function () {
 		value: function clear() {
 			var _this20 = this;
 
-			x$4.keys(this).forEach(function (key) {
+			keys(this).forEach(function (key) {
 				_this20.removeItem(key);
 			});
 		}
@@ -5485,7 +5487,7 @@ var J0Storage = function () {
 	}, {
 		key: 'key',
 		value: function key(n) {
-			return x$4.keys(this)[n];
+			return keys(this)[n];
 		}
 	}, {
 		key: 'removeItem',
@@ -5500,7 +5502,7 @@ var J0Storage = function () {
 	}, {
 		key: 'length',
 		get: function get() {
-			return x$4.keys(this).length;
+			return keys(this).length;
 		}
 	}]);
 
@@ -5508,6 +5510,21 @@ var J0Storage = function () {
 }();
 
 test$27(new J0Storage(), 'J0Storage');
+
+describe('keys', function () {
+
+	it('should return a list of keys', function () {
+		var _obj;
+
+		var key1 = Date.now() + '-1';
+		var key2 = Date.now() + '-2';
+		var key3 = Date.now() + '-3';
+		var obj = (_obj = {}, _defineProperty(_obj, key1, null), _defineProperty(_obj, key2, null), _defineProperty(_obj, key3, null), _obj);
+		var actual = keys(obj);
+		var expected = [key1, key2, key3];
+		assert.deepEqual(actual, expected);
+	});
+});
 
 var Lazy = function () {
 	function Lazy() {
@@ -8629,12 +8646,12 @@ var State = function () {
 				}
 				return '(' + part[2] + ')';
 			}).join(''));
-			x$4.assign(stateInfo, {
+			assign(stateInfo, {
 				parts: parts,
 				matcher: matcher
 			});
 		}
-		x$4.assign(this, stateInfo);
+		assign(this, stateInfo);
 	}
 
 	_createClass(State, [{
@@ -8857,7 +8874,7 @@ var StateManager = function (_EventEmitter) {
 
 		var _this28 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		x$4.assign(_this28, { prefix: '#' }, config, {
+		assign(_this28, { prefix: '#' }, config, {
 			states: new x$38(),
 			listeners: []
 		});
@@ -10507,7 +10524,7 @@ var pluralFunction = void 0;
 function template(templateString) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	return Object.keys(params).reduce(function (result, paramKey) {
+	return keys(params).reduce(function (result, paramKey) {
 		var value = params[paramKey];
 		var matcher1 = new RegExp('\\$\\{' + paramKey + '\\}', 'g');
 		var matcher2 = new RegExp('\\$\\{' + paramKey + '\\s*:\\s*(.*?)\\}', 'g');

@@ -229,6 +229,7 @@
 	"isObject": {},
 	"isString": {},
 	"isUndefined": {},
+	"keys": {},
 	"leftpad": {},
 	"localStorage": {
 		"j0polyfill": {}
