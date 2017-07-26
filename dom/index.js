@@ -1,5 +1,5 @@
 import {
-	Object,
+	keys,
 	assign,
 	Array,
 	document,
@@ -37,7 +37,7 @@ function superForEach(...args) {
 			if (isArray(arg)) {
 				superForEach(...arg, fn);
 			} else {
-				Object.keys(arg)
+				keys(arg)
 				.forEach((key) => {
 					superForEach(key, arg[key], fn);
 				});

@@ -1,7 +1,7 @@
 import {
 	Iterator,
 	StringList,
-	Object
+	keys
 } from 'j0';
 
 function toLowerCase(x) {
@@ -13,7 +13,7 @@ class Headers extends StringList {
 	constructor(headers) {
 		const init = [];
 		if (headers) {
-			Object.keys(headers)
+			keys(headers)
 			.forEach((key) => {
 				init.push([key, headers[key]]);
 			});
