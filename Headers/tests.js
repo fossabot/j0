@@ -18,7 +18,7 @@ function tests(Headers, testName = 'Headers') {
 			const value = 'b';
 			headers.append(name, value);
 			headers.append(name, value);
-			assert.deepEqual(headers.get(name), [value, value].join(','));
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value, value]);
 		});
 
 		it('should have set()', function () {
@@ -28,7 +28,7 @@ function tests(Headers, testName = 'Headers') {
 			const value2 = 'c';
 			headers.set(name, value1);
 			headers.set(name, value2);
-			assert.deepEqual(headers.get(name), value2);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value2]);
 		});
 
 		it('should have get()', function () {
@@ -38,7 +38,7 @@ function tests(Headers, testName = 'Headers') {
 			const value2 = 'c';
 			headers.append(name, value1);
 			headers.append(name, value2);
-			assert.equal(headers.get(name), `${value1},${value2}`);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value1, value2]);
 		});
 
 		it('should have delete()', function () {
@@ -68,10 +68,15 @@ function tests(Headers, testName = 'Headers') {
 				if (done) {
 					break;
 				}
-				results[index++] = value;
+				results[index++] = [].concat(
+					...value
+					.map((result) => {
+						return result.split(/\s*,\s*/);
+					})
+				);
 			}
 			assert.deepEqual(results, [
-				[name, `${value1},${value2}`]
+				[name, value1, value2]
 			]);
 		});
 
@@ -92,9 +97,15 @@ function tests(Headers, testName = 'Headers') {
 				}
 				results[index++] = value;
 			}
-			assert.deepEqual(results, [
-				`${value1},${value2}`
-			]);
+			assert.deepEqual(
+				results
+				.map((result) => {
+					return result.split(/\s*,\s*/);
+				}),
+				[
+					[value1, value2]
+				]
+			);
 		});
 
 	});
