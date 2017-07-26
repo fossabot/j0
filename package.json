@@ -18,7 +18,7 @@
     "start": "node build --watch",
     "polyfill": "node build/generatePolyfill",
     "build": "node build && npm run polyfill",
-    "test": "wdio build/wdio.conf.js"
+    "test": "node test"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -35,7 +35,7 @@
     "rollup-plugin-glob-import": "0.0.4",
     "sable": "^0.1.2",
     "selenium-standalone": "^6.4.1",
-    "selenium-webdriver": "^3.4.0",
+    "selenium-webdriver": "^3.5.0",
     "uglify-js": "^3.0.11",
     "unorm": "^1.4.1",
     "wdio-mocha-framework": "^0.5.10",
