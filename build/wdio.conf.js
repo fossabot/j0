@@ -258,7 +258,9 @@ if (process.argv.includes('--BrowserStack')) {
 					// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
 					verbose: true,
 					forceLocal: true,
-					onlyAutomate: true
+					onlyAutomate: true,
+					onlyCommand: true,
+					only: `localhost,${port},0`
 				});
 				console.info('onPrepare: done');
 			},
