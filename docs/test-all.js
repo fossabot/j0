@@ -1031,24 +1031,53 @@ describe('ArrayBuffer/toString', function () {
 	})));
 });
 
-var x$4 = JSON;
+function test$19(assign) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Object.assign';
 
-var x$5 = Blob;
 
-var x$6 = ArrayBuffer;
+	describe(name, function () {
 
-var x$7 = DataView;
+		it('should assign properties', function () {
+			var _assign, _assign2, _assert$deepEqual;
 
-var x$8 = TypeError;
+			var key1 = Date.now() + '_1';
+			var key2 = Date.now() + '_2';
+			var key3 = Date.now() + '_3';
+			var value1 = Date.now() + '_4';
+			var value2 = Date.now() + '_5';
+			var value3 = Date.now() + '_6';
+			var seed = _defineProperty({}, key1, value3);
+			var result = assign(seed, (_assign = {}, _defineProperty(_assign, key1, value1), _defineProperty(_assign, key2, value2), _assign), (_assign2 = {}, _defineProperty(_assign2, key2, value3), _defineProperty(_assign2, key3, value2), _assign2));
+			assert.equal(result, seed);
+			assert.deepEqual(result, (_assert$deepEqual = {}, _defineProperty(_assert$deepEqual, key1, value1), _defineProperty(_assert$deepEqual, key2, value3), _defineProperty(_assert$deepEqual, key3, value2), _assert$deepEqual));
+		});
+	});
+}
 
-var x$9 = Promise;
+var x$4 = Object;
 
-var x$10 = FormData;
+var assign = x$4.assign;
 
-var x$11 = decodeURIComponent;
+test$19(assign, 'assign');
+
+var x$5 = JSON;
+
+var x$6 = Blob;
+
+var x$7 = ArrayBuffer;
+
+var x$8 = DataView;
+
+var x$9 = TypeError;
+
+var x$10 = Promise;
+
+var x$11 = FormData;
+
+var x$12 = decodeURIComponent;
 
 function parse(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$10();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$11();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -1057,8 +1086,8 @@ function parse(body) {
 			    _name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			_name = x$11(_name.replace(/\+/g, ' '));
-			parts = x$11(parts.join('=').replace(/\+/g, ' '));
+			_name = x$12(_name.replace(/\+/g, ' '));
+			parts = x$12(parts.join('=').replace(/\+/g, ' '));
 			form.append(_name, parts);
 		}
 	});
@@ -1069,29 +1098,29 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$12 = URLSearchParams;
+var x$13 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$13 = Uint8ClampedArray;
+var x$14 = Uint8ClampedArray;
 
-var x$14 = Uint16Array;
+var x$15 = Uint16Array;
 
-var x$15 = Uint32Array;
+var x$16 = Uint32Array;
 
-var x$16 = Int8Array;
+var x$17 = Int8Array;
 
-var x$17 = Int16Array;
+var x$18 = Int16Array;
 
-var x$18 = Int32Array;
+var x$19 = Int32Array;
 
-var x$19 = Float32Array;
+var x$20 = Float32Array;
 
-var x$20 = Float64Array;
+var x$21 = Float64Array;
 
-var viewClasses = [x$1, x$13, x$14, x$15, x$16, x$17, x$18, x$19, x$20];
+var viewClasses = [x$1, x$14, x$15, x$16, x$17, x$18, x$19, x$20, x$21];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -1122,17 +1151,17 @@ var Body$1 = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$5)) {
+			} else if (isInstanceOf(body, x$6)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$10)) {
+			} else if (isInstanceOf(body, x$11)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$12)) {
+			} else if (isInstanceOf(body, x$13)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$7)) {
+			} else if (isInstanceOf(body, x$8)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$5([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$6) || isArrayBufferView(body)) {
+				this.bodyInit = new x$6([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$7) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -1142,7 +1171,7 @@ var Body$1 = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$12) {
+				} else if (body instanceof x$13) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -1151,7 +1180,7 @@ var Body$1 = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$9.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$10.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -1165,13 +1194,13 @@ var Body$1 = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$9.resolve(this.bodyBlob);
+				return x$10.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$9.resolve(new x$5([this.bodyArrayBuffer]));
+				return x$10.resolve(new x$6([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$9.resolve(new x$5([this.bodyText]));
+				return x$10.resolve(new x$6([this.bodyText]));
 			}
 		}
 	}, {
@@ -1184,11 +1213,11 @@ var Body$1 = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$9.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$10.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$9.resolve(this.bodyText);
+				return x$10.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -1199,13 +1228,13 @@ var Body$1 = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$4.parse);
+			return this.text().then(x$5.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$9.reject(new x$8('Already used'));
+				return x$10.reject(new x$9('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -1233,9 +1262,9 @@ tests$1(Body$1, 'J0Body');
 /* global Body */
 tests$1(Body);
 
-var x$21 = cancelAnimationFrame;
+var x$22 = cancelAnimationFrame;
 
-var x$22 = requestAnimationFrame;
+var x$23 = requestAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
@@ -1247,8 +1276,8 @@ describe('cancelAnimationFrame', function () {
 					case 0:
 						_context4.next = 2;
 						return new Promise(function (resolve) {
-							x$22(function (time1) {
-								x$22(function (time2) {
+							x$23(function (time1) {
+								x$23(function (time2) {
 									resolve(time2 - time1);
 								});
 							});
@@ -1266,7 +1295,7 @@ describe('cancelAnimationFrame', function () {
 							var timer = setTimeout(function () {
 								reject(new Error('requestAnimationFrame didn\'t invoke the given function.'));
 							}, baseInterval * margin);
-							x$22(function () {
+							x$23(function () {
 								clearTimeout(timer);
 								resolve();
 							});
@@ -1277,11 +1306,11 @@ describe('cancelAnimationFrame', function () {
 						return new Promise(function (resolve, reject) {
 							var margin = 10;
 							var timer = setTimeout(resolve, baseInterval * margin);
-							var id = x$22(function () {
+							var id = x$23(function () {
 								clearTimeout(timer);
 								reject(new Error('cancelAnimationFrame didn\'t cancel the invocation.'));
 							});
-							x$21(id);
+							x$22(id);
 						});
 
 					case 10:
@@ -1331,7 +1360,7 @@ describe('clamp', function () {
 });
 
 function clone(obj) {
-	return x$4.parse(x$4.stringify(obj));
+	return x$5.parse(x$5.stringify(obj));
 }
 
 function noop() {
@@ -2469,7 +2498,7 @@ describe('ConditionalSet', function () {
 	});
 });
 
-function test$19(info) {
+function test$21(info) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'console.info';
 
 
@@ -2482,7 +2511,7 @@ function test$19(info) {
 }
 
 /* eslint-disable no-console */
-test$19(console.info);
+test$21(console.info);
 
 function createTypedArray(TypedArray, source) {
 	var length = source.length;
@@ -2539,7 +2568,7 @@ describe('cubicBezier', function () {
 	});
 });
 
-function test$21(CustomEvent) {
+function test$23(CustomEvent) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'CustomEvent';
 
 
@@ -2553,7 +2582,7 @@ function test$21(CustomEvent) {
 	});
 }
 
-var x$23 = Event;
+var x$24 = Event;
 
 function CustomEvent$1(event) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -2565,11 +2594,11 @@ function CustomEvent$1(event) {
 	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	return evt;
 }
-CustomEvent$1.prototype = x$23.prototype;
+CustomEvent$1.prototype = x$24.prototype;
 
-test$21(CustomEvent$1, 'CustomEvent#j0');
+test$23(CustomEvent$1, 'CustomEvent#j0');
 
-test$21(CustomEvent);
+test$23(CustomEvent);
 
 function debounce(fn) {
 	var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -2619,8 +2648,6 @@ describe('debounce', function () {
 	});
 });
 
-var x$24 = Object;
-
 var x$25 = Array;
 
 var isArray = x$25.isArray;
@@ -2638,7 +2665,7 @@ var x$28 = Set;
 var x$29 = getComputedStyle;
 
 var nodeKey = Symbol();
-var getBody = new x$9(function (resolve) {
+var getBody = new x$10(function (resolve) {
 	var interval = 50;
 	function check() {
 		var body = x$3.body;
@@ -2665,7 +2692,7 @@ function superForEach() {
 			if (isArray(arg)) {
 				superForEach.apply(undefined, _toConsumableArray(arg).concat([fn]));
 			} else {
-				x$24.keys(arg).forEach(function (key) {
+				x$4.keys(arg).forEach(function (key) {
 					superForEach(key, arg[key], fn);
 				});
 			}
@@ -2679,7 +2706,7 @@ var J0Element = function () {
 
 		_classCallCheck(this, J0Element);
 
-		x$24.assign(this, {
+		x$4.assign(this, {
 			listeners: new x$28()
 		});
 		if (source instanceof J0Element) {
@@ -2938,7 +2965,7 @@ var J0Element = function () {
 	}, {
 		key: 'setStyle',
 		value: function setStyle(styles) {
-			x$24.assign(this.style, styles);
+			x$4.assign(this.style, styles);
 			return this;
 		}
 	}, {
@@ -3132,7 +3159,7 @@ function _findAll(selector) {
 	return result;
 }
 
-x$24.assign(wrap, {
+x$4.assign(wrap, {
 	find: _find,
 	findAll: _findAll,
 	ready: function () {
@@ -3161,7 +3188,7 @@ x$24.assign(wrap, {
 			}, _callee10, this);
 		}));
 
-		function ready(_x29) {
+		function ready(_x30) {
 			return _ref16.apply(this, arguments);
 		}
 
@@ -4415,7 +4442,7 @@ var Headers$1 = function (_StringList) {
 
 		var init = [];
 		if (headers) {
-			x$24.keys(headers).forEach(function (key) {
+			x$4.keys(headers).forEach(function (key) {
 				init.push([key, headers[key]]);
 			});
 		}
@@ -4626,7 +4653,7 @@ function parse$2(rawHeaders) {
 var x$31 = XMLHttpRequest;
 
 function fetch$1(input, init) {
-	return new x$9(function (resolve, reject) {
+	return new x$10(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new x$31();
 		xhr.onload = function () {
@@ -4879,7 +4906,7 @@ function generator$2() {
 	};
 }
 
-function test$23(generator) {
+function test$25(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
 
 
@@ -4931,9 +4958,9 @@ function test$23(generator) {
 	});
 }
 
-test$23(generator$2, 'HTMLCollection/@iterator/j0');
+test$25(generator$2, 'HTMLCollection/@iterator/j0');
 
-test$23(HTMLCollection.prototype[Symbol.iterator]);
+test$25(HTMLCollection.prototype[Symbol.iterator]);
 
 var x$33 = window;
 
@@ -5386,7 +5413,7 @@ describe('Iterator', function () {
 	});
 });
 
-function test$25(storage, testName) {
+function test$27(storage, testName) {
 
 	describe(testName, function () {
 
@@ -5446,7 +5473,7 @@ var J0Storage = function () {
 		value: function clear() {
 			var _this20 = this;
 
-			x$24.keys(this).forEach(function (key) {
+			x$4.keys(this).forEach(function (key) {
 				_this20.removeItem(key);
 			});
 		}
@@ -5458,7 +5485,7 @@ var J0Storage = function () {
 	}, {
 		key: 'key',
 		value: function key(n) {
-			return x$24.keys(this)[n];
+			return x$4.keys(this)[n];
 		}
 	}, {
 		key: 'removeItem',
@@ -5473,14 +5500,14 @@ var J0Storage = function () {
 	}, {
 		key: 'length',
 		get: function get() {
-			return x$24.keys(this).length;
+			return x$4.keys(this).length;
 		}
 	}]);
 
 	return J0Storage;
 }();
 
-test$25(new J0Storage(), 'J0Storage');
+test$27(new J0Storage(), 'J0Storage');
 
 var Lazy = function () {
 	function Lazy() {
@@ -5560,11 +5587,11 @@ describe('leftpad', function () {
 
 var localStorage$1 = new J0Storage();
 
-test$25(localStorage$1, 'localStorage#j0');
+test$27(localStorage$1, 'localStorage#j0');
 
-test$25(localStorage, 'localStorage');
+test$27(localStorage, 'localStorage');
 
-function test$28(generator) {
+function test$30(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
 
 
@@ -5595,9 +5622,9 @@ function generator$4() {
 	return this.entries();
 }
 
-test$28(generator$4, 'Map.prototype[Symbol.iterator]#j0');
+test$30(generator$4, 'Map.prototype[Symbol.iterator]#j0');
 
-test$28(Map.prototype[Symbol.iterator]);
+test$30(Map.prototype[Symbol.iterator]);
 
 var Map$1 = function () {
 	function Map$1(iterable) {
@@ -5848,7 +5875,7 @@ tests$7(Map$1, 'Map#j0');
 
 tests$7(Map);
 
-function test$30(abs) {
+function test$32(abs) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.abs';
 
 
@@ -5880,10 +5907,10 @@ function test$30(abs) {
 	});
 }
 
-test$30(Math.abs);
+test$32(Math.abs);
 
 /* eslint-disable no-magic-numbers */
-function test$32(acos) {
+function test$34(acos) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.acos';
 
 
@@ -5915,10 +5942,10 @@ function test$32(acos) {
 	});
 }
 
-test$32(Math.acos);
+test$34(Math.acos);
 
 /* eslint-disable no-magic-numbers */
-function test$34(acosh) {
+function test$36(acosh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.acosh';
 
 
@@ -5956,12 +5983,12 @@ function acosh(x) {
 	return x$34.log(x + x$34.sqrt(x * x - 1));
 }
 
-test$34(acosh, 'Math.acosh#j0');
+test$36(acosh, 'Math.acosh#j0');
 
-test$34(Math.acosh);
+test$36(Math.acosh);
 
 /* eslint-disable no-magic-numbers */
-function test$36(asin) {
+function test$38(asin) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.asin';
 
 
@@ -5993,10 +6020,10 @@ function test$36(asin) {
 	});
 }
 
-test$36(Math.asin);
+test$38(Math.asin);
 
 /* eslint-disable no-magic-numbers */
-function test$38(asinh) {
+function test$40(asinh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.asinh';
 
 
@@ -6035,12 +6062,12 @@ function asinh(x) {
 	return x$34.log(x + x$34.sqrt(x * x + 1));
 }
 
-test$38(asinh, 'Math.asinh#j0');
+test$40(asinh, 'Math.asinh#j0');
 
-test$38(Math.asinh);
+test$40(Math.asinh);
 
 /* eslint-disable no-magic-numbers */
-function test$40(atan) {
+function test$42(atan) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atan';
 
 
@@ -6072,10 +6099,10 @@ function test$40(atan) {
 	});
 }
 
-test$40(Math.atan);
+test$42(Math.atan);
 
 /* eslint-disable no-magic-numbers */
-function test$42(atan2) {
+function test$44(atan2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atan2';
 
 
@@ -6135,10 +6162,10 @@ function test$42(atan2) {
 	});
 }
 
-test$42(Math.atan2);
+test$44(Math.atan2);
 
 /* eslint-disable no-magic-numbers */
-function test$44(atanh) {
+function test$46(atanh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.atanh';
 
 
@@ -6174,12 +6201,12 @@ function atanh(x) {
 	return x$34.log((1 + x) / (1 - x)) / 2;
 }
 
-test$44(atanh, 'Math.atanh#j0');
+test$46(atanh, 'Math.atanh#j0');
 
-test$44(Math.atanh);
+test$46(Math.atanh);
 
 /* eslint-disable no-magic-numbers */
-function test$46(cbrt) {
+function test$48(cbrt) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cbrt';
 
 
@@ -6217,12 +6244,12 @@ function cbrt(x) {
 	return x < 0 ? -root : root;
 }
 
-test$46(cbrt, 'Math.cbrt#j0');
+test$48(cbrt, 'Math.cbrt#j0');
 
-test$46(Math.cbrt);
+test$48(Math.cbrt);
 
 /* eslint-disable no-magic-numbers */
-function test$48(ceil) {
+function test$50(ceil) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.ceil';
 
 
@@ -6254,10 +6281,10 @@ function test$48(ceil) {
 	});
 }
 
-test$48(Math.ceil);
+test$50(Math.ceil);
 
 /* eslint-disable no-magic-numbers */
-function test$50(clz32) {
+function test$52(clz32) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.clz32';
 
 
@@ -6300,12 +6327,12 @@ function clz32(x) {
 	return 31 - x$34.floor(x$34.log(x >>> 0) * x$34.LOG2E);
 }
 
-test$50(clz32, 'Math.clz32#j0');
+test$52(clz32, 'Math.clz32#j0');
 
-test$50(Math.clz32);
+test$52(Math.clz32);
 
 /* eslint-disable no-magic-numbers */
-function test$52(cos) {
+function test$54(cos) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cos';
 
 
@@ -6337,10 +6364,10 @@ function test$52(cos) {
 	});
 }
 
-test$52(Math.cos);
+test$54(Math.cos);
 
 /* eslint-disable no-magic-numbers */
-function test$54(cosh) {
+function test$56(cosh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.cosh';
 
 
@@ -6377,11 +6404,11 @@ function cosh(x) {
 	return (y + 1 / y) / 2;
 }
 
-test$54(cosh, 'Math.cosh#j0');
+test$56(cosh, 'Math.cosh#j0');
 
-test$54(Math.cosh);
+test$56(Math.cosh);
 
-function test$56(E) {
+function test$58(E) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.E';
 
 
@@ -6394,10 +6421,10 @@ function test$56(E) {
 	});
 }
 
-test$56(Math.E);
+test$58(Math.E);
 
 /* eslint-disable no-magic-numbers */
-function test$58(exp) {
+function test$60(exp) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.exp';
 
 
@@ -6429,10 +6456,10 @@ function test$58(exp) {
 	});
 }
 
-test$58(Math.exp);
+test$60(Math.exp);
 
 /* eslint-disable no-magic-numbers */
-function test$60(expm1) {
+function test$62(expm1) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.expm1';
 
 
@@ -6468,12 +6495,12 @@ function expm1(x) {
 	return x$34.exp(x) - 1;
 }
 
-test$60(expm1, 'Math.expm1#j0');
+test$62(expm1, 'Math.expm1#j0');
 
-test$60(Math.expm1);
+test$62(Math.expm1);
 
 /* eslint-disable no-magic-numbers */
-function test$62(floor) {
+function test$64(floor) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.floor';
 
 
@@ -6505,10 +6532,10 @@ function test$62(floor) {
 	});
 }
 
-test$62(Math.floor);
+test$64(Math.floor);
 
 /* eslint-disable no-magic-numbers */
-function test$64(fround) {
+function test$66(fround) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.fround';
 
 
@@ -6547,15 +6574,15 @@ function test$64(fround) {
 }
 
 function fround(x) {
-	return new x$19([x])[0];
+	return new x$20([x])[0];
 }
 
-test$64(fround, 'Math.fround#j0');
+test$66(fround, 'Math.fround#j0');
 
-test$64(Math.fround);
+test$66(Math.fround);
 
 /* eslint-disable no-magic-numbers */
-function test$66(hypot) {
+function test$68(hypot) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.hypot';
 
 
@@ -6602,12 +6629,12 @@ function hypot() {
 	return x$34.sqrt(sum);
 }
 
-test$66(hypot, 'Math.hypot#j0');
+test$68(hypot, 'Math.hypot#j0');
 
-test$66(Math.hypot);
+test$68(Math.hypot);
 
 /* eslint-disable no-magic-numbers */
-function test$68(imul) {
+function test$70(imul) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.imul';
 
 
@@ -6670,11 +6697,11 @@ function imul(a, b) {
 	return al * bl + (ah * bl + al * bh << 16 >>> 0) | 0;
 }
 
-test$68(imul, 'Math.imul#j0');
+test$70(imul, 'Math.imul#j0');
 
-test$68(Math.imul);
+test$70(Math.imul);
 
-function test$70(LN10) {
+function test$72(LN10) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LN10';
 
 
@@ -6687,9 +6714,9 @@ function test$70(LN10) {
 	});
 }
 
-test$70(Math.LN10);
+test$72(Math.LN10);
 
-function test$72(LN2) {
+function test$74(LN2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LN2';
 
 
@@ -6702,10 +6729,10 @@ function test$72(LN2) {
 	});
 }
 
-test$72(Math.LN2);
+test$74(Math.LN2);
 
 /* eslint-disable no-magic-numbers */
-function test$74(log) {
+function test$76(log) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log';
 
 
@@ -6737,10 +6764,10 @@ function test$74(log) {
 	});
 }
 
-test$74(Math.log);
+test$76(Math.log);
 
 /* eslint-disable no-magic-numbers */
-function test$76(log10) {
+function test$78(log10) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log10';
 
 
@@ -6776,11 +6803,11 @@ function log10(x) {
 	return x$34.log(x) / x$34.LN10;
 }
 
-test$76(log10, 'Math.log10#j0');
+test$78(log10, 'Math.log10#j0');
 
-test$76(Math.log10);
+test$78(Math.log10);
 
-function test$78(LOG10E) {
+function test$80(LOG10E) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LOG10E';
 
 
@@ -6793,10 +6820,10 @@ function test$78(LOG10E) {
 	});
 }
 
-test$78(Math.LOG10E);
+test$80(Math.LOG10E);
 
 /* eslint-disable no-magic-numbers */
-function test$80(log1p) {
+function test$82(log1p) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log1p';
 
 
@@ -6832,12 +6859,12 @@ function log1p(x) {
 	return x$34.log(x + 1);
 }
 
-test$80(log1p, 'Math.log1p#j0');
+test$82(log1p, 'Math.log1p#j0');
 
-test$80(Math.log1p);
+test$82(Math.log1p);
 
 /* eslint-disable no-magic-numbers */
-function test$82(log2) {
+function test$84(log2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log2';
 
 
@@ -6873,11 +6900,11 @@ function log2(x) {
 	return x$34.log(x) / x$34.LN2;
 }
 
-test$82(log2, 'Math.log2#j0');
+test$84(log2, 'Math.log2#j0');
 
-test$82(Math.log2);
+test$84(Math.log2);
 
-function test$84(LOG2E) {
+function test$86(LOG2E) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.LOG2E';
 
 
@@ -6890,10 +6917,10 @@ function test$84(LOG2E) {
 	});
 }
 
-test$84(Math.LOG2E);
+test$86(Math.LOG2E);
 
 /* eslint-disable no-magic-numbers */
-function test$86(max) {
+function test$88(max) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.max';
 
 
@@ -6927,10 +6954,10 @@ function test$86(max) {
 	});
 }
 
-test$86(Math.max);
+test$88(Math.max);
 
 /* eslint-disable no-magic-numbers */
-function test$88(min) {
+function test$90(min) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.min';
 
 
@@ -6964,9 +6991,9 @@ function test$88(min) {
 	});
 }
 
-test$88(Math.min);
+test$90(Math.min);
 
-function test$90(PI) {
+function test$92(PI) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.PI';
 
 
@@ -6979,10 +7006,10 @@ function test$90(PI) {
 	});
 }
 
-test$90(Math.PI);
+test$92(Math.PI);
 
 /* eslint-disable no-magic-numbers */
-function test$92(pow) {
+function test$94(pow) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.pow';
 
 
@@ -7016,10 +7043,10 @@ function test$92(pow) {
 	});
 }
 
-test$92(Math.pow);
+test$94(Math.pow);
 
 /* eslint-disable no-magic-numbers */
-function test$94(random) {
+function test$96(random) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.random';
 
 
@@ -7046,10 +7073,10 @@ function test$94(random) {
 	});
 }
 
-test$94(Math.random);
+test$96(Math.random);
 
 /* eslint-disable no-magic-numbers */
-function test$96(round) {
+function test$98(round) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.round';
 
 
@@ -7081,10 +7108,10 @@ function test$96(round) {
 	});
 }
 
-test$96(Math.round);
+test$98(Math.round);
 
 /* eslint-disable no-magic-numbers */
-function test$98(sign) {
+function test$100(sign) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sign';
 
 
@@ -7126,12 +7153,12 @@ function sign(x) {
 	return x > 0 ? 1 : -1;
 }
 
-test$98(sign, 'Math.sign#j0');
+test$100(sign, 'Math.sign#j0');
 
-test$98(Math.sign);
+test$100(Math.sign);
 
 /* eslint-disable no-magic-numbers */
-function test$100(sin) {
+function test$102(sin) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sin';
 
 
@@ -7163,10 +7190,10 @@ function test$100(sin) {
 	});
 }
 
-test$100(Math.sin);
+test$102(Math.sin);
 
 /* eslint-disable no-magic-numbers */
-function test$102(sinh) {
+function test$104(sinh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sinh';
 
 
@@ -7203,12 +7230,12 @@ function sinh(x) {
 	return (y - 1 / y) / 2;
 }
 
-test$102(sinh, 'Math.sinh#j0');
+test$104(sinh, 'Math.sinh#j0');
 
-test$102(Math.sinh);
+test$104(Math.sinh);
 
 /* eslint-disable no-magic-numbers */
-function test$104(sqrt) {
+function test$106(sqrt) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.sqrt';
 
 
@@ -7240,9 +7267,9 @@ function test$104(sqrt) {
 	});
 }
 
-test$104(Math.sqrt);
+test$106(Math.sqrt);
 
-function test$106(SQRT1_2) {
+function test$108(SQRT1_2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.SQRT1_2';
 
 
@@ -7255,9 +7282,9 @@ function test$106(SQRT1_2) {
 	});
 }
 
-test$106(Math.SQRT1_2);
+test$108(Math.SQRT1_2);
 
-function test$108(SQRT2) {
+function test$110(SQRT2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.SQRT2';
 
 
@@ -7270,10 +7297,10 @@ function test$108(SQRT2) {
 	});
 }
 
-test$108(Math.SQRT2);
+test$110(Math.SQRT2);
 
 /* eslint-disable no-magic-numbers */
-function test$110(tan) {
+function test$112(tan) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.tan';
 
 
@@ -7305,10 +7332,10 @@ function test$110(tan) {
 	});
 }
 
-test$110(Math.tan);
+test$112(Math.tan);
 
 /* eslint-disable no-magic-numbers */
-function test$112(tanh) {
+function test$114(tanh) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.tanh';
 
 
@@ -7350,12 +7377,12 @@ function tanh(x) {
 	return (y - 1) / (y + 1);
 }
 
-test$112(tanh, 'Math.tanh#j0');
+test$114(tanh, 'Math.tanh#j0');
 
-test$112(Math.tanh);
+test$114(Math.tanh);
 
 /* eslint-disable no-magic-numbers */
-function test$114(trunc) {
+function test$116(trunc) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.trunc';
 
 
@@ -7424,11 +7451,11 @@ function trunc(x) {
 	return x - x % 1;
 }
 
-test$114(trunc, 'Math.trunc#j0');
+test$116(trunc, 'Math.trunc#j0');
 
-test$114(Math.trunc);
+test$116(Math.trunc);
 
-function test$116(generator) {
+function test$118(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
 
 
@@ -7551,11 +7578,11 @@ function generator$6() {
 	});
 }
 
-test$116(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
+test$118(generator$6, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-test$116(NamedNodeMap.prototype[Symbol.iterator]);
+test$118(NamedNodeMap.prototype[Symbol.iterator]);
 
-function test$118(generator) {
+function test$120(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NodeList.prototype[Symbol.iterator]';
 
 
@@ -7678,9 +7705,9 @@ function generator$8() {
 	});
 }
 
-test$118(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
+test$120(generator$8, 'NodeList.prototype[Symbol.iterator]#j0');
 
-test$118(NodeList.prototype[Symbol.iterator]);
+test$120(NodeList.prototype[Symbol.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -7700,7 +7727,7 @@ describe('noop', function () {
 	});
 });
 
-function assign(target) {
+function assign$1(target) {
 	for (var _len42 = arguments.length, objects = Array(_len42 > 1 ? _len42 - 1 : 0), _key42 = 1; _key42 < _len42; _key42++) {
 		objects[_key42 - 1] = arguments[_key42];
 	}
@@ -7715,30 +7742,9 @@ function assign(target) {
 	return target;
 }
 
-function test$120(assign) {
-	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Object.assign';
+test$19(assign$1, 'Object.assign#j0');
 
-
-	describe(name, function () {
-
-		it('should assign properties', function () {
-			var _assign, _assign2, _assert$deepEqual;
-
-			var key1 = Date.now() + '_1';
-			var key2 = Date.now() + '_2';
-			var key3 = Date.now() + '_3';
-			var value1 = Date.now() + '_4';
-			var value2 = Date.now() + '_5';
-			var value3 = Date.now() + '_6';
-			var result = assign({}, (_assign = {}, _defineProperty(_assign, key1, value1), _defineProperty(_assign, key2, value2), _assign), (_assign2 = {}, _defineProperty(_assign2, key2, value3), _defineProperty(_assign2, key3, value2), _assign2));
-			assert.deepEqual(result, (_assert$deepEqual = {}, _defineProperty(_assert$deepEqual, key1, value1), _defineProperty(_assert$deepEqual, key2, value3), _defineProperty(_assert$deepEqual, key3, value2), _assert$deepEqual));
-		});
-	});
-}
-
-test$120(assign, 'Object.assign#j0');
-
-test$120(Object.assign);
+test$19(Object.assign);
 
 function onError(error) {
 	onError.listener(error);
@@ -7931,7 +7937,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new x$8('A promise cannot be resolved with itself');
+					throw new x$9('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -8244,7 +8250,7 @@ describe('requestAnimationFrame', function () {
 				switch (_context50.prev = _context50.next) {
 					case 0:
 						_context50.next = 2;
-						return new Promise(x$22);
+						return new Promise(x$23);
 
 					case 2:
 						timeStamp = _context50.sent;
@@ -8623,12 +8629,12 @@ var State = function () {
 				}
 				return '(' + part[2] + ')';
 			}).join(''));
-			x$24.assign(stateInfo, {
+			x$4.assign(stateInfo, {
 				parts: parts,
 				matcher: matcher
 			});
 		}
-		x$24.assign(this, stateInfo);
+		x$4.assign(this, stateInfo);
 	}
 
 	_createClass(State, [{
@@ -8851,7 +8857,7 @@ var StateManager = function (_EventEmitter) {
 
 		var _this28 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		x$24.assign(_this28, { prefix: '#' }, config, {
+		x$4.assign(_this28, { prefix: '#' }, config, {
 			states: new x$38(),
 			listeners: []
 		});
@@ -8952,7 +8958,7 @@ var StateManager = function (_EventEmitter) {
 		value: function otherwise(stateInfo) {
 			this.fallback = this.get(stateInfo);
 			if (!this.fallback) {
-				throw new Error('Failed to set fallback: ' + x$4.stringify(stateInfo) + ' is not exist.');
+				throw new Error('Failed to set fallback: ' + x$5.stringify(stateInfo) + ' is not exist.');
 			}
 			return this;
 		}
@@ -11345,7 +11351,7 @@ var URL$1 = function () {
 	return URL$1;
 }();
 
-x$24.defineProperties(URL$1, {
+x$4.defineProperties(URL$1, {
 	createObjectURL: { value: x$47.createObjectURL },
 	revokeObjectURL: { value: x$47.revokeObjectURL }
 });

@@ -199,6 +199,7 @@
 		"j0polyfill": {}
 	},
 	"arrayBufferToString": {},
+	"assign": {},
 	"cancelAnimationFrame": {},
 	"clamp": {},
 	"cloneObject": {},
