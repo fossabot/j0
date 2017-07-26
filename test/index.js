@@ -24,6 +24,7 @@ async function test(capabilities = require('./capabilities')) {
 		return;
 	}
 	const console = $console.create(getCapabilityText(capability));
+	capability.localIdentifier = exports.localIdentifier;
 	const builder = new Builder()
 	.withCapabilities(capability);
 	if (useBrowserStack) {
@@ -59,22 +60,28 @@ Promise.resolve()
 		quiet: true
 	});
 	exports.server = server;
+	$console.info('start a server');
 	await server.start();
 	const {port} = server.address();
 	exports.port = port;
 	if (useBrowserStack) {
 		const bsLocal = new browserstack.Local();
 		exports.bsLocal = bsLocal;
+		exports.localIdentifier = `${Date.now()}`;
+		$console.info(`start a browserstack-local ${port}`);
 		await promisify(bsLocal.start, bsLocal)({
 			// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
 			verbose: true,
 			forceLocal: true,
 			onlyAutomate: true,
 			onlyCommand: true,
-			only: `localhost,${port},0`
+			only: `localhost,${port},0`,
+			localIdentifier: exports.localIdentifier
 		});
 	}
+	$console.info('start test');
 	await test();
+	$console.info('done');
 	await onEnd();
 })
 .catch(async (error) => {
