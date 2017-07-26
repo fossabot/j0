@@ -1,10 +1,7 @@
-dist: trusty
-sudo: false
 language: node_js
 node_js:
 - '8'
 addons:
-  chrome: stable
   artifacts:
     debug: true
     paths:
@@ -16,8 +13,6 @@ addons:
     key:
       secure: W+3KsIcS2YVxe6HNaeyD4t9gOt/+Tl5s0onsvaKwlKOJTA3MMPaqJlxKwRh8ddW4KrZlN0UvdqmcF4cTwcTUoRvnJM7ErELzpRrGHmeF4j49tn4tNS21PDKY5mTTKZ1o4yGQy7jeoYVoaRXKwGDD6bEtvaQ/m35xTJRoYwuvz2NAey03K5VSmAXhx1Dkfh5iT1eBIGcn94wrTFrYie8qS0ADS6GLMhE+h4yvjpf0RnKuaDe+sqrbnkMm2xsqISN5nVKop1yR8rE0dMWaBRw0OGC4V1NghNqRPTTGfmH/pa5LfrRL9Ka6aFnoUbJ3Lkm5Bh7Q15W7C39+lDPTZLXznMwPbvZpJnfF/T5apNrb080TiTUSQgt2tgGAryJjbh/ivZoK9qkdYx7HR78n2jiSP98cMfMrstAIF3M2RnP0pGScSVhN3Prp8I/NoJgRpFauqVQc50pxlvxedNpSwGhlT4rnaGbqhwZSA7ZfQebATpnehIoVjpZHkuNWgWK1bg4J34HOknLZBZy/ZFKkUunCcT3J8oXOUeZg3I//FzINWXgXFNzDrmZ9F6C4SRDSynr+nMfroQPKZBwDi+SS+ycvQhnFZ/XQitrMMc/4j1TGCMp0vquFG3LznLA3x9l0uguPmX3n7RY7bAXROehBQaPcRkg3zAib3qxt6wIeFzjEdvY=
 install:
-- wget https://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
-- unzip chromedriver_linux64.zip
 - npm install
 script:
 - npm run build
