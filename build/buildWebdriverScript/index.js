@@ -8,7 +8,7 @@ const {docsDir} = require('../constants');
 
 async function buildWebdriverScript(port) {
 	const code = (await readFile(path.join(__dirname, 'script.js'), 'utf8'))
-	.replace(/PAGE_URL/g, `http://127.0.0.1:${port}/`);
+	.replace(/PAGE_URL/g, `http://localhost:${port}/`);
 	return writeFile(path.join(docsDir, 'wdio.js'), code);
 }
 

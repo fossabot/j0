@@ -245,7 +245,8 @@ if (process.argv.includes('--BrowserStack')) {
 			browserstackOpts: {
 				// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
 				localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
-				forceLocal: true
+				forceLocal: true,
+				onlyAutomate: true
 			},
 			capabilities: [
 				{
