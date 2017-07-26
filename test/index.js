@@ -6,7 +6,7 @@ const useBrowserStack = require('./useBrowserStack');
 
 function getCapabilityText(capability) {
 	const fields = [];
-	for (const key of Object.keys(capability)) {
+	for (const key of ['os', 'os_version', 'browser', 'browser_version', 'resolution']) {
 		const value = capability[key];
 		if (isString(value)) {
 			fields.push(value);
