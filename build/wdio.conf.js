@@ -235,34 +235,18 @@ exports.config = {
 };
 
 if (process.argv.includes('--BrowserStack')) {
-	const browserstackOpts = {
-		// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
-		forceLocal: true,
-		onlyAutomate: true,
-		proxyHost: 'localhost',
-		proxyPort: 4000
-	};
 	Object.assign(
 		exports.config,
 		{
 			services: ['browserstack'],
 			browserstackLocal: true,
-			onPrepare: async function () {
-				console.info('onPrepare: create a server');
-				server = new SableServer({
-					documentRoot: docsDir,
-					noWatch: true,
-					quiet: true
-				});
-				console.info('onPrepare: start the server');
-				await server.start();
-				const {port} = server.address();
-				browserstackOpts.proxyPort = port;
-				console.info(`onPrepare: buildWebdriverScript port: ${port}`);
-				await buildWebdriverScript(port);
-				console.info('onPrepare: done');
+			browserstackOpts: {
+				// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
+				verbose: true,
+				forceLocal: true,
+				onlyAutomate: true,
+				localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER
 			},
-			browserstackOpts,
 			capabilities: [
 				{
 					'os': 'OS X',
