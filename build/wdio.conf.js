@@ -258,8 +258,7 @@ if (process.argv.includes('--BrowserStack')) {
 					// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
 					verbose: true,
 					forceLocal: true,
-					onlyAutomate: true,
-					localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER
+					onlyAutomate: true
 				});
 				console.info('onPrepare: done');
 			},
@@ -292,8 +291,7 @@ if (process.argv.includes('--BrowserStack')) {
 					{
 						project: process.env.TRAVIS_REPO_SLUG,
 						build: process.env.TRAVIS_BUILD_NUMBER,
-						'browserstack.local': true,
-						localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER
+						'browserstack.local': true
 					}
 				);
 			})
