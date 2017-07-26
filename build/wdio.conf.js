@@ -242,7 +242,14 @@ if (process.argv.includes('--BrowserStack')) {
 			user: process.env.BROWSERSTACK_USERNAME,
 			key: process.env.BROWSERSTACK_ACCESS_KEY,
 			browserstackLocal: true,
-			browserstackLocalIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
+			browserstackOpts: {
+				// https://github.com/browserstack/browserstack-local-nodejs/blob/master/lib/Local.js
+				localIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER
+			},
+			desiredCapabilities: {
+				project: process.env.TRAVIS_REPO_SLUG,
+				build: process.env.TRAVIS_BUILD_NUMBER
+			},
 			capabilities: [
 				{
 					'os': 'OS X',
