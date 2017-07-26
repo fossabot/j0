@@ -11557,4 +11557,42 @@ describe('wait', function () {
 		}, _callee59, this);
 	})));
 });
+
+var x$48 = canvasTestClass;
+
+mocha.run().once('end', function () {
+	var result = 0 < this.stats.failures ? 'failed' : 'passed';
+	x$3.title += '[' + result + ']';
+	x$3.body.classList.add('done');
+	var tests = x$3.querySelectorAll('.test');
+	var testList = [];
+
+	var _loop2 = function _loop2(i) {
+		var testElement = tests[i];
+		testElement.querySelector('h2').textContent.replace(/^\s*\[\s*id\s*:\s*(.*?)\s*\]/, function (match, name) {
+			testElement.setAttribute('data-graph', name);
+			testList.push(testElement);
+		});
+	};
+
+	for (var i = tests.length; i--;) {
+		_loop2(i);
+	}
+	var canvasList = x$3.querySelectorAll('.' + x$48);
+	var list = [];
+	for (var i = canvasList.length; i--;) {
+		list[i] = canvasList[i];
+	}
+	for (var _i3 = list.length; _i3--;) {
+		var canvas = list[_i3];
+		var _name3 = canvas.getAttribute('data-name');
+		for (var j = testList.length; j--;) {
+			var _testElement = testList[j];
+			var graphName = _testElement.getAttribute('data-graph');
+			if (graphName === _name3) {
+				_testElement.appendChild(canvas);
+			}
+		}
+	}
+});
 }())
