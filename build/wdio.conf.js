@@ -242,6 +242,7 @@ if (process.argv.includes('--BrowserStack')) {
 			user: process.env.BROWSERSTACK_USERNAME,
 			key: process.env.BROWSERSTACK_ACCESS_KEY,
 			browserstackLocal: true,
+			browserstackLocalIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
 			capabilities: [
 				{
 					'os': 'OS X',
