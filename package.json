@@ -14,7 +14,7 @@
     "ios 8"
   ],
   "scripts": {
-    "start": "node build --server",
+    "start": "sable docs & node build --watch",
     "polyfill": "node build/generatePolyfill",
     "build": "node build && npm run polyfill",
     "test": "wdio build/wdio.conf.js"
