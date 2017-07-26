@@ -1,8 +1,10 @@
 const console = require('j1/console').create('build');
 const copyStaticFilesForTest = require('./copyStaticFilesForTest');
+const rollupScripts = require('./rollupScripts');
 
 async function build() {
-	await copyStaticFilesForTest();
+	await rollupScripts();
+	// await copyStaticFilesForTest();
 }
 
 module.exports = build;

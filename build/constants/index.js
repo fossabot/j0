@@ -1,9 +1,10 @@
 const path = require('path');
-const projectDir = path.join(__dirname, '..');
+const projectDir = path.join(__dirname, '..', '..');
 const docsDir = path.join(projectDir, 'docs');
 const libDir = path.join(projectDir, 'lib');
-export default {
+module.exports = {
 	projectDir,
 	docsDir,
-	libDir
+	libDir,
+	watch: process.argv.includes('--watch')
 };

@@ -19,7 +19,7 @@
     "build": "node _j0 && npm run polyfill",
     "test": "wdio _j0/wdio.conf.js"
   },
-  "main": "_j0/rollup",
+  "main": "rollup",
   "devDependencies": {
     "autoprefixer": "^7.1.0",
     "babel-core": "^6.24.1",
