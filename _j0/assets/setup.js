@@ -1,7 +1,10 @@
-/* eslint no-prototype-builtins: "off", max-statements: "off", no-magic-numbers: "off" */
 import {
 	thermalRGB,
-	Object
+	assign,
+	XMLHttpRequest,
+	document,
+	window,
+	URL
 } from 'j0';
 
 function setVersion() {
@@ -30,11 +33,11 @@ function getCanvasContext(name) {
 	const lineHeight = 22;
 	canvas.setAttribute('class', window.canvasTestClass);
 	canvas.setAttribute('data-name', name);
-	Object.assign(canvas, {
+	assign(canvas, {
 		width: size,
 		height: size
 	});
-	Object.assign(canvas.style, {
+	assign(canvas.style, {
 		userSelect: 'none',
 		transition: 'width 0.2s, height 0.2s',
 		border: 'solid 1px #000',
@@ -44,7 +47,7 @@ function getCanvasContext(name) {
 		cursor: 'pointer'
 	});
 	const ctx = canvas.getContext('2d');
-	Object.assign(ctx, {
+	assign(ctx, {
 		font: '20px Courier',
 		lineHeight
 	});
@@ -114,7 +117,7 @@ async function graphicalEqual({
 		}
 		context.stroke();
 		if (drawLabel) {
-			Object.assign(context, {
+			assign(context, {
 				lineWidth: 8,
 				strokeStyle: '#fff',
 				fillStyle: '#000',
@@ -127,7 +130,7 @@ async function graphicalEqual({
 				context.strokeText(label, imageX(value), height);
 				context.fillText(label, imageX(value), height);
 			}
-			Object.assign(context, {
+			assign(context, {
 				textAlign: 'left',
 				textBaseline: 'middle'
 			});
@@ -204,7 +207,7 @@ async function graphicalEqual({
 		document.body.appendChild(ctx.canvas);
 		ctx.canvas.addEventListener('click', function () {
 			ctx.canvas.toBlob(function (blob) {
-				Object.assign(document.createElement('a'), {
+				assign(document.createElement('a'), {
 					href: URL.createObjectURL(blob),
 					download: `${name.replace(/Math\./, '')}.png`
 				})
@@ -215,7 +218,7 @@ async function graphicalEqual({
 			// downloader
 			if (!(/#/).test(name)) {
 				ctx.canvas.toBlob(function (blob) {
-					Object.assign(document.createElement('a'), {
+					assign(document.createElement('a'), {
 						href: URL.createObjectURL(blob),
 						download: `${name.replace(/Math\./, '')}.png`
 					})
@@ -227,7 +230,7 @@ async function graphicalEqual({
 	}
 	const img = document.createElement('img');
 	await new Promise(function (resolve, reject) {
-		Object.assign(img, {
+		assign(img, {
 			onerror: function (event) {
 				reject(event.error || event);
 			},
@@ -241,17 +244,17 @@ async function graphicalEqual({
 		ctx.getImageData(0, 0, width, height).data,
 		expectedCanvasContext.getImageData(0, 0, width, height).data
 	);
-	Object.assign(expectedCanvasContext, {
+	assign(expectedCanvasContext, {
 		lineWidth: 2,
 		strokeStyle: actualColor
 	});
 	drawGraph(expectedCanvasContext);
-	Object.assign(expectedCanvasContext, {
+	assign(expectedCanvasContext, {
 		lineWidth: 1,
 		strokeStyle: '#000'
 	});
 	drawGridLines(expectedCanvasContext, true);
-	Object.assign(expectedCanvasContext, {
+	assign(expectedCanvasContext, {
 		textBaseline: 'top',
 		textAlign: 'center',
 		lineWidth: 8,

@@ -1,5 +1,6 @@
 import {
 	Object,
+	assign,
 	Array,
 	document,
 	Symbol,
@@ -48,7 +49,7 @@ function superForEach(...args) {
 class J0Element {
 
 	constructor(source = {}) {
-		Object.assign(
+		assign(
 			this,
 			{
 				listeners: new Set()
@@ -302,7 +303,7 @@ class J0Element {
 	}
 
 	setStyle(styles) {
-		Object.assign(this.style, styles);
+		assign(this.style, styles);
 		return this;
 	}
 
@@ -382,7 +383,7 @@ function findAll(selector, rootElement = document) {
 	return result;
 }
 
-Object.assign(wrap, {
+assign(wrap, {
 	find,
 	findAll,
 	ready: async function (fn) {

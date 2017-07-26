@@ -1,6 +1,5 @@
 import {
 	Map,
-	Object,
 	EventEmitter,
 	debounce,
 	location,
@@ -8,7 +7,8 @@ import {
 	JSON,
 	addEventListener,
 	isString,
-	Boolean
+	Boolean,
+	assign
 } from 'j0';
 import State from './State';
 
@@ -16,7 +16,7 @@ class StateManager extends EventEmitter {
 
 	constructor(config) {
 		super();
-		Object.assign(
+		assign(
 			this,
 			{prefix: '#'},
 			config,

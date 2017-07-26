@@ -1,8 +1,8 @@
 import {
 	encodeURIComponent,
-	Object,
 	isString,
-	isInstanceOf
+	isInstanceOf,
+	assign
 } from 'j0';
 
 class State {
@@ -32,12 +32,12 @@ class State {
 				})
 				.join('')
 			);
-			Object.assign(stateInfo, {
+			assign(stateInfo, {
 				parts,
 				matcher
 			});
 		}
-		Object.assign(this, stateInfo);
+		assign(this, stateInfo);
 	}
 
 	compose(fn) {
