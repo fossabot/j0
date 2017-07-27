@@ -10,13 +10,24 @@ if (useBrowserStack) {
 		{
 			os: 'OS X',
 			os_version: 'Sierra',
-			browserName: 'Safari'
+			browserName: 'Firefox'
 		},
+		// {
+		// 	os: 'OS X',
+		// 	os_version: 'Sierra',
+		// 	browserName: 'Safari'
+		// },
 		{
 			os: 'Windows',
 			os_version: '10',
 			browserName: 'IE',
 			browser_version: '11.0'
+		},
+		{
+			os: 'Windows',
+			os_version: '10',
+			browserName: 'IE',
+			browser_version: '10.0'
 		}
 	];
 } else {
