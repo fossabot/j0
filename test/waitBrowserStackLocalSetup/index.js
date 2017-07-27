@@ -1,4 +1,4 @@
-async function waitRun(bsLocal) {
+async function waitBrowserStackLocalSetup(bsLocal) {
 	await new Promise((resolve) => {
 		let count = 0;
 		function check() {
@@ -14,4 +14,4 @@ async function waitRun(bsLocal) {
 	});
 }
 
-module.exports = waitRun;
+module.exports = waitBrowserStackLocalSetup;
