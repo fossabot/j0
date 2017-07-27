@@ -3,6 +3,7 @@ const $console = require('j1/console').create('test:run');
 const useBrowserStack = require('../useBrowserStack');
 const getCapabilityText = require('../getCapabilityText');
 const waitForTestCompletion = require('../waitForTestCompletion');
+const waitForTestStart = require('../waitForTestStart');
 const session = require('..');
 
 async function run(capabilities = require('../capabilities')) {
@@ -31,9 +32,10 @@ async function run(capabilities = require('../capabilities')) {
 	console.info('build a driver');
 	const driver = builder.build();
 	driver.prefix = prefix;
-	console.info('access');
-	await driver.get(`http://localhost:${session.port}/`);
-	console.info('wait until all tests are run');
+	const url = `http://localhost:${session.port}/`;
+	console.info(`GET ${url}`);
+	await driver.get(url);
+	await waitForTestStart(driver);
 	await waitForTestCompletion(driver);
 	const title = await driver.getTitle();
 	console.info(`title: ${title}`);
