@@ -6,23 +6,23 @@ if (useBrowserStack) {
 			os: 'OS X',
 			os_version: 'Sierra',
 			browserName: 'Chrome'
-		}
-		// {
-		// 	os: 'OS X',
-		// 	os_version: 'Sierra',
-		// 	browserName: 'Firefox'
-		// },
+		},
+		{
+			os: 'OS X',
+			os_version: 'Sierra',
+			browserName: 'Firefox'
+		},
 		// {
 		// 	os: 'OS X',
 		// 	os_version: 'Sierra',
 		// 	browserName: 'Safari'
 		// },
-		// {
-		// 	os: 'Windows',
-		// 	os_version: '10',
-		// 	browserName: 'IE',
-		// 	browser_version: '11'
-		// },
+		{
+			os: 'Windows',
+			os_version: '10',
+			browserName: 'IE',
+			browser_version: '11'
+		}
 		// {
 		// 	os: 'Windows',
 		// 	os_version: '10',

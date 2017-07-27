@@ -1,12 +1,17 @@
+const chalk = require('chalk');
 const {Builder} = require('selenium-webdriver');
 const $console = require('j1/console').create('test:run');
 const useBrowserStack = require('../useBrowserStack');
 const getCapabilityText = require('../getCapabilityText');
 const waitForTestCompletion = require('../waitForTestCompletion');
 const waitForTestStart = require('../waitForTestStart');
+const getResults = require('../getResults');
 const session = require('..');
 
-async function run(capabilities = require('../capabilities')) {
+async function run(
+	capabilities = require('../capabilities'),
+	errors = new Set()
+) {
 	const capability = capabilities.shift();
 	if (!capability) {
 		return;
@@ -37,11 +42,29 @@ async function run(capabilities = require('../capabilities')) {
 	await driver.get(url);
 	await waitForTestStart(driver);
 	await waitForTestCompletion(driver);
-	const title = await driver.getTitle();
-	console.info(`title: ${title}`);
-	await driver.quit();
-	console.info('done');
-	await run(capabilities);
+	const caughtErrors = await getResults(driver);
+	const {pass, fail} = caughtErrors.counts;
+	console.info(`done. passes: ${pass}, failures: ${fail}`);
+	if (0 < caughtErrors.size) {
+		Array.from(caughtErrors)
+		.forEach((error, index, {length}) => {
+			console.info(`[${index + 1}/${length}] ${error.route.join('>')}`);
+			console.error(chalk.red(`${error}`));
+		});
+		const error = new Error(`Caught ${caughtErrors.size} errors`);
+		error.capability = capability;
+		errors.add(error);
+	}
+	await run(capabilities, errors);
+	if (0 < errors.size) {
+		throw new Error([
+			`${errors.size} capabilities failed`,
+			...Array.from(errors)
+			.map((error, index, {length}) => {
+				return `  [${index + 1}/${length}] ${getCapabilityText(error.capability)} ${error}`;
+			})
+		].join('\n'));
+	}
 }
 
 module.exports = run;
