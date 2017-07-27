@@ -1004,25 +1004,26 @@ describe('ArrayBuffer/toString', function () {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
+						this.timeout(8000);
 						root = x$3.getElementById('root').text;
-						_context3.next = 3;
+						_context3.next = 4;
 						return fetch(root + '/arrayBufferToString/wagahaiha-nekodearu.txt');
 
-					case 3:
-						_context3.next = 5;
+					case 4:
+						_context3.next = 6;
 						return _context3.sent.text();
 
-					case 5:
+					case 6:
 						src = _context3.sent;
-						_context3.next = 8;
+						_context3.next = 9;
 						return createArrayBuffer(src);
 
-					case 8:
+					case 9:
 						arrayBuffer = _context3.sent;
 
 						assert.equal(arrayBufferToString(arrayBuffer), src);
 
-					case 10:
+					case 11:
 					case 'end':
 						return _context3.stop();
 				}

@@ -46,11 +46,11 @@ async function run(
 	const {pass, fail} = caughtErrors.counts;
 	console.info(`done. passes: ${pass}, failures: ${fail}`);
 	if (0 < caughtErrors.size) {
-		Array.from(caughtErrors)
-		.forEach((error, index, {length}) => {
-			console.info(`[${index + 1}/${length}] ${error.route.join('>')}`);
-			console.error(chalk.red(`${error}`));
-		});
+		// Array.from(caughtErrors)
+		// .forEach((error, index, {length}) => {
+		// 	console.info(`[${index + 1}/${length}] ${error.stack}`);
+		// 	console.error(chalk.red(`${error}`));
+		// });
 		const error = new Error(`Caught ${caughtErrors.size} errors`);
 		error.capability = capability;
 		errors.add(error);
