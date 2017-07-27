@@ -13,7 +13,7 @@ async function waitForTestStart(
 		return;
 	} catch (error) {
 		if (0 < count) {
-			await wait(500);
+			await wait(1000);
 			await waitForTestStart(driver, count - 1);
 			return;
 		}
