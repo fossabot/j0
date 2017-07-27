@@ -9,7 +9,7 @@ const session = require('..');
 
 async function setup() {
 	const server = new SableServer({
-		documentRoot: path.join(__dirname, '..', 'docs'),
+		documentRoot: path.join(__dirname, '..', '..', 'docs'),
 		noWatch: true,
 		quiet: true
 	});

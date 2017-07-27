@@ -3,7 +3,6 @@ node_js:
 - '8'
 addons:
   artifacts:
-    debug: true
     paths:
     - "./__errorShots"
     bucket: ci-results

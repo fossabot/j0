@@ -1,7 +1,8 @@
 const {Builder} = require('selenium-webdriver');
-const $console = require('j1/console').create('test');
+const $console = require('j1/console').create('test:run');
 const useBrowserStack = require('../useBrowserStack');
 const getCapabilityText = require('../getCapabilityText');
+const waitForTestCompletion = require('../waitForTestCompletion');
 const session = require('..');
 
 async function run(capabilities = require('../capabilities')) {
@@ -9,7 +10,8 @@ async function run(capabilities = require('../capabilities')) {
 	if (!capability) {
 		return;
 	}
-	const console = $console.create(getCapabilityText(capability));
+	const prefix = getCapabilityText(capability);
+	const console = $console.create(prefix);
 	if (useBrowserStack) {
 		Object.assign(
 			capability,
@@ -28,12 +30,16 @@ async function run(capabilities = require('../capabilities')) {
 	}
 	console.info('build a driver');
 	const driver = builder.build();
+	driver.prefix = prefix;
 	console.info('access');
 	await driver.get(`http://localhost:${session.port}/`);
+	console.info('wait until all tests are run');
+	await waitForTestCompletion(driver);
 	const title = await driver.getTitle();
-	console.info(title);
+	console.info(`title: ${title}`);
 	await driver.quit();
 	await run(capabilities);
+	console.info('done');
 }
 
 module.exports = run;
