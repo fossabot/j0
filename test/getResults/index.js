@@ -19,7 +19,7 @@ async function getResults(
 		const classNames = new Set((await element.getAttribute('class')).split(/\s+/));
 		if (classNames.has('test')) {
 			const {x, y} = await element.getLocation();
-			await driver.executeScript(`scrollTo(${x - 100}, ${y - 100})`);
+			await driver.executeScript(`scrollTo(${x}, ${y})`);
 			const failed = classNames.has('fail');
 			const titleElement = await element.findElement(By.css('h2'));
 			console.log([
