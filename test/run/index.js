@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const {Builder} = require('selenium-webdriver');
 const $console = require('j1/console').create('test:run');
 const useBrowserStack = require('../useBrowserStack');
@@ -6,6 +5,7 @@ const getCapabilityText = require('../getCapabilityText');
 const waitForTestCompletion = require('../waitForTestCompletion');
 const waitForTestStart = require('../waitForTestStart');
 const getResults = require('../getResults');
+const markResult = require('../markResult');
 const session = require('..');
 
 async function run(
@@ -54,9 +54,11 @@ async function run(
 		const error = new Error(`Caught ${caughtErrors.size} errors`);
 		error.capability = capability;
 		errors.add(error);
+		await markResult(driver, error);
 	} else {
-		await driver.quit();
+		await markResult(driver);
 	}
+	await driver.quit();
 	await run(capabilities, errors);
 	if (0 < errors.size) {
 		throw new Error([
