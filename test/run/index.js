@@ -37,7 +37,7 @@ async function run(
 	console.info('build a driver');
 	const driver = builder.build();
 	driver.prefix = prefix;
-	const url = `http://localhost:${session.port}/`;
+	const url = `http://localhost:${session.port}/?grep=Array`;
 	console.info(`GET ${url}`);
 	await driver.get(url);
 	await waitForTestStart(driver);
@@ -54,6 +54,8 @@ async function run(
 		const error = new Error(`Caught ${caughtErrors.size} errors`);
 		error.capability = capability;
 		errors.add(error);
+	} else {
+		await driver.quit();
 	}
 	await run(capabilities, errors);
 	if (0 < errors.size) {
