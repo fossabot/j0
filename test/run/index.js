@@ -40,8 +40,8 @@ async function run(capabilities = require('../capabilities')) {
 	const title = await driver.getTitle();
 	console.info(`title: ${title}`);
 	await driver.quit();
-	await run(capabilities);
 	console.info('done');
+	await run(capabilities);
 }
 
 module.exports = run;

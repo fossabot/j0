@@ -10,8 +10,7 @@ if (useBrowserStack) {
 		{
 			os: 'OS X',
 			os_version: 'Sierra',
-			browserName: 'Safari',
-			browser_version: '10.0'
+			browserName: 'Safari'
 		},
 		{
 			os: 'Windows',
