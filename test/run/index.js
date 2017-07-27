@@ -37,7 +37,7 @@ async function run(
 	console.info('build a driver');
 	const driver = builder.build();
 	driver.prefix = prefix;
-	const url = `http://localhost:${session.port}`;
+	const url = `http://localhost:${session.port}/`;
 	console.info(`GET ${url}`);
 	await driver.get(url);
 	await waitForTestStart(driver);
