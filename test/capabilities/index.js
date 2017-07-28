@@ -39,27 +39,30 @@ if (useBrowserStack) {
 		{
 			device: 'iPhone 7',
 			realMobile: 'true',
-			os_version: '10.0'
+			browserName: 'Safari'
 		},
 		{
-			browserName: 'iPad',
+			device: 'iPad Pro',
 			platform: 'MAC',
-			device: 'iPad Pro'
+			browserName: 'Safari'
 		},
 		{
 			device: 'Google Pixel',
 			realMobile: 'true',
-			os_version: '7.1'
+			os_version: '7.1',
+			browserName: 'Chrome'
 		},
 		{
 			device: 'Google Nexus 9',
 			realMobile: 'true',
-			os_version: '5.1'
+			os_version: '5.1',
+			browserName: 'Chrome'
 		},
 		{
 			device: 'Samsung Galaxy S7',
 			realMobile: 'true',
-			os_version: '6.0'
+			os_version: '6.0',
+			browserName: 'Chrome'
 		}
 	];
 } else {
