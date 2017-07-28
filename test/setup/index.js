@@ -11,7 +11,8 @@ async function setup() {
 	const server = new SableServer({
 		documentRoot: path.join(__dirname, '..', '..', 'docs'),
 		noWatch: true,
-		quiet: true
+		quiet: true,
+		port: 9000
 	});
 	session.server = server;
 	console.info('start a server');
