@@ -12,11 +12,11 @@ if (useBrowserStack) {
 			os_version: 'Sierra',
 			browserName: 'Firefox'
 		},
-		{
-			os: 'OS X',
-			os_version: 'Sierra',
-			browserName: 'Opera'
-		},
+		// {
+		// 	os: 'OS X',
+		// 	os_version: 'Sierra',
+		// 	browserName: 'Opera'
+		// },
 		// {
 		// 	os: 'OS X',
 		// 	os_version: 'Sierra',
@@ -36,11 +36,6 @@ if (useBrowserStack) {
 			os: 'Windows',
 			os_version: '10',
 			browserName: 'Firefox'
-		},
-		{
-			os: 'Windows',
-			os_version: '10',
-			browserName: 'Opera'
 		},
 		{
 			device: 'iPhone 7',
