@@ -73,7 +73,12 @@ async function run(
 			`${errors.size} capabilities failed`,
 			...Array.from(errors)
 			.map((error, index, {length}) => {
-				return `  [${index + 1}/${length}] ${getCapabilityText(error.capability)} ${error}`;
+				const {capability} = error;
+				const messages = [error];
+				if (capability) {
+					messages.unshift(getCapabilityText(error.capability));
+				}
+				return `  [${index + 1}/${length}] ${messages.join(': ')}`;
 			})
 		].join('\n'));
 	}
