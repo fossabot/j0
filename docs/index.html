@@ -20,6 +20,14 @@
 		}
 	}
 </style>
+<script>
+window.onerror = function (event) {
+	var body = document.body;
+	var element = document.createElement('pre');
+	body.insertBefore(element, body.firstChild);
+	element.innerText = (event && event.error ? event.error : event).toString();
+};
+</script>
 <script id="root" type="text/plain">.</script>
 <h1>j0@<span class="version"></span></h1>
 <div id="mocha"></div>
