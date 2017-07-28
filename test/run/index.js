@@ -1,4 +1,5 @@
 const {Builder} = require('selenium-webdriver');
+const formatDate = require('j1/formatDate');
 const $console = require('j1/console').create('test:run');
 const useBrowserStack = require('../useBrowserStack');
 const getCapabilityText = require('../getCapabilityText');
@@ -19,9 +20,13 @@ async function run(
 	const prefix = getCapabilityText(capability);
 	const console = $console.create(prefix);
 	if (useBrowserStack) {
+		const project = process.env.TRAVIS_REPO_SLUG || 'kei-ito/j0';
+		const build = `${process.env.TRAVIS_BUILD_NUMBER}` || formatDate(new Date(), '%YYYY-%MM-%DD-%hh-%mm');
 		Object.assign(
 			capability,
 			{
+				project,
+				build: `${project}#${build}`,
 				'browserstack.local': true,
 				'browserstack.localIdentifier': session.localIdentifier,
 				'browserstack.user': useBrowserStack.user,

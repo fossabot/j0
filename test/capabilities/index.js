@@ -1,4 +1,3 @@
-const formatDate = require('j1/formatDate');
 const useBrowserStack = require('../useBrowserStack');
 if (useBrowserStack) {
 	module.exports = [
@@ -75,13 +74,3 @@ if (useBrowserStack) {
 		}
 	];
 }
-module.exports
-.map((capability) => {
-	return Object.assign(
-		capability,
-		{
-			project: process.env.TRAVIS_REPO_SLUG || 'kei-ito/j0',
-			build: process.env.TRAVIS_BUILD_NUMBER || formatDate(new Date(), '%YYYY-%MM-%DD-%hh-%mm'),
-		}
-	);
-});
