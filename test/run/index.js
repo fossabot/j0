@@ -36,27 +36,30 @@ async function run(
 	}
 	console.info('build a driver');
 	const driver = builder.build();
-	driver.prefix = prefix;
-	const url = `http://localhost:${session.port}/`;
-	console.info(`GET ${url}`);
-	await driver.get(url);
-	await waitForTestStart(driver);
-	await waitForTestCompletion(driver);
-	const caughtErrors = await getResults(driver);
-	const {pass, fail} = caughtErrors.counts;
-	console.info(`done. passes: ${pass}, failures: ${fail}`);
-	if (0 < caughtErrors.size) {
-		// Array.from(caughtErrors)
-		// .forEach((error, index, {length}) => {
-		// 	console.info(`[${index + 1}/${length}] ${error.stack}`);
-		// 	console.error(chalk.red(`${error}`));
-		// });
-		const error = new Error(`Caught ${caughtErrors.size} errors`);
-		error.capability = capability;
+	try {
+		driver.prefix = prefix;
+		const url = `http://localhost:${session.port}/`;
+		console.info(`GET ${url}`);
+		await driver.get(url);
+		await waitForTestStart(driver);
+		await waitForTestCompletion(driver);
+		const caughtErrors = await getResults(driver);
+		const {pass, fail} = caughtErrors.counts;
+		console.info(`done. passes: ${pass}, failures: ${fail}`);
+		if (0 < caughtErrors.size) {
+			// Array.from(caughtErrors)
+			// .forEach((error, index, {length}) => {
+			// 	console.info(`[${index + 1}/${length}] ${error.stack}`);
+			// 	console.error(chalk.red(`${error}`));
+			// });
+			const error = new Error(`Caught ${caughtErrors.size} errors`);
+			error.capability = capability;
+			throw error;
+		}
+		await markResult(driver);
+	} catch (error) {
 		errors.add(error);
 		await markResult(driver, error);
-	} else {
-		await markResult(driver);
 	}
 	await driver.quit();
 	await run(capabilities, errors);
