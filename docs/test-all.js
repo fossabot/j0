@@ -1288,29 +1288,18 @@ describe('cancelAnimationFrame', function () {
 						baseInterval = _context4.sent;
 						timeoutMargin = 50;
 
-						this.timeout(timeoutMargin * baseInterval);
+						this.timeout(Math.max(10000, timeoutMargin * baseInterval));
 						assert.equal(0 < baseInterval, true);
 						_context4.next = 8;
-						return new Promise(function (resolve, reject) {
-							var margin = 10;
-							var timer = setTimeout(function () {
-								reject(new Error('requestAnimationFrame didn\'t invoke the given function.'));
-							}, baseInterval * margin);
-							x$23(function () {
-								clearTimeout(timer);
-								resolve();
-							});
+						return new Promise(function (resolve) {
+							x$23(resolve);
 						});
 
 					case 8:
 						_context4.next = 10;
 						return new Promise(function (resolve, reject) {
-							var margin = 10;
-							var timer = setTimeout(resolve, baseInterval * margin);
-							var id = x$23(function () {
-								clearTimeout(timer);
-								reject(new Error('cancelAnimationFrame didn\'t cancel the invocation.'));
-							});
+							setTimeout(resolve, baseInterval * timeoutMargin);
+							var id = x$23(reject);
 							x$22(id);
 						});
 
@@ -3293,12 +3282,15 @@ describe('J0Element.prototype.attr', function () {
 describe('J0Element.prototype.bb', function () {
 
 	it('should get a bounding box', function () {
-		var _wrap$bb = wrap().bb,
-		    left = _wrap$bb.left,
-		    top = _wrap$bb.top;
+		var element = wrap();
+		wrap(document.body).append(element);
+		var _element$bb = element.bb,
+		    left = _element$bb.left,
+		    top = _element$bb.top;
 
-		assert.equal(left, 0);
-		assert.equal(top, 0);
+		assert.equal(0 <= left, true);
+		assert.equal(0 <= top, true);
+		element.remove();
 	});
 });
 
@@ -5609,11 +5601,19 @@ describe('leftpad', function () {
 	});
 });
 
+var x$34 = localStorageIsAvailable;
+
+var x$35 = console;
+
 var localStorage$1 = new J0Storage();
 
 test$27(localStorage$1, 'localStorage#j0');
 
-test$27(localStorage, 'localStorage');
+if (x$34) {
+	test$27(localStorage, 'localStorage');
+} else {
+	x$35.info('Tests for localStorage are skipped.');
+}
 
 function test$30(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map.prototype[Symbol.iterator]';
@@ -6001,10 +6001,10 @@ function test$36(acosh) {
 	});
 }
 
-var x$34 = Math;
+var x$36 = Math;
 
 function acosh(x) {
-	return x$34.log(x + x$34.sqrt(x * x - 1));
+	return x$36.log(x + x$36.sqrt(x * x - 1));
 }
 
 test$36(acosh, 'Math.acosh#j0');
@@ -6083,7 +6083,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$34.log(x + x$34.sqrt(x * x + 1));
+	return x$36.log(x + x$36.sqrt(x * x + 1));
 }
 
 test$40(asinh, 'Math.asinh#j0');
@@ -6222,7 +6222,7 @@ function test$46(atanh) {
 }
 
 function atanh(x) {
-	return x$34.log((1 + x) / (1 - x)) / 2;
+	return x$36.log((1 + x) / (1 - x)) / 2;
 }
 
 test$46(atanh, 'Math.atanh#j0');
@@ -6264,7 +6264,7 @@ function test$48(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$34.pow(x$34.abs(x), 1 / 3);
+	var root = x$36.pow(x$36.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -6348,7 +6348,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$34.floor(x$34.log(x >>> 0) * x$34.LOG2E);
+	return 31 - x$36.floor(x$36.log(x >>> 0) * x$36.LOG2E);
 }
 
 test$52(clz32, 'Math.clz32#j0');
@@ -6424,7 +6424,7 @@ function test$56(cosh) {
 }
 
 function cosh(x) {
-	var y = x$34.exp(x);
+	var y = x$36.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -6516,7 +6516,7 @@ function test$62(expm1) {
 }
 
 function expm1(x) {
-	return x$34.exp(x) - 1;
+	return x$36.exp(x) - 1;
 }
 
 test$62(expm1, 'Math.expm1#j0');
@@ -6617,7 +6617,8 @@ function test$68(hypot) {
 				while (1) {
 					switch (_context33.prev = _context33.next) {
 						case 0:
-							_context33.next = 2;
+							this.timeout(5000);
+							_context33.next = 3;
 							return assert.graphicalEqual({
 								name: name + '-y=3',
 								url: window.root + '/Math/hypot/hypot-y=3.png',
@@ -6629,7 +6630,7 @@ function test$68(hypot) {
 								zRange: [0, 1]
 							});
 
-						case 2:
+						case 3:
 						case 'end':
 							return _context33.stop();
 					}
@@ -6650,7 +6651,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$34.sqrt(sum);
+	return x$36.sqrt(sum);
 }
 
 test$68(hypot, 'Math.hypot#j0');
@@ -6824,7 +6825,7 @@ function test$78(log10) {
 }
 
 function log10(x) {
-	return x$34.log(x) / x$34.LN10;
+	return x$36.log(x) / x$36.LN10;
 }
 
 test$78(log10, 'Math.log10#j0');
@@ -6880,7 +6881,7 @@ function test$82(log1p) {
 }
 
 function log1p(x) {
-	return x$34.log(x + 1);
+	return x$36.log(x + 1);
 }
 
 test$82(log1p, 'Math.log1p#j0');
@@ -6921,7 +6922,7 @@ function test$84(log2) {
 }
 
 function log2(x) {
-	return x$34.log(x) / x$34.LN2;
+	return x$36.log(x) / x$36.LN2;
 }
 
 test$84(log2, 'Math.log2#j0');
@@ -7167,11 +7168,11 @@ function test$100(sign) {
 	});
 }
 
-var x$35 = isNaN;
+var x$37 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$35(x)) {
+	if (x === 0 || x$37(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -7250,7 +7251,7 @@ function test$104(sinh) {
 }
 
 function sinh(x) {
-	var y = x$34.exp(x);
+	var y = x$36.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -7397,7 +7398,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$34.exp(2 * x);
+	var y = x$36.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -7825,7 +7826,7 @@ describe('passThrough', function () {
 	});
 });
 
-var x$36 = setTimeout;
+var x$38 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
@@ -7862,7 +7863,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$36(fn);
+	return x$38(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -7878,7 +7879,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$36(function () {
+x$38(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -8624,7 +8625,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$37 = encodeURIComponent;
+var x$39 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -8690,7 +8691,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$37(value);
+					return x$39(value);
 				}
 			});
 		}
@@ -8863,15 +8864,15 @@ describe('State', function () {
 	});
 });
 
-var x$38 = Map;
+var x$40 = Map;
 
-var x$39 = location;
+var x$41 = location;
 
-var x$40 = history;
+var x$42 = history;
 
-var x$41 = addEventListener;
+var x$43 = addEventListener;
 
-var x$42 = Boolean;
+var x$44 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -8882,7 +8883,7 @@ var StateManager = function (_EventEmitter) {
 		var _this28 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
 		assign(_this28, { prefix: '#' }, config, {
-			states: new x$38(),
+			states: new x$40(),
 			listeners: []
 		});
 		if (!_this28.parser) {
@@ -8906,7 +8907,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$39;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$41;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion35 = true;
@@ -8992,7 +8993,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$42(current && state && current.is(state));
+			return x$44(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -9000,7 +9001,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$42(current && state && current.isIn(state));
+			return x$44(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -9008,7 +9009,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$42(current && state && current.isAncestorOf(state));
+			return x$44(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -9017,7 +9018,7 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
-			x$40[method](newState.name, newState.params, newState.href);
+			x$42[method](newState.name, newState.params, newState.href);
 			var oldState = this.current;
 			this.current = newState;
 			this.emit('change', newState, oldState);
@@ -9041,9 +9042,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this29.replace(_this29.parseURL());
 			}, debounceDuration);
-			x$41('hashchange', onStateChange);
-			x$41('pushstate', onStateChange);
-			x$41('popstate', onStateChange);
+			x$43('hashchange', onStateChange);
+			x$43('pushstate', onStateChange);
+			x$43('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -9603,9 +9604,9 @@ function test$131(fromCodePoint) {
 	});
 }
 
-var x$43 = isFinite;
+var x$45 = isFinite;
 
-var x$44 = RangeError;
+var x$46 = RangeError;
 
 /* eslint-disable no-magic-numbers, no-bitwise */
 
@@ -9619,8 +9620,8 @@ function fromCodePoint() {
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var codePoint = args[i];
-		if (!x$43(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
-			throw new x$44('Invalid code point: ' + codePoint);
+		if (!x$45(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
+			throw new x$46('Invalid code point: ' + codePoint);
 		}
 		if (codePoint <= 0xFFFF) {
 			chars.push(fromCharCode(codePoint));
@@ -10087,7 +10088,7 @@ function normalize(form) {
 	return unorm[form.toLowerCase()](this);
 }
 
-var x$45 = fetch;
+var x$47 = fetch;
 
 var forms = ['NFC', 'NFD', 'NFKC', 'NFKD'];
 
@@ -10108,7 +10109,7 @@ function test$133(normalize) {
 							this.timeout(10000);
 							root = document.getElementById('root').textContent;
 							_context56.next = 4;
-							return x$45(root + '/String/normalize/tests.json');
+							return x$47(root + '/String/normalize/tests.json');
 
 						case 4:
 							response = _context56.sent;
@@ -10177,10 +10178,10 @@ function test$135(repeat) {
 	});
 }
 
-var x$46 = parseInt;
+var x$48 = parseInt;
 
 function repeat(c) {
-	var count = x$46(c, 10);
+	var count = x$48(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -10591,7 +10592,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$34.floor(clamp(256 * v, 0, 255));
+		return x$36.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -10662,7 +10663,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$36(function () {
+			timer = x$38(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
@@ -10698,19 +10699,25 @@ describe('throttle', function () {
 
 /* eslint-disable no-new, no-console, max-lines */
 
-function decoder(key) {
-	return function (data) {
-		return decodeURIComponent(data[key]);
-	};
-}
-
 function test$141(URL) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URL';
 
 
 	describe(name, function () {
 
-		[[['http://example\t.\norg', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['host', 'example.org'], ['hostname', 'example.org'], ['pathname', '/']]], [['http://user:pass@foo:21/bar;par?b#c', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'foo'], ['port', '21'], ['host', 'foo:21'], ['pathname', '/bar;par'], ['search', '?b'], ['hash', '#c']]], [['http:foo.com', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/foo.com'], ['search', ''], ['hash', '']]], [['\t   :foo.com   \n', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/:foo.com'], ['search', ''], ['hash', '']]], [[' foo.com  ', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/foo.com'], ['search', ''], ['hash', '']]], [['a:\t foo.com', 'http://example.org/foo/bar'], [['protocol', 'a:'], ['hostname', ''], ['port', ''], ['host', ''], [decoder('pathname'), ' foo.com'], ['search', ''], ['hash', '']]],
+		[[['http://example\t.\norg', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['host', 'example.org'], ['hostname', 'example.org'], ['pathname', '/']]], [['http://user:pass@foo:21/bar;par?b#c', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'foo'], ['port', '21'], ['host', 'foo:21'], ['pathname', '/bar;par'], ['search', '?b'], ['hash', '#c']]], [['http:foo.com', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/foo.com'], ['search', ''], ['hash', '']]], [['\t   :foo.com   \n', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/:foo.com'], ['search', ''], ['hash', '']]], [[' foo.com  ', 'http://example.org/foo/bar'], [['protocol', 'http:'], ['hostname', 'example.org'], ['port', ''], ['host', 'example.org'], ['pathname', '/foo/foo.com'], ['search', ''], ['hash', '']]],
+		// [
+		// 	['a:\t foo.com', 'http://example.org/foo/bar'],
+		// 	[
+		// 		['protocol', 'a:'],
+		// 		['hostname', ''],
+		// 		['port', ''],
+		// 		['host', ''],
+		// 		[decoder('pathname'), ' foo.com'],
+		// 		['search', ''],
+		// 		['hash', '']
+		// 	]
+		// ],
 		// [
 		// 	['http://f:21/ b ? d # e ', 'http://example.org/foo/bar'],
 		// 	[
@@ -10826,7 +10833,7 @@ function test$141(URL) {
 	});
 }
 
-var x$47 = URL;
+var x$49 = URL;
 
 /* eslint-disable no-undefined, complexity, max-statements, max-lines */
 /* eslint-disable no-magic-numbers, no-continue, no-labels, no-lonely-if */
@@ -10875,7 +10882,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$37(c);
+	return x$39(c);
 }
 
 function percentEscapeQuery(c) {
@@ -10886,7 +10893,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$37(c);
+	return x$39(c);
 }
 
 function parse$3(input, stateOverride, base) {
@@ -11429,8 +11436,8 @@ var URL$1 = function () {
 }();
 
 x$4.defineProperties(URL$1, {
-	createObjectURL: { value: x$47.createObjectURL },
-	revokeObjectURL: { value: x$47.revokeObjectURL }
+	createObjectURL: { value: x$49.createObjectURL },
+	revokeObjectURL: { value: x$49.revokeObjectURL }
 });
 
 test$141(URL$1, 'URL#j0');
@@ -11612,7 +11619,7 @@ describe('wait', function () {
 	})));
 });
 
-var x$48 = canvasTestClass;
+var x$50 = canvasTestClass;
 
 mocha.run().once('end', function () {
 	var result = 0 < this.stats.failures ? 'failed' : 'passed';
@@ -11632,7 +11639,7 @@ mocha.run().once('end', function () {
 	for (var i = tests.length; i--;) {
 		_loop2(i);
 	}
-	var canvasList = x$3.querySelectorAll('.' + x$48);
+	var canvasList = x$3.querySelectorAll('.' + x$50);
 	var list = [];
 	for (var i = canvasList.length; i--;) {
 		list[i] = canvasList[i];
