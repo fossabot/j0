@@ -39,7 +39,7 @@ if (useBrowserStack) {
 		{
 			browserName: 'android',
 			platform: 'ANDROID',
-			device: 'Google Nexus 9'
+			device: 'Google Nexus 5'
 		}
 	];
 } else {
