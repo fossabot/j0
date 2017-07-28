@@ -16,11 +16,11 @@ if (useBrowserStack) {
 		// 	os_version: 'Sierra',
 		// 	browserName: 'Opera'
 		// },
-		// {
-		// 	os: 'OS X',
-		// 	os_version: 'Sierra',
-		// 	browserName: 'Safari'
-		// },
+		{
+			os: 'OS X',
+			os_version: 'Sierra',
+			browserName: 'Safari'
+		},
 		{
 			os: 'Windows',
 			os_version: '10',
