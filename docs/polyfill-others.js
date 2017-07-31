@@ -3191,4 +3191,4 @@ var x$43 = clearTimeout;
 x$10.cancelAnimationFrame = x$10.cancelAnimationFrame || x$10.mozCancelAnimationFrame || function (id) {
 	return x$43(id);
 };
-}())
+}());

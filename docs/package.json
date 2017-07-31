@@ -35,12 +35,11 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-glob-import": "0.0.4",
     "sable": "^0.1.7",
-    "selenium-standalone": "^6.4.1",
     "selenium-webdriver": "^3.5.0",
-    "uglify-js": "^3.0.11",
-    "unorm": "^1.4.1"
+    "uglify-js": "^3.0.11"
   },
   "dependencies": {
+    "unorm": "^1.4.1",
     "acorn": "^5.0.3",
     "rollup-pluginutils": "^2.0.1"
   }

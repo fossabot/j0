@@ -11656,4 +11656,4 @@ mocha.run().once('end', function () {
 		}
 	}
 });
-}())
+}());

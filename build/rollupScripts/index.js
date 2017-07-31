@@ -35,7 +35,7 @@ async function rollupScript(entry) {
 	));
 	$console.info('transpile');
 	const {code: babeledCode} = babel.transform(code, {presets: ['env']});
-	const wrappedCode = `(function(){\n${babeledCode}\n}())`;
+	const wrappedCode = `(function(){\n${babeledCode}\n}());`;
 	const dest = entry.replace(/\.rollup\.js/, '.js');
 	$console.info(`write to ${path.relative(projectDir, dest)}`);
 	await writeFile(dest, wrappedCode);

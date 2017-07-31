@@ -1,13 +1,16 @@
 const fs = require('fs');
 const path = require('path');
+const acorn = require('acorn');
 const UglifyJS = require('uglify-js');
 const promisify = require('j1/promisify');
 const readFile = promisify(fs.readFile, fs);
 const writeFile = require('j1/writeFile');
 const fileSize = require('j1/fileSize');
 const console = require('j1/console').create('generatePolyfill');
+const CopyRights = require('../CopyRights');
 
 const {
+	docsDir,
 	projectDir,
 	polyfills,
 	polyfillDir
@@ -15,18 +18,31 @@ const {
 
 async function generatePolyfill() {
 	console.info('loading');
-	const code = Buffer.concat(await Promise.all(
+	const codes = await Promise.all(
 		polyfills
 		.map(async (filePath) => {
 			const buffer = await readFile(filePath);
 			return buffer;
 		})
-	));
+	);
+	const total = codes.reduce((total, {length}) => {
+		return total + length;
+	}, 0);
 	console.info('minify');
-	const {code: minifiedCode} = UglifyJS.minify(`${code}`);
-	const minified = Buffer.from(minifiedCode);
-	console.info(`${fileSize(code.length)} -> ${fileSize(minified.length)}`);
-	await writeFile(path.join(polyfillDir, 'polyfill.min.js'), minified);
+	const source = codes.join('\n');
+	const copyRights = new CopyRights();
+	acorn.parse(source, {
+		onComment(block, text, start, end) {
+			copyRights.checkComment(block, text, start, end);
+		}
+	});
+	const {code: minifiedCode} = UglifyJS.minify(`(function(){${source}}());`);
+	const minified = Buffer.from(`${copyRights}${minifiedCode}`);
+	console.info(`${fileSize(total)} -> ${fileSize(minified.length)}`);
+	await Promise.all([
+		writeFile(path.join(docsDir, 'polyfill.min.js'), minified),
+		writeFile(path.join(polyfillDir, 'polyfill.min.js'), minified)
+	]);
 	console.info('update package.json');
 	const {
 		license,

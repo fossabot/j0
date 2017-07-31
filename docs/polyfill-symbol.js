@@ -110,4 +110,9 @@ var J0Symbol = new SymbolRegistry().Symbol;
 if (!x.Symbol) {
 	x.Symbol = J0Symbol;
 }
-}())
+
+// Copyright (c) j0
+// LICENSE MIT
+// Kei Ito
+//
+}());

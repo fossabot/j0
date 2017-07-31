@@ -390,4 +390,4 @@ x$5.canvasTestClass = 'Canvas' + Date.now();
 x$5.mocha.setup('bdd');
 setAssert();
 setVersion();
-}())
+}());
