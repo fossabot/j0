@@ -2642,9 +2642,9 @@ var keys = x$4.keys;
 
 var x$25 = Array;
 
-var isArray = x$25.isArray;
-
 var x$26 = Node;
+
+var isArray = x$25.isArray;
 
 function isNode(x) {
 	return isInstanceOf(x, x$26);
@@ -3124,6 +3124,21 @@ var J0Element = function () {
 		get: function get() {
 			return x$29(this.node);
 		}
+	}, {
+		key: 'nodeType',
+		get: function get() {
+			return this.node.nodeType;
+		}
+	}, {
+		key: 'isElementNode',
+		get: function get() {
+			return this.nodeType === x$26.ELEMENT_NODE;
+		}
+	}, {
+		key: 'isTextNode',
+		get: function get() {
+			return this.nodeType === x$26.TEXT_NODE;
+		}
 	}]);
 
 	return J0Element;
@@ -3154,6 +3169,7 @@ function _findAll(selector) {
 assign(wrap, {
 	find: _find,
 	findAll: _findAll,
+	Element: J0Element,
 	ready: function () {
 		var _ref16 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
 			var body;
@@ -3950,6 +3966,45 @@ describe('J0Element.prototype.next', function () {
 			c: [element1, element2]
 		});
 		assert.equal(element2.next, null);
+	});
+});
+
+describe('J0Element.prototype.nodeType', function () {
+
+	it('should return ELEMENT_NODE', function () {
+		var element = wrap({});
+		assert.equal(element.nodeType, Node.ELEMENT_NODE);
+	});
+
+	it('should return TEXT_NODE', function () {
+		var element = wrap('' + Date.now());
+		assert.equal(element.nodeType, Node.TEXT_NODE);
+	});
+});
+
+describe('J0Element.prototype.isElementNode', function () {
+
+	it('should return true', function () {
+		var element = wrap({});
+		assert.equal(element.isElementNode, true);
+	});
+
+	it('should return false', function () {
+		var element = wrap('' + Date.now());
+		assert.equal(element.isElementNode, false);
+	});
+});
+
+describe('J0Element.prototype.isTextNode', function () {
+
+	it('should return false', function () {
+		var element = wrap({});
+		assert.equal(element.isTextNode, false);
+	});
+
+	it('should return true', function () {
+		var element = wrap('' + Date.now());
+		assert.equal(element.isTextNode, true);
 	});
 });
 
