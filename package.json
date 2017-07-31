@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node build --watch",
     "polyfill": "node build/generatePolyfill",
-    "build": "node build && npm run polyfill",
+    "build": "node build",
     "test": "node test"
   },
   "devDependencies": {

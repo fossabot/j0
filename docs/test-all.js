@@ -1084,12 +1084,12 @@ function parse(body) {
 		if (data) {
 			var _data$split = data.split('='),
 			    _data$split2 = _toArray(_data$split),
-			    _name = _data$split2[0],
+			    name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			_name = x$12(_name.replace(/\+/g, ' '));
+			name = x$12(name.replace(/\+/g, ' '));
 			parts = x$12(parts.join('=').replace(/\+/g, ' '));
-			form.append(_name, parts);
+			form.append(name, parts);
 		}
 	});
 	return form;
@@ -4682,10 +4682,10 @@ function fetch$1(input, init) {
 
 				var _ref40 = _slicedToArray(_ref39, 2);
 
-				var _name2 = _ref40[0];
+				var name = _ref40[0];
 				var value = _ref40[1];
 
-				xhr.setRequestHeader(_name2, value);
+				xhr.setRequestHeader(name, value);
 			}
 		} catch (err) {
 			_didIteratorError24 = true;
@@ -8793,7 +8793,7 @@ describe('State', function () {
 		var state2 = new State(state);
 		var param1 = '' + Date.now();
 		var param2 = '' + Date.now().toString(hex$1);
-		var expected = name + '/' + param1 + '/' + param2;
+		var expected = '/' + param1 + '/' + param2;
 		assert.equal(state !== state2, true);
 		assert.equal(state2.href({
 			param1: param1,
@@ -11646,11 +11646,11 @@ mocha.run().once('end', function () {
 	}
 	for (var _i3 = list.length; _i3--;) {
 		var canvas = list[_i3];
-		var _name3 = canvas.getAttribute('data-name');
+		var name = canvas.getAttribute('data-name');
 		for (var j = testList.length; j--;) {
 			var _testElement = testList[j];
 			var graphName = _testElement.getAttribute('data-graph');
-			if (graphName === _name3) {
+			if (graphName === name) {
 				_testElement.appendChild(canvas);
 			}
 		}
