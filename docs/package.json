@@ -1,7 +1,7 @@
 {
   "name": "j0",
   "license": "MIT",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "A library of wrappers and utility functions",
   "author": {
     "name": "Kei Ito",
@@ -17,7 +17,7 @@
   "scripts": {
     "start": "node build --watch",
     "polyfill": "node build/generatePolyfill",
-    "build": "node build && npm run polyfill",
+    "build": "node build",
     "test": "node test"
   },
   "devDependencies": {
