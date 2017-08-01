@@ -9,13 +9,11 @@ const j0 = require('../..');
 const babel = require('babel-core');
 const glob = promisify(require('glob'));
 const {
-	projectDir,
 	docsDir
 } = require('../constants');
 const dependenciesList = new Map();
 
-async function rollupScript(entry) {
-	const $console = console.create(`rollupScripts:${path.relative(docsDir, entry)}`);
+async function rollupScript(entry, $console) {
 	$console.info('rollup');
 	const bundle = await rollup({
 		entry,
@@ -25,24 +23,34 @@ async function rollupScript(entry) {
 			commonjs()
 		]
 	});
-	$console.info('generate');
-	const {code} = await bundle.generate({format: 'es'});
 	$console.info(`dependencies: ${bundle.modules.length}`);
 	dependenciesList.set(entry, new Set(
-		bundle.modules.map(({id}) => {
+		bundle.modules
+		.map(({id}) => {
 			return id;
 		})
 	));
-	$console.info('transpile');
+	$console.info('generate');
+	const {code} = await bundle.generate({format: 'es'});
+	return code;
+}
+
+async function transpileScript(code) {
 	const {code: babeledCode} = babel.transform(code, {presets: ['env']});
-	const wrappedCode = `(function(){\n${babeledCode}\n}());`;
+	return `(function(){\n${babeledCode}\n}());`;
+}
+
+async function compileScript(entry) {
+	const $console = console.create(`compileScript:${path.relative(docsDir, entry)}`);
 	const dest = entry.replace(/\.rollup\.js/, '.js');
-	$console.info(`write to ${path.relative(projectDir, dest)}`);
-	await writeFile(dest, wrappedCode);
+	let code = await rollupScript(entry, $console);
+	$console.info('transpile');
+	code = await transpileScript(code)
+	await writeFile(dest, code);
 	$console.info('done');
 }
 
-async function rollupScripts(updatedFile) {
+async function rollupScripts(updatedFile, target = '*.rollup.js') {
 	const files = [];
 	if (updatedFile) {
 		console.info(`search files dependent on ${updatedFile}`);
@@ -53,13 +61,13 @@ async function rollupScripts(updatedFile) {
 			}
 		}
 	} else {
-		const pattern = path.join(docsDir, '**', '*.rollup.js');
+		const pattern = path.join(docsDir, '**', target);
 		console.info(`search files to rollup (${pattern})`);
 		files.push(...(await glob(pattern, {nodir: true})));
 	}
 	console.info(`rollup ${files.length} files`);
 	for (const entry of files) {
-		await rollupScript(entry);
+		await compileScript(entry);
 	}
 	console.info('done');
 }
@@ -67,7 +75,11 @@ async function rollupScripts(updatedFile) {
 module.exports = rollupScripts;
 
 if (!module.parent) {
-	rollupScripts()
+	rollupScripts(
+		null,
+		process.argv.includes('--target') &&
+		process.argv[process.argv.indexOf('--target') + 1]
+	)
 	.catch((error) => {
 		console.onError(error);
 		process.exit(1);
