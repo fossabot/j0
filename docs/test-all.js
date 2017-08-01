@@ -9559,7 +9559,15 @@ function test$129(endsWith) {
 }
 
 function endsWith(fragment) {
-	return this.indexOf(fragment) === this.length - fragment.length;
+	var thisLength = this.length;
+	var length = fragment.length;
+
+	for (var i = 0; i < length; i++) {
+		if (fragment[length - i] !== this[thisLength - i]) {
+			return false;
+		}
+	}
+	return true;
 }
 
 test$129(endsWith, 'String.prototype.endsWith#j0');
@@ -10197,7 +10205,14 @@ function test$137(startsWith) {
 }
 
 function startsWith(fragment) {
-	return this.indexOf(fragment) === 0;
+	var length = fragment.length;
+
+	for (var i = 0; i < length; i++) {
+		if (fragment[i] !== this[i]) {
+			return false;
+		}
+	}
+	return true;
 }
 
 test$137(startsWith, 'String.prototype.startsWith#j0');
