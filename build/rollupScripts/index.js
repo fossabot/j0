@@ -50,7 +50,7 @@ async function compileScript(entry) {
 	$console.info('done');
 }
 
-async function rollupScripts(updatedFile) {
+async function rollupScripts(updatedFile, target = '*.rollup.js') {
 	const files = [];
 	if (updatedFile) {
 		console.info(`search files dependent on ${updatedFile}`);
@@ -61,7 +61,7 @@ async function rollupScripts(updatedFile) {
 			}
 		}
 	} else {
-		const pattern = path.join(docsDir, '**', '*.rollup.js');
+		const pattern = path.join(docsDir, '**', target);
 		console.info(`search files to rollup (${pattern})`);
 		files.push(...(await glob(pattern, {nodir: true})));
 	}
@@ -75,7 +75,11 @@ async function rollupScripts(updatedFile) {
 module.exports = rollupScripts;
 
 if (!module.parent) {
-	rollupScripts()
+	rollupScripts(
+		null,
+		process.argv.includes('--target') &&
+		process.argv[process.argv.indexOf('--target') + 1]
+	)
 	.catch((error) => {
 		console.onError(error);
 		process.exit(1);

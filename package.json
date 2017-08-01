@@ -18,6 +18,7 @@
     "start": "node build --watch",
     "polyfill": "node build/generatePolyfill",
     "build": "node build",
+    "build-main": "node build/rollupScripts --target test-all.rollup.js",
     "test": "node test"
   },
   "devDependencies": {
