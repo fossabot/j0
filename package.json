@@ -29,7 +29,6 @@
     "chalk": "^2.0.1",
     "chokidar": "^1.7.0",
     "glob": "^7.1.1",
-    "j1": "0.0.36",
     "mocha": "^3.4.2",
     "regenerator-runtime": "^0.10.5",
     "rollup": "^0.45.2",
@@ -41,6 +40,7 @@
   },
   "dependencies": {
     "acorn": "^5.1.1",
+    "j1": "0.0.36",
     "rollup-pluginutils": "^2.0.1",
     "unorm": "^1.4.1"
   }
