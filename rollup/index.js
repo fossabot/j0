@@ -1,7 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 const acorn = require('acorn');
+const walk = require('acorn/dist/walk');
 const promisify = require('j1/promisify');
+const console = require('j1/console').create('j0');
 const readFile = promisify(fs.readFile, fs);
 const {createFilter} = require('rollup-pluginutils');
 
@@ -33,30 +35,32 @@ function rollupPlugin(options = {}) {
 			}
 			const importer = path.relative(j0prefix, id).replace(/^([^/])/, '/$1');
 			const code = await readFile(importer, 'utf8');
-			const ast = acorn.parse(code, {
-				sourceType: 'module',
-				ecmaVersion: 8
-			});
-			const required = [];
-			ast.body
-			.filter(({type, source}) => {
-				return type === 'ImportDeclaration' && source.value === 'j0';
-			})
-			.forEach((declaration) => {
-				for (const {imported} of declaration.specifiers) {
-					required.push(imported.name);
+			const required = new Set();
+			walk.simple(
+				acorn.parse(code, {
+					sourceType: 'module',
+					ecmaVersion: 8
+				}),
+				{
+					ImportDeclaration(node) {
+						if (node.source.value === 'j0') {
+							for (const {imported: {name}} of node.specifiers) {
+								required.add(name);
+							}
+						}
+					}
 				}
-			});
-			const lines = required
-			.map((name) => {
+			);
+			const lines = [];
+			for (const name of required) {
 				let j0ModulePath;
 				try {
 					j0ModulePath = require.resolve(`../lib/${name}`);
 				} catch (error) {
 					j0ModulePath = path.join(windowFallback, name);
 				}
-				return `import ${name} from '${j0ModulePath}'\nexport {${name}};`;
-			});
+				lines.push(`import ${name} from '${j0ModulePath}'\nexport {${name}};`);
+			}
 			return lines.join('\n');
 		}
 	};
