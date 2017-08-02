@@ -2711,7 +2711,14 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (!x$10.Headers) {
+if (x$10.Headers) {
+	var headers = new x$10.Headers();
+	try {
+		headers.entries();
+	} catch (error) {
+		x$10.Headers = Headers$1;
+	}
+} else {
 	x$10.Headers = Headers$1;
 }
 
