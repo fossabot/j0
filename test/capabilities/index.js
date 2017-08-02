@@ -24,6 +24,11 @@ if (useBrowserStack) {
 		{
 			os: 'Windows',
 			os_version: '10',
+			browserName: 'Edge'
+		},
+		{
+			os: 'Windows',
+			os_version: '10',
 			browserName: 'Chrome'
 		},
 		{
