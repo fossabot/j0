@@ -10914,8 +10914,6 @@ describe('throttle', function () {
 	});
 });
 
-/* eslint-disable no-new, no-console, max-lines */
-
 function test$141(URL) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URL';
 

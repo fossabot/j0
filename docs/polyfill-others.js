@@ -2021,9 +2021,9 @@ x$5.defineProperties(URL$1, {
 });
 
 try {
-	var u = new x$10.URL('b', 'http://a');
-	u.pathname = 'c%20d';
-	if (u.href !== 'http://a/c%20d') {
+	var u = new x$10.URL('/?q#h', 'https://u:p@g.co:8000');
+	u.pathname = 'path';
+	if (u.hash !== '#h' || u.search !== '?q' || u.port !== '8000' || u.hostname !== 'g.co' || u.protocol !== 'https:' || u.href !== 'https://u:p@g.co:8000/path?q#h') {
 		throw u;
 	}
 } catch (e) {
