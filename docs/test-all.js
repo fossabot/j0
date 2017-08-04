@@ -3069,6 +3069,22 @@ var J0Element = function () {
 			return this;
 		}
 	}, {
+		key: 'walk',
+		value: function walk(fn) {
+			var childNodes = this.childNodes;
+
+			for (var i = 0, length = childNodes.length; i < length; i++) {
+				var node = childNodes[i];
+				if (fn(node)) {
+					return true;
+				}
+				if (node.walk(fn)) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -4266,6 +4282,98 @@ describe('J0Element.prototype.toObject', function () {
 		};
 		var element = dom(data);
 		assert.deepEqual(element.toObject(), data);
+	});
+});
+
+describe('J0Element.prototype.walk', function () {
+
+	it('should walk over a dom tree', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		var element = dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element.walk(function (node) {
+			actual.push(node);
+		});
+		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		var element = dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element.walk(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
 	});
 });
 
