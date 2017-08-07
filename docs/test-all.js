@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref109 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
+	var _ref111 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -33,8 +33,8 @@ var wait$1 = function () {
 		}, _callee58, this);
 	}));
 
-	return function wait$1(_x106, _x107) {
-		return _ref109.apply(this, arguments);
+	return function wait$1(_x108, _x109) {
+		return _ref111.apply(this, arguments);
 	};
 }();
 
@@ -5056,15 +5056,6 @@ tests$3(fetch);
 
 var x$33 = Date;
 
-function leftpad(x) {
-	var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-	var padChar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
-
-	var s = x.toString();
-	var pad = length - s.length;
-	return 0 < pad ? '' + padChar.charAt(0).repeat(pad) + s : s;
-}
-
 var century = 100;
 var shortenedLength = 3;
 
@@ -5072,31 +5063,101 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-function format(src, template) {
+function format(src, template, utc) {
 	var date = new x$33(src);
 	if (0 < date) {
-		var Y = date.getFullYear();
-		var M = date.getMonth();
-		var D = date.getDate();
-		var d = date.getDay();
-		var h = date.getHours();
-		var m = date.getMinutes();
-		return template.replace(/%YYYY/g, Y.toString()).replace(/%YY/g, leftpad(Y % century)).replace(/%MMMM/g, MonthNames[M]).replace(/%MMM/g, MonthNames[M].slice(0, shortenedLength)).replace(/%MM/g, leftpad(M + 1)).replace(/%M/g, (M + 1).toString()).replace(/%DD/g, leftpad(D)).replace(/%D/g, D.toString()).replace(/%dddd/g, DayNames[d]).replace(/%ddd/g, DayNames[d].slice(0, shortenedLength)).replace(/%hh/, leftpad(h)).replace(/%h/, h.toString()).replace(/%mm/, leftpad(m)).replace(/%m/, m.toString());
+		var methodPrefix = 'get' + (utc ? 'UTC' : '');
+		var Y = date[methodPrefix + 'FullYear']();
+		var M = date[methodPrefix + 'Month']();
+		var D = date[methodPrefix + 'Date']();
+		var d = date[methodPrefix + 'Day']();
+		var h = date[methodPrefix + 'Hours']();
+		var m = date[methodPrefix + 'Minutes']();
+		var s = date[methodPrefix + 'Seconds']();
+		return template.replace(/%(Y+|M+|D+|d+|h+|m+|s+)/g, function (match, type) {
+			switch (type) {
+				case 'YYYY':
+					return '' + Y;
+				case 'YY':
+					return ('' + Y % century).padStart(2, '0');
+				case 'MMMM':
+					return MonthNames[M];
+				case 'MMM':
+					return MonthNames[M].slice(0, shortenedLength);
+				case 'MM':
+					return ('' + (M + 1)).padStart(2, '0');
+				case 'M':
+					return '' + (M + 1);
+				case 'DD':
+					return ('' + D).padStart(2, '0');
+				case 'D':
+					return '' + D;
+				case 'dddd':
+					return DayNames[d];
+				case 'ddd':
+					return DayNames[d].slice(0, shortenedLength);
+				case 'hh':
+					return ('' + h).padStart(2, '0');
+				case 'h':
+					return '' + h;
+				case 'mm':
+					return ('' + m).padStart(2, '0');
+				case 'm':
+					return '' + m;
+				case 'ss':
+					return ('' + s).padStart(2, '0');
+				case 's':
+					return '' + s;
+			}
+			return match;
+		});
 	}
 	return '';
 }
 
-describe('format', function () {
+var tests$5 = [['2016-01-02T03:04:05Z', '%YYYY,%YY,%MMMM,%MMM,%MM,%M,%DD,%D,%dddd,%ddd', '2016,16,January,Jan,01,1,02,2,Saturday,Sat'], ['2016-01-02T03:04:05Z', '%hh,%h,%mm,%m,%ss,%s', '03,3,04,4,05,5']];
 
-	it('should format a date', function () {
-		var src = '2016-01-01T12:00Z';
-		var template = '%YYYY%MMM';
-		var expected = '2016Jan';
-		assert.equal(format(src, template), expected);
-	});
+describe('formatDate', function () {
+	var _loop = function _loop(src, expected, _template) {
+		it('formatDate(' + src + ', ' + _template + ') returns ' + expected, function () {
+			assert.equal(format(src, _template, true), expected);
+		});
+	};
+
+	var _iteratorNormalCompletion26 = true;
+	var _didIteratorError26 = false;
+	var _iteratorError26 = undefined;
+
+	try {
+
+		for (var _iterator26 = tests$5[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
+			var _ref38 = _step26.value;
+
+			var _ref39 = _slicedToArray(_ref38, 3);
+
+			var src = _ref39[0];
+			var _template = _ref39[1];
+			var expected = _ref39[2];
+
+			_loop(src, expected, _template);
+		}
+	} catch (err) {
+		_didIteratorError26 = true;
+		_iteratorError26 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion26 && _iterator26.return) {
+				_iterator26.return();
+			}
+		} finally {
+			if (_didIteratorError26) {
+				throw _iteratorError26;
+			}
+		}
+	}
 });
 
-function tests$5(Headers) {
+function tests$6(Headers) {
 	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
 
 
@@ -5207,9 +5268,9 @@ function tests$5(Headers) {
 	});
 }
 
-tests$5(Headers$1, 'Headers/j0');
+tests$6(Headers$1, 'Headers/j0');
 
-tests$5(Headers);
+tests$6(Headers);
 
 function generator$2() {
 	var _this17 = this;
@@ -5236,27 +5297,27 @@ function test$25(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion26 = true;
-			var _didIteratorError26 = false;
-			var _iteratorError26 = undefined;
+			var _iteratorNormalCompletion27 = true;
+			var _didIteratorError27 = false;
+			var _iteratorError27 = undefined;
 
 			try {
-				for (var _iterator26 = expected[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-					var element = _step26.value;
+				for (var _iterator27 = expected[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
+					var element = _step27.value;
 
 					parent.appendChild(element);
 				}
 			} catch (err) {
-				_didIteratorError26 = true;
-				_iteratorError26 = err;
+				_didIteratorError27 = true;
+				_iteratorError27 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion26 && _iterator26.return) {
-						_iterator26.return();
+					if (!_iteratorNormalCompletion27 && _iterator27.return) {
+						_iterator27.return();
 					}
 				} finally {
-					if (_didIteratorError26) {
-						throw _iteratorError26;
+					if (_didIteratorError27) {
+						throw _iteratorError27;
 					}
 				}
 			}
@@ -5697,27 +5758,27 @@ describe('Iterator', function () {
 			};
 		});
 		var results = [];
-		var _iteratorNormalCompletion27 = true;
-		var _didIteratorError27 = false;
-		var _iteratorError27 = undefined;
+		var _iteratorNormalCompletion28 = true;
+		var _didIteratorError28 = false;
+		var _iteratorError28 = undefined;
 
 		try {
-			for (var _iterator27 = iterator[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-				var result = _step27.value;
+			for (var _iterator28 = iterator[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
+				var result = _step28.value;
 
 				results.push(result);
 			}
 		} catch (err) {
-			_didIteratorError27 = true;
-			_iteratorError27 = err;
+			_didIteratorError28 = true;
+			_iteratorError28 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion27 && _iterator27.return) {
-					_iterator27.return();
+				if (!_iteratorNormalCompletion28 && _iterator28.return) {
+					_iterator28.return();
 				}
 			} finally {
-				if (_didIteratorError27) {
-					throw _iteratorError27;
+				if (_didIteratorError28) {
+					throw _iteratorError28;
 				}
 			}
 		}
@@ -5898,21 +5959,6 @@ describe('Lazy', function () {
 	});
 });
 
-describe('leftpad', function () {
-
-	it('should pad a string with 0', function () {
-		assert.equal(leftpad(1), '01');
-	});
-
-	it('should pad a string with 0 [length=10]', function () {
-		assert.equal(leftpad(1, 10), '0000000001');
-	});
-
-	it('should pad a string with * [length=10]', function () {
-		assert.equal(leftpad(1, 10, '*+='), '*********1');
-	});
-});
-
 var x$35 = localStorageIsAvailable;
 
 var x$36 = console;
@@ -5968,32 +6014,32 @@ var Map$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion28 = true;
-			var _didIteratorError28 = false;
-			var _iteratorError28 = undefined;
+			var _iteratorNormalCompletion29 = true;
+			var _didIteratorError29 = false;
+			var _iteratorError29 = undefined;
 
 			try {
-				for (var _iterator28 = iterable[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-					var _ref38 = _step28.value;
+				for (var _iterator29 = iterable[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
+					var _ref40 = _step29.value;
 
-					var _ref39 = _slicedToArray(_ref38, 2);
+					var _ref41 = _slicedToArray(_ref40, 2);
 
-					var key = _ref39[0];
-					var value = _ref39[1];
+					var key = _ref41[0];
+					var value = _ref41[1];
 
 					this.set(key, value);
 				}
 			} catch (err) {
-				_didIteratorError28 = true;
-				_iteratorError28 = err;
+				_didIteratorError29 = true;
+				_iteratorError29 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion28 && _iterator28.return) {
-						_iterator28.return();
+					if (!_iteratorNormalCompletion29 && _iterator29.return) {
+						_iterator29.return();
 					}
 				} finally {
-					if (_didIteratorError28) {
-						throw _iteratorError28;
+					if (_didIteratorError29) {
+						throw _iteratorError29;
 					}
 				}
 			}
@@ -6008,9 +6054,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref40) {
-				var _ref41 = _slicedToArray(_ref40, 1),
-				    itemKey = _ref41[0];
+			return this.data.findIndex(function (_ref42) {
+				var _ref43 = _slicedToArray(_ref42, 1),
+				    itemKey = _ref43[0];
 
 				return itemKey === key;
 			});
@@ -6034,9 +6080,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref42) {
-				var _ref43 = _slicedToArray(_ref42, 1),
-				    itemKey = _ref43[0];
+			var found = this.data.find(function (_ref44) {
+				var _ref45 = _slicedToArray(_ref44, 1),
+				    itemKey = _ref45[0];
 
 				return itemKey === key;
 			});
@@ -6064,10 +6110,10 @@ var Map$2 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this20 = this;
 
-			this.data.slice().forEach(function (_ref44) {
-				var _ref45 = _slicedToArray(_ref44, 2),
-				    key = _ref45[0],
-				    value = _ref45[1];
+			this.data.slice().forEach(function (_ref46) {
+				var _ref47 = _slicedToArray(_ref46, 2),
+				    key = _ref47[0],
+				    value = _ref47[1];
 
 				fn.call(thisArg, value, key, _this20);
 			});
@@ -6115,7 +6161,7 @@ var Map$2 = function () {
 /* eslint-disable no-magic-numbers */
 
 
-function tests$7(Map) {
+function tests$8(Map) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Map';
 
 
@@ -6207,9 +6253,9 @@ function tests$7(Map) {
 	});
 }
 
-tests$7(Map$2, 'Map#j0');
+tests$8(Map$2, 'Map#j0');
 
-tests$7(Map);
+tests$8(Map);
 
 function test$32(abs) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.abs';
@@ -7801,49 +7847,6 @@ function test$118(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion29 = true;
-			var _didIteratorError29 = false;
-			var _iteratorError29 = undefined;
-
-			try {
-				for (var _iterator29 = expected[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
-					var element = _step29.value;
-
-					parent.appendChild(element);
-				}
-			} catch (err) {
-				_didIteratorError29 = true;
-				_iteratorError29 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion29 && _iterator29.return) {
-						_iterator29.return();
-					}
-				} finally {
-					if (_didIteratorError29) {
-						throw _iteratorError29;
-					}
-				}
-			}
-
-			var iterator = generator.call(parent.childNodes);
-			var results = [];
-			while (1) {
-				var _iterator$next12 = iterator.next(),
-				    value = _iterator$next12.value,
-				    done = _iterator$next12.done;
-
-				if (done) {
-					break;
-				}
-				results.push(value);
-			}
-			assert.deepEqual(results, expected);
-		});
-
-		it('should create an iterator which is iterable in for-of syntax', function () {
-			var parent = document.createElement('div');
-			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion30 = true;
 			var _didIteratorError30 = false;
 			var _iteratorError30 = undefined;
@@ -7871,15 +7874,31 @@ function test$118(generator) {
 
 			var iterator = generator.call(parent.childNodes);
 			var results = [];
+			while (1) {
+				var _iterator$next12 = iterator.next(),
+				    value = _iterator$next12.value,
+				    done = _iterator$next12.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion31 = true;
 			var _didIteratorError31 = false;
 			var _iteratorError31 = undefined;
 
 			try {
-				for (var _iterator31 = iterator[Symbol.iterator](), _step31; !(_iteratorNormalCompletion31 = (_step31 = _iterator31.next()).done); _iteratorNormalCompletion31 = true) {
-					var value = _step31.value;
+				for (var _iterator31 = expected[Symbol.iterator](), _step31; !(_iteratorNormalCompletion31 = (_step31 = _iterator31.next()).done); _iteratorNormalCompletion31 = true) {
+					var element = _step31.value;
 
-					results.push(value);
+					parent.appendChild(element);
 				}
 			} catch (err) {
 				_didIteratorError31 = true;
@@ -7892,6 +7911,33 @@ function test$118(generator) {
 				} finally {
 					if (_didIteratorError31) {
 						throw _iteratorError31;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion32 = true;
+			var _didIteratorError32 = false;
+			var _iteratorError32 = undefined;
+
+			try {
+				for (var _iterator32 = iterator[Symbol.iterator](), _step32; !(_iteratorNormalCompletion32 = (_step32 = _iterator32.next()).done); _iteratorNormalCompletion32 = true) {
+					var value = _step32.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError32 = true;
+				_iteratorError32 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion32 && _iterator32.return) {
+						_iterator32.return();
+					}
+				} finally {
+					if (_didIteratorError32) {
+						throw _iteratorError32;
 					}
 				}
 			}
@@ -7928,49 +7974,6 @@ function test$120(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion32 = true;
-			var _didIteratorError32 = false;
-			var _iteratorError32 = undefined;
-
-			try {
-				for (var _iterator32 = expected[Symbol.iterator](), _step32; !(_iteratorNormalCompletion32 = (_step32 = _iterator32.next()).done); _iteratorNormalCompletion32 = true) {
-					var element = _step32.value;
-
-					parent.appendChild(element);
-				}
-			} catch (err) {
-				_didIteratorError32 = true;
-				_iteratorError32 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion32 && _iterator32.return) {
-						_iterator32.return();
-					}
-				} finally {
-					if (_didIteratorError32) {
-						throw _iteratorError32;
-					}
-				}
-			}
-
-			var iterator = generator.call(parent.childNodes);
-			var results = [];
-			while (1) {
-				var _iterator$next13 = iterator.next(),
-				    value = _iterator$next13.value,
-				    done = _iterator$next13.done;
-
-				if (done) {
-					break;
-				}
-				results.push(value);
-			}
-			assert.deepEqual(results, expected);
-		});
-
-		it('should create an iterator which is iterable in for-of syntax', function () {
-			var parent = document.createElement('div');
-			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion33 = true;
 			var _didIteratorError33 = false;
 			var _iteratorError33 = undefined;
@@ -7998,15 +8001,31 @@ function test$120(generator) {
 
 			var iterator = generator.call(parent.childNodes);
 			var results = [];
+			while (1) {
+				var _iterator$next13 = iterator.next(),
+				    value = _iterator$next13.value,
+				    done = _iterator$next13.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion34 = true;
 			var _didIteratorError34 = false;
 			var _iteratorError34 = undefined;
 
 			try {
-				for (var _iterator34 = iterator[Symbol.iterator](), _step34; !(_iteratorNormalCompletion34 = (_step34 = _iterator34.next()).done); _iteratorNormalCompletion34 = true) {
-					var value = _step34.value;
+				for (var _iterator34 = expected[Symbol.iterator](), _step34; !(_iteratorNormalCompletion34 = (_step34 = _iterator34.next()).done); _iteratorNormalCompletion34 = true) {
+					var element = _step34.value;
 
-					results.push(value);
+					parent.appendChild(element);
 				}
 			} catch (err) {
 				_didIteratorError34 = true;
@@ -8019,6 +8038,33 @@ function test$120(generator) {
 				} finally {
 					if (_didIteratorError34) {
 						throw _iteratorError34;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion35 = true;
+			var _didIteratorError35 = false;
+			var _iteratorError35 = undefined;
+
+			try {
+				for (var _iterator35 = iterator[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
+					var value = _step35.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError35 = true;
+				_iteratorError35 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion35 && _iterator35.return) {
+						_iterator35.return();
+					}
+				} finally {
+					if (_didIteratorError35) {
+						throw _iteratorError35;
 					}
 				}
 			}
@@ -8562,7 +8608,7 @@ describe('readBlob', function () {
 	});
 });
 
-function tests$10(Request, name) {
+function tests$11(Request, name) {
 
 	describe(name, function () {
 
@@ -8574,9 +8620,9 @@ function tests$10(Request, name) {
 	});
 }
 
-tests$10(Request$1, 'J0Request');
+tests$11(Request$1, 'J0Request');
 
-tests$10(Request, 'Request');
+tests$11(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
@@ -8603,7 +8649,7 @@ describe('requestAnimationFrame', function () {
 	})));
 });
 
-function tests$12(Response, name) {
+function tests$13(Response, name) {
 
 	describe(name, function () {
 
@@ -8615,9 +8661,9 @@ function tests$12(Response, name) {
 	});
 }
 
-tests$12(Response$1, 'J0Response');
+tests$13(Response$1, 'J0Response');
 
-tests$12(Response, 'Response');
+tests$13(Response, 'Response');
 
 function scrollX() {
 	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$34;
@@ -8683,27 +8729,27 @@ var Set$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion35 = true;
-			var _didIteratorError35 = false;
-			var _iteratorError35 = undefined;
+			var _iteratorNormalCompletion36 = true;
+			var _didIteratorError36 = false;
+			var _iteratorError36 = undefined;
 
 			try {
-				for (var _iterator35 = iterable[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
-					var value = _step35.value;
+				for (var _iterator36 = iterable[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
+					var value = _step36.value;
 
 					this.add(value);
 				}
 			} catch (err) {
-				_didIteratorError35 = true;
-				_iteratorError35 = err;
+				_didIteratorError36 = true;
+				_iteratorError36 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion35 && _iterator35.return) {
-						_iterator35.return();
+					if (!_iteratorNormalCompletion36 && _iterator36.return) {
+						_iterator36.return();
 					}
 				} finally {
-					if (_didIteratorError35) {
-						throw _iteratorError35;
+					if (_didIteratorError36) {
+						throw _iteratorError36;
 					}
 				}
 			}
@@ -8790,7 +8836,7 @@ var Set$2 = function () {
 
 /* eslint-disable no-magic-numbers */
 
-function tests$14(Set, name) {
+function tests$15(Set, name) {
 
 	describe(name, function () {
 
@@ -8916,9 +8962,9 @@ function tests$14(Set, name) {
 	});
 }
 
-tests$14(Set$2, 'J0Set');
+tests$15(Set$2, 'J0Set');
 
-tests$14(Set, 'Set');
+tests$15(Set, 'Set');
 
 describe('setImmediate', function () {
 
@@ -8948,8 +8994,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref82, name, expression, offset, source) {
-				var length = _ref82.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref84, name, expression, offset, source) {
+				var length = _ref84.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -9220,17 +9266,17 @@ var StateManager = function (_EventEmitter) {
 			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$41;
 
 			var stateString = this.parser(url);
-			var _iteratorNormalCompletion36 = true;
-			var _didIteratorError36 = false;
-			var _iteratorError36 = undefined;
+			var _iteratorNormalCompletion37 = true;
+			var _didIteratorError37 = false;
+			var _iteratorError37 = undefined;
 
 			try {
-				for (var _iterator36 = this.states[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
-					var _ref83 = _step36.value;
+				for (var _iterator37 = this.states[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
+					var _ref85 = _step37.value;
 
-					var _ref84 = _slicedToArray(_ref83, 2);
+					var _ref86 = _slicedToArray(_ref85, 2);
 
-					var state = _ref84[1];
+					var state = _ref86[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -9238,16 +9284,16 @@ var StateManager = function (_EventEmitter) {
 					}
 				}
 			} catch (err) {
-				_didIteratorError36 = true;
-				_iteratorError36 = err;
+				_didIteratorError37 = true;
+				_iteratorError37 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion36 && _iterator36.return) {
-						_iterator36.return();
+					if (!_iteratorNormalCompletion37 && _iterator37.return) {
+						_iterator37.return();
 					}
 				} finally {
-					if (_didIteratorError36) {
-						throw _iteratorError36;
+					if (_didIteratorError37) {
+						throw _iteratorError37;
 					}
 				}
 			}
@@ -9269,9 +9315,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref85 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref85.name,
-			    params = _ref85.params;
+			var _ref87 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref87.name,
+			    params = _ref87.params;
 
 			var noFallback = arguments[1];
 
@@ -9389,31 +9435,31 @@ describe('StateManager', function () {
 			path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 		});
 		var results = [];
-		var _iteratorNormalCompletion37 = true;
-		var _didIteratorError37 = false;
-		var _iteratorError37 = undefined;
+		var _iteratorNormalCompletion38 = true;
+		var _didIteratorError38 = false;
+		var _iteratorError38 = undefined;
 
 		try {
-			for (var _iterator37 = states.states[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
-				var _ref86 = _step37.value;
+			for (var _iterator38 = states.states[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
+				var _ref88 = _step38.value;
 
-				var _ref87 = _slicedToArray(_ref86, 2);
+				var _ref89 = _slicedToArray(_ref88, 2);
 
-				var state = _ref87[1];
+				var state = _ref89[1];
 
 				results.push(state);
 			}
 		} catch (err) {
-			_didIteratorError37 = true;
-			_iteratorError37 = err;
+			_didIteratorError38 = true;
+			_iteratorError38 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion37 && _iterator37.return) {
-					_iterator37.return();
+				if (!_iteratorNormalCompletion38 && _iterator38.return) {
+					_iterator38.return();
 				}
 			} finally {
-				if (_didIteratorError37) {
-					throw _iteratorError37;
+				if (_didIteratorError38) {
+					throw _iteratorError38;
 				}
 			}
 		}
@@ -9474,7 +9520,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-		var states, name0, name1, name2, _ref89, _ref90, toState, fromState;
+		var states, name0, name1, name2, _ref91, _ref92, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
@@ -9507,10 +9553,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref89 = _context51.sent;
-						_ref90 = _slicedToArray(_ref89, 2);
-						toState = _ref90[0];
-						fromState = _ref90[1];
+						_ref91 = _context51.sent;
+						_ref92 = _slicedToArray(_ref91, 2);
+						toState = _ref92[0];
+						fromState = _ref92[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -9770,27 +9816,27 @@ function test$125(generator) {
 			var string = '' + Date.now();
 			var iterator = generator.call(string);
 			var results = [];
-			var _iteratorNormalCompletion38 = true;
-			var _didIteratorError38 = false;
-			var _iteratorError38 = undefined;
+			var _iteratorNormalCompletion39 = true;
+			var _didIteratorError39 = false;
+			var _iteratorError39 = undefined;
 
 			try {
-				for (var _iterator38 = iterator[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
-					var value = _step38.value;
+				for (var _iterator39 = iterator[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
+					var value = _step39.value;
 
 					results.push(value);
 				}
 			} catch (err) {
-				_didIteratorError38 = true;
-				_iteratorError38 = err;
+				_didIteratorError39 = true;
+				_iteratorError39 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion38 && _iterator38.return) {
-						_iterator38.return();
+					if (!_iteratorNormalCompletion39 && _iterator39.return) {
+						_iterator39.return();
 					}
 				} finally {
-					if (_didIteratorError38) {
-						throw _iteratorError38;
+					if (_didIteratorError39) {
+						throw _iteratorError39;
 					}
 				}
 			}
@@ -9825,11 +9871,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref95) {
-			var _ref96 = _slicedToArray(_ref95, 3),
-			    string = _ref96[0],
-			    from = _ref96[1],
-			    to = _ref96[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref97) {
+			var _ref98 = _slicedToArray(_ref97, 3),
+			    string = _ref98[0],
+			    from = _ref98[1],
+			    to = _ref98[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -9905,11 +9951,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref97) {
-			var _ref98 = _slicedToArray(_ref97, 3),
-			    expected = _ref98[0],
-			    from = _ref98[1],
-			    to = _ref98[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
+			var _ref100 = _slicedToArray(_ref99, 3),
+			    expected = _ref100[0],
+			    from = _ref100[1],
+			    to = _ref100[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10452,7 +10498,7 @@ function test$133(normalize) {
 
 			this.timeout(10000);
 
-			var _loop = function _loop() {
+			var _loop2 = function _loop2() {
 				var _tests$pop = tests.pop(),
 				    _tests$pop2 = _toArray(_tests$pop),
 				    source = _tests$pop2[0],
@@ -10466,7 +10512,7 @@ function test$133(normalize) {
 			};
 
 			while (0 < tests.length) {
-				_loop();
+				_loop2();
 			}
 			if (0 < failed.length) {
 				console.error(new Error(failed.length + ' of ' + length + ' failed'));
@@ -10481,7 +10527,103 @@ test$133(normalize, 'String.prototype.normalize#j0');
 
 test$133(String.prototype.normalize);
 
-function test$135(repeat) {
+function test$135(padEnd) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.padEnd';
+
+
+	describe(name, function () {
+
+		it('should add some 0 at end of a string', function () {
+			var src = '1';
+			var actual = padEnd.call(src, 3, '0');
+			var expected = '100';
+			assert.equal(actual, expected);
+		});
+
+		it('should add some spaces at end of a string', function () {
+			var src = '1';
+			var actual = padEnd.call(src, 3);
+			var expected = '1  ';
+			assert.equal(actual, expected);
+		});
+
+		it('should add some foos at end of a string', function () {
+			var src = 'abc';
+			var actual = padEnd.call(src, 10, 'foo');
+			var expected = 'abcfoofoof';
+			assert.equal(actual, expected);
+		});
+	});
+}
+
+function padEnd(targetLength) {
+	var padString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
+
+	var result = this;
+	var count = (targetLength - result.length) / padString.length;
+	if (0 < count) {
+		while (0 < count--) {
+			result += padString;
+		}
+		return result.slice(0, targetLength);
+	}
+	return result;
+}
+
+test$135(padEnd, 'String.prototype.padEnd#j0');
+
+test$135(String.prototype.padEnd);
+
+function test$137(padStart) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.padStart';
+
+
+	describe(name, function () {
+
+		it('should add some 0 at start of a string', function () {
+			var src = '1';
+			var actual = padStart.call(src, 3, '0');
+			var expected = '001';
+			assert.equal(actual, expected);
+		});
+
+		it('should add some spaces at start of a string', function () {
+			var src = '1';
+			var actual = padStart.call(src, 3);
+			var expected = '  1';
+			assert.equal(actual, expected);
+		});
+
+		it('should add some foos at start of a string', function () {
+			var src = 'abc';
+			var actual = padStart.call(src, 10, 'foo');
+			var expected = 'foofoofabc';
+			assert.equal(actual, expected);
+		});
+	});
+}
+
+function padStart(targetLength) {
+	var padString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
+
+	var result = this;
+	var d = targetLength - result.length;
+	var count = d / padString.length;
+	if (0 < count) {
+		var pad = '';
+		while (0 < count--) {
+			pad += padString;
+		}
+		return pad.slice(0, d) + result;
+	}
+	return result;
+}
+
+test$137(padStart, 'String.prototype.padStart#j0');
+
+test$137(String.prototype.padStart);
+
+function test$139(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
 
@@ -10507,11 +10649,11 @@ function repeat(c) {
 	return results.join('');
 }
 
-test$135(repeat, 'String.prototype.repeat#j0');
+test$139(repeat, 'String.prototype.repeat#j0');
 
-test$135(String.prototype.repeat);
+test$139(String.prototype.repeat);
 
-function test$137(startsWith) {
+function test$141(startsWith) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.startsWith';
 
 
@@ -10538,9 +10680,9 @@ function startsWith(fragment) {
 	return true;
 }
 
-test$137(startsWith, 'String.prototype.startsWith#j0');
+test$141(startsWith, 'String.prototype.startsWith#j0');
 
-test$137(String.prototype.startsWith);
+test$141(String.prototype.startsWith);
 
 describe('StringList', function () {
 
@@ -10662,11 +10804,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref100) {
-		var _ref101 = _slicedToArray(_ref100, 3),
-		    string = _ref101[0],
-		    from = _ref101[1],
-		    to = _ref101[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref102) {
+		var _ref103 = _slicedToArray(_ref102, 3),
+		    string = _ref103[0],
+		    from = _ref103[1],
+		    to = _ref103[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -10679,7 +10821,7 @@ describe('stringToCodePoints', function () {
 	});
 });
 
-function test$139(_Symbol) {
+function test$143(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -10723,9 +10865,9 @@ function test$139(_Symbol) {
 	});
 }
 
-test$139(Symbol, 'J0Symbol');
+test$143(Symbol, 'J0Symbol');
 
-test$139(Symbol);
+test$143(Symbol);
 
 /* eslint-disable no-magic-numbers */
 function isIn(x, min, max) {
@@ -11022,7 +11164,7 @@ describe('throttle', function () {
 	});
 });
 
-function test$141(URL) {
+function test$145(URL) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URL';
 
 
@@ -11203,18 +11345,18 @@ function test$141(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref103, index) {
-			var _ref104 = _slicedToArray(_ref103, 2),
-			    input = _ref104[0],
-			    tests = _ref104[1];
+		].forEach(function (_ref105, index) {
+			var _ref106 = _slicedToArray(_ref105, 2),
+			    input = _ref106[0],
+			    tests = _ref106[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref105) {
-						var _ref106 = _slicedToArray(_ref105, 2),
-						    key = _ref106[0],
-						    expected = _ref106[1];
+					tests.forEach(function (_ref107) {
+						var _ref108 = _slicedToArray(_ref107, 2),
+						    key = _ref108[0],
+						    expected = _ref108[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -11852,9 +11994,9 @@ x$4.defineProperties(URL$1, {
 	revokeObjectURL: { value: x$49.revokeObjectURL }
 });
 
-test$141(URL$1, 'URL#j0');
+test$145(URL$1, 'URL#j0');
 
-test$141(URL);
+test$145(URL);
 
 var separator = '&';
 var equal = '=';
@@ -11873,11 +12015,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref107) {
-				var _ref108 = _slicedToArray(_ref107, 2),
-				    name = _ref108[0],
-				    _ref108$ = _ref108[1],
-				    value = _ref108$ === undefined ? '' : _ref108$;
+			return this.data.map(function (_ref109) {
+				var _ref110 = _slicedToArray(_ref109, 2),
+				    name = _ref110[0],
+				    _ref110$ = _ref110[1],
+				    value = _ref110$ === undefined ? '' : _ref110$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -11887,7 +12029,7 @@ var URLSearchParams$2 = function (_StringList2) {
 	return URLSearchParams$2;
 }(StringList);
 
-function tests$16(URLSearchParams) {
+function tests$17(URLSearchParams) {
 	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URLSearchParams';
 
 
@@ -11998,9 +12140,9 @@ function tests$16(URLSearchParams) {
 	});
 }
 
-tests$16(URLSearchParams$2, 'URLSearchParams#j0');
+tests$17(URLSearchParams$2, 'URLSearchParams#j0');
 
-tests$16(URLSearchParams);
+tests$17(URLSearchParams);
 
 describe('wait', function () {
 	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee59() {
@@ -12040,7 +12182,7 @@ mocha.run().once('end', function () {
 	var tests = x$3.querySelectorAll('.test');
 	var testList = [];
 
-	var _loop2 = function _loop2(i) {
+	var _loop3 = function _loop3(i) {
 		var testElement = tests[i];
 		testElement.querySelector('h2').textContent.replace(/^\s*\[\s*id\s*:\s*(.*?)\s*\]/, function (match, name) {
 			testElement.setAttribute('data-graph', name);
@@ -12049,7 +12191,7 @@ mocha.run().once('end', function () {
 	};
 
 	for (var i = tests.length; i--;) {
-		_loop2(i);
+		_loop3(i);
 	}
 	var canvasList = x$3.querySelectorAll('.' + x$50);
 	var list = [];

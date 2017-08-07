@@ -1013,6 +1013,52 @@ if (!prototype$10.normalize) {
 	prototype$10.normalize = normalize;
 }
 
+function padEnd(targetLength) {
+	var padString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
+
+	var result = this;
+	var count = (targetLength - result.length) / padString.length;
+	if (0 < count) {
+		while (0 < count--) {
+			result += padString;
+		}
+		return result.slice(0, targetLength);
+	}
+	return result;
+}
+
+try {
+	if ('1'.padEnd(3, '0') !== '100') {
+		throw 0;
+	}
+} catch (error) {
+	String.prototype.padEnd = padEnd;
+}
+
+function padStart(targetLength) {
+	var padString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
+
+	var result = this;
+	var d = targetLength - result.length;
+	var count = d / padString.length;
+	if (0 < count) {
+		var pad = '';
+		while (0 < count--) {
+			pad += padString;
+		}
+		return pad.slice(0, d) + result;
+	}
+	return result;
+}
+
+try {
+	if ('1'.padStart(3, '0') !== '001') {
+		throw 0;
+	}
+} catch (error) {
+	String.prototype.padStart = padStart;
+}
+
 var x$9 = parseInt;
 
 function repeat(c) {
