@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref111 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
+	var _ref113 = _asyncToGenerator(regeneratorRuntime.mark(function _callee58(duration, data) {
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -34,7 +34,7 @@ var wait$1 = function () {
 	}));
 
 	return function wait$1(_x108, _x109) {
-		return _ref111.apply(this, arguments);
+		return _ref113.apply(this, arguments);
 	};
 }();
 
@@ -4630,6 +4630,60 @@ describe('dom (J0Element)', function () {
 	});
 });
 
+function emitAll(eventName, data, selector, rootElement) {
+	dom.findAll(selector, rootElement).forEach(function (element) {
+		element.emit(eventName, data);
+	});
+}
+
+describe('emitAll', function () {
+
+	it('should emit for each element', function () {
+		var results = [];
+		function fn(event) {
+			results.push([this, event.detail]);
+		}
+		var className = 'class' + Date.now();
+		var eventName = 'event' + Date.now();
+		var eventData = 'eventData' + Date.now();
+		var element1 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element2 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element3 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element4 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element5 = dom({
+			a: [['class', className]],
+			c: [element3, element4],
+			e: [[eventName, fn]]
+		});
+		var element = dom({
+			c: [element1, element2, element5]
+		});
+		emitAll(eventName, eventData, '.' + className, element);
+		var expected = [element1, element2, element5, element3, element4];
+		assert.equal(results.length, expected.length);
+		results.forEach(function (_ref23, index) {
+			var _ref24 = _slicedToArray(_ref23, 2),
+			    element = _ref24[0],
+			    data = _ref24[1];
+
+			assert.equal(data, eventData);
+			assert.equal(element.equals(expected[index]), true);
+		});
+	});
+});
+
 var listenersKey = Symbol();
 
 var EventEmitter = function () {
@@ -4837,12 +4891,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator24 = iterable[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
-					var _ref23 = _step24.value;
+					var _ref25 = _step24.value;
 
-					var _ref24 = _slicedToArray(_ref23, 2);
+					var _ref26 = _slicedToArray(_ref25, 2);
 
-					var key = _ref24[0];
-					var value = _ref24[1];
+					var key = _ref26[0];
+					var value = _ref26[1];
 
 					this.append(key, value);
 				}
@@ -4871,9 +4925,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref25) {
-				var _ref26 = _slicedToArray(_ref25, 1),
-				    itemName = _ref26[0];
+			return this.data.findIndex(function (_ref27) {
+				var _ref28 = _slicedToArray(_ref27, 1),
+				    itemName = _ref28[0];
 
 				return itemName === name;
 			});
@@ -4901,9 +4955,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref27) {
-				var _ref28 = _slicedToArray(_ref27, 1),
-				    itemName = _ref28[0];
+			this.data = this.data.filter(function (_ref29) {
+				var _ref30 = _slicedToArray(_ref29, 1),
+				    itemName = _ref30[0];
 
 				return itemName !== name;
 			});
@@ -4911,9 +4965,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref29) {
-				var _ref30 = _slicedToArray(_ref29, 1),
-				    itemName = _ref30[0];
+			var found = this.data.find(function (_ref31) {
+				var _ref32 = _slicedToArray(_ref31, 1),
+				    itemName = _ref32[0];
 
 				return itemName === name;
 			});
@@ -4923,10 +4977,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref31) {
-				var _ref32 = _slicedToArray(_ref31, 2),
-				    itemName = _ref32[0],
-				    value = _ref32[1];
+			this.data.forEach(function (_ref33) {
+				var _ref34 = _slicedToArray(_ref33, 2),
+				    itemName = _ref34[0],
+				    value = _ref34[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4937,11 +4991,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref33) {
-				var _ref34 = _slicedToArray(_ref33, 2),
-				    name = _ref34[0],
-				    _ref34$ = _ref34[1],
-				    value = _ref34$ === undefined ? '' : _ref34$;
+			return this.data.map(function (_ref35) {
+				var _ref36 = _slicedToArray(_ref35, 2),
+				    name = _ref36[0],
+				    _ref36$ = _ref36[1],
+				    value = _ref36$ === undefined ? '' : _ref36$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -5102,8 +5156,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref35) {
-			var headers = _ref35.headers;
+		value: function inheritFrom(input, body, _ref37) {
+			var headers = _ref37.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -5244,12 +5298,12 @@ function fetch$1(input, init) {
 
 		try {
 			for (var _iterator25 = request.headers.entries()[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
-				var _ref36 = _step25.value;
+				var _ref38 = _step25.value;
 
-				var _ref37 = _slicedToArray(_ref36, 2);
+				var _ref39 = _slicedToArray(_ref38, 2);
 
-				var name = _ref37[0];
-				var value = _ref37[1];
+				var name = _ref39[0];
+				var value = _ref39[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -5377,13 +5431,13 @@ describe('formatDate', function () {
 	try {
 
 		for (var _iterator26 = tests$5[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-			var _ref38 = _step26.value;
+			var _ref40 = _step26.value;
 
-			var _ref39 = _slicedToArray(_ref38, 3);
+			var _ref41 = _slicedToArray(_ref40, 3);
 
-			var src = _ref39[0];
-			var _template = _ref39[1];
-			var expected = _ref39[2];
+			var src = _ref41[0];
+			var _template = _ref41[1];
+			var expected = _ref41[2];
 
 			_loop(src, expected, _template);
 		}
@@ -6266,12 +6320,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator29 = iterable[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
-					var _ref40 = _step29.value;
+					var _ref42 = _step29.value;
 
-					var _ref41 = _slicedToArray(_ref40, 2);
+					var _ref43 = _slicedToArray(_ref42, 2);
 
-					var key = _ref41[0];
-					var value = _ref41[1];
+					var key = _ref43[0];
+					var value = _ref43[1];
 
 					this.set(key, value);
 				}
@@ -6300,9 +6354,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref42) {
-				var _ref43 = _slicedToArray(_ref42, 1),
-				    itemKey = _ref43[0];
+			return this.data.findIndex(function (_ref44) {
+				var _ref45 = _slicedToArray(_ref44, 1),
+				    itemKey = _ref45[0];
 
 				return itemKey === key;
 			});
@@ -6326,9 +6380,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref44) {
-				var _ref45 = _slicedToArray(_ref44, 1),
-				    itemKey = _ref45[0];
+			var found = this.data.find(function (_ref46) {
+				var _ref47 = _slicedToArray(_ref46, 1),
+				    itemKey = _ref47[0];
 
 				return itemKey === key;
 			});
@@ -6356,10 +6410,10 @@ var Map$2 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this20 = this;
 
-			this.data.slice().forEach(function (_ref46) {
-				var _ref47 = _slicedToArray(_ref46, 2),
-				    key = _ref47[0],
-				    value = _ref47[1];
+			this.data.slice().forEach(function (_ref48) {
+				var _ref49 = _slicedToArray(_ref48, 2),
+				    key = _ref49[0],
+				    value = _ref49[1];
 
 				fn.call(thisArg, value, key, _this20);
 			});
@@ -9240,8 +9294,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref84, name, expression, offset, source) {
-				var length = _ref84.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref86, name, expression, offset, source) {
+				var length = _ref86.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -9518,11 +9572,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator37 = this.states[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
-					var _ref85 = _step37.value;
+					var _ref87 = _step37.value;
 
-					var _ref86 = _slicedToArray(_ref85, 2);
+					var _ref88 = _slicedToArray(_ref87, 2);
 
-					var state = _ref86[1];
+					var state = _ref88[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -9561,9 +9615,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref87 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref87.name,
-			    params = _ref87.params;
+			var _ref89 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref89.name,
+			    params = _ref89.params;
 
 			var noFallback = arguments[1];
 
@@ -9687,11 +9741,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator38 = states.states[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
-				var _ref88 = _step38.value;
+				var _ref90 = _step38.value;
 
-				var _ref89 = _slicedToArray(_ref88, 2);
+				var _ref91 = _slicedToArray(_ref90, 2);
 
-				var state = _ref89[1];
+				var state = _ref91[1];
 
 				results.push(state);
 			}
@@ -9766,7 +9820,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-		var states, name0, name1, name2, _ref91, _ref92, toState, fromState;
+		var states, name0, name1, name2, _ref93, _ref94, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee51$(_context51) {
 			while (1) {
@@ -9799,10 +9853,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref91 = _context51.sent;
-						_ref92 = _slicedToArray(_ref91, 2);
-						toState = _ref92[0];
-						fromState = _ref92[1];
+						_ref93 = _context51.sent;
+						_ref94 = _slicedToArray(_ref93, 2);
+						toState = _ref94[0];
+						fromState = _ref94[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -10117,11 +10171,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref97) {
-			var _ref98 = _slicedToArray(_ref97, 3),
-			    string = _ref98[0],
-			    from = _ref98[1],
-			    to = _ref98[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
+			var _ref100 = _slicedToArray(_ref99, 3),
+			    string = _ref100[0],
+			    from = _ref100[1],
+			    to = _ref100[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10197,11 +10251,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref99) {
-			var _ref100 = _slicedToArray(_ref99, 3),
-			    expected = _ref100[0],
-			    from = _ref100[1],
-			    to = _ref100[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref101) {
+			var _ref102 = _slicedToArray(_ref101, 3),
+			    expected = _ref102[0],
+			    from = _ref102[1],
+			    to = _ref102[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -11050,11 +11104,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref102) {
-		var _ref103 = _slicedToArray(_ref102, 3),
-		    string = _ref103[0],
-		    from = _ref103[1],
-		    to = _ref103[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref104) {
+		var _ref105 = _slicedToArray(_ref104, 3),
+		    string = _ref105[0],
+		    from = _ref105[1],
+		    to = _ref105[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -11591,18 +11645,18 @@ function test$145(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref105, index) {
-			var _ref106 = _slicedToArray(_ref105, 2),
-			    input = _ref106[0],
-			    tests = _ref106[1];
+		].forEach(function (_ref107, index) {
+			var _ref108 = _slicedToArray(_ref107, 2),
+			    input = _ref108[0],
+			    tests = _ref108[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref107) {
-						var _ref108 = _slicedToArray(_ref107, 2),
-						    key = _ref108[0],
-						    expected = _ref108[1];
+					tests.forEach(function (_ref109) {
+						var _ref110 = _slicedToArray(_ref109, 2),
+						    key = _ref110[0],
+						    expected = _ref110[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -12261,11 +12315,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref109) {
-				var _ref110 = _slicedToArray(_ref109, 2),
-				    name = _ref110[0],
-				    _ref110$ = _ref110[1],
-				    value = _ref110$ === undefined ? '' : _ref110$;
+			return this.data.map(function (_ref111) {
+				var _ref112 = _slicedToArray(_ref111, 2),
+				    name = _ref112[0],
+				    _ref112$ = _ref112[1],
+				    value = _ref112$ === undefined ? '' : _ref112$;
 
 				return name + '=' + value;
 			}).join('&');
