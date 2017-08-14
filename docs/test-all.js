@@ -10224,19 +10224,19 @@ function test$129(endsWith) {
 			assert.equal(endsWith.call(string1, fragment), false);
 			assert.equal(endsWith.call(string2, fragment), true);
 		});
+
+		it('should return whether the string starts with the given string or not [multibytes]', function () {
+			var fragment = Date.now() + '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34';
+			var string1 = Date.now() + 'abc';
+			var string2 = 'abc' + Date.now() + '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34';
+			assert.equal(endsWith.call(string1, fragment), false);
+			assert.equal(endsWith.call(string2, fragment), true);
+		});
 	});
 }
 
 function endsWith(fragment) {
-	var thisLength = this.length;
-	var length = fragment.length;
-
-	for (var i = 0; i < length; i++) {
-		if (fragment[length - i] !== this[thisLength - i]) {
-			return false;
-		}
-	}
-	return true;
+	return this.slice(-fragment.length) === fragment;
 }
 
 test$129(endsWith, 'String.prototype.endsWith#j0');
@@ -10966,18 +10966,19 @@ function test$141(startsWith) {
 			assert.equal(startsWith.call(string1, fragment), true);
 			assert.equal(startsWith.call(string2, fragment), false);
 		});
+
+		it('should return whether the string starts with the given string or not [multibytes]', function () {
+			var fragment = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now();
+			var string1 = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now() + 'abc';
+			var string2 = 'abc' + Date.now();
+			assert.equal(startsWith.call(string1, fragment), true);
+			assert.equal(startsWith.call(string2, fragment), false);
+		});
 	});
 }
 
 function startsWith(fragment) {
-	var length = fragment.length;
-
-	for (var i = 0; i < length; i++) {
-		if (fragment[i] !== this[i]) {
-			return false;
-		}
-	}
-	return true;
+	return this.slice(0, fragment.length) === fragment;
 }
 
 test$141(startsWith, 'String.prototype.startsWith#j0');

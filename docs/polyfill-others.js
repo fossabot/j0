@@ -506,15 +506,7 @@ if (!prototype$8.codePointAt) {
 }
 
 function endsWith(fragment) {
-	var thisLength = this.length;
-	var length = fragment.length;
-
-	for (var i = 0; i < length; i++) {
-		if (fragment[length - i] !== this[thisLength - i]) {
-			return false;
-		}
-	}
-	return true;
+	return this.slice(-fragment.length) === fragment;
 }
 
 var prototype$9 = String.prototype;
@@ -1079,14 +1071,7 @@ try {
 }
 
 function startsWith(fragment) {
-	var length = fragment.length;
-
-	for (var i = 0; i < length; i++) {
-		if (fragment[i] !== this[i]) {
-			return false;
-		}
-	}
-	return true;
+	return this.slice(0, fragment.length) === fragment;
 }
 
 var prototype$12 = String.prototype;
