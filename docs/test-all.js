@@ -3085,6 +3085,30 @@ var J0Element = function () {
 			return false;
 		}
 	}, {
+		key: 'walkForward',
+		value: function walkForward(fn) {
+			if (fn(this)) {
+				return;
+			}
+			var forward = this.forward;
+
+			if (forward) {
+				return forward.walkForward(fn);
+			}
+		}
+	}, {
+		key: 'walkBackward',
+		value: function walkBackward(fn) {
+			if (fn(this)) {
+				return;
+			}
+			var backward = this.backward;
+
+			if (backward) {
+				return backward.walkBackward(fn);
+			}
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -3219,6 +3243,44 @@ var J0Element = function () {
 		key: 'isTextNode',
 		get: function get() {
 			return this.nodeType === x$26.TEXT_NODE;
+		}
+	}, {
+		key: 'forward',
+		get: function get() {
+			var element = this.firstChild;
+			if (element) {
+				return element;
+			}
+			element = this;
+			while (element) {
+				var _element = element,
+				    next = _element.next;
+
+				if (next) {
+					return next;
+				}
+				element = element.parent;
+			}
+			return null;
+		}
+	}, {
+		key: 'backward',
+		get: function get() {
+			var element = this.lastChild;
+			if (element) {
+				return element;
+			}
+			element = this;
+			while (element) {
+				var _element2 = element,
+				    previous = _element2.previous;
+
+				if (previous) {
+					return previous;
+				}
+				element = element.parent;
+			}
+			return null;
 		}
 	}]);
 
@@ -4370,6 +4432,190 @@ describe('J0Element.prototype.walk', function () {
 			actual.push(node);
 		});
 		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+});
+
+describe('J0Element.prototype.walkBackward', function () {
+
+	it('should walk backward', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		text10.walkBackward(function (node) {
+			actual.push(node);
+		});
+		var expected = [text10, element5, text8, element4, text6, text7, text9, element3, text5, element2, text3, text4, element1, text2, text1];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element5.walkBackward(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [element5, text8, element4, text6, text7];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+});
+
+describe('J0Element.prototype.walkForward', function () {
+
+	it('should walk forward', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element1.walkForward(function (node) {
+			actual.push(node);
+		});
+		var expected = [element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = dom('text1--' + Date.now());
+		var text2 = dom('text2--' + Date.now());
+		var text3 = dom('text3--' + Date.now());
+		var text4 = dom('text4--' + Date.now());
+		var text5 = dom('text5--' + Date.now());
+		var text6 = dom('text6--' + Date.now());
+		var text7 = dom('text7--' + Date.now());
+		var text8 = dom('text8--' + Date.now());
+		var text9 = dom('text9--' + Date.now());
+		var text10 = dom('text10--' + Date.now());
+		var element1 = dom({
+			c: [text2]
+		});
+		var element2 = dom({
+			c: [text3]
+		});
+		var element3 = dom({
+			c: [text4, element2, text5]
+		});
+		var element4 = dom({
+			c: [text6]
+		});
+		var element5 = dom({
+			c: [text7, element4, text8]
+		});
+		var element6 = dom({
+			c: [text9, element5, text10]
+		});
+		dom({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element3.walkForward(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [element3, text4, element2, text3, text5, element6];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
