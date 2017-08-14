@@ -10218,17 +10218,17 @@ function test$129(endsWith) {
 	describe(name, function () {
 
 		it('should return whether the string starts with the given string or not', function () {
-			var fragment = '' + Date.now();
-			var string1 = Date.now() + 'abc';
-			var string2 = 'abc' + Date.now();
+			var fragment = Date.now().toString(16);
+			var string1 = fragment + 'abc';
+			var string2 = 'abc' + fragment;
 			assert.equal(endsWith.call(string1, fragment), false);
 			assert.equal(endsWith.call(string2, fragment), true);
 		});
 
 		it('should return whether the string starts with the given string or not [multibytes]', function () {
-			var fragment = Date.now() + '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34';
-			var string1 = Date.now() + 'abc';
-			var string2 = 'abc' + Date.now() + '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34';
+			var fragment = Date.now().toString(16) + '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34';
+			var string1 = fragment + 'abc';
+			var string2 = 'abc' + fragment;
 			assert.equal(endsWith.call(string1, fragment), false);
 			assert.equal(endsWith.call(string2, fragment), true);
 		});
@@ -10960,17 +10960,17 @@ function test$141(startsWith) {
 	describe(name, function () {
 
 		it('should return whether the string starts with the given string or not', function () {
-			var fragment = '' + Date.now();
-			var string1 = Date.now() + 'abc';
-			var string2 = 'abc' + Date.now();
+			var fragment = Date.now().toString(16);
+			var string1 = fragment + 'abc';
+			var string2 = 'abc' + fragment;
 			assert.equal(startsWith.call(string1, fragment), true);
 			assert.equal(startsWith.call(string2, fragment), false);
 		});
 
 		it('should return whether the string starts with the given string or not [multibytes]', function () {
-			var fragment = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now();
-			var string1 = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now() + 'abc';
-			var string2 = 'abc' + Date.now();
+			var fragment = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now().toString(16);
+			var string1 = fragment + 'abc';
+			var string2 = 'abc' + fragment;
 			assert.equal(startsWith.call(string1, fragment), true);
 			assert.equal(startsWith.call(string2, fragment), false);
 		});
