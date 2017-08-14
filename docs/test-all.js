@@ -2846,7 +2846,9 @@ var J0Element = function () {
 			}
 
 			elements.forEach(function (element) {
-				node.appendChild(wrap(element).node);
+				if (isString(element) || element) {
+					node.appendChild(wrap(element).node);
+				}
 			});
 			return this;
 		}
@@ -3362,7 +3364,24 @@ describe('J0Element.prototype.append', function () {
 			c: [element1]
 		});
 		element.append(element2, element3);
-		assert.deepEqual(element.childNodes, [element1, element2, element3]);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (element, index) {
+			assert.equal(element.equals(expected[index]), true);
+		});
+	});
+
+	it('should skip null or false or undefined', function () {
+		var element1 = dom(Date.now() + '-1');
+		var element2 = dom();
+		var element3 = dom(Date.now() + '-2');
+		var element = dom({
+			c: [element1]
+		});
+		element.append(0, element2, null, element3);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (element, index) {
+			assert.equal(element.equals(expected[index]), true);
+		});
 	});
 });
 
