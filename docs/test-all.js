@@ -2682,8 +2682,10 @@ function forEachItem(data, fn) {
 	}
 }
 
+var x$31 = console;
+
 function callMethod(event) {
-	this[event.type](event);
+	x$10.resolve(this[event.type](event)).catch(x$31.error);
 }
 
 function _findAll(selector, rootElement) {
@@ -3994,10 +3996,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$31 = Headers;
+var x$32 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$31();
+	var headers = new x$32();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4014,12 +4016,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$32 = XMLHttpRequest;
+var x$33 = XMLHttpRequest;
 
 function fetch$1(input, init) {
 	return new x$10(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$32();
+		var xhr = new x$33();
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
@@ -4103,7 +4105,7 @@ tests$3(fetch$1, 'J0Fetch');
 
 tests$3(fetch);
 
-var x$33 = Date;
+var x$34 = Date;
 
 var century = 100;
 var shortenedLength = 3;
@@ -4113,7 +4115,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template, utc) {
-	var date = new x$33(src);
+	var date = new x$34(src);
 	if (0 < date) {
 		var methodPrefix = 'get' + (utc ? 'UTC' : '');
 		var Y = date[methodPrefix + 'FullYear']();
@@ -4393,10 +4395,10 @@ test$25(generator$2, 'HTMLCollection/@iterator/j0');
 
 test$25(HTMLCollection.prototype[Symbol.iterator]);
 
-var x$34 = window;
+var x$35 = window;
 
 function innerHeight() {
-	return x$34.innerHeight;
+	return x$35.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -4407,7 +4409,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$34.innerWidth;
+	return x$35.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -6483,18 +6485,16 @@ describe('Lazy', function () {
 	});
 });
 
-var x$35 = localStorageIsAvailable;
-
-var x$36 = console;
+var x$36 = localStorageIsAvailable;
 
 var localStorage$1 = new J0Storage();
 
 test$27(localStorage$1, 'localStorage#j0');
 
-if (x$35) {
+if (x$36) {
 	test$27(localStorage, 'localStorage');
 } else {
-	x$36.info('Tests for localStorage are skipped.');
+	x$31.info('Tests for localStorage are skipped.');
 }
 
 function test$30(generator) {
@@ -8712,11 +8712,11 @@ var x$39 = setTimeout;
 
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
-if (!x$34.immediateId) {
-	x$34.immediateId = 0;
+if (!x$35.immediateId) {
+	x$35.immediateId = 0;
 }
-x$34.immediateId += 1;
-var setImmediateNative = x$34.setImmediate;
+x$35.immediateId += 1;
+var setImmediateNative = x$35.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -9190,7 +9190,7 @@ tests$13(Response$1, 'J0Response');
 tests$13(Response, 'Response');
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$34;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$35;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -9202,7 +9202,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$34;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$35;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
