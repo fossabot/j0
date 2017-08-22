@@ -2678,9 +2678,18 @@ function forEachItem(data, fn) {
 	}
 }
 
+function _findAll(selector, rootElement) {
+	var list = (rootElement ? dom(rootElement).node : x$3).querySelectorAll(selector);
+	var result = [];
+	for (var i = 0, length = list.length; i < length; i++) {
+		result[i] = dom(list[i]);
+	}
+	return result;
+}
+
 function _find(selector, rootElement) {
-	var element = (rootElement ? wrap(rootElement).node : x$3).querySelector(selector);
-	return element ? wrap(element) : null;
+	var element = (rootElement ? dom(rootElement).node : x$3).querySelector(selector);
+	return element ? dom(element) : null;
 }
 
 var nodeKey = Symbol();
@@ -2711,7 +2720,7 @@ var J0Element = function () {
 			    n = _ref15.n,
 			    o = _ref15.o;
 
-			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
+			this[nodeKey] = dom(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
 			if (c) {
 				this.append.apply(this, _toConsumableArray(c));
 			}
@@ -2727,7 +2736,7 @@ var J0Element = function () {
 	_createClass(J0Element, [{
 		key: 'equals',
 		value: function equals(element) {
-			return this.node === wrap(element).node;
+			return this.node === dom(element).node;
 		}
 	}, {
 		key: 'setText',
@@ -2744,13 +2753,13 @@ var J0Element = function () {
 	}, {
 		key: 'setParent',
 		value: function setParent(source) {
-			wrap(source).append(this);
+			dom(source).append(this);
 			return this;
 		}
 	}, {
 		key: 'insertBefore',
 		value: function insertBefore(newElement, referenceElement) {
-			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
+			this.node.insertBefore(dom(newElement).node, referenceElement && referenceElement.node);
 		}
 	}, {
 		key: 'setPrevious',
@@ -2760,7 +2769,7 @@ var J0Element = function () {
 			}
 
 			while (0 < elements.length) {
-				var element = wrap(elements.shift());
+				var element = dom(elements.shift());
 				this.parent.insertBefore(element, this);
 			}
 			return this;
@@ -2775,7 +2784,7 @@ var J0Element = function () {
 			}
 
 			while (0 < elements.length) {
-				var element = wrap(elements.pop());
+				var element = dom(elements.pop());
 				this.parent.insertBefore(element, lastElement);
 				lastElement = element;
 			}
@@ -2808,7 +2817,7 @@ var J0Element = function () {
 	}, {
 		key: 'replaceChild',
 		value: function replaceChild(newChild, oldChild) {
-			this.node.replaceChild(wrap(newChild).node, wrap(oldChild).node);
+			this.node.replaceChild(dom(newChild).node, dom(oldChild).node);
 			return this;
 		}
 	}, {
@@ -2818,7 +2827,7 @@ var J0Element = function () {
 				newChilds[_key16] = arguments[_key16];
 			}
 
-			var lastNewChild = wrap(newChilds.pop());
+			var lastNewChild = dom(newChilds.pop());
 			this.parent.replaceChild(lastNewChild, this);
 			lastNewChild.setPrevious.apply(lastNewChild, newChilds);
 		}
@@ -2847,7 +2856,7 @@ var J0Element = function () {
 
 			elements.forEach(function (element) {
 				if (isString(element) || element) {
-					node.appendChild(wrap(element).node);
+					node.appendChild(dom(element).node);
 				}
 			});
 			return this;
@@ -2908,7 +2917,7 @@ var J0Element = function () {
 		value: function on(eventName, fn) {
 			var _this6 = this;
 
-			if (wrap.eventFilter && wrap.eventFilter.call(this, eventName, fn)) {
+			if (dom.eventFilter && dom.eventFilter.call(this, eventName, fn)) {
 				return this;
 			}
 			var wrapped = function wrapped(event) {
@@ -3036,7 +3045,7 @@ var J0Element = function () {
 		value: function clone() {
 			var deep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
-			return wrap(this.node.cloneNode(deep));
+			return dom(this.node.cloneNode(deep));
 		}
 	}, {
 		key: 'toObject',
@@ -3130,45 +3139,45 @@ var J0Element = function () {
 		get: function get() {
 			var parentNode = this.node.parentNode;
 
-			return parentNode && wrap(parentNode);
+			return parentNode && dom(parentNode);
 		}
 	}, {
 		key: 'previous',
 		get: function get() {
 			var previousSibling = this.node.previousSibling;
 
-			return previousSibling ? wrap(previousSibling) : null;
+			return previousSibling ? dom(previousSibling) : null;
 		}
 	}, {
 		key: 'next',
 		get: function get() {
 			var nextSibling = this.node.nextSibling;
 
-			return nextSibling ? wrap(nextSibling) : null;
+			return nextSibling ? dom(nextSibling) : null;
 		}
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return x$25.from(this.node.childNodes).map(wrap);
+			return x$25.from(this.node.childNodes).map(dom);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return x$25.from(this.node.children).map(wrap);
+			return x$25.from(this.node.children).map(dom);
 		}
 	}, {
 		key: 'firstChild',
 		get: function get() {
 			var firstChild = this.node.firstChild;
 
-			return firstChild ? wrap(firstChild) : null;
+			return firstChild ? dom(firstChild) : null;
 		}
 	}, {
 		key: 'lastChild',
 		get: function get() {
 			var lastChild = this.node.lastChild;
 
-			return lastChild ? wrap(lastChild) : null;
+			return lastChild ? dom(lastChild) : null;
 		}
 	}, {
 		key: 'bb',
@@ -3289,26 +3298,13 @@ var J0Element = function () {
 	return J0Element;
 }();
 
-function wrap(source) {
-	return new J0Element(source);
-}
-
-function _findAll(selector, rootElement) {
-	var list = (rootElement ? wrap(rootElement).node : x$3).querySelectorAll(selector);
-	var result = [];
-	for (var i = 0, length = list.length; i < length; i++) {
-		result[i] = wrap(list[i]);
-	}
-	return result;
-}
-
 var getBody = new x$10(function (resolve) {
 	var interval = 50;
 	function check() {
 		var body = x$3.body;
 
 		if (body) {
-			resolve(wrap(body));
+			resolve(dom(body));
 		} else {
 			setTimeout(check, interval);
 		}
@@ -3316,10 +3312,12 @@ var getBody = new x$10(function (resolve) {
 	setTimeout(check);
 });
 
-var dom = assign(wrap, {
+function dom(source) {
+	return new J0Element(source);
+}
+assign(dom, {
 	find: _find,
 	findAll: _findAll,
-	Element: J0Element,
 	ready: function () {
 		var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
 			var body;
@@ -3352,6 +3350,1470 @@ var dom = assign(wrap, {
 
 		return ready;
 	}()
+});
+
+describe('dom (J0Element)', function () {
+
+	it('should create a new J0Element', function () {
+		assert.equal('node' in dom(), true);
+	});
+});
+
+function emitAll(eventName, data, selector, rootElement) {
+	dom.findAll(selector, rootElement).forEach(function (element) {
+		element.emit(eventName, data);
+	});
+}
+
+describe('emitAll', function () {
+
+	it('should emit for each element', function () {
+		var results = [];
+		function fn(event) {
+			results.push([this, event.detail]);
+		}
+		var className = 'class' + Date.now();
+		var eventName = 'event' + Date.now();
+		var eventData = 'eventData' + Date.now();
+		var element1 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element2 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element3 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element4 = dom({
+			a: [['class', className]],
+			e: [[eventName, fn]]
+		});
+		var element5 = dom({
+			a: [['class', className]],
+			c: [element3, element4],
+			e: [[eventName, fn]]
+		});
+		var element = dom({
+			c: [element1, element2, element5]
+		});
+		emitAll(eventName, eventData, '.' + className, element);
+		var expected = [element1, element2, element5, element3, element4];
+		assert.equal(results.length, expected.length);
+		results.forEach(function (_ref18, index) {
+			var _ref19 = _slicedToArray(_ref18, 2),
+			    element = _ref19[0],
+			    data = _ref19[1];
+
+			assert.equal(data, eventData);
+			assert.equal(element.equals(expected[index]), true);
+		});
+	});
+});
+
+var listenersKey = Symbol();
+
+var EventEmitter = function () {
+	function EventEmitter() {
+		_classCallCheck(this, EventEmitter);
+
+		this[listenersKey] = new x$28();
+	}
+
+	_createClass(EventEmitter, [{
+		key: 'emit',
+		value: function emit(type) {
+			var _this12 = this;
+
+			for (var _len24 = arguments.length, data = Array(_len24 > 1 ? _len24 - 1 : 0), _key24 = 1; _key24 < _len24; _key24++) {
+				data[_key24 - 1] = arguments[_key24];
+			}
+
+			this[listenersKey].forEach(function (item, index, listeners) {
+				var _item2 = _slicedToArray(item, 3),
+				    eventType = _item2[0],
+				    fn = _item2[1],
+				    once = _item2[2];
+
+				if (eventType === type) {
+					fn.apply(_this12, data);
+					if (once) {
+						listeners.delete(item);
+					}
+				}
+			});
+			return this;
+		}
+	}, {
+		key: 'off',
+		value: function off(type, targetFn) {
+			this[listenersKey].forEach(function (item, index, listeners) {
+				var _item3 = _slicedToArray(item, 2),
+				    eventType = _item3[0],
+				    fn = _item3[1];
+
+				if (eventType === type && (!targetFn || fn === targetFn)) {
+					listeners.delete(item);
+				}
+			});
+			return this;
+		}
+	}, {
+		key: 'on',
+		value: function on(type, fn) {
+			this[listenersKey].add([type, fn]);
+			return this;
+		}
+	}, {
+		key: 'once',
+		value: function once(type, fn) {
+			this[listenersKey].add([type, fn, true]);
+			return this;
+		}
+	}]);
+
+	return EventEmitter;
+}();
+
+describe('EventEmitter', function () {
+
+	it('should call listeners', function () {
+		var emitter = new EventEmitter();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		var value1 = Date.now() + '-3';
+		var value2 = Date.now() + '-4';
+		var value3 = Date.now() + '-5';
+		var results = [];
+		emitter.on(name1, function () {
+			for (var _len25 = arguments.length, data = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
+				data[_key25] = arguments[_key25];
+			}
+
+			results.push([data, '1']);
+		}).on(name1, function () {
+			for (var _len26 = arguments.length, data = Array(_len26), _key26 = 0; _key26 < _len26; _key26++) {
+				data[_key26] = arguments[_key26];
+			}
+
+			results.push([data, '2']);
+		}).on(name2, function () {
+			for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
+				data[_key27] = arguments[_key27];
+			}
+
+			results.push([data, '3']);
+		}).on(name2, function () {
+			for (var _len28 = arguments.length, data = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
+				data[_key28] = arguments[_key28];
+			}
+
+			results.push([data, '4']);
+		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value2, value3], '1'], [[value2, value3], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
+	});
+
+	it('should call listeners once', function () {
+		var emitter = new EventEmitter();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		var value1 = Date.now() + '-3';
+		var value2 = Date.now() + '-4';
+		var value3 = Date.now() + '-5';
+		var results = [];
+		emitter.once(name1, function () {
+			for (var _len29 = arguments.length, data = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
+				data[_key29] = arguments[_key29];
+			}
+
+			results.push([data, '1']);
+		}).once(name1, function () {
+			for (var _len30 = arguments.length, data = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
+				data[_key30] = arguments[_key30];
+			}
+
+			results.push([data, '2']);
+		}).once(name2, function () {
+			for (var _len31 = arguments.length, data = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
+				data[_key31] = arguments[_key31];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len32 = arguments.length, data = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
+				data[_key32] = arguments[_key32];
+			}
+
+			results.push([data, '4']);
+		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
+	});
+
+	it('should call listeners once even if the functions are same', function () {
+		var emitter = new EventEmitter();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		var value1 = Date.now() + '-3';
+		var value2 = Date.now() + '-4';
+		var value3 = Date.now() + '-5';
+		var results = [];
+		var count = 0;
+		function listener() {
+			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
+				data[_key33] = arguments[_key33];
+			}
+
+			results.push([data, count++]);
+		}
+		emitter.once(name1, listener).once(name1, listener).once(name2, listener).once(name2, listener).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], 0], [[value1, value2], 1], [[value3, value1], 2], [[value3, value1], 3]]);
+	});
+
+	it('should remove listeners', function () {
+		var emitter = new EventEmitter();
+		var name1 = Date.now() + '-1';
+		var name2 = Date.now() + '-2';
+		var value1 = Date.now() + '-3';
+		var value2 = Date.now() + '-4';
+		var value3 = Date.now() + '-5';
+		var results = [];
+		emitter.once(name1, function () {
+			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
+				data[_key34] = arguments[_key34];
+			}
+
+			results.push([data, '1']);
+		}).once(name1, function () {
+			for (var _len35 = arguments.length, data = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
+				data[_key35] = arguments[_key35];
+			}
+
+			results.push([data, '2']);
+		}).once(name2, function () {
+			for (var _len36 = arguments.length, data = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
+				data[_key36] = arguments[_key36];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len37 = arguments.length, data = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
+				data[_key37] = arguments[_key37];
+			}
+
+			results.push([data, '4']);
+		}).off(name2).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
+		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2']]);
+	});
+});
+
+var StringList = function () {
+	function StringList(iterable) {
+		_classCallCheck(this, StringList);
+
+		this.clear();
+		if (iterable) {
+			var _iteratorNormalCompletion24 = true;
+			var _didIteratorError24 = false;
+			var _iteratorError24 = undefined;
+
+			try {
+				for (var _iterator24 = iterable[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
+					var _ref20 = _step24.value;
+
+					var _ref21 = _slicedToArray(_ref20, 2);
+
+					var key = _ref21[0];
+					var value = _ref21[1];
+
+					this.append(key, value);
+				}
+			} catch (err) {
+				_didIteratorError24 = true;
+				_iteratorError24 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion24 && _iterator24.return) {
+						_iterator24.return();
+					}
+				} finally {
+					if (_didIteratorError24) {
+						throw _iteratorError24;
+					}
+				}
+			}
+		}
+	}
+
+	_createClass(StringList, [{
+		key: 'clear',
+		value: function clear() {
+			this.data = [];
+		}
+	}, {
+		key: 'indexOf',
+		value: function indexOf(name) {
+			return this.data.findIndex(function (_ref22) {
+				var _ref23 = _slicedToArray(_ref22, 1),
+				    itemName = _ref23[0];
+
+				return itemName === name;
+			});
+		}
+	}, {
+		key: 'has',
+		value: function has(name) {
+			return 0 <= this.indexOf(name);
+		}
+	}, {
+		key: 'append',
+		value: function append(name, value) {
+			this.data.push([name, value]);
+		}
+	}, {
+		key: 'set',
+		value: function set(name, value) {
+			var index = this.indexOf(name);
+			if (index < 0) {
+				this.append(name, value);
+			} else {
+				this.data[index][1] = value;
+			}
+		}
+	}, {
+		key: 'delete',
+		value: function _delete(name) {
+			this.data = this.data.filter(function (_ref24) {
+				var _ref25 = _slicedToArray(_ref24, 1),
+				    itemName = _ref25[0];
+
+				return itemName !== name;
+			});
+		}
+	}, {
+		key: 'get',
+		value: function get(name) {
+			var found = this.data.find(function (_ref26) {
+				var _ref27 = _slicedToArray(_ref26, 1),
+				    itemName = _ref27[0];
+
+				return itemName === name;
+			});
+			return found ? found[1] : null;
+		}
+	}, {
+		key: 'getAll',
+		value: function getAll(name) {
+			var result = [];
+			this.data.forEach(function (_ref28) {
+				var _ref29 = _slicedToArray(_ref28, 2),
+				    itemName = _ref29[0],
+				    value = _ref29[1];
+
+				if (itemName === name) {
+					result.push(value);
+				}
+			});
+			return result;
+		}
+	}, {
+		key: 'toString',
+		value: function toString() {
+			return this.data.map(function (_ref30) {
+				var _ref31 = _slicedToArray(_ref30, 2),
+				    name = _ref31[0],
+				    _ref31$ = _ref31[1],
+				    value = _ref31$ === undefined ? '' : _ref31$;
+
+				return name + ':' + value;
+			}).join(',');
+		}
+	}, {
+		key: 'entries',
+		value: function entries() {
+			return this.data[iteratorSymbol]();
+		}
+	}, {
+		key: 'keys',
+		value: function keys() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next3 = iterator.next(),
+				    value = _iterator$next3.value,
+				    done = _iterator$next3.done;
+
+				return {
+					value: value && value[0],
+					done: done
+				};
+			});
+		}
+	}, {
+		key: 'values',
+		value: function values() {
+			var iterator = this.entries();
+			return new Iterator(function () {
+				var _iterator$next4 = iterator.next(),
+				    value = _iterator$next4.value,
+				    done = _iterator$next4.done;
+
+				return {
+					value: value && value[1],
+					done: done
+				};
+			});
+		}
+	}, {
+		key: iteratorSymbol,
+		value: function value() {
+			return this.entries();
+		}
+	}]);
+
+	return StringList;
+}();
+
+function toLowerCase(x) {
+	return x ? x.toLowerCase() : '';
+}
+
+var Headers$1 = function (_StringList) {
+	_inherits(Headers$1, _StringList);
+
+	function Headers$1(headers) {
+		_classCallCheck(this, Headers$1);
+
+		var init = [];
+		if (headers) {
+			keys(headers).forEach(function (key) {
+				init.push([key, headers[key]]);
+			});
+		}
+		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
+	}
+
+	_createClass(Headers$1, [{
+		key: 'indexOf',
+		value: function indexOf(name) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'indexOf', this).call(this, toLowerCase(name));
+		}
+	}, {
+		key: 'has',
+		value: function has(name) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'has', this).call(this, toLowerCase(name));
+		}
+	}, {
+		key: 'append',
+		value: function append(name, value) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'append', this).call(this, toLowerCase(name), value);
+		}
+	}, {
+		key: 'set',
+		value: function set(name, value) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'set', this).call(this, toLowerCase(name), value);
+		}
+	}, {
+		key: 'delete',
+		value: function _delete(name) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'delete', this).call(this, toLowerCase(name));
+		}
+	}, {
+		key: 'get',
+		value: function get(name) {
+			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
+		}
+	}, {
+		key: 'entries',
+		value: function entries() {
+			var _this14 = this;
+
+			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
+			var history = [];
+			return new Iterator(function () {
+				while (1) {
+					var _iterator$next5 = iterator.next(),
+					    value = _iterator$next5.value,
+					    done = _iterator$next5.done;
+
+					var key = value && value[0];
+					if (done || history.indexOf(key) < 0) {
+						history.push(key);
+						return {
+							value: [key, _this14.get(key)],
+							done: done
+						};
+					}
+				}
+			});
+		}
+	}]);
+
+	return Headers$1;
+}(StringList);
+
+var Request$1 = function (_Body$) {
+	_inherits(Request$1, _Body$);
+
+	function Request$1(input) {
+		var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		_classCallCheck(this, Request$1);
+
+		var body = init.body;
+
+		var _this15 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+
+		if (input instanceof Request$1) {
+			body = _this15.inheritFrom(input, body, init);
+		} else {
+			_this15.url = '' + input;
+		}
+		_this15.credentials = init.credentials || _this15.credentials || 'omit';
+		if (init.headers || !_this15.headers) {
+			_this15.headers = new Headers$1(init.headers);
+		}
+		_this15.method = (init.method || _this15.method || 'GET').toUpperCase();
+		_this15.mode = init.mode || _this15.mode || null;
+		_this15.referrer = null;
+		if ((_this15.method === 'GET' || _this15.method === 'HEAD') && body) {
+			throw new TypeError('Body not allowed for GET or HEAD requests');
+		}
+		_this15.initBody(body);
+		return _this15;
+	}
+
+	_createClass(Request$1, [{
+		key: 'inheritFrom',
+		value: function inheritFrom(input, body, _ref32) {
+			var headers = _ref32.headers;
+
+			if (input.bodyUsed) {
+				throw new TypeError('Already read');
+			}
+			this.url = input.url;
+			this.credentials = input.credentials;
+			if (!headers) {
+				this.headers = new Headers$1(input.headers);
+			}
+			this.method = input.method;
+			this.mode = input.mode;
+			if (!body && input.bodyInit !== null) {
+				body = input.bodyInit;
+				input.bodyUsed = true;
+			}
+			return body;
+		}
+	}, {
+		key: 'clone',
+		value: function clone() {
+			return new Request$1(this, { body: this.bodyInit });
+		}
+	}]);
+
+	return Request$1;
+}(Body$1);
+
+var minOkStatus = 200;
+var maxOkStatus = 300;
+var redirectStatuses = [301, 302, 303, 307, 308];
+
+var Response$1 = function (_Body$2) {
+	_inherits(Response$1, _Body$2);
+
+	function Response$1(body) {
+		var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		_classCallCheck(this, Response$1);
+
+		var _this16 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+
+		_this16.type = 'default';
+		_this16.status = 'status' in init ? init.status : minOkStatus;
+		_this16.ok = _this16.status >= minOkStatus && _this16.status < maxOkStatus;
+		_this16.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this16.headers = new Headers$1(init.headers);
+		_this16.url = init.url || '';
+		_this16.initBody(body);
+		return _this16;
+	}
+
+	_createClass(Response$1, [{
+		key: 'clone',
+		value: function clone() {
+			return new Response$1(this.bodyInit, {
+				status: this.status,
+				statusText: this.statusText,
+				headers: new Headers$1(this.headers),
+				url: this.url
+			});
+		}
+	}, {
+		key: 'redirect',
+		value: function redirect(url, status) {
+			if (redirectStatuses.indexOf(status) < 0) {
+				throw new RangeError('Invalid status code');
+			}
+			return new Response$1(null, {
+				status: status,
+				headers: { location: url }
+			});
+		}
+	}], [{
+		key: 'error',
+		value: function error() {
+			var response = new Response$1(null, {
+				status: 0,
+				statusText: ''
+			});
+			response.type = 'error';
+			return response;
+		}
+	}]);
+
+	return Response$1;
+}(Body$1);
+
+var x$31 = Headers;
+
+function parse$2(rawHeaders) {
+	var headers = new x$31();
+	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
+	// https://tools.ietf.org/html/rfc7230#section-3.2
+	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
+	preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
+		var _line$split = line.split(':'),
+		    _line$split2 = _toArray(_line$split),
+		    key = _line$split2[0],
+		    parts = _line$split2.slice(1);
+
+		if (key) {
+			headers.append(key.trim(), parts.join(':').trim());
+		}
+	});
+	return headers;
+}
+
+var x$32 = XMLHttpRequest;
+
+function fetch$1(input, init) {
+	return new x$10(function (resolve, reject) {
+		var request = new Request$1(input, init);
+		var xhr = new x$32();
+		xhr.onload = function () {
+			var options = {
+				status: xhr.status,
+				statusText: xhr.statusText,
+				headers: parse$2(xhr.getAllResponseHeaders() || '')
+			};
+			options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
+			var body = 'response' in xhr ? xhr.response : xhr.responseText;
+			resolve(new Response$1(body, options));
+		};
+		xhr.onerror = function () {
+			reject(new TypeError('Network request failed'));
+		};
+		xhr.ontimeout = function () {
+			reject(new TypeError('Network request failed'));
+		};
+		xhr.open(request.method, request.url, true);
+		if (request.credentials === 'include') {
+			xhr.withCredentials = true;
+		}
+		xhr.responseType = 'blob';
+		var _iteratorNormalCompletion25 = true;
+		var _didIteratorError25 = false;
+		var _iteratorError25 = undefined;
+
+		try {
+			for (var _iterator25 = request.headers.entries()[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
+				var _ref33 = _step25.value;
+
+				var _ref34 = _slicedToArray(_ref33, 2);
+
+				var name = _ref34[0];
+				var value = _ref34[1];
+
+				xhr.setRequestHeader(name, value);
+			}
+		} catch (err) {
+			_didIteratorError25 = true;
+			_iteratorError25 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion25 && _iterator25.return) {
+					_iterator25.return();
+				}
+			} finally {
+				if (_didIteratorError25) {
+					throw _iteratorError25;
+				}
+			}
+		}
+
+		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
+	});
+}
+
+function tests$3(fetch) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
+
+
+	describe(name, function () {
+
+		it('should get this page', function () {
+			return fetch('./index.html').then(function (response) {
+				return response.text();
+			}).then(function (text) {
+				assert.equal(/<!doctype/.test(text), true);
+			});
+		});
+
+		it('should get json', function () {
+			return fetch(document.getElementById('root').textContent + '/fetch/test.json').then(function (response) {
+				return response.json();
+			}).then(function (data) {
+				assert.deepEqual(data, { a: 'b' });
+			});
+		});
+	});
+}
+
+tests$3(fetch$1, 'J0Fetch');
+
+tests$3(fetch);
+
+var x$33 = Date;
+
+var century = 100;
+var shortenedLength = 3;
+
+var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function format(src, template, utc) {
+	var date = new x$33(src);
+	if (0 < date) {
+		var methodPrefix = 'get' + (utc ? 'UTC' : '');
+		var Y = date[methodPrefix + 'FullYear']();
+		var M = date[methodPrefix + 'Month']();
+		var D = date[methodPrefix + 'Date']();
+		var d = date[methodPrefix + 'Day']();
+		var h = date[methodPrefix + 'Hours']();
+		var m = date[methodPrefix + 'Minutes']();
+		var s = date[methodPrefix + 'Seconds']();
+		return template.replace(/%(Y+|M+|D+|d+|h+|m+|s+)/g, function (match, type) {
+			switch (type) {
+				case 'YYYY':
+					return '' + Y;
+				case 'YY':
+					return ('' + Y % century).padStart(2, '0');
+				case 'MMMM':
+					return MonthNames[M];
+				case 'MMM':
+					return MonthNames[M].slice(0, shortenedLength);
+				case 'MM':
+					return ('' + (M + 1)).padStart(2, '0');
+				case 'M':
+					return '' + (M + 1);
+				case 'DD':
+					return ('' + D).padStart(2, '0');
+				case 'D':
+					return '' + D;
+				case 'dddd':
+					return DayNames[d];
+				case 'ddd':
+					return DayNames[d].slice(0, shortenedLength);
+				case 'hh':
+					return ('' + h).padStart(2, '0');
+				case 'h':
+					return '' + h;
+				case 'mm':
+					return ('' + m).padStart(2, '0');
+				case 'm':
+					return '' + m;
+				case 'ss':
+					return ('' + s).padStart(2, '0');
+				case 's':
+					return '' + s;
+			}
+			return match;
+		});
+	}
+	return '';
+}
+
+var tests$5 = [['2016-01-02T03:04:05Z', '%YYYY,%YY,%MMMM,%MMM,%MM,%M,%DD,%D,%dddd,%ddd', '2016,16,January,Jan,01,1,02,2,Saturday,Sat'], ['2016-01-02T03:04:05Z', '%hh,%h,%mm,%m,%ss,%s', '03,3,04,4,05,5']];
+
+describe('formatDate', function () {
+	var _loop = function _loop(src, expected, _template) {
+		it('formatDate(' + src + ', ' + _template + ') returns ' + expected, function () {
+			assert.equal(format(src, _template, true), expected);
+		});
+	};
+
+	var _iteratorNormalCompletion26 = true;
+	var _didIteratorError26 = false;
+	var _iteratorError26 = undefined;
+
+	try {
+
+		for (var _iterator26 = tests$5[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
+			var _ref35 = _step26.value;
+
+			var _ref36 = _slicedToArray(_ref35, 3);
+
+			var src = _ref36[0];
+			var _template = _ref36[1];
+			var expected = _ref36[2];
+
+			_loop(src, expected, _template);
+		}
+	} catch (err) {
+		_didIteratorError26 = true;
+		_iteratorError26 = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion26 && _iterator26.return) {
+				_iterator26.return();
+			}
+		} finally {
+			if (_didIteratorError26) {
+				throw _iteratorError26;
+			}
+		}
+	}
+});
+
+function tests$6(Headers) {
+	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
+
+
+	describe(testName, function () {
+
+		it('should have has()', function () {
+			var init = {
+				'Content-Type': 'text/html',
+				'Content-Length': '100'
+			};
+			var headers = new Headers(init);
+			assert.equal(headers.has('Content-Type'), true);
+			assert.equal(headers.has('Location'), false);
+		});
+
+		it('should have append()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value = 'b';
+			headers.append(name, value);
+			headers.append(name, value);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value, value]);
+		});
+
+		it('should have set()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value1 = 'b';
+			var value2 = 'c';
+			headers.set(name, value1);
+			headers.set(name, value2);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value2]);
+		});
+
+		it('should have get()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value1 = 'b';
+			var value2 = 'c';
+			headers.append(name, value1);
+			headers.append(name, value2);
+			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value1, value2]);
+		});
+
+		it('should have delete()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value1 = 'b';
+			var value2 = 'c';
+			headers.append(name, value1);
+			headers.append(name, value2);
+			assert.equal(headers.has(name), true);
+			headers.delete(name);
+			assert.equal(headers.has(name), false);
+		});
+
+		it('should have entries()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value1 = 'b';
+			var value2 = 'c';
+			headers.append(name, value1);
+			headers.append(name, value2);
+			var results = {};
+			var iterator = headers.entries();
+			while (1) {
+				var _iterator$next6 = iterator.next(),
+				    _iterator$next6$value = _iterator$next6.value;
+
+				_iterator$next6$value = _iterator$next6$value === undefined ? [] : _iterator$next6$value;
+
+				var _iterator$next6$value2 = _slicedToArray(_iterator$next6$value, 2),
+				    key = _iterator$next6$value2[0],
+				    value = _iterator$next6$value2[1],
+				    done = _iterator$next6.done;
+
+				if (done) {
+					break;
+				}
+				var result = results[key] || [];
+				result.push.apply(result, _toConsumableArray(value.split(/\s*,\s*/)));
+				results[key] = result;
+			}
+			assert.deepEqual(results, _defineProperty({}, name, [value1, value2]));
+		});
+
+		it('should have values()', function () {
+			var headers = new Headers();
+			var name = 'a';
+			var value1 = 'b';
+			var value2 = 'c';
+			headers.append(name, value1);
+			headers.append(name, value2);
+			var results = [];
+			var iterator = headers.values();
+			while (1) {
+				var _iterator$next7 = iterator.next(),
+				    value = _iterator$next7.value,
+				    done = _iterator$next7.done;
+
+				if (done) {
+					break;
+				}
+				results.push.apply(results, _toConsumableArray(value.split(/\s*,\s*/)));
+			}
+			assert.deepEqual(results, [value1, value2]);
+		});
+	});
+}
+
+tests$6(Headers$1, 'Headers/j0');
+
+tests$6(Headers);
+
+function generator$2() {
+	var _this17 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return {
+		next: function next() {
+			return {
+				value: _this17[index],
+				done: length <= index++
+			};
+		}
+	};
+}
+
+function test$25(generator) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
+
+
+	describe(name, function () {
+
+		it('should create an iterator', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
+			var _iteratorNormalCompletion27 = true;
+			var _didIteratorError27 = false;
+			var _iteratorError27 = undefined;
+
+			try {
+				for (var _iterator27 = expected[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
+					var element = _step27.value;
+
+					parent.appendChild(element);
+				}
+			} catch (err) {
+				_didIteratorError27 = true;
+				_iteratorError27 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion27 && _iterator27.return) {
+						_iterator27.return();
+					}
+				} finally {
+					if (_didIteratorError27) {
+						throw _iteratorError27;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var index = 0;
+			while (1) {
+				var _iterator$next8 = iterator.next(),
+				    value = _iterator$next8.value,
+				    done = _iterator$next8.done;
+
+				if (done) {
+					break;
+				}
+				results[index++] = value;
+			}
+			assert.deepEqual(results, expected);
+		});
+	});
+}
+
+test$25(generator$2, 'HTMLCollection/@iterator/j0');
+
+test$25(HTMLCollection.prototype[Symbol.iterator]);
+
+var x$34 = window;
+
+function innerHeight() {
+	return x$34.innerHeight;
+}
+
+describe('innerHeight', function () {
+
+	it('should return a non-negative integer', function () {
+		assert.equal(0 <= innerHeight(), true);
+	});
+});
+
+function innerWidth() {
+	return x$34.innerWidth;
+}
+
+describe('innerWidth', function () {
+
+	it('should return a non-negative integer', function () {
+		assert.equal(0 <= innerWidth(), true);
+	});
+});
+
+describe('isArray', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isArray(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isArray(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isArray(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isArray(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isArray('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isArray({}), false);
+	});
+
+	it('should return true if the arguments are [[]]', function () {
+		assert.equal(isArray([]), true);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isArray(function () {}), false);
+	});
+});
+
+describe('isArrayBufferView', function () {
+
+	it('should return true if the argument is Int8Array', function () {
+		assert.equal(isArrayBufferView(new Int8Array(1)), true);
+	});
+
+	it('should return true if the argument is Int16Array', function () {
+		assert.equal(isArrayBufferView(new Int16Array(1)), true);
+	});
+
+	it('should return true if the argument is Int32Array', function () {
+		assert.equal(isArrayBufferView(new Int32Array(1)), true);
+	});
+
+	it('should return true if the argument is Uint8ClampedArray', function () {
+		assert.equal(isArrayBufferView(new Uint8ClampedArray(1)), true);
+	});
+
+	it('should return true if the argument is Uint8Array', function () {
+		assert.equal(isArrayBufferView(new Uint8Array(1)), true);
+	});
+
+	it('should return true if the argument is Uint16Array', function () {
+		assert.equal(isArrayBufferView(new Uint16Array(1)), true);
+	});
+
+	it('should return true if the argument is Uint32Array', function () {
+		assert.equal(isArrayBufferView(new Uint32Array(1)), true);
+	});
+
+	it('should return true if the argument is Float32Array', function () {
+		assert.equal(isArrayBufferView(new Float32Array(1)), true);
+	});
+
+	it('should return true if the argument is Float64Array', function () {
+		assert.equal(isArrayBufferView(new Float64Array(1)), true);
+	});
+
+	it('should return false if the argument is Object', function () {
+		assert.equal(isArrayBufferView({}), false);
+	});
+
+	it('should return false if the argument is Number', function () {
+		assert.equal(isArrayBufferView(1), false);
+	});
+});
+
+function isChildClassOf(A, B) {
+	return isInstanceOf(A.prototype, B);
+}
+
+describe('isChildClassOf', function () {
+
+	it('should return true if the first class inherits the second', function () {
+		var Parent = function Parent() {
+			_classCallCheck(this, Parent);
+		};
+
+		var Child = function (_Parent) {
+			_inherits(Child, _Parent);
+
+			function Child() {
+				_classCallCheck(this, Child);
+
+				return _possibleConstructorReturn(this, (Child.__proto__ || Object.getPrototypeOf(Child)).apply(this, arguments));
+			}
+
+			return Child;
+		}(Parent);
+
+		assert.equal(isChildClassOf(Child, Parent), true);
+	});
+
+	it('should return false if the first class doesn\'t inherit the second', function () {
+		var Parent = function Parent() {
+			_classCallCheck(this, Parent);
+		};
+
+		var Child = function Child() {
+			_classCallCheck(this, Child);
+		};
+
+		assert.equal(isChildClassOf(Child, Parent), false);
+	});
+});
+
+function isFunction(x) {
+	return typeof x === 'function';
+}
+
+describe('isFunction', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isFunction(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isFunction(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isFunction(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isFunction(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isFunction('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isFunction({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isFunction([]), false);
+	});
+
+	it('should return true if the arguments are [function () {}]', function () {
+		assert.equal(isFunction(function () {}), true);
+	});
+});
+
+describe('isInstanceOf', function () {
+
+	it('should return true if the first argument is an instance of the last argument', function () {
+		var A = function A() {
+			_classCallCheck(this, A);
+		};
+
+		var a = new A();
+		assert.equal(isInstanceOf(a, A), true);
+	});
+
+	it('should return false if the first argument is not an instance of the last argument', function () {
+		var A = function A() {
+			_classCallCheck(this, A);
+		};
+
+		var a = 0;
+		assert.equal(isInstanceOf(a, A), false);
+	});
+});
+
+describe('isNode', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isNode(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isNode(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isNode(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isNode(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isNode('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isNode({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isNode([]), false);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isNode(function () {}), false);
+	});
+});
+
+function isNumber(x) {
+	return typeof x === 'number';
+}
+
+describe('isNumber', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isNumber(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isNumber(null), false);
+	});
+
+	it('should return true if the arguments are [NaN]', function () {
+		assert.equal(isNumber(NaN), true);
+	});
+
+	it('should return true if the arguments are [123]', function () {
+		assert.equal(isNumber(123), true);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isNumber('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isNumber({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isNumber([]), false);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isNumber(function () {}), false);
+	});
+});
+
+describe('isObject', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isObject(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isObject(null), false);
+	});
+
+	it('should return true if the arguments are [NaN]', function () {
+		assert.equal(isObject(NaN), false);
+	});
+
+	it('should return true if the arguments are [123]', function () {
+		assert.equal(isObject(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isObject('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isObject({}), true);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isObject([]), true);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isObject(function () {}), true);
+	});
+});
+
+describe('isString', function () {
+
+	it('should return false if the arguments are []', function () {
+		assert.equal(isString(), false);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isString(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isString(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isString(123), false);
+	});
+
+	it('should return true if the arguments are [\'abc\']', function () {
+		assert.equal(isString('abc'), true);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isString({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isString([]), false);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isString(function () {}), false);
+	});
+});
+
+describe('isUndefined', function () {
+
+	it('should return true if the arguments are []', function () {
+		assert.equal(isUndefined(), true);
+	});
+
+	it('should return false if the arguments are [null]', function () {
+		assert.equal(isUndefined(null), false);
+	});
+
+	it('should return false if the arguments are [NaN]', function () {
+		assert.equal(isUndefined(NaN), false);
+	});
+
+	it('should return false if the arguments are [123]', function () {
+		assert.equal(isUndefined(123), false);
+	});
+
+	it('should return false if the arguments are [\'abc\']', function () {
+		assert.equal(isUndefined('abc'), false);
+	});
+
+	it('should return false if the arguments are [{}]', function () {
+		assert.equal(isUndefined({}), false);
+	});
+
+	it('should return false if the arguments are [[]]', function () {
+		assert.equal(isUndefined([]), false);
+	});
+
+	it('should return false if the arguments are [function () {}]', function () {
+		assert.equal(isUndefined(function () {}), false);
+	});
+});
+
+describe('Iterator', function () {
+
+	it('should return a function which returns an iterator', function () {
+		var value = 0;
+		var max = 5;
+		var iterator = new Iterator(function () {
+			return {
+				value: value,
+				done: max < value++
+			};
+		});
+		var result = iterator.next();
+		var results = [];
+		while (!result.done) {
+			results.push(result.value);
+			result = iterator.next();
+		}
+		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
+	});
+
+	it('should return a function which returns an iterator iterable in for-of syntax', function () {
+		var value = 0;
+		var max = 5;
+		var iterator = new Iterator(function () {
+			return {
+				value: value,
+				done: max < value++
+			};
+		});
+		var results = [];
+		var _iteratorNormalCompletion28 = true;
+		var _didIteratorError28 = false;
+		var _iteratorError28 = undefined;
+
+		try {
+			for (var _iterator28 = iterator[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
+				var result = _step28.value;
+
+				results.push(result);
+			}
+		} catch (err) {
+			_didIteratorError28 = true;
+			_iteratorError28 = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion28 && _iterator28.return) {
+					_iterator28.return();
+				}
+			} finally {
+				if (_didIteratorError28) {
+					throw _iteratorError28;
+				}
+			}
+		}
+
+		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
+	});
 });
 
 describe('J0Element.prototype.append', function () {
@@ -3651,8 +5113,8 @@ describe('J0Element.eventFilter', function () {
 	it('should set a filter', function () {
 		var actual = [];
 		dom.eventFilter = function () {
-			for (var _len24 = arguments.length, args = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
-				args[_key24] = arguments[_key24];
+			for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+				args[_key38] = arguments[_key38];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -3671,8 +5133,8 @@ describe('J0Element.eventFilter', function () {
 	it('should set a filter and skip addEventListener', function () {
 		var actual = [];
 		dom.eventFilter = function () {
-			for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
-				args[_key25] = arguments[_key25];
+			for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
+				args[_key39] = arguments[_key39];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -3798,8 +5260,8 @@ describe('J0Element.prototype.emit', function () {
 			while (1) {
 				switch (_context12.prev = _context12.next) {
 					case 0:
-						onCall = function onCall(_ref20) {
-							var detail = _ref20.detail;
+						onCall = function onCall(_ref39) {
+							var detail = _ref39.detail;
 
 							results.push(detail);
 						};
@@ -3834,8 +5296,8 @@ describe('J0Element.prototype.once', function () {
 			while (1) {
 				switch (_context13.prev = _context13.next) {
 					case 0:
-						onCall = function onCall(_ref22) {
-							var detail = _ref22.detail;
+						onCall = function onCall(_ref41) {
+							var detail = _ref41.detail;
 
 							results.push(detail);
 						};
@@ -4639,1470 +6101,6 @@ describe('J0Element.prototype.walkForward', function () {
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
 		});
-	});
-});
-
-describe('dom (J0Element)', function () {
-
-	it('should create a new J0Element', function () {
-		assert.equal('node' in dom(), true);
-	});
-});
-
-function emitAll(eventName, data, selector, rootElement) {
-	dom.findAll(selector, rootElement).forEach(function (element) {
-		element.emit(eventName, data);
-	});
-}
-
-describe('emitAll', function () {
-
-	it('should emit for each element', function () {
-		var results = [];
-		function fn(event) {
-			results.push([this, event.detail]);
-		}
-		var className = 'class' + Date.now();
-		var eventName = 'event' + Date.now();
-		var eventData = 'eventData' + Date.now();
-		var element1 = dom({
-			a: [['class', className]],
-			e: [[eventName, fn]]
-		});
-		var element2 = dom({
-			a: [['class', className]],
-			e: [[eventName, fn]]
-		});
-		var element3 = dom({
-			a: [['class', className]],
-			e: [[eventName, fn]]
-		});
-		var element4 = dom({
-			a: [['class', className]],
-			e: [[eventName, fn]]
-		});
-		var element5 = dom({
-			a: [['class', className]],
-			c: [element3, element4],
-			e: [[eventName, fn]]
-		});
-		var element = dom({
-			c: [element1, element2, element5]
-		});
-		emitAll(eventName, eventData, '.' + className, element);
-		var expected = [element1, element2, element5, element3, element4];
-		assert.equal(results.length, expected.length);
-		results.forEach(function (_ref23, index) {
-			var _ref24 = _slicedToArray(_ref23, 2),
-			    element = _ref24[0],
-			    data = _ref24[1];
-
-			assert.equal(data, eventData);
-			assert.equal(element.equals(expected[index]), true);
-		});
-	});
-});
-
-var listenersKey = Symbol();
-
-var EventEmitter = function () {
-	function EventEmitter() {
-		_classCallCheck(this, EventEmitter);
-
-		this[listenersKey] = new x$28();
-	}
-
-	_createClass(EventEmitter, [{
-		key: 'emit',
-		value: function emit(type) {
-			var _this12 = this;
-
-			for (var _len26 = arguments.length, data = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
-				data[_key26 - 1] = arguments[_key26];
-			}
-
-			this[listenersKey].forEach(function (item, index, listeners) {
-				var _item2 = _slicedToArray(item, 3),
-				    eventType = _item2[0],
-				    fn = _item2[1],
-				    once = _item2[2];
-
-				if (eventType === type) {
-					fn.apply(_this12, data);
-					if (once) {
-						listeners.delete(item);
-					}
-				}
-			});
-			return this;
-		}
-	}, {
-		key: 'off',
-		value: function off(type, targetFn) {
-			this[listenersKey].forEach(function (item, index, listeners) {
-				var _item3 = _slicedToArray(item, 2),
-				    eventType = _item3[0],
-				    fn = _item3[1];
-
-				if (eventType === type && (!targetFn || fn === targetFn)) {
-					listeners.delete(item);
-				}
-			});
-			return this;
-		}
-	}, {
-		key: 'on',
-		value: function on(type, fn) {
-			this[listenersKey].add([type, fn]);
-			return this;
-		}
-	}, {
-		key: 'once',
-		value: function once(type, fn) {
-			this[listenersKey].add([type, fn, true]);
-			return this;
-		}
-	}]);
-
-	return EventEmitter;
-}();
-
-describe('EventEmitter', function () {
-
-	it('should call listeners', function () {
-		var emitter = new EventEmitter();
-		var name1 = Date.now() + '-1';
-		var name2 = Date.now() + '-2';
-		var value1 = Date.now() + '-3';
-		var value2 = Date.now() + '-4';
-		var value3 = Date.now() + '-5';
-		var results = [];
-		emitter.on(name1, function () {
-			for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
-				data[_key27] = arguments[_key27];
-			}
-
-			results.push([data, '1']);
-		}).on(name1, function () {
-			for (var _len28 = arguments.length, data = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
-				data[_key28] = arguments[_key28];
-			}
-
-			results.push([data, '2']);
-		}).on(name2, function () {
-			for (var _len29 = arguments.length, data = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
-				data[_key29] = arguments[_key29];
-			}
-
-			results.push([data, '3']);
-		}).on(name2, function () {
-			for (var _len30 = arguments.length, data = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
-				data[_key30] = arguments[_key30];
-			}
-
-			results.push([data, '4']);
-		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
-		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value2, value3], '1'], [[value2, value3], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
-	});
-
-	it('should call listeners once', function () {
-		var emitter = new EventEmitter();
-		var name1 = Date.now() + '-1';
-		var name2 = Date.now() + '-2';
-		var value1 = Date.now() + '-3';
-		var value2 = Date.now() + '-4';
-		var value3 = Date.now() + '-5';
-		var results = [];
-		emitter.once(name1, function () {
-			for (var _len31 = arguments.length, data = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
-				data[_key31] = arguments[_key31];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
-			for (var _len32 = arguments.length, data = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
-				data[_key32] = arguments[_key32];
-			}
-
-			results.push([data, '2']);
-		}).once(name2, function () {
-			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
-				data[_key33] = arguments[_key33];
-			}
-
-			results.push([data, '3']);
-		}).once(name2, function () {
-			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
-				data[_key34] = arguments[_key34];
-			}
-
-			results.push([data, '4']);
-		}).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
-		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2'], [[value3, value1], '3'], [[value3, value1], '4']]);
-	});
-
-	it('should call listeners once even if the functions are same', function () {
-		var emitter = new EventEmitter();
-		var name1 = Date.now() + '-1';
-		var name2 = Date.now() + '-2';
-		var value1 = Date.now() + '-3';
-		var value2 = Date.now() + '-4';
-		var value3 = Date.now() + '-5';
-		var results = [];
-		var count = 0;
-		function listener() {
-			for (var _len35 = arguments.length, data = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
-				data[_key35] = arguments[_key35];
-			}
-
-			results.push([data, count++]);
-		}
-		emitter.once(name1, listener).once(name1, listener).once(name2, listener).once(name2, listener).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
-		assert.deepEqual(results, [[[value1, value2], 0], [[value1, value2], 1], [[value3, value1], 2], [[value3, value1], 3]]);
-	});
-
-	it('should remove listeners', function () {
-		var emitter = new EventEmitter();
-		var name1 = Date.now() + '-1';
-		var name2 = Date.now() + '-2';
-		var value1 = Date.now() + '-3';
-		var value2 = Date.now() + '-4';
-		var value3 = Date.now() + '-5';
-		var results = [];
-		emitter.once(name1, function () {
-			for (var _len36 = arguments.length, data = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
-				data[_key36] = arguments[_key36];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
-			for (var _len37 = arguments.length, data = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
-				data[_key37] = arguments[_key37];
-			}
-
-			results.push([data, '2']);
-		}).once(name2, function () {
-			for (var _len38 = arguments.length, data = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
-				data[_key38] = arguments[_key38];
-			}
-
-			results.push([data, '3']);
-		}).once(name2, function () {
-			for (var _len39 = arguments.length, data = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
-				data[_key39] = arguments[_key39];
-			}
-
-			results.push([data, '4']);
-		}).off(name2).emit(name1, value1, value2).emit(name1, value2, value3).emit(name2, value3, value1);
-		assert.deepEqual(results, [[[value1, value2], '1'], [[value1, value2], '2']]);
-	});
-});
-
-var StringList = function () {
-	function StringList(iterable) {
-		_classCallCheck(this, StringList);
-
-		this.clear();
-		if (iterable) {
-			var _iteratorNormalCompletion24 = true;
-			var _didIteratorError24 = false;
-			var _iteratorError24 = undefined;
-
-			try {
-				for (var _iterator24 = iterable[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
-					var _ref25 = _step24.value;
-
-					var _ref26 = _slicedToArray(_ref25, 2);
-
-					var key = _ref26[0];
-					var value = _ref26[1];
-
-					this.append(key, value);
-				}
-			} catch (err) {
-				_didIteratorError24 = true;
-				_iteratorError24 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion24 && _iterator24.return) {
-						_iterator24.return();
-					}
-				} finally {
-					if (_didIteratorError24) {
-						throw _iteratorError24;
-					}
-				}
-			}
-		}
-	}
-
-	_createClass(StringList, [{
-		key: 'clear',
-		value: function clear() {
-			this.data = [];
-		}
-	}, {
-		key: 'indexOf',
-		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref27) {
-				var _ref28 = _slicedToArray(_ref27, 1),
-				    itemName = _ref28[0];
-
-				return itemName === name;
-			});
-		}
-	}, {
-		key: 'has',
-		value: function has(name) {
-			return 0 <= this.indexOf(name);
-		}
-	}, {
-		key: 'append',
-		value: function append(name, value) {
-			this.data.push([name, value]);
-		}
-	}, {
-		key: 'set',
-		value: function set(name, value) {
-			var index = this.indexOf(name);
-			if (index < 0) {
-				this.append(name, value);
-			} else {
-				this.data[index][1] = value;
-			}
-		}
-	}, {
-		key: 'delete',
-		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref29) {
-				var _ref30 = _slicedToArray(_ref29, 1),
-				    itemName = _ref30[0];
-
-				return itemName !== name;
-			});
-		}
-	}, {
-		key: 'get',
-		value: function get(name) {
-			var found = this.data.find(function (_ref31) {
-				var _ref32 = _slicedToArray(_ref31, 1),
-				    itemName = _ref32[0];
-
-				return itemName === name;
-			});
-			return found ? found[1] : null;
-		}
-	}, {
-		key: 'getAll',
-		value: function getAll(name) {
-			var result = [];
-			this.data.forEach(function (_ref33) {
-				var _ref34 = _slicedToArray(_ref33, 2),
-				    itemName = _ref34[0],
-				    value = _ref34[1];
-
-				if (itemName === name) {
-					result.push(value);
-				}
-			});
-			return result;
-		}
-	}, {
-		key: 'toString',
-		value: function toString() {
-			return this.data.map(function (_ref35) {
-				var _ref36 = _slicedToArray(_ref35, 2),
-				    name = _ref36[0],
-				    _ref36$ = _ref36[1],
-				    value = _ref36$ === undefined ? '' : _ref36$;
-
-				return name + ':' + value;
-			}).join(',');
-		}
-	}, {
-		key: 'entries',
-		value: function entries() {
-			return this.data[iteratorSymbol]();
-		}
-	}, {
-		key: 'keys',
-		value: function keys() {
-			var iterator = this.entries();
-			return new Iterator(function () {
-				var _iterator$next3 = iterator.next(),
-				    value = _iterator$next3.value,
-				    done = _iterator$next3.done;
-
-				return {
-					value: value && value[0],
-					done: done
-				};
-			});
-		}
-	}, {
-		key: 'values',
-		value: function values() {
-			var iterator = this.entries();
-			return new Iterator(function () {
-				var _iterator$next4 = iterator.next(),
-				    value = _iterator$next4.value,
-				    done = _iterator$next4.done;
-
-				return {
-					value: value && value[1],
-					done: done
-				};
-			});
-		}
-	}, {
-		key: iteratorSymbol,
-		value: function value() {
-			return this.entries();
-		}
-	}]);
-
-	return StringList;
-}();
-
-function toLowerCase(x) {
-	return x ? x.toLowerCase() : '';
-}
-
-var Headers$1 = function (_StringList) {
-	_inherits(Headers$1, _StringList);
-
-	function Headers$1(headers) {
-		_classCallCheck(this, Headers$1);
-
-		var init = [];
-		if (headers) {
-			keys(headers).forEach(function (key) {
-				init.push([key, headers[key]]);
-			});
-		}
-		return _possibleConstructorReturn(this, (Headers$1.__proto__ || Object.getPrototypeOf(Headers$1)).call(this, init));
-	}
-
-	_createClass(Headers$1, [{
-		key: 'indexOf',
-		value: function indexOf(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'indexOf', this).call(this, toLowerCase(name));
-		}
-	}, {
-		key: 'has',
-		value: function has(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'has', this).call(this, toLowerCase(name));
-		}
-	}, {
-		key: 'append',
-		value: function append(name, value) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'append', this).call(this, toLowerCase(name), value);
-		}
-	}, {
-		key: 'set',
-		value: function set(name, value) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'set', this).call(this, toLowerCase(name), value);
-		}
-	}, {
-		key: 'delete',
-		value: function _delete(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'delete', this).call(this, toLowerCase(name));
-		}
-	}, {
-		key: 'get',
-		value: function get(name) {
-			return _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'getAll', this).call(this, toLowerCase(name)).join(',');
-		}
-	}, {
-		key: 'entries',
-		value: function entries() {
-			var _this14 = this;
-
-			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
-			var history = [];
-			return new Iterator(function () {
-				while (1) {
-					var _iterator$next5 = iterator.next(),
-					    value = _iterator$next5.value,
-					    done = _iterator$next5.done;
-
-					var key = value && value[0];
-					if (done || history.indexOf(key) < 0) {
-						history.push(key);
-						return {
-							value: [key, _this14.get(key)],
-							done: done
-						};
-					}
-				}
-			});
-		}
-	}]);
-
-	return Headers$1;
-}(StringList);
-
-var Request$1 = function (_Body$) {
-	_inherits(Request$1, _Body$);
-
-	function Request$1(input) {
-		var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-		_classCallCheck(this, Request$1);
-
-		var body = init.body;
-
-		var _this15 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
-
-		if (input instanceof Request$1) {
-			body = _this15.inheritFrom(input, body, init);
-		} else {
-			_this15.url = '' + input;
-		}
-		_this15.credentials = init.credentials || _this15.credentials || 'omit';
-		if (init.headers || !_this15.headers) {
-			_this15.headers = new Headers$1(init.headers);
-		}
-		_this15.method = (init.method || _this15.method || 'GET').toUpperCase();
-		_this15.mode = init.mode || _this15.mode || null;
-		_this15.referrer = null;
-		if ((_this15.method === 'GET' || _this15.method === 'HEAD') && body) {
-			throw new TypeError('Body not allowed for GET or HEAD requests');
-		}
-		_this15.initBody(body);
-		return _this15;
-	}
-
-	_createClass(Request$1, [{
-		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref37) {
-			var headers = _ref37.headers;
-
-			if (input.bodyUsed) {
-				throw new TypeError('Already read');
-			}
-			this.url = input.url;
-			this.credentials = input.credentials;
-			if (!headers) {
-				this.headers = new Headers$1(input.headers);
-			}
-			this.method = input.method;
-			this.mode = input.mode;
-			if (!body && input.bodyInit !== null) {
-				body = input.bodyInit;
-				input.bodyUsed = true;
-			}
-			return body;
-		}
-	}, {
-		key: 'clone',
-		value: function clone() {
-			return new Request$1(this, { body: this.bodyInit });
-		}
-	}]);
-
-	return Request$1;
-}(Body$1);
-
-var minOkStatus = 200;
-var maxOkStatus = 300;
-var redirectStatuses = [301, 302, 303, 307, 308];
-
-var Response$1 = function (_Body$2) {
-	_inherits(Response$1, _Body$2);
-
-	function Response$1(body) {
-		var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-		_classCallCheck(this, Response$1);
-
-		var _this16 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
-
-		_this16.type = 'default';
-		_this16.status = 'status' in init ? init.status : minOkStatus;
-		_this16.ok = _this16.status >= minOkStatus && _this16.status < maxOkStatus;
-		_this16.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this16.headers = new Headers$1(init.headers);
-		_this16.url = init.url || '';
-		_this16.initBody(body);
-		return _this16;
-	}
-
-	_createClass(Response$1, [{
-		key: 'clone',
-		value: function clone() {
-			return new Response$1(this.bodyInit, {
-				status: this.status,
-				statusText: this.statusText,
-				headers: new Headers$1(this.headers),
-				url: this.url
-			});
-		}
-	}, {
-		key: 'redirect',
-		value: function redirect(url, status) {
-			if (redirectStatuses.indexOf(status) < 0) {
-				throw new RangeError('Invalid status code');
-			}
-			return new Response$1(null, {
-				status: status,
-				headers: { location: url }
-			});
-		}
-	}], [{
-		key: 'error',
-		value: function error() {
-			var response = new Response$1(null, {
-				status: 0,
-				statusText: ''
-			});
-			response.type = 'error';
-			return response;
-		}
-	}]);
-
-	return Response$1;
-}(Body$1);
-
-var x$31 = Headers;
-
-function parse$2(rawHeaders) {
-	var headers = new x$31();
-	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
-	// https://tools.ietf.org/html/rfc7230#section-3.2
-	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
-	preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
-		var _line$split = line.split(':'),
-		    _line$split2 = _toArray(_line$split),
-		    key = _line$split2[0],
-		    parts = _line$split2.slice(1);
-
-		if (key) {
-			headers.append(key.trim(), parts.join(':').trim());
-		}
-	});
-	return headers;
-}
-
-var x$32 = XMLHttpRequest;
-
-function fetch$1(input, init) {
-	return new x$10(function (resolve, reject) {
-		var request = new Request$1(input, init);
-		var xhr = new x$32();
-		xhr.onload = function () {
-			var options = {
-				status: xhr.status,
-				statusText: xhr.statusText,
-				headers: parse$2(xhr.getAllResponseHeaders() || '')
-			};
-			options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
-			var body = 'response' in xhr ? xhr.response : xhr.responseText;
-			resolve(new Response$1(body, options));
-		};
-		xhr.onerror = function () {
-			reject(new TypeError('Network request failed'));
-		};
-		xhr.ontimeout = function () {
-			reject(new TypeError('Network request failed'));
-		};
-		xhr.open(request.method, request.url, true);
-		if (request.credentials === 'include') {
-			xhr.withCredentials = true;
-		}
-		xhr.responseType = 'blob';
-		var _iteratorNormalCompletion25 = true;
-		var _didIteratorError25 = false;
-		var _iteratorError25 = undefined;
-
-		try {
-			for (var _iterator25 = request.headers.entries()[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
-				var _ref38 = _step25.value;
-
-				var _ref39 = _slicedToArray(_ref38, 2);
-
-				var name = _ref39[0];
-				var value = _ref39[1];
-
-				xhr.setRequestHeader(name, value);
-			}
-		} catch (err) {
-			_didIteratorError25 = true;
-			_iteratorError25 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion25 && _iterator25.return) {
-					_iterator25.return();
-				}
-			} finally {
-				if (_didIteratorError25) {
-					throw _iteratorError25;
-				}
-			}
-		}
-
-		xhr.send(isUndefined(request.bodyInit) ? null : request.bodyInit);
-	});
-}
-
-function tests$3(fetch) {
-	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'fetch';
-
-
-	describe(name, function () {
-
-		it('should get this page', function () {
-			return fetch('./index.html').then(function (response) {
-				return response.text();
-			}).then(function (text) {
-				assert.equal(/<!doctype/.test(text), true);
-			});
-		});
-
-		it('should get json', function () {
-			return fetch(document.getElementById('root').textContent + '/fetch/test.json').then(function (response) {
-				return response.json();
-			}).then(function (data) {
-				assert.deepEqual(data, { a: 'b' });
-			});
-		});
-	});
-}
-
-tests$3(fetch$1, 'J0Fetch');
-
-tests$3(fetch);
-
-var x$33 = Date;
-
-var century = 100;
-var shortenedLength = 3;
-
-var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-function format(src, template, utc) {
-	var date = new x$33(src);
-	if (0 < date) {
-		var methodPrefix = 'get' + (utc ? 'UTC' : '');
-		var Y = date[methodPrefix + 'FullYear']();
-		var M = date[methodPrefix + 'Month']();
-		var D = date[methodPrefix + 'Date']();
-		var d = date[methodPrefix + 'Day']();
-		var h = date[methodPrefix + 'Hours']();
-		var m = date[methodPrefix + 'Minutes']();
-		var s = date[methodPrefix + 'Seconds']();
-		return template.replace(/%(Y+|M+|D+|d+|h+|m+|s+)/g, function (match, type) {
-			switch (type) {
-				case 'YYYY':
-					return '' + Y;
-				case 'YY':
-					return ('' + Y % century).padStart(2, '0');
-				case 'MMMM':
-					return MonthNames[M];
-				case 'MMM':
-					return MonthNames[M].slice(0, shortenedLength);
-				case 'MM':
-					return ('' + (M + 1)).padStart(2, '0');
-				case 'M':
-					return '' + (M + 1);
-				case 'DD':
-					return ('' + D).padStart(2, '0');
-				case 'D':
-					return '' + D;
-				case 'dddd':
-					return DayNames[d];
-				case 'ddd':
-					return DayNames[d].slice(0, shortenedLength);
-				case 'hh':
-					return ('' + h).padStart(2, '0');
-				case 'h':
-					return '' + h;
-				case 'mm':
-					return ('' + m).padStart(2, '0');
-				case 'm':
-					return '' + m;
-				case 'ss':
-					return ('' + s).padStart(2, '0');
-				case 's':
-					return '' + s;
-			}
-			return match;
-		});
-	}
-	return '';
-}
-
-var tests$5 = [['2016-01-02T03:04:05Z', '%YYYY,%YY,%MMMM,%MMM,%MM,%M,%DD,%D,%dddd,%ddd', '2016,16,January,Jan,01,1,02,2,Saturday,Sat'], ['2016-01-02T03:04:05Z', '%hh,%h,%mm,%m,%ss,%s', '03,3,04,4,05,5']];
-
-describe('formatDate', function () {
-	var _loop = function _loop(src, expected, _template) {
-		it('formatDate(' + src + ', ' + _template + ') returns ' + expected, function () {
-			assert.equal(format(src, _template, true), expected);
-		});
-	};
-
-	var _iteratorNormalCompletion26 = true;
-	var _didIteratorError26 = false;
-	var _iteratorError26 = undefined;
-
-	try {
-
-		for (var _iterator26 = tests$5[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-			var _ref40 = _step26.value;
-
-			var _ref41 = _slicedToArray(_ref40, 3);
-
-			var src = _ref41[0];
-			var _template = _ref41[1];
-			var expected = _ref41[2];
-
-			_loop(src, expected, _template);
-		}
-	} catch (err) {
-		_didIteratorError26 = true;
-		_iteratorError26 = err;
-	} finally {
-		try {
-			if (!_iteratorNormalCompletion26 && _iterator26.return) {
-				_iterator26.return();
-			}
-		} finally {
-			if (_didIteratorError26) {
-				throw _iteratorError26;
-			}
-		}
-	}
-});
-
-function tests$6(Headers) {
-	var testName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Headers';
-
-
-	describe(testName, function () {
-
-		it('should have has()', function () {
-			var init = {
-				'Content-Type': 'text/html',
-				'Content-Length': '100'
-			};
-			var headers = new Headers(init);
-			assert.equal(headers.has('Content-Type'), true);
-			assert.equal(headers.has('Location'), false);
-		});
-
-		it('should have append()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value = 'b';
-			headers.append(name, value);
-			headers.append(name, value);
-			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value, value]);
-		});
-
-		it('should have set()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value1 = 'b';
-			var value2 = 'c';
-			headers.set(name, value1);
-			headers.set(name, value2);
-			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value2]);
-		});
-
-		it('should have get()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value1 = 'b';
-			var value2 = 'c';
-			headers.append(name, value1);
-			headers.append(name, value2);
-			assert.deepEqual(headers.get(name).split(/\s*,\s*/), [value1, value2]);
-		});
-
-		it('should have delete()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value1 = 'b';
-			var value2 = 'c';
-			headers.append(name, value1);
-			headers.append(name, value2);
-			assert.equal(headers.has(name), true);
-			headers.delete(name);
-			assert.equal(headers.has(name), false);
-		});
-
-		it('should have entries()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value1 = 'b';
-			var value2 = 'c';
-			headers.append(name, value1);
-			headers.append(name, value2);
-			var results = {};
-			var iterator = headers.entries();
-			while (1) {
-				var _iterator$next6 = iterator.next(),
-				    _iterator$next6$value = _iterator$next6.value;
-
-				_iterator$next6$value = _iterator$next6$value === undefined ? [] : _iterator$next6$value;
-
-				var _iterator$next6$value2 = _slicedToArray(_iterator$next6$value, 2),
-				    key = _iterator$next6$value2[0],
-				    value = _iterator$next6$value2[1],
-				    done = _iterator$next6.done;
-
-				if (done) {
-					break;
-				}
-				var result = results[key] || [];
-				result.push.apply(result, _toConsumableArray(value.split(/\s*,\s*/)));
-				results[key] = result;
-			}
-			assert.deepEqual(results, _defineProperty({}, name, [value1, value2]));
-		});
-
-		it('should have values()', function () {
-			var headers = new Headers();
-			var name = 'a';
-			var value1 = 'b';
-			var value2 = 'c';
-			headers.append(name, value1);
-			headers.append(name, value2);
-			var results = [];
-			var iterator = headers.values();
-			while (1) {
-				var _iterator$next7 = iterator.next(),
-				    value = _iterator$next7.value,
-				    done = _iterator$next7.done;
-
-				if (done) {
-					break;
-				}
-				results.push.apply(results, _toConsumableArray(value.split(/\s*,\s*/)));
-			}
-			assert.deepEqual(results, [value1, value2]);
-		});
-	});
-}
-
-tests$6(Headers$1, 'Headers/j0');
-
-tests$6(Headers);
-
-function generator$2() {
-	var _this17 = this;
-
-	var length = this.length;
-
-	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this17[index],
-				done: length <= index++
-			};
-		}
-	};
-}
-
-function test$25(generator) {
-	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'HTMLCollection/@iterator';
-
-
-	describe(name, function () {
-
-		it('should create an iterator', function () {
-			var parent = document.createElement('div');
-			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion27 = true;
-			var _didIteratorError27 = false;
-			var _iteratorError27 = undefined;
-
-			try {
-				for (var _iterator27 = expected[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-					var element = _step27.value;
-
-					parent.appendChild(element);
-				}
-			} catch (err) {
-				_didIteratorError27 = true;
-				_iteratorError27 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion27 && _iterator27.return) {
-						_iterator27.return();
-					}
-				} finally {
-					if (_didIteratorError27) {
-						throw _iteratorError27;
-					}
-				}
-			}
-
-			var iterator = generator.call(parent.childNodes);
-			var results = [];
-			var index = 0;
-			while (1) {
-				var _iterator$next8 = iterator.next(),
-				    value = _iterator$next8.value,
-				    done = _iterator$next8.done;
-
-				if (done) {
-					break;
-				}
-				results[index++] = value;
-			}
-			assert.deepEqual(results, expected);
-		});
-	});
-}
-
-test$25(generator$2, 'HTMLCollection/@iterator/j0');
-
-test$25(HTMLCollection.prototype[Symbol.iterator]);
-
-var x$34 = window;
-
-function innerHeight() {
-	return x$34.innerHeight;
-}
-
-describe('innerHeight', function () {
-
-	it('should return a non-negative integer', function () {
-		assert.equal(0 <= innerHeight(), true);
-	});
-});
-
-function innerWidth() {
-	return x$34.innerWidth;
-}
-
-describe('innerWidth', function () {
-
-	it('should return a non-negative integer', function () {
-		assert.equal(0 <= innerWidth(), true);
-	});
-});
-
-describe('isArray', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isArray(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isArray(null), false);
-	});
-
-	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isArray(NaN), false);
-	});
-
-	it('should return false if the arguments are [123]', function () {
-		assert.equal(isArray(123), false);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isArray('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isArray({}), false);
-	});
-
-	it('should return true if the arguments are [[]]', function () {
-		assert.equal(isArray([]), true);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isArray(function () {}), false);
-	});
-});
-
-describe('isArrayBufferView', function () {
-
-	it('should return true if the argument is Int8Array', function () {
-		assert.equal(isArrayBufferView(new Int8Array(1)), true);
-	});
-
-	it('should return true if the argument is Int16Array', function () {
-		assert.equal(isArrayBufferView(new Int16Array(1)), true);
-	});
-
-	it('should return true if the argument is Int32Array', function () {
-		assert.equal(isArrayBufferView(new Int32Array(1)), true);
-	});
-
-	it('should return true if the argument is Uint8ClampedArray', function () {
-		assert.equal(isArrayBufferView(new Uint8ClampedArray(1)), true);
-	});
-
-	it('should return true if the argument is Uint8Array', function () {
-		assert.equal(isArrayBufferView(new Uint8Array(1)), true);
-	});
-
-	it('should return true if the argument is Uint16Array', function () {
-		assert.equal(isArrayBufferView(new Uint16Array(1)), true);
-	});
-
-	it('should return true if the argument is Uint32Array', function () {
-		assert.equal(isArrayBufferView(new Uint32Array(1)), true);
-	});
-
-	it('should return true if the argument is Float32Array', function () {
-		assert.equal(isArrayBufferView(new Float32Array(1)), true);
-	});
-
-	it('should return true if the argument is Float64Array', function () {
-		assert.equal(isArrayBufferView(new Float64Array(1)), true);
-	});
-
-	it('should return false if the argument is Object', function () {
-		assert.equal(isArrayBufferView({}), false);
-	});
-
-	it('should return false if the argument is Number', function () {
-		assert.equal(isArrayBufferView(1), false);
-	});
-});
-
-function isChildClassOf(A, B) {
-	return isInstanceOf(A.prototype, B);
-}
-
-describe('isChildClassOf', function () {
-
-	it('should return true if the first class inherits the second', function () {
-		var Parent = function Parent() {
-			_classCallCheck(this, Parent);
-		};
-
-		var Child = function (_Parent) {
-			_inherits(Child, _Parent);
-
-			function Child() {
-				_classCallCheck(this, Child);
-
-				return _possibleConstructorReturn(this, (Child.__proto__ || Object.getPrototypeOf(Child)).apply(this, arguments));
-			}
-
-			return Child;
-		}(Parent);
-
-		assert.equal(isChildClassOf(Child, Parent), true);
-	});
-
-	it('should return false if the first class doesn\'t inherit the second', function () {
-		var Parent = function Parent() {
-			_classCallCheck(this, Parent);
-		};
-
-		var Child = function Child() {
-			_classCallCheck(this, Child);
-		};
-
-		assert.equal(isChildClassOf(Child, Parent), false);
-	});
-});
-
-function isFunction(x) {
-	return typeof x === 'function';
-}
-
-describe('isFunction', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isFunction(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isFunction(null), false);
-	});
-
-	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isFunction(NaN), false);
-	});
-
-	it('should return false if the arguments are [123]', function () {
-		assert.equal(isFunction(123), false);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isFunction('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isFunction({}), false);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isFunction([]), false);
-	});
-
-	it('should return true if the arguments are [function () {}]', function () {
-		assert.equal(isFunction(function () {}), true);
-	});
-});
-
-describe('isInstanceOf', function () {
-
-	it('should return true if the first argument is an instance of the last argument', function () {
-		var A = function A() {
-			_classCallCheck(this, A);
-		};
-
-		var a = new A();
-		assert.equal(isInstanceOf(a, A), true);
-	});
-
-	it('should return false if the first argument is not an instance of the last argument', function () {
-		var A = function A() {
-			_classCallCheck(this, A);
-		};
-
-		var a = 0;
-		assert.equal(isInstanceOf(a, A), false);
-	});
-});
-
-describe('isNode', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isNode(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isNode(null), false);
-	});
-
-	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isNode(NaN), false);
-	});
-
-	it('should return false if the arguments are [123]', function () {
-		assert.equal(isNode(123), false);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isNode('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isNode({}), false);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isNode([]), false);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isNode(function () {}), false);
-	});
-});
-
-function isNumber(x) {
-	return typeof x === 'number';
-}
-
-describe('isNumber', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isNumber(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isNumber(null), false);
-	});
-
-	it('should return true if the arguments are [NaN]', function () {
-		assert.equal(isNumber(NaN), true);
-	});
-
-	it('should return true if the arguments are [123]', function () {
-		assert.equal(isNumber(123), true);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isNumber('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isNumber({}), false);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isNumber([]), false);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isNumber(function () {}), false);
-	});
-});
-
-describe('isObject', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isObject(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isObject(null), false);
-	});
-
-	it('should return true if the arguments are [NaN]', function () {
-		assert.equal(isObject(NaN), false);
-	});
-
-	it('should return true if the arguments are [123]', function () {
-		assert.equal(isObject(123), false);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isObject('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isObject({}), true);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isObject([]), true);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isObject(function () {}), true);
-	});
-});
-
-describe('isString', function () {
-
-	it('should return false if the arguments are []', function () {
-		assert.equal(isString(), false);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isString(null), false);
-	});
-
-	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isString(NaN), false);
-	});
-
-	it('should return false if the arguments are [123]', function () {
-		assert.equal(isString(123), false);
-	});
-
-	it('should return true if the arguments are [\'abc\']', function () {
-		assert.equal(isString('abc'), true);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isString({}), false);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isString([]), false);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isString(function () {}), false);
-	});
-});
-
-describe('isUndefined', function () {
-
-	it('should return true if the arguments are []', function () {
-		assert.equal(isUndefined(), true);
-	});
-
-	it('should return false if the arguments are [null]', function () {
-		assert.equal(isUndefined(null), false);
-	});
-
-	it('should return false if the arguments are [NaN]', function () {
-		assert.equal(isUndefined(NaN), false);
-	});
-
-	it('should return false if the arguments are [123]', function () {
-		assert.equal(isUndefined(123), false);
-	});
-
-	it('should return false if the arguments are [\'abc\']', function () {
-		assert.equal(isUndefined('abc'), false);
-	});
-
-	it('should return false if the arguments are [{}]', function () {
-		assert.equal(isUndefined({}), false);
-	});
-
-	it('should return false if the arguments are [[]]', function () {
-		assert.equal(isUndefined([]), false);
-	});
-
-	it('should return false if the arguments are [function () {}]', function () {
-		assert.equal(isUndefined(function () {}), false);
-	});
-});
-
-describe('Iterator', function () {
-
-	it('should return a function which returns an iterator', function () {
-		var value = 0;
-		var max = 5;
-		var iterator = new Iterator(function () {
-			return {
-				value: value,
-				done: max < value++
-			};
-		});
-		var result = iterator.next();
-		var results = [];
-		while (!result.done) {
-			results.push(result.value);
-			result = iterator.next();
-		}
-		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
-	});
-
-	it('should return a function which returns an iterator iterable in for-of syntax', function () {
-		var value = 0;
-		var max = 5;
-		var iterator = new Iterator(function () {
-			return {
-				value: value,
-				done: max < value++
-			};
-		});
-		var results = [];
-		var _iteratorNormalCompletion28 = true;
-		var _didIteratorError28 = false;
-		var _iteratorError28 = undefined;
-
-		try {
-			for (var _iterator28 = iterator[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-				var result = _step28.value;
-
-				results.push(result);
-			}
-		} catch (err) {
-			_didIteratorError28 = true;
-			_iteratorError28 = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion28 && _iterator28.return) {
-					_iterator28.return();
-				}
-			} finally {
-				if (_didIteratorError28) {
-					throw _iteratorError28;
-				}
-			}
-		}
-
-		assert.deepEqual(results, [0, 1, 2, 3, 4, 5]);
 	});
 });
 
