@@ -6230,6 +6230,39 @@ describe('J0Element.prototype.walkForward', function () {
 	});
 });
 
+describe('J0Element', function () {
+
+	it('should copy an element', function () {
+		var E1 = function (_J0Element4) {
+			_inherits(E1, _J0Element4);
+
+			function E1() {
+				_classCallCheck(this, E1);
+
+				return _possibleConstructorReturn(this, (E1.__proto__ || Object.getPrototypeOf(E1)).apply(this, arguments));
+			}
+
+			return E1;
+		}(J0Element);
+
+		var E2 = function (_E) {
+			_inherits(E2, _E);
+
+			function E2() {
+				_classCallCheck(this, E2);
+
+				return _possibleConstructorReturn(this, (E2.__proto__ || Object.getPrototypeOf(E2)).apply(this, arguments));
+			}
+
+			return E2;
+		}(E1);
+
+		var e1 = new E2();
+		var e2 = new E2(e1);
+		assert(e1.equals(e2));
+	});
+});
+
 function test$27(storage, testName) {
 
 	describe(testName, function () {
@@ -6288,10 +6321,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this22 = this;
+			var _this24 = this;
 
 			keys(this).forEach(function (key) {
-				_this22.removeItem(key);
+				_this24.removeItem(key);
 			});
 		}
 	}, {
@@ -6551,14 +6584,14 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this23 = this;
+			var _this25 = this;
 
 			this.data.slice().forEach(function (_ref51) {
 				var _ref52 = _slicedToArray(_ref51, 2),
 				    key = _ref52[0],
 				    value = _ref52[1];
 
-				fn.call(thisArg, value, key, _this23);
+				fn.call(thisArg, value, key, _this25);
 			});
 		}
 	}, {
@@ -8391,14 +8424,14 @@ function test$118(generator) {
 }
 
 function generator$6() {
-	var _this24 = this;
+	var _this26 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this24[index],
+			value: _this26[index],
 			done: length <= index++
 		};
 	});
@@ -8518,14 +8551,14 @@ function test$120(generator) {
 }
 
 function generator$8() {
-	var _this25 = this;
+	var _this27 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this25[index],
+			value: _this27[index],
 			done: length <= index++
 		};
 	});
@@ -8735,7 +8768,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this26 = this;
+			var _this28 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -8743,14 +8776,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this26.resolve(value);
+				_this28.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this26.reject(error);
+				_this28.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -8789,10 +8822,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this27 = this;
+			var _this29 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this27.handle(deferred);
+				_this29.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -9234,10 +9267,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this28 = this;
+			var _this30 = this;
 
 			this.data.slice().forEach(function (value) {
-				fn.call(thisArg, value, value, _this28);
+				fn.call(thisArg, value, value, _this30);
 			});
 		}
 	}, {
@@ -9499,7 +9532,7 @@ var State = function () {
 	}, {
 		key: 'parse',
 		value: function parse() {
-			var _this29 = this;
+			var _this31 = this;
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
@@ -9511,7 +9544,7 @@ var State = function () {
 
 				var index = 0;
 				params = {};
-				return _this29.compose(function (key) {
+				return _this31.compose(function (key) {
 					var value = args[index++];
 					params[key] = value;
 					return value;
@@ -9679,19 +9712,19 @@ var StateManager = function (_EventEmitter) {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		var _this30 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+		var _this32 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		assign(_this30, { prefix: '#' }, config, {
+		assign(_this32, { prefix: '#' }, config, {
 			states: new x$29(),
 			listeners: []
 		});
-		if (!_this30.parser) {
-			if (_this30.prefix.charAt(0) === '#') {
-				_this30.parser = function (url) {
+		if (!_this32.parser) {
+			if (_this32.prefix.charAt(0) === '#') {
+				_this32.parser = function (url) {
 					return url.hash.slice(this.prefix.length);
 				};
 			} else {
-				_this30.parser = function (url) {
+				_this32.parser = function (url) {
 					var pathname = url.pathname,
 					    search = url.search,
 					    hash = url.hash;
@@ -9700,7 +9733,7 @@ var StateManager = function (_EventEmitter) {
 				};
 			}
 		}
-		return _this30;
+		return _this32;
 	}
 
 	_createClass(StateManager, [{
@@ -9835,11 +9868,11 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'start',
 		value: function start() {
-			var _this31 = this;
+			var _this33 = this;
 
 			var debounceDuration = 30;
 			var onStateChange = debounce(function () {
-				_this31.replace(_this31.parseURL());
+				_this33.replace(_this33.parseURL());
 			}, debounceDuration);
 			x$43('hashchange', onStateChange);
 			x$43('pushstate', onStateChange);
@@ -10290,14 +10323,14 @@ function test$125(generator) {
 }
 
 function generator$12() {
-	var _this32 = this;
+	var _this34 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this32[index],
+			value: _this34[index],
 			done: length <= index++
 		};
 	});
