@@ -12,29 +12,29 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait$1 = function () {
-	var _ref116 = _asyncToGenerator(regeneratorRuntime.mark(function _callee61(duration, data) {
-		return regeneratorRuntime.wrap(function _callee61$(_context61) {
+	var _ref117 = _asyncToGenerator(regeneratorRuntime.mark(function _callee62(duration, data) {
+		return regeneratorRuntime.wrap(function _callee62$(_context62) {
 			while (1) {
-				switch (_context61.prev = _context61.next) {
+				switch (_context62.prev = _context62.next) {
 					case 0:
-						_context61.next = 2;
+						_context62.next = 2;
 						return new Promise(function (resolve) {
 							setTimeout(resolve, duration);
 						});
 
 					case 2:
-						return _context61.abrupt('return', data);
+						return _context62.abrupt('return', data);
 
 					case 3:
 					case 'end':
-						return _context61.stop();
+						return _context62.stop();
 				}
 			}
-		}, _callee61, this);
+		}, _callee62, this);
 	}));
 
 	return function wait$1(_x110, _x111) {
-		return _ref116.apply(this, arguments);
+		return _ref117.apply(this, arguments);
 	};
 }();
 
@@ -2642,6 +2642,8 @@ var x$25 = Array;
 
 var x$26 = Node;
 
+var isArray = x$25.isArray;
+
 function isNode(x) {
 	return isInstanceOf(x, x$26);
 }
@@ -2667,8 +2669,6 @@ function isObject(x) {
 	var type = typeof x === 'undefined' ? 'undefined' : _typeof(x);
 	return type === 'object' || type === 'function';
 }
-
-var isArray = x$25.isArray;
 
 function forEachItem(data, fn) {
 	if (isArray(data)) {
@@ -2733,7 +2733,7 @@ var J0Element = function () {
 				this.append.apply(this, _toConsumableArray(c));
 			}
 			forEachItem(e, function (args) {
-				_this3.on.apply(_this3, _toConsumableArray(args));
+				_this3.on.apply(_this3, _toConsumableArray(isArray(args) ? args : [args]));
 			});
 			forEachItem(a, function (args) {
 				_this3.setAttribute.apply(_this3, _toConsumableArray(args));
@@ -5203,14 +5203,62 @@ describe('J0Element.prototype.on', function () {
 		}), [[key1, fn1], [key2, fn2]]);
 	});
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
-		var E, element;
+	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+		var results, data1, data2, E, element;
 		return regeneratorRuntime.wrap(function _callee11$(_context11) {
 			while (1) {
 				switch (_context11.prev = _context11.next) {
 					case 0:
+						results = [];
+						data1 = new Date();
+						data2 = Date.now();
+
 						E = function (_J0Element) {
 							_inherits(E, _J0Element);
+
+							function E() {
+								_classCallCheck(this, E);
+
+								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
+							}
+
+							_createClass(E, [{
+								key: 'click',
+								value: function click(event) {
+									results.push(event.detail);
+								}
+							}]);
+
+							return E;
+						}(J0Element);
+
+						element = new E({
+							e: ['click']
+						});
+
+						element.emit('click', data1).emit('_click', data1).emit('click', data2);
+						_context11.next = 8;
+						return wait();
+
+					case 8:
+						assert.deepEqual(results, [data1, data2]);
+
+					case 9:
+					case 'end':
+						return _context11.stop();
+				}
+			}
+		}, _callee11, this);
+	})));
+
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+		var E, element;
+		return regeneratorRuntime.wrap(function _callee12$(_context12) {
+			while (1) {
+				switch (_context12.prev = _context12.next) {
+					case 0:
+						E = function (_J0Element2) {
+							_inherits(E, _J0Element2);
 
 							function E() {
 								_classCallCheck(this, E);
@@ -5229,10 +5277,10 @@ describe('J0Element.prototype.on', function () {
 
 					case 3:
 					case 'end':
-						return _context11.stop();
+						return _context12.stop();
 				}
 			}
-		}, _callee11, this);
+		}, _callee12, this);
 	})));
 });
 
@@ -5275,41 +5323,41 @@ describe('J0Element.prototype.off', function () {
 
 describe('J0Element.prototype.emit', function () {
 
-	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
 		var element, key, data, event;
-		return regeneratorRuntime.wrap(function _callee12$(_context12) {
+		return regeneratorRuntime.wrap(function _callee13$(_context13) {
 			while (1) {
-				switch (_context12.prev = _context12.next) {
+				switch (_context13.prev = _context13.next) {
 					case 0:
 						element = dom();
 						key = 'event-' + Date.now();
 						data = new Date();
-						_context12.next = 5;
+						_context13.next = 5;
 						return new Promise(function (resolve) {
 							element.on(key, resolve).emit(key, data);
 						});
 
 					case 5:
-						event = _context12.sent;
+						event = _context13.sent;
 
 						assert.equal(event.detail, data);
 
 					case 7:
 					case 'end':
-						return _context12.stop();
+						return _context13.stop();
 				}
 			}
-		}, _callee12, this);
+		}, _callee13, this);
 	})));
 
-	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
 		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee13$(_context13) {
+		return regeneratorRuntime.wrap(function _callee14$(_context14) {
 			while (1) {
-				switch (_context13.prev = _context13.next) {
+				switch (_context14.prev = _context14.next) {
 					case 0:
-						onCall = function onCall(_ref40) {
-							var detail = _ref40.detail;
+						onCall = function onCall(_ref41) {
+							var detail = _ref41.detail;
 
 							results.push(detail);
 						};
@@ -5321,7 +5369,7 @@ describe('J0Element.prototype.emit', function () {
 						results = [];
 
 						element.on(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context13.next = 9;
+						_context14.next = 9;
 						return wait();
 
 					case 9:
@@ -5329,23 +5377,23 @@ describe('J0Element.prototype.emit', function () {
 
 					case 10:
 					case 'end':
-						return _context13.stop();
+						return _context14.stop();
 				}
 			}
-		}, _callee13, this);
+		}, _callee14, this);
 	})));
 });
 
 describe('J0Element.prototype.once', function () {
 
-	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
 		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee14$(_context14) {
+		return regeneratorRuntime.wrap(function _callee15$(_context15) {
 			while (1) {
-				switch (_context14.prev = _context14.next) {
+				switch (_context15.prev = _context15.next) {
 					case 0:
-						onCall = function onCall(_ref42) {
-							var detail = _ref42.detail;
+						onCall = function onCall(_ref43) {
+							var detail = _ref43.detail;
 
 							results.push(detail);
 						};
@@ -5357,7 +5405,7 @@ describe('J0Element.prototype.once', function () {
 						results = [];
 
 						element.once(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context14.next = 9;
+						_context15.next = 9;
 						return wait();
 
 					case 9:
@@ -5365,24 +5413,24 @@ describe('J0Element.prototype.once', function () {
 
 					case 10:
 					case 'end':
-						return _context14.stop();
+						return _context15.stop();
 				}
 			}
-		}, _callee14, this);
+		}, _callee15, this);
 	})));
 
-	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
 		var results, data1, data2, E, element;
-		return regeneratorRuntime.wrap(function _callee15$(_context15) {
+		return regeneratorRuntime.wrap(function _callee16$(_context16) {
 			while (1) {
-				switch (_context15.prev = _context15.next) {
+				switch (_context16.prev = _context16.next) {
 					case 0:
 						results = [];
 						data1 = new Date();
 						data2 = Date.now();
 
-						E = function (_J0Element2) {
-							_inherits(E, _J0Element2);
+						E = function (_J0Element3) {
+							_inherits(E, _J0Element3);
 
 							function E() {
 								_classCallCheck(this, E);
@@ -5400,10 +5448,10 @@ describe('J0Element.prototype.once', function () {
 							return E;
 						}(J0Element);
 
-						element = new E();
+						element = new E({});
 
 						element.once('click').emit('click', data1).emit('_click', data1).emit('click', data2);
-						_context15.next = 8;
+						_context16.next = 8;
 						return wait();
 
 					case 8:
@@ -5411,20 +5459,20 @@ describe('J0Element.prototype.once', function () {
 
 					case 9:
 					case 'end':
-						return _context15.stop();
+						return _context16.stop();
 				}
 			}
-		}, _callee15, this);
+		}, _callee16, this);
 	})));
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
 		var E, element;
-		return regeneratorRuntime.wrap(function _callee16$(_context16) {
+		return regeneratorRuntime.wrap(function _callee17$(_context17) {
 			while (1) {
-				switch (_context16.prev = _context16.next) {
+				switch (_context17.prev = _context17.next) {
 					case 0:
-						E = function (_J0Element3) {
-							_inherits(E, _J0Element3);
+						E = function (_J0Element4) {
+							_inherits(E, _J0Element4);
 
 							function E() {
 								_classCallCheck(this, E);
@@ -5443,10 +5491,10 @@ describe('J0Element.prototype.once', function () {
 
 					case 3:
 					case 'end':
-						return _context16.stop();
+						return _context17.stop();
 				}
 			}
-		}, _callee16, this);
+		}, _callee17, this);
 	})));
 });
 
@@ -6233,8 +6281,8 @@ describe('J0Element.prototype.walkForward', function () {
 describe('J0Element', function () {
 
 	it('should copy an element', function () {
-		var E1 = function (_J0Element4) {
-			_inherits(E1, _J0Element4);
+		var E1 = function (_J0Element5) {
+			_inherits(E1, _J0Element5);
 
 			function E1() {
 				_classCallCheck(this, E1);
@@ -6321,10 +6369,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this24 = this;
+			var _this25 = this;
 
 			keys(this).forEach(function (key) {
-				_this24.removeItem(key);
+				_this25.removeItem(key);
 			});
 		}
 	}, {
@@ -6496,12 +6544,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator29 = iterable[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
-					var _ref45 = _step29.value;
+					var _ref46 = _step29.value;
 
-					var _ref46 = _slicedToArray(_ref45, 2);
+					var _ref47 = _slicedToArray(_ref46, 2);
 
-					var key = _ref46[0];
-					var value = _ref46[1];
+					var key = _ref47[0];
+					var value = _ref47[1];
 
 					this.set(key, value);
 				}
@@ -6530,9 +6578,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref47) {
-				var _ref48 = _slicedToArray(_ref47, 1),
-				    itemKey = _ref48[0];
+			return this.data.findIndex(function (_ref48) {
+				var _ref49 = _slicedToArray(_ref48, 1),
+				    itemKey = _ref49[0];
 
 				return itemKey === key;
 			});
@@ -6556,9 +6604,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref49) {
-				var _ref50 = _slicedToArray(_ref49, 1),
-				    itemKey = _ref50[0];
+			var found = this.data.find(function (_ref50) {
+				var _ref51 = _slicedToArray(_ref50, 1),
+				    itemKey = _ref51[0];
 
 				return itemKey === key;
 			});
@@ -6584,14 +6632,14 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this25 = this;
+			var _this26 = this;
 
-			this.data.slice().forEach(function (_ref51) {
-				var _ref52 = _slicedToArray(_ref51, 2),
-				    key = _ref52[0],
-				    value = _ref52[1];
+			this.data.slice().forEach(function (_ref52) {
+				var _ref53 = _slicedToArray(_ref52, 2),
+				    key = _ref53[0],
+				    value = _ref53[1];
 
-				fn.call(thisArg, value, key, _this25);
+				fn.call(thisArg, value, key, _this26);
 			});
 		}
 	}, {
@@ -6672,34 +6720,34 @@ function tests$8(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee17() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee18() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee17$(_context17) {
+				return regeneratorRuntime.wrap(function _callee18$(_context18) {
 					while (1) {
-						switch (_context17.prev = _context17.next) {
+						switch (_context18.prev = _context18.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context17.next = 7;
+									_context18.next = 7;
 									break;
 								}
 
-								_context17.next = 4;
+								_context18.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context17.next = 1;
+								_context18.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context17.stop();
+								return _context18.stop();
 						}
 					}
-				}, _callee17, this);
+				}, _callee18, this);
 			}));
 			var map = new Map(iterable);
 			assert.deepEqual({
@@ -6739,12 +6787,12 @@ function test$32(abs) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
-			return regeneratorRuntime.wrap(function _callee18$(_context18) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
+			return regeneratorRuntime.wrap(function _callee19$(_context19) {
 				while (1) {
-					switch (_context18.prev = _context18.next) {
+					switch (_context19.prev = _context19.next) {
 						case 0:
-							_context18.next = 2;
+							_context19.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/abs/abs.png',
@@ -6757,10 +6805,10 @@ function test$32(abs) {
 
 						case 2:
 						case 'end':
-							return _context18.stop();
+							return _context19.stop();
 					}
 				}
-			}, _callee18, this);
+			}, _callee19, this);
 		})));
 	});
 }
@@ -6774,12 +6822,12 @@ function test$34(acos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
-			return regeneratorRuntime.wrap(function _callee19$(_context19) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+			return regeneratorRuntime.wrap(function _callee20$(_context20) {
 				while (1) {
-					switch (_context19.prev = _context19.next) {
+					switch (_context20.prev = _context20.next) {
 						case 0:
-							_context19.next = 2;
+							_context20.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/acos/acos.png',
@@ -6792,10 +6840,10 @@ function test$34(acos) {
 
 						case 2:
 						case 'end':
-							return _context19.stop();
+							return _context20.stop();
 					}
 				}
-			}, _callee19, this);
+			}, _callee20, this);
 		})));
 	});
 }
@@ -6809,12 +6857,12 @@ function test$36(acosh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
-			return regeneratorRuntime.wrap(function _callee20$(_context20) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
+			return regeneratorRuntime.wrap(function _callee21$(_context21) {
 				while (1) {
-					switch (_context20.prev = _context20.next) {
+					switch (_context21.prev = _context21.next) {
 						case 0:
-							_context20.next = 2;
+							_context21.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/acosh/acosh.png',
@@ -6827,10 +6875,10 @@ function test$36(acosh) {
 
 						case 2:
 						case 'end':
-							return _context20.stop();
+							return _context21.stop();
 					}
 				}
-			}, _callee20, this);
+			}, _callee21, this);
 		})));
 	});
 }
@@ -6852,12 +6900,12 @@ function test$38(asin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
-			return regeneratorRuntime.wrap(function _callee21$(_context21) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
+			return regeneratorRuntime.wrap(function _callee22$(_context22) {
 				while (1) {
-					switch (_context21.prev = _context21.next) {
+					switch (_context22.prev = _context22.next) {
 						case 0:
-							_context21.next = 2;
+							_context22.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/asin/asin.png',
@@ -6870,10 +6918,10 @@ function test$38(asin) {
 
 						case 2:
 						case 'end':
-							return _context21.stop();
+							return _context22.stop();
 					}
 				}
-			}, _callee21, this);
+			}, _callee22, this);
 		})));
 	});
 }
@@ -6887,12 +6935,12 @@ function test$40(asinh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
-			return regeneratorRuntime.wrap(function _callee22$(_context22) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
+			return regeneratorRuntime.wrap(function _callee23$(_context23) {
 				while (1) {
-					switch (_context22.prev = _context22.next) {
+					switch (_context23.prev = _context23.next) {
 						case 0:
-							_context22.next = 2;
+							_context23.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/asinh/asinh.png',
@@ -6905,10 +6953,10 @@ function test$40(asinh) {
 
 						case 2:
 						case 'end':
-							return _context22.stop();
+							return _context23.stop();
 					}
 				}
-			}, _callee22, this);
+			}, _callee23, this);
 		})));
 	});
 }
@@ -6931,12 +6979,12 @@ function test$42(atan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
-			return regeneratorRuntime.wrap(function _callee23$(_context23) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
+			return regeneratorRuntime.wrap(function _callee24$(_context24) {
 				while (1) {
-					switch (_context23.prev = _context23.next) {
+					switch (_context24.prev = _context24.next) {
 						case 0:
-							_context23.next = 2;
+							_context24.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/atan/atan.png',
@@ -6949,10 +6997,10 @@ function test$42(atan) {
 
 						case 2:
 						case 'end':
-							return _context23.stop();
+							return _context24.stop();
 					}
 				}
-			}, _callee23, this);
+			}, _callee24, this);
 		})));
 	});
 }
@@ -6966,12 +7014,12 @@ function test$44(atan2) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
-			return regeneratorRuntime.wrap(function _callee24$(_context24) {
+		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
+			return regeneratorRuntime.wrap(function _callee25$(_context25) {
 				while (1) {
-					switch (_context24.prev = _context24.next) {
+					switch (_context25.prev = _context25.next) {
 						case 0:
-							_context24.next = 2;
+							_context25.next = 2;
 							return assert.graphicalEqual({
 								name: name + '+',
 								url: window.root + '/Math/atan2/atan2+.png',
@@ -6986,18 +7034,18 @@ function test$44(atan2) {
 
 						case 2:
 						case 'end':
-							return _context24.stop();
+							return _context25.stop();
 					}
 				}
-			}, _callee24, this);
+			}, _callee25, this);
 		})));
 
-		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
-			return regeneratorRuntime.wrap(function _callee25$(_context25) {
+		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
+			return regeneratorRuntime.wrap(function _callee26$(_context26) {
 				while (1) {
-					switch (_context25.prev = _context25.next) {
+					switch (_context26.prev = _context26.next) {
 						case 0:
-							_context25.next = 2;
+							_context26.next = 2;
 							return assert.graphicalEqual({
 								name: name + '-',
 								url: window.root + '/Math/atan2/atan2-.png',
@@ -7012,10 +7060,10 @@ function test$44(atan2) {
 
 						case 2:
 						case 'end':
-							return _context25.stop();
+							return _context26.stop();
 					}
 				}
-			}, _callee25, this);
+			}, _callee26, this);
 		})));
 	});
 }
@@ -7029,12 +7077,12 @@ function test$46(atanh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
-			return regeneratorRuntime.wrap(function _callee26$(_context26) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
+			return regeneratorRuntime.wrap(function _callee27$(_context27) {
 				while (1) {
-					switch (_context26.prev = _context26.next) {
+					switch (_context27.prev = _context27.next) {
 						case 0:
-							_context26.next = 2;
+							_context27.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/atanh/atanh.png',
@@ -7047,10 +7095,10 @@ function test$46(atanh) {
 
 						case 2:
 						case 'end':
-							return _context26.stop();
+							return _context27.stop();
 					}
 				}
-			}, _callee26, this);
+			}, _callee27, this);
 		})));
 	});
 }
@@ -7070,12 +7118,12 @@ function test$48(cbrt) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
-			return regeneratorRuntime.wrap(function _callee27$(_context27) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
+			return regeneratorRuntime.wrap(function _callee28$(_context28) {
 				while (1) {
-					switch (_context27.prev = _context27.next) {
+					switch (_context28.prev = _context28.next) {
 						case 0:
-							_context27.next = 2;
+							_context28.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cbrt/cbrt.png',
@@ -7088,10 +7136,10 @@ function test$48(cbrt) {
 
 						case 2:
 						case 'end':
-							return _context27.stop();
+							return _context28.stop();
 					}
 				}
-			}, _callee27, this);
+			}, _callee28, this);
 		})));
 	});
 }
@@ -7113,12 +7161,12 @@ function test$50(ceil) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
-			return regeneratorRuntime.wrap(function _callee28$(_context28) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
+			return regeneratorRuntime.wrap(function _callee29$(_context29) {
 				while (1) {
-					switch (_context28.prev = _context28.next) {
+					switch (_context29.prev = _context29.next) {
 						case 0:
-							_context28.next = 2;
+							_context29.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/ceil/ceil.png',
@@ -7131,10 +7179,10 @@ function test$50(ceil) {
 
 						case 2:
 						case 'end':
-							return _context28.stop();
+							return _context29.stop();
 					}
 				}
-			}, _callee28, this);
+			}, _callee29, this);
 		})));
 	});
 }
@@ -7148,12 +7196,12 @@ function test$52(clz32) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
-			return regeneratorRuntime.wrap(function _callee29$(_context29) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
+			return regeneratorRuntime.wrap(function _callee30$(_context30) {
 				while (1) {
-					switch (_context29.prev = _context29.next) {
+					switch (_context30.prev = _context30.next) {
 						case 0:
-							_context29.next = 2;
+							_context30.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/clz32/clz32.png',
@@ -7166,10 +7214,10 @@ function test$52(clz32) {
 
 						case 2:
 						case 'end':
-							return _context29.stop();
+							return _context30.stop();
 					}
 				}
-			}, _callee29, this);
+			}, _callee30, this);
 		})));
 	});
 }
@@ -7196,12 +7244,12 @@ function test$54(cos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
-			return regeneratorRuntime.wrap(function _callee30$(_context30) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
+			return regeneratorRuntime.wrap(function _callee31$(_context31) {
 				while (1) {
-					switch (_context30.prev = _context30.next) {
+					switch (_context31.prev = _context31.next) {
 						case 0:
-							_context30.next = 2;
+							_context31.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cos/cos.png',
@@ -7214,10 +7262,10 @@ function test$54(cos) {
 
 						case 2:
 						case 'end':
-							return _context30.stop();
+							return _context31.stop();
 					}
 				}
-			}, _callee30, this);
+			}, _callee31, this);
 		})));
 	});
 }
@@ -7231,12 +7279,12 @@ function test$56(cosh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
-			return regeneratorRuntime.wrap(function _callee31$(_context31) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
+			return regeneratorRuntime.wrap(function _callee32$(_context32) {
 				while (1) {
-					switch (_context31.prev = _context31.next) {
+					switch (_context32.prev = _context32.next) {
 						case 0:
-							_context31.next = 2;
+							_context32.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cosh/cosh.png',
@@ -7249,10 +7297,10 @@ function test$56(cosh) {
 
 						case 2:
 						case 'end':
-							return _context31.stop();
+							return _context32.stop();
 					}
 				}
-			}, _callee31, this);
+			}, _callee32, this);
 		})));
 	});
 }
@@ -7288,12 +7336,12 @@ function test$60(exp) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
-			return regeneratorRuntime.wrap(function _callee32$(_context32) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
+			return regeneratorRuntime.wrap(function _callee33$(_context33) {
 				while (1) {
-					switch (_context32.prev = _context32.next) {
+					switch (_context33.prev = _context33.next) {
 						case 0:
-							_context32.next = 2;
+							_context33.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/exp/exp.png',
@@ -7306,10 +7354,10 @@ function test$60(exp) {
 
 						case 2:
 						case 'end':
-							return _context32.stop();
+							return _context33.stop();
 					}
 				}
-			}, _callee32, this);
+			}, _callee33, this);
 		})));
 	});
 }
@@ -7323,12 +7371,12 @@ function test$62(expm1) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
-			return regeneratorRuntime.wrap(function _callee33$(_context33) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
+			return regeneratorRuntime.wrap(function _callee34$(_context34) {
 				while (1) {
-					switch (_context33.prev = _context33.next) {
+					switch (_context34.prev = _context34.next) {
 						case 0:
-							_context33.next = 2;
+							_context34.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/expm1/expm1.png',
@@ -7341,10 +7389,10 @@ function test$62(expm1) {
 
 						case 2:
 						case 'end':
-							return _context33.stop();
+							return _context34.stop();
 					}
 				}
-			}, _callee33, this);
+			}, _callee34, this);
 		})));
 	});
 }
@@ -7364,12 +7412,12 @@ function test$64(floor) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
-			return regeneratorRuntime.wrap(function _callee34$(_context34) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
+			return regeneratorRuntime.wrap(function _callee35$(_context35) {
 				while (1) {
-					switch (_context34.prev = _context34.next) {
+					switch (_context35.prev = _context35.next) {
 						case 0:
-							_context34.next = 2;
+							_context35.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/floor/floor.png',
@@ -7382,10 +7430,10 @@ function test$64(floor) {
 
 						case 2:
 						case 'end':
-							return _context34.stop();
+							return _context35.stop();
 					}
 				}
-			}, _callee34, this);
+			}, _callee35, this);
 		})));
 	});
 }
@@ -7399,14 +7447,14 @@ function test$66(fround) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
 			var d;
-			return regeneratorRuntime.wrap(function _callee35$(_context35) {
+			return regeneratorRuntime.wrap(function _callee36$(_context36) {
 				while (1) {
-					switch (_context35.prev = _context35.next) {
+					switch (_context36.prev = _context36.next) {
 						case 0:
 							d = 1;
-							_context35.next = 3;
+							_context36.next = 3;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/fround/fround.png',
@@ -7419,10 +7467,10 @@ function test$66(fround) {
 
 						case 3:
 						case 'end':
-							return _context35.stop();
+							return _context36.stop();
 					}
 				}
-			}, _callee35, this);
+			}, _callee36, this);
 		})));
 
 		it('should return 1.3370000123977661', function () {
@@ -7446,13 +7494,13 @@ function test$68(hypot) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
-			return regeneratorRuntime.wrap(function _callee36$(_context36) {
+		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
+			return regeneratorRuntime.wrap(function _callee37$(_context37) {
 				while (1) {
-					switch (_context36.prev = _context36.next) {
+					switch (_context37.prev = _context37.next) {
 						case 0:
 							this.timeout(5000);
-							_context36.next = 3;
+							_context37.next = 3;
 							return assert.graphicalEqual({
 								name: name + '-y=3',
 								url: window.root + '/Math/hypot/hypot-y=3.png',
@@ -7466,10 +7514,10 @@ function test$68(hypot) {
 
 						case 3:
 						case 'end':
-							return _context36.stop();
+							return _context37.stop();
 					}
 				}
-			}, _callee36, this);
+			}, _callee37, this);
 		})));
 	});
 }
@@ -7499,12 +7547,12 @@ function test$70(imul) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
-			return regeneratorRuntime.wrap(function _callee37$(_context37) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
+			return regeneratorRuntime.wrap(function _callee38$(_context38) {
 				while (1) {
-					switch (_context37.prev = _context37.next) {
+					switch (_context38.prev = _context38.next) {
 						case 0:
-							_context37.next = 2;
+							_context38.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/imul/imul.png',
@@ -7519,10 +7567,10 @@ function test$70(imul) {
 
 						case 2:
 						case 'end':
-							return _context37.stop();
+							return _context38.stop();
 					}
 				}
-			}, _callee37, this);
+			}, _callee38, this);
 		})));
 
 		it('imul(2, 4) should be 8', function () {
@@ -7597,12 +7645,12 @@ function test$76(log) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
-			return regeneratorRuntime.wrap(function _callee38$(_context38) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
+			return regeneratorRuntime.wrap(function _callee39$(_context39) {
 				while (1) {
-					switch (_context38.prev = _context38.next) {
+					switch (_context39.prev = _context39.next) {
 						case 0:
-							_context38.next = 2;
+							_context39.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log/log.png',
@@ -7615,10 +7663,10 @@ function test$76(log) {
 
 						case 2:
 						case 'end':
-							return _context38.stop();
+							return _context39.stop();
 					}
 				}
-			}, _callee38, this);
+			}, _callee39, this);
 		})));
 	});
 }
@@ -7632,12 +7680,12 @@ function test$78(log10) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
-			return regeneratorRuntime.wrap(function _callee39$(_context39) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
+			return regeneratorRuntime.wrap(function _callee40$(_context40) {
 				while (1) {
-					switch (_context39.prev = _context39.next) {
+					switch (_context40.prev = _context40.next) {
 						case 0:
-							_context39.next = 2;
+							_context40.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log10/log10.png',
@@ -7650,10 +7698,10 @@ function test$78(log10) {
 
 						case 2:
 						case 'end':
-							return _context39.stop();
+							return _context40.stop();
 					}
 				}
-			}, _callee39, this);
+			}, _callee40, this);
 		})));
 	});
 }
@@ -7688,12 +7736,12 @@ function test$82(log1p) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
-			return regeneratorRuntime.wrap(function _callee40$(_context40) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
+			return regeneratorRuntime.wrap(function _callee41$(_context41) {
 				while (1) {
-					switch (_context40.prev = _context40.next) {
+					switch (_context41.prev = _context41.next) {
 						case 0:
-							_context40.next = 2;
+							_context41.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log1p/log1p.png',
@@ -7706,10 +7754,10 @@ function test$82(log1p) {
 
 						case 2:
 						case 'end':
-							return _context40.stop();
+							return _context41.stop();
 					}
 				}
-			}, _callee40, this);
+			}, _callee41, this);
 		})));
 	});
 }
@@ -7729,12 +7777,12 @@ function test$84(log2) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
-			return regeneratorRuntime.wrap(function _callee41$(_context41) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
+			return regeneratorRuntime.wrap(function _callee42$(_context42) {
 				while (1) {
-					switch (_context41.prev = _context41.next) {
+					switch (_context42.prev = _context42.next) {
 						case 0:
-							_context41.next = 2;
+							_context42.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log2/log2.png',
@@ -7747,10 +7795,10 @@ function test$84(log2) {
 
 						case 2:
 						case 'end':
-							return _context41.stop();
+							return _context42.stop();
 					}
 				}
-			}, _callee41, this);
+			}, _callee42, this);
 		})));
 	});
 }
@@ -7785,12 +7833,12 @@ function test$88(max) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
-			return regeneratorRuntime.wrap(function _callee42$(_context42) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
+			return regeneratorRuntime.wrap(function _callee43$(_context43) {
 				while (1) {
-					switch (_context42.prev = _context42.next) {
+					switch (_context43.prev = _context43.next) {
 						case 0:
-							_context42.next = 2;
+							_context43.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/max/max.png',
@@ -7805,10 +7853,10 @@ function test$88(max) {
 
 						case 2:
 						case 'end':
-							return _context42.stop();
+							return _context43.stop();
 					}
 				}
-			}, _callee42, this);
+			}, _callee43, this);
 		})));
 	});
 }
@@ -7822,12 +7870,12 @@ function test$90(min) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
-			return regeneratorRuntime.wrap(function _callee43$(_context43) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
+			return regeneratorRuntime.wrap(function _callee44$(_context44) {
 				while (1) {
-					switch (_context43.prev = _context43.next) {
+					switch (_context44.prev = _context44.next) {
 						case 0:
-							_context43.next = 2;
+							_context44.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/min/min.png',
@@ -7842,10 +7890,10 @@ function test$90(min) {
 
 						case 2:
 						case 'end':
-							return _context43.stop();
+							return _context44.stop();
 					}
 				}
-			}, _callee43, this);
+			}, _callee44, this);
 		})));
 	});
 }
@@ -7874,12 +7922,12 @@ function test$94(pow) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
-			return regeneratorRuntime.wrap(function _callee44$(_context44) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
+			return regeneratorRuntime.wrap(function _callee45$(_context45) {
 				while (1) {
-					switch (_context44.prev = _context44.next) {
+					switch (_context45.prev = _context45.next) {
 						case 0:
-							_context44.next = 2;
+							_context45.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/pow/pow.png',
@@ -7894,10 +7942,10 @@ function test$94(pow) {
 
 						case 2:
 						case 'end':
-							return _context44.stop();
+							return _context45.stop();
 					}
 				}
-			}, _callee44, this);
+			}, _callee45, this);
 		})));
 	});
 }
@@ -7941,12 +7989,12 @@ function test$98(round) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
-			return regeneratorRuntime.wrap(function _callee45$(_context45) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
+			return regeneratorRuntime.wrap(function _callee46$(_context46) {
 				while (1) {
-					switch (_context45.prev = _context45.next) {
+					switch (_context46.prev = _context46.next) {
 						case 0:
-							_context45.next = 2;
+							_context46.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/round/round.png',
@@ -7959,10 +8007,10 @@ function test$98(round) {
 
 						case 2:
 						case 'end':
-							return _context45.stop();
+							return _context46.stop();
 					}
 				}
-			}, _callee45, this);
+			}, _callee46, this);
 		})));
 	});
 }
@@ -7976,12 +8024,12 @@ function test$100(sign) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
-			return regeneratorRuntime.wrap(function _callee46$(_context46) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
+			return regeneratorRuntime.wrap(function _callee47$(_context47) {
 				while (1) {
-					switch (_context46.prev = _context46.next) {
+					switch (_context47.prev = _context47.next) {
 						case 0:
-							_context46.next = 2;
+							_context47.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sign/sign.png',
@@ -7994,10 +8042,10 @@ function test$100(sign) {
 
 						case 2:
 						case 'end':
-							return _context46.stop();
+							return _context47.stop();
 					}
 				}
-			}, _callee46, this);
+			}, _callee47, this);
 		})));
 	});
 }
@@ -8023,12 +8071,12 @@ function test$102(sin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
-			return regeneratorRuntime.wrap(function _callee47$(_context47) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
+			return regeneratorRuntime.wrap(function _callee48$(_context48) {
 				while (1) {
-					switch (_context47.prev = _context47.next) {
+					switch (_context48.prev = _context48.next) {
 						case 0:
-							_context47.next = 2;
+							_context48.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sin/sin.png',
@@ -8041,10 +8089,10 @@ function test$102(sin) {
 
 						case 2:
 						case 'end':
-							return _context47.stop();
+							return _context48.stop();
 					}
 				}
-			}, _callee47, this);
+			}, _callee48, this);
 		})));
 	});
 }
@@ -8058,12 +8106,12 @@ function test$104(sinh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
-			return regeneratorRuntime.wrap(function _callee48$(_context48) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
+			return regeneratorRuntime.wrap(function _callee49$(_context49) {
 				while (1) {
-					switch (_context48.prev = _context48.next) {
+					switch (_context49.prev = _context49.next) {
 						case 0:
-							_context48.next = 2;
+							_context49.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sinh/sinh.png',
@@ -8076,10 +8124,10 @@ function test$104(sinh) {
 
 						case 2:
 						case 'end':
-							return _context48.stop();
+							return _context49.stop();
 					}
 				}
-			}, _callee48, this);
+			}, _callee49, this);
 		})));
 	});
 }
@@ -8100,12 +8148,12 @@ function test$106(sqrt) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
-			return regeneratorRuntime.wrap(function _callee49$(_context49) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
+			return regeneratorRuntime.wrap(function _callee50$(_context50) {
 				while (1) {
-					switch (_context49.prev = _context49.next) {
+					switch (_context50.prev = _context50.next) {
 						case 0:
-							_context49.next = 2;
+							_context50.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sqrt/sqrt.png',
@@ -8118,10 +8166,10 @@ function test$106(sqrt) {
 
 						case 2:
 						case 'end':
-							return _context49.stop();
+							return _context50.stop();
 					}
 				}
-			}, _callee49, this);
+			}, _callee50, this);
 		})));
 	});
 }
@@ -8165,12 +8213,12 @@ function test$112(tan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
-			return regeneratorRuntime.wrap(function _callee50$(_context50) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
+			return regeneratorRuntime.wrap(function _callee51$(_context51) {
 				while (1) {
-					switch (_context50.prev = _context50.next) {
+					switch (_context51.prev = _context51.next) {
 						case 0:
-							_context50.next = 2;
+							_context51.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/tan/tan.png',
@@ -8183,10 +8231,10 @@ function test$112(tan) {
 
 						case 2:
 						case 'end':
-							return _context50.stop();
+							return _context51.stop();
 					}
 				}
-			}, _callee50, this);
+			}, _callee51, this);
 		})));
 	});
 }
@@ -8200,12 +8248,12 @@ function test$114(tanh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-			return regeneratorRuntime.wrap(function _callee51$(_context51) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
+			return regeneratorRuntime.wrap(function _callee52$(_context52) {
 				while (1) {
-					switch (_context51.prev = _context51.next) {
+					switch (_context52.prev = _context52.next) {
 						case 0:
-							_context51.next = 2;
+							_context52.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/tanh/tanh.png',
@@ -8218,10 +8266,10 @@ function test$114(tanh) {
 
 						case 2:
 						case 'end':
-							return _context51.stop();
+							return _context52.stop();
 					}
 				}
-			}, _callee51, this);
+			}, _callee52, this);
 		})));
 	});
 }
@@ -8247,12 +8295,12 @@ function test$116(trunc) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
-			return regeneratorRuntime.wrap(function _callee52$(_context52) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee53() {
+			return regeneratorRuntime.wrap(function _callee53$(_context53) {
 				while (1) {
-					switch (_context52.prev = _context52.next) {
+					switch (_context53.prev = _context53.next) {
 						case 0:
-							_context52.next = 2;
+							_context53.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/trunc/trunc.png',
@@ -8265,10 +8313,10 @@ function test$116(trunc) {
 
 						case 2:
 						case 'end':
-							return _context52.stop();
+							return _context53.stop();
 					}
 				}
-			}, _callee52, this);
+			}, _callee53, this);
 		})));
 
 		it('trunc(13.37) should be 13', function () {
@@ -8424,14 +8472,14 @@ function test$118(generator) {
 }
 
 function generator$6() {
-	var _this26 = this;
+	var _this27 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this26[index],
+			value: _this27[index],
 			done: length <= index++
 		};
 	});
@@ -8551,14 +8599,14 @@ function test$120(generator) {
 }
 
 function generator$8() {
-	var _this27 = this;
+	var _this28 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this27[index],
+			value: _this28[index],
 			done: length <= index++
 		};
 	});
@@ -8768,7 +8816,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this28 = this;
+			var _this29 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -8776,14 +8824,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this28.resolve(value);
+				_this29.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this28.reject(error);
+				_this29.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -8822,10 +8870,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this29 = this;
+			var _this30 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this29.handle(deferred);
+				_this30.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -9102,26 +9150,26 @@ tests$11(Request, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee53() {
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee54() {
 		var timeStamp;
-		return regeneratorRuntime.wrap(function _callee53$(_context53) {
+		return regeneratorRuntime.wrap(function _callee54$(_context54) {
 			while (1) {
-				switch (_context53.prev = _context53.next) {
+				switch (_context54.prev = _context54.next) {
 					case 0:
-						_context53.next = 2;
+						_context54.next = 2;
 						return new Promise(x$23);
 
 					case 2:
-						timeStamp = _context53.sent;
+						timeStamp = _context54.sent;
 
 						assert(0 < timeStamp, true);
 
 					case 4:
 					case 'end':
-						return _context53.stop();
+						return _context54.stop();
 				}
 			}
-		}, _callee53, this);
+		}, _callee54, this);
 	})));
 });
 
@@ -9267,10 +9315,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this30 = this;
+			var _this31 = this;
 
 			this.data.slice().forEach(function (value) {
-				fn.call(thisArg, value, value, _this30);
+				fn.call(thisArg, value, value, _this31);
 			});
 		}
 	}, {
@@ -9470,8 +9518,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref89, name, expression, offset, source) {
-				var length = _ref89.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref90, name, expression, offset, source) {
+				var length = _ref90.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -9532,7 +9580,7 @@ var State = function () {
 	}, {
 		key: 'parse',
 		value: function parse() {
-			var _this31 = this;
+			var _this32 = this;
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
@@ -9544,7 +9592,7 @@ var State = function () {
 
 				var index = 0;
 				params = {};
-				return _this31.compose(function (key) {
+				return _this32.compose(function (key) {
 					var value = args[index++];
 					params[key] = value;
 					return value;
@@ -9712,19 +9760,19 @@ var StateManager = function (_EventEmitter) {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		var _this32 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+		var _this33 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		assign(_this32, { prefix: '#' }, config, {
+		assign(_this33, { prefix: '#' }, config, {
 			states: new x$29(),
 			listeners: []
 		});
-		if (!_this32.parser) {
-			if (_this32.prefix.charAt(0) === '#') {
-				_this32.parser = function (url) {
+		if (!_this33.parser) {
+			if (_this33.prefix.charAt(0) === '#') {
+				_this33.parser = function (url) {
 					return url.hash.slice(this.prefix.length);
 				};
 			} else {
-				_this32.parser = function (url) {
+				_this33.parser = function (url) {
 					var pathname = url.pathname,
 					    search = url.search,
 					    hash = url.hash;
@@ -9733,7 +9781,7 @@ var StateManager = function (_EventEmitter) {
 				};
 			}
 		}
-		return _this32;
+		return _this33;
 	}
 
 	_createClass(StateManager, [{
@@ -9748,11 +9796,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator37 = this.states[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
-					var _ref90 = _step37.value;
+					var _ref91 = _step37.value;
 
-					var _ref91 = _slicedToArray(_ref90, 2);
+					var _ref92 = _slicedToArray(_ref91, 2);
 
-					var state = _ref91[1];
+					var state = _ref92[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -9791,9 +9839,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref92 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref92.name,
-			    params = _ref92.params;
+			var _ref93 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref93.name,
+			    params = _ref93.params;
 
 			var noFallback = arguments[1];
 
@@ -9868,11 +9916,11 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'start',
 		value: function start() {
-			var _this33 = this;
+			var _this34 = this;
 
 			var debounceDuration = 30;
 			var onStateChange = debounce(function () {
-				_this33.replace(_this33.parseURL());
+				_this34.replace(_this34.parseURL());
 			}, debounceDuration);
 			x$43('hashchange', onStateChange);
 			x$43('pushstate', onStateChange);
@@ -9917,11 +9965,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator38 = states.states[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
-				var _ref93 = _step38.value;
+				var _ref94 = _step38.value;
 
-				var _ref94 = _slicedToArray(_ref93, 2);
+				var _ref95 = _slicedToArray(_ref94, 2);
 
-				var state = _ref94[1];
+				var state = _ref95[1];
 
 				results.push(state);
 			}
@@ -9995,58 +10043,9 @@ describe('StateManager', function () {
 		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
 
-	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee54() {
-		var states, name0, name1, name2, _ref96, _ref97, toState, fromState;
+	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee55() {
+		var states, name0, name1, name2, _ref97, _ref98, toState, fromState;
 
-		return regeneratorRuntime.wrap(function _callee54$(_context54) {
-			while (1) {
-				switch (_context54.prev = _context54.next) {
-					case 0:
-						states = new StateManager();
-						name0 = Date.now() + '-defaultState';
-						name1 = Date.now() + '-1';
-						name2 = Date.now() + '-2';
-
-						states.define({
-							name: name0,
-							path: name0
-						}).define({
-							name: name1,
-							path: 'stateA/{param1:\\d+}'
-						}).define({
-							name: name2,
-							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
-						}).otherwise({ name: name0 });
-						_context54.next = 7;
-						return new Promise(function (resolve) {
-							states.on('change', function () {
-								for (var _len45 = arguments.length, data = Array(_len45), _key45 = 0; _key45 < _len45; _key45++) {
-									data[_key45] = arguments[_key45];
-								}
-
-								resolve(data);
-							}).start();
-						});
-
-					case 7:
-						_ref96 = _context54.sent;
-						_ref97 = _slicedToArray(_ref96, 2);
-						toState = _ref97[0];
-						fromState = _ref97[1];
-
-						assert.deepEqual(toState, states.fallback);
-						assert.equal(!fromState, true);
-
-					case 13:
-					case 'end':
-						return _context54.stop();
-				}
-			}
-		}, _callee54, this);
-	})));
-
-	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee55() {
-		var states, name0, name1, name2;
 		return regeneratorRuntime.wrap(function _callee55$(_context55) {
 			while (1) {
 				switch (_context55.prev = _context55.next) {
@@ -10065,17 +10064,28 @@ describe('StateManager', function () {
 						}).define({
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
-						}).otherwise({ name: name0 }).start();
+						}).otherwise({ name: name0 });
 						_context55.next = 7;
 						return new Promise(function (resolve) {
-							states.once('change', resolve);
+							states.on('change', function () {
+								for (var _len45 = arguments.length, data = Array(_len45), _key45 = 0; _key45 < _len45; _key45++) {
+									data[_key45] = arguments[_key45];
+								}
+
+								resolve(data);
+							}).start();
 						});
 
 					case 7:
-						assert.equal(states.is({ name: name0 }), true);
-						assert.equal(states.is({ name: name1 }), false);
+						_ref97 = _context55.sent;
+						_ref98 = _slicedToArray(_ref97, 2);
+						toState = _ref98[0];
+						fromState = _ref98[1];
 
-					case 9:
+						assert.deepEqual(toState, states.fallback);
+						assert.equal(!fromState, true);
+
+					case 13:
 					case 'end':
 						return _context55.stop();
 				}
@@ -10083,8 +10093,8 @@ describe('StateManager', function () {
 		}, _callee55, this);
 	})));
 
-	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee56() {
-		var states, name0, name1, name2, param1, params;
+	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee56() {
+		var states, name0, name1, name2;
 		return regeneratorRuntime.wrap(function _callee56$(_context56) {
 			while (1) {
 				switch (_context56.prev = _context56.next) {
@@ -10103,27 +10113,17 @@ describe('StateManager', function () {
 						}).define({
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
-						}).otherwise({ name: name0 });
+						}).otherwise({ name: name0 }).start();
 						_context56.next = 7;
 						return new Promise(function (resolve) {
-							states.once('change', resolve).start();
+							states.once('change', resolve);
 						});
 
 					case 7:
-						param1 = '' + Date.now();
-						params = { param1: param1 };
-						_context56.next = 11;
-						return new Promise(function (resolve) {
-							states.once('change', resolve).go({
-								name: name1,
-								params: params
-							});
-						});
+						assert.equal(states.is({ name: name0 }), true);
+						assert.equal(states.is({ name: name1 }), false);
 
-					case 11:
-						assert.equal(states.current.name, name1);
-
-					case 12:
+					case 9:
 					case 'end':
 						return _context56.stop();
 				}
@@ -10131,8 +10131,8 @@ describe('StateManager', function () {
 		}, _callee56, this);
 	})));
 
-	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee57() {
-		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
+	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee57() {
+		var states, name0, name1, name2, param1, params;
 		return regeneratorRuntime.wrap(function _callee57$(_context57) {
 			while (1) {
 				switch (_context57.prev = _context57.next) {
@@ -10147,10 +10147,10 @@ describe('StateManager', function () {
 							path: name0
 						}).define({
 							name: name1,
-							path: '/{param1:\\d+}'
+							path: 'stateA/{param1:\\d+}'
 						}).define({
 							name: name2,
-							path: '/{param1:\\d+}/{param2:\\w+}'
+							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
 						_context57.next = 7;
 						return new Promise(function (resolve) {
@@ -10158,37 +10158,20 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						toState0 = _context57.sent;
-
-						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
-						param2 = Date.now() + '_param2';
-						params = {
-							param1: param1,
-							param2: param2
-						};
-						_context57.next = 14;
+						params = { param1: param1 };
+						_context57.next = 11;
 						return new Promise(function (resolve) {
 							states.once('change', resolve).go({
-								name: name2,
+								name: name1,
 								params: params
 							});
 						});
 
-					case 14:
-						toState1 = _context57.sent;
+					case 11:
+						assert.equal(states.current.name, name1);
 
-						assert.equal(toState1.name, name2);
-						assert.equal(states.is({
-							name: name2,
-							params: params
-						}), true);
-						assert.equal(states.isIn({
-							name: name1,
-							params: { param1: param1 }
-						}), true);
-
-					case 18:
+					case 12:
 					case 'end':
 						return _context57.stop();
 				}
@@ -10196,8 +10179,8 @@ describe('StateManager', function () {
 		}, _callee57, this);
 	})));
 
-	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee58() {
-		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
+	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee58() {
+		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
 		return regeneratorRuntime.wrap(function _callee58$(_context58) {
 			while (1) {
 				switch (_context58.prev = _context58.next) {
@@ -10244,23 +10227,88 @@ describe('StateManager', function () {
 						toState1 = _context58.sent;
 
 						assert.equal(toState1.name, name2);
-						_context58.next = 18;
+						assert.equal(states.is({
+							name: name2,
+							params: params
+						}), true);
+						assert.equal(states.isIn({
+							name: name1,
+							params: { param1: param1 }
+						}), true);
+
+					case 18:
+					case 'end':
+						return _context58.stop();
+				}
+			}
+		}, _callee58, this);
+	})));
+
+	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee59() {
+		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
+		return regeneratorRuntime.wrap(function _callee59$(_context59) {
+			while (1) {
+				switch (_context59.prev = _context59.next) {
+					case 0:
+						states = new StateManager();
+						name0 = Date.now() + '-defaultState';
+						name1 = Date.now() + '-1';
+						name2 = Date.now() + '-2';
+
+						states.define({
+							name: name0,
+							path: name0
+						}).define({
+							name: name1,
+							path: '/{param1:\\d+}'
+						}).define({
+							name: name2,
+							path: '/{param1:\\d+}/{param2:\\w+}'
+						}).otherwise({ name: name0 });
+						_context59.next = 7;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).start();
+						});
+
+					case 7:
+						toState0 = _context59.sent;
+
+						assert.equal(toState0.name, name0);
+						param1 = '' + Date.now();
+						param2 = Date.now() + '_param2';
+						params = {
+							param1: param1,
+							param2: param2
+						};
+						_context59.next = 14;
+						return new Promise(function (resolve) {
+							states.once('change', resolve).go({
+								name: name2,
+								params: params
+							});
+						});
+
+					case 14:
+						toState1 = _context59.sent;
+
+						assert.equal(toState1.name, name2);
+						_context59.next = 18;
 						return new Promise(function (resolve) {
 							states.once('change', resolve);
 							history.back();
 						});
 
 					case 18:
-						toState2 = _context58.sent;
+						toState2 = _context59.sent;
 
 						assert.equal(toState2.name, name0);
 
 					case 20:
 					case 'end':
-						return _context58.stop();
+						return _context59.stop();
 				}
 			}
-		}, _callee58, this);
+		}, _callee59, this);
 	})));
 });
 
@@ -10323,14 +10371,14 @@ function test$125(generator) {
 }
 
 function generator$12() {
-	var _this34 = this;
+	var _this35 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this34[index],
+			value: _this35[index],
 			done: length <= index++
 		};
 	});
@@ -10347,11 +10395,11 @@ function test$127(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref102) {
-			var _ref103 = _slicedToArray(_ref102, 3),
-			    string = _ref103[0],
-			    from = _ref103[1],
-			    to = _ref103[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref103) {
+			var _ref104 = _slicedToArray(_ref103, 3),
+			    string = _ref104[0],
+			    from = _ref104[1],
+			    to = _ref104[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10427,11 +10475,11 @@ function test$131(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref104) {
-			var _ref105 = _slicedToArray(_ref104, 3),
-			    expected = _ref105[0],
-			    from = _ref105[1],
-			    to = _ref105[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref105) {
+			var _ref106 = _slicedToArray(_ref105, 3),
+			    expected = _ref106[0],
+			    from = _ref106[1],
+			    to = _ref106[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -10940,31 +10988,31 @@ function test$133(normalize) {
 
 		var tests = void 0;
 
-		before(_asyncToGenerator(regeneratorRuntime.mark(function _callee59() {
+		before(_asyncToGenerator(regeneratorRuntime.mark(function _callee60() {
 			var root, response;
-			return regeneratorRuntime.wrap(function _callee59$(_context59) {
+			return regeneratorRuntime.wrap(function _callee60$(_context60) {
 				while (1) {
-					switch (_context59.prev = _context59.next) {
+					switch (_context60.prev = _context60.next) {
 						case 0:
 							this.timeout(10000);
 							root = document.getElementById('root').textContent;
-							_context59.next = 4;
+							_context60.next = 4;
 							return x$47(root + '/String/normalize/tests.json');
 
 						case 4:
-							response = _context59.sent;
-							_context59.next = 7;
+							response = _context60.sent;
+							_context60.next = 7;
 							return response.json();
 
 						case 7:
-							tests = _context59.sent;
+							tests = _context60.sent;
 
 						case 8:
 						case 'end':
-							return _context59.stop();
+							return _context60.stop();
 					}
 				}
-			}, _callee59, this);
+			}, _callee60, this);
 		})));
 
 		it('should normalize texts', function () {
@@ -11281,11 +11329,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref107) {
-		var _ref108 = _slicedToArray(_ref107, 3),
-		    string = _ref108[0],
-		    from = _ref108[1],
-		    to = _ref108[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref108) {
+		var _ref109 = _slicedToArray(_ref108, 3),
+		    string = _ref109[0],
+		    from = _ref109[1],
+		    to = _ref109[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -11555,16 +11603,16 @@ describe('thermalRGB', function () {
 			assert.deepEqual(thermalRGB.css(1), 'rgb(255,0,0)');
 		});
 
-		it('[id:thermalRGB] should draw an expected map', _asyncToGenerator(regeneratorRuntime.mark(function _callee60() {
+		it('[id:thermalRGB] should draw an expected map', _asyncToGenerator(regeneratorRuntime.mark(function _callee61() {
 			var timeout;
-			return regeneratorRuntime.wrap(function _callee60$(_context60) {
+			return regeneratorRuntime.wrap(function _callee61$(_context61) {
 				while (1) {
-					switch (_context60.prev = _context60.next) {
+					switch (_context61.prev = _context61.next) {
 						case 0:
 							timeout = 5000;
 
 							this.timeout(timeout);
-							_context60.next = 4;
+							_context61.next = 4;
 							return assert.graphicalEqual({
 								name: 'thermalRGB',
 								url: window.root + '/thermalRGB/thermalRGB.png',
@@ -11580,10 +11628,10 @@ describe('thermalRGB', function () {
 
 						case 4:
 						case 'end':
-							return _context60.stop();
+							return _context61.stop();
 					}
 				}
-			}, _callee60, this);
+			}, _callee61, this);
 		})));
 	});
 });
@@ -11822,18 +11870,18 @@ function test$145(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref110, index) {
-			var _ref111 = _slicedToArray(_ref110, 2),
-			    input = _ref111[0],
-			    tests = _ref111[1];
+		].forEach(function (_ref111, index) {
+			var _ref112 = _slicedToArray(_ref111, 2),
+			    input = _ref112[0],
+			    tests = _ref112[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref112) {
-						var _ref113 = _slicedToArray(_ref112, 2),
-						    key = _ref113[0],
-						    expected = _ref113[1];
+					tests.forEach(function (_ref113) {
+						var _ref114 = _slicedToArray(_ref113, 2),
+						    key = _ref114[0],
+						    expected = _ref114[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -12492,11 +12540,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref114) {
-				var _ref115 = _slicedToArray(_ref114, 2),
-				    name = _ref115[0],
-				    _ref115$ = _ref115[1],
-				    value = _ref115$ === undefined ? '' : _ref115$;
+			return this.data.map(function (_ref115) {
+				var _ref116 = _slicedToArray(_ref115, 2),
+				    name = _ref116[0],
+				    _ref116$ = _ref116[1],
+				    value = _ref116$ === undefined ? '' : _ref116$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -12622,31 +12670,31 @@ tests$17(URLSearchParams$2, 'URLSearchParams#j0');
 tests$17(URLSearchParams);
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee62() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee63() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee62$(_context62) {
+		return regeneratorRuntime.wrap(function _callee63$(_context63) {
 			while (1) {
-				switch (_context62.prev = _context62.next) {
+				switch (_context63.prev = _context63.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.8;
-						_context62.next = 6;
+						_context63.next = 6;
 						return wait$1(duration, data);
 
 					case 6:
-						actual = _context62.sent;
+						actual = _context63.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context62.stop();
+						return _context63.stop();
 				}
 			}
-		}, _callee62, this);
+		}, _callee63, this);
 	})));
 });
 
