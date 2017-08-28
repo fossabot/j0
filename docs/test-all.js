@@ -3318,8 +3318,7 @@ var J0Element = function () {
 	}, {
 		key: 'focused',
 		get: function get() {
-			var focusedElement = dom.find(':focus');
-			return this.equals(focusedElement);
+			return this.equals(x$3.activeElement);
 		}
 	}]);
 
@@ -5590,6 +5589,8 @@ describe('J0Element.prototype.firstChild', function () {
 	});
 });
 
+var x$36 = setTimeout;
+
 describe('J0Element.prototype.focused', function () {
 
 	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
@@ -5604,15 +5605,33 @@ describe('J0Element.prototype.focused', function () {
 					case 2:
 						body = _context18.sent;
 						element = dom({
-							t: 'input'
+							t: 'input',
+							a: [['type', 'text']]
 						});
 
 						body.append(element);
-						element.node.focus();
+						_context18.next = 7;
+						return new x$10(function (resolve, reject) {
+							var count = 0;
+							function check() {
+								element.node.click();
+								element.node.focus();
+								if (element.equals(x$3.activeElement)) {
+									resolve();
+								} else if (count++ < 20) {
+									x$36(check, 100);
+								} else {
+									reject(new Error('Failed to focus an element'));
+								}
+							}
+							check();
+						});
+
+					case 7:
 						assert.equal(element.focused, true);
 						element.remove();
 
-					case 8:
+					case 9:
 					case 'end':
 						return _context18.stop();
 				}
@@ -5636,11 +5655,10 @@ describe('J0Element.prototype.focused', function () {
 						});
 
 						body.append(element);
-						element.node.blur();
 						assert.equal(element.focused, false);
 						element.remove();
 
-					case 8:
+					case 7:
 					case 'end':
 						return _context19.stop();
 				}
@@ -6550,13 +6568,13 @@ describe('Lazy', function () {
 	});
 });
 
-var x$36 = localStorageIsAvailable;
+var x$37 = localStorageIsAvailable;
 
 var localStorage$1 = new J0Storage();
 
 test$27(localStorage$1, 'localStorage#j0');
 
-if (x$36) {
+if (x$37) {
 	test$27(localStorage, 'localStorage');
 } else {
 	x$31.info('Tests for localStorage are skipped.');
@@ -6948,10 +6966,10 @@ function test$36(acosh) {
 	});
 }
 
-var x$37 = Math;
+var x$38 = Math;
 
 function acosh(x) {
-	return x$37.log(x + x$37.sqrt(x * x - 1));
+	return x$38.log(x + x$38.sqrt(x * x - 1));
 }
 
 test$36(acosh, 'Math.acosh#j0');
@@ -7030,7 +7048,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$37.log(x + x$37.sqrt(x * x + 1));
+	return x$38.log(x + x$38.sqrt(x * x + 1));
 }
 
 test$40(asinh, 'Math.asinh#j0');
@@ -7169,7 +7187,7 @@ function test$46(atanh) {
 }
 
 function atanh(x) {
-	return x$37.log((1 + x) / (1 - x)) / 2;
+	return x$38.log((1 + x) / (1 - x)) / 2;
 }
 
 test$46(atanh, 'Math.atanh#j0');
@@ -7211,7 +7229,7 @@ function test$48(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$37.pow(x$37.abs(x), 1 / 3);
+	var root = x$38.pow(x$38.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -7295,7 +7313,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$37.floor(x$37.log(x >>> 0) * x$37.LOG2E);
+	return 31 - x$38.floor(x$38.log(x >>> 0) * x$38.LOG2E);
 }
 
 test$52(clz32, 'Math.clz32#j0');
@@ -7371,7 +7389,7 @@ function test$56(cosh) {
 }
 
 function cosh(x) {
-	var y = x$37.exp(x);
+	var y = x$38.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -7463,7 +7481,7 @@ function test$62(expm1) {
 }
 
 function expm1(x) {
-	return x$37.exp(x) - 1;
+	return x$38.exp(x) - 1;
 }
 
 test$62(expm1, 'Math.expm1#j0');
@@ -7598,7 +7616,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$37.sqrt(sum);
+	return x$38.sqrt(sum);
 }
 
 test$68(hypot, 'Math.hypot#j0');
@@ -7772,7 +7790,7 @@ function test$78(log10) {
 }
 
 function log10(x) {
-	return x$37.log(x) / x$37.LN10;
+	return x$38.log(x) / x$38.LN10;
 }
 
 test$78(log10, 'Math.log10#j0');
@@ -7828,7 +7846,7 @@ function test$82(log1p) {
 }
 
 function log1p(x) {
-	return x$37.log(x + 1);
+	return x$38.log(x + 1);
 }
 
 test$82(log1p, 'Math.log1p#j0');
@@ -7869,7 +7887,7 @@ function test$84(log2) {
 }
 
 function log2(x) {
-	return x$37.log(x) / x$37.LN2;
+	return x$38.log(x) / x$38.LN2;
 }
 
 test$84(log2, 'Math.log2#j0');
@@ -8115,11 +8133,11 @@ function test$100(sign) {
 	});
 }
 
-var x$38 = isNaN;
+var x$39 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$38(x)) {
+	if (x === 0 || x$39(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -8198,7 +8216,7 @@ function test$104(sinh) {
 }
 
 function sinh(x) {
-	var y = x$37.exp(x);
+	var y = x$38.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -8345,7 +8363,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$37.exp(2 * x);
+	var y = x$38.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -8773,8 +8791,6 @@ describe('passThrough', function () {
 	});
 });
 
-var x$39 = setTimeout;
-
 // import postMessage from '../postMessage';
 // import addEventListner from '../dom/addEventListener';
 if (!x$35.immediateId) {
@@ -8810,7 +8826,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$39(fn);
+	return x$36(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -8826,7 +8842,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$39(function () {
+x$36(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -9595,12 +9611,12 @@ var State = function () {
 			if (pos < path.length) {
 				parts.push(path.slice(pos));
 			}
-			var matcher = new RegExp(parts.map(function (part) {
+			var matcher = new RegExp('^' + parts.map(function (part) {
 				if (isString(part)) {
 					return part;
 				}
 				return '(' + part[2] + ')';
-			}).join(''));
+			}).join('') + '/?$');
 			assign(stateInfo, {
 				parts: parts,
 				matcher: matcher
@@ -9649,7 +9665,7 @@ var State = function () {
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
-			var params = void 0;
+			var params = null;
 			href.replace(this.matcher, function (match) {
 				for (var _len44 = arguments.length, args = Array(_len44 > 1 ? _len44 - 1 : 0), _key44 = 1; _key44 < _len44; _key44++) {
 					args[_key44 - 1] = arguments[_key44];
@@ -9758,6 +9774,30 @@ describe('State', function () {
 			param2: param2
 		};
 		assert.deepEqual(state.parse(state.href(params)), params);
+	});
+
+	it('should return nothing if given href has extra prefix', function () {
+		var path = '/{param1:\\d+}/{param2:\\d+}';
+		var state = new State({ path: path });
+		var param1 = '' + Date.now();
+		var param2 = '' + (Date.now() + 1000);
+		var params = {
+			param1: param1,
+			param2: param2
+		};
+		assert.equal(state.parse('_' + state.href(params)), null);
+	});
+
+	it('should return nothing if given href has extra suffix', function () {
+		var path = '/{param1:\\d+}/{param2:\\d+}';
+		var state = new State({ path: path });
+		var param1 = '' + Date.now();
+		var param2 = '' + (Date.now() + 1000);
+		var params = {
+			param1: param1,
+			param2: param2
+		};
+		assert.equal(state.parse(state.href(params) + '_'), null);
 	});
 
 	it('should instantiate a state', function () {
@@ -11649,7 +11689,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$37.floor(clamp(256 * v, 0, 255));
+		return x$38.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -11720,7 +11760,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$39(function () {
+			timer = x$36(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
