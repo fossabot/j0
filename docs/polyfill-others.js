@@ -3155,10 +3155,13 @@ function parse$2(rawHeaders) {
 
 var x$41 = XMLHttpRequest;
 
-function fetch(input, init) {
+function fetch(input, init, cb) {
 	return new x$28(function (resolve, reject) {
 		var request = new Request(input, init);
 		var xhr = new x$41();
+		if (isFunction(cb)) {
+			cb(xhr);
+		}
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,

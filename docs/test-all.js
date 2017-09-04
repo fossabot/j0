@@ -1288,7 +1288,7 @@ describe('cancelAnimationFrame', function () {
 						baseInterval = _context4.sent;
 						timeoutMargin = 50;
 
-						this.timeout(Math.max(10000, timeoutMargin * baseInterval));
+						this.timeout(Math.max(10000, baseInterval * timeoutMargin));
 						assert.equal(0 < baseInterval, true);
 						_context4.next = 8;
 						return new Promise(function (resolve) {
@@ -1298,7 +1298,7 @@ describe('cancelAnimationFrame', function () {
 					case 8:
 						_context4.next = 10;
 						return new Promise(function (resolve, reject) {
-							setTimeout(resolve, baseInterval * timeoutMargin);
+							setTimeout(resolve, baseInterval * timeoutMargin / 2);
 							var id = x$23(reject);
 							x$22(id);
 						});
@@ -4023,10 +4023,13 @@ function parse$2(rawHeaders) {
 
 var x$33 = XMLHttpRequest;
 
-function fetch$1(input, init) {
+function fetch$1(input, init, cb) {
 	return new x$10(function (resolve, reject) {
 		var request = new Request$1(input, init);
 		var xhr = new x$33();
+		if (isFunction(cb)) {
+			cb(xhr);
+		}
 		xhr.onload = function () {
 			var options = {
 				status: xhr.status,
