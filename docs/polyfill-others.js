@@ -511,7 +511,11 @@ function endsWith(fragment) {
 
 var prototype$9 = String.prototype;
 
-if (!prototype$9.endsWith) {
+try {
+	if (!'abc'.endsWith('ab')) {
+		throw String;
+	}
+} catch (error) {
 	prototype$9.endsWith = endsWith;
 }
 
@@ -548,6 +552,20 @@ function fromCodePoint() {
 
 if (!String.fromCodePoint) {
 	String.fromCodePoint = fromCodePoint;
+}
+
+function includes$1(fragment) {
+	return 0 <= this.indexOf(fragment);
+}
+
+var prototype$10 = String.prototype;
+
+try {
+	if (!'abc'.includes('b')) {
+		throw String;
+	}
+} catch (error) {
+	prototype$10.includes = includes$1;
 }
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -999,10 +1017,10 @@ function normalize(form) {
 	return unorm[form.toLowerCase()](this);
 }
 
-var prototype$10 = String.prototype;
+var prototype$11 = String.prototype;
 
-if (!prototype$10.normalize) {
-	prototype$10.normalize = normalize;
+if (!prototype$11.normalize) {
+	prototype$11.normalize = normalize;
 }
 
 function padEnd(targetLength) {
@@ -1062,22 +1080,26 @@ function repeat(c) {
 	return results.join('');
 }
 
-var prototype$11 = String.prototype;
+var prototype$12 = String.prototype;
 
 try {
 	'0'.repeat(1);
 } catch (error) {
-	prototype$11.repeat = repeat;
+	prototype$12.repeat = repeat;
 }
 
 function startsWith(fragment) {
 	return this.slice(0, fragment.length) === fragment;
 }
 
-var prototype$12 = String.prototype;
+var prototype$13 = String.prototype;
 
-if (!prototype$12.startsWith) {
-	prototype$12.startsWith = startsWith;
+try {
+	if (!'abc'.startsWith('ab')) {
+		throw String;
+	}
+} catch (error) {
+	prototype$13.startsWith = startsWith;
 }
 
 var x$10 = window;
@@ -2249,10 +2271,10 @@ function generator$2() {
 	return this.entries();
 }
 
-var prototype$13 = x$18.prototype;
+var prototype$14 = x$18.prototype;
 
-if (!prototype$13[iteratorSymbol]) {
-	prototype$13[iteratorSymbol] = generator$2;
+if (!prototype$14[iteratorSymbol]) {
+	prototype$14[iteratorSymbol] = generator$2;
 }
 
 var Set$1 = function () {
@@ -2383,14 +2405,14 @@ function generator$4() {
 	return this.values();
 }
 
-var prototype$14 = x$19.prototype;
+var prototype$15 = x$19.prototype;
 
 try {
 	if (new x$19([1])[iteratorSymbol]().next().value !== 1) {
 		throw 0;
 	}
 } catch (e) {
-	prototype$14[iteratorSymbol] = generator$4;
+	prototype$15[iteratorSymbol] = generator$4;
 }
 
 var x$20 = NodeList;
@@ -2409,10 +2431,10 @@ function generator$6() {
 	});
 }
 
-var prototype$15 = x$20.prototype;
+var prototype$16 = x$20.prototype;
 
-if (!prototype$15[iteratorSymbol]) {
-	prototype$15[iteratorSymbol] = generator$6;
+if (!prototype$16[iteratorSymbol]) {
+	prototype$16[iteratorSymbol] = generator$6;
 }
 
 var x$21 = HTMLCollection;
@@ -2433,10 +2455,10 @@ function generator$8() {
 	};
 }
 
-var prototype$16 = x$21.prototype;
+var prototype$17 = x$21.prototype;
 
-if (!prototype$16[iteratorSymbol]) {
-	prototype$16[iteratorSymbol] = generator$8;
+if (!prototype$17[iteratorSymbol]) {
+	prototype$17[iteratorSymbol] = generator$8;
 }
 
 var x$22 = NamedNodeMap;
@@ -2455,10 +2477,10 @@ function generator$10() {
 	});
 }
 
-var prototype$17 = x$22.prototype;
+var prototype$18 = x$22.prototype;
 
-if (!prototype$17[iteratorSymbol]) {
-	prototype$17[iteratorSymbol] = generator$10;
+if (!prototype$18[iteratorSymbol]) {
+	prototype$18[iteratorSymbol] = generator$10;
 }
 
 var StringList = function () {

@@ -33,7 +33,7 @@ var wait$1 = function () {
 		}, _callee64, this);
 	}));
 
-	return function wait$1(_x110, _x111) {
+	return function wait$1(_x111, _x112) {
 		return _ref119.apply(this, arguments);
 	};
 }();
@@ -10635,6 +10635,38 @@ test$131(fromCodePoint, 'String.fromCodePoint#j0');
 
 test$131(String.fromCodePoint);
 
+function test$133(includes) {
+	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.includes';
+
+
+	describe(name, function () {
+
+		it('should return whether the string includes the given string or not', function () {
+			var fragment = Date.now().toString(16);
+			var string1 = 'abc' + fragment + 'def';
+			var string2 = 'abcdef';
+			assert.equal(includes.call(string1, fragment), true);
+			assert.equal(includes.call(string2, fragment), false);
+		});
+
+		it('should return whether the string includes the given string or not [multibytes]', function () {
+			var fragment = '\uD842\uDC34\uD842\uDC38\uD842\uDC38\uD842\uDC34' + Date.now().toString(16);
+			var string1 = 'abc' + fragment + 'def';
+			var string2 = 'abcdef';
+			assert.equal(includes.call(string1, fragment), true);
+			assert.equal(includes.call(string2, fragment), false);
+		});
+	});
+}
+
+function includes$2(fragment) {
+	return 0 <= this.indexOf(fragment);
+}
+
+test$133(includes$2, 'String.prototype.includes#j0');
+
+test$133(String.prototype.includes);
+
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function createCommonjsModule(fn, module) {
@@ -11088,7 +11120,7 @@ var x$47 = fetch;
 
 var forms = ['NFC', 'NFD', 'NFKC', 'NFKD'];
 
-function test$133(normalize) {
+function test$135(normalize) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.normalize';
 
 
@@ -11155,11 +11187,11 @@ function test$133(normalize) {
 	});
 }
 
-test$133(normalize, 'String.prototype.normalize#j0');
+test$135(normalize, 'String.prototype.normalize#j0');
 
-test$133(String.prototype.normalize);
+test$135(String.prototype.normalize);
 
-function test$135(padEnd) {
+function test$137(padEnd) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.padEnd';
 
 
@@ -11202,11 +11234,11 @@ function padEnd(targetLength) {
 	return result;
 }
 
-test$135(padEnd, 'String.prototype.padEnd#j0');
+test$137(padEnd, 'String.prototype.padEnd#j0');
 
-test$135(String.prototype.padEnd);
+test$137(String.prototype.padEnd);
 
-function test$137(padStart) {
+function test$139(padStart) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.padStart';
 
 
@@ -11251,11 +11283,11 @@ function padStart(targetLength) {
 	return result;
 }
 
-test$137(padStart, 'String.prototype.padStart#j0');
+test$139(padStart, 'String.prototype.padStart#j0');
 
-test$137(String.prototype.padStart);
+test$139(String.prototype.padStart);
 
-function test$139(repeat) {
+function test$141(repeat) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.repeat';
 
 
@@ -11281,11 +11313,11 @@ function repeat(c) {
 	return results.join('');
 }
 
-test$139(repeat, 'String.prototype.repeat#j0');
+test$141(repeat, 'String.prototype.repeat#j0');
 
-test$139(String.prototype.repeat);
+test$141(String.prototype.repeat);
 
-function test$141(startsWith) {
+function test$143(startsWith) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'String.prototype.startsWith';
 
 
@@ -11313,9 +11345,9 @@ function startsWith(fragment) {
 	return this.slice(0, fragment.length) === fragment;
 }
 
-test$141(startsWith, 'String.prototype.startsWith#j0');
+test$143(startsWith, 'String.prototype.startsWith#j0');
 
-test$141(String.prototype.startsWith);
+test$143(String.prototype.startsWith);
 
 describe('StringList', function () {
 
@@ -11454,7 +11486,7 @@ describe('stringToCodePoints', function () {
 	});
 });
 
-function test$143(_Symbol) {
+function test$145(_Symbol) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Symbol';
 
 
@@ -11498,9 +11530,9 @@ function test$143(_Symbol) {
 	});
 }
 
-test$143(Symbol, 'J0Symbol');
+test$145(Symbol, 'J0Symbol');
 
-test$143(Symbol);
+test$145(Symbol);
 
 /* eslint-disable no-magic-numbers */
 function isIn(x, min, max) {
@@ -11797,7 +11829,7 @@ describe('throttle', function () {
 	});
 });
 
-function test$145(URL) {
+function test$147(URL) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'URL';
 
 
@@ -12627,9 +12659,9 @@ x$4.defineProperties(URL$1, {
 	revokeObjectURL: { value: x$49.revokeObjectURL }
 });
 
-test$145(URL$1, 'URL#j0');
+test$147(URL$1, 'URL#j0');
 
-test$145(URL);
+test$147(URL);
 
 var separator = '&';
 var equal = '=';
