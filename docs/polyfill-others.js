@@ -1106,8 +1106,6 @@ var x$10 = window;
 
 var x$11 = setTimeout;
 
-// import postMessage from '../postMessage';
-// import addEventListner from '../dom/addEventListener';
 if (!x$10.immediateId) {
 	x$10.immediateId = 0;
 }
