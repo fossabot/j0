@@ -2935,6 +2935,11 @@ var N = function () {
 			return this.node.getAttribute(name);
 		}
 	}, {
+		key: 'removeAttribute',
+		value: function removeAttribute(name) {
+			return this.node.removeAttribute(name);
+		}
+	}, {
 		key: 'getMethodCaller',
 		value: function getMethodCaller(methodName) {
 			if (!isFunction(this[methodName])) {
@@ -6948,6 +6953,30 @@ describe('N.prototype.attributes', function () {
 		assert.equal(element.getAttribute(key), null);
 		element.setAttribute(key, value1, value2);
 		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+	});
+
+	it('should remove an attribute', function () {
+		var element = new N();
+		var key = 'attr-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.setAttribute(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+		element.removeAttribute(key);
+		assert.equal(element.getAttribute(key), null);
+	});
+
+	it('should remove a "data-" prefixed attribute', function () {
+		var element = new N();
+		var key = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.setAttribute(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+		element.removeAttribute(key);
+		assert.equal(element.getAttribute(key), null);
 	});
 
 	it('should return a map of attributes', function () {
