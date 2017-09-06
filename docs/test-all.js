@@ -2688,34 +2688,52 @@ function callMethod(event) {
 	x$10.resolve(this[event.type](event)).catch(x$31.error);
 }
 
+var getBody = new x$10(function (resolve) {
+	var interval = 50;
+	function check() {
+		var body = x$3.body;
+
+		if (body) {
+			resolve(new N(body));
+		} else {
+			setTimeout(check, interval);
+		}
+	}
+	setTimeout(check);
+});
+
+var nodeKey = Symbol();
+
+function wrap(element) {
+	return new N(element);
+}
+
+function _find(selector, rootElement) {
+	var element = (rootElement ? wrap(rootElement).node : x$3).querySelector(selector);
+	return element ? wrap(element) : null;
+}
+
 function _findAll(selector, rootElement) {
-	var list = (rootElement ? dom(rootElement).node : x$3).querySelectorAll(selector);
+	var list = (rootElement ? wrap(rootElement).node : x$3).querySelectorAll(selector);
 	var result = [];
 	for (var i = 0, length = list.length; i < length; i++) {
-		result[i] = dom(list[i]);
+		result[i] = wrap(list[i]);
 	}
 	return result;
 }
 
-function _find(selector, rootElement) {
-	var element = (rootElement ? dom(rootElement).node : x$3).querySelector(selector);
-	return element ? dom(element) : null;
-}
-
-var nodeKey = Symbol();
-
-var J0Element = function () {
-	function J0Element() {
+var N = function () {
+	function N() {
 		var _this3 = this;
 
 		var source = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-		_classCallCheck(this, J0Element);
+		_classCallCheck(this, N);
 
 		assign(this, {
 			listeners: new x$28()
 		});
-		if (source instanceof J0Element) {
+		if (source instanceof N) {
 			this[nodeKey] = source.node;
 		} else if (isString(source)) {
 			this[nodeKey] = x$3.createTextNode(source);
@@ -2730,7 +2748,7 @@ var J0Element = function () {
 			    n = _ref15.n,
 			    o = _ref15.o;
 
-			this[nodeKey] = dom(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
+			this[nodeKey] = wrap(n ? x$3.createElementNS(n, t, o) : x$3.createElement(t || 'div')).node;
 			if (c) {
 				this.append.apply(this, _toConsumableArray(c));
 			}
@@ -2743,10 +2761,20 @@ var J0Element = function () {
 		}
 	}
 
-	_createClass(J0Element, [{
+	_createClass(N, [{
+		key: 'find',
+		value: function find(selector) {
+			return _find(selector, this);
+		}
+	}, {
+		key: 'findAll',
+		value: function findAll(selector) {
+			return _findAll(selector, this);
+		}
+	}, {
 		key: 'equals',
 		value: function equals(element) {
-			return this.node === dom(element).node;
+			return this.node === wrap(element).node;
 		}
 	}, {
 		key: 'setText',
@@ -2763,13 +2791,13 @@ var J0Element = function () {
 	}, {
 		key: 'setParent',
 		value: function setParent(source) {
-			dom(source).append(this);
+			wrap(source).append(this);
 			return this;
 		}
 	}, {
 		key: 'insertBefore',
 		value: function insertBefore(newElement, referenceElement) {
-			this.node.insertBefore(dom(newElement).node, referenceElement && referenceElement.node);
+			this.node.insertBefore(wrap(newElement).node, referenceElement && referenceElement.node);
 		}
 	}, {
 		key: 'setPrevious',
@@ -2779,7 +2807,7 @@ var J0Element = function () {
 			}
 
 			while (0 < elements.length) {
-				var element = dom(elements.shift());
+				var element = wrap(elements.shift());
 				this.parent.insertBefore(element, this);
 			}
 			return this;
@@ -2794,7 +2822,7 @@ var J0Element = function () {
 			}
 
 			while (0 < elements.length) {
-				var element = dom(elements.pop());
+				var element = wrap(elements.pop());
 				this.parent.insertBefore(element, lastElement);
 				lastElement = element;
 			}
@@ -2827,7 +2855,7 @@ var J0Element = function () {
 	}, {
 		key: 'replaceChild',
 		value: function replaceChild(newChild, oldChild) {
-			this.node.replaceChild(dom(newChild).node, dom(oldChild).node);
+			this.node.replaceChild(wrap(newChild).node, wrap(oldChild).node);
 			return this;
 		}
 	}, {
@@ -2837,7 +2865,7 @@ var J0Element = function () {
 				newChilds[_key16] = arguments[_key16];
 			}
 
-			var lastNewChild = dom(newChilds.pop());
+			var lastNewChild = wrap(newChilds.pop());
 			this.parent.replaceChild(lastNewChild, this);
 			lastNewChild.setPrevious.apply(lastNewChild, newChilds);
 		}
@@ -2866,7 +2894,7 @@ var J0Element = function () {
 
 			elements.forEach(function (element) {
 				if (isString(element) || element) {
-					node.appendChild(dom(element).node);
+					node.appendChild(wrap(element).node);
 				}
 			});
 			return this;
@@ -2939,7 +2967,7 @@ var J0Element = function () {
 
 			var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.getMethodCaller(eventName);
 
-			if (dom.eventFilter && dom.eventFilter.call(this, eventName, fn)) {
+			if (N.eventFilter && N.eventFilter.call(this, eventName, fn)) {
 				return this;
 			}
 			var wrapped = function wrapped(event) {
@@ -2973,16 +3001,6 @@ var J0Element = function () {
 			var event = new x$27(eventName, { detail: detail });
 			this.node.dispatchEvent(event);
 			return this;
-		}
-	}, {
-		key: 'find',
-		value: function find(selector) {
-			return _find(selector, this);
-		}
-	}, {
-		key: 'findAll',
-		value: function findAll(selector) {
-			return _findAll(selector, this);
 		}
 	}, {
 		key: 'setStyle',
@@ -3067,7 +3085,7 @@ var J0Element = function () {
 		value: function clone() {
 			var deep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
-			return dom(this.node.cloneNode(deep));
+			return wrap(this.node.cloneNode(deep));
 		}
 	}, {
 		key: 'toObject',
@@ -3161,45 +3179,45 @@ var J0Element = function () {
 		get: function get() {
 			var parentNode = this.node.parentNode;
 
-			return parentNode && dom(parentNode);
+			return parentNode && wrap(parentNode);
 		}
 	}, {
 		key: 'previous',
 		get: function get() {
 			var previousSibling = this.node.previousSibling;
 
-			return previousSibling ? dom(previousSibling) : null;
+			return previousSibling ? wrap(previousSibling) : null;
 		}
 	}, {
 		key: 'next',
 		get: function get() {
 			var nextSibling = this.node.nextSibling;
 
-			return nextSibling ? dom(nextSibling) : null;
+			return nextSibling ? wrap(nextSibling) : null;
 		}
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return x$25.from(this.node.childNodes).map(dom);
+			return x$25.from(this.node.childNodes).map(wrap);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return x$25.from(this.node.children).map(dom);
+			return x$25.from(this.node.children).map(wrap);
 		}
 	}, {
 		key: 'firstChild',
 		get: function get() {
 			var firstChild = this.node.firstChild;
 
-			return firstChild ? dom(firstChild) : null;
+			return firstChild ? wrap(firstChild) : null;
 		}
 	}, {
 		key: 'lastChild',
 		get: function get() {
 			var lastChild = this.node.lastChild;
 
-			return lastChild ? dom(lastChild) : null;
+			return lastChild ? wrap(lastChild) : null;
 		}
 	}, {
 		key: 'bb',
@@ -3320,74 +3338,62 @@ var J0Element = function () {
 		get: function get() {
 			return this.equals(x$3.activeElement);
 		}
+	}], [{
+		key: 'ready',
+		value: function () {
+			var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
+				var body;
+				return regeneratorRuntime.wrap(function _callee10$(_context10) {
+					while (1) {
+						switch (_context10.prev = _context10.next) {
+							case 0:
+								_context10.next = 2;
+								return getBody;
+
+							case 2:
+								body = _context10.sent;
+
+								if (fn) {
+									fn(body);
+								}
+								return _context10.abrupt('return', body);
+
+							case 5:
+							case 'end':
+								return _context10.stop();
+						}
+					}
+				}, _callee10, this);
+			}));
+
+			function ready(_x30) {
+				return _ref17.apply(this, arguments);
+			}
+
+			return ready;
+		}()
+	}, {
+		key: 'wrap',
+		get: function get() {
+			return wrap;
+		}
+	}, {
+		key: 'find',
+		get: function get() {
+			return _find;
+		}
+	}, {
+		key: 'findAll',
+		get: function get() {
+			return _findAll;
+		}
 	}]);
 
-	return J0Element;
+	return N;
 }();
 
-var getBody = new x$10(function (resolve) {
-	var interval = 50;
-	function check() {
-		var body = x$3.body;
-
-		if (body) {
-			resolve(dom(body));
-		} else {
-			setTimeout(check, interval);
-		}
-	}
-	setTimeout(check);
-});
-
-function dom(source) {
-	return new J0Element(source);
-}
-assign(dom, {
-	find: _find,
-	findAll: _findAll,
-	ready: function () {
-		var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(fn) {
-			var body;
-			return regeneratorRuntime.wrap(function _callee10$(_context10) {
-				while (1) {
-					switch (_context10.prev = _context10.next) {
-						case 0:
-							_context10.next = 2;
-							return getBody;
-
-						case 2:
-							body = _context10.sent;
-
-							if (fn) {
-								fn(body);
-							}
-							return _context10.abrupt('return', body);
-
-						case 5:
-						case 'end':
-							return _context10.stop();
-					}
-				}
-			}, _callee10, this);
-		}));
-
-		function ready(_x30) {
-			return _ref17.apply(this, arguments);
-		}
-
-		return ready;
-	}()
-});
-
-describe('dom (J0Element)', function () {
-
-	it('should create a new J0Element', function () {
-		assert.equal('node' in dom(), true);
-	});
-});
-
 function emitAll(eventName, data, selector, rootElement) {
-	dom.findAll(selector, rootElement).forEach(function (element) {
+	N.findAll(selector, rootElement).forEach(function (element) {
 		element.emit(eventName, data);
 	});
 }
@@ -3402,28 +3408,28 @@ describe('emitAll', function () {
 		var className = 'class' + Date.now();
 		var eventName = 'event' + Date.now();
 		var eventData = 'eventData' + Date.now();
-		var element1 = dom({
+		var element1 = new N({
 			a: [['class', className]],
 			e: [[eventName, fn]]
 		});
-		var element2 = dom({
+		var element2 = new N({
 			a: [['class', className]],
 			e: [[eventName, fn]]
 		});
-		var element3 = dom({
+		var element3 = new N({
 			a: [['class', className]],
 			e: [[eventName, fn]]
 		});
-		var element4 = dom({
+		var element4 = new N({
 			a: [['class', className]],
 			e: [[eventName, fn]]
 		});
-		var element5 = dom({
+		var element5 = new N({
 			a: [['class', className]],
 			c: [element3, element4],
 			e: [[eventName, fn]]
 		});
-		var element = dom({
+		var element = new N({
 			c: [element1, element2, element5]
 		});
 		emitAll(eventName, eventData, '.' + className, element);
@@ -4842,1563 +4848,6 @@ describe('Iterator', function () {
 	});
 });
 
-describe('J0Element.prototype.append', function () {
-
-	it('should append nodes', function () {
-		var element1 = dom(Date.now() + '-1');
-		var element2 = dom();
-		var element3 = dom(Date.now() + '-2');
-		var element = dom({
-			c: [element1]
-		});
-		element.append(element2, element3);
-		var expected = [element1, element2, element3];
-		element.childNodes.forEach(function (element, index) {
-			assert.equal(element.equals(expected[index]), true);
-		});
-	});
-
-	it('should skip null or false or undefined', function () {
-		var element1 = dom(Date.now() + '-1');
-		var element2 = dom();
-		var element3 = dom(Date.now() + '-2');
-		var element = dom({
-			c: [element1]
-		});
-		element.append(0, element2, null, element3);
-		var expected = [element1, element2, element3];
-		element.childNodes.forEach(function (element, index) {
-			assert.equal(element.equals(expected[index]), true);
-		});
-	});
-});
-
-describe('J0Element.prototype.attributes', function () {
-
-	it('should set an attribute', function () {
-		var element = dom();
-		var key = 'attr-' + Date.now();
-		var value1 = 'value-' + Date.now();
-		var value2 = 'value-' + Date.now();
-		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
-		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
-	});
-
-	it('should set a "data-" prefixed attribute', function () {
-		var element = dom();
-		var key = 'data-' + Date.now();
-		var value1 = 'value-' + Date.now();
-		var value2 = 'value-' + Date.now();
-		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
-		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
-	});
-
-	it('should return a map of attributes', function () {
-		var key1 = 'attr-' + Date.now();
-		var key2 = 'data-' + Date.now();
-		var value1 = 'value-' + Date.now();
-		var value2 = 'value-' + Date.now();
-		var element = dom({
-			a: [[key1, value2], [key1, value1], [key2, value2]]
-		});
-		assert.deepEqual(Array.from(element.attributes), [[key1, value1], [key2, value2]]);
-	});
-});
-
-describe('J0Element.prototype.bb', function () {
-
-	it('should get a bounding box', function () {
-		var element = dom();
-		dom(document.body).append(element);
-		var _element$bb = element.bb,
-		    left = _element$bb.left,
-		    top = _element$bb.top;
-
-		assert.equal(0 <= left, true);
-		assert.equal(0 <= top, true);
-		element.remove();
-	});
-});
-
-describe('J0Element.prototype.childNodes', function () {
-
-	it('should return all nodes under the element', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.deepEqual(element.childNodes, [element1, element2]);
-	});
-});
-
-describe('J0Element.prototype.children', function () {
-
-	it('should return all elements under the element', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.deepEqual(element.children, [element2]);
-	});
-});
-
-describe('J0Element.prototype.addClass', function () {
-
-	it('should add a class', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var element = dom({
-			a: [['class', class1]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
-		element.addClass(class2);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-	});
-
-	it('should add 2 classes', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var class3 = '_' + Date.now() + '-3';
-		var element = dom({
-			a: [['class', class1]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
-		element.addClass(class2, class3);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2, class3]);
-	});
-});
-
-describe('J0Element.prototype.removeClass', function () {
-
-	it('should remove a class', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var element = dom({
-			a: [['class', class1 + ' ' + class2]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-		element.removeClass(class2);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
-	});
-
-	it('should remove 2 classes', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var class3 = '_' + Date.now() + '-3';
-		var element = dom({
-			a: [['class', class1 + ' ' + class2 + ' ' + class3]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2, class3]);
-		element.removeClass(class2, class3);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
-	});
-});
-
-describe('J0Element.prototype.toggleClass', function () {
-
-	it('should toggle a class', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var element = dom({
-			a: [['class', class1 + ' ' + class2]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-		element.toggleClass(class2);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
-		element.toggleClass(class2);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-	});
-
-	it('should toggle 2 classes', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var class3 = '_' + Date.now() + '-3';
-		var element = dom({
-			a: [['class', class1 + ' ' + class2]]
-		});
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-		element.toggleClass(class2, class3);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class3]);
-		element.toggleClass(class2, class3);
-		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
-	});
-});
-
-describe('J0Element.prototype.hasClass', function () {
-
-	it('should check a class', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var element = dom({
-			a: [['class', class1]]
-		});
-		assert.equal(element.hasClass(class1), true);
-		assert.equal(element.hasClass(class2), false);
-	});
-
-	it('should check 2 classes', function () {
-		var class1 = '_' + Date.now() + '-1';
-		var class2 = '_' + Date.now() + '-2';
-		var class3 = '_' + Date.now() + '-3';
-		var element = dom({
-			a: [['class', class1, class2]]
-		});
-		assert.equal(element.hasClass(class1), true);
-		assert.equal(element.hasClass(class1, class2), true);
-		assert.equal(element.hasClass(class1, class3), false);
-	});
-
-	it('should check nodes which has no classList', function () {
-		var element = dom(document);
-		assert.equal(element.hasClass(), true);
-		assert.equal(element.hasClass('_' + Date.now()), false);
-	});
-});
-
-describe('J0Element.prototype.clone', function () {
-
-	it('should clone a text node', function () {
-		var text = '' + Date.now();
-		var element1 = dom(text);
-		assert.equal(element1.text, text);
-		var element2 = element1.clone();
-		assert.equal(element2.text, text);
-	});
-
-	it('should clone an element node', function () {
-		var text = '' + Date.now();
-		var element1 = dom({
-			c: [text]
-		});
-		assert.equal(element1.text, text);
-		var element2 = element1.clone();
-		assert.equal(element2.text, text);
-	});
-
-	it('should clone an element node shallowly', function () {
-		var text = '' + Date.now();
-		var element1 = dom({
-			c: [text]
-		});
-		assert.equal(element1.text, text);
-		var element2 = element1.clone(false);
-		assert.equal(element2.text, '');
-	});
-});
-
-describe('J0Element.prototype.empty', function () {
-
-	it('should remove childNodes', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.deepEqual(element.childNodes, [element1, element2]);
-		assert.equal(element.empty(), element);
-		assert.deepEqual(element.childNodes, []);
-	});
-});
-
-describe('J0Element.prototype.equals', function () {
-
-	it('should return whether the given wraps the same element or not', function () {
-		var element1 = dom();
-		var element2 = dom(element1);
-		var element3 = dom();
-		assert.equal(element1.equals(element1), true);
-		assert.equal(element1.equals(element2), true);
-		assert.equal(element1.equals(element3), false);
-		assert.equal(element2.equals(element1), true);
-		assert.equal(element2.equals(element2), true);
-		assert.equal(element2.equals(element3), false);
-		assert.equal(element3.equals(element1), false);
-		assert.equal(element3.equals(element2), false);
-		assert.equal(element3.equals(element3), true);
-	});
-});
-
-/* eslint-disable no-empty-function */
-function wait(duration) {
-	var defaultDuration = 20;
-	return new Promise(function (resolve) {
-		setTimeout(resolve, duration || defaultDuration);
-	});
-}
-
-describe('J0Element.eventFilter', function () {
-
-	after(function () {
-		delete dom.eventFilter;
-	});
-
-	it('should set a filter', function () {
-		var actual = [];
-		dom.eventFilter = function () {
-			for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
-				args[_key38] = arguments[_key38];
-			}
-
-			actual.push.apply(actual, [this].concat(args));
-		};
-		var element = dom();
-		var key = 'event-' + Date.now();
-		function fn() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key, fn);
-		assert.deepEqual(actual, [element, key, fn]);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key, fn]]);
-	});
-
-	it('should set a filter and skip addEventListener', function () {
-		var actual = [];
-		dom.eventFilter = function () {
-			for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
-				args[_key39] = arguments[_key39];
-			}
-
-			actual.push.apply(actual, [this].concat(args));
-			return true;
-		};
-		var element = dom();
-		var key = 'event-' + Date.now();
-		function fn() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key, fn);
-		assert.deepEqual(actual, [element, key, fn]);
-		assert.deepEqual(Array.from(element.listeners), []);
-	});
-});
-
-describe('J0Element.prototype.on', function () {
-
-	it('should initialize with event listener', function () {
-		var key = 'event-' + Date.now();
-		function fn() {}
-		var element = dom({
-			e: [[key, fn]]
-		});
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key, fn]]);
-	});
-
-	it('should set an listener', function () {
-		var element = dom();
-		var key = 'event-' + Date.now();
-		function fn() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key, fn);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key, fn]]);
-	});
-
-	it('should set listeners', function () {
-		var element = dom();
-		var key1 = 'event1-' + Date.now();
-		var key2 = 'event2-' + Date.now();
-		function fn1() {}
-		function fn2() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key1, fn1).on(key2, fn2);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key1, fn1], [key2, fn2]]);
-	});
-
-	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
-		var results, data1, data2, E, element;
-		return regeneratorRuntime.wrap(function _callee11$(_context11) {
-			while (1) {
-				switch (_context11.prev = _context11.next) {
-					case 0:
-						results = [];
-						data1 = new Date();
-						data2 = Date.now();
-
-						E = function (_J0Element) {
-							_inherits(E, _J0Element);
-
-							function E() {
-								_classCallCheck(this, E);
-
-								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
-							}
-
-							_createClass(E, [{
-								key: 'click',
-								value: function click(event) {
-									results.push(event.detail);
-								}
-							}]);
-
-							return E;
-						}(J0Element);
-
-						element = new E({
-							e: ['click']
-						});
-
-						element.emit('click', data1).emit('_click', data1).emit('click', data2);
-						_context11.next = 8;
-						return wait();
-
-					case 8:
-						assert.deepEqual(results, [data1, data2]);
-
-					case 9:
-					case 'end':
-						return _context11.stop();
-				}
-			}
-		}, _callee11, this);
-	})));
-
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
-		var E, element;
-		return regeneratorRuntime.wrap(function _callee12$(_context12) {
-			while (1) {
-				switch (_context12.prev = _context12.next) {
-					case 0:
-						E = function (_J0Element2) {
-							_inherits(E, _J0Element2);
-
-							function E() {
-								_classCallCheck(this, E);
-
-								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
-							}
-
-							return E;
-						}(J0Element);
-
-						element = new E();
-
-						assert.throws(function () {
-							element.on('click');
-						});
-
-					case 3:
-					case 'end':
-						return _context12.stop();
-				}
-			}
-		}, _callee12, this);
-	})));
-});
-
-describe('J0Element.prototype.off', function () {
-
-	it('should remove an listener', function () {
-		var element = dom();
-		var key1 = 'event1-' + Date.now();
-		var key2 = 'event2-' + Date.now();
-		function fn1() {}
-		function fn2() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key1, fn1).on(key1, fn2).on(key2, fn2);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
-		element.off(key1, fn2);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key1, fn1], [key2, fn2]]);
-	});
-
-	it('should remove listeners', function () {
-		var element = dom();
-		var key1 = 'event1-' + Date.now();
-		var key2 = 'event2-' + Date.now();
-		function fn1() {}
-		function fn2() {}
-		assert.deepEqual(Array.from(element.listeners), []);
-		element.on(key1, fn1).on(key1, fn2).on(key2, fn2);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
-		element.off(key1);
-		assert.deepEqual(Array.from(element.listeners).map(function (item) {
-			return item.slice(0, 2);
-		}), [[key2, fn2]]);
-	});
-});
-
-describe('J0Element.prototype.emit', function () {
-
-	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
-		var element, key, data, event;
-		return regeneratorRuntime.wrap(function _callee13$(_context13) {
-			while (1) {
-				switch (_context13.prev = _context13.next) {
-					case 0:
-						element = dom();
-						key = 'event-' + Date.now();
-						data = new Date();
-						_context13.next = 5;
-						return new Promise(function (resolve) {
-							element.on(key, resolve).emit(key, data);
-						});
-
-					case 5:
-						event = _context13.sent;
-
-						assert.equal(event.detail, data);
-
-					case 7:
-					case 'end':
-						return _context13.stop();
-				}
-			}
-		}, _callee13, this);
-	})));
-
-	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
-		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee14$(_context14) {
-			while (1) {
-				switch (_context14.prev = _context14.next) {
-					case 0:
-						onCall = function onCall(_ref41) {
-							var detail = _ref41.detail;
-
-							results.push(detail);
-						};
-
-						element = dom();
-						key = 'event-' + Date.now();
-						data1 = new Date();
-						data2 = Date.now();
-						results = [];
-
-						element.on(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context14.next = 9;
-						return wait();
-
-					case 9:
-						assert.deepEqual(results, [data1, data1, data2, data2]);
-
-					case 10:
-					case 'end':
-						return _context14.stop();
-				}
-			}
-		}, _callee14, this);
-	})));
-});
-
-describe('J0Element.prototype.once', function () {
-
-	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
-		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee15$(_context15) {
-			while (1) {
-				switch (_context15.prev = _context15.next) {
-					case 0:
-						onCall = function onCall(_ref43) {
-							var detail = _ref43.detail;
-
-							results.push(detail);
-						};
-
-						element = dom();
-						key = 'event-' + Date.now();
-						data1 = new Date();
-						data2 = Date.now();
-						results = [];
-
-						element.once(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context15.next = 9;
-						return wait();
-
-					case 9:
-						assert.deepEqual(results, [data1, data1, data2]);
-
-					case 10:
-					case 'end':
-						return _context15.stop();
-				}
-			}
-		}, _callee15, this);
-	})));
-
-	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
-		var results, data1, data2, E, element;
-		return regeneratorRuntime.wrap(function _callee16$(_context16) {
-			while (1) {
-				switch (_context16.prev = _context16.next) {
-					case 0:
-						results = [];
-						data1 = new Date();
-						data2 = Date.now();
-
-						E = function (_J0Element3) {
-							_inherits(E, _J0Element3);
-
-							function E() {
-								_classCallCheck(this, E);
-
-								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
-							}
-
-							_createClass(E, [{
-								key: 'click',
-								value: function click(event) {
-									results.push(event.detail);
-								}
-							}]);
-
-							return E;
-						}(J0Element);
-
-						element = new E({});
-
-						element.once('click').emit('click', data1).emit('_click', data1).emit('click', data2);
-						_context16.next = 8;
-						return wait();
-
-					case 8:
-						assert.deepEqual(results, [data1]);
-
-					case 9:
-					case 'end':
-						return _context16.stop();
-				}
-			}
-		}, _callee16, this);
-	})));
-
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
-		var E, element;
-		return regeneratorRuntime.wrap(function _callee17$(_context17) {
-			while (1) {
-				switch (_context17.prev = _context17.next) {
-					case 0:
-						E = function (_J0Element4) {
-							_inherits(E, _J0Element4);
-
-							function E() {
-								_classCallCheck(this, E);
-
-								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
-							}
-
-							return E;
-						}(J0Element);
-
-						element = new E();
-
-						assert.throws(function () {
-							element.once('click');
-						});
-
-					case 3:
-					case 'end':
-						return _context17.stop();
-				}
-			}
-		}, _callee17, this);
-	})));
-});
-
-describe('J0Element.prototype.find', function () {
-
-	it('should return the first matched element', function () {
-		var className = 'c' + Date.now();
-		var element1 = dom({
-			a: [['class', className]]
-		});
-		var element2 = dom({
-			a: [['class', className]]
-		});
-		var element3 = dom({
-			a: [['class', className]]
-		});
-		var element = dom({
-			c: [element2, {
-				c: [element3]
-			}]
-		});
-		dom({
-			c: [element1, element]
-		});
-		var actual = element.find('.' + className);
-		var expected = element2;
-		assert.equal(actual.equals(expected), true);
-	});
-});
-
-describe('J0Element.prototype.findAll', function () {
-
-	it('should return an array of matched elements', function () {
-		var className = 'c' + Date.now();
-		var element1 = dom({
-			a: [['class', className]]
-		});
-		var element2 = dom({
-			a: [['class', className]]
-		});
-		var element3 = dom({
-			a: [['class', className]]
-		});
-		var element = dom({
-			c: [element2, {
-				c: [element3]
-			}]
-		});
-		dom({
-			c: [element1, element]
-		});
-		var actual = element.findAll('.' + className);
-		var expected = [element2, element3];
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-});
-
-describe('J0Element.prototype.firstChild', function () {
-
-	it('should return null', function () {
-		var element = dom();
-		assert.equal(element.firstChild, null);
-	});
-
-	it('should return the first child', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-	});
-
-	it('should set the first child', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element.setFirstChild(element2);
-		assert.equal(element.firstChild.equals(element2), true);
-	});
-});
-
-var x$36 = setTimeout;
-
-describe('J0Element.prototype.focused', function () {
-
-	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
-		var body, element;
-		return regeneratorRuntime.wrap(function _callee18$(_context18) {
-			while (1) {
-				switch (_context18.prev = _context18.next) {
-					case 0:
-						_context18.next = 2;
-						return dom.ready();
-
-					case 2:
-						body = _context18.sent;
-						element = dom({
-							t: 'input',
-							a: [['type', 'text']]
-						});
-
-						body.append(element);
-						_context18.next = 7;
-						return new x$10(function (resolve, reject) {
-							var count = 0;
-							function check() {
-								element.node.click();
-								element.node.focus();
-								if (element.equals(x$3.activeElement)) {
-									resolve();
-								} else if (count++ < 20) {
-									x$36(check, 100);
-								} else {
-									reject(new Error('Failed to focus an element'));
-								}
-							}
-							check();
-						});
-
-					case 7:
-						assert.equal(element.focused, true);
-						element.remove();
-
-					case 9:
-					case 'end':
-						return _context18.stop();
-				}
-			}
-		}, _callee18, this);
-	})));
-
-	it('should return true if it is not focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
-		var body, element;
-		return regeneratorRuntime.wrap(function _callee19$(_context19) {
-			while (1) {
-				switch (_context19.prev = _context19.next) {
-					case 0:
-						_context19.next = 2;
-						return dom.ready();
-
-					case 2:
-						body = _context19.sent;
-						element = dom({
-							t: 'input'
-						});
-
-						body.append(element);
-						assert.equal(element.focused, false);
-						element.remove();
-
-					case 7:
-					case 'end':
-						return _context19.stop();
-				}
-			}
-		}, _callee19, this);
-	})));
-});
-
-describe('J0Element.prototype.html', function () {
-
-	it('should return its innerHTML', function () {
-		var text = '' + Date.now();
-		var element = dom({
-			c: [{
-				t: 'span',
-				c: [text]
-			}]
-		});
-		var expected = '<span>' + text + '</span>';
-		assert.equal(element.html, expected);
-	});
-
-	it('should set its innerHTML', function () {
-		var text = '' + Date.now();
-		var element = dom({
-			c: [{}, {}, text]
-		});
-		element.setHTML('<s>' + text + '</s>');
-		var expected = '<s>' + text + '</s>';
-		assert.equal(element.html, expected);
-	});
-});
-
-describe('J0Element.prototype.insertBefore', function () {
-
-	it('should insert a new child', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element.insertBefore(element2, element1);
-		assert.equal(element.firstChild.equals(element2), true);
-	});
-
-	it('should replace an existing child', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element.insertBefore(element2, element1);
-		assert.equal(element.firstChild.equals(element2), true);
-	});
-});
-
-describe('J0Element.prototype.lastChild', function () {
-
-	it('should return null', function () {
-		var element = dom();
-		assert.equal(element.lastChild, null);
-	});
-
-	it('should return the first child', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.equal(element.lastChild.equals(element2), true);
-	});
-
-	it('should set the first child', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element.setLastChild(element2);
-		assert.equal(element.lastChild.equals(element2), true);
-	});
-});
-
-describe('J0Element.prototype.next', function () {
-
-	it('should insert a new node before an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.setNext(element2);
-		var expected = [element1, element2];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should insert 2 new nodes before an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element3 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.setNext(element2, element3);
-		var expected = [element1, element2, element3];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should replace an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element2, element1]
-		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.setNext(element2);
-		var expected = [element1, element2];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should replace existing nodes', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element3 = dom();
-		var element = dom({
-			c: [element3, element2, element1]
-		});
-		assert.equal(element.lastChild.equals(element1), true);
-		element1.setNext(element2, element3);
-		var expected = [element1, element2, element3];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should return null', function () {
-		var element1 = dom();
-		var element2 = dom();
-		dom({
-			c: [element1, element2]
-		});
-		assert.equal(element2.next, null);
-	});
-});
-
-describe('J0Element.prototype.nodeType', function () {
-
-	it('should return ELEMENT_NODE', function () {
-		var element = dom({});
-		assert.equal(element.nodeType, Node.ELEMENT_NODE);
-	});
-
-	it('should return TEXT_NODE', function () {
-		var element = dom('' + Date.now());
-		assert.equal(element.nodeType, Node.TEXT_NODE);
-	});
-});
-
-describe('J0Element.prototype.isElementNode', function () {
-
-	it('should return true', function () {
-		var element = dom({});
-		assert.equal(element.isElementNode, true);
-	});
-
-	it('should return false', function () {
-		var element = dom('' + Date.now());
-		assert.equal(element.isElementNode, false);
-	});
-});
-
-describe('J0Element.prototype.isTextNode', function () {
-
-	it('should return false', function () {
-		var element = dom({});
-		assert.equal(element.isTextNode, false);
-	});
-
-	it('should return true', function () {
-		var element = dom('' + Date.now());
-		assert.equal(element.isTextNode, true);
-	});
-});
-
-describe('J0Element.prototype.normalize', function () {
-
-	it('should normalize an element', function () {
-		var text1 = 'text1' + Date.now();
-		var text2 = 'text2' + Date.now();
-		var text3 = 'text3' + Date.now();
-		var text4 = 'text4' + Date.now();
-		var text5 = 'text5' + Date.now();
-		var text6 = 'text6' + Date.now();
-		var data = {
-			c: ['', text1, text2, {
-				c: [text3, '', text4]
-			}, text5, text6]
-		};
-		var element = dom(data);
-		assert.deepEqual(element.toObject(), data);
-		element.normalize();
-		var expected = {
-			c: ['' + text1 + text2, {
-				c: ['' + text3 + text4]
-			}, '' + text5 + text6]
-		};
-		assert.deepEqual(element.toObject(), expected);
-	});
-});
-
-describe('J0Element.prototype.parent', function () {
-
-	it('should return its parent', function () {
-		var element1 = dom();
-		var element2 = dom({ c: [element1] });
-		assert.equal(element1.parent.equals(element2), true);
-	});
-
-	it('should set its parent', function () {
-		var element1 = dom();
-		var element2 = dom();
-		element1.setParent(element2);
-		assert.equal(element1.parent.equals(element2), true);
-	});
-});
-
-describe('J0Element.prototype.prepend', function () {
-
-	it('should prepend nodes', function () {
-		var element1 = dom(Date.now() + '-1');
-		var element2 = dom();
-		var element3 = dom(Date.now() + '-2');
-		var element = dom({
-			c: [element1]
-		});
-		element.prepend(element2, element3);
-		assert.deepEqual(element.childNodes, [element3, element2, element1]);
-	});
-});
-
-describe('J0Element.prototype.previous', function () {
-
-	it('should insert a new node before an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element1.setPrevious(element2);
-		var expected = [element2, element1];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should insert 2 new nodes before an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element3 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element1.setPrevious(element2, element3);
-		var expected = [element2, element3, element1];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should replace an existing node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element1.setPrevious(element2);
-		var expected = [element2, element1];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should replace existing nodes', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element3 = dom();
-		var element = dom({
-			c: [element3, element1, element2]
-		});
-		assert.equal(element.firstChild.equals(element3), true);
-		element1.setPrevious(element2, element3);
-		var expected = [element2, element3, element1];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-
-	it('should return null', function () {
-		var element1 = dom();
-		var element2 = dom();
-		dom({
-			c: [element1, element2]
-		});
-		assert.equal(element1.previous, null);
-	});
-});
-
-describe('J0Element.prototype.remove', function () {
-
-	it('should remove itself from its parent', function () {
-		var element1 = dom('' + Date.now());
-		var element2 = dom();
-		var element = dom({
-			c: [element1, element2]
-		});
-		assert.deepEqual(element.childNodes, [element1, element2]);
-		assert.equal(element1.remove(), element1);
-		assert.equal(element1.remove(), element1);
-		assert.deepEqual(element.childNodes, [element2]);
-	});
-});
-
-describe('J0Element.prototype.replaceChild', function () {
-
-	it('should replace a node', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element = dom({
-			c: [element1]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element.replaceChild(element2, element1);
-		var expected = [element2];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-});
-
-describe('J0Element.prototype.replaceWith', function () {
-
-	it('should replace node with some nodes', function () {
-		var element1 = dom();
-		var element2 = dom();
-		var element3 = dom();
-		var element4 = dom();
-		var element5 = dom();
-		var element = dom({
-			c: [element1, element2, element3]
-		});
-		assert.equal(element.firstChild.equals(element1), true);
-		element2.replaceWith(element4, element5);
-		var expected = [element1, element4, element5, element3];
-		element.childNodes.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true);
-		});
-	});
-});
-
-describe('J0Element.prototype.text', function () {
-
-	it('should return its textContent', function () {
-		var text = '' + Date.now();
-		var element = dom({
-			c: [{
-				t: 'span',
-				c: [text]
-			}]
-		});
-		var expected = text;
-		assert.equal(element.text, expected);
-	});
-
-	it('should set its textContent', function () {
-		var text = '' + Date.now();
-		var element = dom({
-			c: [{}, {}, text]
-		});
-		element.setText('<s>' + text + '</s>');
-		var expected = '<s>' + text + '</s>';
-		assert.equal(element.text, expected);
-	});
-});
-
-describe('J0Element.prototype.toObject', function () {
-
-	it('should convert a text node to an object', function () {
-		var text = '' + Date.now();
-		var element = dom(text);
-		assert.equal(element.toObject(), text);
-	});
-
-	it('should convert an element node to an object', function () {
-		var t = 'h1';
-		var text = '' + Date.now();
-		var key1 = 'key1-' + Date.now();
-		var key2 = 'data-key2-' + Date.now();
-		var value1 = 'value1-' + Date.now();
-		var value2 = 'value2-' + Date.now();
-		var data = {
-			t: t,
-			a: [[key1, value1], [key2, value2]],
-			c: [text, {
-				a: [[key1, value2], [key2, value1]],
-				c: [{
-					c: [text]
-				}]
-			}]
-		};
-		var element = dom(data);
-		assert.deepEqual(element.toObject(), data);
-	});
-});
-
-describe('J0Element.prototype.walk', function () {
-
-	it('should walk over a dom tree', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		var element = dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		element.walk(function (node) {
-			actual.push(node);
-		});
-		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-
-	it('should stop walking if a given function returns a truthy value', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		var element = dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		element.walk(function (node) {
-			if (node.equals(text9)) {
-				return true;
-			}
-			actual.push(node);
-		});
-		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-});
-
-describe('J0Element.prototype.walkBackward', function () {
-
-	it('should walk backward', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		text10.walkBackward(function (node) {
-			actual.push(node);
-		});
-		var expected = [text10, element5, text8, element4, text6, text7, text9, element3, text5, element2, text3, text4, element1, text2, text1];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-
-	it('should stop walking if a given function returns a truthy value', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		element5.walkBackward(function (node) {
-			if (node.equals(text9)) {
-				return true;
-			}
-			actual.push(node);
-		});
-		var expected = [element5, text8, element4, text6, text7];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-});
-
-describe('J0Element.prototype.walkForward', function () {
-
-	it('should walk forward', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		element1.walkForward(function (node) {
-			actual.push(node);
-		});
-		var expected = [element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-
-	it('should stop walking if a given function returns a truthy value', function () {
-		var text1 = dom('text1--' + Date.now());
-		var text2 = dom('text2--' + Date.now());
-		var text3 = dom('text3--' + Date.now());
-		var text4 = dom('text4--' + Date.now());
-		var text5 = dom('text5--' + Date.now());
-		var text6 = dom('text6--' + Date.now());
-		var text7 = dom('text7--' + Date.now());
-		var text8 = dom('text8--' + Date.now());
-		var text9 = dom('text9--' + Date.now());
-		var text10 = dom('text10--' + Date.now());
-		var element1 = dom({
-			c: [text2]
-		});
-		var element2 = dom({
-			c: [text3]
-		});
-		var element3 = dom({
-			c: [text4, element2, text5]
-		});
-		var element4 = dom({
-			c: [text6]
-		});
-		var element5 = dom({
-			c: [text7, element4, text8]
-		});
-		var element6 = dom({
-			c: [text9, element5, text10]
-		});
-		dom({
-			c: [text1, element1, element3, element6]
-		});
-		var actual = [];
-		element3.walkForward(function (node) {
-			if (node.equals(text9)) {
-				return true;
-			}
-			actual.push(node);
-		});
-		var expected = [element3, text4, element2, text3, text5, element6];
-		assert.equal(actual.length, expected.length);
-		actual.forEach(function (node, index) {
-			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
-		});
-	});
-});
-
-describe('J0Element', function () {
-
-	it('should copy an element', function () {
-		var E1 = function (_J0Element5) {
-			_inherits(E1, _J0Element5);
-
-			function E1() {
-				_classCallCheck(this, E1);
-
-				return _possibleConstructorReturn(this, (E1.__proto__ || Object.getPrototypeOf(E1)).apply(this, arguments));
-			}
-
-			return E1;
-		}(J0Element);
-
-		var E2 = function (_E) {
-			_inherits(E2, _E);
-
-			function E2() {
-				_classCallCheck(this, E2);
-
-				return _possibleConstructorReturn(this, (E2.__proto__ || Object.getPrototypeOf(E2)).apply(this, arguments));
-			}
-
-			return E2;
-		}(E1);
-
-		var e1 = new E2();
-		var e2 = new E2(e1);
-		assert(e1.equals(e2));
-	});
-});
-
 function test$27(storage, testName) {
 
 	describe(testName, function () {
@@ -6457,10 +4906,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this25 = this;
+			var _this19 = this;
 
 			keys(this).forEach(function (key) {
-				_this25.removeItem(key);
+				_this19.removeItem(key);
 			});
 		}
 	}, {
@@ -6571,13 +5020,13 @@ describe('Lazy', function () {
 	});
 });
 
-var x$37 = localStorageIsAvailable;
+var x$36 = localStorageIsAvailable;
 
 var localStorage$1 = new J0Storage();
 
 test$27(localStorage$1, 'localStorage#j0');
 
-if (x$37) {
+if (x$36) {
 	test$27(localStorage, 'localStorage');
 } else {
 	x$31.info('Tests for localStorage are skipped.');
@@ -6630,12 +5079,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator29 = iterable[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
-					var _ref48 = _step29.value;
+					var _ref37 = _step29.value;
 
-					var _ref49 = _slicedToArray(_ref48, 2);
+					var _ref38 = _slicedToArray(_ref37, 2);
 
-					var key = _ref49[0];
-					var value = _ref49[1];
+					var key = _ref38[0];
+					var value = _ref38[1];
 
 					this.set(key, value);
 				}
@@ -6664,9 +5113,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref50) {
-				var _ref51 = _slicedToArray(_ref50, 1),
-				    itemKey = _ref51[0];
+			return this.data.findIndex(function (_ref39) {
+				var _ref40 = _slicedToArray(_ref39, 1),
+				    itemKey = _ref40[0];
 
 				return itemKey === key;
 			});
@@ -6690,9 +5139,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref52) {
-				var _ref53 = _slicedToArray(_ref52, 1),
-				    itemKey = _ref53[0];
+			var found = this.data.find(function (_ref41) {
+				var _ref42 = _slicedToArray(_ref41, 1),
+				    itemKey = _ref42[0];
 
 				return itemKey === key;
 			});
@@ -6718,14 +5167,14 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this26 = this;
+			var _this20 = this;
 
-			this.data.slice().forEach(function (_ref54) {
-				var _ref55 = _slicedToArray(_ref54, 2),
-				    key = _ref55[0],
-				    value = _ref55[1];
+			this.data.slice().forEach(function (_ref43) {
+				var _ref44 = _slicedToArray(_ref43, 2),
+				    key = _ref44[0],
+				    value = _ref44[1];
 
-				fn.call(thisArg, value, key, _this26);
+				fn.call(thisArg, value, key, _this20);
 			});
 		}
 	}, {
@@ -6806,34 +5255,34 @@ function tests$8(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee20() {
+			var iterable = _defineProperty({}, Symbol.iterator, regeneratorRuntime.mark(function _callee11() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee20$(_context20) {
+				return regeneratorRuntime.wrap(function _callee11$(_context11) {
 					while (1) {
-						switch (_context20.prev = _context20.next) {
+						switch (_context11.prev = _context11.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context20.next = 7;
+									_context11.next = 7;
 									break;
 								}
 
-								_context20.next = 4;
+								_context11.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context20.next = 1;
+								_context11.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context20.stop();
+								return _context11.stop();
 						}
 					}
-				}, _callee20, this);
+				}, _callee11, this);
 			}));
 			var map = new Map(iterable);
 			assert.deepEqual({
@@ -6850,8 +5299,8 @@ function tests$8(Map) {
 			var context = {};
 			var results = [];
 			map.forEach(function () {
-				for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
-					args[_key40] = arguments[_key40];
+				for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+					args[_key38] = arguments[_key38];
 				}
 
 				map.delete(args[1]);
@@ -6873,12 +5322,12 @@ function test$32(abs) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
-			return regeneratorRuntime.wrap(function _callee21$(_context21) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+			return regeneratorRuntime.wrap(function _callee12$(_context12) {
 				while (1) {
-					switch (_context21.prev = _context21.next) {
+					switch (_context12.prev = _context12.next) {
 						case 0:
-							_context21.next = 2;
+							_context12.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/abs/abs.png',
@@ -6891,10 +5340,10 @@ function test$32(abs) {
 
 						case 2:
 						case 'end':
-							return _context21.stop();
+							return _context12.stop();
 					}
 				}
-			}, _callee21, this);
+			}, _callee12, this);
 		})));
 	});
 }
@@ -6908,12 +5357,12 @@ function test$34(acos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
-			return regeneratorRuntime.wrap(function _callee22$(_context22) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+			return regeneratorRuntime.wrap(function _callee13$(_context13) {
 				while (1) {
-					switch (_context22.prev = _context22.next) {
+					switch (_context13.prev = _context13.next) {
 						case 0:
-							_context22.next = 2;
+							_context13.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/acos/acos.png',
@@ -6926,10 +5375,10 @@ function test$34(acos) {
 
 						case 2:
 						case 'end':
-							return _context22.stop();
+							return _context13.stop();
 					}
 				}
-			}, _callee22, this);
+			}, _callee13, this);
 		})));
 	});
 }
@@ -6943,12 +5392,12 @@ function test$36(acosh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
-			return regeneratorRuntime.wrap(function _callee23$(_context23) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+			return regeneratorRuntime.wrap(function _callee14$(_context14) {
 				while (1) {
-					switch (_context23.prev = _context23.next) {
+					switch (_context14.prev = _context14.next) {
 						case 0:
-							_context23.next = 2;
+							_context14.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/acosh/acosh.png',
@@ -6961,18 +5410,18 @@ function test$36(acosh) {
 
 						case 2:
 						case 'end':
-							return _context23.stop();
+							return _context14.stop();
 					}
 				}
-			}, _callee23, this);
+			}, _callee14, this);
 		})));
 	});
 }
 
-var x$38 = Math;
+var x$37 = Math;
 
 function acosh(x) {
-	return x$38.log(x + x$38.sqrt(x * x - 1));
+	return x$37.log(x + x$37.sqrt(x * x - 1));
 }
 
 test$36(acosh, 'Math.acosh#j0');
@@ -6986,12 +5435,12 @@ function test$38(asin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
-			return regeneratorRuntime.wrap(function _callee24$(_context24) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+			return regeneratorRuntime.wrap(function _callee15$(_context15) {
 				while (1) {
-					switch (_context24.prev = _context24.next) {
+					switch (_context15.prev = _context15.next) {
 						case 0:
-							_context24.next = 2;
+							_context15.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/asin/asin.png',
@@ -7004,10 +5453,10 @@ function test$38(asin) {
 
 						case 2:
 						case 'end':
-							return _context24.stop();
+							return _context15.stop();
 					}
 				}
-			}, _callee24, this);
+			}, _callee15, this);
 		})));
 	});
 }
@@ -7021,12 +5470,12 @@ function test$40(asinh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
-			return regeneratorRuntime.wrap(function _callee25$(_context25) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
+			return regeneratorRuntime.wrap(function _callee16$(_context16) {
 				while (1) {
-					switch (_context25.prev = _context25.next) {
+					switch (_context16.prev = _context16.next) {
 						case 0:
-							_context25.next = 2;
+							_context16.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/asinh/asinh.png',
@@ -7039,10 +5488,10 @@ function test$40(asinh) {
 
 						case 2:
 						case 'end':
-							return _context25.stop();
+							return _context16.stop();
 					}
 				}
-			}, _callee25, this);
+			}, _callee16, this);
 		})));
 	});
 }
@@ -7051,7 +5500,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$38.log(x + x$38.sqrt(x * x + 1));
+	return x$37.log(x + x$37.sqrt(x * x + 1));
 }
 
 test$40(asinh, 'Math.asinh#j0');
@@ -7065,12 +5514,12 @@ function test$42(atan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
-			return regeneratorRuntime.wrap(function _callee26$(_context26) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+			return regeneratorRuntime.wrap(function _callee17$(_context17) {
 				while (1) {
-					switch (_context26.prev = _context26.next) {
+					switch (_context17.prev = _context17.next) {
 						case 0:
-							_context26.next = 2;
+							_context17.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/atan/atan.png',
@@ -7083,10 +5532,10 @@ function test$42(atan) {
 
 						case 2:
 						case 'end':
-							return _context26.stop();
+							return _context17.stop();
 					}
 				}
-			}, _callee26, this);
+			}, _callee17, this);
 		})));
 	});
 }
@@ -7100,12 +5549,12 @@ function test$44(atan2) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
-			return regeneratorRuntime.wrap(function _callee27$(_context27) {
+		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
+			return regeneratorRuntime.wrap(function _callee18$(_context18) {
 				while (1) {
-					switch (_context27.prev = _context27.next) {
+					switch (_context18.prev = _context18.next) {
 						case 0:
-							_context27.next = 2;
+							_context18.next = 2;
 							return assert.graphicalEqual({
 								name: name + '+',
 								url: window.root + '/Math/atan2/atan2+.png',
@@ -7120,18 +5569,18 @@ function test$44(atan2) {
 
 						case 2:
 						case 'end':
-							return _context27.stop();
+							return _context18.stop();
 					}
 				}
-			}, _callee27, this);
+			}, _callee18, this);
 		})));
 
-		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
-			return regeneratorRuntime.wrap(function _callee28$(_context28) {
+		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
+			return regeneratorRuntime.wrap(function _callee19$(_context19) {
 				while (1) {
-					switch (_context28.prev = _context28.next) {
+					switch (_context19.prev = _context19.next) {
 						case 0:
-							_context28.next = 2;
+							_context19.next = 2;
 							return assert.graphicalEqual({
 								name: name + '-',
 								url: window.root + '/Math/atan2/atan2-.png',
@@ -7146,10 +5595,10 @@ function test$44(atan2) {
 
 						case 2:
 						case 'end':
-							return _context28.stop();
+							return _context19.stop();
 					}
 				}
-			}, _callee28, this);
+			}, _callee19, this);
 		})));
 	});
 }
@@ -7163,12 +5612,12 @@ function test$46(atanh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
-			return regeneratorRuntime.wrap(function _callee29$(_context29) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+			return regeneratorRuntime.wrap(function _callee20$(_context20) {
 				while (1) {
-					switch (_context29.prev = _context29.next) {
+					switch (_context20.prev = _context20.next) {
 						case 0:
-							_context29.next = 2;
+							_context20.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/atanh/atanh.png',
@@ -7181,16 +5630,16 @@ function test$46(atanh) {
 
 						case 2:
 						case 'end':
-							return _context29.stop();
+							return _context20.stop();
 					}
 				}
-			}, _callee29, this);
+			}, _callee20, this);
 		})));
 	});
 }
 
 function atanh(x) {
-	return x$38.log((1 + x) / (1 - x)) / 2;
+	return x$37.log((1 + x) / (1 - x)) / 2;
 }
 
 test$46(atanh, 'Math.atanh#j0');
@@ -7204,12 +5653,12 @@ function test$48(cbrt) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
-			return regeneratorRuntime.wrap(function _callee30$(_context30) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
+			return regeneratorRuntime.wrap(function _callee21$(_context21) {
 				while (1) {
-					switch (_context30.prev = _context30.next) {
+					switch (_context21.prev = _context21.next) {
 						case 0:
-							_context30.next = 2;
+							_context21.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cbrt/cbrt.png',
@@ -7222,17 +5671,17 @@ function test$48(cbrt) {
 
 						case 2:
 						case 'end':
-							return _context30.stop();
+							return _context21.stop();
 					}
 				}
-			}, _callee30, this);
+			}, _callee21, this);
 		})));
 	});
 }
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$38.pow(x$38.abs(x), 1 / 3);
+	var root = x$37.pow(x$37.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -7247,12 +5696,12 @@ function test$50(ceil) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
-			return regeneratorRuntime.wrap(function _callee31$(_context31) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
+			return regeneratorRuntime.wrap(function _callee22$(_context22) {
 				while (1) {
-					switch (_context31.prev = _context31.next) {
+					switch (_context22.prev = _context22.next) {
 						case 0:
-							_context31.next = 2;
+							_context22.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/ceil/ceil.png',
@@ -7265,10 +5714,10 @@ function test$50(ceil) {
 
 						case 2:
 						case 'end':
-							return _context31.stop();
+							return _context22.stop();
 					}
 				}
-			}, _callee31, this);
+			}, _callee22, this);
 		})));
 	});
 }
@@ -7282,12 +5731,12 @@ function test$52(clz32) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
-			return regeneratorRuntime.wrap(function _callee32$(_context32) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
+			return regeneratorRuntime.wrap(function _callee23$(_context23) {
 				while (1) {
-					switch (_context32.prev = _context32.next) {
+					switch (_context23.prev = _context23.next) {
 						case 0:
-							_context32.next = 2;
+							_context23.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/clz32/clz32.png',
@@ -7300,10 +5749,10 @@ function test$52(clz32) {
 
 						case 2:
 						case 'end':
-							return _context32.stop();
+							return _context23.stop();
 					}
 				}
-			}, _callee32, this);
+			}, _callee23, this);
 		})));
 	});
 }
@@ -7316,7 +5765,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$38.floor(x$38.log(x >>> 0) * x$38.LOG2E);
+	return 31 - x$37.floor(x$37.log(x >>> 0) * x$37.LOG2E);
 }
 
 test$52(clz32, 'Math.clz32#j0');
@@ -7330,12 +5779,12 @@ function test$54(cos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
-			return regeneratorRuntime.wrap(function _callee33$(_context33) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
+			return regeneratorRuntime.wrap(function _callee24$(_context24) {
 				while (1) {
-					switch (_context33.prev = _context33.next) {
+					switch (_context24.prev = _context24.next) {
 						case 0:
-							_context33.next = 2;
+							_context24.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cos/cos.png',
@@ -7348,10 +5797,10 @@ function test$54(cos) {
 
 						case 2:
 						case 'end':
-							return _context33.stop();
+							return _context24.stop();
 					}
 				}
-			}, _callee33, this);
+			}, _callee24, this);
 		})));
 	});
 }
@@ -7365,12 +5814,12 @@ function test$56(cosh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
-			return regeneratorRuntime.wrap(function _callee34$(_context34) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
+			return regeneratorRuntime.wrap(function _callee25$(_context25) {
 				while (1) {
-					switch (_context34.prev = _context34.next) {
+					switch (_context25.prev = _context25.next) {
 						case 0:
-							_context34.next = 2;
+							_context25.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/cosh/cosh.png',
@@ -7383,16 +5832,16 @@ function test$56(cosh) {
 
 						case 2:
 						case 'end':
-							return _context34.stop();
+							return _context25.stop();
 					}
 				}
-			}, _callee34, this);
+			}, _callee25, this);
 		})));
 	});
 }
 
 function cosh(x) {
-	var y = x$38.exp(x);
+	var y = x$37.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -7422,12 +5871,12 @@ function test$60(exp) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
-			return regeneratorRuntime.wrap(function _callee35$(_context35) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
+			return regeneratorRuntime.wrap(function _callee26$(_context26) {
 				while (1) {
-					switch (_context35.prev = _context35.next) {
+					switch (_context26.prev = _context26.next) {
 						case 0:
-							_context35.next = 2;
+							_context26.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/exp/exp.png',
@@ -7440,10 +5889,10 @@ function test$60(exp) {
 
 						case 2:
 						case 'end':
-							return _context35.stop();
+							return _context26.stop();
 					}
 				}
-			}, _callee35, this);
+			}, _callee26, this);
 		})));
 	});
 }
@@ -7457,12 +5906,12 @@ function test$62(expm1) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
-			return regeneratorRuntime.wrap(function _callee36$(_context36) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
+			return regeneratorRuntime.wrap(function _callee27$(_context27) {
 				while (1) {
-					switch (_context36.prev = _context36.next) {
+					switch (_context27.prev = _context27.next) {
 						case 0:
-							_context36.next = 2;
+							_context27.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/expm1/expm1.png',
@@ -7475,16 +5924,16 @@ function test$62(expm1) {
 
 						case 2:
 						case 'end':
-							return _context36.stop();
+							return _context27.stop();
 					}
 				}
-			}, _callee36, this);
+			}, _callee27, this);
 		})));
 	});
 }
 
 function expm1(x) {
-	return x$38.exp(x) - 1;
+	return x$37.exp(x) - 1;
 }
 
 test$62(expm1, 'Math.expm1#j0');
@@ -7498,12 +5947,12 @@ function test$64(floor) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
-			return regeneratorRuntime.wrap(function _callee37$(_context37) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
+			return regeneratorRuntime.wrap(function _callee28$(_context28) {
 				while (1) {
-					switch (_context37.prev = _context37.next) {
+					switch (_context28.prev = _context28.next) {
 						case 0:
-							_context37.next = 2;
+							_context28.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/floor/floor.png',
@@ -7516,10 +5965,10 @@ function test$64(floor) {
 
 						case 2:
 						case 'end':
-							return _context37.stop();
+							return _context28.stop();
 					}
 				}
-			}, _callee37, this);
+			}, _callee28, this);
 		})));
 	});
 }
@@ -7533,14 +5982,14 @@ function test$66(fround) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
 			var d;
-			return regeneratorRuntime.wrap(function _callee38$(_context38) {
+			return regeneratorRuntime.wrap(function _callee29$(_context29) {
 				while (1) {
-					switch (_context38.prev = _context38.next) {
+					switch (_context29.prev = _context29.next) {
 						case 0:
 							d = 1;
-							_context38.next = 3;
+							_context29.next = 3;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/fround/fround.png',
@@ -7553,10 +6002,10 @@ function test$66(fround) {
 
 						case 3:
 						case 'end':
-							return _context38.stop();
+							return _context29.stop();
 					}
 				}
-			}, _callee38, this);
+			}, _callee29, this);
 		})));
 
 		it('should return 1.3370000123977661', function () {
@@ -7580,13 +6029,13 @@ function test$68(hypot) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
-			return regeneratorRuntime.wrap(function _callee39$(_context39) {
+		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
+			return regeneratorRuntime.wrap(function _callee30$(_context30) {
 				while (1) {
-					switch (_context39.prev = _context39.next) {
+					switch (_context30.prev = _context30.next) {
 						case 0:
 							this.timeout(5000);
-							_context39.next = 3;
+							_context30.next = 3;
 							return assert.graphicalEqual({
 								name: name + '-y=3',
 								url: window.root + '/Math/hypot/hypot-y=3.png',
@@ -7600,10 +6049,10 @@ function test$68(hypot) {
 
 						case 3:
 						case 'end':
-							return _context39.stop();
+							return _context30.stop();
 					}
 				}
-			}, _callee39, this);
+			}, _callee30, this);
 		})));
 	});
 }
@@ -7611,15 +6060,15 @@ function test$68(hypot) {
 function hypot() {
 	var sum = 0;
 
-	for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
-		args[_key41] = arguments[_key41];
+	for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
+		args[_key39] = arguments[_key39];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$38.sqrt(sum);
+	return x$37.sqrt(sum);
 }
 
 test$68(hypot, 'Math.hypot#j0');
@@ -7633,12 +6082,12 @@ function test$70(imul) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
-			return regeneratorRuntime.wrap(function _callee40$(_context40) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
+			return regeneratorRuntime.wrap(function _callee31$(_context31) {
 				while (1) {
-					switch (_context40.prev = _context40.next) {
+					switch (_context31.prev = _context31.next) {
 						case 0:
-							_context40.next = 2;
+							_context31.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/imul/imul.png',
@@ -7653,10 +6102,10 @@ function test$70(imul) {
 
 						case 2:
 						case 'end':
-							return _context40.stop();
+							return _context31.stop();
 					}
 				}
-			}, _callee40, this);
+			}, _callee31, this);
 		})));
 
 		it('imul(2, 4) should be 8', function () {
@@ -7731,12 +6180,12 @@ function test$76(log) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
-			return regeneratorRuntime.wrap(function _callee41$(_context41) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
+			return regeneratorRuntime.wrap(function _callee32$(_context32) {
 				while (1) {
-					switch (_context41.prev = _context41.next) {
+					switch (_context32.prev = _context32.next) {
 						case 0:
-							_context41.next = 2;
+							_context32.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log/log.png',
@@ -7749,10 +6198,10 @@ function test$76(log) {
 
 						case 2:
 						case 'end':
-							return _context41.stop();
+							return _context32.stop();
 					}
 				}
-			}, _callee41, this);
+			}, _callee32, this);
 		})));
 	});
 }
@@ -7766,12 +6215,12 @@ function test$78(log10) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
-			return regeneratorRuntime.wrap(function _callee42$(_context42) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
+			return regeneratorRuntime.wrap(function _callee33$(_context33) {
 				while (1) {
-					switch (_context42.prev = _context42.next) {
+					switch (_context33.prev = _context33.next) {
 						case 0:
-							_context42.next = 2;
+							_context33.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log10/log10.png',
@@ -7784,16 +6233,16 @@ function test$78(log10) {
 
 						case 2:
 						case 'end':
-							return _context42.stop();
+							return _context33.stop();
 					}
 				}
-			}, _callee42, this);
+			}, _callee33, this);
 		})));
 	});
 }
 
 function log10(x) {
-	return x$38.log(x) / x$38.LN10;
+	return x$37.log(x) / x$37.LN10;
 }
 
 test$78(log10, 'Math.log10#j0');
@@ -7822,12 +6271,12 @@ function test$82(log1p) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
-			return regeneratorRuntime.wrap(function _callee43$(_context43) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
+			return regeneratorRuntime.wrap(function _callee34$(_context34) {
 				while (1) {
-					switch (_context43.prev = _context43.next) {
+					switch (_context34.prev = _context34.next) {
 						case 0:
-							_context43.next = 2;
+							_context34.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log1p/log1p.png',
@@ -7840,16 +6289,16 @@ function test$82(log1p) {
 
 						case 2:
 						case 'end':
-							return _context43.stop();
+							return _context34.stop();
 					}
 				}
-			}, _callee43, this);
+			}, _callee34, this);
 		})));
 	});
 }
 
 function log1p(x) {
-	return x$38.log(x + 1);
+	return x$37.log(x + 1);
 }
 
 test$82(log1p, 'Math.log1p#j0');
@@ -7863,12 +6312,12 @@ function test$84(log2) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
-			return regeneratorRuntime.wrap(function _callee44$(_context44) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
+			return regeneratorRuntime.wrap(function _callee35$(_context35) {
 				while (1) {
-					switch (_context44.prev = _context44.next) {
+					switch (_context35.prev = _context35.next) {
 						case 0:
-							_context44.next = 2;
+							_context35.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/log2/log2.png',
@@ -7881,16 +6330,16 @@ function test$84(log2) {
 
 						case 2:
 						case 'end':
-							return _context44.stop();
+							return _context35.stop();
 					}
 				}
-			}, _callee44, this);
+			}, _callee35, this);
 		})));
 	});
 }
 
 function log2(x) {
-	return x$38.log(x) / x$38.LN2;
+	return x$37.log(x) / x$37.LN2;
 }
 
 test$84(log2, 'Math.log2#j0');
@@ -7919,12 +6368,12 @@ function test$88(max) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
-			return regeneratorRuntime.wrap(function _callee45$(_context45) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
+			return regeneratorRuntime.wrap(function _callee36$(_context36) {
 				while (1) {
-					switch (_context45.prev = _context45.next) {
+					switch (_context36.prev = _context36.next) {
 						case 0:
-							_context45.next = 2;
+							_context36.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/max/max.png',
@@ -7939,10 +6388,10 @@ function test$88(max) {
 
 						case 2:
 						case 'end':
-							return _context45.stop();
+							return _context36.stop();
 					}
 				}
-			}, _callee45, this);
+			}, _callee36, this);
 		})));
 	});
 }
@@ -7956,12 +6405,12 @@ function test$90(min) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
-			return regeneratorRuntime.wrap(function _callee46$(_context46) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
+			return regeneratorRuntime.wrap(function _callee37$(_context37) {
 				while (1) {
-					switch (_context46.prev = _context46.next) {
+					switch (_context37.prev = _context37.next) {
 						case 0:
-							_context46.next = 2;
+							_context37.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/min/min.png',
@@ -7976,10 +6425,10 @@ function test$90(min) {
 
 						case 2:
 						case 'end':
-							return _context46.stop();
+							return _context37.stop();
 					}
 				}
-			}, _callee46, this);
+			}, _callee37, this);
 		})));
 	});
 }
@@ -8008,12 +6457,12 @@ function test$94(pow) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
-			return regeneratorRuntime.wrap(function _callee47$(_context47) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
+			return regeneratorRuntime.wrap(function _callee38$(_context38) {
 				while (1) {
-					switch (_context47.prev = _context47.next) {
+					switch (_context38.prev = _context38.next) {
 						case 0:
-							_context47.next = 2;
+							_context38.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/pow/pow.png',
@@ -8028,10 +6477,10 @@ function test$94(pow) {
 
 						case 2:
 						case 'end':
-							return _context47.stop();
+							return _context38.stop();
 					}
 				}
-			}, _callee47, this);
+			}, _callee38, this);
 		})));
 	});
 }
@@ -8075,12 +6524,12 @@ function test$98(round) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
-			return regeneratorRuntime.wrap(function _callee48$(_context48) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
+			return regeneratorRuntime.wrap(function _callee39$(_context39) {
 				while (1) {
-					switch (_context48.prev = _context48.next) {
+					switch (_context39.prev = _context39.next) {
 						case 0:
-							_context48.next = 2;
+							_context39.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/round/round.png',
@@ -8093,10 +6542,10 @@ function test$98(round) {
 
 						case 2:
 						case 'end':
-							return _context48.stop();
+							return _context39.stop();
 					}
 				}
-			}, _callee48, this);
+			}, _callee39, this);
 		})));
 	});
 }
@@ -8110,12 +6559,12 @@ function test$100(sign) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
-			return regeneratorRuntime.wrap(function _callee49$(_context49) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
+			return regeneratorRuntime.wrap(function _callee40$(_context40) {
 				while (1) {
-					switch (_context49.prev = _context49.next) {
+					switch (_context40.prev = _context40.next) {
 						case 0:
-							_context49.next = 2;
+							_context40.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sign/sign.png',
@@ -8128,19 +6577,19 @@ function test$100(sign) {
 
 						case 2:
 						case 'end':
-							return _context49.stop();
+							return _context40.stop();
 					}
 				}
-			}, _callee49, this);
+			}, _callee40, this);
 		})));
 	});
 }
 
-var x$39 = isNaN;
+var x$38 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$39(x)) {
+	if (x === 0 || x$38(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -8157,12 +6606,12 @@ function test$102(sin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
-			return regeneratorRuntime.wrap(function _callee50$(_context50) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
+			return regeneratorRuntime.wrap(function _callee41$(_context41) {
 				while (1) {
-					switch (_context50.prev = _context50.next) {
+					switch (_context41.prev = _context41.next) {
 						case 0:
-							_context50.next = 2;
+							_context41.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sin/sin.png',
@@ -8175,10 +6624,10 @@ function test$102(sin) {
 
 						case 2:
 						case 'end':
-							return _context50.stop();
+							return _context41.stop();
 					}
 				}
-			}, _callee50, this);
+			}, _callee41, this);
 		})));
 	});
 }
@@ -8192,12 +6641,12 @@ function test$104(sinh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-			return regeneratorRuntime.wrap(function _callee51$(_context51) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
+			return regeneratorRuntime.wrap(function _callee42$(_context42) {
 				while (1) {
-					switch (_context51.prev = _context51.next) {
+					switch (_context42.prev = _context42.next) {
 						case 0:
-							_context51.next = 2;
+							_context42.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sinh/sinh.png',
@@ -8210,16 +6659,16 @@ function test$104(sinh) {
 
 						case 2:
 						case 'end':
-							return _context51.stop();
+							return _context42.stop();
 					}
 				}
-			}, _callee51, this);
+			}, _callee42, this);
 		})));
 	});
 }
 
 function sinh(x) {
-	var y = x$38.exp(x);
+	var y = x$37.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -8234,12 +6683,12 @@ function test$106(sqrt) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
-			return regeneratorRuntime.wrap(function _callee52$(_context52) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
+			return regeneratorRuntime.wrap(function _callee43$(_context43) {
 				while (1) {
-					switch (_context52.prev = _context52.next) {
+					switch (_context43.prev = _context43.next) {
 						case 0:
-							_context52.next = 2;
+							_context43.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/sqrt/sqrt.png',
@@ -8252,10 +6701,10 @@ function test$106(sqrt) {
 
 						case 2:
 						case 'end':
-							return _context52.stop();
+							return _context43.stop();
 					}
 				}
-			}, _callee52, this);
+			}, _callee43, this);
 		})));
 	});
 }
@@ -8299,12 +6748,12 @@ function test$112(tan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee53() {
-			return regeneratorRuntime.wrap(function _callee53$(_context53) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
+			return regeneratorRuntime.wrap(function _callee44$(_context44) {
 				while (1) {
-					switch (_context53.prev = _context53.next) {
+					switch (_context44.prev = _context44.next) {
 						case 0:
-							_context53.next = 2;
+							_context44.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/tan/tan.png',
@@ -8317,10 +6766,10 @@ function test$112(tan) {
 
 						case 2:
 						case 'end':
-							return _context53.stop();
+							return _context44.stop();
 					}
 				}
-			}, _callee53, this);
+			}, _callee44, this);
 		})));
 	});
 }
@@ -8334,12 +6783,12 @@ function test$114(tanh) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee54() {
-			return regeneratorRuntime.wrap(function _callee54$(_context54) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
+			return regeneratorRuntime.wrap(function _callee45$(_context45) {
 				while (1) {
-					switch (_context54.prev = _context54.next) {
+					switch (_context45.prev = _context45.next) {
 						case 0:
-							_context54.next = 2;
+							_context45.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/tanh/tanh.png',
@@ -8352,10 +6801,10 @@ function test$114(tanh) {
 
 						case 2:
 						case 'end':
-							return _context54.stop();
+							return _context45.stop();
 					}
 				}
-			}, _callee54, this);
+			}, _callee45, this);
 		})));
 	});
 }
@@ -8366,7 +6815,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$38.exp(2 * x);
+	var y = x$37.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -8381,12 +6830,12 @@ function test$116(trunc) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee55() {
-			return regeneratorRuntime.wrap(function _callee55$(_context55) {
+		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
+			return regeneratorRuntime.wrap(function _callee46$(_context46) {
 				while (1) {
-					switch (_context55.prev = _context55.next) {
+					switch (_context46.prev = _context46.next) {
 						case 0:
-							_context55.next = 2;
+							_context46.next = 2;
 							return assert.graphicalEqual({
 								name: name,
 								url: window.root + '/Math/trunc/trunc.png',
@@ -8399,10 +6848,10 @@ function test$116(trunc) {
 
 						case 2:
 						case 'end':
-							return _context55.stop();
+							return _context46.stop();
 					}
 				}
-			}, _callee55, this);
+			}, _callee46, this);
 		})));
 
 		it('trunc(13.37) should be 13', function () {
@@ -8447,6 +6896,1563 @@ function trunc(x) {
 test$116(trunc, 'Math.trunc#j0');
 
 test$116(Math.trunc);
+
+describe('N.prototype.append', function () {
+
+	it('should append nodes', function () {
+		var element1 = new N(Date.now() + '-1');
+		var element2 = new N();
+		var element3 = new N(Date.now() + '-2');
+		var element = new N({
+			c: [element1]
+		});
+		element.append(element2, element3);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (element, index) {
+			assert.equal(element.equals(expected[index]), true);
+		});
+	});
+
+	it('should skip null or false or undefined', function () {
+		var element1 = new N(Date.now() + '-1');
+		var element2 = new N();
+		var element3 = new N(Date.now() + '-2');
+		var element = new N({
+			c: [element1]
+		});
+		element.append(0, element2, null, element3);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (element, index) {
+			assert.equal(element.equals(expected[index]), true);
+		});
+	});
+});
+
+describe('N.prototype.attributes', function () {
+
+	it('should set an attribute', function () {
+		var element = new N();
+		var key = 'attr-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.setAttribute(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+	});
+
+	it('should set a "data-" prefixed attribute', function () {
+		var element = new N();
+		var key = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		assert.equal(element.getAttribute(key), null);
+		element.setAttribute(key, value1, value2);
+		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
+	});
+
+	it('should return a map of attributes', function () {
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'data-' + Date.now();
+		var value1 = 'value-' + Date.now();
+		var value2 = 'value-' + Date.now();
+		var element = new N({
+			a: [[key1, value2], [key1, value1], [key2, value2]]
+		});
+		assert.deepEqual(Array.from(element.attributes), [[key1, value1], [key2, value2]]);
+	});
+});
+
+describe('N.prototype.bb', function () {
+
+	it('should get a bounding box', function () {
+		var element = new N();
+		new N(document.body).append(element);
+		var _element$bb = element.bb,
+		    left = _element$bb.left,
+		    top = _element$bb.top;
+
+		assert.equal(0 <= left, true);
+		assert.equal(0 <= top, true);
+		element.remove();
+	});
+});
+
+describe('N.prototype.childNodes', function () {
+
+	it('should return all nodes under the element', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+	});
+});
+
+describe('N.prototype.children', function () {
+
+	it('should return all elements under the element', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.children, [element2]);
+	});
+});
+
+describe('N.prototype.addClass', function () {
+
+	it('should add a class', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var element = new N({
+			a: [['class', class1]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
+		element.addClass(class2);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+	});
+
+	it('should add 2 classes', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var class3 = '_' + Date.now() + '-3';
+		var element = new N({
+			a: [['class', class1]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
+		element.addClass(class2, class3);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2, class3]);
+	});
+});
+
+describe('N.prototype.removeClass', function () {
+
+	it('should remove a class', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var element = new N({
+			a: [['class', class1 + ' ' + class2]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+		element.removeClass(class2);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
+	});
+
+	it('should remove 2 classes', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var class3 = '_' + Date.now() + '-3';
+		var element = new N({
+			a: [['class', class1 + ' ' + class2 + ' ' + class3]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2, class3]);
+		element.removeClass(class2, class3);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
+	});
+});
+
+describe('N.prototype.toggleClass', function () {
+
+	it('should toggle a class', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var element = new N({
+			a: [['class', class1 + ' ' + class2]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+		element.toggleClass(class2);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1]);
+		element.toggleClass(class2);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+	});
+
+	it('should toggle 2 classes', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var class3 = '_' + Date.now() + '-3';
+		var element = new N({
+			a: [['class', class1 + ' ' + class2]]
+		});
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+		element.toggleClass(class2, class3);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class3]);
+		element.toggleClass(class2, class3);
+		assert.deepEqual(element.getAttribute('class').split(/\s+/), [class1, class2]);
+	});
+});
+
+describe('N.prototype.hasClass', function () {
+
+	it('should check a class', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var element = new N({
+			a: [['class', class1]]
+		});
+		assert.equal(element.hasClass(class1), true);
+		assert.equal(element.hasClass(class2), false);
+	});
+
+	it('should check 2 classes', function () {
+		var class1 = '_' + Date.now() + '-1';
+		var class2 = '_' + Date.now() + '-2';
+		var class3 = '_' + Date.now() + '-3';
+		var element = new N({
+			a: [['class', class1, class2]]
+		});
+		assert.equal(element.hasClass(class1), true);
+		assert.equal(element.hasClass(class1, class2), true);
+		assert.equal(element.hasClass(class1, class3), false);
+	});
+
+	it('should check nodes which has no classList', function () {
+		var element = new N(document);
+		assert.equal(element.hasClass(), true);
+		assert.equal(element.hasClass('_' + Date.now()), false);
+	});
+});
+
+describe('N.prototype.clone', function () {
+
+	it('should clone a text node', function () {
+		var text = '' + Date.now();
+		var element1 = new N(text);
+		assert.equal(element1.text, text);
+		var element2 = element1.clone();
+		assert.equal(element2.text, text);
+	});
+
+	it('should clone an element node', function () {
+		var text = '' + Date.now();
+		var element1 = new N({
+			c: [text]
+		});
+		assert.equal(element1.text, text);
+		var element2 = element1.clone();
+		assert.equal(element2.text, text);
+	});
+
+	it('should clone an element node shallowly', function () {
+		var text = '' + Date.now();
+		var element1 = new N({
+			c: [text]
+		});
+		assert.equal(element1.text, text);
+		var element2 = element1.clone(false);
+		assert.equal(element2.text, '');
+	});
+});
+
+describe('N.prototype.empty', function () {
+
+	it('should remove childNodes', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+		assert.equal(element.empty(), element);
+		assert.deepEqual(element.childNodes, []);
+	});
+});
+
+describe('N.prototype.equals', function () {
+
+	it('should return whether the given wraps the same element or not', function () {
+		var element1 = new N();
+		var element2 = new N(element1);
+		var element3 = new N();
+		assert.equal(element1.equals(element1), true);
+		assert.equal(element1.equals(element2), true);
+		assert.equal(element1.equals(element3), false);
+		assert.equal(element2.equals(element1), true);
+		assert.equal(element2.equals(element2), true);
+		assert.equal(element2.equals(element3), false);
+		assert.equal(element3.equals(element1), false);
+		assert.equal(element3.equals(element2), false);
+		assert.equal(element3.equals(element3), true);
+	});
+});
+
+/* eslint-disable no-empty-function */
+function wait(duration) {
+	var defaultDuration = 20;
+	return new Promise(function (resolve) {
+		setTimeout(resolve, duration || defaultDuration);
+	});
+}
+
+describe('N.eventFilter', function () {
+
+	after(function () {
+		delete N.eventFilter;
+	});
+
+	it('should set a filter', function () {
+		var actual = [];
+		N.eventFilter = function () {
+			for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
+				args[_key40] = arguments[_key40];
+			}
+
+			actual.push.apply(actual, [this].concat(args));
+		};
+		var element = new N();
+		var key = 'event-' + Date.now();
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(actual, [element, key, fn]);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key, fn]]);
+	});
+
+	it('should set a filter and skip addEventListener', function () {
+		var actual = [];
+		N.eventFilter = function () {
+			for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
+				args[_key41] = arguments[_key41];
+			}
+
+			actual.push.apply(actual, [this].concat(args));
+			return true;
+		};
+		var element = new N();
+		var key = 'event-' + Date.now();
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(actual, [element, key, fn]);
+		assert.deepEqual(Array.from(element.listeners), []);
+	});
+});
+
+describe('N.prototype.on', function () {
+
+	it('should initialize with event listener', function () {
+		var key = 'event-' + Date.now();
+		function fn() {}
+		var element = new N({
+			e: [[key, fn]]
+		});
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key, fn]]);
+	});
+
+	it('should set an listener', function () {
+		var element = new N();
+		var key = 'event-' + Date.now();
+		function fn() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key, fn);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key, fn]]);
+	});
+
+	it('should set listeners', function () {
+		var element = new N();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key1, fn1).on(key2, fn2);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
+		var results, data1, data2, E, element;
+		return regeneratorRuntime.wrap(function _callee47$(_context47) {
+			while (1) {
+				switch (_context47.prev = _context47.next) {
+					case 0:
+						results = [];
+						data1 = new Date();
+						data2 = Date.now();
+
+						E = function (_N) {
+							_inherits(E, _N);
+
+							function E() {
+								_classCallCheck(this, E);
+
+								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
+							}
+
+							_createClass(E, [{
+								key: 'click',
+								value: function click(event) {
+									results.push(event.detail);
+								}
+							}]);
+
+							return E;
+						}(N);
+
+						element = new E({
+							e: ['click']
+						});
+
+						element.emit('click', data1).emit('_click', data1).emit('click', data2);
+						_context47.next = 8;
+						return wait();
+
+					case 8:
+						assert.deepEqual(results, [data1, data2]);
+
+					case 9:
+					case 'end':
+						return _context47.stop();
+				}
+			}
+		}, _callee47, this);
+	})));
+
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
+		var E, element;
+		return regeneratorRuntime.wrap(function _callee48$(_context48) {
+			while (1) {
+				switch (_context48.prev = _context48.next) {
+					case 0:
+						E = function (_N2) {
+							_inherits(E, _N2);
+
+							function E() {
+								_classCallCheck(this, E);
+
+								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
+							}
+
+							return E;
+						}(N);
+
+						element = new E();
+
+						assert.throws(function () {
+							element.on('click');
+						});
+
+					case 3:
+					case 'end':
+						return _context48.stop();
+				}
+			}
+		}, _callee48, this);
+	})));
+});
+
+describe('N.prototype.off', function () {
+
+	it('should remove an listener', function () {
+		var element = new N();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key1, fn1).on(key1, fn2).on(key2, fn2);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
+		element.off(key1, fn2);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key2, fn2]]);
+	});
+
+	it('should remove listeners', function () {
+		var element = new N();
+		var key1 = 'event1-' + Date.now();
+		var key2 = 'event2-' + Date.now();
+		function fn1() {}
+		function fn2() {}
+		assert.deepEqual(Array.from(element.listeners), []);
+		element.on(key1, fn1).on(key1, fn2).on(key2, fn2);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key1, fn1], [key1, fn2], [key2, fn2]]);
+		element.off(key1);
+		assert.deepEqual(Array.from(element.listeners).map(function (item) {
+			return item.slice(0, 2);
+		}), [[key2, fn2]]);
+	});
+});
+
+describe('N.prototype.emit', function () {
+
+	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
+		var element, key, data, event;
+		return regeneratorRuntime.wrap(function _callee49$(_context49) {
+			while (1) {
+				switch (_context49.prev = _context49.next) {
+					case 0:
+						element = new N();
+						key = 'event-' + Date.now();
+						data = new Date();
+						_context49.next = 5;
+						return new Promise(function (resolve) {
+							element.on(key, resolve).emit(key, data);
+						});
+
+					case 5:
+						event = _context49.sent;
+
+						assert.equal(event.detail, data);
+
+					case 7:
+					case 'end':
+						return _context49.stop();
+				}
+			}
+		}, _callee49, this);
+	})));
+
+	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
+		var element, key, data1, data2, results, onCall;
+		return regeneratorRuntime.wrap(function _callee50$(_context50) {
+			while (1) {
+				switch (_context50.prev = _context50.next) {
+					case 0:
+						onCall = function onCall(_ref84) {
+							var detail = _ref84.detail;
+
+							results.push(detail);
+						};
+
+						element = new N();
+						key = 'event-' + Date.now();
+						data1 = new Date();
+						data2 = Date.now();
+						results = [];
+
+						element.on(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
+						_context50.next = 9;
+						return wait();
+
+					case 9:
+						assert.deepEqual(results, [data1, data1, data2, data2]);
+
+					case 10:
+					case 'end':
+						return _context50.stop();
+				}
+			}
+		}, _callee50, this);
+	})));
+});
+
+describe('N.prototype.once', function () {
+
+	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
+		var element, key, data1, data2, results, onCall;
+		return regeneratorRuntime.wrap(function _callee51$(_context51) {
+			while (1) {
+				switch (_context51.prev = _context51.next) {
+					case 0:
+						onCall = function onCall(_ref86) {
+							var detail = _ref86.detail;
+
+							results.push(detail);
+						};
+
+						element = new N();
+						key = 'event-' + Date.now();
+						data1 = new Date();
+						data2 = Date.now();
+						results = [];
+
+						element.once(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
+						_context51.next = 9;
+						return wait();
+
+					case 9:
+						assert.deepEqual(results, [data1, data1, data2]);
+
+					case 10:
+					case 'end':
+						return _context51.stop();
+				}
+			}
+		}, _callee51, this);
+	})));
+
+	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
+		var results, data1, data2, E, element;
+		return regeneratorRuntime.wrap(function _callee52$(_context52) {
+			while (1) {
+				switch (_context52.prev = _context52.next) {
+					case 0:
+						results = [];
+						data1 = new Date();
+						data2 = Date.now();
+
+						E = function (_N3) {
+							_inherits(E, _N3);
+
+							function E() {
+								_classCallCheck(this, E);
+
+								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
+							}
+
+							_createClass(E, [{
+								key: 'click',
+								value: function click(event) {
+									results.push(event.detail);
+								}
+							}]);
+
+							return E;
+						}(N);
+
+						element = new E({});
+
+						element.once('click').emit('click', data1).emit('_click', data1).emit('click', data2);
+						_context52.next = 8;
+						return wait();
+
+					case 8:
+						assert.deepEqual(results, [data1]);
+
+					case 9:
+					case 'end':
+						return _context52.stop();
+				}
+			}
+		}, _callee52, this);
+	})));
+
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee53() {
+		var E, element;
+		return regeneratorRuntime.wrap(function _callee53$(_context53) {
+			while (1) {
+				switch (_context53.prev = _context53.next) {
+					case 0:
+						E = function (_N4) {
+							_inherits(E, _N4);
+
+							function E() {
+								_classCallCheck(this, E);
+
+								return _possibleConstructorReturn(this, (E.__proto__ || Object.getPrototypeOf(E)).apply(this, arguments));
+							}
+
+							return E;
+						}(N);
+
+						element = new E();
+
+						assert.throws(function () {
+							element.once('click');
+						});
+
+					case 3:
+					case 'end':
+						return _context53.stop();
+				}
+			}
+		}, _callee53, this);
+	})));
+});
+
+describe('N.prototype.find', function () {
+
+	it('should return the first matched element', function () {
+		var className = 'c' + Date.now();
+		var element1 = new N({
+			a: [['class', className]]
+		});
+		var element2 = new N({
+			a: [['class', className]]
+		});
+		var element3 = new N({
+			a: [['class', className]]
+		});
+		var element = new N({
+			c: [element2, {
+				c: [element3]
+			}]
+		});
+		new N({
+			c: [element1, element]
+		});
+		var actual = element.find('.' + className);
+		var expected = element2;
+		assert.equal(actual.equals(expected), true);
+	});
+});
+
+describe('N.prototype.findAll', function () {
+
+	it('should return an array of matched elements', function () {
+		var className = 'c' + Date.now();
+		var element1 = new N({
+			a: [['class', className]]
+		});
+		var element2 = new N({
+			a: [['class', className]]
+		});
+		var element3 = new N({
+			a: [['class', className]]
+		});
+		var element = new N({
+			c: [element2, {
+				c: [element3]
+			}]
+		});
+		new N({
+			c: [element1, element]
+		});
+		var actual = element.findAll('.' + className);
+		var expected = [element2, element3];
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+});
+
+describe('N.prototype.firstChild', function () {
+
+	it('should return null', function () {
+		var element = new N();
+		assert.equal(element.firstChild, null);
+	});
+
+	it('should return the first child', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+	});
+
+	it('should set the first child', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.setFirstChild(element2);
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+});
+
+var x$39 = setTimeout;
+
+describe('N.prototype.focused', function () {
+
+	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee54() {
+		var body, element;
+		return regeneratorRuntime.wrap(function _callee54$(_context54) {
+			while (1) {
+				switch (_context54.prev = _context54.next) {
+					case 0:
+						_context54.next = 2;
+						return new N.ready();
+
+					case 2:
+						body = _context54.sent;
+						element = new N({
+							t: 'input',
+							a: [['type', 'text']]
+						});
+
+						body.append(element);
+						_context54.next = 7;
+						return new x$10(function (resolve, reject) {
+							var count = 0;
+							function check() {
+								element.node.click();
+								element.node.focus();
+								if (element.equals(x$3.activeElement)) {
+									resolve();
+								} else if (count++ < 20) {
+									x$39(check, 100);
+								} else {
+									reject(new Error('Failed to focus an element'));
+								}
+							}
+							check();
+						});
+
+					case 7:
+						assert.equal(element.focused, true);
+						element.remove();
+
+					case 9:
+					case 'end':
+						return _context54.stop();
+				}
+			}
+		}, _callee54, this);
+	})));
+
+	it('should return true if it is not focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee55() {
+		var body, element;
+		return regeneratorRuntime.wrap(function _callee55$(_context55) {
+			while (1) {
+				switch (_context55.prev = _context55.next) {
+					case 0:
+						_context55.next = 2;
+						return N.ready();
+
+					case 2:
+						body = _context55.sent;
+						element = new N({
+							t: 'input'
+						});
+
+						body.append(element);
+						assert.equal(element.focused, false);
+						element.remove();
+
+					case 7:
+					case 'end':
+						return _context55.stop();
+				}
+			}
+		}, _callee55, this);
+	})));
+});
+
+describe('N.prototype.html', function () {
+
+	it('should return its innerHTML', function () {
+		var text = '' + Date.now();
+		var element = new N({
+			c: [{
+				t: 'span',
+				c: [text]
+			}]
+		});
+		var expected = '<span>' + text + '</span>';
+		assert.equal(element.html, expected);
+	});
+
+	it('should set its innerHTML', function () {
+		var text = '' + Date.now();
+		var element = new N({
+			c: [{}, {}, text]
+		});
+		element.setHTML('<s>' + text + '</s>');
+		var expected = '<s>' + text + '</s>';
+		assert.equal(element.html, expected);
+	});
+});
+
+describe('N.prototype.insertBefore', function () {
+
+	it('should insert a new child', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.insertBefore(element2, element1);
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+
+	it('should replace an existing child', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.insertBefore(element2, element1);
+		assert.equal(element.firstChild.equals(element2), true);
+	});
+});
+
+describe('N.prototype.lastChild', function () {
+
+	it('should return null', function () {
+		var element = new N();
+		assert.equal(element.lastChild, null);
+	});
+
+	it('should return the first child', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+
+	it('should set the first child', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element.setLastChild(element2);
+		assert.equal(element.lastChild.equals(element2), true);
+	});
+});
+
+describe('N.prototype.next', function () {
+
+	it('should insert a new node before an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.setNext(element2);
+		var expected = [element1, element2];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should insert 2 new nodes before an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.setNext(element2, element3);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should replace an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element2, element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.setNext(element2);
+		var expected = [element1, element2];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should replace existing nodes', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N();
+		var element = new N({
+			c: [element3, element2, element1]
+		});
+		assert.equal(element.lastChild.equals(element1), true);
+		element1.setNext(element2, element3);
+		var expected = [element1, element2, element3];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should return null', function () {
+		var element1 = new N();
+		var element2 = new N();
+		new N({
+			c: [element1, element2]
+		});
+		assert.equal(element2.next, null);
+	});
+});
+
+describe('N.prototype.nodeType', function () {
+
+	it('should return ELEMENT_NODE', function () {
+		var element = new N({});
+		assert.equal(element.nodeType, Node.ELEMENT_NODE);
+	});
+
+	it('should return TEXT_NODE', function () {
+		var element = new N('' + Date.now());
+		assert.equal(element.nodeType, Node.TEXT_NODE);
+	});
+});
+
+describe('N.prototype.isElementNode', function () {
+
+	it('should return true', function () {
+		var element = new N({});
+		assert.equal(element.isElementNode, true);
+	});
+
+	it('should return false', function () {
+		var element = new N('' + Date.now());
+		assert.equal(element.isElementNode, false);
+	});
+});
+
+describe('N.prototype.isTextNode', function () {
+
+	it('should return false', function () {
+		var element = new N({});
+		assert.equal(element.isTextNode, false);
+	});
+
+	it('should return true', function () {
+		var element = new N('' + Date.now());
+		assert.equal(element.isTextNode, true);
+	});
+});
+
+describe('N.prototype.normalize', function () {
+
+	it('should normalize an element', function () {
+		var text1 = 'text1' + Date.now();
+		var text2 = 'text2' + Date.now();
+		var text3 = 'text3' + Date.now();
+		var text4 = 'text4' + Date.now();
+		var text5 = 'text5' + Date.now();
+		var text6 = 'text6' + Date.now();
+		var data = {
+			c: ['', text1, text2, {
+				c: [text3, '', text4]
+			}, text5, text6]
+		};
+		var element = new N(data);
+		assert.deepEqual(element.toObject(), data);
+		element.normalize();
+		var expected = {
+			c: ['' + text1 + text2, {
+				c: ['' + text3 + text4]
+			}, '' + text5 + text6]
+		};
+		assert.deepEqual(element.toObject(), expected);
+	});
+});
+
+describe('N.prototype.parent', function () {
+
+	it('should return its parent', function () {
+		var element1 = new N();
+		var element2 = new N({ c: [element1] });
+		assert.equal(element1.parent.equals(element2), true);
+	});
+
+	it('should set its parent', function () {
+		var element1 = new N();
+		var element2 = new N();
+		element1.setParent(element2);
+		assert.equal(element1.parent.equals(element2), true);
+	});
+});
+
+describe('N.prototype.prepend', function () {
+
+	it('should prepend nodes', function () {
+		var element1 = new N(Date.now() + '-1');
+		var element2 = new N();
+		var element3 = new N(Date.now() + '-2');
+		var element = new N({
+			c: [element1]
+		});
+		element.prepend(element2, element3);
+		assert.deepEqual(element.childNodes, [element3, element2, element1]);
+	});
+});
+
+describe('N.prototype.previous', function () {
+
+	it('should insert a new node before an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element1.setPrevious(element2);
+		var expected = [element2, element1];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should insert 2 new nodes before an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element1.setPrevious(element2, element3);
+		var expected = [element2, element3, element1];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should replace an existing node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element1.setPrevious(element2);
+		var expected = [element2, element1];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should replace existing nodes', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N();
+		var element = new N({
+			c: [element3, element1, element2]
+		});
+		assert.equal(element.firstChild.equals(element3), true);
+		element1.setPrevious(element2, element3);
+		var expected = [element2, element3, element1];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+
+	it('should return null', function () {
+		var element1 = new N();
+		var element2 = new N();
+		new N({
+			c: [element1, element2]
+		});
+		assert.equal(element1.previous, null);
+	});
+});
+
+describe('N.prototype.remove', function () {
+
+	it('should remove itself from its parent', function () {
+		var element1 = new N('' + Date.now());
+		var element2 = new N();
+		var element = new N({
+			c: [element1, element2]
+		});
+		assert.deepEqual(element.childNodes, [element1, element2]);
+		assert.equal(element1.remove(), element1);
+		assert.equal(element1.remove(), element1);
+		assert.deepEqual(element.childNodes, [element2]);
+	});
+});
+
+describe('N.prototype.replaceChild', function () {
+
+	it('should replace a node', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element.replaceChild(element2, element1);
+		var expected = [element2];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+});
+
+describe('N.prototype.replaceWith', function () {
+
+	it('should replace node with some nodes', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N();
+		var element4 = new N();
+		var element5 = new N();
+		var element = new N({
+			c: [element1, element2, element3]
+		});
+		assert.equal(element.firstChild.equals(element1), true);
+		element2.replaceWith(element4, element5);
+		var expected = [element1, element4, element5, element3];
+		element.childNodes.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true);
+		});
+	});
+});
+
+describe('N.prototype.text', function () {
+
+	it('should return its textContent', function () {
+		var text = '' + Date.now();
+		var element = new N({
+			c: [{
+				t: 'span',
+				c: [text]
+			}]
+		});
+		var expected = text;
+		assert.equal(element.text, expected);
+	});
+
+	it('should set its textContent', function () {
+		var text = '' + Date.now();
+		var element = new N({
+			c: [{}, {}, text]
+		});
+		element.setText('<s>' + text + '</s>');
+		var expected = '<s>' + text + '</s>';
+		assert.equal(element.text, expected);
+	});
+});
+
+describe('N.prototype.toObject', function () {
+
+	it('should convert a text node to an object', function () {
+		var text = '' + Date.now();
+		var element = new N(text);
+		assert.equal(element.toObject(), text);
+	});
+
+	it('should convert an element node to an object', function () {
+		var t = 'h1';
+		var text = '' + Date.now();
+		var key1 = 'key1-' + Date.now();
+		var key2 = 'data-key2-' + Date.now();
+		var value1 = 'value1-' + Date.now();
+		var value2 = 'value2-' + Date.now();
+		var data = {
+			t: t,
+			a: [[key1, value1], [key2, value2]],
+			c: [text, {
+				a: [[key1, value2], [key2, value1]],
+				c: [{
+					c: [text]
+				}]
+			}]
+		};
+		var element = new N(data);
+		assert.deepEqual(element.toObject(), data);
+	});
+});
+
+describe('N.prototype.walk', function () {
+
+	it('should walk over a new N tree', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		var element = new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element.walk(function (node) {
+			actual.push(node);
+		});
+		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		var element = new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element.walk(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [text1, element1, text2, element3, text4, element2, text3, text5, element6];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+});
+
+describe('N.prototype.walkBackward', function () {
+
+	it('should walk backward', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		text10.walkBackward(function (node) {
+			actual.push(node);
+		});
+		var expected = [text10, element5, text8, element4, text6, text7, text9, element3, text5, element2, text3, text4, element1, text2, text1];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element5.walkBackward(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [element5, text8, element4, text6, text7];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+});
+
+describe('N.prototype.walkForward', function () {
+
+	it('should walk forward', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element1.walkForward(function (node) {
+			actual.push(node);
+		});
+		var expected = [element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should stop walking if a given function returns a truthy value', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element3.walkForward(function (node) {
+			if (node.equals(text9)) {
+				return true;
+			}
+			actual.push(node);
+		});
+		var expected = [element3, text4, element2, text3, text5, element6];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+});
+
+describe('N', function () {
+
+	it('should copy an element', function () {
+		var E1 = function (_N5) {
+			_inherits(E1, _N5);
+
+			function E1() {
+				_classCallCheck(this, E1);
+
+				return _possibleConstructorReturn(this, (E1.__proto__ || Object.getPrototypeOf(E1)).apply(this, arguments));
+			}
+
+			return E1;
+		}(N);
+
+		var E2 = function (_E) {
+			_inherits(E2, _E);
+
+			function E2() {
+				_classCallCheck(this, E2);
+
+				return _possibleConstructorReturn(this, (E2.__proto__ || Object.getPrototypeOf(E2)).apply(this, arguments));
+			}
+
+			return E2;
+		}(E1);
+
+		var e1 = new E2();
+		var e2 = new E2(e1);
+		assert(e1.equals(e2));
+	});
+});
 
 function test$118(generator) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'NamedNodeMap.prototype[Symbol.iterator]';
@@ -8794,8 +8800,6 @@ describe('passThrough', function () {
 	});
 });
 
-// import postMessage from '../postMessage';
-// import addEventListner from '../dom/addEventListener';
 if (!x$35.immediateId) {
 	x$35.immediateId = 0;
 }
@@ -8829,7 +8833,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$36(fn);
+	return x$39(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -8845,7 +8849,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$36(function () {
+x$39(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -11724,7 +11728,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$38.floor(clamp(256 * v, 0, 255));
+		return x$37.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -11795,7 +11799,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$36(function () {
+			timer = x$39(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
