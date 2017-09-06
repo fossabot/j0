@@ -13,10 +13,10 @@ const {
 } = require('../constants');
 const dependenciesList = new Map();
 
-async function rollupScript(entry, $console) {
+async function rollupScript(input, $console) {
 	$console.info('rollup');
 	const bundle = await rollup({
-		entry,
+		input,
 		plugins: [
 			j0(),
 			globImport(),
@@ -24,7 +24,7 @@ async function rollupScript(entry, $console) {
 		]
 	});
 	$console.info(`dependencies: ${bundle.modules.length}`);
-	dependenciesList.set(entry, new Set(
+	dependenciesList.set(input, new Set(
 		bundle.modules
 		.map(({id}) => {
 			return id;
@@ -40,10 +40,10 @@ async function transpileScript(code) {
 	return `(function(){\n${babeledCode}\n}());`;
 }
 
-async function compileScript(entry) {
-	const $console = console.create(`compileScript:${path.relative(docsDir, entry)}`);
-	const dest = entry.replace(/\.rollup\.js/, '.js');
-	let code = await rollupScript(entry, $console);
+async function compileScript(input) {
+	const $console = console.create(`compileScript:${path.relative(docsDir, input)}`);
+	const dest = input.replace(/\.rollup\.js/, '.js');
+	let code = await rollupScript(input, $console);
 	$console.info('transpile');
 	code = await transpileScript(code)
 	await writeFile(dest, code);
@@ -54,10 +54,10 @@ async function rollupScripts(updatedFile, target = '*.rollup.js') {
 	const files = [];
 	if (updatedFile) {
 		console.info(`search files dependent on ${updatedFile}`);
-		for (const [entry, dependencies] of dependenciesList) {
+		for (const [input, dependencies] of dependenciesList) {
 			if (dependencies.has(updatedFile)) {
-				console.info(entry);
-				files.push(entry);
+				console.info(input);
+				files.push(input);
 			}
 		}
 	} else {
@@ -66,8 +66,8 @@ async function rollupScripts(updatedFile, target = '*.rollup.js') {
 		files.push(...(await glob(pattern, {nodir: true})));
 	}
 	console.info(`rollup ${files.length} files`);
-	for (const entry of files) {
-		await compileScript(entry);
+	for (const input of files) {
+		await compileScript(input);
 	}
 	console.info('done');
 }
