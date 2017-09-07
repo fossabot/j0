@@ -2936,8 +2936,37 @@ var N = function () {
 		}
 	}, {
 		key: 'removeAttribute',
-		value: function removeAttribute(name) {
-			return this.node.removeAttribute(name);
+		value: function removeAttribute() {
+			for (var _len20 = arguments.length, names = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+				names[_key20] = arguments[_key20];
+			}
+
+			var _iteratorNormalCompletion23 = true;
+			var _didIteratorError23 = false;
+			var _iteratorError23 = undefined;
+
+			try {
+				for (var _iterator23 = names[Symbol.iterator](), _step23; !(_iteratorNormalCompletion23 = (_step23 = _iterator23.next()).done); _iteratorNormalCompletion23 = true) {
+					var name = _step23.value;
+
+					this.node.removeAttribute(name);
+				}
+			} catch (err) {
+				_didIteratorError23 = true;
+				_iteratorError23 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion23 && _iterator23.return) {
+						_iterator23.return();
+					}
+				} finally {
+					if (_didIteratorError23) {
+						throw _iteratorError23;
+					}
+				}
+			}
+
+			return this;
 		}
 	}, {
 		key: 'getMethodCaller',
@@ -3021,8 +3050,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len20 = arguments.length, args = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-					args[_key20] = arguments[_key20];
+				for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+					args[_key21] = arguments[_key21];
 				}
 
 				args.forEach(function (arg) {
@@ -3039,8 +3068,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
-					args[_key21] = arguments[_key21];
+				for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+					args[_key22] = arguments[_key22];
 				}
 
 				args.forEach(function (arg) {
@@ -3057,8 +3086,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
-					args[_key22] = arguments[_key22];
+				for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
+					args[_key23] = arguments[_key23];
 				}
 
 				args.forEach(function (arg) {
@@ -3074,8 +3103,8 @@ var N = function () {
 
 			var classList = this.classList;
 
-			for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
-				args[_key23] = arguments[_key23];
+			for (var _len24 = arguments.length, args = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
+				args[_key24] = arguments[_key24];
 			}
 
 			if (classList) {
@@ -3236,29 +3265,29 @@ var N = function () {
 			var attributes = this.node.attributes;
 
 			if (attributes) {
-				var _iteratorNormalCompletion23 = true;
-				var _didIteratorError23 = false;
-				var _iteratorError23 = undefined;
+				var _iteratorNormalCompletion24 = true;
+				var _didIteratorError24 = false;
+				var _iteratorError24 = undefined;
 
 				try {
-					for (var _iterator23 = attributes[Symbol.iterator](), _step23; !(_iteratorNormalCompletion23 = (_step23 = _iterator23.next()).done); _iteratorNormalCompletion23 = true) {
-						var _ref16 = _step23.value;
+					for (var _iterator24 = attributes[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
+						var _ref16 = _step24.value;
 						var name = _ref16.name;
 						var _value = _ref16.value;
 
 						result.set(name, _value);
 					}
 				} catch (err) {
-					_didIteratorError23 = true;
-					_iteratorError23 = err;
+					_didIteratorError24 = true;
+					_iteratorError24 = err;
 				} finally {
 					try {
-						if (!_iteratorNormalCompletion23 && _iterator23.return) {
-							_iterator23.return();
+						if (!_iteratorNormalCompletion24 && _iterator24.return) {
+							_iterator24.return();
 						}
 					} finally {
-						if (_didIteratorError23) {
-							throw _iteratorError23;
+						if (_didIteratorError24) {
+							throw _iteratorError24;
 						}
 					}
 				}
@@ -3465,8 +3494,8 @@ var EventEmitter = function () {
 		value: function emit(type) {
 			var _this12 = this;
 
-			for (var _len24 = arguments.length, data = Array(_len24 > 1 ? _len24 - 1 : 0), _key24 = 1; _key24 < _len24; _key24++) {
-				data[_key24 - 1] = arguments[_key24];
+			for (var _len25 = arguments.length, data = Array(_len25 > 1 ? _len25 - 1 : 0), _key25 = 1; _key25 < _len25; _key25++) {
+				data[_key25 - 1] = arguments[_key25];
 			}
 
 			this[listenersKey].forEach(function (item, index, listeners) {
@@ -3526,26 +3555,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.on(name1, function () {
-			for (var _len25 = arguments.length, data = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
-				data[_key25] = arguments[_key25];
-			}
-
-			results.push([data, '1']);
-		}).on(name1, function () {
 			for (var _len26 = arguments.length, data = Array(_len26), _key26 = 0; _key26 < _len26; _key26++) {
 				data[_key26] = arguments[_key26];
 			}
 
-			results.push([data, '2']);
-		}).on(name2, function () {
+			results.push([data, '1']);
+		}).on(name1, function () {
 			for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
 				data[_key27] = arguments[_key27];
 			}
 
-			results.push([data, '3']);
+			results.push([data, '2']);
 		}).on(name2, function () {
 			for (var _len28 = arguments.length, data = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
 				data[_key28] = arguments[_key28];
+			}
+
+			results.push([data, '3']);
+		}).on(name2, function () {
+			for (var _len29 = arguments.length, data = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
+				data[_key29] = arguments[_key29];
 			}
 
 			results.push([data, '4']);
@@ -3562,26 +3591,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len29 = arguments.length, data = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
-				data[_key29] = arguments[_key29];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
 			for (var _len30 = arguments.length, data = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
 				data[_key30] = arguments[_key30];
 			}
 
-			results.push([data, '2']);
-		}).once(name2, function () {
+			results.push([data, '1']);
+		}).once(name1, function () {
 			for (var _len31 = arguments.length, data = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
 				data[_key31] = arguments[_key31];
 			}
 
-			results.push([data, '3']);
+			results.push([data, '2']);
 		}).once(name2, function () {
 			for (var _len32 = arguments.length, data = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
 				data[_key32] = arguments[_key32];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
+				data[_key33] = arguments[_key33];
 			}
 
 			results.push([data, '4']);
@@ -3599,8 +3628,8 @@ describe('EventEmitter', function () {
 		var results = [];
 		var count = 0;
 		function listener() {
-			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
-				data[_key33] = arguments[_key33];
+			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
+				data[_key34] = arguments[_key34];
 			}
 
 			results.push([data, count++]);
@@ -3618,26 +3647,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
-				data[_key34] = arguments[_key34];
-			}
-
-			results.push([data, '1']);
-		}).once(name1, function () {
 			for (var _len35 = arguments.length, data = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
 				data[_key35] = arguments[_key35];
 			}
 
-			results.push([data, '2']);
-		}).once(name2, function () {
+			results.push([data, '1']);
+		}).once(name1, function () {
 			for (var _len36 = arguments.length, data = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
 				data[_key36] = arguments[_key36];
 			}
 
-			results.push([data, '3']);
+			results.push([data, '2']);
 		}).once(name2, function () {
 			for (var _len37 = arguments.length, data = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
 				data[_key37] = arguments[_key37];
+			}
+
+			results.push([data, '3']);
+		}).once(name2, function () {
+			for (var _len38 = arguments.length, data = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+				data[_key38] = arguments[_key38];
 			}
 
 			results.push([data, '4']);
@@ -3652,13 +3681,13 @@ var StringList = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion24 = true;
-			var _didIteratorError24 = false;
-			var _iteratorError24 = undefined;
+			var _iteratorNormalCompletion25 = true;
+			var _didIteratorError25 = false;
+			var _iteratorError25 = undefined;
 
 			try {
-				for (var _iterator24 = iterable[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
-					var _ref20 = _step24.value;
+				for (var _iterator25 = iterable[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
+					var _ref20 = _step25.value;
 
 					var _ref21 = _slicedToArray(_ref20, 2);
 
@@ -3668,16 +3697,16 @@ var StringList = function () {
 					this.append(key, value);
 				}
 			} catch (err) {
-				_didIteratorError24 = true;
-				_iteratorError24 = err;
+				_didIteratorError25 = true;
+				_iteratorError25 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion24 && _iterator24.return) {
-						_iterator24.return();
+					if (!_iteratorNormalCompletion25 && _iterator25.return) {
+						_iterator25.return();
 					}
 				} finally {
-					if (_didIteratorError24) {
-						throw _iteratorError24;
+					if (_didIteratorError25) {
+						throw _iteratorError25;
 					}
 				}
 			}
@@ -4062,13 +4091,13 @@ function fetch$1(input, init, cb) {
 			xhr.withCredentials = true;
 		}
 		xhr.responseType = 'blob';
-		var _iteratorNormalCompletion25 = true;
-		var _didIteratorError25 = false;
-		var _iteratorError25 = undefined;
+		var _iteratorNormalCompletion26 = true;
+		var _didIteratorError26 = false;
+		var _iteratorError26 = undefined;
 
 		try {
-			for (var _iterator25 = request.headers.entries()[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
-				var _ref33 = _step25.value;
+			for (var _iterator26 = request.headers.entries()[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
+				var _ref33 = _step26.value;
 
 				var _ref34 = _slicedToArray(_ref33, 2);
 
@@ -4078,16 +4107,16 @@ function fetch$1(input, init, cb) {
 				xhr.setRequestHeader(name, value);
 			}
 		} catch (err) {
-			_didIteratorError25 = true;
-			_iteratorError25 = err;
+			_didIteratorError26 = true;
+			_iteratorError26 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion25 && _iterator25.return) {
-					_iterator25.return();
+				if (!_iteratorNormalCompletion26 && _iterator26.return) {
+					_iterator26.return();
 				}
 			} finally {
-				if (_didIteratorError25) {
-					throw _iteratorError25;
+				if (_didIteratorError26) {
+					throw _iteratorError26;
 				}
 			}
 		}
@@ -4194,14 +4223,14 @@ describe('formatDate', function () {
 		});
 	};
 
-	var _iteratorNormalCompletion26 = true;
-	var _didIteratorError26 = false;
-	var _iteratorError26 = undefined;
+	var _iteratorNormalCompletion27 = true;
+	var _didIteratorError27 = false;
+	var _iteratorError27 = undefined;
 
 	try {
 
-		for (var _iterator26 = tests$5[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-			var _ref35 = _step26.value;
+		for (var _iterator27 = tests$5[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
+			var _ref35 = _step27.value;
 
 			var _ref36 = _slicedToArray(_ref35, 3);
 
@@ -4212,16 +4241,16 @@ describe('formatDate', function () {
 			_loop(src, expected, _template);
 		}
 	} catch (err) {
-		_didIteratorError26 = true;
-		_iteratorError26 = err;
+		_didIteratorError27 = true;
+		_iteratorError27 = err;
 	} finally {
 		try {
-			if (!_iteratorNormalCompletion26 && _iterator26.return) {
-				_iterator26.return();
+			if (!_iteratorNormalCompletion27 && _iterator27.return) {
+				_iterator27.return();
 			}
 		} finally {
-			if (_didIteratorError26) {
-				throw _iteratorError26;
+			if (_didIteratorError27) {
+				throw _iteratorError27;
 			}
 		}
 	}
@@ -4367,27 +4396,27 @@ function test$25(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion27 = true;
-			var _didIteratorError27 = false;
-			var _iteratorError27 = undefined;
+			var _iteratorNormalCompletion28 = true;
+			var _didIteratorError28 = false;
+			var _iteratorError28 = undefined;
 
 			try {
-				for (var _iterator27 = expected[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-					var element = _step27.value;
+				for (var _iterator28 = expected[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
+					var element = _step28.value;
 
 					parent.appendChild(element);
 				}
 			} catch (err) {
-				_didIteratorError27 = true;
-				_iteratorError27 = err;
+				_didIteratorError28 = true;
+				_iteratorError28 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion27 && _iterator27.return) {
-						_iterator27.return();
+					if (!_iteratorNormalCompletion28 && _iterator28.return) {
+						_iterator28.return();
 					}
 				} finally {
-					if (_didIteratorError27) {
-						throw _iteratorError27;
+					if (_didIteratorError28) {
+						throw _iteratorError28;
 					}
 				}
 			}
@@ -4824,27 +4853,27 @@ describe('Iterator', function () {
 			};
 		});
 		var results = [];
-		var _iteratorNormalCompletion28 = true;
-		var _didIteratorError28 = false;
-		var _iteratorError28 = undefined;
+		var _iteratorNormalCompletion29 = true;
+		var _didIteratorError29 = false;
+		var _iteratorError29 = undefined;
 
 		try {
-			for (var _iterator28 = iterator[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-				var result = _step28.value;
+			for (var _iterator29 = iterator[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
+				var result = _step29.value;
 
 				results.push(result);
 			}
 		} catch (err) {
-			_didIteratorError28 = true;
-			_iteratorError28 = err;
+			_didIteratorError29 = true;
+			_iteratorError29 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion28 && _iterator28.return) {
-					_iterator28.return();
+				if (!_iteratorNormalCompletion29 && _iterator29.return) {
+					_iterator29.return();
 				}
 			} finally {
-				if (_didIteratorError28) {
-					throw _iteratorError28;
+				if (_didIteratorError29) {
+					throw _iteratorError29;
 				}
 			}
 		}
@@ -5078,13 +5107,13 @@ var Map$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion29 = true;
-			var _didIteratorError29 = false;
-			var _iteratorError29 = undefined;
+			var _iteratorNormalCompletion30 = true;
+			var _didIteratorError30 = false;
+			var _iteratorError30 = undefined;
 
 			try {
-				for (var _iterator29 = iterable[Symbol.iterator](), _step29; !(_iteratorNormalCompletion29 = (_step29 = _iterator29.next()).done); _iteratorNormalCompletion29 = true) {
-					var _ref37 = _step29.value;
+				for (var _iterator30 = iterable[Symbol.iterator](), _step30; !(_iteratorNormalCompletion30 = (_step30 = _iterator30.next()).done); _iteratorNormalCompletion30 = true) {
+					var _ref37 = _step30.value;
 
 					var _ref38 = _slicedToArray(_ref37, 2);
 
@@ -5094,16 +5123,16 @@ var Map$2 = function () {
 					this.set(key, value);
 				}
 			} catch (err) {
-				_didIteratorError29 = true;
-				_iteratorError29 = err;
+				_didIteratorError30 = true;
+				_iteratorError30 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion29 && _iterator29.return) {
-						_iterator29.return();
+					if (!_iteratorNormalCompletion30 && _iterator30.return) {
+						_iterator30.return();
 					}
 				} finally {
-					if (_didIteratorError29) {
-						throw _iteratorError29;
+					if (_didIteratorError30) {
+						throw _iteratorError30;
 					}
 				}
 			}
@@ -5304,8 +5333,8 @@ function tests$8(Map) {
 			var context = {};
 			var results = [];
 			map.forEach(function () {
-				for (var _len38 = arguments.length, args = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
-					args[_key38] = arguments[_key38];
+				for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
+					args[_key39] = arguments[_key39];
 				}
 
 				map.delete(args[1]);
@@ -6065,8 +6094,8 @@ function test$68(hypot) {
 function hypot() {
 	var sum = 0;
 
-	for (var _len39 = arguments.length, args = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
-		args[_key39] = arguments[_key39];
+	for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
+		args[_key40] = arguments[_key40];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
@@ -6941,7 +6970,7 @@ describe('N.prototype.attributes', function () {
 		var value1 = 'value-' + Date.now();
 		var value2 = 'value-' + Date.now();
 		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
+		assert.equal(element.setAttribute(key, value1, value2), element);
 		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
 	});
 
@@ -6951,32 +6980,42 @@ describe('N.prototype.attributes', function () {
 		var value1 = 'value-' + Date.now();
 		var value2 = 'value-' + Date.now();
 		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
+		assert.equal(element.setAttribute(key, value1, value2), element);
 		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
 	});
 
-	it('should remove an attribute', function () {
+	it('should remove attributes', function () {
 		var element = new N();
-		var key = 'attr-' + Date.now();
+		var key1 = 'attr-' + Date.now();
+		var key2 = 'attr-' + Date.now();
 		var value1 = 'value-' + Date.now();
 		var value2 = 'value-' + Date.now();
-		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
-		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
-		element.removeAttribute(key);
-		assert.equal(element.getAttribute(key), null);
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		assert.equal(element.setAttribute(key1, value1, value2), element);
+		assert.equal(element.setAttribute(key2, value2, value1), element);
+		assert.equal(element.getAttribute(key1), value1 + ' ' + value2);
+		assert.equal(element.getAttribute(key2), value2 + ' ' + value1);
+		assert.equal(element.removeAttribute(key1, key2), element);
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
 	});
 
 	it('should remove a "data-" prefixed attribute', function () {
 		var element = new N();
-		var key = 'data-' + Date.now();
+		var key1 = 'data-' + Date.now();
+		var key2 = 'data-' + Date.now();
 		var value1 = 'value-' + Date.now();
 		var value2 = 'value-' + Date.now();
-		assert.equal(element.getAttribute(key), null);
-		element.setAttribute(key, value1, value2);
-		assert.equal(element.getAttribute(key), value1 + ' ' + value2);
-		element.removeAttribute(key);
-		assert.equal(element.getAttribute(key), null);
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
+		assert.equal(element.setAttribute(key1, value1, value2), element);
+		assert.equal(element.setAttribute(key2, value2, value1), element);
+		assert.equal(element.getAttribute(key1), value1 + ' ' + value2);
+		assert.equal(element.getAttribute(key2), value2 + ' ' + value1);
+		assert.equal(element.removeAttribute(key1, key2), element);
+		assert.equal(element.getAttribute(key1), null);
+		assert.equal(element.getAttribute(key2), null);
 	});
 
 	it('should return a map of attributes', function () {
@@ -7239,8 +7278,8 @@ describe('N.eventFilter', function () {
 	it('should set a filter', function () {
 		var actual = [];
 		N.eventFilter = function () {
-			for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
-				args[_key40] = arguments[_key40];
+			for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
+				args[_key41] = arguments[_key41];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -7259,8 +7298,8 @@ describe('N.eventFilter', function () {
 	it('should set a filter and skip addEventListener', function () {
 		var actual = [];
 		N.eventFilter = function () {
-			for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
-				args[_key41] = arguments[_key41];
+			for (var _len42 = arguments.length, args = Array(_len42), _key42 = 0; _key42 < _len42; _key42++) {
+				args[_key42] = arguments[_key42];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -8508,49 +8547,6 @@ function test$118(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion30 = true;
-			var _didIteratorError30 = false;
-			var _iteratorError30 = undefined;
-
-			try {
-				for (var _iterator30 = expected[Symbol.iterator](), _step30; !(_iteratorNormalCompletion30 = (_step30 = _iterator30.next()).done); _iteratorNormalCompletion30 = true) {
-					var element = _step30.value;
-
-					parent.appendChild(element);
-				}
-			} catch (err) {
-				_didIteratorError30 = true;
-				_iteratorError30 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion30 && _iterator30.return) {
-						_iterator30.return();
-					}
-				} finally {
-					if (_didIteratorError30) {
-						throw _iteratorError30;
-					}
-				}
-			}
-
-			var iterator = generator.call(parent.childNodes);
-			var results = [];
-			while (1) {
-				var _iterator$next12 = iterator.next(),
-				    value = _iterator$next12.value,
-				    done = _iterator$next12.done;
-
-				if (done) {
-					break;
-				}
-				results.push(value);
-			}
-			assert.deepEqual(results, expected);
-		});
-
-		it('should create an iterator which is iterable in for-of syntax', function () {
-			var parent = document.createElement('div');
-			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion31 = true;
 			var _didIteratorError31 = false;
 			var _iteratorError31 = undefined;
@@ -8578,15 +8574,31 @@ function test$118(generator) {
 
 			var iterator = generator.call(parent.childNodes);
 			var results = [];
+			while (1) {
+				var _iterator$next12 = iterator.next(),
+				    value = _iterator$next12.value,
+				    done = _iterator$next12.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion32 = true;
 			var _didIteratorError32 = false;
 			var _iteratorError32 = undefined;
 
 			try {
-				for (var _iterator32 = iterator[Symbol.iterator](), _step32; !(_iteratorNormalCompletion32 = (_step32 = _iterator32.next()).done); _iteratorNormalCompletion32 = true) {
-					var value = _step32.value;
+				for (var _iterator32 = expected[Symbol.iterator](), _step32; !(_iteratorNormalCompletion32 = (_step32 = _iterator32.next()).done); _iteratorNormalCompletion32 = true) {
+					var element = _step32.value;
 
-					results.push(value);
+					parent.appendChild(element);
 				}
 			} catch (err) {
 				_didIteratorError32 = true;
@@ -8599,6 +8611,33 @@ function test$118(generator) {
 				} finally {
 					if (_didIteratorError32) {
 						throw _iteratorError32;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion33 = true;
+			var _didIteratorError33 = false;
+			var _iteratorError33 = undefined;
+
+			try {
+				for (var _iterator33 = iterator[Symbol.iterator](), _step33; !(_iteratorNormalCompletion33 = (_step33 = _iterator33.next()).done); _iteratorNormalCompletion33 = true) {
+					var value = _step33.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError33 = true;
+				_iteratorError33 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion33 && _iterator33.return) {
+						_iterator33.return();
+					}
+				} finally {
+					if (_didIteratorError33) {
+						throw _iteratorError33;
 					}
 				}
 			}
@@ -8635,49 +8674,6 @@ function test$120(generator) {
 		it('should create an iterator', function () {
 			var parent = document.createElement('div');
 			var expected = [document.createElement('div'), document.createElement('div')];
-			var _iteratorNormalCompletion33 = true;
-			var _didIteratorError33 = false;
-			var _iteratorError33 = undefined;
-
-			try {
-				for (var _iterator33 = expected[Symbol.iterator](), _step33; !(_iteratorNormalCompletion33 = (_step33 = _iterator33.next()).done); _iteratorNormalCompletion33 = true) {
-					var element = _step33.value;
-
-					parent.appendChild(element);
-				}
-			} catch (err) {
-				_didIteratorError33 = true;
-				_iteratorError33 = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion33 && _iterator33.return) {
-						_iterator33.return();
-					}
-				} finally {
-					if (_didIteratorError33) {
-						throw _iteratorError33;
-					}
-				}
-			}
-
-			var iterator = generator.call(parent.childNodes);
-			var results = [];
-			while (1) {
-				var _iterator$next13 = iterator.next(),
-				    value = _iterator$next13.value,
-				    done = _iterator$next13.done;
-
-				if (done) {
-					break;
-				}
-				results.push(value);
-			}
-			assert.deepEqual(results, expected);
-		});
-
-		it('should create an iterator which is iterable in for-of syntax', function () {
-			var parent = document.createElement('div');
-			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion34 = true;
 			var _didIteratorError34 = false;
 			var _iteratorError34 = undefined;
@@ -8705,15 +8701,31 @@ function test$120(generator) {
 
 			var iterator = generator.call(parent.childNodes);
 			var results = [];
+			while (1) {
+				var _iterator$next13 = iterator.next(),
+				    value = _iterator$next13.value,
+				    done = _iterator$next13.done;
+
+				if (done) {
+					break;
+				}
+				results.push(value);
+			}
+			assert.deepEqual(results, expected);
+		});
+
+		it('should create an iterator which is iterable in for-of syntax', function () {
+			var parent = document.createElement('div');
+			var expected = [document.createElement('div'), document.createElement('div')];
 			var _iteratorNormalCompletion35 = true;
 			var _didIteratorError35 = false;
 			var _iteratorError35 = undefined;
 
 			try {
-				for (var _iterator35 = iterator[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
-					var value = _step35.value;
+				for (var _iterator35 = expected[Symbol.iterator](), _step35; !(_iteratorNormalCompletion35 = (_step35 = _iterator35.next()).done); _iteratorNormalCompletion35 = true) {
+					var element = _step35.value;
 
-					results.push(value);
+					parent.appendChild(element);
 				}
 			} catch (err) {
 				_didIteratorError35 = true;
@@ -8726,6 +8738,33 @@ function test$120(generator) {
 				} finally {
 					if (_didIteratorError35) {
 						throw _iteratorError35;
+					}
+				}
+			}
+
+			var iterator = generator.call(parent.childNodes);
+			var results = [];
+			var _iteratorNormalCompletion36 = true;
+			var _didIteratorError36 = false;
+			var _iteratorError36 = undefined;
+
+			try {
+				for (var _iterator36 = iterator[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
+					var value = _step36.value;
+
+					results.push(value);
+				}
+			} catch (err) {
+				_didIteratorError36 = true;
+				_iteratorError36 = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion36 && _iterator36.return) {
+						_iterator36.return();
+					}
+				} finally {
+					if (_didIteratorError36) {
+						throw _iteratorError36;
 					}
 				}
 			}
@@ -8772,8 +8811,8 @@ describe('noop', function () {
 });
 
 function assign$1(target) {
-	for (var _len42 = arguments.length, objects = Array(_len42 > 1 ? _len42 - 1 : 0), _key42 = 1; _key42 < _len42; _key42++) {
-		objects[_key42 - 1] = arguments[_key42];
+	for (var _len43 = arguments.length, objects = Array(_len43 > 1 ? _len43 - 1 : 0), _key43 = 1; _key43 < _len43; _key43++) {
+		objects[_key43 - 1] = arguments[_key43];
 	}
 
 	objects.forEach(function (obj) {
@@ -9386,27 +9425,27 @@ var Set$2 = function () {
 
 		this.clear();
 		if (iterable) {
-			var _iteratorNormalCompletion36 = true;
-			var _didIteratorError36 = false;
-			var _iteratorError36 = undefined;
+			var _iteratorNormalCompletion37 = true;
+			var _didIteratorError37 = false;
+			var _iteratorError37 = undefined;
 
 			try {
-				for (var _iterator36 = iterable[Symbol.iterator](), _step36; !(_iteratorNormalCompletion36 = (_step36 = _iterator36.next()).done); _iteratorNormalCompletion36 = true) {
-					var value = _step36.value;
+				for (var _iterator37 = iterable[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
+					var value = _step37.value;
 
 					this.add(value);
 				}
 			} catch (err) {
-				_didIteratorError36 = true;
-				_iteratorError36 = err;
+				_didIteratorError37 = true;
+				_iteratorError37 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion36 && _iterator36.return) {
-						_iterator36.return();
+					if (!_iteratorNormalCompletion37 && _iterator37.return) {
+						_iterator37.return();
 					}
 				} finally {
-					if (_didIteratorError36) {
-						throw _iteratorError36;
+					if (_didIteratorError37) {
+						throw _iteratorError37;
 					}
 				}
 			}
@@ -9554,8 +9593,8 @@ function tests$15(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len43 = arguments.length, args = Array(_len43), _key43 = 0; _key43 < _len43; _key43++) {
-					args[_key43] = arguments[_key43];
+				for (var _len44 = arguments.length, args = Array(_len44), _key44 = 0; _key44 < _len44; _key44++) {
+					args[_key44] = arguments[_key44];
 				}
 
 				args[3] = this;
@@ -9719,8 +9758,8 @@ var State = function () {
 
 			var params = null;
 			href.replace(this.matcher, function (match) {
-				for (var _len44 = arguments.length, args = Array(_len44 > 1 ? _len44 - 1 : 0), _key44 = 1; _key44 < _len44; _key44++) {
-					args[_key44 - 1] = arguments[_key44];
+				for (var _len45 = arguments.length, args = Array(_len45 > 1 ? _len45 - 1 : 0), _key45 = 1; _key45 < _len45; _key45++) {
+					args[_key45 - 1] = arguments[_key45];
 				}
 
 				var index = 0;
@@ -9947,13 +9986,13 @@ var StateManager = function (_EventEmitter) {
 			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$41;
 
 			var stateString = this.parser(url);
-			var _iteratorNormalCompletion37 = true;
-			var _didIteratorError37 = false;
-			var _iteratorError37 = undefined;
+			var _iteratorNormalCompletion38 = true;
+			var _didIteratorError38 = false;
+			var _iteratorError38 = undefined;
 
 			try {
-				for (var _iterator37 = this.states[Symbol.iterator](), _step37; !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
-					var _ref101 = _step37.value;
+				for (var _iterator38 = this.states[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
+					var _ref101 = _step38.value;
 
 					var _ref102 = _slicedToArray(_ref101, 2);
 
@@ -9965,16 +10004,16 @@ var StateManager = function (_EventEmitter) {
 					}
 				}
 			} catch (err) {
-				_didIteratorError37 = true;
-				_iteratorError37 = err;
+				_didIteratorError38 = true;
+				_iteratorError38 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion37 && _iterator37.return) {
-						_iterator37.return();
+					if (!_iteratorNormalCompletion38 && _iterator38.return) {
+						_iterator38.return();
 					}
 				} finally {
-					if (_didIteratorError37) {
-						throw _iteratorError37;
+					if (_didIteratorError38) {
+						throw _iteratorError38;
 					}
 				}
 			}
@@ -10116,13 +10155,13 @@ describe('StateManager', function () {
 			path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 		});
 		var results = [];
-		var _iteratorNormalCompletion38 = true;
-		var _didIteratorError38 = false;
-		var _iteratorError38 = undefined;
+		var _iteratorNormalCompletion39 = true;
+		var _didIteratorError39 = false;
+		var _iteratorError39 = undefined;
 
 		try {
-			for (var _iterator38 = states.states[Symbol.iterator](), _step38; !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
-				var _ref104 = _step38.value;
+			for (var _iterator39 = states.states[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
+				var _ref104 = _step39.value;
 
 				var _ref105 = _slicedToArray(_ref104, 2);
 
@@ -10131,16 +10170,16 @@ describe('StateManager', function () {
 				results.push(state);
 			}
 		} catch (err) {
-			_didIteratorError38 = true;
-			_iteratorError38 = err;
+			_didIteratorError39 = true;
+			_iteratorError39 = err;
 		} finally {
 			try {
-				if (!_iteratorNormalCompletion38 && _iterator38.return) {
-					_iterator38.return();
+				if (!_iteratorNormalCompletion39 && _iterator39.return) {
+					_iterator39.return();
 				}
 			} finally {
-				if (_didIteratorError38) {
-					throw _iteratorError38;
+				if (_didIteratorError39) {
+					throw _iteratorError39;
 				}
 			}
 		}
@@ -10225,8 +10264,8 @@ describe('StateManager', function () {
 						_context57.next = 7;
 						return new Promise(function (resolve) {
 							states.on('change', function () {
-								for (var _len45 = arguments.length, data = Array(_len45), _key45 = 0; _key45 < _len45; _key45++) {
-									data[_key45] = arguments[_key45];
+								for (var _len46 = arguments.length, data = Array(_len46), _key46 = 0; _key46 < _len46; _key46++) {
+									data[_key46] = arguments[_key46];
 								}
 
 								resolve(data);
@@ -10497,27 +10536,27 @@ function test$125(generator) {
 			var string = '' + Date.now();
 			var iterator = generator.call(string);
 			var results = [];
-			var _iteratorNormalCompletion39 = true;
-			var _didIteratorError39 = false;
-			var _iteratorError39 = undefined;
+			var _iteratorNormalCompletion40 = true;
+			var _didIteratorError40 = false;
+			var _iteratorError40 = undefined;
 
 			try {
-				for (var _iterator39 = iterator[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
-					var value = _step39.value;
+				for (var _iterator40 = iterator[Symbol.iterator](), _step40; !(_iteratorNormalCompletion40 = (_step40 = _iterator40.next()).done); _iteratorNormalCompletion40 = true) {
+					var value = _step40.value;
 
 					results.push(value);
 				}
 			} catch (err) {
-				_didIteratorError39 = true;
-				_iteratorError39 = err;
+				_didIteratorError40 = true;
+				_iteratorError40 = err;
 			} finally {
 				try {
-					if (!_iteratorNormalCompletion39 && _iterator39.return) {
-						_iterator39.return();
+					if (!_iteratorNormalCompletion40 && _iterator40.return) {
+						_iterator40.return();
 					}
 				} finally {
-					if (_didIteratorError39) {
-						throw _iteratorError39;
+					if (_didIteratorError40) {
+						throw _iteratorError40;
 					}
 				}
 			}
@@ -10659,8 +10698,8 @@ function fromCodePoint() {
 	var chars = [];
 	var fromCharCode = String.fromCharCode;
 
-	for (var _len46 = arguments.length, args = Array(_len46), _key46 = 0; _key46 < _len46; _key46++) {
-		args[_key46] = arguments[_key46];
+	for (var _len47 = arguments.length, args = Array(_len47), _key47 = 0; _key47 < _len47; _key47++) {
+		args[_key47] = arguments[_key47];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
@@ -11835,8 +11874,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len47 = arguments.length, args = Array(_len47), _key47 = 0; _key47 < _len47; _key47++) {
-			args[_key47] = arguments[_key47];
+		for (var _len48 = arguments.length, args = Array(_len48), _key48 = 0; _key48 < _len48; _key48++) {
+			args[_key48] = arguments[_key48];
 		}
 
 		lastArgs = args;
