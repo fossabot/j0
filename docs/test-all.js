@@ -33,7 +33,7 @@ var wait$1 = function () {
 		}, _callee64, this);
 	}));
 
-	return function wait$1(_x111, _x112) {
+	return function wait$1(_x112, _x113) {
 		return _ref127.apply(this, arguments);
 	};
 }();
@@ -3194,6 +3194,21 @@ var N = function () {
 			}
 		}
 	}, {
+		key: 'forEachAncestor',
+		value: function forEachAncestor(fn) {
+			var skip = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+			var element = this;
+			while (element && !element.equals(x$3)) {
+				if (--skip < 0) {
+					if (fn(element)) {
+						break;
+					}
+				}
+				element = element.parent;
+			}
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -3400,7 +3415,7 @@ var N = function () {
 				}, _callee10, this);
 			}));
 
-			function ready(_x30) {
+			function ready(_x31) {
 				return _ref17.apply(this, arguments);
 			}
 
@@ -7807,6 +7822,56 @@ describe('N.prototype.focused', function () {
 			}
 		}, _callee55, this);
 	})));
+});
+
+describe('N.prototype.forEachAncestor', function () {
+
+	it('should iterate ancestors', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N({ c: [element1, element2] });
+		var element4 = new N({ c: [element3] });
+		var results = [];
+		element1.forEachAncestor(function (element) {
+			results.push(element);
+		});
+		var expected = [element1, element3, element4];
+		expected.forEach(function (element, index) {
+			assert(element.equals(results[index]), 'Error at ' + index);
+		});
+	});
+
+	it('should iterate ancestors but skip the first element', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N({ c: [element1, element2] });
+		var element4 = new N({ c: [element3] });
+		var results = [];
+		element1.forEachAncestor(function (element) {
+			results.push(element);
+		}, 1);
+		var expected = [element3, element4];
+		expected.forEach(function (element, index) {
+			assert(element.equals(results[index]), 'Error at ' + index);
+		});
+	});
+
+	it('should iterate ancestors but skip the document', function () {
+		var element1 = new N();
+		var element2 = new N();
+		var element3 = new N({ c: [element1, element2] });
+		var element4 = new N({ c: [element3] });
+		element4.setParent(x$3.body);
+		var results = [];
+		element1.forEachAncestor(function (element) {
+			results.push(element);
+		}, 1);
+		var expected = [element3, element4, new N(x$3.body)];
+		expected.forEach(function (element, index) {
+			assert(element.equals(results[index]), 'Error at ' + index);
+		});
+		element4.remove();
+	});
 });
 
 describe('N.prototype.html', function () {
