@@ -9,6 +9,7 @@ import '../lib/URL/polyfill.js';
 import '../lib/CustomEvent/polyfill.js';
 import '../lib/Map/polyfill.js';
 import '../lib/Set/polyfill.js';
+import '../lib/DOMTokenList/polyfill.js';
 import '../lib/NodeList/polyfill.js';
 import '../lib/HTMLCollection/polyfill.js';
 import '../lib/NamedNodeMap/polyfill.js';

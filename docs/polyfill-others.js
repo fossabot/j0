@@ -2413,7 +2413,7 @@ try {
 	prototype$15[iteratorSymbol] = generator$4;
 }
 
-var x$20 = NodeList;
+var x$20 = DOMTokenList;
 
 function generator$6() {
 	var _this8 = this;
@@ -2421,12 +2421,14 @@ function generator$6() {
 	var length = this.length;
 
 	var index = 0;
-	return new Iterator(function () {
-		return {
-			value: _this8[index],
-			done: length <= index++
-		};
-	});
+	return {
+		next: function next() {
+			return {
+				value: _this8[index],
+				done: length <= index++
+			};
+		}
+	};
 }
 
 var prototype$16 = x$20.prototype;
@@ -2435,7 +2437,13 @@ if (!prototype$16[iteratorSymbol]) {
 	prototype$16[iteratorSymbol] = generator$6;
 }
 
-var x$21 = HTMLCollection;
+try {
+	x$17.head.classList.forEach(noop);
+} catch (error) {
+	x$20.prototype.forEach = x$6.prototype.forEach;
+}
+
+var x$21 = NodeList;
 
 function generator$8() {
 	var _this9 = this;
@@ -2443,14 +2451,12 @@ function generator$8() {
 	var length = this.length;
 
 	var index = 0;
-	return {
-		next: function next() {
-			return {
-				value: _this9[index],
-				done: length <= index++
-			};
-		}
-	};
+	return new Iterator(function () {
+		return {
+			value: _this9[index],
+			done: length <= index++
+		};
+	});
 }
 
 var prototype$17 = x$21.prototype;
@@ -2459,7 +2465,7 @@ if (!prototype$17[iteratorSymbol]) {
 	prototype$17[iteratorSymbol] = generator$8;
 }
 
-var x$22 = NamedNodeMap;
+var x$22 = HTMLCollection;
 
 function generator$10() {
 	var _this10 = this;
@@ -2467,18 +2473,42 @@ function generator$10() {
 	var length = this.length;
 
 	var index = 0;
-	return new Iterator(function () {
-		return {
-			value: _this10[index],
-			done: length <= index++
-		};
-	});
+	return {
+		next: function next() {
+			return {
+				value: _this10[index],
+				done: length <= index++
+			};
+		}
+	};
 }
 
 var prototype$18 = x$22.prototype;
 
 if (!prototype$18[iteratorSymbol]) {
 	prototype$18[iteratorSymbol] = generator$10;
+}
+
+var x$23 = NamedNodeMap;
+
+function generator$12() {
+	var _this11 = this;
+
+	var length = this.length;
+
+	var index = 0;
+	return new Iterator(function () {
+		return {
+			value: _this11[index],
+			done: length <= index++
+		};
+	});
+}
+
+var prototype$19 = x$23.prototype;
+
+if (!prototype$19[iteratorSymbol]) {
+	prototype$19[iteratorSymbol] = generator$12;
 }
 
 var StringList = function () {
@@ -2736,7 +2766,7 @@ var Headers$1 = function (_StringList2) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this13 = this;
+			var _this14 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -2750,7 +2780,7 @@ var Headers$1 = function (_StringList2) {
 					if (done || history.indexOf(_key8) < 0) {
 						history.push(_key8);
 						return {
-							value: [_key8, _this13.get(_key8)],
+							value: [_key8, _this14.get(_key8)],
 							done: done
 						};
 					}
@@ -2773,22 +2803,22 @@ if (x$10.Headers) {
 	x$10.Headers = Headers$1;
 }
 
-var x$23 = JSON;
+var x$24 = JSON;
 
-var x$24 = Blob;
+var x$25 = Blob;
 
-var x$25 = ArrayBuffer;
+var x$26 = ArrayBuffer;
 
-var x$26 = DataView;
+var x$27 = DataView;
 
-var x$27 = Uint8Array;
+var x$28 = Uint8Array;
 
-var x$28 = Promise;
+var x$29 = Promise;
 
-var x$29 = FileReader;
+var x$30 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new x$29();
+	var reader = new x$30();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -2815,12 +2845,12 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var x$30 = FormData;
+var x$31 = FormData;
 
-var x$31 = decodeURIComponent;
+var x$32 = decodeURIComponent;
 
 function parse$1(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$30();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$31();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -2829,8 +2859,8 @@ function parse$1(body) {
 			    _name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			_name = x$31(_name.replace(/\+/g, ' '));
-			parts = x$31(parts.join('=').replace(/\+/g, ' '));
+			_name = x$32(_name.replace(/\+/g, ' '));
+			parts = x$32(parts.join('=').replace(/\+/g, ' '));
 			form.append(_name, parts);
 		}
 	});
@@ -2841,27 +2871,27 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$32 = URLSearchParams;
+var x$33 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$33 = Uint8ClampedArray;
+var x$34 = Uint8ClampedArray;
 
-var x$34 = Uint16Array;
+var x$35 = Uint16Array;
 
-var x$35 = Uint32Array;
+var x$36 = Uint32Array;
 
-var x$36 = Int8Array;
+var x$37 = Int8Array;
 
-var x$37 = Int16Array;
+var x$38 = Int16Array;
 
-var x$38 = Int32Array;
+var x$39 = Int32Array;
 
-var x$39 = Float64Array;
+var x$40 = Float64Array;
 
-var viewClasses = [x$27, x$33, x$34, x$35, x$36, x$37, x$38, x$3, x$39];
+var viewClasses = [x$28, x$34, x$35, x$36, x$37, x$38, x$39, x$3, x$40];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -2876,7 +2906,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new x$27(arrayBuffer);
+	var view = new x$28(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -2919,8 +2949,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new x$27(buf.byteLength);
-	view.set(new x$27(buf));
+	var view = new x$28(buf.byteLength);
+	view.set(new x$28(buf));
 	return view.buffer;
 }
 
@@ -2939,17 +2969,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$24)) {
+			} else if (isInstanceOf(body, x$25)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$30)) {
+			} else if (isInstanceOf(body, x$31)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$32)) {
+			} else if (isInstanceOf(body, x$33)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$26)) {
+			} else if (isInstanceOf(body, x$27)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$24([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$25) || isArrayBufferView(body)) {
+				this.bodyInit = new x$25([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$26) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -2959,7 +2989,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$32) {
+				} else if (body instanceof x$33) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -2968,7 +2998,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$28.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$29.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -2982,13 +3012,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$28.resolve(this.bodyBlob);
+				return x$29.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$28.resolve(new x$24([this.bodyArrayBuffer]));
+				return x$29.resolve(new x$25([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$28.resolve(new x$24([this.bodyText]));
+				return x$29.resolve(new x$25([this.bodyText]));
 			}
 		}
 	}, {
@@ -3001,11 +3031,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$28.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$29.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$28.resolve(this.bodyText);
+				return x$29.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -3016,13 +3046,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$23.parse);
+			return this.text().then(x$24.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$28.reject(new x$12('Already used'));
+				return x$29.reject(new x$12('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -3041,25 +3071,25 @@ var Request = function (_Body) {
 
 		var body = init.body;
 
-		var _this14 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
+		var _this15 = _possibleConstructorReturn(this, (Request.__proto__ || Object.getPrototypeOf(Request)).call(this));
 
 		if (input instanceof Request) {
-			body = _this14.inheritFrom(input, body, init);
+			body = _this15.inheritFrom(input, body, init);
 		} else {
-			_this14.url = '' + input;
+			_this15.url = '' + input;
 		}
-		_this14.credentials = init.credentials || _this14.credentials || 'omit';
-		if (init.headers || !_this14.headers) {
-			_this14.headers = new Headers$1(init.headers);
+		_this15.credentials = init.credentials || _this15.credentials || 'omit';
+		if (init.headers || !_this15.headers) {
+			_this15.headers = new Headers$1(init.headers);
 		}
-		_this14.method = (init.method || _this14.method || 'GET').toUpperCase();
-		_this14.mode = init.mode || _this14.mode || null;
-		_this14.referrer = null;
-		if ((_this14.method === 'GET' || _this14.method === 'HEAD') && body) {
+		_this15.method = (init.method || _this15.method || 'GET').toUpperCase();
+		_this15.mode = init.mode || _this15.mode || null;
+		_this15.referrer = null;
+		if ((_this15.method === 'GET' || _this15.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this14.initBody(body);
-		return _this14;
+		_this15.initBody(body);
+		return _this15;
 	}
 
 	_createClass(Request, [{
@@ -3105,16 +3135,16 @@ var Response = function (_Body2) {
 
 		_classCallCheck(this, Response);
 
-		var _this15 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
+		var _this16 = _possibleConstructorReturn(this, (Response.__proto__ || Object.getPrototypeOf(Response)).call(this));
 
-		_this15.type = 'default';
-		_this15.status = 'status' in init ? init.status : minOkStatus;
-		_this15.ok = _this15.status >= minOkStatus && _this15.status < maxOkStatus;
-		_this15.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this15.headers = new Headers$1(init.headers);
-		_this15.url = init.url || '';
-		_this15.initBody(body);
-		return _this15;
+		_this16.type = 'default';
+		_this16.status = 'status' in init ? init.status : minOkStatus;
+		_this16.ok = _this16.status >= minOkStatus && _this16.status < maxOkStatus;
+		_this16.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this16.headers = new Headers$1(init.headers);
+		_this16.url = init.url || '';
+		_this16.initBody(body);
+		return _this16;
 	}
 
 	_createClass(Response, [{
@@ -3153,10 +3183,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$40 = Headers;
+var x$41 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$40();
+	var headers = new x$41();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -3173,12 +3203,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$41 = XMLHttpRequest;
+var x$42 = XMLHttpRequest;
 
 function fetch(input, init, cb) {
-	return new x$28(function (resolve, reject) {
+	return new x$29(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$41();
+		var xhr = new x$42();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -3254,17 +3284,17 @@ if (!x$10.Request) {
 	x$10.Request = Request;
 }
 
-var x$42 = Date;
+var x$43 = Date;
 
 x$10.requestAnimationFrame = x$10.requestAnimationFrame || x$10.mozRequestAnimationFrame || x$10.webkitRequestAnimationFrame || x$10.msRequestAnimationFrame || function (fn) {
 	return x$11(function () {
-		fn(x$42.now());
+		fn(x$43.now());
 	}, 30);
 };
 
-var x$43 = clearTimeout;
+var x$44 = clearTimeout;
 
 x$10.cancelAnimationFrame = x$10.cancelAnimationFrame || x$10.mozCancelAnimationFrame || function (id) {
-	return x$43(id);
+	return x$44(id);
 };
 }());
