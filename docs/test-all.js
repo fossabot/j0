@@ -13158,6 +13158,12 @@ var Vector = function () {
 			return this;
 		}
 	}, {
+		key: 'setNorm',
+		value: function setNorm(norm) {
+			this.norm = norm;
+			return this;
+		}
+	}, {
 		key: 'add',
 		value: function add() {
 			for (var _len50 = arguments.length, vectors = Array(_len50), _key50 = 0; _key50 < _len50; _key50++) {
