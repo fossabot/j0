@@ -15,7 +15,7 @@
   ],
   "main": "rollup/index.js",
   "scripts": {
-    "start": "node build --watch",
+    "start": "sable docs",
     "polyfill": "node build/generatePolyfill",
     "build": "node build",
     "build-main": "node build/rollupScripts --target test-all.rollup.js",
