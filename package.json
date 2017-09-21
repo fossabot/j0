@@ -1,7 +1,7 @@
 {
   "name": "j0",
   "license": "MIT",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "A library of shims and utility functions",
   "author": {
     "name": "Kei Ito",
