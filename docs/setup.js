@@ -30,12 +30,12 @@ var graphicalEqual = function () {
 							    maxZ = _zRange[1];
 
 							var zScale = maxZ - minZ;
-							for (var x = 0; x < width; x += 2) {
+							for (var _x6 = 0; _x6 < width; _x6 += 2) {
 								for (var y = 0; y < height; y += 2) {
-									var z = fn(minX + xScale * x / width, minY + yScale * (1 - y / width));
+									var z = fn(minX + xScale * _x6 / width, minY + yScale * (1 - y / width));
 									var r = (z - minZ) / zScale;
 									context.fillStyle = thermalRGB.css(r);
-									context.fillRect(x, y, 2, 2);
+									context.fillRect(_x6, y, 2, 2);
 								}
 							}
 						};
@@ -65,11 +65,11 @@ var graphicalEqual = function () {
 								}
 							}
 							for (var iX = 0; iX <= width; iX += step) {
-								var x = minX + xScale * iX / width;
-								var x1 = x - d;
+								var _x5 = minX + xScale * iX / width;
+								var x1 = _x5 - d;
 								draw(x1, fn(x1));
-								draw(x, fn(x));
-								var x2 = x + d;
+								draw(_x5, fn(_x5));
+								var x2 = _x5 + d;
 								draw(x2, fn(x2));
 							}
 							if (state) {
@@ -152,11 +152,11 @@ var graphicalEqual = function () {
 							break;
 						}
 
-						x$4.body.appendChild(ctx.canvas);
+						x$3.body.appendChild(ctx.canvas);
 						ctx.canvas.addEventListener('click', function () {
 							ctx.canvas.toBlob(function (blob) {
-								assign(x$4.createElement('a'), {
-									href: x$6.createObjectURL(blob),
+								assign(x$3.createElement('a'), {
+									href: x$5.createObjectURL(blob),
 									download: name.replace(/Math\./, '') + '.png'
 								}).click();
 							});
@@ -165,8 +165,8 @@ var graphicalEqual = function () {
 							// downloader
 							if (!/#/.test(name)) {
 								ctx.canvas.toBlob(function (blob) {
-									assign(x$4.createElement('a'), {
-										href: x$6.createObjectURL(blob),
+									assign(x$3.createElement('a'), {
+										href: x$5.createObjectURL(blob),
 										download: name.replace(/Math\./, '') + '.png'
 									}).click();
 								});
@@ -175,7 +175,7 @@ var graphicalEqual = function () {
 						throw new Error('No url for expected graph');
 
 					case 23:
-						img = x$4.createElement('img');
+						img = x$3.createElement('img');
 						_context.next = 26;
 						return new Promise(function (resolve, reject) {
 							assign(img, {
@@ -227,7 +227,7 @@ var graphicalEqual = function () {
 								this.style.height = height / 2 + 'px';
 							}
 						});
-						x$4.body.appendChild(expectedCanvasContext.canvas);
+						x$3.body.appendChild(expectedCanvasContext.canvas);
 
 						if (!(threshold < sum)) {
 							_context.next = 41;
@@ -271,7 +271,7 @@ function clamp(x) {
 	return x;
 }
 
-var x$1 = Math;
+var x = Math;
 
 /* eslint no-magic-numbers: "off" */
 function thermalRGB(value) {
@@ -283,31 +283,31 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$1.floor(clamp(256 * v, 0, 255));
+		return x.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
 
-var x$2 = Object;
+var x$1 = Object;
 
-var assign = x$2.assign;
+var assign = x$1.assign;
 
-var x$3 = XMLHttpRequest;
+var x$2 = XMLHttpRequest;
 
-var x$4 = document;
+var x$3 = document;
 
-var x$5 = window;
+var x$4 = window;
 
-var x$6 = URL;
+var x$5 = URL;
 
 function setVersion() {
-	var xhr = new x$3();
-	xhr.open('GET', x$5.root + '/package.json');
+	var xhr = new x$2();
+	xhr.open('GET', x$4.root + '/package.json');
 	xhr.onload = function () {
 		var _JSON$parse = JSON.parse(xhr.response),
 		    version = _JSON$parse.version;
 
-		var elements = x$4.querySelectorAll('.version');
+		var elements = x$3.querySelectorAll('.version');
 		for (var i = elements.length; i--;) {
 			elements[i].textContent = version;
 		}
@@ -325,10 +325,10 @@ function approxEqual(a, b) {
 }
 
 function getCanvasContext(name) {
-	var canvas = x$4.createElement('canvas');
+	var canvas = x$3.createElement('canvas');
 	var size = 400;
 	var lineHeight = 22;
-	canvas.setAttribute('class', x$5.canvasTestClass);
+	canvas.setAttribute('class', x$4.canvasTestClass);
 	canvas.setAttribute('data-name', name);
 	assign(canvas, {
 		width: size,
@@ -377,17 +377,17 @@ var downloader = false;
 
 
 function setAssert() {
-	var assert = x$5.chai.assert;
+	var assert = x$4.chai.assert;
 
 	assert.approxThreshold = 0.000000000000001;
 	assert.approxEqual = approxEqual;
 	assert.graphicalEqual = graphicalEqual;
-	x$5.assert = assert;
+	x$4.assert = assert;
 }
 
-x$5.root = x$4.getElementById('root').textContent;
-x$5.canvasTestClass = 'Canvas' + Date.now();
-x$5.mocha.setup('bdd');
+x$4.root = x$3.getElementById('root').textContent;
+x$4.canvasTestClass = 'Canvas' + Date.now();
+x$4.mocha.setup('bdd');
 setAssert();
 setVersion();
 }());

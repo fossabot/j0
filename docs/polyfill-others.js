@@ -17,55 +17,55 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var x$1 = console;
+var x = console;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var j0info = x$1.log;
+var j0info = x.log;
 
-if (!isFunction(x$1.info)) {
-	x$1.info = j0info;
+if (!isFunction(x.info)) {
+	x.info = j0info;
 }
 
-var x$2 = Math;
+var x$1 = Math;
 
 function acosh(x) {
-	return x$2.log(x + x$2.sqrt(x * x - 1));
+	return x$1.log(x + x$1.sqrt(x * x - 1));
 }
 
-if (!x$2.acosh) {
-	x$2.acosh = acosh;
+if (!x$1.acosh) {
+	x$1.acosh = acosh;
 }
 
 function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$2.log(x + x$2.sqrt(x * x + 1));
+	return x$1.log(x + x$1.sqrt(x * x + 1));
 }
 
-if (!x$2.asinh) {
-	x$2.asinh = asinh;
+if (!x$1.asinh) {
+	x$1.asinh = asinh;
 }
 
 function atanh(x) {
-	return x$2.log((1 + x) / (1 - x)) / 2;
+	return x$1.log((1 + x) / (1 - x)) / 2;
 }
 
-if (!x$2.atanh) {
-	x$2.atanh = atanh;
+if (!x$1.atanh) {
+	x$1.atanh = atanh;
 }
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$2.pow(x$2.abs(x), 1 / 3);
+	var root = x$1.pow(x$1.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
-if (!x$2.cbrt) {
-	x$2.cbrt = cbrt;
+if (!x$1.cbrt) {
+	x$1.cbrt = cbrt;
 }
 
 /* eslint no-magic-numbers: ["warn", {ignore: [-1, 0, 1, 31, 32]}], no-bitwise: "off" */
@@ -76,38 +76,38 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$2.floor(x$2.log(x >>> 0) * x$2.LOG2E);
+	return 31 - x$1.floor(x$1.log(x >>> 0) * x$1.LOG2E);
 }
 
-if (!x$2.clz32) {
-	x$2.clz32 = clz32;
+if (!x$1.clz32) {
+	x$1.clz32 = clz32;
 }
 
 function cosh(x) {
-	var y = x$2.exp(x);
+	var y = x$1.exp(x);
 	return (y + 1 / y) / 2;
 }
 
-if (!x$2.cosh) {
-	x$2.cosh = cosh;
+if (!x$1.cosh) {
+	x$1.cosh = cosh;
 }
 
 function expm1(x) {
-	return x$2.exp(x) - 1;
+	return x$1.exp(x) - 1;
 }
 
-if (!x$2.expm1) {
-	x$2.expm1 = expm1;
+if (!x$1.expm1) {
+	x$1.expm1 = expm1;
 }
 
-var x$3 = Float32Array;
+var x$2 = Float32Array;
 
 function fround(x) {
-	return new x$3([x])[0];
+	return new x$2([x])[0];
 }
 
-if (!x$2.fround) {
-	x$2.fround = fround;
+if (!x$1.fround) {
+	x$1.fround = fround;
 }
 
 function hypot() {
@@ -121,11 +121,11 @@ function hypot() {
 		var _value = args[i];
 		sum += _value * _value;
 	}
-	return x$2.sqrt(sum);
+	return x$1.sqrt(sum);
 }
 
-if (!x$2.hypot) {
-	x$2.hypot = hypot;
+if (!x$1.hypot) {
+	x$1.hypot = hypot;
 }
 
 /* eslint-disable no-bitwise, no-magic-numbers */
@@ -137,55 +137,55 @@ function imul(a, b) {
 	return al * bl + (ah * bl + al * bh << 16 >>> 0) | 0;
 }
 
-if (!x$2.imul) {
-	x$2.imul = imul;
+if (!x$1.imul) {
+	x$1.imul = imul;
 }
 
 function log10(x) {
-	return x$2.log(x) / x$2.LN10;
+	return x$1.log(x) / x$1.LN10;
 }
 
-if (!x$2.log10) {
-	x$2.log10 = log10;
+if (!x$1.log10) {
+	x$1.log10 = log10;
 }
 
 function log1p(x) {
-	return x$2.log(x + 1);
+	return x$1.log(x + 1);
 }
 
-if (!x$2.log1p) {
-	x$2.log1p = log1p;
+if (!x$1.log1p) {
+	x$1.log1p = log1p;
 }
 
 function log2(x) {
-	return x$2.log(x) / x$2.LN2;
+	return x$1.log(x) / x$1.LN2;
 }
 
-if (!x$2.log2) {
-	x$2.log2 = log2;
+if (!x$1.log2) {
+	x$1.log2 = log2;
 }
 
-var x$4 = isNaN;
+var x$3 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$4(x)) {
+	if (x === 0 || x$3(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
 }
 
-if (!x$2.sign) {
-	x$2.sign = sign;
+if (!x$1.sign) {
+	x$1.sign = sign;
 }
 
 function sinh(x) {
-	var y = x$2.exp(x);
+	var y = x$1.exp(x);
 	return (y - 1 / y) / 2;
 }
 
-if (!x$2.sinh) {
-	x$2.sinh = sinh;
+if (!x$1.sinh) {
+	x$1.sinh = sinh;
 }
 
 function tanh(x) {
@@ -194,12 +194,12 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$2.exp(2 * x);
+	var y = x$1.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
-if (!x$2.tanh) {
-	x$2.tanh = tanh;
+if (!x$1.tanh) {
+	x$1.tanh = tanh;
 }
 
 /* eslint-disable no-bitwise, no-magic-numbers */
@@ -207,11 +207,11 @@ function trunc(x) {
 	return x - x % 1;
 }
 
-if (!x$2.trunc) {
-	x$2.trunc = trunc;
+if (!x$1.trunc) {
+	x$1.trunc = trunc;
 }
 
-var x$5 = Object;
+var x$4 = Object;
 
 function assign(target) {
 	for (var _len2 = arguments.length, objects = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
@@ -229,14 +229,14 @@ function assign(target) {
 }
 
 try {
-	if (x$5.assign({ a: 1 }, { a: 2 }).a !== 2) {
+	if (x$4.assign({ a: 1 }, { a: 2 }).a !== 2) {
 		throw 0;
 	}
 } catch (e) {
-	x$5.assign = assign;
+	x$4.assign = assign;
 }
 
-var x$6 = Array;
+var x$5 = Array;
 
 var iteratorSymbol = Symbol.iterator;
 
@@ -270,7 +270,7 @@ function generator() {
 	});
 }
 
-var prototype = x$6.prototype;
+var prototype = x$5.prototype;
 
 try {
 	if ([1][iteratorSymbol]().next().value !== 1) {
@@ -306,7 +306,7 @@ function copyWithin(target) {
 	return this;
 }
 
-var prototype$1 = x$6.prototype;
+var prototype$1 = x$5.prototype;
 
 if (!prototype$1.copyWithin) {
 	prototype$1.copyWithin = copyWithin;
@@ -324,7 +324,7 @@ function entries() {
 	});
 }
 
-var prototype$2 = x$6.prototype;
+var prototype$2 = x$5.prototype;
 
 try {
 	if ([1].entries().next().value.join(',') !== '0,1') {
@@ -351,7 +351,7 @@ function copyWithin$1(value) {
 	return this;
 }
 
-var prototype$3 = x$6.prototype;
+var prototype$3 = x$5.prototype;
 
 if (!prototype$3.fill) {
 	prototype$3.fill = copyWithin$1;
@@ -366,7 +366,7 @@ function findIndex(fn, thisArg) {
 	}
 }
 
-var prototype$4 = x$6.prototype;
+var prototype$4 = x$5.prototype;
 
 if (!prototype$4.find) {
 	prototype$4.find = findIndex;
@@ -381,7 +381,7 @@ function findIndex$1(fn, thisArg) {
 	return -1;
 }
 
-var prototype$5 = x$6.prototype;
+var prototype$5 = x$5.prototype;
 
 if (!prototype$5.findIndex) {
 	prototype$5.findIndex = findIndex$1;
@@ -434,8 +434,8 @@ function arrayFrom(iterable) {
 	return result;
 }
 
-if (!x$6.from) {
-	x$6.from = arrayFrom;
+if (!x$5.from) {
+	x$5.from = arrayFrom;
 }
 
 function includes(searchElement) {
@@ -449,7 +449,7 @@ function includes(searchElement) {
 	return false;
 }
 
-var prototype$6 = x$6.prototype;
+var prototype$6 = x$5.prototype;
 
 if (!prototype$6.includes) {
 	prototype$6.includes = includes;
@@ -463,8 +463,8 @@ function arrayOf() {
 	return args;
 }
 
-if (!x$6.of) {
-	x$6.of = arrayOf;
+if (!x$5.of) {
+	x$5.of = arrayOf;
 }
 
 function generator$1() {
@@ -519,9 +519,9 @@ try {
 	prototype$9.endsWith = endsWith;
 }
 
-var x$7 = isFinite;
+var x$6 = isFinite;
 
-var x$8 = RangeError;
+var x$7 = RangeError;
 
 /* eslint-disable no-magic-numbers, no-bitwise */
 
@@ -535,8 +535,8 @@ function fromCodePoint() {
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var codePoint = args[i];
-		if (!x$7(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
-			throw new x$8('Invalid code point: ' + codePoint);
+		if (!x$6(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
+			throw new x$7('Invalid code point: ' + codePoint);
 		}
 		if (codePoint <= 0xFFFF) {
 			chars.push(fromCharCode(codePoint));
@@ -1069,10 +1069,10 @@ try {
 	String.prototype.padStart = padStart;
 }
 
-var x$9 = parseInt;
+var x$8 = parseInt;
 
 function repeat(c) {
-	var count = x$9(c, 10);
+	var count = x$8(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -1102,15 +1102,15 @@ try {
 	prototype$13.startsWith = startsWith;
 }
 
-var x$10 = window;
+var x$9 = window;
 
-var x$11 = setTimeout;
+var x$10 = setTimeout;
 
-if (!x$10.immediateId) {
-	x$10.immediateId = 0;
+if (!x$9.immediateId) {
+	x$9.immediateId = 0;
 }
-x$10.immediateId += 1;
-var setImmediateNative = x$10.setImmediate;
+x$9.immediateId += 1;
+var setImmediateNative = x$9.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -1139,7 +1139,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$11(fn);
+	return x$10(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -1155,7 +1155,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$11(function () {
+x$10(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -1174,7 +1174,7 @@ var setImmediate = function setImmediate(fn) {
 	return setImmediateAvailable(fn);
 };
 
-var x$12 = TypeError;
+var x$11 = TypeError;
 
 function noop(x) {
 	return x;
@@ -1244,7 +1244,7 @@ var J0Promise = function () {
 		value: function resolve(value) {
 			try {
 				if (value === this) {
-					throw new x$12('A promise cannot be resolved with itself');
+					throw new x$11('A promise cannot be resolved with itself');
 				}
 				this.value = value;
 				if (isThennable(value)) {
@@ -1393,11 +1393,11 @@ function isThennable(value) {
 	return value && isFunction(value.then) && isFunction(value.catch);
 }
 
-if (!x$10.Promise) {
-	x$10.Promise = J0Promise;
+if (!x$9.Promise) {
+	x$9.Promise = J0Promise;
 }
 
-var keys = x$5.keys;
+var keys = x$4.keys;
 
 var J0Storage = function () {
 	function J0Storage() {
@@ -1448,23 +1448,23 @@ var name = '' + Date.now();
 var value = new Date().toISOString();
 var key = 'localStorageIsAvailable';
 try {
-	storage = x$10.localStorage;
+	storage = x$9.localStorage;
 	storage.setItem(name, value);
 	storage.removeItem(name);
-	x$10[key] = true;
+	x$9[key] = true;
 } catch (e) {
 	try {
-		x$10.localStorage = new J0Storage();
-		x$10[key] = true;
+		x$9.localStorage = new J0Storage();
+		x$9[key] = true;
 	} catch (e) {
-		x$10[key] = false;
-		x$1.info('localStorage is unavailable and polyfill failed to override it.');
+		x$9[key] = false;
+		x.info('localStorage is unavailable and polyfill failed to override it.');
 	}
 }
 
-var x$13 = URL;
+var x$12 = URL;
 
-var x$14 = encodeURIComponent;
+var x$13 = encodeURIComponent;
 
 /* eslint-disable no-undefined, complexity, max-statements, max-lines */
 /* eslint-disable no-magic-numbers, no-continue, no-labels, no-lonely-if */
@@ -1513,7 +1513,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$14(c);
+	return x$13(c);
 }
 
 function percentEscapeQuery(c) {
@@ -1524,7 +1524,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$14(c);
+	return x$13(c);
 }
 
 function parse(input, stateOverride, base) {
@@ -2066,26 +2066,26 @@ var URL$1 = function () {
 	return URL$1;
 }();
 
-x$5.defineProperties(URL$1, {
-	createObjectURL: { value: x$13.createObjectURL },
-	revokeObjectURL: { value: x$13.revokeObjectURL }
+x$4.defineProperties(URL$1, {
+	createObjectURL: { value: x$12.createObjectURL },
+	revokeObjectURL: { value: x$12.revokeObjectURL }
 });
 
 try {
-	var u = new x$10.URL('/?q#h', 'https://u:p@g.co:8000');
+	var u = new x$9.URL('/?q#h', 'https://u:p@g.co:8000');
 	u.pathname = 'path';
 	if (u.hash !== '#h' || u.search !== '?q' || u.port !== '8000' || u.hostname !== 'g.co' || u.protocol !== 'https:' || u.href !== 'https://u:p@g.co:8000/path?q#h') {
 		throw u;
 	}
 } catch (e) {
-	x$10.URL = URL$1;
+	x$9.URL = URL$1;
 }
 
-var x$15 = CustomEvent;
+var x$14 = CustomEvent;
 
-var x$16 = Event;
+var x$15 = Event;
 
-var x$17 = document;
+var x$16 = document;
 
 function CustomEvent$2(event) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -2093,14 +2093,14 @@ function CustomEvent$2(event) {
 		cancelable: false
 	};
 
-	var evt = x$17.createEvent('CustomEvent');
+	var evt = x$16.createEvent('CustomEvent');
 	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	return evt;
 }
-CustomEvent$2.prototype = x$16.prototype;
+CustomEvent$2.prototype = x$15.prototype;
 
-if (!isFunction(x$15)) {
-	x$10.CustomEvent = CustomEvent$2;
+if (!isFunction(x$14)) {
+	x$9.CustomEvent = CustomEvent$2;
 }
 
 var Map$1 = function () {
@@ -2253,7 +2253,7 @@ var Map$1 = function () {
 	return Map$1;
 }();
 
-var MAP = x$10.Map;
+var MAP = x$9.Map;
 try {
 	if (!MAP || !(new MAP([[0, 0]]).size === 1) || new Map([[1, 2]]).values().next().value !== 2) {
 		throw 0;
@@ -2261,15 +2261,15 @@ try {
 } catch (e) {
 	MAP = Map$1;
 }
-x$10.Map = MAP;
+x$9.Map = MAP;
 
-var x$18 = Map;
+var x$17 = Map;
 
 function generator$2() {
 	return this.entries();
 }
 
-var prototype$14 = x$18.prototype;
+var prototype$14 = x$17.prototype;
 
 if (!prototype$14[iteratorSymbol]) {
 	prototype$14[iteratorSymbol] = generator$2;
@@ -2386,7 +2386,7 @@ var Set$1 = function () {
 	return Set$1;
 }();
 
-var SET = x$10.Set;
+var SET = x$9.Set;
 try {
 	if (!SET || !(new SET([0]).size === 1) || new SET([0]).values().next().value !== 1) {
 		throw 0;
@@ -2395,25 +2395,25 @@ try {
 	SET = Set$1;
 }
 
-x$10.Set = SET;
+x$9.Set = SET;
 
-var x$19 = Set;
+var x$18 = Set;
 
 function generator$4() {
 	return this.values();
 }
 
-var prototype$15 = x$19.prototype;
+var prototype$15 = x$18.prototype;
 
 try {
-	if (new x$19([1])[iteratorSymbol]().next().value !== 1) {
+	if (new x$18([1])[iteratorSymbol]().next().value !== 1) {
 		throw 0;
 	}
 } catch (e) {
 	prototype$15[iteratorSymbol] = generator$4;
 }
 
-var x$20 = DOMTokenList;
+var x$19 = DOMTokenList;
 
 function generator$6() {
 	var _this8 = this;
@@ -2431,19 +2431,19 @@ function generator$6() {
 	};
 }
 
-var prototype$16 = x$20.prototype;
+var prototype$16 = x$19.prototype;
 
 if (!prototype$16[iteratorSymbol]) {
 	prototype$16[iteratorSymbol] = generator$6;
 }
 
 try {
-	x$17.head.classList.forEach(noop);
+	x$16.head.classList.forEach(noop);
 } catch (error) {
-	x$20.prototype.forEach = x$6.prototype.forEach;
+	x$19.prototype.forEach = x$5.prototype.forEach;
 }
 
-var x$21 = NodeList;
+var x$20 = NodeList;
 
 function generator$8() {
 	var _this9 = this;
@@ -2459,13 +2459,13 @@ function generator$8() {
 	});
 }
 
-var prototype$17 = x$21.prototype;
+var prototype$17 = x$20.prototype;
 
 if (!prototype$17[iteratorSymbol]) {
 	prototype$17[iteratorSymbol] = generator$8;
 }
 
-var x$22 = HTMLCollection;
+var x$21 = HTMLCollection;
 
 function generator$10() {
 	var _this10 = this;
@@ -2483,13 +2483,13 @@ function generator$10() {
 	};
 }
 
-var prototype$18 = x$22.prototype;
+var prototype$18 = x$21.prototype;
 
 if (!prototype$18[iteratorSymbol]) {
 	prototype$18[iteratorSymbol] = generator$10;
 }
 
-var x$23 = NamedNodeMap;
+var x$22 = NamedNodeMap;
 
 function generator$12() {
 	var _this11 = this;
@@ -2505,7 +2505,7 @@ function generator$12() {
 	});
 }
 
-var prototype$19 = x$23.prototype;
+var prototype$19 = x$22.prototype;
 
 if (!prototype$19[iteratorSymbol]) {
 	prototype$19[iteratorSymbol] = generator$12;
@@ -2708,10 +2708,10 @@ var URLSearchParams$2 = function (_StringList) {
 	return URLSearchParams$2;
 }(StringList);
 
-var URLSearchParams$1 = x$10.URLSearchParams;
+var URLSearchParams$1 = x$9.URLSearchParams;
 
 if (!(URLSearchParams$1 && new URLSearchParams$1('?a=b').has('a'))) {
-	x$10.URLSearchParams = URLSearchParams$2;
+	x$9.URLSearchParams = URLSearchParams$2;
 }
 
 function toLowerCase(x) {
@@ -2792,33 +2792,33 @@ var Headers$1 = function (_StringList2) {
 	return Headers$1;
 }(StringList);
 
-if (x$10.Headers) {
-	var headers = new x$10.Headers();
+if (x$9.Headers) {
+	var headers = new x$9.Headers();
 	try {
 		headers.entries();
 	} catch (error) {
-		x$10.Headers = Headers$1;
+		x$9.Headers = Headers$1;
 	}
 } else {
-	x$10.Headers = Headers$1;
+	x$9.Headers = Headers$1;
 }
 
-var x$24 = JSON;
+var x$23 = JSON;
 
-var x$25 = Blob;
+var x$24 = Blob;
 
-var x$26 = ArrayBuffer;
+var x$25 = ArrayBuffer;
 
-var x$27 = DataView;
+var x$26 = DataView;
 
-var x$28 = Uint8Array;
+var x$27 = Uint8Array;
 
-var x$29 = Promise;
+var x$28 = Promise;
 
-var x$30 = FileReader;
+var x$29 = FileReader;
 
 function readBlob(data, type) {
-	var reader = new x$30();
+	var reader = new x$29();
 	var promise = new Promise(function (resolve, reject) {
 		reader.onload = function () {
 			resolve(reader.result);
@@ -2845,12 +2845,12 @@ function readBlob(data, type) {
 	return promise;
 }
 
-var x$31 = FormData;
+var x$30 = FormData;
 
-var x$32 = decodeURIComponent;
+var x$31 = decodeURIComponent;
 
 function parse$1(body) {
-	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$31();
+	var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new x$30();
 
 	body.trim().split('&').forEach(function (data) {
 		if (data) {
@@ -2859,8 +2859,8 @@ function parse$1(body) {
 			    _name = _data$split2[0],
 			    parts = _data$split2.slice(1);
 
-			_name = x$32(_name.replace(/\+/g, ' '));
-			parts = x$32(parts.join('=').replace(/\+/g, ' '));
+			_name = x$31(_name.replace(/\+/g, ' '));
+			parts = x$31(parts.join('=').replace(/\+/g, ' '));
 			form.append(_name, parts);
 		}
 	});
@@ -2871,27 +2871,27 @@ function isString(x) {
 	return typeof x === 'string';
 }
 
-var x$33 = URLSearchParams;
+var x$32 = URLSearchParams;
 
 function isInstanceOf(instance, constructor) {
 	return instance instanceof constructor;
 }
 
-var x$34 = Uint8ClampedArray;
+var x$33 = Uint8ClampedArray;
 
-var x$35 = Uint16Array;
+var x$34 = Uint16Array;
 
-var x$36 = Uint32Array;
+var x$35 = Uint32Array;
 
-var x$37 = Int8Array;
+var x$36 = Int8Array;
 
-var x$38 = Int16Array;
+var x$37 = Int16Array;
 
-var x$39 = Int32Array;
+var x$38 = Int32Array;
 
-var x$40 = Float64Array;
+var x$39 = Float64Array;
 
-var viewClasses = [x$28, x$34, x$35, x$36, x$37, x$38, x$39, x$3, x$40];
+var viewClasses = [x$27, x$33, x$34, x$35, x$36, x$37, x$38, x$2, x$39];
 function isArrayBufferView(obj) {
 	return 0 <= viewClasses.findIndex(function (constructor) {
 		return isInstanceOf(obj, constructor);
@@ -2906,7 +2906,7 @@ var lastMasks = [baseMask, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1];
 var availableBits = 6;
 
 function arrayBufferToString(arrayBuffer) {
-	var view = new x$28(arrayBuffer);
+	var view = new x$27(arrayBuffer);
 	var chars = [];
 	for (var i = 0; i < view.length; i++) {
 		var byte = view[i];
@@ -2949,8 +2949,8 @@ function cloneBuffer(buf) {
 	if (buf.slice) {
 		return buf.slice(0);
 	}
-	var view = new x$28(buf.byteLength);
-	view.set(new x$28(buf));
+	var view = new x$27(buf.byteLength);
+	view.set(new x$27(buf));
 	return view.buffer;
 }
 
@@ -2969,17 +2969,17 @@ var Body = function () {
 				this.bodyText = '';
 			} else if (isString(body)) {
 				this.bodyText = body;
-			} else if (isInstanceOf(body, x$25)) {
+			} else if (isInstanceOf(body, x$24)) {
 				this.bodyBlob = body;
-			} else if (isInstanceOf(body, x$31)) {
+			} else if (isInstanceOf(body, x$30)) {
 				this.bodyFormData = body;
-			} else if (isInstanceOf(body, x$33)) {
+			} else if (isInstanceOf(body, x$32)) {
 				this.bodyText = body.toString();
-			} else if (isInstanceOf(body, x$27)) {
+			} else if (isInstanceOf(body, x$26)) {
 				this.bodyArrayBuffer = cloneBuffer(body.buffer);
 				// IE 10-11 can't handle a DataView body.
-				this.bodyInit = new x$25([this.bodyArrayBuffer]);
-			} else if (isInstanceOf(body, x$26) || isArrayBufferView(body)) {
+				this.bodyInit = new x$24([this.bodyArrayBuffer]);
+			} else if (isInstanceOf(body, x$25) || isArrayBufferView(body)) {
 				this.bodyArrayBuffer = cloneBuffer(body);
 			} else {
 				throw new Error('unsupported BodyInit type');
@@ -2989,7 +2989,7 @@ var Body = function () {
 					this.headers.set('content-type', 'text/plain;charset=UTF-8');
 				} else if (this.bodyBlob && this.bodyBlob.type) {
 					this.headers.set('content-type', this.bodyBlob.type);
-				} else if (body instanceof x$33) {
+				} else if (body instanceof x$32) {
 					this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
 				}
 			}
@@ -2998,7 +2998,7 @@ var Body = function () {
 		key: 'arrayBuffer',
 		value: function arrayBuffer() {
 			if (this.bodyArrayBuffer) {
-				return this.isUsed || x$29.resolve(this.bodyArrayBuffer);
+				return this.isUsed || x$28.resolve(this.bodyArrayBuffer);
 			}
 			return this.blob().then(function (blob) {
 				return readBlob(blob, 'ArrayBuffer');
@@ -3012,13 +3012,13 @@ var Body = function () {
 				return rejected;
 			}
 			if (this.bodyBlob) {
-				return x$29.resolve(this.bodyBlob);
+				return x$28.resolve(this.bodyBlob);
 			} else if (this.bodyArrayBuffer) {
-				return x$29.resolve(new x$25([this.bodyArrayBuffer]));
+				return x$28.resolve(new x$24([this.bodyArrayBuffer]));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as blob');
 			} else {
-				return x$29.resolve(new x$25([this.bodyText]));
+				return x$28.resolve(new x$24([this.bodyText]));
 			}
 		}
 	}, {
@@ -3031,11 +3031,11 @@ var Body = function () {
 			if (this.bodyBlob) {
 				return readBlob(this.bodyBlob, 'Text');
 			} else if (this.bodyArrayBuffer) {
-				return x$29.resolve(arrayBufferToString(this.bodyArrayBuffer));
+				return x$28.resolve(arrayBufferToString(this.bodyArrayBuffer));
 			} else if (this.bodyFormData) {
 				throw new Error('could not read FormData body as text');
 			} else {
-				return x$29.resolve(this.bodyText);
+				return x$28.resolve(this.bodyText);
 			}
 		}
 	}, {
@@ -3046,13 +3046,13 @@ var Body = function () {
 	}, {
 		key: 'json',
 		value: function json() {
-			return this.text().then(x$24.parse);
+			return this.text().then(x$23.parse);
 		}
 	}, {
 		key: 'isUsed',
 		get: function get() {
 			if (this.bodyUsed) {
-				return x$29.reject(new x$12('Already used'));
+				return x$28.reject(new x$11('Already used'));
 			}
 			this.bodyUsed = true;
 		}
@@ -3183,10 +3183,10 @@ var Response = function (_Body2) {
 	return Response;
 }(Body);
 
-var x$41 = Headers;
+var x$40 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$41();
+	var headers = new x$40();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -3203,12 +3203,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$42 = XMLHttpRequest;
+var x$41 = XMLHttpRequest;
 
 function fetch(input, init, cb) {
-	return new x$29(function (resolve, reject) {
+	return new x$28(function (resolve, reject) {
 		var request = new Request(input, init);
-		var xhr = new x$42();
+		var xhr = new x$41();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -3270,31 +3270,31 @@ function fetch(input, init, cb) {
 // if (!window.fetch) {
 // 	window.fetch = j0fetch;
 // }
-x$10.fetch = fetch;
+x$9.fetch = fetch;
 
-if (!x$10.Body) {
-	x$10.Body = Body;
+if (!x$9.Body) {
+	x$9.Body = Body;
 }
 
-if (!x$10.Response) {
-	x$10.Response = Response;
+if (!x$9.Response) {
+	x$9.Response = Response;
 }
 
-if (!x$10.Request) {
-	x$10.Request = Request;
+if (!x$9.Request) {
+	x$9.Request = Request;
 }
 
-var x$43 = Date;
+var x$42 = Date;
 
-x$10.requestAnimationFrame = x$10.requestAnimationFrame || x$10.mozRequestAnimationFrame || x$10.webkitRequestAnimationFrame || x$10.msRequestAnimationFrame || function (fn) {
-	return x$11(function () {
-		fn(x$43.now());
+x$9.requestAnimationFrame = x$9.requestAnimationFrame || x$9.mozRequestAnimationFrame || x$9.webkitRequestAnimationFrame || x$9.msRequestAnimationFrame || function (fn) {
+	return x$10(function () {
+		fn(x$42.now());
 	}, 30);
 };
 
-var x$44 = clearTimeout;
+var x$43 = clearTimeout;
 
-x$10.cancelAnimationFrame = x$10.cancelAnimationFrame || x$10.mozCancelAnimationFrame || function (id) {
-	return x$44(id);
+x$9.cancelAnimationFrame = x$9.cancelAnimationFrame || x$9.mozCancelAnimationFrame || function (id) {
+	return x$43(id);
 };
 }());
