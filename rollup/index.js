@@ -63,10 +63,12 @@ function rollupPlugin({
 			for (const name of required) {
 				let j0ModulePath = path.join(windowFallback, name);
 				for (const dir of directories) {
+					/* eslint-disable no-empty */
 					try {
 						j0ModulePath = require.resolve(`${dir}/${name}`);
 					} catch (error) {
 					}
+					/* eslint-enable no-empty */
 				}
 				lines.push(`import ${name} from '${j0ModulePath}'\nexport {${name}};`);
 			}
