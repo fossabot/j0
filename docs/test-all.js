@@ -10134,7 +10134,7 @@ function tests$14(Set, name) {
 
 tests$14(Set$2, 'J0Set');
 
-tests$14(Set, 'Set');
+tests$14(x$35, 'Set');
 
 describe('setImmediate', function () {
 
