@@ -2768,6 +2768,14 @@ function isFunction(x) {
 
 var x$30 = setTimeout;
 
+function onError(error) {
+	onError.listener(error);
+}
+
+onError.listener = function (error) {
+	console.error(error);
+};
+
 function forEachItem(data, fn) {
 	if (isArray(data)) {
 		data.forEach(function (args) {
@@ -2780,10 +2788,8 @@ function forEachItem(data, fn) {
 	}
 }
 
-var x$31 = console;
-
 function callMethod(event) {
-	x$9.resolve(this[event.type](event)).catch(x$31.error);
+	return this[event.type](event);
 }
 
 var getBody = new x$9(function (resolve) {
@@ -2818,6 +2824,15 @@ function _findAll(selector, rootElement) {
 		result[i] = wrap(list[i]);
 	}
 	return result;
+}
+
+function callAsyncOrSyncFunction(fn, thisArg, arg) {
+	try {
+		var result = fn.call(thisArg, arg);
+		x$9.resolve(result).catch(onError);
+	} catch (error) {
+		onError(error);
+	}
 }
 
 var N = function () {
@@ -3093,7 +3108,7 @@ var N = function () {
 			var wrapped = function wrapped(event) {
 				_this7.node.removeEventListener(eventName, wrapped);
 				_this7.listeners.delete(item);
-				fn.call(_this7, event);
+				callAsyncOrSyncFunction(fn, _this7, event);
 			};
 			item.push(wrapped);
 			this.node.addEventListener(eventName, wrapped);
@@ -3111,7 +3126,7 @@ var N = function () {
 				return this;
 			}
 			var wrapped = function wrapped(event) {
-				fn.call(_this8, event);
+				callAsyncOrSyncFunction(fn, _this8, event);
 			};
 			this.node.addEventListener(eventName, wrapped);
 			this.listeners.add([eventName, fn, wrapped]);
@@ -3547,7 +3562,7 @@ var N = function () {
 	return N;
 }();
 
-var x$32 = Date;
+var x$31 = Date;
 
 function test$26(forEach) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'DOMTokenList.prototype.forEach';
@@ -3556,9 +3571,9 @@ function test$26(forEach) {
 	describe(name, function () {
 
 		it('should iterate over classList', function () {
-			var class1 = '1_' + x$32.now();
-			var class2 = '2_' + x$32.now();
-			var class3 = '3_' + x$32.now();
+			var class1 = '1_' + x$31.now();
+			var class2 = '2_' + x$31.now();
+			var class3 = '3_' + x$31.now();
 			var element = new N({
 				a: [['class', class1, class2, class3]]
 			});
@@ -4195,10 +4210,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$33 = Headers;
+var x$32 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$33();
+	var headers = new x$32();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4215,12 +4230,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$34 = XMLHttpRequest;
+var x$33 = XMLHttpRequest;
 
 function fetch$1(input, init, cb) {
 	return new x$9(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$34();
+		var xhr = new x$33();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -4315,7 +4330,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template, utc) {
-	var date = new x$32(src);
+	var date = new x$31(src);
 	if (0 < date) {
 		var methodPrefix = 'get' + (utc ? 'UTC' : '');
 		var Y = date[methodPrefix + 'FullYear']();
@@ -4595,10 +4610,10 @@ test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
 test$28(HTMLCollection.prototype[Symbol.iterator]);
 
-var x$35 = window;
+var x$34 = window;
 
 function innerHeight() {
-	return x$35.innerHeight;
+	return x$34.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -4609,7 +4624,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$35.innerWidth;
+	return x$34.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -5206,16 +5221,18 @@ describe('Lazy', function () {
 	});
 });
 
-var x$36 = localStorageIsAvailable;
+var x$35 = localStorageIsAvailable;
+
+var x$36 = console;
 
 var localStorage$1 = new J0Storage();
 
 test$30(localStorage$1, 'localStorage#j0');
 
-if (x$36) {
+if (x$35) {
 	test$30(localStorage, 'localStorage');
 } else {
-	x$31.info('Tests for localStorage are skipped.');
+	x$36.info('Tests for localStorage are skipped.');
 }
 
 function test$33(generator) {
@@ -9029,14 +9046,6 @@ test$18(assign$1, 'Object.assign#j0');
 
 test$18(Object.assign);
 
-function onError(error) {
-	onError.listener(error);
-}
-
-onError.listener = function (error) {
-	console.error(error);
-};
-
 describe('onError', function () {
 
 	it('should call its listener', function () {
@@ -9084,11 +9093,11 @@ describe('passThrough', function () {
 	});
 });
 
-if (!x$35.immediateId) {
-	x$35.immediateId = 0;
+if (!x$34.immediateId) {
+	x$34.immediateId = 0;
 }
-x$35.immediateId += 1;
-var setImmediateNative = x$35.setImmediate;
+x$34.immediateId += 1;
+var setImmediateNative = x$34.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -9636,7 +9645,7 @@ describe('Ring', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$35;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$34;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -9648,7 +9657,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$35;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$34;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
