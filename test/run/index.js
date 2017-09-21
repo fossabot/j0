@@ -32,12 +32,12 @@ async function run(
 				'browserstack.user': useBrowserStack.user,
 				'browserstack.key': useBrowserStack.key
 			}
-		)
+		);
 	}
 	const builder = new Builder()
 	.withCapabilities(capability);
 	if (useBrowserStack) {
-		builder.usingServer('http://hub-cloud.browserstack.com/wd/hub')
+		builder.usingServer('http://hub-cloud.browserstack.com/wd/hub');
 	}
 	console.info('build a driver');
 	const driver = builder.build();
