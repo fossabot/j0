@@ -2884,7 +2884,7 @@ function isObject(x) {
 }
 
 function deepEqual(a, b) {
-	if (isObject(a)) {
+	if (isObject(a) && isObject(b)) {
 		return keys(a).every(function (key) {
 			return deepEqual(a[key], b[key]);
 		});
@@ -2895,7 +2895,7 @@ function deepEqual(a, b) {
 
 describe('deepEqual', function () {
 
-	[[123, 123, true], [123, 321, false], ['abc', 'abc', true], ['abc', 'abd', false], [{ 0: 0, 1: 1 }, [0, 1], true], [{ 0: 0, 1: 1 }, [0, 2], false], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 4 }], true], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 5 }], false]].forEach(function (_ref24) {
+	[[123, 123, true], [123, 321, false], ['abc', 'abc', true], ['abc', 'abd', false], [{ 0: 0, 1: 1 }, [0, 1], true], [{ 0: 0, 1: 1 }, [0, 2], false], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 4 }], true], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 5 }], false], [{ 0: 0, 1: 1, 2: [3, 4] }, undefined, false]].forEach(function (_ref24) {
 		var _ref25 = _slicedToArray(_ref24, 3),
 		    a = _ref25[0],
 		    b = _ref25[1],
