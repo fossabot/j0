@@ -3002,6 +3002,28 @@ function isFunction(x) {
 	return typeof x === 'function';
 }
 
+var x$38 = addEventListener;
+
+function checkPassiveSupport() {
+	var supportsPassive = false;
+	try {
+		x$38('test', null, x$7.defineProperty({}, 'passive', {
+			get: function get() {
+				supportsPassive = true;
+			}
+		}));
+	} catch (e) {
+		supportsPassive = false;
+	}
+	return supportsPassive;
+}
+
+var addEventListenerWithOptions = checkPassiveSupport() ? function addEventListenerWithOptions(target, type, handler, options) {
+	target.addEventListener(type, handler, options === true ? { capture: true } : options);
+} : function addEventListenerWithOptions(target, type, handler, options) {
+	target.addEventListener(type, handler, options === true || options && options.capture);
+};
+
 function forEachItem(data, fn) {
 	if (isArray(data)) {
 		data.forEach(function (args) {
@@ -3320,6 +3342,7 @@ var N = function () {
 			var _this8 = this;
 
 			var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.getMethodCaller(eventName);
+			var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 			var item = [eventName, fn];
 			var wrapped = function wrapped(event) {
@@ -3328,7 +3351,7 @@ var N = function () {
 				call(fn, _this8, [event]);
 			};
 			item.push(wrapped);
-			this.node.addEventListener(eventName, wrapped);
+			addEventListenerWithOptions(this.node, eventName, wrapped, assign({ passive: true }, options));
 			this.listeners.add(item);
 			return this;
 		}
@@ -3338,6 +3361,7 @@ var N = function () {
 			var _this9 = this;
 
 			var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.getMethodCaller(eventName);
+			var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 			if (N.eventFilter && N.eventFilter.call(this, eventName, fn)) {
 				return this;
@@ -3345,7 +3369,7 @@ var N = function () {
 			var wrapped = function wrapped(event) {
 				call(fn, _this9, [event]);
 			};
-			this.node.addEventListener(eventName, wrapped);
+			addEventListenerWithOptions(this.node, eventName, wrapped, assign({ passive: true }, options));
 			this.listeners.add([eventName, fn, wrapped]);
 			return this;
 		}
@@ -3753,7 +3777,7 @@ var N = function () {
 				}, _callee19, this);
 			}));
 
-			function ready(_x41) {
+			function ready(_x43) {
 				return _ref28.apply(this, arguments);
 			}
 
@@ -4427,10 +4451,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$38 = Headers;
+var x$39 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$38();
+	var headers = new x$39();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4447,12 +4471,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$39 = XMLHttpRequest;
+var x$40 = XMLHttpRequest;
 
 function fetch$2(input, init, cb) {
 	return new x$3(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$39();
+		var xhr = new x$40();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -4754,7 +4778,7 @@ function tests$5(Headers) {
 
 tests$5(Headers$1, 'Headers/j0');
 
-tests$5(x$38);
+tests$5(x$39);
 
 function generator$4() {
 	var _this20 = this;
@@ -4827,9 +4851,9 @@ function test$28(generator) {
 
 test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
-var x$40 = HTMLCollection;
+var x$41 = HTMLCollection;
 
-test$28(x$40.prototype[x.iterator]);
+test$28(x$41.prototype[x.iterator]);
 
 function innerHeight() {
 	return x$28.innerHeight;
@@ -5440,16 +5464,16 @@ describe('Lazy', function () {
 	});
 });
 
-var x$41 = localStorageIsAvailable;
+var x$42 = localStorageIsAvailable;
 
-var x$42 = localStorage;
+var x$43 = localStorage;
 
 var localStorage$2 = new J0Storage();
 
 test$30(localStorage$2, 'localStorage#j0');
 
-if (x$41) {
-	test$30(x$42, 'localStorage');
+if (x$42) {
+	test$30(x$43, 'localStorage');
 } else {
 	x$23.info('Tests for localStorage are skipped.');
 }
@@ -5839,10 +5863,10 @@ function test$39(acosh) {
 	});
 }
 
-var x$43 = Math;
+var x$44 = Math;
 
 function acosh(x) {
-	return x$43.log(x + x$43.sqrt(x * x - 1));
+	return x$44.log(x + x$44.sqrt(x * x - 1));
 }
 
 test$39(acosh, 'Math.acosh#j0');
@@ -5919,7 +5943,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$43.log(x + x$43.sqrt(x * x + 1));
+	return x$44.log(x + x$44.sqrt(x * x + 1));
 }
 
 test$43(asinh, 'Math.asinh#j0');
@@ -6055,7 +6079,7 @@ function test$49(atanh) {
 }
 
 function atanh(x) {
-	return x$43.log((1 + x) / (1 - x)) / 2;
+	return x$44.log((1 + x) / (1 - x)) / 2;
 }
 
 test$49(atanh, 'Math.atanh#j0');
@@ -6096,7 +6120,7 @@ function test$51(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$43.pow(x$43.abs(x), 1 / 3);
+	var root = x$44.pow(x$44.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -6178,7 +6202,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$43.floor(x$43.log(x >>> 0) * x$43.LOG2E);
+	return 31 - x$44.floor(x$44.log(x >>> 0) * x$44.LOG2E);
 }
 
 test$55(clz32, 'Math.clz32#j0');
@@ -6252,7 +6276,7 @@ function test$59(cosh) {
 }
 
 function cosh(x) {
-	var y = x$43.exp(x);
+	var y = x$44.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -6342,7 +6366,7 @@ function test$65(expm1) {
 }
 
 function expm1(x) {
-	return x$43.exp(x) - 1;
+	return x$44.exp(x) - 1;
 }
 
 test$65(expm1, 'Math.expm1#j0');
@@ -6474,7 +6498,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$43.sqrt(sum);
+	return x$44.sqrt(sum);
 }
 
 test$71(hypot, 'Math.hypot#j0');
@@ -6645,7 +6669,7 @@ function test$81(log10) {
 }
 
 function log10(x) {
-	return x$43.log(x) / x$43.LN10;
+	return x$44.log(x) / x$44.LN10;
 }
 
 test$81(log10, 'Math.log10#j0');
@@ -6700,7 +6724,7 @@ function test$85(log1p) {
 }
 
 function log1p(x) {
-	return x$43.log(x + 1);
+	return x$44.log(x + 1);
 }
 
 test$85(log1p, 'Math.log1p#j0');
@@ -6741,7 +6765,7 @@ function test$87(log2) {
 }
 
 function log2(x) {
-	return x$43.log(x) / x$43.LN2;
+	return x$44.log(x) / x$44.LN2;
 }
 
 test$87(log2, 'Math.log2#j0');
@@ -6981,11 +7005,11 @@ function test$103(sign) {
 	});
 }
 
-var x$44 = isNaN;
+var x$45 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$44(x)) {
+	if (x === 0 || x$45(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -7062,7 +7086,7 @@ function test$107(sinh) {
 }
 
 function sinh(x) {
-	var y = x$43.exp(x);
+	var y = x$44.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -7206,7 +7230,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$43.exp(2 * x);
+	var y = x$44.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -9061,9 +9085,9 @@ function generator$8() {
 
 test$121(generator$8, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-var x$45 = NamedNodeMap;
+var x$46 = NamedNodeMap;
 
-test$121(x$45.prototype[x.iterator]);
+test$121(x$46.prototype[x.iterator]);
 
 /* eslint-disable no-constant-condition */
 function test$123(generator) {
@@ -9191,9 +9215,9 @@ function generator$10() {
 
 test$123(generator$10, 'NodeList.prototype[Symbol.iterator]#j0');
 
-var x$46 = NodeList;
+var x$47 = NodeList;
 
-test$123(x$46.prototype[x.iterator]);
+test$123(x$47.prototype[x.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -9713,9 +9737,9 @@ function tests$10(Request, name) {
 
 tests$10(Request$1, 'J0Request');
 
-var x$47 = Request;
+var x$48 = Request;
 
-tests$10(x$47, 'Request');
+tests$10(x$48, 'Request');
 
 describe('requestAnimationFrame', function () {
 
@@ -9756,9 +9780,9 @@ function tests$12(Response, name) {
 
 tests$12(Response$1, 'J0Response');
 
-var x$48 = Response;
+var x$49 = Response;
 
-tests$12(x$48, 'Response');
+tests$12(x$49, 'Response');
 
 var Ring = function () {
 	function Ring(array) {
@@ -10153,7 +10177,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$49 = encodeURIComponent;
+var x$50 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -10219,7 +10243,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$49(value);
+					return x$50(value);
 				}
 			});
 		}
@@ -10416,11 +10440,9 @@ describe('State', function () {
 	});
 });
 
-var x$50 = location;
+var x$51 = location;
 
-var x$51 = history;
-
-var x$52 = addEventListener;
+var x$52 = history;
 
 var x$53 = Boolean;
 
@@ -10457,7 +10479,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$50;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$51;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion39 = true;
@@ -10568,7 +10590,7 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
-			x$51[method](newState.name, newState.params, newState.href);
+			x$52[method](newState.name, newState.params, newState.href);
 			var oldState = this.current;
 			this.current = newState;
 			this.emit('change', newState, oldState);
@@ -10592,9 +10614,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this37.replace(_this37.parseURL());
 			}, debounceDuration);
-			x$52('hashchange', onStateChange);
-			x$52('pushstate', onStateChange);
-			x$52('popstate', onStateChange);
+			x$38('hashchange', onStateChange);
+			x$38('pushstate', onStateChange);
+			x$38('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -10603,10 +10625,10 @@ var StateManager = function (_EventEmitter) {
 }(EventEmitter);
 
 var hex = 16;
-var initialState = x$50.pathname;
+var initialState = x$51.pathname;
 
 function resetState() {
-	x$51.replaceState(null, {}, initialState);
+	x$52.replaceState(null, {}, initialState);
 }
 
 describe('StateManager', function () {
@@ -10965,7 +10987,7 @@ describe('StateManager', function () {
 						_context70.next = 18;
 						return new x$3(function (resolve) {
 							states.once('change', resolve);
-							x$51.back();
+							x$52.back();
 						});
 
 					case 18:
@@ -12376,7 +12398,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$43.floor(clamp(256 * v, 0, 255));
+		return x$44.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -12753,7 +12775,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$49(c);
+	return x$50(c);
 }
 
 function percentEscapeQuery(c) {
@@ -12764,7 +12786,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$49(c);
+	return x$50(c);
 }
 
 function parse$3(input, stateOverride, base) {
@@ -13539,7 +13561,7 @@ var Vector = function () {
 	}, {
 		key: 'norm',
 		get: function get() {
-			return x$43.hypot.apply(null, this.array);
+			return x$44.hypot.apply(null, this.array);
 		},
 		set: function set(norm) {
 			this.array = this.scale(norm / this.norm).array;
