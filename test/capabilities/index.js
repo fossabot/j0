@@ -39,7 +39,7 @@ if (useBrowserStack) {
 		{
 			browserName: 'iPhone',
 			platform: 'MAC',
-			device: 'iPhone 6S'
+			device: 'iPhone 7'
 		}
 	];
 } else {
