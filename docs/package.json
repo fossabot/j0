@@ -1,7 +1,7 @@
 {
   "name": "j0",
   "license": "MIT",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "description": "A library of shims and utility functions",
   "author": {
     "name": "Kei Ito",
@@ -29,14 +29,14 @@
     "chalk": "^2.1.0",
     "chokidar": "^1.7.0",
     "glob": "^7.1.2",
-    "mocha": "^3.5.0",
+    "mocha": "^4.0.1",
     "regenerator-runtime": "^0.11.0",
     "rollup": "^0.50.0",
     "rollup-plugin-commonjs": "^8.2.1",
     "rollup-plugin-glob-import": "0.0.8",
     "sable": "^0.1.7",
-    "selenium-webdriver": "^3.5.0",
-    "uglify-js": "^3.1.1"
+    "selenium-webdriver": "^3.6.0",
+    "uglify-js": "^3.1.3"
   },
   "dependencies": {
     "acorn": "^5.1.1",

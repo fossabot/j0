@@ -3062,6 +3062,8 @@ var addEventListenerWithOptions = checkPassiveSupport() ? function addEventListe
 
 var x$41 = Math;
 
+var x$42 = getSelection;
+
 function forEachItem(data, fn) {
 	if (isArray(data)) {
 		data.forEach(function (args) {
@@ -3907,6 +3909,17 @@ var N = function () {
 					range.setEnd(range.startContainer, range.startOffset);
 				}
 			}
+			return this;
+		}
+	}, {
+		key: 'modifySelection',
+		value: function modifySelection(alter, direction) {
+			var selection = x$42();
+			var range = selection.getRangeAt(0);
+			selection.removeAllRanges();
+			this.modifyRange(range, alter, direction);
+			selection.addRange(range);
+			return this;
 		}
 	}, {
 		key: 'node',
@@ -4833,10 +4846,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$42 = Headers;
+var x$43 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$42();
+	var headers = new x$43();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4853,12 +4866,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$43 = XMLHttpRequest;
+var x$44 = XMLHttpRequest;
 
 function fetch$2(input, init, cb) {
 	return new x$3(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$43();
+		var xhr = new x$44();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -5160,7 +5173,7 @@ function tests$5(Headers) {
 
 tests$5(Headers$1, 'Headers/j0');
 
-tests$5(x$42);
+tests$5(x$43);
 
 function generator$4() {
 	var _this21 = this;
@@ -5233,9 +5246,9 @@ function test$28(generator) {
 
 test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
-var x$44 = HTMLCollection;
+var x$45 = HTMLCollection;
 
-test$28(x$44.prototype[x.iterator]);
+test$28(x$45.prototype[x.iterator]);
 
 function innerHeight() {
 	return x$30.innerHeight;
@@ -5846,13 +5859,13 @@ describe('Lazy', function () {
 	});
 });
 
-var x$45 = localStorageIsAvailable;
+var x$46 = localStorageIsAvailable;
 
 var localStorage$1 = new J0Storage();
 
 test$30(localStorage$1, 'localStorage#j0');
 
-if (x$45) {
+if (x$46) {
 	test$30(localStorage, 'localStorage');
 } else {
 	x$25.info('Tests for localStorage are skipped.');
@@ -7383,11 +7396,11 @@ function test$103(sign) {
 	});
 }
 
-var x$46 = isNaN;
+var x$47 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$46(x)) {
+	if (x === 0 || x$47(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -9788,9 +9801,9 @@ function generator$8() {
 
 test$121(generator$8, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-var x$47 = NamedNodeMap;
+var x$48 = NamedNodeMap;
 
-test$121(x$47.prototype[x.iterator]);
+test$121(x$48.prototype[x.iterator]);
 
 /* eslint-disable no-constant-condition */
 function test$123(generator) {
@@ -9918,9 +9931,9 @@ function generator$10() {
 
 test$123(generator$10, 'NodeList.prototype[Symbol.iterator]#j0');
 
-var x$48 = NodeList;
+var x$49 = NodeList;
 
-test$123(x$48.prototype[x.iterator]);
+test$123(x$49.prototype[x.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -10440,9 +10453,9 @@ function tests$10(Request, name) {
 
 tests$10(Request$1, 'J0Request');
 
-var x$49 = Request;
+var x$50 = Request;
 
-tests$10(x$49, 'Request');
+tests$10(x$50, 'Request');
 
 describe('requestAnimationFrame', function () {
 
@@ -10483,9 +10496,9 @@ function tests$12(Response, name) {
 
 tests$12(Response$1, 'J0Response');
 
-var x$50 = Response;
+var x$51 = Response;
 
-tests$12(x$50, 'Response');
+tests$12(x$51, 'Response');
 
 var Ring = function () {
 	function Ring(array) {
@@ -10880,7 +10893,7 @@ describe('setImmediate', function () {
 	});
 });
 
-var x$51 = encodeURIComponent;
+var x$52 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -10946,7 +10959,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$51(value);
+					return x$52(value);
 				}
 			});
 		}
@@ -11143,11 +11156,11 @@ describe('State', function () {
 	});
 });
 
-var x$52 = location;
+var x$53 = location;
 
-var x$53 = history;
+var x$54 = history;
 
-var x$54 = Boolean;
+var x$55 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -11182,7 +11195,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$52;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$53;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion39 = true;
@@ -11268,7 +11281,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$54(current && state && current.is(state));
+			return x$55(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -11276,7 +11289,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$54(current && state && current.isIn(state));
+			return x$55(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -11284,7 +11297,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$54(current && state && current.isAncestorOf(state));
+			return x$55(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -11293,7 +11306,7 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
-			x$53[method](newState.name, newState.params, newState.href);
+			x$54[method](newState.name, newState.params, newState.href);
 			var oldState = this.current;
 			this.current = newState;
 			this.emit('change', newState, oldState);
@@ -11328,10 +11341,10 @@ var StateManager = function (_EventEmitter) {
 }(EventEmitter);
 
 var hex = 16;
-var initialState = x$52.pathname;
+var initialState = x$53.pathname;
 
 function resetState() {
-	x$53.replaceState(null, {}, initialState);
+	x$54.replaceState(null, {}, initialState);
 }
 
 describe('StateManager', function () {
@@ -11690,7 +11703,7 @@ describe('StateManager', function () {
 						_context70.next = 18;
 						return new x$3(function (resolve) {
 							states.once('change', resolve);
-							x$53.back();
+							x$54.back();
 						});
 
 					case 18:
@@ -11888,9 +11901,9 @@ function test$134(fromCodePoint) {
 	});
 }
 
-var x$55 = isFinite;
+var x$56 = isFinite;
 
-var x$56 = RangeError;
+var x$57 = RangeError;
 
 /* eslint-disable no-magic-numbers, no-bitwise */
 
@@ -11904,8 +11917,8 @@ function fromCodePoint() {
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var codePoint = args[i];
-		if (!x$55(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
-			throw new x$56('Invalid code point: ' + codePoint);
+		if (!x$56(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
+			throw new x$57('Invalid code point: ' + codePoint);
 		}
 		if (codePoint <= 0xFFFF) {
 			chars.push(fromCharCode(codePoint));
@@ -13427,7 +13440,7 @@ function test$150(URL) {
 	});
 }
 
-var x$57 = URL;
+var x$58 = URL;
 
 /* eslint-disable no-undefined, complexity, max-statements, max-lines */
 /* eslint-disable no-magic-numbers, no-continue, no-labels, no-lonely-if */
@@ -13476,7 +13489,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$51(c);
+	return x$52(c);
 }
 
 function percentEscapeQuery(c) {
@@ -13487,7 +13500,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$51(c);
+	return x$52(c);
 }
 
 function parse$3(input, stateOverride, base) {
@@ -14030,13 +14043,13 @@ var URL$1 = function () {
 }();
 
 x$7.defineProperties(URL$1, {
-	createObjectURL: { value: x$57.createObjectURL },
-	revokeObjectURL: { value: x$57.revokeObjectURL }
+	createObjectURL: { value: x$58.createObjectURL },
+	revokeObjectURL: { value: x$58.revokeObjectURL }
 });
 
 test$150(URL$1, 'URL#j0');
 
-test$150(x$57);
+test$150(x$58);
 
 var separator = '&';
 var equal = '=';
@@ -14444,7 +14457,7 @@ describe('wait', function () {
 	})));
 });
 
-var x$58 = canvasTestClass;
+var x$59 = canvasTestClass;
 
 mocha.run().once('end', function () {
 	var result = 0 < this.stats.failures ? 'failed' : 'passed';
@@ -14464,7 +14477,7 @@ mocha.run().once('end', function () {
 	for (var i = tests.length; i--;) {
 		_loop3(i);
 	}
-	var canvasList = x$4.querySelectorAll('.' + x$58);
+	var canvasList = x$4.querySelectorAll('.' + x$59);
 	var list = [];
 	for (var i = canvasList.length; i--;) {
 		list[i] = canvasList[i];
