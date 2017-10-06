@@ -19,7 +19,7 @@ var wait = function () {
 					case 0:
 						_context4.next = 2;
 						return new x$3(function (resolve) {
-							x$25(resolve, duration);
+							x$27(resolve, duration);
 						});
 
 					case 2:
@@ -1269,14 +1269,50 @@ tests(Body$1, 'J0Body');
 /* global Body */
 tests(Body);
 
-var x$23 = console;
+var x$23 = navigator;
+
+var x$24 = parseInt;
+
+var browser = {};
+
+x$23.userAgent.replace(/safari\/([\d.]+)/i, function (match, version) {
+	browser.name = 'safari';
+	browser.version = version;
+}).replace(/chrome\/([\d.]+)/i, function (match, version) {
+	browser.name = 'chrome';
+	browser.version = version;
+}).replace(/firefox\/([\d.]+)/i, function (match, version) {
+	browser.name = 'firefox';
+	browser.version = version;
+}).replace(/edge\/([\d.]+)/i, function (match, version) {
+	browser.name = 'edge';
+	browser.version = version;
+}).replace(/trident\/([\d.]+)/i, function (match, version) {
+	browser.name = 'ie';
+	browser.version = version.replace(/^\d+/, function (majorVersion) {
+		return x$24(majorVersion, 10) + 4;
+	});
+});
+
+describe('browser', function () {
+
+	it('should have browser: ' + browser.name, function () {
+		assert(browser.name, x$23.userAgent);
+	});
+
+	it('should have version: ' + browser.version, function () {
+		assert(browser.version, x$23.userAgent);
+	});
+});
+
+var x$25 = console;
 
 function onError(error) {
 	onError.listener(error);
 }
 
 onError.listener = function (error) {
-	x$23.error(error);
+	x$25.error(error);
 };
 
 function call(fn, thisArg, args) {
@@ -1290,9 +1326,9 @@ function call(fn, thisArg, args) {
 	}
 }
 
-var x$24 = Date;
+var x$26 = Date;
 
-var x$25 = setTimeout;
+var x$27 = setTimeout;
 
 describe('call', function () {
 
@@ -1302,9 +1338,9 @@ describe('call', function () {
 			while (1) {
 				switch (_context5.prev = _context5.next) {
 					case 0:
-						thisArg = x$24.now() + '-1';
-						arg1 = x$24.now() + '-2';
-						arg2 = x$24.now() + '-3';
+						thisArg = x$26.now() + '-1';
+						arg1 = x$26.now() + '-2';
+						arg2 = x$26.now() + '-3';
 						_context5.next = 5;
 						return new x$3(function (resolve, reject) {
 							call(function (a1, a2, a3) {
@@ -1332,9 +1368,9 @@ describe('call', function () {
 			while (1) {
 				switch (_context7.prev = _context7.next) {
 					case 0:
-						thisArg = x$24.now() + '-1';
-						arg1 = x$24.now() + '-2';
-						arg2 = x$24.now() + '-3';
+						thisArg = x$26.now() + '-1';
+						arg1 = x$26.now() + '-2';
+						arg2 = x$26.now() + '-3';
 						_context7.next = 5;
 						return new x$3(function (resolve, reject) {
 							call(function () {
@@ -1383,9 +1419,9 @@ describe('call', function () {
 			while (1) {
 				switch (_context8.prev = _context8.next) {
 					case 0:
-						thisArg = x$24.now() + '-1';
-						arg1 = x$24.now() + '-2';
-						arg2 = x$24.now() + '-3';
+						thisArg = x$26.now() + '-1';
+						arg1 = x$26.now() + '-2';
+						arg2 = x$26.now() + '-3';
 						_context8.next = 5;
 						return new x$3(function (resolve) {
 							call(function (a1, a2, a3) {
@@ -1413,9 +1449,9 @@ describe('call', function () {
 			while (1) {
 				switch (_context10.prev = _context10.next) {
 					case 0:
-						thisArg = x$24.now() + '-1';
-						arg1 = x$24.now() + '-2';
-						arg2 = x$24.now() + '-3';
+						thisArg = x$26.now() + '-1';
+						arg1 = x$26.now() + '-2';
+						arg2 = x$26.now() + '-3';
 						_context10.next = 5;
 						return new x$3(function (resolve) {
 							call(function () {
@@ -1459,9 +1495,9 @@ describe('call', function () {
 	})));
 });
 
-var x$26 = cancelAnimationFrame;
+var x$28 = cancelAnimationFrame;
 
-var x$27 = requestAnimationFrame;
+var x$29 = requestAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
@@ -1473,8 +1509,8 @@ describe('cancelAnimationFrame', function () {
 					case 0:
 						_context11.next = 2;
 						return new x$3(function (resolve) {
-							x$27(function (time1) {
-								x$27(function (time2) {
+							x$29(function (time1) {
+								x$29(function (time2) {
 									resolve(time2 - time1);
 								});
 							});
@@ -1488,15 +1524,15 @@ describe('cancelAnimationFrame', function () {
 						assert.equal(0 < baseInterval, true);
 						_context11.next = 8;
 						return new x$3(function (resolve) {
-							x$27(resolve);
+							x$29(resolve);
 						});
 
 					case 8:
 						_context11.next = 10;
 						return new x$3(function (resolve, reject) {
-							x$25(resolve, baseInterval * timeoutMargin / 2);
-							var id = x$27(reject);
-							x$26(id);
+							x$27(resolve, baseInterval * timeoutMargin / 2);
+							var id = x$29(reject);
+							x$28(id);
 						});
 
 					case 10:
@@ -2493,7 +2529,7 @@ describe('codePoints', function () {
 	});
 });
 
-var x$28 = window;
+var x$30 = window;
 
 /* eslint-disable no-magic-numbers */
 describe('ConditionalSet', function () {
@@ -2535,7 +2571,7 @@ describe('ConditionalSet', function () {
 							_context12.next = 3;
 							return assert.graphicalEqual({
 								name: 'ConditionalSet1',
-								url: x$28.root + '/ConditionalSet/ConditionalSet1.png',
+								url: x$30.root + '/ConditionalSet/ConditionalSet1.png',
 								fn: function fn(x, y) {
 									return set.includes(x, y) ? 1 : 0;
 								},
@@ -2568,7 +2604,7 @@ describe('ConditionalSet', function () {
 							_context13.next = 3;
 							return assert.graphicalEqual({
 								name: 'ConditionalSet2',
-								url: x$28.root + '/ConditionalSet/ConditionalSet2.png',
+								url: x$30.root + '/ConditionalSet/ConditionalSet2.png',
 								fn: function fn(x, y) {
 									return set.includes(x, y) ? 1 : 0;
 								},
@@ -2601,7 +2637,7 @@ describe('ConditionalSet', function () {
 							_context14.next = 3;
 							return assert.graphicalEqual({
 								name: 'ConditionalSet3',
-								url: x$28.root + '/ConditionalSet/ConditionalSet3.png',
+								url: x$30.root + '/ConditionalSet/ConditionalSet3.png',
 								fn: function fn(x, y) {
 									return set.includes(x, y) ? 1 : 0;
 								},
@@ -2634,7 +2670,7 @@ describe('ConditionalSet', function () {
 							_context15.next = 3;
 							return assert.graphicalEqual({
 								name: 'ConditionalSet4',
-								url: x$28.root + '/ConditionalSet/ConditionalSet4.png',
+								url: x$30.root + '/ConditionalSet/ConditionalSet4.png',
 								fn: function fn(x, y) {
 									return set.includes(x, y) ? 1 : 0;
 								},
@@ -2667,7 +2703,7 @@ describe('ConditionalSet', function () {
 							_context16.next = 3;
 							return assert.graphicalEqual({
 								name: 'ConditionalSet5',
-								url: x$28.root + '/ConditionalSet/ConditionalSet5.png',
+								url: x$30.root + '/ConditionalSet/ConditionalSet5.png',
 								fn: function fn(x, y) {
 									return set.includes(x, y) ? 1 : 0;
 								},
@@ -2699,7 +2735,7 @@ function test$20(info) {
 }
 
 /* eslint-disable no-console */
-test$20(x$23.info);
+test$20(x$25.info);
 
 function createTypedArray(TypedArray, source) {
 	var length = source.length;
@@ -2756,7 +2792,7 @@ describe('cubicBezier', function () {
 	});
 });
 
-var x$29 = CustomEvent;
+var x$31 = CustomEvent;
 
 function test$22(CustomEvent) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'CustomEvent';
@@ -2772,7 +2808,7 @@ function test$22(CustomEvent) {
 	});
 }
 
-var x$30 = Event;
+var x$32 = Event;
 
 function CustomEvent$2(event) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -2784,13 +2820,13 @@ function CustomEvent$2(event) {
 	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	return evt;
 }
-CustomEvent$2.prototype = x$30.prototype;
+CustomEvent$2.prototype = x$32.prototype;
 
 test$22(CustomEvent$2, 'CustomEvent#j0');
 
-test$22(x$29);
+test$22(x$31);
 
-var x$31 = clearTimeout;
+var x$33 = clearTimeout;
 
 function debounce(fn) {
 	var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -2804,8 +2840,8 @@ function debounce(fn) {
 			args[_key13] = arguments[_key13];
 		}
 
-		x$31(timer);
-		timer = x$25(function () {
+		x$33(timer);
+		timer = x$27(function () {
 			fn.call.apply(fn, [thisArg || _this2].concat(args));
 		}, delay);
 	};
@@ -2907,7 +2943,7 @@ describe('deepEqual', function () {
 	});
 });
 
-var x$32 = DOMTokenList;
+var x$34 = DOMTokenList;
 
 function generator$2() {
 	var _this4 = this;
@@ -2980,34 +3016,34 @@ function test$24(generator) {
 
 test$24(generator$2, 'DOMTokenList/@iterator/j0');
 
-test$24(x$32.prototype[x.iterator]);
+test$24(x$34.prototype[x.iterator]);
 
-var x$33 = Array;
+var x$35 = Array;
 
-var x$34 = Node;
+var x$36 = Node;
 
-var isArray = x$33.isArray;
+var isArray = x$35.isArray;
 
 function isNode(x) {
-	return isInstanceOf(x, x$34);
+	return isInstanceOf(x, x$36);
 }
 
-var x$35 = Set;
+var x$37 = Set;
 
-var x$36 = Map;
+var x$38 = Map;
 
-var x$37 = getComputedStyle;
+var x$39 = getComputedStyle;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var x$38 = addEventListener;
+var x$40 = addEventListener;
 
 function checkPassiveSupport() {
 	var supportsPassive = false;
 	try {
-		x$38('test', null, x$7.defineProperty({}, 'passive', {
+		x$40('test', null, x$7.defineProperty({}, 'passive', {
 			get: function get() {
 				supportsPassive = true;
 			}
@@ -3024,7 +3060,7 @@ var addEventListenerWithOptions = checkPassiveSupport() ? function addEventListe
 	target.addEventListener(type, handler, options === true || options && options.capture);
 };
 
-var x$39 = Math;
+var x$41 = Math;
 
 function forEachItem(data, fn) {
 	if (isArray(data)) {
@@ -3050,10 +3086,10 @@ var getBody = new x$3(function (resolve) {
 		if (body) {
 			resolve(new N(body));
 		} else {
-			x$25(check, interval);
+			x$27(check, interval);
 		}
 	}
-	x$25(check);
+	x$27(check);
 });
 
 var nodeKey = x();
@@ -3076,12 +3112,10 @@ function _findAll(selector, rootElement) {
 	return result;
 }
 
-var directions = {
-	top: 0,
-	right: 1,
-	bottom: 2,
-	left: 3
-};
+var DIRECTION_TOP = 0;
+var DIRECTION_RIGHT = 1;
+var DIRECTION_BOTTOM = 2;
+var DIRECTION_LEFT = 3;
 
 var N = function () {
 	function N() {
@@ -3092,7 +3126,7 @@ var N = function () {
 		_classCallCheck(this, N);
 
 		assign(this, {
-			listeners: new x$35()
+			listeners: new x$37()
 		});
 		if (source instanceof N) {
 			this[nodeKey] = source.node;
@@ -3266,7 +3300,7 @@ var N = function () {
 			var _this7 = this;
 
 			if (0 < delay) {
-				x$25(function () {
+				x$27(function () {
 					_this7.remove();
 				}, delay);
 			} else {
@@ -3403,7 +3437,7 @@ var N = function () {
 	}, {
 		key: 'emit',
 		value: function emit(eventName, detail) {
-			var event = new x$29(eventName, { detail: detail });
+			var event = new x$31(eventName, { detail: detail });
 			this.node.dispatchEvent(event);
 			return this;
 		}
@@ -3507,7 +3541,7 @@ var N = function () {
 					result.t = tagName;
 				}
 				if (0 < attributes.size) {
-					result.a = x$33.from(attributes);
+					result.a = x$35.from(attributes);
 				}
 				if (0 < childNodes.length) {
 					result.c = childNodes.map(function (node) {
@@ -3541,18 +3575,59 @@ var N = function () {
 			return false;
 		}
 	}, {
-		key: 'walkForward',
-		value: function walkForward(fn, limit, callTheFunction) {
-			if (callTheFunction) {
-				if (fn(this)) {
-					return this;
-				}
-				if (this.equals(limit)) {
+		key: 'getForward',
+		value: function getForward(limit) {
+			var element = this.firstChild;
+			if (element) {
+				return element;
+			}
+			element = this;
+			while (element) {
+				if (element.equals(limit)) {
 					return null;
 				}
-			}
-			var forward = this.forward;
+				var _element = element,
+				    next = _element.next;
 
+				if (next) {
+					return next;
+				}
+				element = element.parent;
+			}
+			return null;
+		}
+	}, {
+		key: 'getBackward',
+		value: function getBackward(limit) {
+			var element = this.lastChild;
+			if (element) {
+				return element;
+			}
+			element = this;
+			while (element) {
+				if (element.equals(limit)) {
+					return null;
+				}
+				var _element2 = element,
+				    previous = _element2.previous;
+
+				if (previous) {
+					return previous;
+				}
+				element = element.parent;
+			}
+			return null;
+		}
+	}, {
+		key: 'walkForward',
+		value: function walkForward(fn, limit, callTheFunction) {
+			if (this.equals(limit)) {
+				return null;
+			}
+			if (callTheFunction && fn(this)) {
+				return this;
+			}
+			var forward = this.getForward(limit);
 			if (forward) {
 				return forward.walkForward(fn, limit, true);
 			}
@@ -3560,16 +3635,13 @@ var N = function () {
 	}, {
 		key: 'walkBackward',
 		value: function walkBackward(fn, limit, callTheFunction) {
-			if (callTheFunction) {
-				if (fn(this)) {
-					return this;
-				}
-				if (this.equals(limit)) {
-					return null;
-				}
+			if (this.equals(limit)) {
+				return null;
 			}
-			var backward = this.backward;
-
+			if (callTheFunction && fn(this)) {
+				return this;
+			}
+			var backward = this.getBackward(limit);
 			if (backward) {
 				return backward.walkBackward(fn, limit, true);
 			}
@@ -3599,27 +3671,241 @@ var N = function () {
 	}, {
 		key: 'getPreviousText',
 		value: function getPreviousText(limit) {
-			return this.walkForward(function (node) {
+			return this.walkBackward(function (node) {
 				return node.isTextNode;
 			}, limit);
 		}
 	}, {
+		key: 'forwardRange',
+		value: function forwardRange(range) {
+			try {
+				range.setStart(range.endContainer, range.endOffset);
+				range.setEnd(range.endContainer, range.endOffset + 1);
+			} catch (error) {
+				var nextText = new N(range.endContainer).getNextText(this);
+				if (!nextText) {
+					return false;
+				}
+				range.setStart(nextText.node, 0);
+				range.setEnd(nextText.node, 1);
+			}
+			return true;
+		}
+	}, {
+		key: 'backwardRange',
+		value: function backwardRange(range) {
+			if (0 < range.startOffset) {
+				range.setEnd(range.startContainer, range.startOffset);
+				range.setStart(range.startContainer, range.startOffset - 1);
+			} else {
+				var previousText = new N(range.startContainer).getPreviousText(this);
+				if (!previousText) {
+					return false;
+				}
+				range.selectNodeContents(previousText.node);
+				range.setStart(range.endContainer, range.endOffset - 1);
+			}
+			return true;
+		}
+	}, {
+		key: 'getCollapsedRectOfRange',
+		value: function getCollapsedRectOfRange(range) {
+			var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+			var _range$getBoundingCli = range.getBoundingClientRect(),
+			    left = _range$getBoundingCli.left,
+			    right = _range$getBoundingCli.right,
+			    width = _range$getBoundingCli.width,
+			    top = _range$getBoundingCli.top,
+			    bottom = _range$getBoundingCli.bottom,
+			    height = _range$getBoundingCli.height;
+
+			var _textDirection = _slicedToArray(this.textDirection, 1),
+			    mainDirection = _textDirection[0];
+
+			switch (mainDirection) {
+				case DIRECTION_TOP:
+					bottom = top = reverse ? top : bottom;
+					height = 0;
+					break;
+				case DIRECTION_BOTTOM:
+					bottom = top = reverse ? bottom : top;
+					height = 0;
+					break;
+				case DIRECTION_LEFT:
+					right = left = reverse ? left : right;
+					width = 0;
+					break;
+				case DIRECTION_RIGHT:
+					right = left = reverse ? right : left;
+					width = 0;
+					break;
+			}
+			return {
+				left: left,
+				right: right,
+				width: width,
+				top: top,
+				bottom: bottom,
+				height: height
+			};
+		}
+	}, {
+		key: 'getRangeRect',
+		value: function getRangeRect(range) {
+			var clonedRange = range.cloneRange();
+			if (clonedRange.collapsed) {
+				if (this.forwardRange(clonedRange)) {
+					return this.getCollapsedRectOfRange(clonedRange);
+				} else if (this.backwardRange(clonedRange)) {
+					return this.getCollapsedRectOfRange(clonedRange, true);
+				} else {
+					var text = new N('A');
+					this.append(text);
+					clonedRange.selectNodeContents(text.node);
+					var rect = this.getCollapsedRectOfRange(clonedRange);
+					text.remove();
+					return rect;
+				}
+			}
+			return clonedRange.getBoundingClientRect();
+		}
+	}, {
 		key: 'modifyRange',
 		value: function modifyRange(range, alter, direction) {
-			var textDirection = this.textDirection;
-			direction = directions[direction];
-			if (textDirection === direction) {
-				// go forward by 1 char
-				range.setEnd(range.endContainer, range.endOffset + 1);
-			} else if ((textDirection - direction) % 2 === 0) {
-				// go backward by 1 char
-				range.setEnd(range.startContainer, range.startOffset - 1);
-			} else if (direction < 1.5) {
-				// go backward by 1 line
-				range.setEnd(range.startContainer, range.startOffset - 1);
+			var _textDirection2 = _slicedToArray(this.textDirection, 2),
+			    mainDirection = _textDirection2[0],
+			    crossDirection = _textDirection2[1];
+
+			var character = void 0;
+			var forward = void 0;
+			direction = N.directions[direction];
+			if (mainDirection === direction) {
+				character = true;
+				forward = true;
+			} else if ((mainDirection - direction) % 2 === 0) {
+				character = true;
+				forward = false;
+			} else if (crossDirection === direction) {
+				character = false;
+				forward = true;
 			} else {
-				// go forward by 1 line
-				range.setEnd(range.endContainer, range.endOffset + 1);
+				character = false;
+				forward = false;
+			}
+			var anchorRect = this.getRangeRect(range);
+			function compareRect(rect1, rect2, direction) {
+				switch (direction) {
+					case DIRECTION_TOP:
+						return rect2.top < rect1.top;
+					case DIRECTION_BOTTOM:
+						return rect1.bottom < rect2.bottom;
+					case DIRECTION_LEFT:
+						return rect2.left < rect1.left;
+					case DIRECTION_RIGHT:
+						return rect1.right < rect2.right;
+				}
+			}
+			function compareRectEq(rect1, rect2, direction) {
+				switch (direction) {
+					case DIRECTION_TOP:
+						return rect2.top <= rect1.top;
+					case DIRECTION_BOTTOM:
+						return rect1.bottom <= rect2.bottom;
+					case DIRECTION_LEFT:
+						return rect2.left <= rect1.left;
+					case DIRECTION_RIGHT:
+						return rect1.right <= rect2.right;
+				}
+			}
+			function selectNearRange(range1, range2, rect1, rect2) {
+				if (!range2) {
+					return;
+				}
+				var side = void 0;
+				switch (mainDirection) {
+					case DIRECTION_TOP:
+						side = forward ? 'top' : 'bottom';
+						break;
+					case DIRECTION_BOTTOM:
+						side = forward ? 'bottom' : 'top';
+						break;
+					case DIRECTION_LEFT:
+						side = forward ? 'left' : 'right';
+						break;
+					case DIRECTION_RIGHT:
+						side = forward ? 'right' : 'left';
+						break;
+				}
+				var d1 = x$41.abs(rect1[side] - anchorRect[side]);
+				var d2 = x$41.abs(rect2[side] - anchorRect[side]);
+				if (d2 < d1) {
+					range1.setStart(range2.startContainer, range2.startOffset);
+					range1.setEnd(range2.endContainer, range2.endOffset);
+				}
+			}
+			if (forward) {
+				var done = void 0;
+				if (character) {
+					if (this.forwardRange(range)) {
+						done = true;
+					} else {
+						done = false;
+						this.emit('range:last');
+					}
+				} else {
+					var lastRange = void 0;
+					var lastRect = void 0;
+					while (this.forwardRange(range)) {
+						var rect = range.getBoundingClientRect();
+						if (0 < rect.width * rect.height) {
+							if (compareRect(anchorRect, rect, crossDirection) && compareRectEq(anchorRect, rect, mainDirection)) {
+								selectNearRange(range, lastRange, rect, lastRect);
+								done = true;
+								break;
+							}
+							lastRange = range.cloneRange();
+							lastRect = rect;
+						}
+					}
+					if (!done) {
+						this.emit('range:lastline', anchorRect);
+					}
+				}
+				if (alter !== 'expand') {
+					range.setStart(range.endContainer, range.endOffset);
+				}
+			} else {
+				var _done = void 0;
+				if (character) {
+					if (this.backwardRange(range)) {
+						_done = true;
+					} else {
+						_done = false;
+						this.emit('range:first');
+					}
+				} else {
+					var _lastRange = void 0;
+					var _lastRect = void 0;
+					while (this.backwardRange(range)) {
+						var _rect = range.getBoundingClientRect();
+						if (0 < _rect.width * _rect.height) {
+							if (compareRect(_rect, anchorRect, crossDirection) && compareRectEq(anchorRect, _rect, (mainDirection + 2) % 4)) {
+								selectNearRange(range, _lastRange, _rect, _lastRect);
+								_done = true;
+								break;
+							}
+							_lastRange = range.cloneRange();
+							_lastRect = _rect;
+						}
+					}
+					if (!_done) {
+						this.emit('range:firstline', anchorRect);
+					}
+				}
+				if (alter !== 'expand') {
+					range.setEnd(range.startContainer, range.startOffset);
+				}
 			}
 		}
 	}, {
@@ -3661,12 +3947,12 @@ var N = function () {
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return x$33.from(this.node.childNodes).map(wrap);
+			return x$35.from(this.node.childNodes).map(wrap);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return x$33.from(this.node.children).map(wrap);
+			return x$35.from(this.node.children).map(wrap);
 		}
 	}, {
 		key: 'firstChild',
@@ -3690,7 +3976,7 @@ var N = function () {
 	}, {
 		key: 'attributes',
 		get: function get() {
-			var result = new x$36();
+			var result = new x$38();
 			var attributes = this.node.attributes;
 
 			if (attributes) {
@@ -3736,7 +4022,7 @@ var N = function () {
 	}, {
 		key: 'computedStyle',
 		get: function get() {
-			return x$37(this.node);
+			return x$39(this.node);
 		}
 	}, {
 		key: 'tagName',
@@ -3751,50 +4037,12 @@ var N = function () {
 	}, {
 		key: 'isElementNode',
 		get: function get() {
-			return this.nodeType === x$34.ELEMENT_NODE;
+			return this.nodeType === x$36.ELEMENT_NODE;
 		}
 	}, {
 		key: 'isTextNode',
 		get: function get() {
-			return this.nodeType === x$34.TEXT_NODE;
-		}
-	}, {
-		key: 'forward',
-		get: function get() {
-			var element = this.firstChild;
-			if (element) {
-				return element;
-			}
-			element = this;
-			while (element) {
-				var _element = element,
-				    next = _element.next;
-
-				if (next) {
-					return next;
-				}
-				element = element.parent;
-			}
-			return null;
-		}
-	}, {
-		key: 'backward',
-		get: function get() {
-			var element = this.lastChild;
-			if (element) {
-				return element;
-			}
-			element = this;
-			while (element) {
-				var _element2 = element,
-				    previous = _element2.previous;
-
-				if (previous) {
-					return previous;
-				}
-				element = element.parent;
-			}
-			return null;
+			return this.nodeType === x$36.TEXT_NODE;
 		}
 	}, {
 		key: 'focused',
@@ -3806,55 +4054,65 @@ var N = function () {
 		get: function get() {
 			var _this15 = this;
 
-			var texts = ['A', 'B', 'M', 'M'].map(function (text) {
-				return new N(text).node;
-			});
-			var elements = [texts[3], 0, texts[2], 0, texts[1], texts[0]].map(function (element) {
-				_this15.prepend(element || { t: 'br' });
-				return _this15.firstChild;
-			});
-
-			var _texts$map = texts.map(function (textNode) {
-				var range = x$4.createRange();
-				range.setStart(textNode, 0);
-				range.setEnd(textNode, 1);
-				var rect = range.getBoundingClientRect();
-				return [(rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2];
-			}),
-			    _texts$map2 = _slicedToArray(_texts$map, 4),
-			    _texts$map2$ = _slicedToArray(_texts$map2[0], 2),
-			    x1 = _texts$map2$[0],
-			    y1 = _texts$map2$[1],
-			    _texts$map2$2 = _slicedToArray(_texts$map2[1], 2),
-			    x2 = _texts$map2$2[0],
-			    y2 = _texts$map2$2[1],
-			    _texts$map2$3 = _slicedToArray(_texts$map2[2], 2),
-			    x3 = _texts$map2$3[0],
-			    y3 = _texts$map2$3[1],
-			    _texts$map2$4 = _slicedToArray(_texts$map2[3], 2),
-			    x4 = _texts$map2$4[0],
-			    y4 = _texts$map2$4[1];
-
-			elements.forEach(function (element) {
-				element.remove();
-			});
-			return [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref28) {
-				var _ref29 = _slicedToArray(_ref28, 2),
-				    y = _ref29[0],
-				    x$$1 = _ref29[1];
-
-				var arg = x$39.atan2(y, x$$1) / x$39.PI;
-				var absArg = arg < 0 ? -arg : arg;
-				if (absArg < 0.25) {
-					return directions.right;
-				} else if (0.75 < absArg) {
-					return directions.left;
-				} else if (arg < 0) {
-					return directions.top;
-				} else {
-					return directions.bottom;
+			if (!this._textDirection) {
+				var contenteditable = this.getAttribute('contenteditable');
+				if (!contenteditable) {
+					this.setAttribute('contenteditable', 'true');
 				}
-			});
+				var texts = ['A', 'B', 'M', 'M'].map(function (text) {
+					return new N(text).node;
+				});
+				var _elements = [texts[3], 0, texts[2], 0, texts[1], texts[0]].map(function (element) {
+					_this15.prepend(element || { t: 'br' });
+					return _this15.firstChild;
+				});
+
+				var _texts$map = texts.map(function (textNode) {
+					var range = x$4.createRange();
+					range.setStart(textNode, 0);
+					range.setEnd(textNode, 1);
+					var rect = range.getBoundingClientRect();
+					return [(rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2];
+				}),
+				    _texts$map2 = _slicedToArray(_texts$map, 4),
+				    _texts$map2$ = _slicedToArray(_texts$map2[0], 2),
+				    x1 = _texts$map2$[0],
+				    y1 = _texts$map2$[1],
+				    _texts$map2$2 = _slicedToArray(_texts$map2[1], 2),
+				    x2 = _texts$map2$2[0],
+				    y2 = _texts$map2$2[1],
+				    _texts$map2$3 = _slicedToArray(_texts$map2[2], 2),
+				    x3 = _texts$map2$3[0],
+				    y3 = _texts$map2$3[1],
+				    _texts$map2$4 = _slicedToArray(_texts$map2[3], 2),
+				    x4 = _texts$map2$4[0],
+				    y4 = _texts$map2$4[1];
+
+				_elements.forEach(function (element) {
+					element.remove();
+				});
+				if (!contenteditable) {
+					this.removeAttribute('contenteditable');
+				}
+				this._textDirection = [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref28) {
+					var _ref29 = _slicedToArray(_ref28, 2),
+					    y = _ref29[0],
+					    x$$1 = _ref29[1];
+
+					var arg = x$41.atan2(y, x$$1) / x$41.PI;
+					var absArg = arg < 0 ? -arg : arg;
+					if (absArg < 0.25) {
+						return DIRECTION_RIGHT;
+					} else if (0.75 < absArg) {
+						return DIRECTION_LEFT;
+					} else if (arg < 0) {
+						return DIRECTION_TOP;
+					} else {
+						return DIRECTION_BOTTOM;
+					}
+				});
+			}
+			return this._textDirection;
 		}
 	}], [{
 		key: 'ready',
@@ -3884,7 +4142,7 @@ var N = function () {
 				}, _callee19, this);
 			}));
 
-			function ready(_x43) {
+			function ready(_x44) {
 				return _ref30.apply(this, arguments);
 			}
 
@@ -3908,7 +4166,19 @@ var N = function () {
 	}, {
 		key: 'directions',
 		get: function get() {
-			return directions;
+			return {
+				top: DIRECTION_TOP,
+				right: DIRECTION_RIGHT,
+				bottom: DIRECTION_BOTTOM,
+				left: DIRECTION_LEFT
+			};
+		}
+	}, {
+		key: 'directionKeys',
+		get: function get() {
+			var _ref31;
+
+			return _ref31 = {}, _defineProperty(_ref31, DIRECTION_TOP, 'top'), _defineProperty(_ref31, DIRECTION_RIGHT, 'right'), _defineProperty(_ref31, DIRECTION_BOTTOM, 'bottom'), _defineProperty(_ref31, DIRECTION_LEFT, 'left'), _ref31;
 		}
 	}]);
 
@@ -3922,9 +4192,9 @@ function test$26(forEach) {
 	describe(name, function () {
 
 		it('should iterate over classList', function () {
-			var class1 = '1_' + x$24.now();
-			var class2 = '2_' + x$24.now();
-			var class3 = '3_' + x$24.now();
+			var class1 = '1_' + x$26.now();
+			var class2 = '2_' + x$26.now();
+			var class3 = '3_' + x$26.now();
 			var element = new N({
 				a: [['class', class1, class2, class3]]
 			});
@@ -3944,7 +4214,7 @@ function test$26(forEach) {
 	});
 }
 
-test$26(x$32.prototype.forEach);
+test$26(x$34.prototype.forEach);
 
 function emitAll(eventName, data, selector, rootElement) {
 	N.findAll(selector, rootElement).forEach(function (element) {
@@ -3989,10 +4259,10 @@ describe('emitAll', function () {
 		emitAll(eventName, eventData, '.' + className, element);
 		var expected = [element1, element2, element5, element3, element4];
 		assert.equal(results.length, expected.length);
-		results.forEach(function (_ref31, index) {
-			var _ref32 = _slicedToArray(_ref31, 2),
-			    element = _ref32[0],
-			    data = _ref32[1];
+		results.forEach(function (_ref32, index) {
+			var _ref33 = _slicedToArray(_ref32, 2),
+			    element = _ref33[0],
+			    data = _ref33[1];
 
 			assert.equal(data, eventData);
 			assert.equal(element.equals(expected[index]), true);
@@ -4006,7 +4276,7 @@ var EventEmitter = function () {
 	function EventEmitter() {
 		_classCallCheck(this, EventEmitter);
 
-		this[listenersKey] = new x$35();
+		this[listenersKey] = new x$37();
 	}
 
 	_createClass(EventEmitter, [{
@@ -4207,12 +4477,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator26 = iterable[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-					var _ref33 = _step26.value;
+					var _ref34 = _step26.value;
 
-					var _ref34 = _slicedToArray(_ref33, 2);
+					var _ref35 = _slicedToArray(_ref34, 2);
 
-					var key = _ref34[0];
-					var value = _ref34[1];
+					var key = _ref35[0];
+					var value = _ref35[1];
 
 					this.append(key, value);
 				}
@@ -4241,9 +4511,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref35) {
-				var _ref36 = _slicedToArray(_ref35, 1),
-				    itemName = _ref36[0];
+			return this.data.findIndex(function (_ref36) {
+				var _ref37 = _slicedToArray(_ref36, 1),
+				    itemName = _ref37[0];
 
 				return itemName === name;
 			});
@@ -4271,9 +4541,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref37) {
-				var _ref38 = _slicedToArray(_ref37, 1),
-				    itemName = _ref38[0];
+			this.data = this.data.filter(function (_ref38) {
+				var _ref39 = _slicedToArray(_ref38, 1),
+				    itemName = _ref39[0];
 
 				return itemName !== name;
 			});
@@ -4281,9 +4551,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref39) {
-				var _ref40 = _slicedToArray(_ref39, 1),
-				    itemName = _ref40[0];
+			var found = this.data.find(function (_ref40) {
+				var _ref41 = _slicedToArray(_ref40, 1),
+				    itemName = _ref41[0];
 
 				return itemName === name;
 			});
@@ -4293,10 +4563,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref41) {
-				var _ref42 = _slicedToArray(_ref41, 2),
-				    itemName = _ref42[0],
-				    value = _ref42[1];
+			this.data.forEach(function (_ref42) {
+				var _ref43 = _slicedToArray(_ref42, 2),
+				    itemName = _ref43[0],
+				    value = _ref43[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4307,11 +4577,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref43) {
-				var _ref44 = _slicedToArray(_ref43, 2),
-				    name = _ref44[0],
-				    _ref44$ = _ref44[1],
-				    value = _ref44$ === undefined ? '' : _ref44$;
+			return this.data.map(function (_ref44) {
+				var _ref45 = _slicedToArray(_ref44, 2),
+				    name = _ref45[0],
+				    _ref45$ = _ref45[1],
+				    value = _ref45$ === undefined ? '' : _ref45$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -4474,8 +4744,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref45) {
-			var headers = _ref45.headers;
+		value: function inheritFrom(input, body, _ref46) {
+			var headers = _ref46.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -4563,10 +4833,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$40 = Headers;
+var x$42 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$40();
+	var headers = new x$42();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4583,12 +4853,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$41 = XMLHttpRequest;
+var x$43 = XMLHttpRequest;
 
 function fetch$2(input, init, cb) {
 	return new x$3(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$41();
+		var xhr = new x$43();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -4619,12 +4889,12 @@ function fetch$2(input, init, cb) {
 
 		try {
 			for (var _iterator27 = request.headers.entries()[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-				var _ref46 = _step27.value;
+				var _ref47 = _step27.value;
 
-				var _ref47 = _slicedToArray(_ref46, 2);
+				var _ref48 = _slicedToArray(_ref47, 2);
 
-				var name = _ref47[0];
-				var value = _ref47[1];
+				var name = _ref48[0];
+				var value = _ref48[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -4683,7 +4953,7 @@ var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
 var DayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function format(src, template, utc) {
-	var date = new x$24(src);
+	var date = new x$26(src);
 	if (0 < date) {
 		var methodPrefix = 'get' + (utc ? 'UTC' : '');
 		var Y = date[methodPrefix + 'FullYear']();
@@ -4750,13 +5020,13 @@ describe('formatDate', function () {
 	try {
 
 		for (var _iterator28 = tests$4[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-			var _ref48 = _step28.value;
+			var _ref49 = _step28.value;
 
-			var _ref49 = _slicedToArray(_ref48, 3);
+			var _ref50 = _slicedToArray(_ref49, 3);
 
-			var src = _ref49[0];
-			var _template = _ref49[1];
-			var expected = _ref49[2];
+			var src = _ref50[0];
+			var _template = _ref50[1];
+			var expected = _ref50[2];
 
 			_loop(src, expected, _template);
 		}
@@ -4890,7 +5160,7 @@ function tests$5(Headers) {
 
 tests$5(Headers$1, 'Headers/j0');
 
-tests$5(x$40);
+tests$5(x$42);
 
 function generator$4() {
 	var _this21 = this;
@@ -4963,12 +5233,12 @@ function test$28(generator) {
 
 test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
-var x$42 = HTMLCollection;
+var x$44 = HTMLCollection;
 
-test$28(x$42.prototype[x.iterator]);
+test$28(x$44.prototype[x.iterator]);
 
 function innerHeight() {
-	return x$28.innerHeight;
+	return x$30.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -4979,7 +5249,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$28.innerWidth;
+	return x$30.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -5576,18 +5846,16 @@ describe('Lazy', function () {
 	});
 });
 
-var x$43 = localStorageIsAvailable;
+var x$45 = localStorageIsAvailable;
 
-var x$44 = localStorage;
+var localStorage$1 = new J0Storage();
 
-var localStorage$2 = new J0Storage();
+test$30(localStorage$1, 'localStorage#j0');
 
-test$30(localStorage$2, 'localStorage#j0');
-
-if (x$43) {
-	test$30(x$44, 'localStorage');
+if (x$45) {
+	test$30(localStorage, 'localStorage');
 } else {
-	x$23.info('Tests for localStorage are skipped.');
+	x$25.info('Tests for localStorage are skipped.');
 }
 
 /* eslint-disable no-constant-condition */
@@ -5599,7 +5867,7 @@ function test$33(generator) {
 
 		it(name, function () {
 			var data = [[1, 2], [3, 4]];
-			var map = new x$36(data);
+			var map = new x$38(data);
 			var iterator = generator.call(map);
 			var results = [];
 			var index = 0;
@@ -5624,7 +5892,7 @@ function generator$6() {
 
 test$33(generator$6, 'Map.prototype[Symbol.iterator]#j0');
 
-test$33(x$36.prototype[x.iterator]);
+test$33(x$38.prototype[x.iterator]);
 
 var Map$2 = function () {
 	function Map$2(iterable) {
@@ -5638,12 +5906,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator31 = iterable[Symbol.iterator](), _step31; !(_iteratorNormalCompletion31 = (_step31 = _iterator31.next()).done); _iteratorNormalCompletion31 = true) {
-					var _ref50 = _step31.value;
+					var _ref51 = _step31.value;
 
-					var _ref51 = _slicedToArray(_ref50, 2);
+					var _ref52 = _slicedToArray(_ref51, 2);
 
-					var key = _ref51[0];
-					var value = _ref51[1];
+					var key = _ref52[0];
+					var value = _ref52[1];
 
 					this.set(key, value);
 				}
@@ -5672,9 +5940,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref52) {
-				var _ref53 = _slicedToArray(_ref52, 1),
-				    itemKey = _ref53[0];
+			return this.data.findIndex(function (_ref53) {
+				var _ref54 = _slicedToArray(_ref53, 1),
+				    itemKey = _ref54[0];
 
 				return itemKey === key;
 			});
@@ -5698,9 +5966,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref54) {
-				var _ref55 = _slicedToArray(_ref54, 1),
-				    itemKey = _ref55[0];
+			var found = this.data.find(function (_ref55) {
+				var _ref56 = _slicedToArray(_ref55, 1),
+				    itemKey = _ref56[0];
 
 				return itemKey === key;
 			});
@@ -5728,10 +5996,10 @@ var Map$2 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this24 = this;
 
-			this.data.slice().forEach(function (_ref56) {
-				var _ref57 = _slicedToArray(_ref56, 2),
-				    key = _ref57[0],
-				    value = _ref57[1];
+			this.data.slice().forEach(function (_ref57) {
+				var _ref58 = _slicedToArray(_ref57, 2),
+				    key = _ref58[0],
+				    value = _ref58[1];
 
 				fn.call(thisArg, value, key, _this24);
 			});
@@ -5873,7 +6141,7 @@ function tests$7(Map) {
 
 tests$7(Map$2, 'Map#j0');
 
-tests$7(x$36);
+tests$7(x$38);
 
 function test$35(abs) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.abs';
@@ -5889,7 +6157,7 @@ function test$35(abs) {
 							_context21.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/abs/abs.png',
+								url: x$30.root + '/Math/abs/abs.png',
 								fn: abs,
 								xRange: [-1, 1],
 								yRange: [-1, 1],
@@ -5923,7 +6191,7 @@ function test$37(acos) {
 							_context22.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/acos/acos.png',
+								url: x$30.root + '/Math/acos/acos.png',
 								fn: acos,
 								xRange: [-1, 1],
 								yRange: [0, Math.PI],
@@ -5957,7 +6225,7 @@ function test$39(acosh) {
 							_context23.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/acosh/acosh.png',
+								url: x$30.root + '/Math/acosh/acosh.png',
 								fn: acosh,
 								xRange: [0, 10],
 								yRange: [0, 4],
@@ -5976,7 +6244,7 @@ function test$39(acosh) {
 }
 
 function acosh(x) {
-	return x$39.log(x + x$39.sqrt(x * x - 1));
+	return x$41.log(x + x$41.sqrt(x * x - 1));
 }
 
 test$39(acosh, 'Math.acosh#j0');
@@ -5997,7 +6265,7 @@ function test$41(asin) {
 							_context24.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/asin/asin.png',
+								url: x$30.root + '/Math/asin/asin.png',
 								fn: asin,
 								xRange: [-1, 1],
 								yRange: [-Math.PI / 2, Math.PI / 2],
@@ -6031,7 +6299,7 @@ function test$43(asinh) {
 							_context25.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/asinh/asinh.png',
+								url: x$30.root + '/Math/asinh/asinh.png',
 								fn: asinh,
 								xRange: [-16, 16],
 								yRange: [-4, 4],
@@ -6053,7 +6321,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$39.log(x + x$39.sqrt(x * x + 1));
+	return x$41.log(x + x$41.sqrt(x * x + 1));
 }
 
 test$43(asinh, 'Math.asinh#j0');
@@ -6074,7 +6342,7 @@ function test$45(atan) {
 							_context26.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/atan/atan.png',
+								url: x$30.root + '/Math/atan/atan.png',
 								fn: atan,
 								xRange: [-10, 10],
 								yRange: [-Math.PI / 2, Math.PI / 2],
@@ -6108,7 +6376,7 @@ function test$47(atan2) {
 							_context27.next = 2;
 							return assert.graphicalEqual({
 								name: name + '+',
-								url: x$28.root + '/Math/atan2/atan2+.png',
+								url: x$30.root + '/Math/atan2/atan2+.png',
 								fn: function fn(x) {
 									return atan2(1, x);
 								},
@@ -6134,7 +6402,7 @@ function test$47(atan2) {
 							_context28.next = 2;
 							return assert.graphicalEqual({
 								name: name + '-',
-								url: x$28.root + '/Math/atan2/atan2-.png',
+								url: x$30.root + '/Math/atan2/atan2-.png',
 								fn: function fn(x) {
 									return atan2(-1, x);
 								},
@@ -6170,7 +6438,7 @@ function test$49(atanh) {
 							_context29.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/atanh/atanh.png',
+								url: x$30.root + '/Math/atanh/atanh.png',
 								fn: atanh,
 								xRange: [-1, 1],
 								yRange: [-5, 5],
@@ -6189,7 +6457,7 @@ function test$49(atanh) {
 }
 
 function atanh(x) {
-	return x$39.log((1 + x) / (1 - x)) / 2;
+	return x$41.log((1 + x) / (1 - x)) / 2;
 }
 
 test$49(atanh, 'Math.atanh#j0');
@@ -6210,7 +6478,7 @@ function test$51(cbrt) {
 							_context30.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/cbrt/cbrt.png',
+								url: x$30.root + '/Math/cbrt/cbrt.png',
 								fn: cbrt,
 								xRange: [-64, 64],
 								yRange: [-4, 4],
@@ -6230,7 +6498,7 @@ function test$51(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$39.pow(x$39.abs(x), 1 / 3);
+	var root = x$41.pow(x$41.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -6252,7 +6520,7 @@ function test$53(ceil) {
 							_context31.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/ceil/ceil.png',
+								url: x$30.root + '/Math/ceil/ceil.png',
 								fn: ceil,
 								xRange: [-5, 5],
 								yRange: [-5, 5],
@@ -6286,7 +6554,7 @@ function test$55(clz32) {
 							_context32.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/clz32/clz32.png',
+								url: x$30.root + '/Math/clz32/clz32.png',
 								fn: clz32,
 								xRange: [0, 0xffffff],
 								yRange: [0, 33],
@@ -6312,7 +6580,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$39.floor(x$39.log(x >>> 0) * x$39.LOG2E);
+	return 31 - x$41.floor(x$41.log(x >>> 0) * x$41.LOG2E);
 }
 
 test$55(clz32, 'Math.clz32#j0');
@@ -6333,7 +6601,7 @@ function test$57(cos) {
 							_context33.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/cos/cos.png',
+								url: x$30.root + '/Math/cos/cos.png',
 								fn: cos,
 								xRange: [0, 2 * Math.PI],
 								yRange: [-1, 1],
@@ -6367,7 +6635,7 @@ function test$59(cosh) {
 							_context34.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/cosh/cosh.png',
+								url: x$30.root + '/Math/cosh/cosh.png',
 								fn: cosh,
 								xRange: [-12, 12],
 								yRange: [0, 25000],
@@ -6386,7 +6654,7 @@ function test$59(cosh) {
 }
 
 function cosh(x) {
-	var y = x$39.exp(x);
+	var y = x$41.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -6423,7 +6691,7 @@ function test$63(exp) {
 							_context35.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/exp/exp.png',
+								url: x$30.root + '/Math/exp/exp.png',
 								fn: exp,
 								xRange: [-10, 3],
 								yRange: [0, 9],
@@ -6457,7 +6725,7 @@ function test$65(expm1) {
 							_context36.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/expm1/expm1.png',
+								url: x$30.root + '/Math/expm1/expm1.png',
 								fn: expm1,
 								xRange: [-10, 3],
 								yRange: [-1, 8],
@@ -6476,7 +6744,7 @@ function test$65(expm1) {
 }
 
 function expm1(x) {
-	return x$39.exp(x) - 1;
+	return x$41.exp(x) - 1;
 }
 
 test$65(expm1, 'Math.expm1#j0');
@@ -6497,7 +6765,7 @@ function test$67(floor) {
 							_context37.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/floor/floor.png',
+								url: x$30.root + '/Math/floor/floor.png',
 								fn: floor,
 								xRange: [-5, 5],
 								yRange: [-5, 5],
@@ -6533,7 +6801,7 @@ function test$69(fround) {
 							_context38.next = 3;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/fround/fround.png',
+								url: x$30.root + '/Math/fround/fround.png',
 								fn: fround,
 								xRange: [-d, d],
 								yRange: [-d, d],
@@ -6578,7 +6846,7 @@ function test$71(hypot) {
 							_context39.next = 3;
 							return assert.graphicalEqual({
 								name: name + '-y=3',
-								url: x$28.root + '/Math/hypot/hypot-y=3.png',
+								url: x$30.root + '/Math/hypot/hypot-y=3.png',
 								fn: function fn(x, y) {
 									return hypot(x, y);
 								},
@@ -6608,7 +6876,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$39.sqrt(sum);
+	return x$41.sqrt(sum);
 }
 
 test$71(hypot, 'Math.hypot#j0');
@@ -6629,7 +6897,7 @@ function test$73(imul) {
 							_context40.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/imul/imul.png',
+								url: x$30.root + '/Math/imul/imul.png',
 								fn: function fn(x) {
 									return imul(x, 1);
 								},
@@ -6726,7 +6994,7 @@ function test$79(log) {
 							_context41.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/log/log.png',
+								url: x$30.root + '/Math/log/log.png',
 								fn: log,
 								xRange: [0, 10],
 								yRange: [-10, 4],
@@ -6760,7 +7028,7 @@ function test$81(log10) {
 							_context42.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/log10/log10.png',
+								url: x$30.root + '/Math/log10/log10.png',
 								fn: log10,
 								xRange: [0, 100],
 								yRange: [-5, 2],
@@ -6779,7 +7047,7 @@ function test$81(log10) {
 }
 
 function log10(x) {
-	return x$39.log(x) / x$39.LN10;
+	return x$41.log(x) / x$41.LN10;
 }
 
 test$81(log10, 'Math.log10#j0');
@@ -6815,7 +7083,7 @@ function test$85(log1p) {
 							_context43.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/log1p/log1p.png',
+								url: x$30.root + '/Math/log1p/log1p.png',
 								fn: log1p,
 								xRange: [-1, 9],
 								yRange: [-10, 4],
@@ -6834,7 +7102,7 @@ function test$85(log1p) {
 }
 
 function log1p(x) {
-	return x$39.log(x + 1);
+	return x$41.log(x + 1);
 }
 
 test$85(log1p, 'Math.log1p#j0');
@@ -6856,7 +7124,7 @@ function test$87(log2) {
 							_context44.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/log2/log2.png',
+								url: x$30.root + '/Math/log2/log2.png',
 								fn: log2,
 								xRange: [0, 8],
 								yRange: [-5, 3],
@@ -6875,7 +7143,7 @@ function test$87(log2) {
 }
 
 function log2(x) {
-	return x$39.log(x) / x$39.LN2;
+	return x$41.log(x) / x$41.LN2;
 }
 
 test$87(log2, 'Math.log2#j0');
@@ -6911,7 +7179,7 @@ function test$91(max) {
 							_context45.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/max/max.png',
+								url: x$30.root + '/Math/max/max.png',
 								fn: function fn(x) {
 									return max(0, x);
 								},
@@ -6947,7 +7215,7 @@ function test$93(min) {
 							_context46.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/min/min.png',
+								url: x$30.root + '/Math/min/min.png',
 								fn: function fn(x) {
 									return min(0, x);
 								},
@@ -6998,7 +7266,7 @@ function test$97(pow) {
 							_context47.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/pow/pow.png',
+								url: x$30.root + '/Math/pow/pow.png',
 								fn: function fn(x) {
 									return pow(2, x);
 								},
@@ -7031,7 +7299,7 @@ function test$99(random) {
 			this.timeout(timeout);
 			return assert.graphicalEqual({
 				name: name,
-				url: x$28.root + '/Math/random/random.png',
+				url: x$30.root + '/Math/random/random.png',
 				fn: random,
 				xRange: [0, 1],
 				yRange: [0, 1],
@@ -7063,7 +7331,7 @@ function test$101(round) {
 							_context48.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/round/round.png',
+								url: x$30.root + '/Math/round/round.png',
 								fn: round,
 								xRange: [-5, 5],
 								yRange: [-5, 5],
@@ -7097,7 +7365,7 @@ function test$103(sign) {
 							_context49.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/sign/sign.png',
+								url: x$30.root + '/Math/sign/sign.png',
 								fn: sign,
 								xRange: [-3, 3],
 								yRange: [-1.1, 1.1],
@@ -7115,11 +7383,11 @@ function test$103(sign) {
 	});
 }
 
-var x$45 = isNaN;
+var x$46 = isNaN;
 
 function sign(x) {
 	x = +x;
-	if (x === 0 || x$45(x)) {
+	if (x === 0 || x$46(x)) {
 		return x;
 	}
 	return x > 0 ? 1 : -1;
@@ -7143,7 +7411,7 @@ function test$105(sin) {
 							_context50.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/sin/sin.png',
+								url: x$30.root + '/Math/sin/sin.png',
 								fn: sin,
 								xRange: [0, 2 * Math.PI],
 								yRange: [-1, 1],
@@ -7177,7 +7445,7 @@ function test$107(sinh) {
 							_context51.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/sinh/sinh.png',
+								url: x$30.root + '/Math/sinh/sinh.png',
 								fn: sinh,
 								xRange: [-12, 12],
 								yRange: [-5000, 5000],
@@ -7196,7 +7464,7 @@ function test$107(sinh) {
 }
 
 function sinh(x) {
-	var y = x$39.exp(x);
+	var y = x$41.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -7218,7 +7486,7 @@ function test$109(sqrt) {
 							_context52.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/sqrt/sqrt.png',
+								url: x$30.root + '/Math/sqrt/sqrt.png',
 								fn: sqrt,
 								xRange: [0, 10],
 								yRange: [0, 4],
@@ -7282,7 +7550,7 @@ function test$115(tan) {
 							_context53.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/tan/tan.png',
+								url: x$30.root + '/Math/tan/tan.png',
 								fn: tan,
 								xRange: [0, 2 * Math.PI],
 								yRange: [-5, 5],
@@ -7316,7 +7584,7 @@ function test$117(tanh) {
 							_context54.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/tanh/tanh.png',
+								url: x$30.root + '/Math/tanh/tanh.png',
 								fn: tanh,
 								xRange: [-6, 6],
 								yRange: [-1, 1],
@@ -7340,7 +7608,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$39.exp(2 * x);
+	var y = x$41.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -7362,7 +7630,7 @@ function test$119(trunc) {
 							_context55.next = 2;
 							return assert.graphicalEqual({
 								name: name,
-								url: x$28.root + '/Math/trunc/trunc.png',
+								url: x$30.root + '/Math/trunc/trunc.png',
 								fn: trunc,
 								xRange: [-10, 10],
 								yRange: [-10, 10],
@@ -7516,20 +7784,20 @@ describe('N.prototype.attributes', function () {
 		var element = new N({
 			a: [[key1, value2], [key1, value1], [key2, value2]]
 		});
-		assert.deepEqual(Array.from(element.attributes).sort(function (_ref93, _ref94) {
-			var _ref96 = _slicedToArray(_ref93, 1),
-			    a = _ref96[0];
+		assert.deepEqual(Array.from(element.attributes).sort(function (_ref94, _ref95) {
+			var _ref97 = _slicedToArray(_ref94, 1),
+			    a = _ref97[0];
 
-			var _ref95 = _slicedToArray(_ref94, 1),
-			    b = _ref95[0];
+			var _ref96 = _slicedToArray(_ref95, 1),
+			    b = _ref96[0];
 
 			return a < b ? -1 : 1;
-		}), [[key1, value1], [key2, value2]].sort(function (_ref97, _ref98) {
-			var _ref100 = _slicedToArray(_ref97, 1),
-			    a = _ref100[0];
+		}), [[key1, value1], [key2, value2]].sort(function (_ref98, _ref99) {
+			var _ref101 = _slicedToArray(_ref98, 1),
+			    a = _ref101[0];
 
-			var _ref99 = _slicedToArray(_ref98, 1),
-			    b = _ref99[0];
+			var _ref100 = _slicedToArray(_ref99, 1),
+			    b = _ref100[0];
 
 			return a < b ? -1 : 1;
 		}));
@@ -7988,8 +8256,8 @@ describe('N.prototype.emit', function () {
 			while (1) {
 				switch (_context59.prev = _context59.next) {
 					case 0:
-						onCall = function onCall(_ref105) {
-							var detail = _ref105.detail;
+						onCall = function onCall(_ref106) {
+							var detail = _ref106.detail;
 
 							results.push(detail);
 						};
@@ -8024,8 +8292,8 @@ describe('N.prototype.once', function () {
 			while (1) {
 				switch (_context60.prev = _context60.next) {
 					case 0:
-						onCall = function onCall(_ref107) {
-							var detail = _ref107.detail;
+						onCall = function onCall(_ref108) {
+							var detail = _ref108.detail;
 
 							results.push(detail);
 						};
@@ -8242,7 +8510,7 @@ describe('N.prototype.focused', function () {
 								if (element.equals(x$4.activeElement)) {
 									resolve();
 								} else if (count++ < 20) {
-									x$25(check, 100);
+									x$27(check, 100);
 								} else {
 									reject(new Error('Failed to focus an element'));
 								}
@@ -8492,12 +8760,12 @@ describe('N.prototype.nodeType', function () {
 
 	it('should return ELEMENT_NODE', function () {
 		var element = new N({});
-		assert.equal(element.nodeType, x$34.ELEMENT_NODE);
+		assert.equal(element.nodeType, x$36.ELEMENT_NODE);
 	});
 
 	it('should return TEXT_NODE', function () {
 		var element = new N('' + Date.now());
-		assert.equal(element.nodeType, x$34.TEXT_NODE);
+		assert.equal(element.nodeType, x$36.TEXT_NODE);
 	});
 });
 
@@ -8653,27 +8921,243 @@ describe('N.prototype.previous', function () {
 	});
 });
 
-var directions$1 = N.directions;
+var directions = N.directions;
+var commonStyle = ['position:fixed;', 'left:0;', 'right:0;', 'bottom:0;', 'opacity:0.6;', 'font-family:Courier,monospace;', 'white-space:pre;', 'pointer-events:none;'].join('');
 
-var styles = [['-ms-writing-mode:bt-rl;writing-mode:vertical-rl;direction:rtl;unicode-bidi:bidi-override;', [directions$1.top, directions$1.left]], ['direction:ltr;unicode-bidi:normal;', [directions$1.right, directions$1.bottom]], ['-ms-writing-mode:tb-rl;writing-mode:vertical-rl;direction:ltr;unicode-bidi:normal;', [directions$1.bottom, directions$1.left]], ['-ms-writing-mode:tb-lr;writing-mode:vertical-lr;direction:ltr;unicode-bidi:normal;', [directions$1.bottom, directions$1.right]], ['direction:rtl;unicode-bidi:bidi-override;', [directions$1.left, directions$1.bottom]]];
+function compileCSS() {
+	for (var _len44 = arguments.length, declarations = Array(_len44), _key44 = 0; _key44 < _len44; _key44++) {
+		declarations[_key44] = arguments[_key44];
+	}
+
+	return declarations.map(function (declaration) {
+		return declaration.join(':') + ';';
+	}).join('');
+}
+
+var styles = {
+	lrtb: compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']),
+	rltb: compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']),
+	tbrl: compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']),
+	tblr: compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']),
+	btrl: compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']),
+	btlr: compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override'])
+};
 
 describe('N.prototype.textDirection', function () {
 
-	styles.forEach(function (_ref112) {
-		var _ref113 = _slicedToArray(_ref112, 2),
-		    style = _ref113[0],
-		    expectedDirection = _ref113[1];
+	[[styles.lrtb, [directions.right, directions.bottom]], [styles.rltb, [directions.left, directions.bottom]], [styles.tbrl, [directions.bottom, directions.left]], [styles.tblr, [directions.bottom, directions.right]], [styles.btrl, [directions.top, directions.left]], [styles.btlr, [directions.top, directions.right]]].forEach(function (_ref113) {
+		var _ref114 = _slicedToArray(_ref113, 2),
+		    style = _ref114[0],
+		    expectedDirection = _ref114[1];
 
 		it('should return ' + expectedDirection.join(',') + ' as its direction', function () {
 			var element = new N({
-				a: [['style', 'white-space:pre;' + style]],
-				c: ['AB\nCDE']
+				a: [['style', '' + commonStyle + style]]
 			});
 			element.setParent(x$4.body);
 			assert.deepEqual(element.textDirection, expectedDirection);
 			element.remove();
 		});
 	});
+});
+
+describe('N.prototype.modifyRange', function () {
+
+	if (browser.name === 'firefox') {
+		return;
+	}
+
+	(function () {
+		var text = new N(['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].join('\n'));
+		var charactersInLine = 27;
+		var offset = charactersInLine * 2 + 10;
+
+		[['lrtb', [['left', text, offset - 2, text, offset - 2], ['right', text, offset + 2, text, offset + 2], ['top', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['bottom', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['rltb', [['right', text, offset - 2, text, offset - 2], ['left', text, offset + 2, text, offset + 2], ['top', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['bottom', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['tbrl', [['top', text, offset - 2, text, offset - 2], ['bottom', text, offset + 2, text, offset + 2], ['right', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['left', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['tblr', [['top', text, offset - 2, text, offset - 2], ['bottom', text, offset + 2, text, offset + 2], ['left', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['right', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['btrl', [['bottom', text, offset - 2, text, offset - 2], ['top', text, offset + 2, text, offset + 2], ['right', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['left', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['btlr', [['bottom', text, offset - 2, text, offset - 2], ['top', text, offset + 2, text, offset + 2], ['left', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['right', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]]].forEach(function (_ref115) {
+			var _ref116 = _slicedToArray(_ref115, 2),
+			    textDirection = _ref116[0],
+			    directions = _ref116[1];
+
+			directions.forEach(function (_ref117) {
+				var _ref118 = _slicedToArray(_ref117, 5),
+				    direction = _ref118[0],
+				    expectedStartContainer = _ref118[1],
+				    expectedStartOffset = _ref118[2],
+				    expectedEndContainer = _ref118[3],
+				    expectedEndOffset = _ref118[4];
+
+				var title = 'Simple Text - ' + textDirection + ' - move to ' + direction + ' twice';
+
+				if (!textDirection) {
+					it('skipped ' + title, function () {});
+				}
+
+				it(title, function () {
+					var element = new N({
+						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
+						c: [text]
+					});
+					element.setParent(x$4.body);
+					var range = x$4.createRange();
+					range.setStart(text.node, offset);
+					range.setEnd(text.node, offset);
+					element.modifyRange(range, 'move', direction);
+					element.modifyRange(range, 'move', direction);
+					var startContainer = range.startContainer,
+					    startOffset = range.startOffset,
+					    endContainer = range.endContainer,
+					    endOffset = range.endOffset;
+
+					element.remove();
+					assert.equal(startContainer === expectedStartContainer.node, true, 'startContainer error');
+					assert.equal(startOffset, expectedStartOffset, 'startOffset error');
+					assert.equal(endContainer === expectedEndContainer.node, true, 'endContainer error');
+					assert.equal(endOffset, expectedEndOffset, 'endOffset error');
+				});
+			});
+		});
+	})();
+
+	(function () {
+		var text1 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text2 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text3 = new N('ABCDEFGHI');
+		var text4 = new N('JK');
+		var text5 = new N('LMNOPQRSTUVWXYZ');
+		var text6 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text7 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+		[['lrtb', [['right', text5, 1, text5, 1], ['left', text3, 8, text3, 8], ['top', text1, 10, text1, 10], ['bottom', text7, 10, text7, 10]]], ['rltb', [['left', text5, 1, text5, 1], ['right', text3, 8, text3, 8], ['top', text1, 10, text1, 10], ['bottom', text7, 10, text7, 10]]], ['tbrl', [['bottom', text5, 1, text5, 1], ['top', text3, 8, text3, 8], ['right', text1, 10, text1, 10], ['left', text7, 10, text7, 10]]], ['tblr', [['bottom', text5, 1, text5, 1], ['top', text3, 8, text3, 8], ['left', text1, 10, text1, 10], ['right', text7, 10, text7, 10]]], ['btrl', [['top', text5, 1, text5, 1], ['bottom', text3, 8, text3, 8], ['right', text1, 10, text1, 10], ['left', text7, 10, text7, 10]]], ['btlr', [['top', text5, 1, text5, 1], ['bottom', text3, 8, text3, 8], ['left', text1, 10, text1, 10], ['right', text7, 10, text7, 10]]]].forEach(function (_ref119) {
+			var _ref120 = _slicedToArray(_ref119, 2),
+			    textDirection = _ref120[0],
+			    directions = _ref120[1];
+
+			directions.forEach(function (_ref121) {
+				var _ref122 = _slicedToArray(_ref121, 5),
+				    direction = _ref122[0],
+				    expectedStartContainer = _ref122[1],
+				    expectedStartOffset = _ref122[2],
+				    expectedEndContainer = _ref122[3],
+				    expectedEndOffset = _ref122[4];
+
+				var title = 'Nested Elements - ' + textDirection + ' - move to ' + direction + ' twice';
+
+				if (!textDirection) {
+					it('skipped ' + title, function () {});
+				}
+
+				it(title, function () {
+					var inlineStyle = 'display:inline;';
+					var br = { t: 'br' };
+					var element = new N({
+						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
+						c: [{
+							a: [['style', inlineStyle]],
+							c: [text1, br, {
+								a: [['style', inlineStyle]],
+								c: [text2]
+							}]
+						}, br, {
+							a: [['style', inlineStyle]],
+							c: [text3]
+						}, text4, {
+							a: [['style', inlineStyle]],
+							c: [text5, br, {
+								a: [['style', inlineStyle]],
+								c: [text6]
+							}]
+						}, br, text7]
+					});
+					element.setParent(x$4.body);
+					var range = x$4.createRange();
+					range.setStart(text4.node, 1);
+					range.setEnd(text4.node, 1);
+					element.modifyRange(range, 'move', direction);
+					element.modifyRange(range, 'move', direction);
+					var startContainer = range.startContainer,
+					    startOffset = range.startOffset,
+					    endContainer = range.endContainer,
+					    endOffset = range.endOffset;
+
+					element.remove();
+					assert.equal(startContainer === expectedStartContainer.node, true, 'startContainer error');
+					assert.equal(startOffset, expectedStartOffset, 'startOffset error');
+					assert.equal(endContainer === expectedEndContainer.node, true, 'endContainer error');
+					assert.equal(endOffset, expectedEndOffset, 'endOffset error');
+				});
+			});
+		});
+	})();
+
+	(function () {
+		var text1 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text2 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text3 = new N('ABCDEFGHI');
+		var text4 = new N('JK');
+		var text5 = new N('LMNOPQRSTUVWXYZ');
+		var text6 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+		var text7 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+		[['lrtb', [['right', 69, 'range:last'], ['left', 63, 'range:first'], ['top', 3, 'range:firstline'], ['bottom', 3, 'range:lastline']]], ['rltb', [['left', 69, 'range:last'], ['right', 63, 'range:first'], ['top', 3, 'range:firstline'], ['bottom', 3, 'range:lastline']]], ['tbrl', [['bottom', 69, 'range:last'], ['top', 63, 'range:first'], ['right', 3, 'range:firstline'], ['left', 3, 'range:lastline']]], ['tblr', [['bottom', 69, 'range:last'], ['top', 63, 'range:first'], ['left', 3, 'range:firstline'], ['right', 3, 'range:lastline']]], ['btrl', [['top', 69, 'range:last'], ['bottom', 63, 'range:first'], ['right', 3, 'range:firstline'], ['left', 3, 'range:lastline']]], ['btlr', [['top', 69, 'range:last'], ['bottom', 63, 'range:first'], ['left', 3, 'range:firstline'], ['right', 3, 'range:lastline']]]].forEach(function (_ref123) {
+			var _ref124 = _slicedToArray(_ref123, 2),
+			    textDirection = _ref124[0],
+			    directions = _ref124[1];
+
+			directions.forEach(function (_ref125) {
+				var _ref126 = _slicedToArray(_ref125, 3),
+				    direction = _ref126[0],
+				    times = _ref126[1],
+				    eventName = _ref126[2];
+
+				var title = 'Nested Elements - ' + textDirection + ' - move to ' + direction + ' for ' + times + ' times and emit a "' + eventName + '" event';
+
+				if (!textDirection) {
+					it('skipped ' + title, function () {});
+				}
+
+				it(title, function () {
+					var inlineStyle = 'display:inline;';
+					var br = { t: 'br' };
+					var called = [];
+					var element = new N({
+						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
+						c: [{
+							a: [['style', inlineStyle]],
+							c: [text1, br, {
+								a: [['style', inlineStyle]],
+								c: [text2]
+							}]
+						}, br, {
+							a: [['style', inlineStyle]],
+							c: [text3]
+						}, text4, {
+							a: [['style', inlineStyle]],
+							c: [text5, br, {
+								a: [['style', inlineStyle]],
+								c: [text6]
+							}]
+						}, br, text7],
+						e: [['range:last', function () {
+							called.push('range:last');
+						}], ['range:first', function () {
+							called.push('range:first');
+						}], ['range:lastline', function () {
+							called.push('range:lastline');
+						}], ['range:firstline', function () {
+							called.push('range:firstline');
+						}]]
+					}).setParent(x$4.body);
+					var range = x$4.createRange();
+					range.setStart(text4.node, 1);
+					range.setEnd(text4.node, 1);
+					for (var i = 0; i < times; i++) {
+						element.modifyRange(range, 'move', direction);
+					}
+					element.remove();
+					assert.equal(called.join(','), eventName);
+				});
+			});
+		});
+	})();
 });
 
 describe('N.prototype.remove', function () {
@@ -8956,7 +9440,7 @@ describe('N.prototype.walkBackward', function () {
 		text10.walkBackward(function (node) {
 			actual.push(node);
 		}, element3);
-		var expected = [element5, text8, element4, text6, text7, text9, element3];
+		var expected = [element5, text8, element4, text6, text7, text9];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -9091,7 +9575,7 @@ describe('N.prototype.walkForward', function () {
 		element1.walkForward(function (node) {
 			actual.push(node);
 		}, element6);
-		var expected = [text2, element3, text4, element2, text3, text5, element6];
+		var expected = [text2, element3, text4, element2, text3, text5];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -9304,9 +9788,9 @@ function generator$8() {
 
 test$121(generator$8, 'NamedNodeMap.prototype[Symbol.iterator]#j0');
 
-var x$46 = NamedNodeMap;
+var x$47 = NamedNodeMap;
 
-test$121(x$46.prototype[x.iterator]);
+test$121(x$47.prototype[x.iterator]);
 
 /* eslint-disable no-constant-condition */
 function test$123(generator) {
@@ -9434,9 +9918,9 @@ function generator$10() {
 
 test$123(generator$10, 'NodeList.prototype[Symbol.iterator]#j0');
 
-var x$47 = NodeList;
+var x$48 = NodeList;
 
-test$123(x$47.prototype[x.iterator]);
+test$123(x$48.prototype[x.iterator]);
 
 function noop$1(x) {
 	return x;
@@ -9457,8 +9941,8 @@ describe('noop', function () {
 });
 
 function assign$1(target) {
-	for (var _len44 = arguments.length, objects = Array(_len44 > 1 ? _len44 - 1 : 0), _key44 = 1; _key44 < _len44; _key44++) {
-		objects[_key44 - 1] = arguments[_key44];
+	for (var _len45 = arguments.length, objects = Array(_len45 > 1 ? _len45 - 1 : 0), _key45 = 1; _key45 < _len45; _key45++) {
+		objects[_key45 - 1] = arguments[_key45];
 	}
 
 	objects.forEach(function (obj) {
@@ -9522,11 +10006,11 @@ describe('passThrough', function () {
 	});
 });
 
-if (!x$28.immediateId) {
-	x$28.immediateId = 0;
+if (!x$30.immediateId) {
+	x$30.immediateId = 0;
 }
-x$28.immediateId += 1;
-var setImmediateNative = x$28.setImmediate;
+x$30.immediateId += 1;
+var setImmediateNative = x$30.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -9555,7 +10039,7 @@ var setImmediateAvailable = void 0;
 // }
 
 function setImmediateTimeout(fn) {
-	return x$25(fn);
+	return x$27(fn);
 }
 
 function testImmediate(fn, onSuccess) {
@@ -9571,7 +10055,7 @@ function testImmediate(fn, onSuccess) {
 }
 
 setImmediateAvailable = setImmediateTimeout;
-x$25(function () {
+x$27(function () {
 	// if (postMessage) {
 	// 	testImmediate(setImmediatePostMessage, function () {
 	// 		if (setImmediateAvailable !== setImmediateNative) {
@@ -9902,9 +10386,9 @@ function test$125(Promise, name) {
 			var expected = 3;
 			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				x$25(resolve, timeout);
+				x$27(resolve, timeout);
 			}), new Promise(function (resolve) {
-				x$25(resolve, timeout);
+				x$27(resolve, timeout);
 			}), Promise.resolve(expected)]).then(function (result) {
 				assert.equal(result, expected);
 			}).catch(onUnexpectedReject);
@@ -9921,9 +10405,9 @@ function test$125(Promise, name) {
 			var expected = 3;
 			var timeout = 100;
 			return Promise.race([new Promise(function (resolve) {
-				x$25(resolve, timeout);
+				x$27(resolve, timeout);
 			}), new Promise(function (resolve) {
-				x$25(resolve, timeout);
+				x$27(resolve, timeout);
 			}), Promise.reject(expected)]).then(onUnexpectedFullfill, function (error) {
 				assert.equal(error, expected);
 			}).catch(onUnexpectedReject);
@@ -9956,9 +10440,9 @@ function tests$10(Request, name) {
 
 tests$10(Request$1, 'J0Request');
 
-var x$48 = Request;
+var x$49 = Request;
 
-tests$10(x$48, 'Request');
+tests$10(x$49, 'Request');
 
 describe('requestAnimationFrame', function () {
 
@@ -9969,7 +10453,7 @@ describe('requestAnimationFrame', function () {
 				switch (_context65.prev = _context65.next) {
 					case 0:
 						_context65.next = 2;
-						return new x$3(x$27);
+						return new x$3(x$29);
 
 					case 2:
 						timeStamp = _context65.sent;
@@ -9999,9 +10483,9 @@ function tests$12(Response, name) {
 
 tests$12(Response$1, 'J0Response');
 
-var x$49 = Response;
+var x$50 = Response;
 
-tests$12(x$49, 'Response');
+tests$12(x$50, 'Response');
 
 var Ring = function () {
 	function Ring(array) {
@@ -10050,10 +10534,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.get', function () {
 
-		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref115) {
-			var _ref116 = _slicedToArray(_ref115, 2),
-			    index = _ref116[0],
-			    expected = _ref116[1];
+		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref128) {
+			var _ref129 = _slicedToArray(_ref128, 2),
+			    index = _ref129[0],
+			    expected = _ref129[1];
 
 			it('should return element at ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -10064,10 +10548,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.rotate', function () {
 
-		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref117) {
-			var _ref118 = _slicedToArray(_ref117, 2),
-			    index = _ref118[0],
-			    expected = _ref118[1];
+		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref130) {
+			var _ref131 = _slicedToArray(_ref130, 2),
+			    index = _ref131[0],
+			    expected = _ref131[1];
 
 			it('should return rotate by ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -10078,7 +10562,7 @@ describe('Ring', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$28;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$30;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -10090,7 +10574,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$28;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$30;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -10110,7 +10594,7 @@ function test$126(generator) {
 
 		it('should return an iterator', function () {
 			var data = [1, 2];
-			var set = new x$35(data);
+			var set = new x$37(data);
 			var iterator = generator.call(set);
 			var results = [];
 			while (1) {
@@ -10134,7 +10618,7 @@ function generator$12() {
 
 test$126(generator$12, 'Set.prototype[Symbol.iterator]#j0');
 
-test$126(x$35.prototype[x.iterator]);
+test$126(x$37.prototype[x.iterator]);
 
 var Set$2 = function () {
 	function Set$2(iterable) {
@@ -10310,8 +10794,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len45 = arguments.length, args = Array(_len45), _key45 = 0; _key45 < _len45; _key45++) {
-					args[_key45] = arguments[_key45];
+				for (var _len46 = arguments.length, args = Array(_len46), _key46 = 0; _key46 < _len46; _key46++) {
+					args[_key46] = arguments[_key46];
 				}
 
 				args[3] = this;
@@ -10377,7 +10861,7 @@ function tests$14(Set, name) {
 
 tests$14(Set$2, 'J0Set');
 
-tests$14(x$35, 'Set');
+tests$14(x$37, 'Set');
 
 describe('setImmediate', function () {
 
@@ -10389,14 +10873,14 @@ describe('setImmediate', function () {
 				order *= order;
 			});
 			order += order;
-			x$25(resolve, 50);
+			x$27(resolve, 50);
 		}).then(function () {
 			assert.equal(order, expected);
 		});
 	});
 });
 
-var x$50 = encodeURIComponent;
+var x$51 = encodeURIComponent;
 
 var State = function () {
 	function State(stateInfo) {
@@ -10407,8 +10891,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref119, name, expression, offset, source) {
-				var length = _ref119.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref132, name, expression, offset, source) {
+				var length = _ref132.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -10462,7 +10946,7 @@ var State = function () {
 			return this.compose(function (key, pattern) {
 				var value = params[key];
 				if (value && pattern.test(value)) {
-					return x$50(value);
+					return x$51(value);
 				}
 			});
 		}
@@ -10475,8 +10959,8 @@ var State = function () {
 
 			var params = null;
 			href.replace(this.matcher, function (match) {
-				for (var _len46 = arguments.length, args = Array(_len46 > 1 ? _len46 - 1 : 0), _key46 = 1; _key46 < _len46; _key46++) {
-					args[_key46 - 1] = arguments[_key46];
+				for (var _len47 = arguments.length, args = Array(_len47 > 1 ? _len47 - 1 : 0), _key47 = 1; _key47 < _len47; _key47++) {
+					args[_key47 - 1] = arguments[_key47];
 				}
 
 				var index = 0;
@@ -10659,11 +11143,11 @@ describe('State', function () {
 	});
 });
 
-var x$51 = location;
+var x$52 = location;
 
-var x$52 = history;
+var x$53 = history;
 
-var x$53 = Boolean;
+var x$54 = Boolean;
 
 var StateManager = function (_EventEmitter) {
 	_inherits(StateManager, _EventEmitter);
@@ -10674,7 +11158,7 @@ var StateManager = function (_EventEmitter) {
 		var _this37 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
 		assign(_this37, { prefix: '#' }, config, {
-			states: new x$36(),
+			states: new x$38(),
 			listeners: []
 		});
 		if (!_this37.parser) {
@@ -10698,7 +11182,7 @@ var StateManager = function (_EventEmitter) {
 	_createClass(StateManager, [{
 		key: 'parseURL',
 		value: function parseURL() {
-			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$51;
+			var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$52;
 
 			var stateString = this.parser(url);
 			var _iteratorNormalCompletion39 = true;
@@ -10707,11 +11191,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator39 = this.states[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
-					var _ref120 = _step39.value;
+					var _ref133 = _step39.value;
 
-					var _ref121 = _slicedToArray(_ref120, 2);
+					var _ref134 = _slicedToArray(_ref133, 2);
 
-					var state = _ref121[1];
+					var state = _ref134[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -10750,9 +11234,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref122 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref122.name,
-			    params = _ref122.params;
+			var _ref135 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref135.name,
+			    params = _ref135.params;
 
 			var noFallback = arguments[1];
 
@@ -10784,7 +11268,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$53(current && state && current.is(state));
+			return x$54(current && state && current.is(state));
 		}
 	}, {
 		key: 'isIn',
@@ -10792,7 +11276,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$53(current && state && current.isIn(state));
+			return x$54(current && state && current.isIn(state));
 		}
 	}, {
 		key: 'isAncestorOf',
@@ -10800,7 +11284,7 @@ var StateManager = function (_EventEmitter) {
 			var current = this.current;
 
 			var state = this.get(stateInfo, true);
-			return x$53(current && state && current.isAncestorOf(state));
+			return x$54(current && state && current.isAncestorOf(state));
 		}
 	}, {
 		key: 'setCurrent',
@@ -10809,7 +11293,7 @@ var StateManager = function (_EventEmitter) {
 			if (this.is(newState)) {
 				return;
 			}
-			x$52[method](newState.name, newState.params, newState.href);
+			x$53[method](newState.name, newState.params, newState.href);
 			var oldState = this.current;
 			this.current = newState;
 			this.emit('change', newState, oldState);
@@ -10833,9 +11317,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this38.replace(_this38.parseURL());
 			}, debounceDuration);
-			x$38('hashchange', onStateChange);
-			x$38('pushstate', onStateChange);
-			x$38('popstate', onStateChange);
+			x$40('hashchange', onStateChange);
+			x$40('pushstate', onStateChange);
+			x$40('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -10844,10 +11328,10 @@ var StateManager = function (_EventEmitter) {
 }(EventEmitter);
 
 var hex = 16;
-var initialState = x$51.pathname;
+var initialState = x$52.pathname;
 
 function resetState() {
-	x$52.replaceState(null, {}, initialState);
+	x$53.replaceState(null, {}, initialState);
 }
 
 describe('StateManager', function () {
@@ -10876,11 +11360,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator40 = states.states[Symbol.iterator](), _step40; !(_iteratorNormalCompletion40 = (_step40 = _iterator40.next()).done); _iteratorNormalCompletion40 = true) {
-				var _ref123 = _step40.value;
+				var _ref136 = _step40.value;
 
-				var _ref124 = _slicedToArray(_ref123, 2);
+				var _ref137 = _slicedToArray(_ref136, 2);
 
-				var state = _ref124[1];
+				var state = _ref137[1];
 
 				results.push(state);
 			}
@@ -10955,7 +11439,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee66() {
-		var states, name0, name1, name2, _ref126, _ref127, toState, fromState;
+		var states, name0, name1, name2, _ref139, _ref140, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee66$(_context66) {
 			while (1) {
@@ -10979,8 +11463,8 @@ describe('StateManager', function () {
 						_context66.next = 7;
 						return new x$3(function (resolve) {
 							states.on('change', function () {
-								for (var _len47 = arguments.length, data = Array(_len47), _key47 = 0; _key47 < _len47; _key47++) {
-									data[_key47] = arguments[_key47];
+								for (var _len48 = arguments.length, data = Array(_len48), _key48 = 0; _key48 < _len48; _key48++) {
+									data[_key48] = arguments[_key48];
 								}
 
 								resolve(data);
@@ -10988,10 +11472,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref126 = _context66.sent;
-						_ref127 = _slicedToArray(_ref126, 2);
-						toState = _ref127[0];
-						fromState = _ref127[1];
+						_ref139 = _context66.sent;
+						_ref140 = _slicedToArray(_ref139, 2);
+						toState = _ref140[0];
+						fromState = _ref140[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -11206,7 +11690,7 @@ describe('StateManager', function () {
 						_context70.next = 18;
 						return new x$3(function (resolve) {
 							states.once('change', resolve);
-							x$52.back();
+							x$53.back();
 						});
 
 					case 18:
@@ -11307,11 +11791,11 @@ function test$130(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref132) {
-			var _ref133 = _slicedToArray(_ref132, 3),
-			    string = _ref133[0],
-			    from = _ref133[1],
-			    to = _ref133[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref145) {
+			var _ref146 = _slicedToArray(_ref145, 3),
+			    string = _ref146[0],
+			    from = _ref146[1],
+			    to = _ref146[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -11387,11 +11871,11 @@ function test$134(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref134) {
-			var _ref135 = _slicedToArray(_ref134, 3),
-			    expected = _ref135[0],
-			    from = _ref135[1],
-			    to = _ref135[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref147) {
+			var _ref148 = _slicedToArray(_ref147, 3),
+			    expected = _ref148[0],
+			    from = _ref148[1],
+			    to = _ref148[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -11404,9 +11888,9 @@ function test$134(fromCodePoint) {
 	});
 }
 
-var x$54 = isFinite;
+var x$55 = isFinite;
 
-var x$55 = RangeError;
+var x$56 = RangeError;
 
 /* eslint-disable no-magic-numbers, no-bitwise */
 
@@ -11414,14 +11898,14 @@ function fromCodePoint() {
 	var chars = [];
 	var fromCharCode = String.fromCharCode;
 
-	for (var _len48 = arguments.length, args = Array(_len48), _key48 = 0; _key48 < _len48; _key48++) {
-		args[_key48] = arguments[_key48];
+	for (var _len49 = arguments.length, args = Array(_len49), _key49 = 0; _key49 < _len49; _key49++) {
+		args[_key49] = arguments[_key49];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var codePoint = args[i];
-		if (!x$54(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
-			throw new x$55('Invalid code point: ' + codePoint);
+		if (!x$55(codePoint) || codePoint < 0 || codePoint > 0x10FFFF) {
+			throw new x$56('Invalid code point: ' + codePoint);
 		}
 		if (codePoint <= 0xFFFF) {
 			chars.push(fromCharCode(codePoint));
@@ -11981,8 +12465,8 @@ function test$138(normalize) {
 				_loop2();
 			}
 			if (0 < failed.length) {
-				x$23.error(new Error(failed.length + ' of ' + length + ' failed'));
-				x$23.log(failed);
+				x$25.error(new Error(failed.length + ' of ' + length + ' failed'));
+				x$25.log(failed);
 				// throw new Error(`${failed.length} of ${length} failed`);
 			}
 		});
@@ -12104,10 +12588,8 @@ function test$144(repeat) {
 	});
 }
 
-var x$56 = parseInt;
-
 function repeat(c) {
-	var count = x$56(c, 10);
+	var count = x$24(c, 10);
 	var results = [];
 	for (var i = 0; i < count; i += 1) {
 		results.push(this);
@@ -12272,11 +12754,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref137) {
-		var _ref138 = _slicedToArray(_ref137, 3),
-		    string = _ref138[0],
-		    from = _ref138[1],
-		    to = _ref138[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref150) {
+		var _ref151 = _slicedToArray(_ref150, 3),
+		    string = _ref151[0],
+		    from = _ref151[1],
+		    to = _ref151[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -12295,7 +12777,7 @@ var SymbolRegistry = function () {
 	function SymbolRegistry() {
 		_classCallCheck(this, SymbolRegistry);
 
-		this.seed = x$24.now();
+		this.seed = x$26.now();
 		this.registry = [];
 	}
 
@@ -12303,7 +12785,7 @@ var SymbolRegistry = function () {
 		key: 'get',
 		value: function get() {
 			var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$24.now();
+			var salt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : x$26.now();
 
 			var symbol = 'Symbol(' + key + ')' + (this.seed + this.registry.length).toString(hex$2);
 			this.registry.push([symbol, '' + key + salt]);
@@ -12617,7 +13099,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$39.floor(clamp(256 * v, 0, 255));
+		return x$41.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -12648,7 +13130,7 @@ describe('thermalRGB', function () {
 							_context72.next = 4;
 							return assert.graphicalEqual({
 								name: 'thermalRGB',
-								url: x$28.root + '/thermalRGB/thermalRGB.png',
+								url: x$30.root + '/thermalRGB/thermalRGB.png',
 								fn: function fn(x, y) {
 									return y;
 								},
@@ -12679,8 +13161,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len49 = arguments.length, args = Array(_len49), _key49 = 0; _key49 < _len49; _key49++) {
-			args[_key49] = arguments[_key49];
+		for (var _len50 = arguments.length, args = Array(_len50), _key50 = 0; _key50 < _len50; _key50++) {
+			args[_key50] = arguments[_key50];
 		}
 
 		lastArgs = args;
@@ -12688,7 +13170,7 @@ function throttle(fn) {
 			scheduled = true;
 		} else {
 			fn.apply(thisArg, args);
-			timer = x$25(function () {
+			timer = x$27(function () {
 				timer = null;
 				if (scheduled) {
 					scheduled = null;
@@ -12903,18 +13385,18 @@ function test$150(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref140, index) {
-			var _ref141 = _slicedToArray(_ref140, 2),
-			    input = _ref141[0],
-			    tests = _ref141[1];
+		].forEach(function (_ref153, index) {
+			var _ref154 = _slicedToArray(_ref153, 2),
+			    input = _ref154[0],
+			    tests = _ref154[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref142) {
-						var _ref143 = _slicedToArray(_ref142, 2),
-						    key = _ref143[0],
-						    expected = _ref143[1];
+					tests.forEach(function (_ref155) {
+						var _ref156 = _slicedToArray(_ref155, 2),
+						    key = _ref156[0],
+						    expected = _ref156[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -12929,7 +13411,7 @@ function test$150(URL) {
 						caught = error;
 					}
 					if (!caught) {
-						x$23.info('#' + index + ' An error is expected but not occurred');
+						x$25.info('#' + index + ' An error is expected but not occurred');
 					}
 				});
 			}
@@ -12994,7 +13476,7 @@ function percentEscape(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x3F, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$50(c);
+	return x$51(c);
 }
 
 function percentEscapeQuery(c) {
@@ -13005,7 +13487,7 @@ function percentEscapeQuery(c) {
 	![0x22, 0x23, 0x3C, 0x3E, 0x60].includes(unicode)) {
 		return c;
 	}
-	return x$50(c);
+	return x$51(c);
 }
 
 function parse$3(input, stateOverride, base) {
@@ -13573,11 +14055,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref144) {
-				var _ref145 = _slicedToArray(_ref144, 2),
-				    name = _ref145[0],
-				    _ref145$ = _ref145[1],
-				    value = _ref145$ === undefined ? '' : _ref145$;
+			return this.data.map(function (_ref157) {
+				var _ref158 = _slicedToArray(_ref157, 2),
+				    name = _ref158[0],
+				    _ref158$ = _ref158[1],
+				    value = _ref158$ === undefined ? '' : _ref158$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -13732,8 +14214,8 @@ var Vector = function () {
 	}, {
 		key: 'add',
 		value: function add() {
-			for (var _len50 = arguments.length, vectors = Array(_len50), _key50 = 0; _key50 < _len50; _key50++) {
-				vectors[_key50] = arguments[_key50];
+			for (var _len51 = arguments.length, vectors = Array(_len51), _key51 = 0; _key51 < _len51; _key51++) {
+				vectors[_key51] = arguments[_key51];
 			}
 
 			return new Vector(this.array.map(function (component, index) {
@@ -13745,8 +14227,8 @@ var Vector = function () {
 	}, {
 		key: 'subtract',
 		value: function subtract() {
-			for (var _len51 = arguments.length, vectors = Array(_len51), _key51 = 0; _key51 < _len51; _key51++) {
-				vectors[_key51] = arguments[_key51];
+			for (var _len52 = arguments.length, vectors = Array(_len52), _key52 = 0; _key52 < _len52; _key52++) {
+				vectors[_key52] = arguments[_key52];
 			}
 
 			return new Vector(this.array.map(function (component, index) {
@@ -13780,7 +14262,7 @@ var Vector = function () {
 	}, {
 		key: 'norm',
 		get: function get() {
-			return x$39.hypot.apply(null, this.array);
+			return x$41.hypot.apply(null, this.array);
 		},
 		set: function set(norm) {
 			this.array = this.scale(norm / this.norm).array;
@@ -13803,10 +14285,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.get', function () {
 		var components = [1, 2, 3];
-		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref146) {
-			var _ref147 = _slicedToArray(_ref146, 2),
-			    index = _ref147[0],
-			    expected = _ref147[1];
+		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref159) {
+			var _ref160 = _slicedToArray(_ref159, 2),
+			    index = _ref160[0],
+			    expected = _ref160[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13817,10 +14299,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.set', function () {
 		var components = [0, 1, 2];
-		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref148) {
-			var _ref149 = _slicedToArray(_ref148, 2),
-			    index = _ref149[0],
-			    expected = _ref149[1];
+		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref161) {
+			var _ref162 = _slicedToArray(_ref161, 2),
+			    index = _ref162[0],
+			    expected = _ref162[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13831,10 +14313,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.dim', function () {
-		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref150) {
-			var _ref151 = _slicedToArray(_ref150, 2),
-			    components = _ref151[0],
-			    expected = _ref151[1];
+		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref163) {
+			var _ref164 = _slicedToArray(_ref163, 2),
+			    components = _ref164[0],
+			    expected = _ref164[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13845,10 +14327,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.add', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref152) {
-			var _ref153 = _slicedToArray(_ref152, 2),
-			    components2 = _ref153[0],
-			    expected = _ref153[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref165) {
+			var _ref166 = _slicedToArray(_ref165, 2),
+			    components2 = _ref166[0],
+			    expected = _ref166[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -13860,10 +14342,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.subtract', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref154) {
-			var _ref155 = _slicedToArray(_ref154, 2),
-			    components2 = _ref155[0],
-			    expected = _ref155[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref167) {
+			var _ref168 = _slicedToArray(_ref167, 2),
+			    components2 = _ref168[0],
+			    expected = _ref168[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -13875,10 +14357,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.scale', function () {
 		var components = [0, 1, 2];
-		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref156) {
-			var _ref157 = _slicedToArray(_ref156, 2),
-			    scalar = _ref157[0],
-			    expected = _ref157[1];
+		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref169) {
+			var _ref170 = _slicedToArray(_ref169, 2),
+			    scalar = _ref170[0],
+			    expected = _ref170[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v = new Vector(components);
@@ -13888,10 +14370,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (getter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref158) {
-			var _ref159 = _slicedToArray(_ref158, 2),
-			    components = _ref159[0],
-			    expected = _ref159[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref171) {
+			var _ref172 = _slicedToArray(_ref171, 2),
+			    components = _ref172[0],
+			    expected = _ref172[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13901,10 +14383,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (setter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref160) {
-			var _ref161 = _slicedToArray(_ref160, 2),
-			    components = _ref161[0],
-			    norm = _ref161[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref173) {
+			var _ref174 = _slicedToArray(_ref173, 2),
+			    components = _ref174[0],
+			    norm = _ref174[1];
 
 			it('should return [' + components.join(', ') + ']', function () {
 				var v = new Vector(components).scale(100);
@@ -13918,12 +14400,12 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.toString', function () {
-		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref162) {
-			var _ref163 = _slicedToArray(_ref162, 4),
-			    components = _ref163[0],
-			    digits = _ref163[1],
-			    separator = _ref163[2],
-			    expected = _ref163[3];
+		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref175) {
+			var _ref176 = _slicedToArray(_ref175, 4),
+			    components = _ref176[0],
+			    digits = _ref176[1],
+			    separator = _ref176[2],
+			    expected = _ref176[3];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
