@@ -3024,6 +3024,8 @@ var addEventListenerWithOptions = checkPassiveSupport() ? function addEventListe
 	target.addEventListener(type, handler, options === true || options && options.capture);
 };
 
+var x$39 = Math;
+
 function forEachItem(data, fn) {
 	if (isArray(data)) {
 		data.forEach(function (args) {
@@ -3073,6 +3075,13 @@ function _findAll(selector, rootElement) {
 	}
 	return result;
 }
+
+var directions = {
+	top: 0,
+	right: 1,
+	bottom: 2,
+	left: 3
+};
 
 var N = function () {
 	function N() {
@@ -3533,26 +3542,36 @@ var N = function () {
 		}
 	}, {
 		key: 'walkForward',
-		value: function walkForward(fn) {
-			if (fn(this)) {
-				return;
+		value: function walkForward(fn, limit, callTheFunction) {
+			if (callTheFunction) {
+				if (fn(this)) {
+					return this;
+				}
+				if (this.equals(limit)) {
+					return null;
+				}
 			}
 			var forward = this.forward;
 
 			if (forward) {
-				return forward.walkForward(fn);
+				return forward.walkForward(fn, limit, true);
 			}
 		}
 	}, {
 		key: 'walkBackward',
-		value: function walkBackward(fn) {
-			if (fn(this)) {
-				return;
+		value: function walkBackward(fn, limit, callTheFunction) {
+			if (callTheFunction) {
+				if (fn(this)) {
+					return this;
+				}
+				if (this.equals(limit)) {
+					return null;
+				}
 			}
 			var backward = this.backward;
 
 			if (backward) {
-				return backward.walkBackward(fn);
+				return backward.walkBackward(fn, limit, true);
 			}
 		}
 	}, {
@@ -3568,6 +3587,39 @@ var N = function () {
 					}
 				}
 				element = element.parent;
+			}
+		}
+	}, {
+		key: 'getNextText',
+		value: function getNextText(limit) {
+			return this.walkForward(function (node) {
+				return node.isTextNode;
+			}, limit);
+		}
+	}, {
+		key: 'getPreviousText',
+		value: function getPreviousText(limit) {
+			return this.walkForward(function (node) {
+				return node.isTextNode;
+			}, limit);
+		}
+	}, {
+		key: 'modifyRange',
+		value: function modifyRange(range, alter, direction) {
+			var textDirection = this.textDirection;
+			direction = directions[direction];
+			if (textDirection === direction) {
+				// go forward by 1 char
+				range.setEnd(range.endContainer, range.endOffset + 1);
+			} else if ((textDirection - direction) % 2 === 0) {
+				// go backward by 1 char
+				range.setEnd(range.startContainer, range.startOffset - 1);
+			} else if (direction < 1.5) {
+				// go backward by 1 line
+				range.setEnd(range.startContainer, range.startOffset - 1);
+			} else {
+				// go forward by 1 line
+				range.setEnd(range.endContainer, range.endOffset + 1);
 			}
 		}
 	}, {
@@ -3749,10 +3801,65 @@ var N = function () {
 		get: function get() {
 			return this.equals(x$4.activeElement);
 		}
+	}, {
+		key: 'textDirection',
+		get: function get() {
+			var _this15 = this;
+
+			var texts = ['A', 'B', 'M', 'M'].map(function (text) {
+				return new N(text).node;
+			});
+			var elements = [texts[3], 0, texts[2], 0, texts[1], texts[0]].map(function (element) {
+				_this15.prepend(element || { t: 'br' });
+				return _this15.firstChild;
+			});
+
+			var _texts$map = texts.map(function (textNode) {
+				var range = x$4.createRange();
+				range.setStart(textNode, 0);
+				range.setEnd(textNode, 1);
+				var rect = range.getBoundingClientRect();
+				return [(rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2];
+			}),
+			    _texts$map2 = _slicedToArray(_texts$map, 4),
+			    _texts$map2$ = _slicedToArray(_texts$map2[0], 2),
+			    x1 = _texts$map2$[0],
+			    y1 = _texts$map2$[1],
+			    _texts$map2$2 = _slicedToArray(_texts$map2[1], 2),
+			    x2 = _texts$map2$2[0],
+			    y2 = _texts$map2$2[1],
+			    _texts$map2$3 = _slicedToArray(_texts$map2[2], 2),
+			    x3 = _texts$map2$3[0],
+			    y3 = _texts$map2$3[1],
+			    _texts$map2$4 = _slicedToArray(_texts$map2[3], 2),
+			    x4 = _texts$map2$4[0],
+			    y4 = _texts$map2$4[1];
+
+			elements.forEach(function (element) {
+				element.remove();
+			});
+			return [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref28) {
+				var _ref29 = _slicedToArray(_ref28, 2),
+				    y = _ref29[0],
+				    x$$1 = _ref29[1];
+
+				var arg = x$39.atan2(y, x$$1) / x$39.PI;
+				var absArg = arg < 0 ? -arg : arg;
+				if (absArg < 0.25) {
+					return directions.right;
+				} else if (0.75 < absArg) {
+					return directions.left;
+				} else if (arg < 0) {
+					return directions.top;
+				} else {
+					return directions.bottom;
+				}
+			});
+		}
 	}], [{
 		key: 'ready',
 		value: function () {
-			var _ref28 = _asyncToGenerator(regeneratorRuntime.mark(function _callee19(fn) {
+			var _ref30 = _asyncToGenerator(regeneratorRuntime.mark(function _callee19(fn) {
 				var body;
 				return regeneratorRuntime.wrap(function _callee19$(_context19) {
 					while (1) {
@@ -3778,7 +3885,7 @@ var N = function () {
 			}));
 
 			function ready(_x43) {
-				return _ref28.apply(this, arguments);
+				return _ref30.apply(this, arguments);
 			}
 
 			return ready;
@@ -3797,6 +3904,11 @@ var N = function () {
 		key: 'findAll',
 		get: function get() {
 			return _findAll;
+		}
+	}, {
+		key: 'directions',
+		get: function get() {
+			return directions;
 		}
 	}]);
 
@@ -3877,10 +3989,10 @@ describe('emitAll', function () {
 		emitAll(eventName, eventData, '.' + className, element);
 		var expected = [element1, element2, element5, element3, element4];
 		assert.equal(results.length, expected.length);
-		results.forEach(function (_ref29, index) {
-			var _ref30 = _slicedToArray(_ref29, 2),
-			    element = _ref30[0],
-			    data = _ref30[1];
+		results.forEach(function (_ref31, index) {
+			var _ref32 = _slicedToArray(_ref31, 2),
+			    element = _ref32[0],
+			    data = _ref32[1];
 
 			assert.equal(data, eventData);
 			assert.equal(element.equals(expected[index]), true);
@@ -3900,7 +4012,7 @@ var EventEmitter = function () {
 	_createClass(EventEmitter, [{
 		key: 'emit',
 		value: function emit(type) {
-			var _this15 = this;
+			var _this16 = this;
 
 			for (var _len26 = arguments.length, data = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
 				data[_key26 - 1] = arguments[_key26];
@@ -3916,7 +4028,7 @@ var EventEmitter = function () {
 					if (once) {
 						listeners.delete(item);
 					}
-					call(fn, _this15, data);
+					call(fn, _this16, data);
 				}
 			});
 			return this;
@@ -4095,12 +4207,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator26 = iterable[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-					var _ref31 = _step26.value;
+					var _ref33 = _step26.value;
 
-					var _ref32 = _slicedToArray(_ref31, 2);
+					var _ref34 = _slicedToArray(_ref33, 2);
 
-					var key = _ref32[0];
-					var value = _ref32[1];
+					var key = _ref34[0];
+					var value = _ref34[1];
 
 					this.append(key, value);
 				}
@@ -4129,9 +4241,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref33) {
-				var _ref34 = _slicedToArray(_ref33, 1),
-				    itemName = _ref34[0];
+			return this.data.findIndex(function (_ref35) {
+				var _ref36 = _slicedToArray(_ref35, 1),
+				    itemName = _ref36[0];
 
 				return itemName === name;
 			});
@@ -4159,9 +4271,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref35) {
-				var _ref36 = _slicedToArray(_ref35, 1),
-				    itemName = _ref36[0];
+			this.data = this.data.filter(function (_ref37) {
+				var _ref38 = _slicedToArray(_ref37, 1),
+				    itemName = _ref38[0];
 
 				return itemName !== name;
 			});
@@ -4169,9 +4281,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref37) {
-				var _ref38 = _slicedToArray(_ref37, 1),
-				    itemName = _ref38[0];
+			var found = this.data.find(function (_ref39) {
+				var _ref40 = _slicedToArray(_ref39, 1),
+				    itemName = _ref40[0];
 
 				return itemName === name;
 			});
@@ -4181,10 +4293,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref39) {
-				var _ref40 = _slicedToArray(_ref39, 2),
-				    itemName = _ref40[0],
-				    value = _ref40[1];
+			this.data.forEach(function (_ref41) {
+				var _ref42 = _slicedToArray(_ref41, 2),
+				    itemName = _ref42[0],
+				    value = _ref42[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4195,11 +4307,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref41) {
-				var _ref42 = _slicedToArray(_ref41, 2),
-				    name = _ref42[0],
-				    _ref42$ = _ref42[1],
-				    value = _ref42$ === undefined ? '' : _ref42$;
+			return this.data.map(function (_ref43) {
+				var _ref44 = _slicedToArray(_ref43, 2),
+				    name = _ref44[0],
+				    _ref44$ = _ref44[1],
+				    value = _ref44$ === undefined ? '' : _ref44$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -4301,7 +4413,7 @@ var Headers$1 = function (_StringList) {
 	}, {
 		key: 'entries',
 		value: function entries() {
-			var _this17 = this;
+			var _this18 = this;
 
 			var iterator = _get(Headers$1.prototype.__proto__ || Object.getPrototypeOf(Headers$1.prototype), 'entries', this).call(this);
 			var history = [];
@@ -4316,7 +4428,7 @@ var Headers$1 = function (_StringList) {
 					if (done || history.indexOf(key) < 0) {
 						history.push(key);
 						return {
-							value: [key, _this17.get(key)],
+							value: [key, _this18.get(key)],
 							done: done
 						};
 					}
@@ -4339,31 +4451,31 @@ var Request$1 = function (_Body$) {
 
 		var body = init.body;
 
-		var _this18 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
+		var _this19 = _possibleConstructorReturn(this, (Request$1.__proto__ || Object.getPrototypeOf(Request$1)).call(this));
 
 		if (input instanceof Request$1) {
-			body = _this18.inheritFrom(input, body, init);
+			body = _this19.inheritFrom(input, body, init);
 		} else {
-			_this18.url = '' + input;
+			_this19.url = '' + input;
 		}
-		_this18.credentials = init.credentials || _this18.credentials || 'omit';
-		if (init.headers || !_this18.headers) {
-			_this18.headers = new Headers$1(init.headers);
+		_this19.credentials = init.credentials || _this19.credentials || 'omit';
+		if (init.headers || !_this19.headers) {
+			_this19.headers = new Headers$1(init.headers);
 		}
-		_this18.method = (init.method || _this18.method || 'GET').toUpperCase();
-		_this18.mode = init.mode || _this18.mode || null;
-		_this18.referrer = null;
-		if ((_this18.method === 'GET' || _this18.method === 'HEAD') && body) {
+		_this19.method = (init.method || _this19.method || 'GET').toUpperCase();
+		_this19.mode = init.mode || _this19.mode || null;
+		_this19.referrer = null;
+		if ((_this19.method === 'GET' || _this19.method === 'HEAD') && body) {
 			throw new TypeError('Body not allowed for GET or HEAD requests');
 		}
-		_this18.initBody(body);
-		return _this18;
+		_this19.initBody(body);
+		return _this19;
 	}
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref43) {
-			var headers = _ref43.headers;
+		value: function inheritFrom(input, body, _ref45) {
+			var headers = _ref45.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -4403,16 +4515,16 @@ var Response$1 = function (_Body$2) {
 
 		_classCallCheck(this, Response$1);
 
-		var _this19 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
+		var _this20 = _possibleConstructorReturn(this, (Response$1.__proto__ || Object.getPrototypeOf(Response$1)).call(this));
 
-		_this19.type = 'default';
-		_this19.status = 'status' in init ? init.status : minOkStatus;
-		_this19.ok = _this19.status >= minOkStatus && _this19.status < maxOkStatus;
-		_this19.statusText = 'statusText' in init ? init.statusText : 'OK';
-		_this19.headers = new Headers$1(init.headers);
-		_this19.url = init.url || '';
-		_this19.initBody(body);
-		return _this19;
+		_this20.type = 'default';
+		_this20.status = 'status' in init ? init.status : minOkStatus;
+		_this20.ok = _this20.status >= minOkStatus && _this20.status < maxOkStatus;
+		_this20.statusText = 'statusText' in init ? init.statusText : 'OK';
+		_this20.headers = new Headers$1(init.headers);
+		_this20.url = init.url || '';
+		_this20.initBody(body);
+		return _this20;
 	}
 
 	_createClass(Response$1, [{
@@ -4451,10 +4563,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$39 = Headers;
+var x$40 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$39();
+	var headers = new x$40();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -4471,12 +4583,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$40 = XMLHttpRequest;
+var x$41 = XMLHttpRequest;
 
 function fetch$2(input, init, cb) {
 	return new x$3(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$40();
+		var xhr = new x$41();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -4507,12 +4619,12 @@ function fetch$2(input, init, cb) {
 
 		try {
 			for (var _iterator27 = request.headers.entries()[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-				var _ref44 = _step27.value;
+				var _ref46 = _step27.value;
 
-				var _ref45 = _slicedToArray(_ref44, 2);
+				var _ref47 = _slicedToArray(_ref46, 2);
 
-				var name = _ref45[0];
-				var value = _ref45[1];
+				var name = _ref47[0];
+				var value = _ref47[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -4638,13 +4750,13 @@ describe('formatDate', function () {
 	try {
 
 		for (var _iterator28 = tests$4[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-			var _ref46 = _step28.value;
+			var _ref48 = _step28.value;
 
-			var _ref47 = _slicedToArray(_ref46, 3);
+			var _ref49 = _slicedToArray(_ref48, 3);
 
-			var src = _ref47[0];
-			var _template = _ref47[1];
-			var expected = _ref47[2];
+			var src = _ref49[0];
+			var _template = _ref49[1];
+			var expected = _ref49[2];
 
 			_loop(src, expected, _template);
 		}
@@ -4778,10 +4890,10 @@ function tests$5(Headers) {
 
 tests$5(Headers$1, 'Headers/j0');
 
-tests$5(x$39);
+tests$5(x$40);
 
 function generator$4() {
-	var _this20 = this;
+	var _this21 = this;
 
 	var length = this.length;
 
@@ -4789,7 +4901,7 @@ function generator$4() {
 	return {
 		next: function next() {
 			return {
-				value: _this20[index],
+				value: _this21[index],
 				done: length <= index++
 			};
 		}
@@ -4851,9 +4963,9 @@ function test$28(generator) {
 
 test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
-var x$41 = HTMLCollection;
+var x$42 = HTMLCollection;
 
-test$28(x$41.prototype[x.iterator]);
+test$28(x$42.prototype[x.iterator]);
 
 function innerHeight() {
 	return x$28.innerHeight;
@@ -5350,10 +5462,10 @@ var J0Storage = function () {
 	_createClass(J0Storage, [{
 		key: 'clear',
 		value: function clear() {
-			var _this22 = this;
+			var _this23 = this;
 
 			keys(this).forEach(function (key) {
-				_this22.removeItem(key);
+				_this23.removeItem(key);
 			});
 		}
 	}, {
@@ -5464,16 +5576,16 @@ describe('Lazy', function () {
 	});
 });
 
-var x$42 = localStorageIsAvailable;
+var x$43 = localStorageIsAvailable;
 
-var x$43 = localStorage;
+var x$44 = localStorage;
 
 var localStorage$2 = new J0Storage();
 
 test$30(localStorage$2, 'localStorage#j0');
 
-if (x$42) {
-	test$30(x$43, 'localStorage');
+if (x$43) {
+	test$30(x$44, 'localStorage');
 } else {
 	x$23.info('Tests for localStorage are skipped.');
 }
@@ -5526,12 +5638,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator31 = iterable[Symbol.iterator](), _step31; !(_iteratorNormalCompletion31 = (_step31 = _iterator31.next()).done); _iteratorNormalCompletion31 = true) {
-					var _ref48 = _step31.value;
+					var _ref50 = _step31.value;
 
-					var _ref49 = _slicedToArray(_ref48, 2);
+					var _ref51 = _slicedToArray(_ref50, 2);
 
-					var key = _ref49[0];
-					var value = _ref49[1];
+					var key = _ref51[0];
+					var value = _ref51[1];
 
 					this.set(key, value);
 				}
@@ -5560,9 +5672,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref50) {
-				var _ref51 = _slicedToArray(_ref50, 1),
-				    itemKey = _ref51[0];
+			return this.data.findIndex(function (_ref52) {
+				var _ref53 = _slicedToArray(_ref52, 1),
+				    itemKey = _ref53[0];
 
 				return itemKey === key;
 			});
@@ -5586,9 +5698,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref52) {
-				var _ref53 = _slicedToArray(_ref52, 1),
-				    itemKey = _ref53[0];
+			var found = this.data.find(function (_ref54) {
+				var _ref55 = _slicedToArray(_ref54, 1),
+				    itemKey = _ref55[0];
 
 				return itemKey === key;
 			});
@@ -5614,14 +5726,14 @@ var Map$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this23 = this;
+			var _this24 = this;
 
-			this.data.slice().forEach(function (_ref54) {
-				var _ref55 = _slicedToArray(_ref54, 2),
-				    key = _ref55[0],
-				    value = _ref55[1];
+			this.data.slice().forEach(function (_ref56) {
+				var _ref57 = _slicedToArray(_ref56, 2),
+				    key = _ref57[0],
+				    value = _ref57[1];
 
-				fn.call(thisArg, value, key, _this23);
+				fn.call(thisArg, value, key, _this24);
 			});
 		}
 	}, {
@@ -5863,10 +5975,8 @@ function test$39(acosh) {
 	});
 }
 
-var x$44 = Math;
-
 function acosh(x) {
-	return x$44.log(x + x$44.sqrt(x * x - 1));
+	return x$39.log(x + x$39.sqrt(x * x - 1));
 }
 
 test$39(acosh, 'Math.acosh#j0');
@@ -5943,7 +6053,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$44.log(x + x$44.sqrt(x * x + 1));
+	return x$39.log(x + x$39.sqrt(x * x + 1));
 }
 
 test$43(asinh, 'Math.asinh#j0');
@@ -6079,7 +6189,7 @@ function test$49(atanh) {
 }
 
 function atanh(x) {
-	return x$44.log((1 + x) / (1 - x)) / 2;
+	return x$39.log((1 + x) / (1 - x)) / 2;
 }
 
 test$49(atanh, 'Math.atanh#j0');
@@ -6120,7 +6230,7 @@ function test$51(cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$44.pow(x$44.abs(x), 1 / 3);
+	var root = x$39.pow(x$39.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -6202,7 +6312,7 @@ function clz32(x) {
 	if (x === null || x <= 1) {
 		return 32;
 	}
-	return 31 - x$44.floor(x$44.log(x >>> 0) * x$44.LOG2E);
+	return 31 - x$39.floor(x$39.log(x >>> 0) * x$39.LOG2E);
 }
 
 test$55(clz32, 'Math.clz32#j0');
@@ -6276,7 +6386,7 @@ function test$59(cosh) {
 }
 
 function cosh(x) {
-	var y = x$44.exp(x);
+	var y = x$39.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -6366,7 +6476,7 @@ function test$65(expm1) {
 }
 
 function expm1(x) {
-	return x$44.exp(x) - 1;
+	return x$39.exp(x) - 1;
 }
 
 test$65(expm1, 'Math.expm1#j0');
@@ -6498,7 +6608,7 @@ function hypot() {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$44.sqrt(sum);
+	return x$39.sqrt(sum);
 }
 
 test$71(hypot, 'Math.hypot#j0');
@@ -6669,7 +6779,7 @@ function test$81(log10) {
 }
 
 function log10(x) {
-	return x$44.log(x) / x$44.LN10;
+	return x$39.log(x) / x$39.LN10;
 }
 
 test$81(log10, 'Math.log10#j0');
@@ -6724,7 +6834,7 @@ function test$85(log1p) {
 }
 
 function log1p(x) {
-	return x$44.log(x + 1);
+	return x$39.log(x + 1);
 }
 
 test$85(log1p, 'Math.log1p#j0');
@@ -6765,7 +6875,7 @@ function test$87(log2) {
 }
 
 function log2(x) {
-	return x$44.log(x) / x$44.LN2;
+	return x$39.log(x) / x$39.LN2;
 }
 
 test$87(log2, 'Math.log2#j0');
@@ -7086,7 +7196,7 @@ function test$107(sinh) {
 }
 
 function sinh(x) {
-	var y = x$44.exp(x);
+	var y = x$39.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -7230,7 +7340,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$44.exp(2 * x);
+	var y = x$39.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -7406,20 +7516,20 @@ describe('N.prototype.attributes', function () {
 		var element = new N({
 			a: [[key1, value2], [key1, value1], [key2, value2]]
 		});
-		assert.deepEqual(Array.from(element.attributes).sort(function (_ref91, _ref92) {
-			var _ref94 = _slicedToArray(_ref91, 1),
-			    a = _ref94[0];
+		assert.deepEqual(Array.from(element.attributes).sort(function (_ref93, _ref94) {
+			var _ref96 = _slicedToArray(_ref93, 1),
+			    a = _ref96[0];
 
-			var _ref93 = _slicedToArray(_ref92, 1),
-			    b = _ref93[0];
+			var _ref95 = _slicedToArray(_ref94, 1),
+			    b = _ref95[0];
 
 			return a < b ? -1 : 1;
-		}), [[key1, value1], [key2, value2]].sort(function (_ref95, _ref96) {
-			var _ref98 = _slicedToArray(_ref95, 1),
-			    a = _ref98[0];
+		}), [[key1, value1], [key2, value2]].sort(function (_ref97, _ref98) {
+			var _ref100 = _slicedToArray(_ref97, 1),
+			    a = _ref100[0];
 
-			var _ref97 = _slicedToArray(_ref96, 1),
-			    b = _ref97[0];
+			var _ref99 = _slicedToArray(_ref98, 1),
+			    b = _ref99[0];
 
 			return a < b ? -1 : 1;
 		}));
@@ -7878,8 +7988,8 @@ describe('N.prototype.emit', function () {
 			while (1) {
 				switch (_context59.prev = _context59.next) {
 					case 0:
-						onCall = function onCall(_ref103) {
-							var detail = _ref103.detail;
+						onCall = function onCall(_ref105) {
+							var detail = _ref105.detail;
 
 							results.push(detail);
 						};
@@ -7914,8 +8024,8 @@ describe('N.prototype.once', function () {
 			while (1) {
 				switch (_context60.prev = _context60.next) {
 					case 0:
-						onCall = function onCall(_ref105) {
-							var detail = _ref105.detail;
+						onCall = function onCall(_ref107) {
+							var detail = _ref107.detail;
 
 							results.push(detail);
 						};
@@ -8543,6 +8653,29 @@ describe('N.prototype.previous', function () {
 	});
 });
 
+var directions$1 = N.directions;
+
+var styles = [['-ms-writing-mode:bt-rl;writing-mode:vertical-rl;direction:rtl;unicode-bidi:bidi-override;', [directions$1.top, directions$1.left]], ['direction:ltr;unicode-bidi:normal;', [directions$1.right, directions$1.bottom]], ['-ms-writing-mode:tb-rl;writing-mode:vertical-rl;direction:ltr;unicode-bidi:normal;', [directions$1.bottom, directions$1.left]], ['-ms-writing-mode:tb-lr;writing-mode:vertical-lr;direction:ltr;unicode-bidi:normal;', [directions$1.bottom, directions$1.right]], ['direction:rtl;unicode-bidi:bidi-override;', [directions$1.left, directions$1.bottom]]];
+
+describe('N.prototype.textDirection', function () {
+
+	styles.forEach(function (_ref112) {
+		var _ref113 = _slicedToArray(_ref112, 2),
+		    style = _ref113[0],
+		    expectedDirection = _ref113[1];
+
+		it('should return ' + expectedDirection.join(',') + ' as its direction', function () {
+			var element = new N({
+				a: [['style', 'white-space:pre;' + style]],
+				c: ['AB\nCDE']
+			});
+			element.setParent(x$4.body);
+			assert.deepEqual(element.textDirection, expectedDirection);
+			element.remove();
+		});
+	});
+});
+
 describe('N.prototype.remove', function () {
 
 	it('should remove itself from its parent', function () {
@@ -8780,7 +8913,50 @@ describe('N.prototype.walkBackward', function () {
 		text10.walkBackward(function (node) {
 			actual.push(node);
 		});
-		var expected = [text10, element5, text8, element4, text6, text7, text9, element3, text5, element2, text3, text4, element1, text2, text1];
+		var expected = [element5, text8, element4, text6, text7, text9, element3, text5, element2, text3, text4, element1, text2, text1];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should walk backward and stop at limit', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		text10.walkBackward(function (node) {
+			actual.push(node);
+		}, element3);
+		var expected = [element5, text8, element4, text6, text7, text9, element3];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -8826,7 +9002,7 @@ describe('N.prototype.walkBackward', function () {
 			}
 			actual.push(node);
 		});
-		var expected = [element5, text8, element4, text6, text7];
+		var expected = [text8, element4, text6, text7];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -8872,7 +9048,50 @@ describe('N.prototype.walkForward', function () {
 		element1.walkForward(function (node) {
 			actual.push(node);
 		});
-		var expected = [element1, text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		var expected = [text2, element3, text4, element2, text3, text5, element6, text9, element5, text7, element4, text6, text8, text10];
+		assert.equal(actual.length, expected.length);
+		actual.forEach(function (node, index) {
+			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
+		});
+	});
+
+	it('should walk forward and stop at limit', function () {
+		var text1 = new N('text1--' + Date.now());
+		var text2 = new N('text2--' + Date.now());
+		var text3 = new N('text3--' + Date.now());
+		var text4 = new N('text4--' + Date.now());
+		var text5 = new N('text5--' + Date.now());
+		var text6 = new N('text6--' + Date.now());
+		var text7 = new N('text7--' + Date.now());
+		var text8 = new N('text8--' + Date.now());
+		var text9 = new N('text9--' + Date.now());
+		var text10 = new N('text10--' + Date.now());
+		var element1 = new N({
+			c: [text2]
+		});
+		var element2 = new N({
+			c: [text3]
+		});
+		var element3 = new N({
+			c: [text4, element2, text5]
+		});
+		var element4 = new N({
+			c: [text6]
+		});
+		var element5 = new N({
+			c: [text7, element4, text8]
+		});
+		var element6 = new N({
+			c: [text9, element5, text10]
+		});
+		new N({
+			c: [text1, element1, element3, element6]
+		});
+		var actual = [];
+		element1.walkForward(function (node) {
+			actual.push(node);
+		}, element6);
+		var expected = [text2, element3, text4, element2, text3, text5, element6];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -8918,7 +9137,7 @@ describe('N.prototype.walkForward', function () {
 			}
 			actual.push(node);
 		});
-		var expected = [element3, text4, element2, text3, text5, element6];
+		var expected = [text4, element2, text3, text5, element6];
 		assert.equal(actual.length, expected.length);
 		actual.forEach(function (node, index) {
 			assert.equal(node.equals(expected[index]), true, 'Failed at ' + index);
@@ -9070,14 +9289,14 @@ function test$121(generator) {
 }
 
 function generator$8() {
-	var _this30 = this;
+	var _this31 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this30[index],
+			value: _this31[index],
 			done: length <= index++
 		};
 	});
@@ -9200,14 +9419,14 @@ function test$123(generator) {
 }
 
 function generator$10() {
-	var _this31 = this;
+	var _this32 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this31[index],
+			value: _this32[index],
 			done: length <= index++
 		};
 	});
@@ -9407,7 +9626,7 @@ var J0Promise = function () {
 	}, {
 		key: 'exec',
 		value: function exec(fn) {
-			var _this32 = this;
+			var _this33 = this;
 
 			var done = false;
 			var onResolve = function onResolve(value) {
@@ -9415,14 +9634,14 @@ var J0Promise = function () {
 					return;
 				}
 				done = true;
-				_this32.resolve(value);
+				_this33.resolve(value);
 			};
 			var onReject = function onReject(error) {
 				if (done) {
 					return;
 				}
 				done = true;
-				_this32.reject(error);
+				_this33.reject(error);
 			};
 			try {
 				fn(onResolve, onReject);
@@ -9461,10 +9680,10 @@ var J0Promise = function () {
 	}, {
 		key: 'finish',
 		value: function finish() {
-			var _this33 = this;
+			var _this34 = this;
 
 			this.deferreds.forEach(function (deferred) {
-				_this33.handle(deferred);
+				_this34.handle(deferred);
 			});
 			this.deferreds = null;
 		}
@@ -9831,10 +10050,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.get', function () {
 
-		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref111) {
-			var _ref112 = _slicedToArray(_ref111, 2),
-			    index = _ref112[0],
-			    expected = _ref112[1];
+		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref115) {
+			var _ref116 = _slicedToArray(_ref115, 2),
+			    index = _ref116[0],
+			    expected = _ref116[1];
 
 			it('should return element at ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -9845,10 +10064,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.rotate', function () {
 
-		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref113) {
-			var _ref114 = _slicedToArray(_ref113, 2),
-			    index = _ref114[0],
-			    expected = _ref114[1];
+		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref117) {
+			var _ref118 = _slicedToArray(_ref117, 2),
+			    index = _ref118[0],
+			    expected = _ref118[1];
 
 			it('should return rotate by ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -9985,10 +10204,10 @@ var Set$2 = function () {
 	}, {
 		key: 'forEach',
 		value: function forEach(fn, thisArg) {
-			var _this34 = this;
+			var _this35 = this;
 
 			this.data.slice().forEach(function (value) {
-				fn.call(thisArg, value, value, _this34);
+				fn.call(thisArg, value, value, _this35);
 			});
 		}
 	}, {
@@ -10188,8 +10407,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref115, name, expression, offset, source) {
-				var length = _ref115.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref119, name, expression, offset, source) {
+				var length = _ref119.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -10250,7 +10469,7 @@ var State = function () {
 	}, {
 		key: 'parse',
 		value: function parse() {
-			var _this35 = this;
+			var _this36 = this;
 
 			var href = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
@@ -10262,7 +10481,7 @@ var State = function () {
 
 				var index = 0;
 				params = {};
-				return _this35.compose(function (key) {
+				return _this36.compose(function (key) {
 					var value = args[index++];
 					params[key] = value;
 					return value;
@@ -10452,19 +10671,19 @@ var StateManager = function (_EventEmitter) {
 	function StateManager(config) {
 		_classCallCheck(this, StateManager);
 
-		var _this36 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
+		var _this37 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
-		assign(_this36, { prefix: '#' }, config, {
+		assign(_this37, { prefix: '#' }, config, {
 			states: new x$36(),
 			listeners: []
 		});
-		if (!_this36.parser) {
-			if (_this36.prefix.charAt(0) === '#') {
-				_this36.parser = function (url) {
+		if (!_this37.parser) {
+			if (_this37.prefix.charAt(0) === '#') {
+				_this37.parser = function (url) {
 					return url.hash.slice(this.prefix.length);
 				};
 			} else {
-				_this36.parser = function (url) {
+				_this37.parser = function (url) {
 					var pathname = url.pathname,
 					    search = url.search,
 					    hash = url.hash;
@@ -10473,7 +10692,7 @@ var StateManager = function (_EventEmitter) {
 				};
 			}
 		}
-		return _this36;
+		return _this37;
 	}
 
 	_createClass(StateManager, [{
@@ -10488,11 +10707,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator39 = this.states[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
-					var _ref116 = _step39.value;
+					var _ref120 = _step39.value;
 
-					var _ref117 = _slicedToArray(_ref116, 2);
+					var _ref121 = _slicedToArray(_ref120, 2);
 
-					var state = _ref117[1];
+					var state = _ref121[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -10531,9 +10750,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref118 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref118.name,
-			    params = _ref118.params;
+			var _ref122 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref122.name,
+			    params = _ref122.params;
 
 			var noFallback = arguments[1];
 
@@ -10608,11 +10827,11 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'start',
 		value: function start() {
-			var _this37 = this;
+			var _this38 = this;
 
 			var debounceDuration = 30;
 			var onStateChange = debounce(function () {
-				_this37.replace(_this37.parseURL());
+				_this38.replace(_this38.parseURL());
 			}, debounceDuration);
 			x$38('hashchange', onStateChange);
 			x$38('pushstate', onStateChange);
@@ -10657,11 +10876,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator40 = states.states[Symbol.iterator](), _step40; !(_iteratorNormalCompletion40 = (_step40 = _iterator40.next()).done); _iteratorNormalCompletion40 = true) {
-				var _ref119 = _step40.value;
+				var _ref123 = _step40.value;
 
-				var _ref120 = _slicedToArray(_ref119, 2);
+				var _ref124 = _slicedToArray(_ref123, 2);
 
-				var state = _ref120[1];
+				var state = _ref124[1];
 
 				results.push(state);
 			}
@@ -10736,7 +10955,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee66() {
-		var states, name0, name1, name2, _ref122, _ref123, toState, fromState;
+		var states, name0, name1, name2, _ref126, _ref127, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee66$(_context66) {
 			while (1) {
@@ -10769,10 +10988,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref122 = _context66.sent;
-						_ref123 = _slicedToArray(_ref122, 2);
-						toState = _ref123[0];
-						fromState = _ref123[1];
+						_ref126 = _context66.sent;
+						_ref127 = _slicedToArray(_ref126, 2);
+						toState = _ref127[0];
+						fromState = _ref127[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -11064,14 +11283,14 @@ function test$128(generator) {
 }
 
 function generator$14() {
-	var _this38 = this;
+	var _this39 = this;
 
 	var length = this.length;
 
 	var index = 0;
 	return new Iterator(function () {
 		return {
-			value: _this38[index],
+			value: _this39[index],
 			done: length <= index++
 		};
 	});
@@ -11088,11 +11307,11 @@ function test$130(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref128) {
-			var _ref129 = _slicedToArray(_ref128, 3),
-			    string = _ref129[0],
-			    from = _ref129[1],
-			    to = _ref129[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref132) {
+			var _ref133 = _slicedToArray(_ref132, 3),
+			    string = _ref133[0],
+			    from = _ref133[1],
+			    to = _ref133[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -11168,11 +11387,11 @@ function test$134(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref130) {
-			var _ref131 = _slicedToArray(_ref130, 3),
-			    expected = _ref131[0],
-			    from = _ref131[1],
-			    to = _ref131[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref134) {
+			var _ref135 = _slicedToArray(_ref134, 3),
+			    expected = _ref135[0],
+			    from = _ref135[1],
+			    to = _ref135[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -12053,11 +12272,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref133) {
-		var _ref134 = _slicedToArray(_ref133, 3),
-		    string = _ref134[0],
-		    from = _ref134[1],
-		    to = _ref134[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref137) {
+		var _ref138 = _slicedToArray(_ref137, 3),
+		    string = _ref138[0],
+		    from = _ref138[1],
+		    to = _ref138[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -12121,10 +12340,10 @@ var SymbolRegistry = function () {
 	}, {
 		key: 'Symbol',
 		get: function get() {
-			var _this39 = this;
+			var _this40 = this;
 
 			var fn = function fn(key) {
-				return _this39.get(key);
+				return _this40.get(key);
 			};
 			function define(key, value) {
 				x$7.defineProperty(fn, key, { value: value });
@@ -12146,10 +12365,10 @@ var SymbolRegistry = function () {
 			defineReserved('toPrimitive');
 			defineReserved('toStringTag');
 			define('for', function (key) {
-				return _this39.for(key);
+				return _this40.for(key);
 			});
 			define('keyFor', function (key) {
-				return _this39.keyFor(key);
+				return _this40.keyFor(key);
 			});
 			return fn;
 		}
@@ -12398,7 +12617,7 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$44.floor(clamp(256 * v, 0, 255));
+		return x$39.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
@@ -12684,18 +12903,18 @@ function test$150(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref136, index) {
-			var _ref137 = _slicedToArray(_ref136, 2),
-			    input = _ref137[0],
-			    tests = _ref137[1];
+		].forEach(function (_ref140, index) {
+			var _ref141 = _slicedToArray(_ref140, 2),
+			    input = _ref141[0],
+			    tests = _ref141[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref138) {
-						var _ref139 = _slicedToArray(_ref138, 2),
-						    key = _ref139[0],
-						    expected = _ref139[1];
+					tests.forEach(function (_ref142) {
+						var _ref143 = _slicedToArray(_ref142, 2),
+						    key = _ref143[0],
+						    expected = _ref143[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -13354,11 +13573,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref140) {
-				var _ref141 = _slicedToArray(_ref140, 2),
-				    name = _ref141[0],
-				    _ref141$ = _ref141[1],
-				    value = _ref141$ === undefined ? '' : _ref141$;
+			return this.data.map(function (_ref144) {
+				var _ref145 = _slicedToArray(_ref144, 2),
+				    name = _ref145[0],
+				    _ref145$ = _ref145[1],
+				    value = _ref145$ === undefined ? '' : _ref145$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -13561,7 +13780,7 @@ var Vector = function () {
 	}, {
 		key: 'norm',
 		get: function get() {
-			return x$44.hypot.apply(null, this.array);
+			return x$39.hypot.apply(null, this.array);
 		},
 		set: function set(norm) {
 			this.array = this.scale(norm / this.norm).array;
@@ -13584,10 +13803,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.get', function () {
 		var components = [1, 2, 3];
-		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref142) {
-			var _ref143 = _slicedToArray(_ref142, 2),
-			    index = _ref143[0],
-			    expected = _ref143[1];
+		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref146) {
+			var _ref147 = _slicedToArray(_ref146, 2),
+			    index = _ref147[0],
+			    expected = _ref147[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13598,10 +13817,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.set', function () {
 		var components = [0, 1, 2];
-		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref144) {
-			var _ref145 = _slicedToArray(_ref144, 2),
-			    index = _ref145[0],
-			    expected = _ref145[1];
+		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref148) {
+			var _ref149 = _slicedToArray(_ref148, 2),
+			    index = _ref149[0],
+			    expected = _ref149[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13612,10 +13831,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.dim', function () {
-		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref146) {
-			var _ref147 = _slicedToArray(_ref146, 2),
-			    components = _ref147[0],
-			    expected = _ref147[1];
+		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref150) {
+			var _ref151 = _slicedToArray(_ref150, 2),
+			    components = _ref151[0],
+			    expected = _ref151[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13626,10 +13845,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.add', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref148) {
-			var _ref149 = _slicedToArray(_ref148, 2),
-			    components2 = _ref149[0],
-			    expected = _ref149[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref152) {
+			var _ref153 = _slicedToArray(_ref152, 2),
+			    components2 = _ref153[0],
+			    expected = _ref153[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -13641,10 +13860,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.subtract', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref150) {
-			var _ref151 = _slicedToArray(_ref150, 2),
-			    components2 = _ref151[0],
-			    expected = _ref151[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref154) {
+			var _ref155 = _slicedToArray(_ref154, 2),
+			    components2 = _ref155[0],
+			    expected = _ref155[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -13656,10 +13875,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.scale', function () {
 		var components = [0, 1, 2];
-		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref152) {
-			var _ref153 = _slicedToArray(_ref152, 2),
-			    scalar = _ref153[0],
-			    expected = _ref153[1];
+		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref156) {
+			var _ref157 = _slicedToArray(_ref156, 2),
+			    scalar = _ref157[0],
+			    expected = _ref157[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v = new Vector(components);
@@ -13669,10 +13888,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (getter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref154) {
-			var _ref155 = _slicedToArray(_ref154, 2),
-			    components = _ref155[0],
-			    expected = _ref155[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref158) {
+			var _ref159 = _slicedToArray(_ref158, 2),
+			    components = _ref159[0],
+			    expected = _ref159[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -13682,10 +13901,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (setter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref156) {
-			var _ref157 = _slicedToArray(_ref156, 2),
-			    components = _ref157[0],
-			    norm = _ref157[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref160) {
+			var _ref161 = _slicedToArray(_ref160, 2),
+			    components = _ref161[0],
+			    norm = _ref161[1];
 
 			it('should return [' + components.join(', ') + ']', function () {
 				var v = new Vector(components).scale(100);
@@ -13699,12 +13918,12 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.toString', function () {
-		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref158) {
-			var _ref159 = _slicedToArray(_ref158, 4),
-			    components = _ref159[0],
-			    digits = _ref159[1],
-			    separator = _ref159[2],
-			    expected = _ref159[3];
+		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref162) {
+			var _ref163 = _slicedToArray(_ref162, 4),
+			    components = _ref163[0],
+			    digits = _ref163[1],
+			    separator = _ref163[2],
+			    expected = _ref163[3];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);

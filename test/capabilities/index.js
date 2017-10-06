@@ -40,7 +40,7 @@ if (useBrowserStack) {
 			browserName: 'iPhone',
 			platform: 'MAC',
 			device: 'iPhone 6S'
-		}
+		},
 	];
 } else {
 	module.exports = [
