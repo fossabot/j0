@@ -3773,141 +3773,161 @@ var N = function () {
 			return clonedRange.getBoundingClientRect();
 		}
 	}, {
-		key: 'modifyRange',
-		value: function modifyRange(range, alter, direction) {
+		key: 'modifyRangeForwardChar',
+		value: function modifyRangeForwardChar(range, alter) {
+			var startContainer = range.startContainer,
+			    startOffset = range.startOffset;
+
+			range.collapse(false);
+			if (!this.forwardRange(range)) {
+				this.emit('range:last');
+			}
+			if (alter === 'expand') {
+				range.setStart(startContainer, startOffset);
+			} else {
+				range.collapse(false);
+			}
+		}
+	}, {
+		key: 'modifyRangeBackwardChar',
+		value: function modifyRangeBackwardChar(range, alter) {
+			var endContainer = range.endContainer,
+			    endOffset = range.endOffset;
+
+			range.collapse(true);
+			if (!this.backwardRange(range)) {
+				this.emit('range:first');
+			}
+			if (alter === 'expand') {
+				range.setEnd(endContainer, endOffset);
+			} else {
+				range.collapse(true);
+			}
+		}
+	}, {
+		key: 'modifyRangeLine',
+		value: function modifyRangeLine(range, alter, direction) {
+			var _DIRECTION_TOP$DIRECT;
+
+			var anchorRect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : this.getRangeRect(range);
+			var startContainer = range.startContainer,
+			    startOffset = range.startOffset,
+			    endContainer = range.endContainer,
+			    endOffset = range.endOffset;
+
 			var _textDirection2 = _slicedToArray(this.textDirection, 2),
 			    mainDirection = _textDirection2[0],
 			    crossDirection = _textDirection2[1];
 
-			var character = void 0;
-			var forward = void 0;
-			direction = N.directions[direction];
-			if (mainDirection === direction) {
-				character = true;
-				forward = true;
-			} else if ((mainDirection - direction) % 2 === 0) {
-				character = true;
-				forward = false;
-			} else if (crossDirection === direction) {
-				character = false;
-				forward = true;
-			} else {
-				character = false;
-				forward = false;
+			var targetX = anchorRect.left;
+			var targetY = anchorRect.top;
+			switch (direction) {
+				case DIRECTION_LEFT:
+					targetX -= anchorRect.width;
+					break;
+				case DIRECTION_RIGHT:
+					targetX += anchorRect.height;
+					break;
+				case DIRECTION_TOP:
+					targetY -= anchorRect.height;
+					break;
+				case DIRECTION_BOTTOM:
+					targetY += anchorRect.height;
+					break;
 			}
-			var anchorRect = this.getRangeRect(range);
-			function compareRect(rect1, rect2, direction) {
-				switch (direction) {
-					case DIRECTION_TOP:
-						return rect2.top < rect1.top;
-					case DIRECTION_BOTTOM:
-						return rect1.bottom < rect2.bottom;
-					case DIRECTION_LEFT:
-						return rect2.left < rect1.left;
-					case DIRECTION_RIGHT:
-						return rect1.right < rect2.right;
+			var forward = crossDirection === direction;
+			var stepFn = this[(forward ? 'for' : 'back') + 'wardRange'];
+			var onDifferentLine = (_DIRECTION_TOP$DIRECT = {}, _defineProperty(_DIRECTION_TOP$DIRECT, DIRECTION_TOP, function (rect) {
+				return rect.top < anchorRect.top;
+			}), _defineProperty(_DIRECTION_TOP$DIRECT, DIRECTION_BOTTOM, function (rect) {
+				return anchorRect.bottom < rect.bottom;
+			}), _defineProperty(_DIRECTION_TOP$DIRECT, DIRECTION_LEFT, function (rect) {
+				return rect.left < anchorRect.left;
+			}), _defineProperty(_DIRECTION_TOP$DIRECT, DIRECTION_RIGHT, function (rect) {
+				return anchorRect.right < rect.right;
+			}), _DIRECTION_TOP$DIRECT)[direction];
+			var previous = {};
+			function checkDiff(x$$1, y, container, offset) {
+				var diff = x$41.hypot(x$$1 - targetX, y - targetY);
+				if (previous.diff < diff) {
+					range['set' + (forward ? 'End' : 'Start')](previous.container, previous.offset);
+					return true;
+				} else {
+					previous.diff = diff;
+					previous.container = container;
+					previous.offset = offset;
+					return false;
 				}
 			}
-			function compareRectEq(rect1, rect2, direction) {
-				switch (direction) {
-					case DIRECTION_TOP:
-						return rect2.top <= rect1.top;
-					case DIRECTION_BOTTOM:
-						return rect1.bottom <= rect2.bottom;
-					case DIRECTION_LEFT:
-						return rect2.left <= rect1.left;
-					case DIRECTION_RIGHT:
-						return rect1.right <= rect2.right;
-				}
+			var calculateDiff = void 0;
+			switch (mainDirection) {
+				case DIRECTION_LEFT:
+					calculateDiff = forward ? function (rect, range) {
+						return checkDiff(rect.right, rect.top, range.startContainer, range.startOffset) || checkDiff(rect.left, rect.top, range.endContainer, range.endOffset);
+					} : function (rect, range) {
+						return checkDiff(rect.left, rect.top, range.endContainer, range.endOffset) || checkDiff(rect.right, rect.top, range.startContainer, range.startOffset);
+					};
+					break;
+				case DIRECTION_RIGHT:
+					calculateDiff = forward ? function (rect, range) {
+						return checkDiff(rect.left, rect.top, range.startContainer, range.startOffset) || checkDiff(rect.right, rect.top, range.endContainer, range.endOffset);
+					} : function (rect, range) {
+						return checkDiff(rect.right, rect.top, range.endContainer, range.endOffset) || checkDiff(rect.left, rect.top, range.startContainer, range.startOffset);
+					};
+					break;
+				case DIRECTION_TOP:
+					calculateDiff = forward ? function (rect, range) {
+						return checkDiff(rect.left, rect.bottom, range.startContainer, range.startOffset) || checkDiff(rect.left, rect.top, range.endContainer, range.endOffset);
+					} : function (rect, range) {
+						return checkDiff(rect.left, rect.top, range.endContainer, range.endOffset) || checkDiff(rect.left, rect.bottom, range.startContainer, range.startOffset);
+					};
+					break;
+				case DIRECTION_BOTTOM:
+					calculateDiff = forward ? function (rect, range) {
+						return checkDiff(rect.left, rect.top, range.startContainer, range.startOffset) || checkDiff(rect.left, rect.bottom, range.endContainer, range.endOffset);
+					} : function (rect, range) {
+						return checkDiff(rect.left, rect.bottom, range.endContainer, range.endOffset) || checkDiff(rect.left, rect.top, range.startContainer, range.startOffset);
+					};
+					break;
 			}
-			function selectNearRange(range1, range2, rect1, rect2) {
-				if (!range2) {
-					return;
-				}
-				var side = void 0;
-				switch (mainDirection) {
-					case DIRECTION_TOP:
-						side = forward ? 'top' : 'bottom';
-						break;
-					case DIRECTION_BOTTOM:
-						side = forward ? 'bottom' : 'top';
-						break;
-					case DIRECTION_LEFT:
-						side = forward ? 'left' : 'right';
-						break;
-					case DIRECTION_RIGHT:
-						side = forward ? 'right' : 'left';
-						break;
-				}
-				var d1 = x$41.abs(rect1[side] - anchorRect[side]);
-				var d2 = x$41.abs(rect2[side] - anchorRect[side]);
-				if (d2 < d1) {
-					range1.setStart(range2.startContainer, range2.startOffset);
-					range1.setEnd(range2.endContainer, range2.endOffset);
+			var done = false;
+			while (stepFn.call(this, range)) {
+				var rect = range.getBoundingClientRect();
+				done = 0 < rect.width * rect.height && onDifferentLine(rect) && calculateDiff(rect, range);
+				if (done) {
+					break;
 				}
 			}
 			if (forward) {
-				var done = void 0;
-				if (character) {
-					if (this.forwardRange(range)) {
-						done = true;
-					} else {
-						done = false;
-						this.emit('range:last');
-					}
-				} else {
-					var lastRange = void 0;
-					var lastRect = void 0;
-					while (this.forwardRange(range)) {
-						var rect = range.getBoundingClientRect();
-						if (0 < rect.width * rect.height) {
-							if (compareRect(anchorRect, rect, crossDirection) && compareRectEq(anchorRect, rect, mainDirection)) {
-								selectNearRange(range, lastRange, rect, lastRect);
-								done = true;
-								break;
-							}
-							lastRange = range.cloneRange();
-							lastRect = rect;
-						}
-					}
-					if (!done) {
-						this.emit('range:lastline', anchorRect);
-					}
-				}
-				if (alter !== 'expand') {
+				if (alter === 'move') {
 					range.setStart(range.endContainer, range.endOffset);
+				} else {
+					range.setStart(startContainer, startOffset);
 				}
 			} else {
-				var _done = void 0;
-				if (character) {
-					if (this.backwardRange(range)) {
-						_done = true;
-					} else {
-						_done = false;
-						this.emit('range:first');
-					}
-				} else {
-					var _lastRange = void 0;
-					var _lastRect = void 0;
-					while (this.backwardRange(range)) {
-						var _rect = range.getBoundingClientRect();
-						if (0 < _rect.width * _rect.height) {
-							if (compareRect(_rect, anchorRect, crossDirection) && compareRectEq(anchorRect, _rect, (mainDirection + 2) % 4)) {
-								selectNearRange(range, _lastRange, _rect, _lastRect);
-								_done = true;
-								break;
-							}
-							_lastRange = range.cloneRange();
-							_lastRect = _rect;
-						}
-					}
-					if (!_done) {
-						this.emit('range:firstline', anchorRect);
-					}
-				}
-				if (alter !== 'expand') {
+				if (alter === 'move') {
 					range.setEnd(range.startContainer, range.startOffset);
+				} else {
+					range.setEnd(endContainer, endOffset);
 				}
+			}
+			if (!done) {
+				this.emit('range:' + (forward ? 'last' : 'first') + 'line', anchorRect);
+			}
+		}
+	}, {
+		key: 'modifyRange',
+		value: function modifyRange(range, alter, direction) {
+			var _textDirection3 = _slicedToArray(this.textDirection, 1),
+			    mainDirection = _textDirection3[0];
+
+			direction = N.directions[direction];
+			if (mainDirection === direction) {
+				this.modifyRangeForwardChar(range, alter);
+			} else if ((mainDirection - direction) % 2 === 0) {
+				this.modifyRangeBackwardChar(range, alter);
+			} else {
+				this.modifyRangeLine(range, alter, direction);
 			}
 			return this;
 		}
@@ -4155,7 +4175,7 @@ var N = function () {
 				}, _callee19, this);
 			}));
 
-			function ready(_x44) {
+			function ready(_x45) {
 				return _ref30.apply(this, arguments);
 			}
 
@@ -8934,9 +8954,6 @@ describe('N.prototype.previous', function () {
 	});
 });
 
-var directions = N.directions;
-var commonStyle = ['position:fixed;', 'left:0;', 'right:0;', 'bottom:0;', 'opacity:0.6;', 'font-family:Courier,monospace;', 'white-space:pre;', 'pointer-events:none;'].join('');
-
 function compileCSS() {
 	for (var _len44 = arguments.length, declarations = Array(_len44), _key44 = 0; _key44 < _len44; _key44++) {
 		declarations[_key44] = arguments[_key44];
@@ -8947,28 +8964,59 @@ function compileCSS() {
 	}).join('');
 }
 
-var styles = {
-	lrtb: compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']),
-	rltb: compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']),
-	tbrl: compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']),
-	tblr: compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']),
-	btrl: compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']),
-	btlr: compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override'])
-};
+function checkRange(actual, expected, message) {
+	var errors = [];
+	['startContainer', 'startOffset', 'endContainer', 'endOffset'].forEach(function (key) {
+		if (actual[key] !== expected[key]) {
+			errors.push(key + ': ' + actual[key] + ' !== ' + expected[key]);
+		}
+	});
+	if (0 < errors.length) {
+		throw new Error((message ? message + ' ' : '') + '{' + errors.join(', ') + '}');
+	}
+}
+
+function testRange(data, init, fn) {
+	var element = new N(data);
+	element.setParent(x$4.body);
+	try {
+		var range = x$4.createRange();
+		range.setStart(init.startContainer, init.startOffset);
+		range.setEnd(init.endContainer, init.endOffset);
+		fn(element, range);
+	} catch (error) {
+		element.remove();
+		throw error;
+	}
+	element.remove();
+}
+
+var directions = N.directions;
+var commonStyle = ['position:fixed;', 'left:0;', 'right:0;', 'bottom:0;', 'opacity:0.6;', 'font-family:Courier,monospace;', 'white-space:pre;', 'pointer-events:none;'].join('');
+
+function forEachDirections(fn) {
+	[['lrtb', compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']), ['mainB', 'mainF', 'crossB', 'crossF'], [directions.right, directions.bottom]], ['rltb', compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['mainF', 'mainB', 'crossB', 'crossF'], [directions.left, directions.bottom]], ['tbrl', compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossF', 'crossB', 'mainB', 'mainF'], [directions.bottom, directions.left]], ['tblr', compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossB', 'crossF', 'mainB', 'mainF'], [directions.bottom, directions.right]], ['btrl', compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossF', 'crossB', 'mainF', 'mainB'], [directions.top, directions.left]], ['btlr', compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossB', 'crossF', 'mainF', 'mainB'], [directions.top, directions.right]]].forEach(function (_ref113) {
+		var _ref114 = _slicedToArray(_ref113, 4),
+		    textDirectionType = _ref114[0],
+		    style = _ref114[1],
+		    visualDirections = _ref114[2],
+		    calculatedDirection = _ref114[3];
+
+		fn(textDirectionType, style, visualDirections.map(function (visualDirection, index) {
+			return [['left', 'right', 'top', 'bottom'][index], visualDirection];
+		}), calculatedDirection);
+	});
+}
 
 describe('N.prototype.textDirection', function () {
 
-	[[styles.lrtb, [directions.right, directions.bottom]], [styles.rltb, [directions.left, directions.bottom]], [styles.tbrl, [directions.bottom, directions.left]], [styles.tblr, [directions.bottom, directions.right]], [styles.btrl, [directions.top, directions.left]], [styles.btlr, [directions.top, directions.right]]].forEach(function (_ref113) {
-		var _ref114 = _slicedToArray(_ref113, 2),
-		    style = _ref114[0],
-		    expectedDirection = _ref114[1];
-
-		it('should return ' + expectedDirection.join(',') + ' as its direction', function () {
+	forEachDirections(function (textDirectionType, style, visualDirections, calculatedDirection) {
+		it(textDirectionType + ' should return ' + calculatedDirection.join(',') + ' as its direction', function () {
 			var element = new N({
 				a: [['style', '' + commonStyle + style]]
 			});
 			element.setParent(x$4.body);
-			assert.deepEqual(element.textDirection, expectedDirection);
+			assert.deepEqual(element.textDirection, calculatedDirection);
 			element.remove();
 		});
 	});
@@ -8976,93 +9024,32 @@ describe('N.prototype.textDirection', function () {
 
 describe('N.prototype.modifyRange', function () {
 
-	if (browser.name === 'firefox') {
-		return;
-	}
+	forEachDirections(function (textDirectionType, style, visualDirections) {
 
-	(function () {
-		var text = new N(['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].join('\n'));
-		var charactersInLine = 27;
-		var offset = charactersInLine * 2 + 10;
+		describe('N.prototype.modifyRange - ' + textDirectionType, function () {
 
-		[['lrtb', [['left', text, offset - 2, text, offset - 2], ['right', text, offset + 2, text, offset + 2], ['top', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['bottom', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['rltb', [['right', text, offset - 2, text, offset - 2], ['left', text, offset + 2, text, offset + 2], ['top', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['bottom', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['tbrl', [['top', text, offset - 2, text, offset - 2], ['bottom', text, offset + 2, text, offset + 2], ['right', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['left', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['tblr', [['top', text, offset - 2, text, offset - 2], ['bottom', text, offset + 2, text, offset + 2], ['left', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['right', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['btrl', [['bottom', text, offset - 2, text, offset - 2], ['top', text, offset + 2, text, offset + 2], ['right', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['left', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]], ['btlr', [['bottom', text, offset - 2, text, offset - 2], ['top', text, offset + 2, text, offset + 2], ['left', text, offset - charactersInLine * 2, text, offset - charactersInLine * 2], ['right', text, offset + charactersInLine * 2, text, offset + charactersInLine * 2]]]].forEach(function (_ref115) {
-			var _ref116 = _slicedToArray(_ref115, 2),
-			    textDirection = _ref116[0],
-			    directions = _ref116[1];
+			if (browser.name === 'firefox') {
+				it('skipped: Firefox', function () {});
+				return;
+			}
 
-			directions.forEach(function (_ref117) {
-				var _ref118 = _slicedToArray(_ref117, 5),
-				    direction = _ref118[0],
-				    expectedStartContainer = _ref118[1],
-				    expectedStartOffset = _ref118[2],
-				    expectedEndContainer = _ref118[3],
-				    expectedEndOffset = _ref118[4];
+			visualDirections.forEach(function (_ref115) {
+				var _ref116 = _slicedToArray(_ref115, 2),
+				    visualDirection = _ref116[0],
+				    textDirection = _ref116[1];
 
-				var title = 'Simple Text - ' + textDirection + ' - move to ' + direction + ' twice';
-
-				if (!textDirection) {
-					it('skipped ' + title, function () {});
-				}
-
-				it(title, function () {
-					var element = new N({
-						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
-						c: [text]
-					});
-					element.setParent(x$4.body);
-					var range = x$4.createRange();
-					range.setStart(text.node, offset);
-					range.setEnd(text.node, offset);
-					element.modifyRange(range, 'move', direction);
-					element.modifyRange(range, 'move', direction);
-					var startContainer = range.startContainer,
-					    startOffset = range.startOffset,
-					    endContainer = range.endContainer,
-					    endOffset = range.endOffset;
-
-					element.remove();
-					assert.equal(startContainer === expectedStartContainer.node, true, 'startContainer error');
-					assert.equal(startOffset, expectedStartOffset, 'startOffset error');
-					assert.equal(endContainer === expectedEndContainer.node, true, 'endContainer error');
-					assert.equal(endOffset, expectedEndOffset, 'endOffset error');
-				});
-			});
-		});
-	})();
-
-	(function () {
-		var text1 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text2 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text3 = new N('ABCDEFGHI');
-		var text4 = new N('JK');
-		var text5 = new N('LMNOPQRSTUVWXYZ');
-		var text6 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text7 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-
-		[['lrtb', [['right', text5, 1, text5, 1], ['left', text3, 8, text3, 8], ['top', text1, 10, text1, 10], ['bottom', text7, 10, text7, 10]]], ['rltb', [['left', text5, 1, text5, 1], ['right', text3, 8, text3, 8], ['top', text1, 10, text1, 10], ['bottom', text7, 10, text7, 10]]], ['tbrl', [['bottom', text5, 1, text5, 1], ['top', text3, 8, text3, 8], ['right', text1, 10, text1, 10], ['left', text7, 10, text7, 10]]], ['tblr', [['bottom', text5, 1, text5, 1], ['top', text3, 8, text3, 8], ['left', text1, 10, text1, 10], ['right', text7, 10, text7, 10]]], ['btrl', [['top', text5, 1, text5, 1], ['bottom', text3, 8, text3, 8], ['right', text1, 10, text1, 10], ['left', text7, 10, text7, 10]]], ['btlr', [['top', text5, 1, text5, 1], ['bottom', text3, 8, text3, 8], ['left', text1, 10, text1, 10], ['right', text7, 10, text7, 10]]]].forEach(function (_ref119) {
-			var _ref120 = _slicedToArray(_ref119, 2),
-			    textDirection = _ref120[0],
-			    directions = _ref120[1];
-
-			directions.forEach(function (_ref121) {
-				var _ref122 = _slicedToArray(_ref121, 5),
-				    direction = _ref122[0],
-				    expectedStartContainer = _ref122[1],
-				    expectedStartOffset = _ref122[2],
-				    expectedEndContainer = _ref122[3],
-				    expectedEndOffset = _ref122[4];
-
-				var title = 'Nested Elements - ' + textDirection + ' - move to ' + direction + ' twice';
-
-				if (!textDirection) {
-					it('skipped ' + title, function () {});
-				}
-
-				it(title, function () {
+				describe('N.prototype.modifyRange - ' + textDirectionType + ' - ' + visualDirection, function () {
+					var text1 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+					var text2 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+					var text3 = new N('ABCDEFGHI');
+					var text4 = new N('JK');
+					var text5 = new N('LMNOPQRSTUVWXYZ');
+					var text6 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+					var text7 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
 					var inlineStyle = 'display:inline;';
 					var br = { t: 'br' };
-					var element = new N({
-						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
+					var data = {
+						a: [['contenteditable', 'true']],
 						c: [{
 							a: [['style', inlineStyle]],
 							c: [text1, br, {
@@ -9079,98 +9066,188 @@ describe('N.prototype.modifyRange', function () {
 								c: [text6]
 							}]
 						}, br, text7]
+					};
+					var init = {
+						startContainer: text4.node,
+						startOffset: 1,
+						endContainer: text4.node,
+						endOffset: 1
+					};
+
+					var _mainF$mainB$crossF$c = _slicedToArray({
+						mainF: [69, 'range:last'],
+						mainB: [63, 'range:first'],
+						crossF: [3, 'range:lastline'],
+						crossB: [3, 'range:firstline']
+					}[textDirection], 2),
+					    times = _mainF$mainB$crossF$c[0],
+					    eventName = _mainF$mainB$crossF$c[1];
+
+					it('Simple Text - ' + textDirectionType + ' - move to ' + visualDirection + ' twice', function () {
+						var text = new N(['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].join('\n'));
+						testRange({
+							a: [['style', '' + commonStyle + style], ['contenteditable', 'true']],
+							c: [text]
+						}, {
+							startContainer: text.node,
+							startOffset: 64,
+							endContainer: text.node,
+							endOffset: 64
+						}, function (element, range) {
+							element.modifyRange(range, 'move', visualDirection);
+							element.modifyRange(range, 'move', visualDirection);
+							checkRange(range, {
+								mainF: {
+									startContainer: text.node,
+									startOffset: 64 + 2,
+									endContainer: text.node,
+									endOffset: 64 + 2
+								},
+								mainB: {
+									startContainer: text.node,
+									startOffset: 64 - 2,
+									endContainer: text.node,
+									endOffset: 64 - 2
+								},
+								crossF: {
+									startContainer: text.node,
+									startOffset: 64 + 27 * 2,
+									endContainer: text.node,
+									endOffset: 64 + 27 * 2
+								},
+								crossB: {
+									startContainer: text.node,
+									startOffset: 64 - 27 * 2,
+									endContainer: text.node,
+									endOffset: 64 - 27 * 2
+								}
+							}[textDirection]);
+						});
 					});
-					element.setParent(x$4.body);
-					var range = x$4.createRange();
-					range.setStart(text4.node, 1);
-					range.setEnd(text4.node, 1);
-					element.modifyRange(range, 'move', direction);
-					element.modifyRange(range, 'move', direction);
-					var startContainer = range.startContainer,
-					    startOffset = range.startOffset,
-					    endContainer = range.endContainer,
-					    endOffset = range.endOffset;
 
-					element.remove();
-					assert.equal(startContainer === expectedStartContainer.node, true, 'startContainer error');
-					assert.equal(startOffset, expectedStartOffset, 'startOffset error');
-					assert.equal(endContainer === expectedEndContainer.node, true, 'endContainer error');
-					assert.equal(endOffset, expectedEndOffset, 'endOffset error');
-				});
-			});
-		});
-	})();
+					it('Nested Elements - ' + textDirectionType + ' - move to ' + visualDirection + ' twice', function () {
+						testRange(data, init, function (element, range) {
+							element.setAttribute('style', '' + commonStyle + style);
+							element.modifyRange(range, 'move', visualDirection);
+							element.modifyRange(range, 'move', visualDirection);
+							checkRange(range, {
+								mainB: {
+									startContainer: text3.node,
+									startOffset: 8,
+									endContainer: text3.node,
+									endOffset: 8
+								},
+								mainF: {
+									startContainer: text5.node,
+									startOffset: 1,
+									endContainer: text5.node,
+									endOffset: 1
+								},
+								crossB: {
+									startContainer: text1.node,
+									startOffset: 10,
+									endContainer: text1.node,
+									endOffset: 10
+								},
+								crossF: {
+									startContainer: text7.node,
+									startOffset: 10,
+									endContainer: text7.node,
+									endOffset: 10
+								}
+							}[textDirection]);
+						});
+					});
 
-	(function () {
-		var text1 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text2 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text3 = new N('ABCDEFGHI');
-		var text4 = new N('JK');
-		var text5 = new N('LMNOPQRSTUVWXYZ');
-		var text6 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var text7 = new N('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+					it('Nested Elements - ' + textDirectionType + ' - move to ' + visualDirection + ' for ' + times + ' times and emit one "' + eventName + '" event', function () {
+						testRange(data, init, function (element, range) {
+							var called = [];
+							element.on('range:last', function () {
+								called.push('range:last');
+							}).on('range:first', function () {
+								called.push('range:first');
+							}).on('range:lastline', function () {
+								called.push('range:lastline');
+							}).on('range:firstline', function () {
+								called.push('range:firstline');
+							}).setAttribute('style', '' + commonStyle + style);
+							for (var i = 0; i < times; i++) {
+								element.modifyRange(range, 'move', visualDirection);
+							}
+							assert.equal(called.join(','), eventName);
+						});
+					});
 
-		[['lrtb', [['right', 69, 'range:last'], ['left', 63, 'range:first'], ['top', 3, 'range:firstline'], ['bottom', 3, 'range:lastline']]], ['rltb', [['left', 69, 'range:last'], ['right', 63, 'range:first'], ['top', 3, 'range:firstline'], ['bottom', 3, 'range:lastline']]], ['tbrl', [['bottom', 69, 'range:last'], ['top', 63, 'range:first'], ['right', 3, 'range:firstline'], ['left', 3, 'range:lastline']]], ['tblr', [['bottom', 69, 'range:last'], ['top', 63, 'range:first'], ['left', 3, 'range:firstline'], ['right', 3, 'range:lastline']]], ['btrl', [['top', 69, 'range:last'], ['bottom', 63, 'range:first'], ['right', 3, 'range:firstline'], ['left', 3, 'range:lastline']]], ['btlr', [['top', 69, 'range:last'], ['bottom', 63, 'range:first'], ['left', 3, 'range:firstline'], ['right', 3, 'range:lastline']]]].forEach(function (_ref123) {
-			var _ref124 = _slicedToArray(_ref123, 2),
-			    textDirection = _ref124[0],
-			    directions = _ref124[1];
+					var crossTestText = new N(['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'iMlN', 'NlMiZlXi', 'ABCDEFGHIJKLMNOPQ'].join('\n'));
 
-			directions.forEach(function (_ref125) {
-				var _ref126 = _slicedToArray(_ref125, 3),
-				    direction = _ref126[0],
-				    times = _ref126[1],
-				    eventName = _ref126[2];
+					switch (textDirection) {
+						case 'crossF':
+							it('should modify ranges to ' + visualDirection + ' at edge - ' + textDirectionType + ':' + visualDirection, function () {
+								testRange({
+									a: [['style', '' + commonStyle + style], ['contenteditable', 'true']],
+									c: [crossTestText]
+								}, {
+									startContainer: crossTestText.node,
+									startOffset: 0,
+									endContainer: crossTestText.node,
+									endOffset: 0
+								}, function (element, range) {
+									var called = [];
+									element.on('range:last', function () {
+										called.push('range:last');
+									}).on('range:first', function () {
+										called.push('range:first');
+									}).on('range:lastline', function () {
+										called.push('range:lastline');
+									}).on('range:firstline', function () {
+										called.push('range:firstline');
+									}).setAttribute('style', '' + commonStyle + style);
 
-				var title = 'Nested Elements - ' + textDirection + ' - move to ' + direction + ' for ' + times + ' times and emit a "' + eventName + '" event';
+									element.modifyRange(range, 'move', visualDirection);
+									checkRange(range, {
+										startContainer: crossTestText.node,
+										startOffset: 27,
+										endContainer: crossTestText.node,
+										endOffset: 27
+									}, '1st modification');
+									assert.equal(called.length, 0, '1st modification: expected ' + called.length + ' to equal 0');
 
-				if (!textDirection) {
-					it('skipped ' + title, function () {});
-				}
+									element.modifyRange(range, 'move', visualDirection);
+									checkRange(range, {
+										startContainer: crossTestText.node,
+										startOffset: 32,
+										endContainer: crossTestText.node,
+										endOffset: 32
+									}, '2nd modification');
+									assert.equal(called.length, 0, '2nd modification: expected ' + called.length + ' to equal 0');
 
-				it(title, function () {
-					var inlineStyle = 'display:inline;';
-					var br = { t: 'br' };
-					var called = [];
-					var element = new N({
-						a: [['style', '' + commonStyle + styles[textDirection]], ['contenteditable', 'true']],
-						c: [{
-							a: [['style', inlineStyle]],
-							c: [text1, br, {
-								a: [['style', inlineStyle]],
-								c: [text2]
-							}]
-						}, br, {
-							a: [['style', inlineStyle]],
-							c: [text3]
-						}, text4, {
-							a: [['style', inlineStyle]],
-							c: [text5, br, {
-								a: [['style', inlineStyle]],
-								c: [text6]
-							}]
-						}, br, text7],
-						e: [['range:last', function () {
-							called.push('range:last');
-						}], ['range:first', function () {
-							called.push('range:first');
-						}], ['range:lastline', function () {
-							called.push('range:lastline');
-						}], ['range:firstline', function () {
-							called.push('range:firstline');
-						}]]
-					}).setParent(x$4.body);
-					var range = x$4.createRange();
-					range.setStart(text4.node, 1);
-					range.setEnd(text4.node, 1);
-					for (var i = 0; i < times; i++) {
-						element.modifyRange(range, 'move', direction);
+									element.modifyRange(range, 'move', visualDirection);
+									checkRange(range, {
+										startContainer: crossTestText.node,
+										startOffset: 41,
+										endContainer: crossTestText.node,
+										endOffset: 41
+									}, '3rd modification');
+									assert.equal(called.length, 0, '3rd modification: expected ' + called.length + ' to equal 0');
+
+									element.modifyRange(range, 'move', visualDirection);
+									checkRange(range, {
+										startContainer: crossTestText.node,
+										startOffset: 58,
+										endContainer: crossTestText.node,
+										endOffset: 58
+									}, '4th modification');
+									assert.equal(called[0], 'range:lastline', '4th modification: expected ' + called[0] + ' to equal \'range:lastline\'');
+								});
+							});
+							break;
+						case 'crossB':
+							break;
 					}
-					element.remove();
-					assert.equal(called.join(','), eventName);
 				});
 			});
 		});
-	})();
+	});
 });
 
 describe('N.prototype.remove', function () {
@@ -10547,10 +10624,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.get', function () {
 
-		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref128) {
-			var _ref129 = _slicedToArray(_ref128, 2),
-			    index = _ref129[0],
-			    expected = _ref129[1];
+		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref118) {
+			var _ref119 = _slicedToArray(_ref118, 2),
+			    index = _ref119[0],
+			    expected = _ref119[1];
 
 			it('should return element at ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -10561,10 +10638,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.rotate', function () {
 
-		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref130) {
-			var _ref131 = _slicedToArray(_ref130, 2),
-			    index = _ref131[0],
-			    expected = _ref131[1];
+		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref120) {
+			var _ref121 = _slicedToArray(_ref120, 2),
+			    index = _ref121[0],
+			    expected = _ref121[1];
 
 			it('should return rotate by ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -10904,8 +10981,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref132, name, expression, offset, source) {
-				var length = _ref132.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref122, name, expression, offset, source) {
+				var length = _ref122.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -11204,11 +11281,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator39 = this.states[Symbol.iterator](), _step39; !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
-					var _ref133 = _step39.value;
+					var _ref123 = _step39.value;
 
-					var _ref134 = _slicedToArray(_ref133, 2);
+					var _ref124 = _slicedToArray(_ref123, 2);
 
-					var state = _ref134[1];
+					var state = _ref124[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -11247,9 +11324,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref135 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref135.name,
-			    params = _ref135.params;
+			var _ref125 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref125.name,
+			    params = _ref125.params;
 
 			var noFallback = arguments[1];
 
@@ -11373,11 +11450,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator40 = states.states[Symbol.iterator](), _step40; !(_iteratorNormalCompletion40 = (_step40 = _iterator40.next()).done); _iteratorNormalCompletion40 = true) {
-				var _ref136 = _step40.value;
+				var _ref126 = _step40.value;
 
-				var _ref137 = _slicedToArray(_ref136, 2);
+				var _ref127 = _slicedToArray(_ref126, 2);
 
-				var state = _ref137[1];
+				var state = _ref127[1];
 
 				results.push(state);
 			}
@@ -11452,7 +11529,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee66() {
-		var states, name0, name1, name2, _ref139, _ref140, toState, fromState;
+		var states, name0, name1, name2, _ref129, _ref130, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee66$(_context66) {
 			while (1) {
@@ -11485,10 +11562,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref139 = _context66.sent;
-						_ref140 = _slicedToArray(_ref139, 2);
-						toState = _ref140[0];
-						fromState = _ref140[1];
+						_ref129 = _context66.sent;
+						_ref130 = _slicedToArray(_ref129, 2);
+						toState = _ref130[0];
+						fromState = _ref130[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -11804,11 +11881,11 @@ function test$130(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref145) {
-			var _ref146 = _slicedToArray(_ref145, 3),
-			    string = _ref146[0],
-			    from = _ref146[1],
-			    to = _ref146[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref135) {
+			var _ref136 = _slicedToArray(_ref135, 3),
+			    string = _ref136[0],
+			    from = _ref136[1],
+			    to = _ref136[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -11884,11 +11961,11 @@ function test$134(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref147) {
-			var _ref148 = _slicedToArray(_ref147, 3),
-			    expected = _ref148[0],
-			    from = _ref148[1],
-			    to = _ref148[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref137) {
+			var _ref138 = _slicedToArray(_ref137, 3),
+			    expected = _ref138[0],
+			    from = _ref138[1],
+			    to = _ref138[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -12767,11 +12844,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref150) {
-		var _ref151 = _slicedToArray(_ref150, 3),
-		    string = _ref151[0],
-		    from = _ref151[1],
-		    to = _ref151[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref140) {
+		var _ref141 = _slicedToArray(_ref140, 3),
+		    string = _ref141[0],
+		    from = _ref141[1],
+		    to = _ref141[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -13398,18 +13475,18 @@ function test$150(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref153, index) {
-			var _ref154 = _slicedToArray(_ref153, 2),
-			    input = _ref154[0],
-			    tests = _ref154[1];
+		].forEach(function (_ref143, index) {
+			var _ref144 = _slicedToArray(_ref143, 2),
+			    input = _ref144[0],
+			    tests = _ref144[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref155) {
-						var _ref156 = _slicedToArray(_ref155, 2),
-						    key = _ref156[0],
-						    expected = _ref156[1];
+					tests.forEach(function (_ref145) {
+						var _ref146 = _slicedToArray(_ref145, 2),
+						    key = _ref146[0],
+						    expected = _ref146[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -14068,11 +14145,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref157) {
-				var _ref158 = _slicedToArray(_ref157, 2),
-				    name = _ref158[0],
-				    _ref158$ = _ref158[1],
-				    value = _ref158$ === undefined ? '' : _ref158$;
+			return this.data.map(function (_ref147) {
+				var _ref148 = _slicedToArray(_ref147, 2),
+				    name = _ref148[0],
+				    _ref148$ = _ref148[1],
+				    value = _ref148$ === undefined ? '' : _ref148$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -14298,10 +14375,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.get', function () {
 		var components = [1, 2, 3];
-		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref159) {
-			var _ref160 = _slicedToArray(_ref159, 2),
-			    index = _ref160[0],
-			    expected = _ref160[1];
+		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref149) {
+			var _ref150 = _slicedToArray(_ref149, 2),
+			    index = _ref150[0],
+			    expected = _ref150[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -14312,10 +14389,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.set', function () {
 		var components = [0, 1, 2];
-		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref161) {
-			var _ref162 = _slicedToArray(_ref161, 2),
-			    index = _ref162[0],
-			    expected = _ref162[1];
+		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref151) {
+			var _ref152 = _slicedToArray(_ref151, 2),
+			    index = _ref152[0],
+			    expected = _ref152[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -14326,10 +14403,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.dim', function () {
-		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref163) {
-			var _ref164 = _slicedToArray(_ref163, 2),
-			    components = _ref164[0],
-			    expected = _ref164[1];
+		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref153) {
+			var _ref154 = _slicedToArray(_ref153, 2),
+			    components = _ref154[0],
+			    expected = _ref154[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -14340,10 +14417,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.add', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref165) {
-			var _ref166 = _slicedToArray(_ref165, 2),
-			    components2 = _ref166[0],
-			    expected = _ref166[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref155) {
+			var _ref156 = _slicedToArray(_ref155, 2),
+			    components2 = _ref156[0],
+			    expected = _ref156[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -14355,10 +14432,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.subtract', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref167) {
-			var _ref168 = _slicedToArray(_ref167, 2),
-			    components2 = _ref168[0],
-			    expected = _ref168[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref157) {
+			var _ref158 = _slicedToArray(_ref157, 2),
+			    components2 = _ref158[0],
+			    expected = _ref158[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -14370,10 +14447,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.scale', function () {
 		var components = [0, 1, 2];
-		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref169) {
-			var _ref170 = _slicedToArray(_ref169, 2),
-			    scalar = _ref170[0],
-			    expected = _ref170[1];
+		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref159) {
+			var _ref160 = _slicedToArray(_ref159, 2),
+			    scalar = _ref160[0],
+			    expected = _ref160[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v = new Vector(components);
@@ -14383,10 +14460,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (getter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref171) {
-			var _ref172 = _slicedToArray(_ref171, 2),
-			    components = _ref172[0],
-			    expected = _ref172[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref161) {
+			var _ref162 = _slicedToArray(_ref161, 2),
+			    components = _ref162[0],
+			    expected = _ref162[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -14396,10 +14473,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (setter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref173) {
-			var _ref174 = _slicedToArray(_ref173, 2),
-			    components = _ref174[0],
-			    norm = _ref174[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref163) {
+			var _ref164 = _slicedToArray(_ref163, 2),
+			    components = _ref164[0],
+			    norm = _ref164[1];
 
 			it('should return [' + components.join(', ') + ']', function () {
 				var v = new Vector(components).scale(100);
@@ -14413,12 +14490,12 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.toString', function () {
-		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref175) {
-			var _ref176 = _slicedToArray(_ref175, 4),
-			    components = _ref176[0],
-			    digits = _ref176[1],
-			    separator = _ref176[2],
-			    expected = _ref176[3];
+		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref165) {
+			var _ref166 = _slicedToArray(_ref165, 4),
+			    components = _ref166[0],
+			    digits = _ref166[1],
+			    separator = _ref166[2],
+			    expected = _ref166[3];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
