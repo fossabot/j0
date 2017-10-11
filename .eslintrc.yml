@@ -3,6 +3,7 @@ parserOptions:
   sourceType: module
 globals:
   assert: true
+  debugMode: true
 env:
   mocha: true
 extends:
