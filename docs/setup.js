@@ -300,6 +300,8 @@ var x$4 = window;
 
 var x$5 = URL;
 
+var x$6 = console;
+
 function setVersion() {
 	var xhr = new x$2();
 	xhr.open('GET', x$4.root + '/package.json');
@@ -390,4 +392,15 @@ x$4.canvasTestClass = 'Canvas' + Date.now();
 x$4.mocha.setup('bdd');
 setAssert();
 setVersion();
+before(function () {
+	if (x$4.mocha.options.grep) {
+		beforeEach(function () {
+			this.test.ctx.debug = true;
+			x$6.group(this.currentTest.title);
+		});
+		afterEach(function () {
+			x$6.groupEnd(this.currentTest.title);
+		});
+	}
+});
 }());

@@ -4,7 +4,8 @@ import {
 	XMLHttpRequest,
 	document,
 	window,
-	URL
+	URL,
+	console,
 } from 'j0';
 
 function setVersion() {
@@ -299,3 +300,14 @@ window.canvasTestClass = `Canvas${Date.now()}`;
 window.mocha.setup('bdd');
 setAssert();
 setVersion();
+before(function () {
+	if (window.mocha.options.grep) {
+		beforeEach(function () {
+			this.test.ctx.debug = true;
+			console.group(this.currentTest.title);
+		});
+		afterEach(function () {
+			console.groupEnd(this.currentTest.title);
+		});
+	}
+});
