@@ -3210,7 +3210,7 @@ var J0Range = function () {
 		}
 	}, {
 		key: 'modify',
-		value: function modify(alter, direction) {
+		value: function modify(alter, direction, anchorBB) {
 			var mainProduct = this.product(direction);
 			var forward = void 0;
 			if (mainProduct === 1) {
@@ -3222,10 +3222,10 @@ var J0Range = function () {
 			} else {
 				var crossProduct = this.product(direction, true);
 				if (crossProduct === 1) {
-					this.forwardLine(direction);
+					this.forwardLine(direction, anchorBB);
 					forward = true;
 				} else {
-					this.backwardLine(direction);
+					this.backwardLine(direction, anchorBB);
 					forward = false;
 				}
 			}
@@ -3393,9 +3393,9 @@ var J0Range = function () {
 		}
 	}, {
 		key: 'forwardLine',
-		value: function forwardLine(direction) {
+		value: function forwardLine(direction, anchorBB) {
 			var cloned = this.clone();
-			var check = cloned.getChecker(direction, true);
+			var check = cloned.getChecker(direction, true, anchorBB);
 			while (1) {
 				cloned.setStart(cloned.endContainer, cloned.endOffset);
 				if (cloned.forwardEnd()) {
@@ -3414,9 +3414,9 @@ var J0Range = function () {
 		}
 	}, {
 		key: 'backwardLine',
-		value: function backwardLine(direction) {
+		value: function backwardLine(direction, anchorBB) {
 			var cloned = this.clone();
-			var check = cloned.getChecker(direction, false);
+			var check = cloned.getChecker(direction, false, anchorBB);
 			while (1) {
 				cloned.setEnd(cloned.startContainer, cloned.startOffset);
 				if (cloned.backwardStart()) {
@@ -4146,11 +4146,11 @@ var N = function () {
 		}
 	}, {
 		key: 'modifySelection',
-		value: function modifySelection(alter, direction) {
+		value: function modifySelection(alter, direction, anchorBB) {
 			var selection = x$42();
 			var range = new J0Range(selection.getRangeAt(0), this);
 			selection.removeAllRanges();
-			range.modify(alter, direction);
+			range.modify(alter, direction, anchorBB);
 			selection.addRange(range.range);
 			return this;
 		}
