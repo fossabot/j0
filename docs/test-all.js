@@ -4146,11 +4146,11 @@ var N = function () {
 		}
 	}, {
 		key: 'modifySelection',
-		value: function modifySelection(alter, direction, anchorBB) {
+		value: function modifySelection(expand, direction, anchorBB) {
 			var selection = x$42();
 			var range = new J0Range(selection.getRangeAt(0), this);
 			selection.removeAllRanges();
-			range.modify(alter, direction, anchorBB);
+			range.modify(expand ? 'expand' : 'move', direction, anchorBB);
 			selection.addRange(range.range);
 			return this;
 		}
