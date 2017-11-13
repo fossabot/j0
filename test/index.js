@@ -10,6 +10,6 @@ Promise.resolve()
 .then(run)
 .then(onEnd, onEnd)
 .catch((error) => {
-	console.onError(error);
+	console.error(error);
 	process.exit(1);
 });
