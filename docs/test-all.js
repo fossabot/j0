@@ -2534,7 +2534,7 @@ var x$30 = window;
 /* eslint-disable no-magic-numbers */
 describe('ConditionalSet', function () {
 
-	this.timeout(10000);
+	this.timeout(30000);
 
 	it('should create a set', function () {
 		var set = ConditionalSet.and(function (x) {
@@ -2850,6 +2850,8 @@ function debounce(fn) {
 describe('debounce', function () {
 	var _this3 = this;
 
+	this.timeout(5000);
+
 	it('should call the function after the last call', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
 		var result;
 		return regeneratorRuntime.wrap(function _callee17$(_context17) {
@@ -2860,7 +2862,7 @@ describe('debounce', function () {
 						return new x$3(function (resolve) {
 							var execute = debounce(function (value) {
 								resolve(value);
-							}, 50);
+							}, 100);
 							execute(1);
 							execute(2);
 							execute(3);
@@ -2889,7 +2891,7 @@ describe('debounce', function () {
 						return new x$3(function (resolve) {
 							var execute = debounce(function () {
 								resolve(this);
-							}, 50);
+							}, 100);
 							execute.call(1);
 							execute.call(2);
 							execute.call(3);
@@ -7946,7 +7948,7 @@ function test$71(hypot) {
 				while (1) {
 					switch (_context43.prev = _context43.next) {
 						case 0:
-							this.timeout(5000);
+							this.timeout(10000);
 							_context43.next = 3;
 							return assert.graphicalEqual({
 								name: name + '-y=3',
@@ -14411,15 +14413,12 @@ describe('thermalRGB', function () {
 		});
 
 		it('[id:thermalRGB] should draw an expected map', _asyncToGenerator(regeneratorRuntime.mark(function _callee76() {
-			var timeout;
 			return regeneratorRuntime.wrap(function _callee76$(_context76) {
 				while (1) {
 					switch (_context76.prev = _context76.next) {
 						case 0:
-							timeout = 5000;
-
-							this.timeout(timeout);
-							_context76.next = 4;
+							this.timeout(30000);
+							_context76.next = 3;
 							return assert.graphicalEqual({
 								name: 'thermalRGB',
 								url: x$30.root + '/thermalRGB/thermalRGB.png',
@@ -14433,7 +14432,7 @@ describe('thermalRGB', function () {
 								yGrid: []
 							});
 
-						case 4:
+						case 3:
 						case 'end':
 							return _context76.stop();
 					}
