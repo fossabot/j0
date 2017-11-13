@@ -12,7 +12,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var wait = function () {
-	var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(duration, data) {
+	var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(duration, data) {
 		return regeneratorRuntime.wrap(function _callee4$(_context4) {
 			while (1) {
 				switch (_context4.prev = _context4.next) {
@@ -962,7 +962,7 @@ function createArrayBuffer(data) {
 
 describe('ArrayBuffer/toString', function () {
 
-	it('should return hello', _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	it('should return hello', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
 		var src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
@@ -985,7 +985,7 @@ describe('ArrayBuffer/toString', function () {
 		}, _callee, this);
 	})));
 
-	it('should return こんにちは', _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+	it('should return こんにちは', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
 		var src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
@@ -1008,7 +1008,7 @@ describe('ArrayBuffer/toString', function () {
 		}, _callee2, this);
 	})));
 
-	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	it('should return wagahaiha-nekodearu.txt', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
 		var root, src, arrayBuffer;
 		return regeneratorRuntime.wrap(function _callee3$(_context3) {
 			while (1) {
@@ -1332,7 +1332,7 @@ var x$27 = setTimeout;
 
 describe('call', function () {
 
-	it('should call a sync function', _asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
+	it('should call a sync function', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
 		var thisArg, arg1, arg2, results, expected;
 		return regeneratorRuntime.wrap(function _callee5$(_context5) {
 			while (1) {
@@ -1362,7 +1362,7 @@ describe('call', function () {
 		}, _callee5, this);
 	})));
 
-	it('should call an async function', _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
+	it('should call an async function', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
 		var thisArg, arg1, arg2, results, expected;
 		return regeneratorRuntime.wrap(function _callee7$(_context7) {
 			while (1) {
@@ -1374,7 +1374,7 @@ describe('call', function () {
 						_context7.next = 5;
 						return new x$3(function (resolve, reject) {
 							call(function () {
-								var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(a1, a2, a3) {
+								var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(a1, a2, a3) {
 									return regeneratorRuntime.wrap(function _callee6$(_context6) {
 										while (1) {
 											switch (_context6.prev = _context6.next) {
@@ -1413,7 +1413,7 @@ describe('call', function () {
 		}, _callee7, this);
 	})));
 
-	it('should catch an error from a sync function', _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
+	it('should catch an error from a sync function', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
 		var thisArg, arg1, arg2, results, expected;
 		return regeneratorRuntime.wrap(function _callee8$(_context8) {
 			while (1) {
@@ -1443,7 +1443,7 @@ describe('call', function () {
 		}, _callee8, this);
 	})));
 
-	it('should catch an error from an async function', _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+	it('should catch an error from an async function', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
 		var thisArg, arg1, arg2, results, expected;
 		return regeneratorRuntime.wrap(function _callee10$(_context10) {
 			while (1) {
@@ -1455,7 +1455,7 @@ describe('call', function () {
 						_context10.next = 5;
 						return new x$3(function (resolve) {
 							call(function () {
-								var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(a1, a2, a3) {
+								var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(a1, a2, a3) {
 									return regeneratorRuntime.wrap(function _callee9$(_context9) {
 										while (1) {
 											switch (_context9.prev = _context9.next) {
@@ -1501,7 +1501,7 @@ var x$29 = requestAnimationFrame;
 
 describe('cancelAnimationFrame', function () {
 
-	it('should cancel scheduled invocation', _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
+	it('should cancel scheduled invocation', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
 		var baseInterval, timeoutMargin;
 		return regeneratorRuntime.wrap(function _callee11$(_context11) {
 			while (1) {
@@ -2541,7 +2541,7 @@ describe('ConditionalSet', function () {
 
 	describe('ConditionalSet.prototype.includes', function () {
 
-		describe('ConditionalSet:and', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+		describe('ConditionalSet:and', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee12$(_context12) {
 				while (1) {
@@ -2580,7 +2580,7 @@ describe('ConditionalSet', function () {
 			}, _callee12, this);
 		})));
 
-		describe('ConditionalSet:or', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+		describe('ConditionalSet:or', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee13$(_context13) {
 				while (1) {
@@ -2619,7 +2619,7 @@ describe('ConditionalSet', function () {
 			}, _callee13, this);
 		})));
 
-		describe('ConditionalSet:xor', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+		describe('ConditionalSet:xor', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee14$(_context14) {
 				while (1) {
@@ -2658,7 +2658,7 @@ describe('ConditionalSet', function () {
 			}, _callee14, this);
 		})));
 
-		describe('ConditionalSet:not', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+		describe('ConditionalSet:not', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee15$(_context15) {
 				while (1) {
@@ -2829,7 +2829,7 @@ describe('debounce', function () {
 
 	this.timeout(5000);
 
-	it('should call the function after the last call', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
+	it('should call the function after the last call', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
 		var result;
 		return regeneratorRuntime.wrap(function _callee16$(_context16) {
 			while (1) {
@@ -2858,7 +2858,7 @@ describe('debounce', function () {
 		}, _callee16, _this3);
 	})));
 
-	it('should call the function with its context', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+	it('should call the function with its context', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
 		var result;
 		return regeneratorRuntime.wrap(function _callee17$(_context17) {
 			while (1) {
@@ -4357,7 +4357,7 @@ var N = function () {
 	}], [{
 		key: 'ready',
 		value: function () {
-			var _ref41 = _asyncToGenerator(regeneratorRuntime.mark(function _callee18(fn) {
+			var _ref41 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(fn) {
 				var body;
 				return regeneratorRuntime.wrap(function _callee18$(_context18) {
 					while (1) {
@@ -6307,7 +6307,7 @@ function test_modify(textDirectionType, visualDirections) {
 					});
 					break;
 				case 'crossF':
-					it('[' + textDirectionType + '] should move forward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
+					it('[' + textDirectionType + '] should move forward along to cross axis [start of lines]', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
 						var range, _iteratorNormalCompletion37, _didIteratorError37, _iteratorError37, _iterator37, _step37, textNode, index;
 
 						return regeneratorRuntime.wrap(function _callee19$(_context19) {
@@ -6384,7 +6384,7 @@ function test_modify(textDirectionType, visualDirections) {
 							}
 						}, _callee19, this, [[5, 9, 13, 21], [14,, 16, 20]]);
 					})));
-					it('[' + textDirectionType + '] should move forward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+					it('[' + textDirectionType + '] should move forward along to cross axis [middle of lines]', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
 						var range, _iteratorNormalCompletion38, _didIteratorError38, _iteratorError38, _iterator38, _step38, textNode, index;
 
 						return regeneratorRuntime.wrap(function _callee20$(_context20) {
@@ -6472,7 +6472,7 @@ function test_modify(textDirectionType, visualDirections) {
 					});
 					break;
 				case 'crossB':
-					it('[' + textDirectionType + '] should move backward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
+					it('[' + textDirectionType + '] should move backward along to cross axis [start of lines]', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
 						var range, _iteratorNormalCompletion39, _didIteratorError39, _iteratorError39, _iterator39, _step39, textNode, index;
 
 						return regeneratorRuntime.wrap(function _callee21$(_context21) {
@@ -6552,7 +6552,7 @@ function test_modify(textDirectionType, visualDirections) {
 							}
 						}, _callee21, this, [[5, 9, 13, 21], [14,, 16, 20]]);
 					})));
-					it('[' + textDirectionType + '] should move backward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
+					it('[' + textDirectionType + '] should move backward along to cross axis [middle of lines]', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
 						var range, _iteratorNormalCompletion40, _didIteratorError40, _iteratorError40, _iterator40, _step40, textNode, index;
 
 						return regeneratorRuntime.wrap(function _callee22$(_context22) {
@@ -7167,7 +7167,7 @@ function tests$7(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, x.iterator, regeneratorRuntime.mark(function _callee23() {
+			var iterable = _defineProperty({}, x.iterator, /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
 				var count;
 				return regeneratorRuntime.wrap(function _callee23$(_context23) {
 					while (1) {
@@ -7275,7 +7275,7 @@ function test$39(acosh) {
 	describe(name, function () {
 		var _loop2 = function _loop2(value) {
 			var expected = Math.log(value + Math.sqrt(value * value - 1));
-			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
 				return regeneratorRuntime.wrap(function _callee24$(_context24) {
 					while (1) {
 						switch (_context24.prev = _context24.next) {
@@ -7332,7 +7332,7 @@ function test$43(asinh) {
 	describe(name, function () {
 		var _loop3 = function _loop3(value) {
 			var expected = Math.log(value + Math.sqrt(value * value + 1));
-			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25() {
 				return regeneratorRuntime.wrap(function _callee25$(_context25) {
 					while (1) {
 						switch (_context25.prev = _context25.next) {
@@ -7413,7 +7413,7 @@ function test$49(atanh) {
 	describe(name, function () {
 		var _loop4 = function _loop4(value) {
 			var expected = Math.log((1 + value) / (1 - value)) / 2;
-			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26() {
 				return regeneratorRuntime.wrap(function _callee26$(_context26) {
 					while (1) {
 						switch (_context26.prev = _context26.next) {
@@ -7450,7 +7450,7 @@ function test$51(cbrt) {
 	describe(name, function () {
 		var _loop5 = function _loop5(_x70) {
 			var expected = Math.sign(_x70) * Math.pow(Math.abs(_x70), 1 / 3);
-			it(name + '(' + _x70.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
+			it(name + '(' + _x70.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27() {
 				return regeneratorRuntime.wrap(function _callee27$(_context27) {
 					while (1) {
 						switch (_context27.prev = _context27.next) {
@@ -7559,7 +7559,7 @@ function test$59(cosh) {
 	describe(name, function () {
 		var _loop6 = function _loop6(_x75) {
 			var expected = (Math.exp(_x75) + 1 / Math.exp(_x75)) / 2;
-			it(name + '(' + _x75.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
+			it(name + '(' + _x75.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28() {
 				return regeneratorRuntime.wrap(function _callee28$(_context28) {
 					while (1) {
 						switch (_context28.prev = _context28.next) {
@@ -8093,7 +8093,7 @@ function test$107(sinh) {
 	describe(name, function () {
 		var _loop7 = function _loop7(_x101) {
 			var expected = (Math.exp(_x101) - 1 / Math.exp(_x101)) / 2;
-			it(name + '(' + _x101.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
+			it(name + '(' + _x101.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
 				return regeneratorRuntime.wrap(function _callee29$(_context29) {
 					while (1) {
 						switch (_context29.prev = _context29.next) {
@@ -8201,7 +8201,7 @@ function test$117(tanh) {
 	describe(name, function () {
 		var _loop8 = function _loop8(_x107) {
 			var expected = (Math.exp(2 * _x107) - 1) / (Math.exp(2 * _x107) + 1);
-			it(name + '(' + _x107.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
+			it(name + '(' + _x107.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
 				return regeneratorRuntime.wrap(function _callee30$(_context30) {
 					while (1) {
 						switch (_context30.prev = _context30.next) {
@@ -8712,7 +8712,7 @@ describe('N.prototype.on', function () {
 		}), [[key1, fn1], [key2, fn2]]);
 	});
 
-	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
+	it('should call a method', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
 		var results, data1, data2, E, element;
 		return regeneratorRuntime.wrap(function _callee31$(_context31) {
 			while (1) {
@@ -8760,7 +8760,7 @@ describe('N.prototype.on', function () {
 		}, _callee31, this);
 	})));
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
+	it('should throw an error if the object has no method', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32() {
 		var E, element;
 		return regeneratorRuntime.wrap(function _callee32$(_context32) {
 			while (1) {
@@ -8832,7 +8832,7 @@ describe('N.prototype.off', function () {
 
 describe('N.prototype.emit', function () {
 
-	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
+	it('should call a listener', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
 		var element, key, data, event;
 		return regeneratorRuntime.wrap(function _callee33$(_context33) {
 			while (1) {
@@ -8859,7 +8859,7 @@ describe('N.prototype.emit', function () {
 		}, _callee33, this);
 	})));
 
-	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
+	it('should call listeners', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
 		var element, key, data1, data2, results, onCall;
 		return regeneratorRuntime.wrap(function _callee34$(_context34) {
 			while (1) {
@@ -8895,7 +8895,7 @@ describe('N.prototype.emit', function () {
 
 describe('N.prototype.once', function () {
 
-	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
+	it('should call a listener only once', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
 		var element, key, data1, data2, results, onCall;
 		return regeneratorRuntime.wrap(function _callee35$(_context35) {
 			while (1) {
@@ -8928,7 +8928,7 @@ describe('N.prototype.once', function () {
 		}, _callee35, this);
 	})));
 
-	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
+	it('should call a method only once', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
 		var results, data1, data2, E, element;
 		return regeneratorRuntime.wrap(function _callee36$(_context36) {
 			while (1) {
@@ -8974,7 +8974,7 @@ describe('N.prototype.once', function () {
 		}, _callee36, this);
 	})));
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
+	it('should throw an error if the object has no method', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
 		var E, element;
 		return regeneratorRuntime.wrap(function _callee37$(_context37) {
 			while (1) {
@@ -9093,7 +9093,7 @@ describe('N.prototype.firstChild', function () {
 
 describe('N.prototype.focused', function () {
 
-	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
+	it('should return true if it is focused', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
 		var body, element;
 		return regeneratorRuntime.wrap(function _callee38$(_context38) {
 			while (1) {
@@ -9139,7 +9139,7 @@ describe('N.prototype.focused', function () {
 		}, _callee38, this);
 	})));
 
-	it('should return true if it is not focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
+	it('should return true if it is not focused', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
 		var body, element;
 		return regeneratorRuntime.wrap(function _callee39$(_context39) {
 			while (1) {
@@ -11211,7 +11211,7 @@ tests$10(x$51, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
+	it('should call the given function with timeStamp', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee40() {
 		var timeStamp;
 		return regeneratorRuntime.wrap(function _callee40$(_context40) {
 			while (1) {
@@ -12201,7 +12201,7 @@ describe('StateManager', function () {
 		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
 
-	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
+	it('should start management', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee41() {
 		var states, name0, name1, name2, _ref171, _ref172, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee41$(_context41) {
@@ -12251,7 +12251,7 @@ describe('StateManager', function () {
 		}, _callee41, this);
 	})));
 
-	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
+	it('should return whether the current state is the given state or not', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee42() {
 		var states, name0, name1, name2;
 		return regeneratorRuntime.wrap(function _callee42$(_context42) {
 			while (1) {
@@ -12289,7 +12289,7 @@ describe('StateManager', function () {
 		}, _callee42, this);
 	})));
 
-	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
+	it('should go to the other state', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee43() {
 		var states, name0, name1, name2, param1, params;
 		return regeneratorRuntime.wrap(function _callee43$(_context43) {
 			while (1) {
@@ -12337,7 +12337,7 @@ describe('StateManager', function () {
 		}, _callee43, this);
 	})));
 
-	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
+	it('should return whether the current state is one of the given states', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee44() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
 		return regeneratorRuntime.wrap(function _callee44$(_context44) {
 			while (1) {
@@ -12402,7 +12402,7 @@ describe('StateManager', function () {
 		}, _callee44, this);
 	})));
 
-	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
+	it('should detect history.back()', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee45() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
 		return regeneratorRuntime.wrap(function _callee45$(_context45) {
 			while (1) {
@@ -13177,7 +13177,7 @@ function test$138(normalize) {
 
 		var tests = void 0;
 
-		before(_asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
+		before(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee46() {
 			var root, response;
 			return regeneratorRuntime.wrap(function _callee46$(_context46) {
 				while (1) {
@@ -15163,7 +15163,7 @@ describe('Vector', function () {
 });
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee47() {
 		var start, data, duration, margin, actual;
 		return regeneratorRuntime.wrap(function _callee47$(_context47) {
 			while (1) {
