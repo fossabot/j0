@@ -4155,6 +4155,21 @@ var N = function () {
 			return this;
 		}
 	}, {
+		key: 'belongsTo',
+		value: function belongsTo(anotherNode) {
+			var result = false;
+			this.forEachAncestor(function (node) {
+				result = node.equals(anotherNode);
+				return result;
+			});
+			return result;
+		}
+	}, {
+		key: 'contains',
+		value: function contains(anotherNode) {
+			return new N(anotherNode).belongsTo(this);
+		}
+	}, {
 		key: 'node',
 		get: function get() {
 			return this[nodeKey];
@@ -8908,6 +8923,23 @@ describe('N.prototype.bb', function () {
 	});
 });
 
+describe('N.prototype.belongsTo', function () {
+
+	it('should return true if the node belongs to the given node', function () {
+		var element1 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element1.belongsTo(element), true);
+	});
+
+	it('should return false if the node does not contain the given node', function () {
+		var element1 = new N();
+		var element = new N();
+		assert.equal(element1.belongsTo(element), false);
+	});
+});
+
 describe('N.prototype.childNodes', function () {
 
 	it('should return all nodes under the element', function () {
@@ -9073,6 +9105,23 @@ describe('N.prototype.clone', function () {
 		assert.equal(element1.text, text);
 		var element2 = element1.clone(false);
 		assert.equal(element2.text, '');
+	});
+});
+
+describe('N.prototype.contains', function () {
+
+	it('should return true if the node contains the given node', function () {
+		var element1 = new N();
+		var element = new N({
+			c: [element1]
+		});
+		assert.equal(element.contains(element1), true);
+	});
+
+	it('should return false if the node does not contain the given node', function () {
+		var element1 = new N();
+		var element = new N();
+		assert.equal(element.contains(element1), false);
 	});
 });
 

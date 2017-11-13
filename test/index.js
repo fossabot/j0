@@ -1,4 +1,4 @@
-const $console = require('j1/console').create('test');
+const console = require('console');
 const setup = require('./setup');
 const run = require('./run');
 const rollup = require('./rollup');
@@ -10,6 +10,6 @@ Promise.resolve()
 .then(run)
 .then(onEnd, onEnd)
 .catch((error) => {
-	$console.onError(error);
+	console.onError(error);
 	process.exit(1);
 });
