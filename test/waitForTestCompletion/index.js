@@ -32,7 +32,7 @@ async function waitForTestCompletion(
 		console.info('done');
 		return;
 	} else {
-		await wait(500);
+		await wait(1000);
 		await waitForTestCompletion(driver, console);
 	}
 }
