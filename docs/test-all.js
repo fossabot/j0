@@ -2529,12 +2529,7 @@ describe('codePoints', function () {
 	});
 });
 
-var x$30 = window;
-
-/* eslint-disable no-magic-numbers */
 describe('ConditionalSet', function () {
-
-	this.timeout(30000);
 
 	it('should create a set', function () {
 		var set = ConditionalSet.and(function (x) {
@@ -2546,41 +2541,38 @@ describe('ConditionalSet', function () {
 
 	describe('ConditionalSet.prototype.includes', function () {
 
-		var d = 0.6;
-		var dd = 0.3;
-		var offsets = [0, 1, 2].map(function (t, index, _ref16) {
-			var length = _ref16.length;
-
-			var rad = index * 2 * Math.PI / length;
-			return [dd * Math.cos(rad), dd * Math.sin(rad)];
-		});
-
-		it('[id:ConditionalSet1] should draw an expected diagram (AND)', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
+		describe('ConditionalSet:and', _asyncToGenerator(regeneratorRuntime.mark(function _callee12() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee12$(_context12) {
 				while (1) {
 					switch (_context12.prev = _context12.next) {
 						case 0:
-							set = ConditionalSet.and(function (x, y) {
-								return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
+							set = ConditionalSet.and(function () {
+								for (var _len13 = arguments.length, args = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+									args[_key13] = arguments[_key13];
+								}
+
+								return args.every(function (arg) {
+									return typeof arg === 'number';
+								});
 							}, function (x, y) {
-								return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
+								return (x + y) % 2 === 0;
 							}, function (x, y) {
-								return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
-							});
-							_context12.next = 3;
-							return assert.graphicalEqual({
-								name: 'ConditionalSet1',
-								url: x$30.root + '/ConditionalSet/ConditionalSet1.png',
-								fn: function fn(x, y) {
-									return set.includes(x, y) ? 1 : 0;
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
+								return (x + y) % 3 === 0;
 							});
 
-						case 3:
+							[['', 1, false], [0, 1, false], [1, 1, false], [3, 6, false], [6, 6, true]].forEach(function (_ref17) {
+								var _ref18 = _slicedToArray(_ref17, 3),
+								    x = _ref18[0],
+								    y = _ref18[1],
+								    expected = _ref18[2];
+
+								it('set.includes(' + x + ', ' + y + ') \u2192 ' + expected, function () {
+									assert.equal(set.includes(x, y), expected);
+								});
+							});
+
+						case 2:
 						case 'end':
 							return _context12.stop();
 					}
@@ -2588,32 +2580,38 @@ describe('ConditionalSet', function () {
 			}, _callee12, this);
 		})));
 
-		it('[id:ConditionalSet2] should draw an expected diagram (OR)', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+		describe('ConditionalSet:or', _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee13$(_context13) {
 				while (1) {
 					switch (_context13.prev = _context13.next) {
 						case 0:
-							set = ConditionalSet.or(function (x, y) {
-								return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
+							set = ConditionalSet.or(function () {
+								for (var _len14 = arguments.length, args = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+									args[_key14] = arguments[_key14];
+								}
+
+								return args.every(function (arg) {
+									return typeof arg === 'number';
+								});
 							}, function (x, y) {
-								return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
+								return (x + y) % 2 === 0;
 							}, function (x, y) {
-								return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
-							});
-							_context13.next = 3;
-							return assert.graphicalEqual({
-								name: 'ConditionalSet2',
-								url: x$30.root + '/ConditionalSet/ConditionalSet2.png',
-								fn: function fn(x, y) {
-									return set.includes(x, y) ? 1 : 0;
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
+								return (x + y) % 3 === 0;
 							});
 
-						case 3:
+							[['', 1, false], [0, 1, true], [1, 1, true], [3, 6, true], [6, 6, true]].forEach(function (_ref20) {
+								var _ref21 = _slicedToArray(_ref20, 3),
+								    x = _ref21[0],
+								    y = _ref21[1],
+								    expected = _ref21[2];
+
+								it('set.includes(' + x + ', ' + y + ') \u2192 ' + expected, function () {
+									assert.equal(set.includes(x, y), expected);
+								});
+							});
+
+						case 2:
 						case 'end':
 							return _context13.stop();
 					}
@@ -2621,32 +2619,38 @@ describe('ConditionalSet', function () {
 			}, _callee13, this);
 		})));
 
-		it('[id:ConditionalSet3] should draw an expected diagram (XOR)', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
+		describe('ConditionalSet:xor', _asyncToGenerator(regeneratorRuntime.mark(function _callee14() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee14$(_context14) {
 				while (1) {
 					switch (_context14.prev = _context14.next) {
 						case 0:
-							set = ConditionalSet.xor(function (x, y) {
-								return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
+							set = ConditionalSet.xor(function () {
+								for (var _len15 = arguments.length, args = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+									args[_key15] = arguments[_key15];
+								}
+
+								return args.every(function (arg) {
+									return typeof arg === 'number';
+								});
 							}, function (x, y) {
-								return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
+								return (x + y) % 2 === 0;
 							}, function (x, y) {
-								return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
-							});
-							_context14.next = 3;
-							return assert.graphicalEqual({
-								name: 'ConditionalSet3',
-								url: x$30.root + '/ConditionalSet/ConditionalSet3.png',
-								fn: function fn(x, y) {
-									return set.includes(x, y) ? 1 : 0;
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
+								return (x + y) % 3 === 0;
 							});
 
-						case 3:
+							[['', 1, false], [0, 1, true], [1, 1, false], [3, 6, false], [6, 6, false]].forEach(function (_ref23) {
+								var _ref24 = _slicedToArray(_ref23, 3),
+								    x = _ref24[0],
+								    y = _ref24[1],
+								    expected = _ref24[2];
+
+								it('set.includes(' + x + ', ' + y + ') \u2192 ' + expected, function () {
+									assert.equal(set.includes(x, y), expected);
+								});
+							});
+
+						case 2:
 						case 'end':
 							return _context14.stop();
 					}
@@ -2654,70 +2658,43 @@ describe('ConditionalSet', function () {
 			}, _callee14, this);
 		})));
 
-		it('[id:ConditionalSet4] should draw an expected diagram (NOT)', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
+		describe('ConditionalSet:not', _asyncToGenerator(regeneratorRuntime.mark(function _callee15() {
 			var set;
 			return regeneratorRuntime.wrap(function _callee15$(_context15) {
 				while (1) {
 					switch (_context15.prev = _context15.next) {
 						case 0:
-							set = ConditionalSet.not(function (x, y) {
-								return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
+							set = ConditionalSet.not(function () {
+								for (var _len16 = arguments.length, args = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+									args[_key16] = arguments[_key16];
+								}
+
+								return args.every(function (arg) {
+									return typeof arg === 'number';
+								});
 							}, function (x, y) {
-								return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
+								return (x + y) % 2 === 0;
 							}, function (x, y) {
-								return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
-							});
-							_context15.next = 3;
-							return assert.graphicalEqual({
-								name: 'ConditionalSet4',
-								url: x$30.root + '/ConditionalSet/ConditionalSet4.png',
-								fn: function fn(x, y) {
-									return set.includes(x, y) ? 1 : 0;
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
+								return (x + y) % 3 === 0;
 							});
 
-						case 3:
+							[['', 1, true], [0, 1, false], [1, 1, false], [3, 6, false], [6, 6, false]].forEach(function (_ref26) {
+								var _ref27 = _slicedToArray(_ref26, 3),
+								    x = _ref27[0],
+								    y = _ref27[1],
+								    expected = _ref27[2];
+
+								it('set.includes(' + x + ', ' + y + ') \u2192 ' + expected, function () {
+									assert.equal(set.includes(x, y), expected);
+								});
+							});
+
+						case 2:
 						case 'end':
 							return _context15.stop();
 					}
 				}
 			}, _callee15, this);
-		})));
-
-		it('[id:ConditionalSet5] should draw an expected diagram (Complex)', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
-			var set;
-			return regeneratorRuntime.wrap(function _callee16$(_context16) {
-				while (1) {
-					switch (_context16.prev = _context16.next) {
-						case 0:
-							set = ConditionalSet.and(ConditionalSet.or(function (x, y) {
-								return Math.hypot(x - offsets[0][0], y - offsets[0][1]) < d;
-							}, function (x, y) {
-								return Math.hypot(x - offsets[1][0], y - offsets[1][1]) < d;
-							}), ConditionalSet.not(function (x, y) {
-								return Math.hypot(x - offsets[2][0], y - offsets[2][1]) < d;
-							}));
-							_context16.next = 3;
-							return assert.graphicalEqual({
-								name: 'ConditionalSet5',
-								url: x$30.root + '/ConditionalSet/ConditionalSet5.png',
-								fn: function fn(x, y) {
-									return set.includes(x, y) ? 1 : 0;
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
-							});
-
-						case 3:
-						case 'end':
-							return _context16.stop();
-					}
-				}
-			}, _callee16, this);
 		})));
 	});
 });
@@ -2792,7 +2769,7 @@ describe('cubicBezier', function () {
 	});
 });
 
-var x$31 = CustomEvent;
+var x$30 = CustomEvent;
 
 function test$22(CustomEvent) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'CustomEvent';
@@ -2808,7 +2785,7 @@ function test$22(CustomEvent) {
 	});
 }
 
-var x$32 = Event;
+var x$31 = Event;
 
 function CustomEvent$2(event) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
@@ -2820,13 +2797,13 @@ function CustomEvent$2(event) {
 	evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	return evt;
 }
-CustomEvent$2.prototype = x$32.prototype;
+CustomEvent$2.prototype = x$31.prototype;
 
 test$22(CustomEvent$2, 'CustomEvent#j0');
 
-test$22(x$31);
+test$22(x$30);
 
-var x$33 = clearTimeout;
+var x$32 = clearTimeout;
 
 function debounce(fn) {
 	var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -2836,11 +2813,11 @@ function debounce(fn) {
 	return function () {
 		var _this2 = this;
 
-		for (var _len13 = arguments.length, args = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-			args[_key13] = arguments[_key13];
+		for (var _len17 = arguments.length, args = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+			args[_key17] = arguments[_key17];
 		}
 
-		x$33(timer);
+		x$32(timer);
 		timer = x$27(function () {
 			fn.call.apply(fn, [thisArg || _this2].concat(args));
 		}, delay);
@@ -2852,13 +2829,13 @@ describe('debounce', function () {
 
 	this.timeout(5000);
 
-	it('should call the function after the last call', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+	it('should call the function after the last call', _asyncToGenerator(regeneratorRuntime.mark(function _callee16() {
 		var result;
-		return regeneratorRuntime.wrap(function _callee17$(_context17) {
+		return regeneratorRuntime.wrap(function _callee16$(_context16) {
 			while (1) {
-				switch (_context17.prev = _context17.next) {
+				switch (_context16.prev = _context16.next) {
 					case 0:
-						_context17.next = 2;
+						_context16.next = 2;
 						return new x$3(function (resolve) {
 							var execute = debounce(function (value) {
 								resolve(value);
@@ -2866,6 +2843,35 @@ describe('debounce', function () {
 							execute(1);
 							execute(2);
 							execute(3);
+						});
+
+					case 2:
+						result = _context16.sent;
+
+						assert.equal(result, 3);
+
+					case 4:
+					case 'end':
+						return _context16.stop();
+				}
+			}
+		}, _callee16, _this3);
+	})));
+
+	it('should call the function with its context', _asyncToGenerator(regeneratorRuntime.mark(function _callee17() {
+		var result;
+		return regeneratorRuntime.wrap(function _callee17$(_context17) {
+			while (1) {
+				switch (_context17.prev = _context17.next) {
+					case 0:
+						_context17.next = 2;
+						return new x$3(function (resolve) {
+							var execute = debounce(function () {
+								resolve(this);
+							}, 100);
+							execute.call(1);
+							execute.call(2);
+							execute.call(3);
 						});
 
 					case 2:
@@ -2879,35 +2885,6 @@ describe('debounce', function () {
 				}
 			}
 		}, _callee17, _this3);
-	})));
-
-	it('should call the function with its context', _asyncToGenerator(regeneratorRuntime.mark(function _callee18() {
-		var result;
-		return regeneratorRuntime.wrap(function _callee18$(_context18) {
-			while (1) {
-				switch (_context18.prev = _context18.next) {
-					case 0:
-						_context18.next = 2;
-						return new x$3(function (resolve) {
-							var execute = debounce(function () {
-								resolve(this);
-							}, 100);
-							execute.call(1);
-							execute.call(2);
-							execute.call(3);
-						});
-
-					case 2:
-						result = _context18.sent;
-
-						assert.equal(result, 3);
-
-					case 4:
-					case 'end':
-						return _context18.stop();
-				}
-			}
-		}, _callee18, _this3);
 	})));
 });
 
@@ -2933,11 +2910,11 @@ function deepEqual(a, b) {
 
 describe('deepEqual', function () {
 
-	[[123, 123, true], [123, 321, false], ['abc', 'abc', true], ['abc', 'abd', false], [{ 0: 0, 1: 1 }, [0, 1], true], [{ 0: 0, 1: 1 }, [0, 2], false], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 4 }], true], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 5 }], false], [{ 0: 0, 1: 1, 2: [3, 4] }, undefined, false]].forEach(function (_ref24) {
-		var _ref25 = _slicedToArray(_ref24, 3),
-		    a = _ref25[0],
-		    b = _ref25[1],
-		    expected = _ref25[2];
+	[[123, 123, true], [123, 321, false], ['abc', 'abc', true], ['abc', 'abd', false], [{ 0: 0, 1: 1 }, [0, 1], true], [{ 0: 0, 1: 1 }, [0, 2], false], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 4 }], true], [{ 0: 0, 1: 1, 2: [3, 4] }, [0, 1, { 0: 3, 1: 5 }], false], [{ 0: 0, 1: 1, 2: [3, 4] }, undefined, false]].forEach(function (_ref30) {
+		var _ref31 = _slicedToArray(_ref30, 3),
+		    a = _ref31[0],
+		    b = _ref31[1],
+		    expected = _ref31[2];
 
 		it('(' + x$8.stringify(a) + ', ' + x$8.stringify(b) + ') => ' + expected, function () {
 			assert.equal(deepEqual(a, b), expected);
@@ -2945,7 +2922,7 @@ describe('deepEqual', function () {
 	});
 });
 
-var x$34 = DOMTokenList;
+var x$33 = DOMTokenList;
 
 function generator$2() {
 	var _this4 = this;
@@ -3018,34 +2995,34 @@ function test$24(generator) {
 
 test$24(generator$2, 'DOMTokenList/@iterator/j0');
 
-test$24(x$34.prototype[x.iterator]);
+test$24(x$33.prototype[x.iterator]);
 
-var x$35 = Array;
+var x$34 = Array;
 
-var x$36 = Node;
+var x$35 = Node;
 
-var isArray = x$35.isArray;
+var isArray = x$34.isArray;
 
 function isNode(x) {
-	return isInstanceOf(x, x$36);
+	return isInstanceOf(x, x$35);
 }
 
-var x$37 = Set;
+var x$36 = Set;
 
-var x$38 = Map;
+var x$37 = Map;
 
-var x$39 = getComputedStyle;
+var x$38 = getComputedStyle;
 
 function isFunction(x) {
 	return typeof x === 'function';
 }
 
-var x$40 = addEventListener;
+var x$39 = addEventListener;
 
 function checkPassiveSupport() {
 	var supportsPassive = false;
 	try {
-		x$40('test', null, x$7.defineProperty({}, 'passive', {
+		x$39('test', null, x$7.defineProperty({}, 'passive', {
 			get: function get() {
 				supportsPassive = true;
 			}
@@ -3062,9 +3039,9 @@ var addEventListenerWithOptions = checkPassiveSupport() ? function addEventListe
 	target.addEventListener(type, handler, options === true || options && options.capture);
 };
 
-var x$41 = Math;
+var x$40 = Math;
 
-var x$42 = getSelection;
+var x$41 = getSelection;
 
 var J0Range = function () {
 	function J0Range(range, container) {
@@ -3097,13 +3074,13 @@ var J0Range = function () {
 		}
 	}, {
 		key: 'equals',
-		value: function equals(_ref26) {
-			var startContainer = _ref26.startContainer,
-			    startOffset = _ref26.startOffset,
-			    _ref26$endContainer = _ref26.endContainer,
-			    endContainer = _ref26$endContainer === undefined ? startContainer : _ref26$endContainer,
-			    _ref26$endOffset = _ref26.endOffset,
-			    endOffset = _ref26$endOffset === undefined ? startOffset : _ref26$endOffset;
+		value: function equals(_ref32) {
+			var startContainer = _ref32.startContainer,
+			    startOffset = _ref32.startOffset,
+			    _ref32$endContainer = _ref32.endContainer,
+			    endContainer = _ref32$endContainer === undefined ? startContainer : _ref32$endContainer,
+			    _ref32$endOffset = _ref32.endOffset,
+			    endOffset = _ref32$endOffset === undefined ? startOffset : _ref32$endOffset;
 
 			return this.diff(startContainer, startOffset, endContainer, endOffset).length === 0;
 		}
@@ -3115,7 +3092,7 @@ var J0Range = function () {
 	}, {
 		key: 'apply',
 		value: function apply() {
-			var selection = x$42();
+			var selection = x$41();
 			selection.removeAllRanges();
 			selection.addRange(this.range);
 		}
@@ -3358,12 +3335,12 @@ var J0Range = function () {
 					break;
 			}
 			function selectNearest(candidates) {
-				return candidates.sort(function (_ref27, _ref28) {
-					var _ref30 = _slicedToArray(_ref27, 1),
-					    a = _ref30[0];
+				return candidates.sort(function (_ref33, _ref34) {
+					var _ref36 = _slicedToArray(_ref33, 1),
+					    a = _ref36[0];
 
-					var _ref29 = _slicedToArray(_ref28, 1),
-					    b = _ref29[0];
+					var _ref35 = _slicedToArray(_ref34, 1),
+					    b = _ref35[0];
 
 					return a < b ? -1 : 1;
 				}).shift().slice(1, 3);
@@ -3597,7 +3574,7 @@ var N = function () {
 		_classCallCheck(this, N);
 
 		assign(this, {
-			listeners: new x$37()
+			listeners: new x$36()
 		});
 		if (source instanceof N) {
 			this[nodeKey] = source.node;
@@ -3606,13 +3583,13 @@ var N = function () {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			var _ref31 = source || {},
-			    t = _ref31.t,
-			    a = _ref31.a,
-			    c = _ref31.c,
-			    e = _ref31.e,
-			    n = _ref31.n,
-			    o = _ref31.o;
+			var _ref37 = source || {},
+			    t = _ref37.t,
+			    a = _ref37.a,
+			    c = _ref37.c,
+			    e = _ref37.e,
+			    n = _ref37.n,
+			    o = _ref37.o;
 
 			this[nodeKey] = wrap(n ? x$4.createElementNS(n, t, o) : x$4.createElement(t || 'div')).node;
 			if (c) {
@@ -3668,8 +3645,8 @@ var N = function () {
 	}, {
 		key: 'setPrevious',
 		value: function setPrevious() {
-			for (var _len14 = arguments.length, elements = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-				elements[_key14] = arguments[_key14];
+			for (var _len18 = arguments.length, elements = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+				elements[_key18] = arguments[_key18];
 			}
 
 			while (0 < elements.length) {
@@ -3683,8 +3660,8 @@ var N = function () {
 		value: function setNext() {
 			var lastElement = this.next;
 
-			for (var _len15 = arguments.length, elements = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-				elements[_key15] = arguments[_key15];
+			for (var _len19 = arguments.length, elements = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
+				elements[_key19] = arguments[_key19];
 			}
 
 			while (0 < elements.length) {
@@ -3727,8 +3704,8 @@ var N = function () {
 	}, {
 		key: 'replaceWith',
 		value: function replaceWith() {
-			for (var _len16 = arguments.length, newChilds = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
-				newChilds[_key16] = arguments[_key16];
+			for (var _len20 = arguments.length, newChilds = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
+				newChilds[_key20] = arguments[_key20];
 			}
 
 			var lastNewChild = wrap(newChilds.pop());
@@ -3740,8 +3717,8 @@ var N = function () {
 		value: function prepend() {
 			var _this7 = this;
 
-			for (var _len17 = arguments.length, elements = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
-				elements[_key17] = arguments[_key17];
+			for (var _len21 = arguments.length, elements = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
+				elements[_key21] = arguments[_key21];
 			}
 
 			elements.forEach(function (element) {
@@ -3754,8 +3731,8 @@ var N = function () {
 		value: function append() {
 			var node = this.node;
 
-			for (var _len18 = arguments.length, elements = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-				elements[_key18] = arguments[_key18];
+			for (var _len22 = arguments.length, elements = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+				elements[_key22] = arguments[_key22];
 			}
 
 			elements.forEach(function (element) {
@@ -3796,8 +3773,8 @@ var N = function () {
 	}, {
 		key: 'setAttribute',
 		value: function setAttribute(name) {
-			for (var _len19 = arguments.length, value = Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
-				value[_key19 - 1] = arguments[_key19];
+			for (var _len23 = arguments.length, value = Array(_len23 > 1 ? _len23 - 1 : 0), _key23 = 1; _key23 < _len23; _key23++) {
+				value[_key23 - 1] = arguments[_key23];
 			}
 
 			this.node.setAttribute(name, value.join(' '));
@@ -3811,8 +3788,8 @@ var N = function () {
 	}, {
 		key: 'removeAttribute',
 		value: function removeAttribute() {
-			for (var _len20 = arguments.length, names = Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-				names[_key20] = arguments[_key20];
+			for (var _len24 = arguments.length, names = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
+				names[_key24] = arguments[_key24];
 			}
 
 			var _iteratorNormalCompletion24 = true;
@@ -3908,7 +3885,7 @@ var N = function () {
 	}, {
 		key: 'emit',
 		value: function emit(eventName, detail) {
-			var event = new x$31(eventName, { detail: detail });
+			var event = new x$30(eventName, { detail: detail });
 			this.node.dispatchEvent(event);
 			return this;
 		}
@@ -3926,8 +3903,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len21 = arguments.length, args = Array(_len21), _key21 = 0; _key21 < _len21; _key21++) {
-					args[_key21] = arguments[_key21];
+				for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
+					args[_key25] = arguments[_key25];
 				}
 
 				args.forEach(function (arg) {
@@ -3944,8 +3921,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len22 = arguments.length, args = Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
-					args[_key22] = arguments[_key22];
+				for (var _len26 = arguments.length, args = Array(_len26), _key26 = 0; _key26 < _len26; _key26++) {
+					args[_key26] = arguments[_key26];
 				}
 
 				args.forEach(function (arg) {
@@ -3962,8 +3939,8 @@ var N = function () {
 			var classList = this.classList;
 
 			if (classList) {
-				for (var _len23 = arguments.length, args = Array(_len23), _key23 = 0; _key23 < _len23; _key23++) {
-					args[_key23] = arguments[_key23];
+				for (var _len27 = arguments.length, args = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
+					args[_key27] = arguments[_key27];
 				}
 
 				args.forEach(function (arg) {
@@ -3979,8 +3956,8 @@ var N = function () {
 
 			var classList = this.classList;
 
-			for (var _len24 = arguments.length, args = Array(_len24), _key24 = 0; _key24 < _len24; _key24++) {
-				args[_key24] = arguments[_key24];
+			for (var _len28 = arguments.length, args = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
+				args[_key28] = arguments[_key28];
 			}
 
 			if (classList) {
@@ -4012,7 +3989,7 @@ var N = function () {
 					result.t = tagName;
 				}
 				if (0 < attributes.size) {
-					result.a = x$35.from(attributes);
+					result.a = x$34.from(attributes);
 				}
 				if (0 < childNodes.length) {
 					result.c = childNodes.map(function (node) {
@@ -4149,7 +4126,7 @@ var N = function () {
 	}, {
 		key: 'modifySelection',
 		value: function modifySelection(expand, direction, anchorBB) {
-			var selection = x$42();
+			var selection = x$41();
 			var range = new J0Range(selection.getRangeAt(0), this);
 			selection.removeAllRanges();
 			range.modify(expand ? 'expand' : 'move', direction, anchorBB);
@@ -4210,12 +4187,12 @@ var N = function () {
 	}, {
 		key: 'childNodes',
 		get: function get() {
-			return x$35.from(this.node.childNodes).map(wrap);
+			return x$34.from(this.node.childNodes).map(wrap);
 		}
 	}, {
 		key: 'children',
 		get: function get() {
-			return x$35.from(this.node.children).map(wrap);
+			return x$34.from(this.node.children).map(wrap);
 		}
 	}, {
 		key: 'firstChild',
@@ -4239,7 +4216,7 @@ var N = function () {
 	}, {
 		key: 'attributes',
 		get: function get() {
-			var result = new x$38();
+			var result = new x$37();
 			var attributes = this.node.attributes;
 
 			if (attributes) {
@@ -4249,9 +4226,9 @@ var N = function () {
 
 				try {
 					for (var _iterator25 = attributes[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
-						var _ref32 = _step25.value;
-						var name = _ref32.name;
-						var _value = _ref32.value;
+						var _ref38 = _step25.value;
+						var name = _ref38.name;
+						var _value = _ref38.value;
 
 						result.set(name, _value);
 					}
@@ -4285,7 +4262,7 @@ var N = function () {
 	}, {
 		key: 'computedStyle',
 		get: function get() {
-			return x$39(this.node);
+			return x$38(this.node);
 		}
 	}, {
 		key: 'tagName',
@@ -4300,12 +4277,12 @@ var N = function () {
 	}, {
 		key: 'isElementNode',
 		get: function get() {
-			return this.nodeType === x$36.ELEMENT_NODE;
+			return this.nodeType === x$35.ELEMENT_NODE;
 		}
 	}, {
 		key: 'isTextNode',
 		get: function get() {
-			return this.nodeType === x$36.TEXT_NODE;
+			return this.nodeType === x$35.TEXT_NODE;
 		}
 	}, {
 		key: 'focused',
@@ -4357,12 +4334,12 @@ var N = function () {
 				if (!contenteditable) {
 					this.removeAttribute('contenteditable');
 				}
-				node._textDirection = [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref33) {
-					var _ref34 = _slicedToArray(_ref33, 2),
-					    y = _ref34[0],
-					    x$$1 = _ref34[1];
+				node._textDirection = [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref39) {
+					var _ref40 = _slicedToArray(_ref39, 2),
+					    y = _ref40[0],
+					    x$$1 = _ref40[1];
 
-					var arg = x$41.atan2(y, x$$1) / x$41.PI;
+					var arg = x$40.atan2(y, x$$1) / x$40.PI;
 					var absArg = arg < 0 ? -arg : arg;
 					if (absArg < 0.25) {
 						return 'lr';
@@ -4380,33 +4357,33 @@ var N = function () {
 	}], [{
 		key: 'ready',
 		value: function () {
-			var _ref35 = _asyncToGenerator(regeneratorRuntime.mark(function _callee19(fn) {
+			var _ref41 = _asyncToGenerator(regeneratorRuntime.mark(function _callee18(fn) {
 				var body;
-				return regeneratorRuntime.wrap(function _callee19$(_context19) {
+				return regeneratorRuntime.wrap(function _callee18$(_context18) {
 					while (1) {
-						switch (_context19.prev = _context19.next) {
+						switch (_context18.prev = _context18.next) {
 							case 0:
-								_context19.next = 2;
+								_context18.next = 2;
 								return getBody;
 
 							case 2:
-								body = _context19.sent;
+								body = _context18.sent;
 
 								if (fn) {
 									fn(body);
 								}
-								return _context19.abrupt('return', body);
+								return _context18.abrupt('return', body);
 
 							case 5:
 							case 'end':
-								return _context19.stop();
+								return _context18.stop();
 						}
 					}
-				}, _callee19, this);
+				}, _callee18, this);
 			}));
 
 			function ready(_x50) {
-				return _ref35.apply(this, arguments);
+				return _ref41.apply(this, arguments);
 			}
 
 			return ready;
@@ -4448,8 +4425,8 @@ function test$26(forEach) {
 			var classList = element.classList;
 
 			classList.forEach(function () {
-				for (var _len25 = arguments.length, args = Array(_len25), _key25 = 0; _key25 < _len25; _key25++) {
-					args[_key25] = arguments[_key25];
+				for (var _len29 = arguments.length, args = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
+					args[_key29] = arguments[_key29];
 				}
 
 				actual.push(args);
@@ -4460,7 +4437,7 @@ function test$26(forEach) {
 	});
 }
 
-test$26(x$34.prototype.forEach);
+test$26(x$33.prototype.forEach);
 
 function emitAll(eventName, data, selector, rootElement) {
 	N.findAll(selector, rootElement).forEach(function (element) {
@@ -4505,10 +4482,10 @@ describe('emitAll', function () {
 		emitAll(eventName, eventData, '.' + className, element);
 		var expected = [element1, element2, element5, element3, element4];
 		assert.equal(results.length, expected.length);
-		results.forEach(function (_ref36, index) {
-			var _ref37 = _slicedToArray(_ref36, 2),
-			    element = _ref37[0],
-			    data = _ref37[1];
+		results.forEach(function (_ref42, index) {
+			var _ref43 = _slicedToArray(_ref42, 2),
+			    element = _ref43[0],
+			    data = _ref43[1];
 
 			assert.equal(data, eventData);
 			assert.equal(element.equals(expected[index]), true);
@@ -4522,7 +4499,7 @@ var EventEmitter = function () {
 	function EventEmitter() {
 		_classCallCheck(this, EventEmitter);
 
-		this[listenersKey] = new x$37();
+		this[listenersKey] = new x$36();
 	}
 
 	_createClass(EventEmitter, [{
@@ -4530,8 +4507,8 @@ var EventEmitter = function () {
 		value: function emit(type) {
 			var _this16 = this;
 
-			for (var _len26 = arguments.length, data = Array(_len26 > 1 ? _len26 - 1 : 0), _key26 = 1; _key26 < _len26; _key26++) {
-				data[_key26 - 1] = arguments[_key26];
+			for (var _len30 = arguments.length, data = Array(_len30 > 1 ? _len30 - 1 : 0), _key30 = 1; _key30 < _len30; _key30++) {
+				data[_key30 - 1] = arguments[_key30];
 			}
 
 			this[listenersKey].forEach(function (item, index, listeners) {
@@ -4591,26 +4568,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.on(name1, function () {
-			for (var _len27 = arguments.length, data = Array(_len27), _key27 = 0; _key27 < _len27; _key27++) {
-				data[_key27] = arguments[_key27];
+			for (var _len31 = arguments.length, data = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
+				data[_key31] = arguments[_key31];
 			}
 
 			results.push([data, '1']);
 		}).on(name1, function () {
-			for (var _len28 = arguments.length, data = Array(_len28), _key28 = 0; _key28 < _len28; _key28++) {
-				data[_key28] = arguments[_key28];
+			for (var _len32 = arguments.length, data = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
+				data[_key32] = arguments[_key32];
 			}
 
 			results.push([data, '2']);
 		}).on(name2, function () {
-			for (var _len29 = arguments.length, data = Array(_len29), _key29 = 0; _key29 < _len29; _key29++) {
-				data[_key29] = arguments[_key29];
+			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
+				data[_key33] = arguments[_key33];
 			}
 
 			results.push([data, '3']);
 		}).on(name2, function () {
-			for (var _len30 = arguments.length, data = Array(_len30), _key30 = 0; _key30 < _len30; _key30++) {
-				data[_key30] = arguments[_key30];
+			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
+				data[_key34] = arguments[_key34];
 			}
 
 			results.push([data, '4']);
@@ -4627,26 +4604,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len31 = arguments.length, data = Array(_len31), _key31 = 0; _key31 < _len31; _key31++) {
-				data[_key31] = arguments[_key31];
+			for (var _len35 = arguments.length, data = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
+				data[_key35] = arguments[_key35];
 			}
 
 			results.push([data, '1']);
 		}).once(name1, function () {
-			for (var _len32 = arguments.length, data = Array(_len32), _key32 = 0; _key32 < _len32; _key32++) {
-				data[_key32] = arguments[_key32];
+			for (var _len36 = arguments.length, data = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
+				data[_key36] = arguments[_key36];
 			}
 
 			results.push([data, '2']);
 		}).once(name2, function () {
-			for (var _len33 = arguments.length, data = Array(_len33), _key33 = 0; _key33 < _len33; _key33++) {
-				data[_key33] = arguments[_key33];
+			for (var _len37 = arguments.length, data = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
+				data[_key37] = arguments[_key37];
 			}
 
 			results.push([data, '3']);
 		}).once(name2, function () {
-			for (var _len34 = arguments.length, data = Array(_len34), _key34 = 0; _key34 < _len34; _key34++) {
-				data[_key34] = arguments[_key34];
+			for (var _len38 = arguments.length, data = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
+				data[_key38] = arguments[_key38];
 			}
 
 			results.push([data, '4']);
@@ -4664,8 +4641,8 @@ describe('EventEmitter', function () {
 		var results = [];
 		var count = 0;
 		function listener() {
-			for (var _len35 = arguments.length, data = Array(_len35), _key35 = 0; _key35 < _len35; _key35++) {
-				data[_key35] = arguments[_key35];
+			for (var _len39 = arguments.length, data = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
+				data[_key39] = arguments[_key39];
 			}
 
 			results.push([data, count++]);
@@ -4683,26 +4660,26 @@ describe('EventEmitter', function () {
 		var value3 = Date.now() + '-5';
 		var results = [];
 		emitter.once(name1, function () {
-			for (var _len36 = arguments.length, data = Array(_len36), _key36 = 0; _key36 < _len36; _key36++) {
-				data[_key36] = arguments[_key36];
+			for (var _len40 = arguments.length, data = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
+				data[_key40] = arguments[_key40];
 			}
 
 			results.push([data, '1']);
 		}).once(name1, function () {
-			for (var _len37 = arguments.length, data = Array(_len37), _key37 = 0; _key37 < _len37; _key37++) {
-				data[_key37] = arguments[_key37];
+			for (var _len41 = arguments.length, data = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
+				data[_key41] = arguments[_key41];
 			}
 
 			results.push([data, '2']);
 		}).once(name2, function () {
-			for (var _len38 = arguments.length, data = Array(_len38), _key38 = 0; _key38 < _len38; _key38++) {
-				data[_key38] = arguments[_key38];
+			for (var _len42 = arguments.length, data = Array(_len42), _key42 = 0; _key42 < _len42; _key42++) {
+				data[_key42] = arguments[_key42];
 			}
 
 			results.push([data, '3']);
 		}).once(name2, function () {
-			for (var _len39 = arguments.length, data = Array(_len39), _key39 = 0; _key39 < _len39; _key39++) {
-				data[_key39] = arguments[_key39];
+			for (var _len43 = arguments.length, data = Array(_len43), _key43 = 0; _key43 < _len43; _key43++) {
+				data[_key43] = arguments[_key43];
 			}
 
 			results.push([data, '4']);
@@ -4723,12 +4700,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator26 = iterable[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-					var _ref38 = _step26.value;
+					var _ref44 = _step26.value;
 
-					var _ref39 = _slicedToArray(_ref38, 2);
+					var _ref45 = _slicedToArray(_ref44, 2);
 
-					var key = _ref39[0];
-					var value = _ref39[1];
+					var key = _ref45[0];
+					var value = _ref45[1];
 
 					this.append(key, value);
 				}
@@ -4757,9 +4734,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref40) {
-				var _ref41 = _slicedToArray(_ref40, 1),
-				    itemName = _ref41[0];
+			return this.data.findIndex(function (_ref46) {
+				var _ref47 = _slicedToArray(_ref46, 1),
+				    itemName = _ref47[0];
 
 				return itemName === name;
 			});
@@ -4787,9 +4764,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref42) {
-				var _ref43 = _slicedToArray(_ref42, 1),
-				    itemName = _ref43[0];
+			this.data = this.data.filter(function (_ref48) {
+				var _ref49 = _slicedToArray(_ref48, 1),
+				    itemName = _ref49[0];
 
 				return itemName !== name;
 			});
@@ -4797,9 +4774,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref44) {
-				var _ref45 = _slicedToArray(_ref44, 1),
-				    itemName = _ref45[0];
+			var found = this.data.find(function (_ref50) {
+				var _ref51 = _slicedToArray(_ref50, 1),
+				    itemName = _ref51[0];
 
 				return itemName === name;
 			});
@@ -4809,10 +4786,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref46) {
-				var _ref47 = _slicedToArray(_ref46, 2),
-				    itemName = _ref47[0],
-				    value = _ref47[1];
+			this.data.forEach(function (_ref52) {
+				var _ref53 = _slicedToArray(_ref52, 2),
+				    itemName = _ref53[0],
+				    value = _ref53[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4823,11 +4800,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref48) {
-				var _ref49 = _slicedToArray(_ref48, 2),
-				    name = _ref49[0],
-				    _ref49$ = _ref49[1],
-				    value = _ref49$ === undefined ? '' : _ref49$;
+			return this.data.map(function (_ref54) {
+				var _ref55 = _slicedToArray(_ref54, 2),
+				    name = _ref55[0],
+				    _ref55$ = _ref55[1],
+				    value = _ref55$ === undefined ? '' : _ref55$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -4990,8 +4967,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref50) {
-			var headers = _ref50.headers;
+		value: function inheritFrom(input, body, _ref56) {
+			var headers = _ref56.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -5079,10 +5056,10 @@ var Response$1 = function (_Body$2) {
 	return Response$1;
 }(Body$1);
 
-var x$43 = Headers;
+var x$42 = Headers;
 
 function parse$2(rawHeaders) {
-	var headers = new x$43();
+	var headers = new x$42();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
@@ -5099,12 +5076,12 @@ function parse$2(rawHeaders) {
 	return headers;
 }
 
-var x$44 = XMLHttpRequest;
+var x$43 = XMLHttpRequest;
 
 function fetch$2(input, init, cb) {
 	return new x$3(function (resolve, reject) {
 		var request = new Request$1(input, init);
-		var xhr = new x$44();
+		var xhr = new x$43();
 		if (isFunction(cb)) {
 			cb(xhr);
 		}
@@ -5135,12 +5112,12 @@ function fetch$2(input, init, cb) {
 
 		try {
 			for (var _iterator27 = request.headers.entries()[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-				var _ref51 = _step27.value;
+				var _ref57 = _step27.value;
 
-				var _ref52 = _slicedToArray(_ref51, 2);
+				var _ref58 = _slicedToArray(_ref57, 2);
 
-				var name = _ref52[0];
-				var value = _ref52[1];
+				var name = _ref58[0];
+				var value = _ref58[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -5266,13 +5243,13 @@ describe('formatDate', function () {
 	try {
 
 		for (var _iterator28 = tests$4[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-			var _ref53 = _step28.value;
+			var _ref59 = _step28.value;
 
-			var _ref54 = _slicedToArray(_ref53, 3);
+			var _ref60 = _slicedToArray(_ref59, 3);
 
-			var src = _ref54[0];
-			var _template = _ref54[1];
-			var expected = _ref54[2];
+			var src = _ref60[0];
+			var _template = _ref60[1];
+			var expected = _ref60[2];
 
 			_loop(src, expected, _template);
 		}
@@ -5406,7 +5383,7 @@ function tests$5(Headers) {
 
 tests$5(Headers$1, 'Headers/j0');
 
-tests$5(x$43);
+tests$5(x$42);
 
 function generator$4() {
 	var _this21 = this;
@@ -5479,12 +5456,14 @@ function test$28(generator) {
 
 test$28(generator$4, 'HTMLCollection/@iterator/j0');
 
-var x$45 = HTMLCollection;
+var x$44 = HTMLCollection;
 
-test$28(x$45.prototype[x.iterator]);
+test$28(x$44.prototype[x.iterator]);
+
+var x$45 = window;
 
 function innerHeight() {
-	return x$30.innerHeight;
+	return x$45.innerHeight;
 }
 
 describe('innerHeight', function () {
@@ -5495,7 +5474,7 @@ describe('innerHeight', function () {
 });
 
 function innerWidth() {
-	return x$30.innerWidth;
+	return x$45.innerWidth;
 }
 
 describe('innerWidth', function () {
@@ -5921,11 +5900,11 @@ describe('Iterator', function () {
 });
 
 function forEachDirections(fn, thisArg) {
-	[['lrtb', [['direction', 'ltr'], ['unicode-bidi', 'normal']], ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', [['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', [['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', [['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', [['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', [['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref55) {
-		var _ref56 = _slicedToArray(_ref55, 3),
-		    textDirectionType = _ref56[0],
-		    styleDeclarations = _ref56[1],
-		    visualDirections = _ref56[2];
+	[['lrtb', [['direction', 'ltr'], ['unicode-bidi', 'normal']], ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', [['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', [['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', [['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', [['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', [['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref61) {
+		var _ref62 = _slicedToArray(_ref61, 3),
+		    textDirectionType = _ref62[0],
+		    styleDeclarations = _ref62[1],
+		    visualDirections = _ref62[2];
 
 		fn.call(thisArg, textDirectionType, styleDeclarations.map(function (declaration) {
 			return declaration.join(':') + ';';
@@ -6173,10 +6152,10 @@ function test_modify(textDirectionType, visualDirections) {
 			return;
 		}
 
-		visualDirections.forEach(function (_ref57) {
-			var _ref58 = _slicedToArray(_ref57, 2),
-			    visualDirection = _ref58[0],
-			    textDirection = _ref58[1];
+		visualDirections.forEach(function (_ref63) {
+			var _ref64 = _slicedToArray(_ref63, 2),
+			    visualDirection = _ref64[0],
+			    textDirection = _ref64[1];
 
 			switch (textDirection) {
 				case 'mainF':
@@ -6328,12 +6307,12 @@ function test_modify(textDirectionType, visualDirections) {
 					});
 					break;
 				case 'crossF':
-					it('[' + textDirectionType + '] should move forward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+					it('[' + textDirectionType + '] should move forward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee19() {
 						var range, _iteratorNormalCompletion37, _didIteratorError37, _iteratorError37, _iterator37, _step37, textNode, index;
 
-						return regeneratorRuntime.wrap(function _callee20$(_context20) {
+						return regeneratorRuntime.wrap(function _callee19$(_context19) {
 							while (1) {
-								switch (_context20.prev = _context20.next) {
+								switch (_context19.prev = _context19.next) {
 									case 0:
 										range = new J0Range(null, this.element);
 
@@ -6346,7 +6325,7 @@ function test_modify(textDirectionType, visualDirections) {
 										_iteratorNormalCompletion37 = true;
 										_didIteratorError37 = false;
 										_iteratorError37 = undefined;
-										_context20.prev = 5;
+										_context19.prev = 5;
 										for (_iterator37 = this.textNodes.slice(1)[Symbol.iterator](); !(_iteratorNormalCompletion37 = (_step37 = _iterator37.next()).done); _iteratorNormalCompletion37 = true) {
 											textNode = _step37.value;
 											index = this.textNodes.indexOf(textNode);
@@ -6359,32 +6338,112 @@ function test_modify(textDirectionType, visualDirections) {
 											// }
 											checkRange(range, textNode, 0);
 										}
-										_context20.next = 13;
+										_context19.next = 13;
 										break;
 
 									case 9:
-										_context20.prev = 9;
-										_context20.t0 = _context20['catch'](5);
+										_context19.prev = 9;
+										_context19.t0 = _context19['catch'](5);
 										_didIteratorError37 = true;
-										_iteratorError37 = _context20.t0;
+										_iteratorError37 = _context19.t0;
 
 									case 13:
-										_context20.prev = 13;
-										_context20.prev = 14;
+										_context19.prev = 13;
+										_context19.prev = 14;
 
 										if (!_iteratorNormalCompletion37 && _iterator37.return) {
 											_iterator37.return();
 										}
 
 									case 16:
-										_context20.prev = 16;
+										_context19.prev = 16;
 
 										if (!_didIteratorError37) {
-											_context20.next = 19;
+											_context19.next = 19;
 											break;
 										}
 
 										throw _iteratorError37;
+
+									case 19:
+										return _context19.finish(16);
+
+									case 20:
+										return _context19.finish(13);
+
+									case 21:
+										assert.deepEqual(this.events, []);
+										range.modify('move', visualDirection);
+										range.modify('move', visualDirection);
+										assert.deepEqual(this.events, ['range:lastline', 'range:lastline']);
+
+									case 25:
+									case 'end':
+										return _context19.stop();
+								}
+							}
+						}, _callee19, this, [[5, 9, 13, 21], [14,, 16, 20]]);
+					})));
+					it('[' + textDirectionType + '] should move forward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee20() {
+						var range, _iteratorNormalCompletion38, _didIteratorError38, _iteratorError38, _iterator38, _step38, textNode, index;
+
+						return regeneratorRuntime.wrap(function _callee20$(_context20) {
+							while (1) {
+								switch (_context20.prev = _context20.next) {
+									case 0:
+										range = new J0Range(null, this.element);
+
+										range.set(this.firstTextNode, 1);
+										// if (this.debug) {
+										// 	this.timeout(8000);
+										// 	range.apply();
+										// 	await wait(800);
+										// }
+										_iteratorNormalCompletion38 = true;
+										_didIteratorError38 = false;
+										_iteratorError38 = undefined;
+										_context20.prev = 5;
+										for (_iterator38 = this.textNodes.slice(1)[Symbol.iterator](); !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
+											textNode = _step38.value;
+											index = this.textNodes.indexOf(textNode);
+
+											checkRange.prefix = '[' + index + ']';
+											range.modify('move', visualDirection);
+											if (this.debug) {
+												x$25.log('-------- ' + checkRange.prefix + ' ' + x$8.stringify(range.startContainer.textContent) + ' ' + range.startOffset);
+												// range.apply();
+												// await wait(800);
+											}
+											checkRange(range, textNode, index === 3 ? 1 : function (value) {
+												return 1 <= value;
+											});
+										}
+										_context20.next = 13;
+										break;
+
+									case 9:
+										_context20.prev = 9;
+										_context20.t0 = _context20['catch'](5);
+										_didIteratorError38 = true;
+										_iteratorError38 = _context20.t0;
+
+									case 13:
+										_context20.prev = 13;
+										_context20.prev = 14;
+
+										if (!_iteratorNormalCompletion38 && _iterator38.return) {
+											_iterator38.return();
+										}
+
+									case 16:
+										_context20.prev = 16;
+
+										if (!_didIteratorError38) {
+											_context20.next = 19;
+											break;
+										}
+
+										throw _iteratorError38;
 
 									case 19:
 										return _context20.finish(16);
@@ -6405,86 +6464,6 @@ function test_modify(textDirectionType, visualDirections) {
 							}
 						}, _callee20, this, [[5, 9, 13, 21], [14,, 16, 20]]);
 					})));
-					it('[' + textDirectionType + '] should move forward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
-						var range, _iteratorNormalCompletion38, _didIteratorError38, _iteratorError38, _iterator38, _step38, textNode, index;
-
-						return regeneratorRuntime.wrap(function _callee21$(_context21) {
-							while (1) {
-								switch (_context21.prev = _context21.next) {
-									case 0:
-										range = new J0Range(null, this.element);
-
-										range.set(this.firstTextNode, 1);
-										// if (this.debug) {
-										// 	this.timeout(8000);
-										// 	range.apply();
-										// 	await wait(800);
-										// }
-										_iteratorNormalCompletion38 = true;
-										_didIteratorError38 = false;
-										_iteratorError38 = undefined;
-										_context21.prev = 5;
-										for (_iterator38 = this.textNodes.slice(1)[Symbol.iterator](); !(_iteratorNormalCompletion38 = (_step38 = _iterator38.next()).done); _iteratorNormalCompletion38 = true) {
-											textNode = _step38.value;
-											index = this.textNodes.indexOf(textNode);
-
-											checkRange.prefix = '[' + index + ']';
-											range.modify('move', visualDirection);
-											if (this.debug) {
-												x$25.log('-------- ' + checkRange.prefix + ' ' + x$8.stringify(range.startContainer.textContent) + ' ' + range.startOffset);
-												// range.apply();
-												// await wait(800);
-											}
-											checkRange(range, textNode, index === 3 ? 1 : function (value) {
-												return 1 <= value;
-											});
-										}
-										_context21.next = 13;
-										break;
-
-									case 9:
-										_context21.prev = 9;
-										_context21.t0 = _context21['catch'](5);
-										_didIteratorError38 = true;
-										_iteratorError38 = _context21.t0;
-
-									case 13:
-										_context21.prev = 13;
-										_context21.prev = 14;
-
-										if (!_iteratorNormalCompletion38 && _iterator38.return) {
-											_iterator38.return();
-										}
-
-									case 16:
-										_context21.prev = 16;
-
-										if (!_didIteratorError38) {
-											_context21.next = 19;
-											break;
-										}
-
-										throw _iteratorError38;
-
-									case 19:
-										return _context21.finish(16);
-
-									case 20:
-										return _context21.finish(13);
-
-									case 21:
-										assert.deepEqual(this.events, []);
-										range.modify('move', visualDirection);
-										range.modify('move', visualDirection);
-										assert.deepEqual(this.events, ['range:lastline', 'range:lastline']);
-
-									case 25:
-									case 'end':
-										return _context21.stop();
-								}
-							}
-						}, _callee21, this, [[5, 9, 13, 21], [14,, 16, 20]]);
-					})));
 					it('[' + textDirectionType + '] should move forward along to cross axis [end of lines]', function () {
 						var range = new J0Range(null, this.element);
 						range.set(this.textNodes[1], this.textNodes[1].textContent.trim().length);
@@ -6493,12 +6472,12 @@ function test_modify(textDirectionType, visualDirections) {
 					});
 					break;
 				case 'crossB':
-					it('[' + textDirectionType + '] should move backward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
+					it('[' + textDirectionType + '] should move backward along to cross axis [start of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee21() {
 						var range, _iteratorNormalCompletion39, _didIteratorError39, _iteratorError39, _iterator39, _step39, textNode, index;
 
-						return regeneratorRuntime.wrap(function _callee22$(_context22) {
+						return regeneratorRuntime.wrap(function _callee21$(_context21) {
 							while (1) {
-								switch (_context22.prev = _context22.next) {
+								switch (_context21.prev = _context21.next) {
 									case 0:
 										range = new J0Range(null, this.element);
 
@@ -6512,7 +6491,7 @@ function test_modify(textDirectionType, visualDirections) {
 										_iteratorNormalCompletion39 = true;
 										_didIteratorError39 = false;
 										_iteratorError39 = undefined;
-										_context22.prev = 5;
+										_context21.prev = 5;
 										for (_iterator39 = this.textNodes.slice(0, -1).reverse()[Symbol.iterator](); !(_iteratorNormalCompletion39 = (_step39 = _iterator39.next()).done); _iteratorNormalCompletion39 = true) {
 											textNode = _step39.value;
 											index = this.textNodes.indexOf(textNode);
@@ -6526,38 +6505,38 @@ function test_modify(textDirectionType, visualDirections) {
 											// }
 											checkRange(range, textNode, 0);
 										}
-										_context22.next = 13;
+										_context21.next = 13;
 										break;
 
 									case 9:
-										_context22.prev = 9;
-										_context22.t0 = _context22['catch'](5);
+										_context21.prev = 9;
+										_context21.t0 = _context21['catch'](5);
 										_didIteratorError39 = true;
-										_iteratorError39 = _context22.t0;
+										_iteratorError39 = _context21.t0;
 
 									case 13:
-										_context22.prev = 13;
-										_context22.prev = 14;
+										_context21.prev = 13;
+										_context21.prev = 14;
 
 										if (!_iteratorNormalCompletion39 && _iterator39.return) {
 											_iterator39.return();
 										}
 
 									case 16:
-										_context22.prev = 16;
+										_context21.prev = 16;
 
 										if (!_didIteratorError39) {
-											_context22.next = 19;
+											_context21.next = 19;
 											break;
 										}
 
 										throw _iteratorError39;
 
 									case 19:
-										return _context22.finish(16);
+										return _context21.finish(16);
 
 									case 20:
-										return _context22.finish(13);
+										return _context21.finish(13);
 
 									case 21:
 										x$25.log('event test');
@@ -6568,17 +6547,17 @@ function test_modify(textDirectionType, visualDirections) {
 
 									case 26:
 									case 'end':
-										return _context22.stop();
+										return _context21.stop();
 								}
 							}
-						}, _callee22, this, [[5, 9, 13, 21], [14,, 16, 20]]);
+						}, _callee21, this, [[5, 9, 13, 21], [14,, 16, 20]]);
 					})));
-					it('[' + textDirectionType + '] should move backward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee23() {
+					it('[' + textDirectionType + '] should move backward along to cross axis [middle of lines]', _asyncToGenerator(regeneratorRuntime.mark(function _callee22() {
 						var range, _iteratorNormalCompletion40, _didIteratorError40, _iteratorError40, _iterator40, _step40, textNode, index;
 
-						return regeneratorRuntime.wrap(function _callee23$(_context23) {
+						return regeneratorRuntime.wrap(function _callee22$(_context22) {
 							while (1) {
-								switch (_context23.prev = _context23.next) {
+								switch (_context22.prev = _context22.next) {
 									case 0:
 										range = new J0Range(null, this.element);
 
@@ -6591,7 +6570,7 @@ function test_modify(textDirectionType, visualDirections) {
 										_iteratorNormalCompletion40 = true;
 										_didIteratorError40 = false;
 										_iteratorError40 = undefined;
-										_context23.prev = 5;
+										_context22.prev = 5;
 										for (_iterator40 = this.textNodes.slice(0, -1).reverse()[Symbol.iterator](); !(_iteratorNormalCompletion40 = (_step40 = _iterator40.next()).done); _iteratorNormalCompletion40 = true) {
 											textNode = _step40.value;
 											index = this.textNodes.indexOf(textNode);
@@ -6607,38 +6586,38 @@ function test_modify(textDirectionType, visualDirections) {
 												return 1 <= value;
 											});
 										}
-										_context23.next = 13;
+										_context22.next = 13;
 										break;
 
 									case 9:
-										_context23.prev = 9;
-										_context23.t0 = _context23['catch'](5);
+										_context22.prev = 9;
+										_context22.t0 = _context22['catch'](5);
 										_didIteratorError40 = true;
-										_iteratorError40 = _context23.t0;
+										_iteratorError40 = _context22.t0;
 
 									case 13:
-										_context23.prev = 13;
-										_context23.prev = 14;
+										_context22.prev = 13;
+										_context22.prev = 14;
 
 										if (!_iteratorNormalCompletion40 && _iterator40.return) {
 											_iterator40.return();
 										}
 
 									case 16:
-										_context23.prev = 16;
+										_context22.prev = 16;
 
 										if (!_didIteratorError40) {
-											_context23.next = 19;
+											_context22.next = 19;
 											break;
 										}
 
 										throw _iteratorError40;
 
 									case 19:
-										return _context23.finish(16);
+										return _context22.finish(16);
 
 									case 20:
-										return _context23.finish(13);
+										return _context22.finish(13);
 
 									case 21:
 										assert.deepEqual(this.events, []);
@@ -6648,10 +6627,10 @@ function test_modify(textDirectionType, visualDirections) {
 
 									case 25:
 									case 'end':
-										return _context23.stop();
+										return _context22.stop();
 								}
 							}
-						}, _callee23, this, [[5, 9, 13, 21], [14,, 16, 20]]);
+						}, _callee22, this, [[5, 9, 13, 21], [14,, 16, 20]]);
 					})));
 					it('[' + textDirectionType + '] should move backward along to cross axis [end of lines]', function () {
 						var range = new J0Range(null, this.element);
@@ -6891,7 +6870,7 @@ var Lazy = function () {
 		value: function getLazy(key, getter, force) {
 			var keys = this[KEYS];
 			if (!keys) {
-				keys = new x$38();
+				keys = new x$37();
 				this[KEYS] = keys;
 			}
 			var internalKey = keys.get(key);
@@ -6973,7 +6952,7 @@ function test$33(generator) {
 
 		it(name, function () {
 			var data = [[1, 2], [3, 4]];
-			var map = new x$38(data);
+			var map = new x$37(data);
 			var iterator = generator.call(map);
 			var results = [];
 			var index = 0;
@@ -6998,7 +6977,7 @@ function generator$6() {
 
 test$33(generator$6, 'Map.prototype[Symbol.iterator]#j0');
 
-test$33(x$38.prototype[x.iterator]);
+test$33(x$37.prototype[x.iterator]);
 
 var Map$2 = function () {
 	function Map$2(iterable) {
@@ -7012,12 +6991,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator41 = iterable[Symbol.iterator](), _step41; !(_iteratorNormalCompletion41 = (_step41 = _iterator41.next()).done); _iteratorNormalCompletion41 = true) {
-					var _ref63 = _step41.value;
+					var _ref69 = _step41.value;
 
-					var _ref64 = _slicedToArray(_ref63, 2);
+					var _ref70 = _slicedToArray(_ref69, 2);
 
-					var key = _ref64[0];
-					var value = _ref64[1];
+					var key = _ref70[0];
+					var value = _ref70[1];
 
 					this.set(key, value);
 				}
@@ -7046,9 +7025,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref65) {
-				var _ref66 = _slicedToArray(_ref65, 1),
-				    itemKey = _ref66[0];
+			return this.data.findIndex(function (_ref71) {
+				var _ref72 = _slicedToArray(_ref71, 1),
+				    itemKey = _ref72[0];
 
 				return itemKey === key;
 			});
@@ -7072,9 +7051,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref67) {
-				var _ref68 = _slicedToArray(_ref67, 1),
-				    itemKey = _ref68[0];
+			var found = this.data.find(function (_ref73) {
+				var _ref74 = _slicedToArray(_ref73, 1),
+				    itemKey = _ref74[0];
 
 				return itemKey === key;
 			});
@@ -7102,10 +7081,10 @@ var Map$2 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this25 = this;
 
-			this.data.slice().forEach(function (_ref69) {
-				var _ref70 = _slicedToArray(_ref69, 2),
-				    key = _ref70[0],
-				    value = _ref70[1];
+			this.data.slice().forEach(function (_ref75) {
+				var _ref76 = _slicedToArray(_ref75, 2),
+				    key = _ref76[0],
+				    value = _ref76[1];
 
 				fn.call(thisArg, value, key, _this25);
 			});
@@ -7188,34 +7167,34 @@ function tests$7(Map) {
 		});
 
 		it('should initialize with given iterable', function () {
-			var iterable = _defineProperty({}, x.iterator, regeneratorRuntime.mark(function _callee24() {
+			var iterable = _defineProperty({}, x.iterator, regeneratorRuntime.mark(function _callee23() {
 				var count;
-				return regeneratorRuntime.wrap(function _callee24$(_context24) {
+				return regeneratorRuntime.wrap(function _callee23$(_context23) {
 					while (1) {
-						switch (_context24.prev = _context24.next) {
+						switch (_context23.prev = _context23.next) {
 							case 0:
 								count = 0;
 
 							case 1:
 								if (!(count < 1)) {
-									_context24.next = 7;
+									_context23.next = 7;
 									break;
 								}
 
-								_context24.next = 4;
+								_context23.next = 4;
 								return [count, count + 1];
 
 							case 4:
 								count += 1;
-								_context24.next = 1;
+								_context23.next = 1;
 								break;
 
 							case 7:
 							case 'end':
-								return _context24.stop();
+								return _context23.stop();
 						}
 					}
-				}, _callee24, this);
+				}, _callee23, this);
 			}));
 			var map = new Map(iterable);
 			assert.deepEqual({
@@ -7232,8 +7211,8 @@ function tests$7(Map) {
 			var context = {};
 			var results = [];
 			map.forEach(function () {
-				for (var _len40 = arguments.length, args = Array(_len40), _key40 = 0; _key40 < _len40; _key40++) {
-					args[_key40] = arguments[_key40];
+				for (var _len44 = arguments.length, args = Array(_len44), _key44 = 0; _key44 < _len44; _key44++) {
+					args[_key44] = arguments[_key44];
 				}
 
 				map.delete(args[1]);
@@ -7247,7 +7226,7 @@ function tests$7(Map) {
 
 tests$7(Map$2, 'Map#j0');
 
-tests$7(x$38);
+tests$7(x$37);
 
 function test$35(abs) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.abs';
@@ -7255,29 +7234,15 @@ function test$35(abs) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
-			return regeneratorRuntime.wrap(function _callee25$(_context25) {
-				while (1) {
-					switch (_context25.prev = _context25.next) {
-						case 0:
-							_context25.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/abs/abs.png',
-								fn: abs,
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								xGrid: [0],
-								yGrid: [0]
-							});
+		[[-Math.PI, Math.PI], [-0, 0], [0.1, 0.1]].forEach(function (_ref77) {
+			var _ref78 = _slicedToArray(_ref77, 2),
+			    value = _ref78[0],
+			    expected = _ref78[1];
 
-						case 2:
-						case 'end':
-							return _context25.stop();
-					}
-				}
-			}, _callee25, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.equal(abs(value), expected);
+			});
+		});
 	});
 }
 
@@ -7289,29 +7254,15 @@ function test$37(acos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
-			return regeneratorRuntime.wrap(function _callee26$(_context26) {
-				while (1) {
-					switch (_context26.prev = _context26.next) {
-						case 0:
-							_context26.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/acos/acos.png',
-								fn: acos,
-								xRange: [-1, 1],
-								yRange: [0, Math.PI],
-								xGrid: [-0.5, 0, 0.5],
-								yGrid: [Math.PI / 2]
-							});
+		[[-1, Math.PI], [-0.5, Math.PI * 2 / 3], [0, Math.PI / 2], [0.5, Math.PI / 3], [1, 0]].forEach(function (_ref79) {
+			var _ref80 = _slicedToArray(_ref79, 2),
+			    value = _ref80[0],
+			    expected = _ref80[1];
 
-						case 2:
-						case 'end':
-							return _context26.stop();
-					}
-				}
-			}, _callee26, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(acos(value), expected);
+			});
+		});
 	});
 }
 
@@ -7322,35 +7273,32 @@ function test$39(acosh) {
 
 
 	describe(name, function () {
+		var _loop2 = function _loop2(value) {
+			var expected = Math.log(value + Math.sqrt(value * value - 1));
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee24() {
+				return regeneratorRuntime.wrap(function _callee24$(_context24) {
+					while (1) {
+						switch (_context24.prev = _context24.next) {
+							case 0:
+								assert.approxEqual(acosh(value), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
-			return regeneratorRuntime.wrap(function _callee27$(_context27) {
-				while (1) {
-					switch (_context27.prev = _context27.next) {
-						case 0:
-							_context27.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/acosh/acosh.png',
-								fn: acosh,
-								xRange: [0, 10],
-								yRange: [0, 4],
-								xGrid: [1, 3, 5, 7, 9],
-								yGrid: [1, 2, 3]
-							});
-
-						case 2:
-						case 'end':
-							return _context27.stop();
+							case 1:
+							case 'end':
+								return _context24.stop();
+						}
 					}
-				}
-			}, _callee27, this);
-		})));
+				}, _callee24, this);
+			})));
+		};
+
+		for (var value = 1; value < 9; value += 0.4) {
+			_loop2(value);
+		}
 	});
 }
 
 function acosh(x) {
-	return x$41.log(x + x$41.sqrt(x * x - 1));
+	return x$40.log(x + x$40.sqrt(x * x - 1));
 }
 
 test$39(acosh, 'Math.acosh#j0');
@@ -7363,29 +7311,15 @@ function test$41(asin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
-			return regeneratorRuntime.wrap(function _callee28$(_context28) {
-				while (1) {
-					switch (_context28.prev = _context28.next) {
-						case 0:
-							_context28.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/asin/asin.png',
-								fn: asin,
-								xRange: [-1, 1],
-								yRange: [-Math.PI / 2, Math.PI / 2],
-								xGrid: [-0.5, 0, 0.5],
-								yGrid: [0]
-							});
+		[[-1, Math.PI / -2], [-0.5, Math.PI / -6], [0, 0], [0.5, Math.PI / 6], [1, Math.PI / 2]].forEach(function (_ref82) {
+			var _ref83 = _slicedToArray(_ref82, 2),
+			    value = _ref83[0],
+			    expected = _ref83[1];
 
-						case 2:
-						case 'end':
-							return _context28.stop();
-					}
-				}
-			}, _callee28, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(asin(value), expected);
+			});
+		});
 	});
 }
 
@@ -7396,30 +7330,27 @@ function test$43(asinh) {
 
 
 	describe(name, function () {
+		var _loop3 = function _loop3(value) {
+			var expected = Math.log(value + Math.sqrt(value * value + 1));
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee25() {
+				return regeneratorRuntime.wrap(function _callee25$(_context25) {
+					while (1) {
+						switch (_context25.prev = _context25.next) {
+							case 0:
+								assert.approxEqual(asinh(value), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
-			return regeneratorRuntime.wrap(function _callee29$(_context29) {
-				while (1) {
-					switch (_context29.prev = _context29.next) {
-						case 0:
-							_context29.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/asinh/asinh.png',
-								fn: asinh,
-								xRange: [-16, 16],
-								yRange: [-4, 4],
-								xGrid: [-15, -10, -5, 0, 5, 10, 15],
-								yGrid: [-3, -2, -1, 0, 1, 2, 3]
-							});
-
-						case 2:
-						case 'end':
-							return _context29.stop();
+							case 1:
+							case 'end':
+								return _context25.stop();
+						}
 					}
-				}
-			}, _callee29, this);
-		})));
+				}, _callee25, this);
+			})));
+		};
+
+		for (var value = -5; value < 5; value += 1) {
+			_loop3(value);
+		}
 	});
 }
 
@@ -7427,7 +7358,7 @@ function asinh(x) {
 	if (x === -Infinity) {
 		return x;
 	}
-	return x$41.log(x + x$41.sqrt(x * x + 1));
+	return x$40.log(x + x$40.sqrt(x * x + 1));
 }
 
 test$43(asinh, 'Math.asinh#j0');
@@ -7440,29 +7371,15 @@ function test$45(atan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
-			return regeneratorRuntime.wrap(function _callee30$(_context30) {
-				while (1) {
-					switch (_context30.prev = _context30.next) {
-						case 0:
-							_context30.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/atan/atan.png',
-								fn: atan,
-								xRange: [-10, 10],
-								yRange: [-Math.PI / 2, Math.PI / 2],
-								xGrid: [-5, 0, 5],
-								yGrid: [0]
-							});
+		[[-Math.sqrt(3), Math.PI / -3], [-1, Math.PI / -4], [-1 / Math.sqrt(3), Math.PI / -6], [0, 0], [1 / Math.sqrt(3), Math.PI / 6], [1, Math.PI / 4], [Math.sqrt(3), Math.PI / 3]].forEach(function (_ref85) {
+			var _ref86 = _slicedToArray(_ref85, 2),
+			    value = _ref86[0],
+			    expected = _ref86[1];
 
-						case 2:
-						case 'end':
-							return _context30.stop();
-					}
-				}
-			}, _callee30, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(atan(value), expected);
+			});
+		});
 	});
 }
 
@@ -7474,57 +7391,16 @@ function test$47(atan2) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '+] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
-			return regeneratorRuntime.wrap(function _callee31$(_context31) {
-				while (1) {
-					switch (_context31.prev = _context31.next) {
-						case 0:
-							_context31.next = 2;
-							return assert.graphicalEqual({
-								name: name + '+',
-								url: x$30.root + '/Math/atan2/atan2+.png',
-								fn: function fn(x) {
-									return atan2(1, x);
-								},
-								xRange: [-10, 10],
-								yRange: [0, Math.PI],
-								xGrid: [-5, 0, 5],
-								yGrid: [Math.PI / 2]
-							});
+		[[-Math.sqrt(3), 1, Math.PI / -3], [-1, 1, Math.PI / -4], [-1 / Math.sqrt(3), 1, Math.PI / -6], [0, 1, 0], [1 / Math.sqrt(3), 1, Math.PI / 6], [1, 1, Math.PI / 4], [Math.sqrt(3), 1, Math.PI / 3], [-Math.sqrt(3), -1, Math.PI * 2 / -3], [-1, -1, Math.PI * -3 / 4], [-1 / Math.sqrt(3), -1, Math.PI * -5 / 6], [0, -1, Math.PI], [1 / Math.sqrt(3), -1, Math.PI * 5 / 6], [1, -1, Math.PI * 3 / 4], [Math.sqrt(3), -1, Math.PI * 2 / 3]].forEach(function (_ref87) {
+			var _ref88 = _slicedToArray(_ref87, 3),
+			    x = _ref88[0],
+			    y = _ref88[1],
+			    expected = _ref88[2];
 
-						case 2:
-						case 'end':
-							return _context31.stop();
-					}
-				}
-			}, _callee31, this);
-		})));
-
-		it('[id:' + name + '-] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
-			return regeneratorRuntime.wrap(function _callee32$(_context32) {
-				while (1) {
-					switch (_context32.prev = _context32.next) {
-						case 0:
-							_context32.next = 2;
-							return assert.graphicalEqual({
-								name: name + '-',
-								url: x$30.root + '/Math/atan2/atan2-.png',
-								fn: function fn(x) {
-									return atan2(-1, x);
-								},
-								xRange: [-10, 10],
-								yRange: [-Math.PI, 0],
-								xGrid: [-5, 0, 5],
-								yGrid: [-Math.PI / 2]
-							});
-
-						case 2:
-						case 'end':
-							return _context32.stop();
-					}
-				}
-			}, _callee32, this);
-		})));
+			it(name + '(' + x + ', ' + y + ') \u2192 ' + expected, function () {
+				assert.approxEqual(atan2(x, y), expected);
+			});
+		});
 	});
 }
 
@@ -7535,35 +7411,32 @@ function test$49(atanh) {
 
 
 	describe(name, function () {
+		var _loop4 = function _loop4(value) {
+			var expected = Math.log((1 + value) / (1 - value)) / 2;
+			it(name + '(' + value.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee26() {
+				return regeneratorRuntime.wrap(function _callee26$(_context26) {
+					while (1) {
+						switch (_context26.prev = _context26.next) {
+							case 0:
+								assert.approxEqual(atanh(value), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
-			return regeneratorRuntime.wrap(function _callee33$(_context33) {
-				while (1) {
-					switch (_context33.prev = _context33.next) {
-						case 0:
-							_context33.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/atanh/atanh.png',
-								fn: atanh,
-								xRange: [-1, 1],
-								yRange: [-5, 5],
-								xGrid: [-0.5, 0, 0.5],
-								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
-							});
-
-						case 2:
-						case 'end':
-							return _context33.stop();
+							case 1:
+							case 'end':
+								return _context26.stop();
+						}
 					}
-				}
-			}, _callee33, this);
-		})));
+				}, _callee26, this);
+			})));
+		};
+
+		for (var value = -0.99; value < 1; value += 0.1) {
+			_loop4(value);
+		}
 	});
 }
 
 function atanh(x) {
-	return x$41.log((1 + x) / (1 - x)) / 2;
+	return x$40.log((1 + x) / (1 - x)) / 2;
 }
 
 test$49(atanh, 'Math.atanh#j0');
@@ -7575,36 +7448,33 @@ function test$51(cbrt) {
 
 
 	describe(name, function () {
+		var _loop5 = function _loop5(_x70) {
+			var expected = Math.sign(_x70) * Math.pow(Math.abs(_x70), 1 / 3);
+			it(name + '(' + _x70.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee27() {
+				return regeneratorRuntime.wrap(function _callee27$(_context27) {
+					while (1) {
+						switch (_context27.prev = _context27.next) {
+							case 0:
+								assert.approxEqual(cbrt(_x70), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
-			return regeneratorRuntime.wrap(function _callee34$(_context34) {
-				while (1) {
-					switch (_context34.prev = _context34.next) {
-						case 0:
-							_context34.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/cbrt/cbrt.png',
-								fn: cbrt,
-								xRange: [-64, 64],
-								yRange: [-4, 4],
-								xGrid: [-27, -8, 0, 8, 27],
-								yGrid: [-3, -2, -1, 0, 1, 2, 3]
-							});
-
-						case 2:
-						case 'end':
-							return _context34.stop();
+							case 1:
+							case 'end':
+								return _context27.stop();
+						}
 					}
-				}
-			}, _callee34, this);
-		})));
+				}, _callee27, this);
+			})));
+		};
+
+		for (var _x70 = -5; _x70 < 5; _x70 += 0.5) {
+			_loop5(_x70);
+		}
 	});
 }
 
 /* eslint no-magic-numbers: ["warn", {ignore: [0, 1, 3]}] */
 function cbrt(x) {
-	var root = x$41.pow(x$41.abs(x), 1 / 3);
+	var root = x$40.pow(x$40.abs(x), 1 / 3);
 	return x < 0 ? -root : root;
 }
 
@@ -7618,29 +7488,15 @@ function test$53(ceil) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
-			return regeneratorRuntime.wrap(function _callee35$(_context35) {
-				while (1) {
-					switch (_context35.prev = _context35.next) {
-						case 0:
-							_context35.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/ceil/ceil.png',
-								fn: ceil,
-								xRange: [-5, 5],
-								yRange: [-5, 5],
-								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
-							});
+		[[-1.1, -1], [-0.1, 0], [0, 0], [0.1, 1], [1.1, 2]].forEach(function (_ref91) {
+			var _ref92 = _slicedToArray(_ref91, 2),
+			    value = _ref92[0],
+			    expected = _ref92[1];
 
-						case 2:
-						case 'end':
-							return _context35.stop();
-					}
-				}
-			}, _callee35, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(ceil(value), expected);
+			});
+		});
 	});
 }
 
@@ -7652,41 +7508,24 @@ function test$55(clz32) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
-			return regeneratorRuntime.wrap(function _callee36$(_context36) {
-				while (1) {
-					switch (_context36.prev = _context36.next) {
-						case 0:
-							_context36.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/clz32/clz32.png',
-								fn: clz32,
-								xRange: [0, 0xffffff],
-								yRange: [0, 33],
-								xGrid: [0x1fffff, 0x7fffff],
-								yGrid: [1, 10, 20, 30]
-							});
+		[[1, 31], [1000, 22], [0, 32], [3.5, 30]].forEach(function (_ref93) {
+			var _ref94 = _slicedToArray(_ref93, 2),
+			    value = _ref94[0],
+			    expected = _ref94[1];
 
-						case 2:
-						case 'end':
-							return _context36.stop();
-					}
-				}
-			}, _callee36, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.equal(clz32(value), expected);
+			});
+		});
 	});
 }
 
 /* eslint no-magic-numbers: ["warn", {ignore: [-1, 0, 1, 31, 32]}], no-bitwise: "off" */
 function clz32(x) {
-	if (x <= -1) {
-		return 0;
-	}
-	if (x === null || x <= 1) {
+	if (x === null || x === 0) {
 		return 32;
 	}
-	return 31 - x$41.floor(x$41.log(x >>> 0) * x$41.LOG2E);
+	return 31 - x$40.floor(x$40.log(x >>> 0) * x$40.LOG2E);
 }
 
 test$55(clz32, 'Math.clz32#j0');
@@ -7699,29 +7538,15 @@ function test$57(cos) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
-			return regeneratorRuntime.wrap(function _callee37$(_context37) {
-				while (1) {
-					switch (_context37.prev = _context37.next) {
-						case 0:
-							_context37.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/cos/cos.png',
-								fn: cos,
-								xRange: [0, 2 * Math.PI],
-								yRange: [-1, 1],
-								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
-								yGrid: [-0.5, 0, 0.5]
-							});
+		[[-Math.PI, -1], [-Math.PI / 2, 0], [0, 1], [Math.PI / 2, 0], [Math.PI, -1]].forEach(function (_ref95) {
+			var _ref96 = _slicedToArray(_ref95, 2),
+			    value = _ref96[0],
+			    expected = _ref96[1];
 
-						case 2:
-						case 'end':
-							return _context37.stop();
-					}
-				}
-			}, _callee37, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(cos(value), expected);
+			});
+		});
 	});
 }
 
@@ -7732,35 +7557,32 @@ function test$59(cosh) {
 
 
 	describe(name, function () {
+		var _loop6 = function _loop6(_x75) {
+			var expected = (Math.exp(_x75) + 1 / Math.exp(_x75)) / 2;
+			it(name + '(' + _x75.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee28() {
+				return regeneratorRuntime.wrap(function _callee28$(_context28) {
+					while (1) {
+						switch (_context28.prev = _context28.next) {
+							case 0:
+								assert.approxEqual(cosh(_x75), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
-			return regeneratorRuntime.wrap(function _callee38$(_context38) {
-				while (1) {
-					switch (_context38.prev = _context38.next) {
-						case 0:
-							_context38.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/cosh/cosh.png',
-								fn: cosh,
-								xRange: [-12, 12],
-								yRange: [0, 25000],
-								xGrid: [-10, -5, 0, 5, 10],
-								yGrid: [5000, 10000, 15000, 20000]
-							});
-
-						case 2:
-						case 'end':
-							return _context38.stop();
+							case 1:
+							case 'end':
+								return _context28.stop();
+						}
 					}
-				}
-			}, _callee38, this);
-		})));
+				}, _callee28, this);
+			})));
+		};
+
+		for (var _x75 = -5; _x75 < 5; _x75 += 1) {
+			_loop6(_x75);
+		}
 	});
 }
 
 function cosh(x) {
-	var y = x$41.exp(x);
+	var y = x$40.exp(x);
 	return (y + 1 / y) / 2;
 }
 
@@ -7789,29 +7611,15 @@ function test$63(exp) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
-			return regeneratorRuntime.wrap(function _callee39$(_context39) {
-				while (1) {
-					switch (_context39.prev = _context39.next) {
-						case 0:
-							_context39.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/exp/exp.png',
-								fn: exp,
-								xRange: [-10, 3],
-								yRange: [0, 9],
-								xGrid: [0, 1],
-								yGrid: [1, Math.E]
-							});
+		[[2, Math.E * Math.E], [-2, 1 / (Math.E * Math.E)], [0, 1]].forEach(function (_ref98) {
+			var _ref99 = _slicedToArray(_ref98, 2),
+			    value = _ref99[0],
+			    expected = _ref99[1];
 
-						case 2:
-						case 'end':
-							return _context39.stop();
-					}
-				}
-			}, _callee39, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(exp(value), expected);
+			});
+		});
 	});
 }
 
@@ -7823,34 +7631,20 @@ function test$65(expm1) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
-			return regeneratorRuntime.wrap(function _callee40$(_context40) {
-				while (1) {
-					switch (_context40.prev = _context40.next) {
-						case 0:
-							_context40.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/expm1/expm1.png',
-								fn: expm1,
-								xRange: [-10, 3],
-								yRange: [-1, 8],
-								xGrid: [0, 1],
-								yGrid: [0, Math.E - 1]
-							});
+		[[2, Math.E * Math.E - 1], [-2, 1 / (Math.E * Math.E) - 1], [0, 0]].forEach(function (_ref100) {
+			var _ref101 = _slicedToArray(_ref100, 2),
+			    value = _ref101[0],
+			    expected = _ref101[1];
 
-						case 2:
-						case 'end':
-							return _context40.stop();
-					}
-				}
-			}, _callee40, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(expm1(value), expected);
+			});
+		});
 	});
 }
 
 function expm1(x) {
-	return x$41.exp(x) - 1;
+	return x$40.exp(x) - 1;
 }
 
 test$65(expm1, 'Math.expm1#j0');
@@ -7863,29 +7657,15 @@ function test$67(floor) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
-			return regeneratorRuntime.wrap(function _callee41$(_context41) {
-				while (1) {
-					switch (_context41.prev = _context41.next) {
-						case 0:
-							_context41.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/floor/floor.png',
-								fn: floor,
-								xRange: [-5, 5],
-								yRange: [-5, 5],
-								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
-							});
+		[[-0.1, -1], [0.1, 0], [1.1, 1]].forEach(function (_ref102) {
+			var _ref103 = _slicedToArray(_ref102, 2),
+			    value = _ref103[0],
+			    expected = _ref103[1];
 
-						case 2:
-						case 'end':
-							return _context41.stop();
-					}
-				}
-			}, _callee41, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(floor(value), expected);
+			});
+		});
 	});
 }
 
@@ -7897,34 +7677,14 @@ function test$69(fround) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
-			var d;
-			return regeneratorRuntime.wrap(function _callee42$(_context42) {
-				while (1) {
-					switch (_context42.prev = _context42.next) {
-						case 0:
-							d = 1;
-							_context42.next = 3;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/fround/fround.png',
-								fn: fround,
-								xRange: [-d, d],
-								yRange: [-d, d],
-								xGrid: [-d / 2, 0, d / 2],
-								yGrid: [-d / 2, 0, d / 2]
-							});
+		[[1.337, 1.3370000123977661]].forEach(function (_ref104) {
+			var _ref105 = _slicedToArray(_ref104, 2),
+			    value = _ref105[0],
+			    expected = _ref105[1];
 
-						case 3:
-						case 'end':
-							return _context42.stop();
-					}
-				}
-			}, _callee42, this);
-		})));
-
-		it('should return 1.3370000123977661', function () {
-			assert.equal(fround(1.337), 1.3370000123977661);
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(fround(value), expected);
+			});
 		});
 	});
 }
@@ -7943,46 +7703,30 @@ function test$71(hypot) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '-y=3] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
-			return regeneratorRuntime.wrap(function _callee43$(_context43) {
-				while (1) {
-					switch (_context43.prev = _context43.next) {
-						case 0:
-							this.timeout(10000);
-							_context43.next = 3;
-							return assert.graphicalEqual({
-								name: name + '-y=3',
-								url: x$30.root + '/Math/hypot/hypot-y=3.png',
-								fn: function fn(x, y) {
-									return hypot(x, y);
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								zRange: [0, 1]
-							});
+		[[[3, 4], 5], [[1, 1, 1, 1], 2]].forEach(function (_ref106) {
+			var _ref107 = _slicedToArray(_ref106, 2),
+			    args = _ref107[0],
+			    expected = _ref107[1];
 
-						case 3:
-						case 'end':
-							return _context43.stop();
-					}
-				}
-			}, _callee43, this);
-		})));
+			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
+				assert.approxEqual(hypot.apply(undefined, _toConsumableArray(args)), expected);
+			});
+		});
 	});
 }
 
 function hypot() {
 	var sum = 0;
 
-	for (var _len41 = arguments.length, args = Array(_len41), _key41 = 0; _key41 < _len41; _key41++) {
-		args[_key41] = arguments[_key41];
+	for (var _len45 = arguments.length, args = Array(_len45), _key45 = 0; _key45 < _len45; _key45++) {
+		args[_key45] = arguments[_key45];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
 		var value = args[i];
 		sum += value * value;
 	}
-	return x$41.sqrt(sum);
+	return x$40.sqrt(sum);
 }
 
 test$71(hypot, 'Math.hypot#j0');
@@ -7995,51 +7739,15 @@ function test$73(imul) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
-			return regeneratorRuntime.wrap(function _callee44$(_context44) {
-				while (1) {
-					switch (_context44.prev = _context44.next) {
-						case 0:
-							_context44.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/imul/imul.png',
-								fn: function fn(x) {
-									return imul(x, 1);
-								},
-								xRange: [-10, 10],
-								yRange: [-10, 10],
-								xGrid: [0],
-								yGrid: [0]
-							});
+		[[[2, 4], 8], [[-1, 8], -8], [[-2, -2], 4]].forEach(function (_ref108) {
+			var _ref109 = _slicedToArray(_ref108, 2),
+			    args = _ref109[0],
+			    expected = _ref109[1];
 
-						case 2:
-						case 'end':
-							return _context44.stop();
-					}
-				}
-			}, _callee44, this);
-		})));
-
-		it('imul(2, 4) should be 8', function () {
-			assert.equal(imul(2, 4), 8);
+			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
+				assert.approxEqual(imul.apply(undefined, _toConsumableArray(args)), expected);
+			});
 		});
-
-		it('imul(-1, 8) should be -8', function () {
-			assert.equal(imul(-1, 8), -8);
-		});
-
-		it('imul(-2, -2) should be 4', function () {
-			assert.equal(imul(-2, -2), 4);
-		});
-
-		// it('imul(0xffffffff, 5) should be -5', function () {
-		// 	assert.equal(imul(0xffffffff, 5), -5);
-		// });
-		//
-		// it('imul(0xfffffffe, 5) should be -10', function () {
-		// 	assert.equal(imul(0xfffffffe, 5), -10);
-		// });
 	});
 }
 
@@ -8092,29 +7800,15 @@ function test$79(log) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
-			return regeneratorRuntime.wrap(function _callee45$(_context45) {
-				while (1) {
-					switch (_context45.prev = _context45.next) {
-						case 0:
-							_context45.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/log/log.png',
-								fn: log,
-								xRange: [0, 10],
-								yRange: [-10, 4],
-								xGrid: [1 / Math.E, 1, Math.E],
-								yGrid: [-1, 0, 1]
-							});
+		[[Math.E, 1], [1, 0], [Math.E * Math.E, 2]].forEach(function (_ref110) {
+			var _ref111 = _slicedToArray(_ref110, 2),
+			    value = _ref111[0],
+			    expected = _ref111[1];
 
-						case 2:
-						case 'end':
-							return _context45.stop();
-					}
-				}
-			}, _callee45, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(log(value), expected);
+			});
+		});
 	});
 }
 
@@ -8126,34 +7820,20 @@ function test$81(log10) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
-			return regeneratorRuntime.wrap(function _callee46$(_context46) {
-				while (1) {
-					switch (_context46.prev = _context46.next) {
-						case 0:
-							_context46.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/log10/log10.png',
-								fn: log10,
-								xRange: [0, 100],
-								yRange: [-5, 2],
-								xGrid: [0.1, 1, 10],
-								yGrid: [-1, 0, 1]
-							});
+		[[0.1, -1], [10, 1], [1, 0], [100, 2]].forEach(function (_ref112) {
+			var _ref113 = _slicedToArray(_ref112, 2),
+			    value = _ref113[0],
+			    expected = _ref113[1];
 
-						case 2:
-						case 'end':
-							return _context46.stop();
-					}
-				}
-			}, _callee46, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(log10(value), expected);
+			});
+		});
 	});
 }
 
 function log10(x) {
-	return x$41.log(x) / x$41.LN10;
+	return x$40.log(x) / x$40.LN10;
 }
 
 test$81(log10, 'Math.log10#j0');
@@ -8181,75 +7861,46 @@ function test$85(log1p) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
-			return regeneratorRuntime.wrap(function _callee47$(_context47) {
-				while (1) {
-					switch (_context47.prev = _context47.next) {
-						case 0:
-							_context47.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/log1p/log1p.png',
-								fn: log1p,
-								xRange: [-1, 9],
-								yRange: [-10, 4],
-								xGrid: [1 / Math.E - 1, 0, Math.E - 1],
-								yGrid: [-1, 0, 1]
-							});
+		[[Math.E - 1, 1], [0, 0], [Math.E * Math.E - 1, 2]].forEach(function (_ref114) {
+			var _ref115 = _slicedToArray(_ref114, 2),
+			    value = _ref115[0],
+			    expected = _ref115[1];
 
-						case 2:
-						case 'end':
-							return _context47.stop();
-					}
-				}
-			}, _callee47, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(log1p(value), expected);
+			});
+		});
 	});
 }
 
 function log1p(x) {
-	return x$41.log(x + 1);
+	return x$40.log(x + 1);
 }
 
 test$85(log1p, 'Math.log1p#j0');
 
 test$85(Math.log1p);
 
-/* eslint-disable no-magic-numbers */
 function test$87(log2) {
 	var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Math.log2';
 
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee48() {
-			return regeneratorRuntime.wrap(function _callee48$(_context48) {
-				while (1) {
-					switch (_context48.prev = _context48.next) {
-						case 0:
-							_context48.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/log2/log2.png',
-								fn: log2,
-								xRange: [0, 8],
-								yRange: [-5, 3],
-								xGrid: [1 / 2, 1, 2],
-								yGrid: [-1, 0, 1]
-							});
+		[[1 / 2, -1], [1, 0], [2, 1], [4, 2], [8, 3]].forEach(function (_ref116) {
+			var _ref117 = _slicedToArray(_ref116, 2),
+			    value = _ref117[0],
+			    expected = _ref117[1];
 
-						case 2:
-						case 'end':
-							return _context48.stop();
-					}
-				}
-			}, _callee48, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(log2(value), expected);
+			});
+		});
 	});
 }
 
 function log2(x) {
-	return x$41.log(x) / x$41.LN2;
+	return x$40.log(x) / x$40.LN2;
 }
 
 test$87(log2, 'Math.log2#j0');
@@ -8277,31 +7928,15 @@ function test$91(max) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee49() {
-			return regeneratorRuntime.wrap(function _callee49$(_context49) {
-				while (1) {
-					switch (_context49.prev = _context49.next) {
-						case 0:
-							_context49.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/max/max.png',
-								fn: function fn(x) {
-									return max(0, x);
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								xGrid: [-0.5, 0, 0.5],
-								yGrid: [-0.5, 0, 0.5]
-							});
+		[[[3, 4], 4], [[1, 1, 1, 2], 2]].forEach(function (_ref118) {
+			var _ref119 = _slicedToArray(_ref118, 2),
+			    args = _ref119[0],
+			    expected = _ref119[1];
 
-						case 2:
-						case 'end':
-							return _context49.stop();
-					}
-				}
-			}, _callee49, this);
-		})));
+			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
+				assert.approxEqual(max.apply(undefined, _toConsumableArray(args)), expected);
+			});
+		});
 	});
 }
 
@@ -8313,31 +7948,15 @@ function test$93(min) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee50() {
-			return regeneratorRuntime.wrap(function _callee50$(_context50) {
-				while (1) {
-					switch (_context50.prev = _context50.next) {
-						case 0:
-							_context50.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/min/min.png',
-								fn: function fn(x) {
-									return min(0, x);
-								},
-								xRange: [-1, 1],
-								yRange: [-1, 1],
-								xGrid: [-0.5, 0, 0.5],
-								yGrid: [-0.5, 0, 0.5]
-							});
+		[[[3, 4], 3], [[1, 1, 1, 2], 1]].forEach(function (_ref120) {
+			var _ref121 = _slicedToArray(_ref120, 2),
+			    args = _ref121[0],
+			    expected = _ref121[1];
 
-						case 2:
-						case 'end':
-							return _context50.stop();
-					}
-				}
-			}, _callee50, this);
-		})));
+			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
+				assert.approxEqual(min.apply(undefined, _toConsumableArray(args)), expected);
+			});
+		});
 	});
 }
 
@@ -8364,31 +7983,15 @@ function test$97(pow) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee51() {
-			return regeneratorRuntime.wrap(function _callee51$(_context51) {
-				while (1) {
-					switch (_context51.prev = _context51.next) {
-						case 0:
-							_context51.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/pow/pow.png',
-								fn: function fn(x) {
-									return pow(2, x);
-								},
-								xRange: [-2, 2],
-								yRange: [0, 4],
-								xGrid: [-1, 0, 1],
-								yGrid: [1, 2, 3]
-							});
+		[[[1, 10], 1], [[2, 10], 1024]].forEach(function (_ref122) {
+			var _ref123 = _slicedToArray(_ref122, 2),
+			    args = _ref123[0],
+			    expected = _ref123[1];
 
-						case 2:
-						case 'end':
-							return _context51.stop();
-					}
-				}
-			}, _callee51, this);
-		})));
+			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
+				assert.approxEqual(pow.apply(undefined, _toConsumableArray(args)), expected);
+			});
+		});
 	});
 }
 
@@ -8400,23 +8003,11 @@ function test$99(random) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', function () {
-			var timeout = 5000;
-			this.timeout(timeout);
-			return assert.graphicalEqual({
-				name: name,
-				url: x$30.root + '/Math/random/random.png',
-				fn: random,
-				xRange: [0, 1],
-				yRange: [0, 1],
-				xGrid: [],
-				yGrid: [0.5]
-			}).catch(function (error) {
-				if (error.code === 'EDIFF') {
-					return;
-				}
-				throw error;
-			});
+		it('returns a number in [0, 1)', function () {
+			for (var i = 0; i < 100; i++) {
+				var _x96 = random();
+				assert(0 <= _x96 && _x96 < 1);
+			}
 		});
 	});
 }
@@ -8429,29 +8020,15 @@ function test$101(round) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee52() {
-			return regeneratorRuntime.wrap(function _callee52$(_context52) {
-				while (1) {
-					switch (_context52.prev = _context52.next) {
-						case 0:
-							_context52.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/round/round.png',
-								fn: round,
-								xRange: [-5, 5],
-								yRange: [-5, 5],
-								xGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-								yGrid: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
-							});
+		[[-0.6, -1], [-0.2, 0], [0.2, 0], [0.6, 1]].forEach(function (_ref124) {
+			var _ref125 = _slicedToArray(_ref124, 2),
+			    value = _ref125[0],
+			    expected = _ref125[1];
 
-						case 2:
-						case 'end':
-							return _context52.stop();
-					}
-				}
-			}, _callee52, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(round(value), expected);
+			});
+		});
 	});
 }
 
@@ -8463,29 +8040,15 @@ function test$103(sign) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee53() {
-			return regeneratorRuntime.wrap(function _callee53$(_context53) {
-				while (1) {
-					switch (_context53.prev = _context53.next) {
-						case 0:
-							_context53.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/sign/sign.png',
-								fn: sign,
-								xRange: [-3, 3],
-								yRange: [-1.1, 1.1],
-								xGrid: [-2, -1, 0, 1, 2],
-								yGrid: [-1, 0, 1]
-							});
+		[[-0.6, -1], [-0.2, -1], [0, 0], [0.2, 1], [0.6, 1]].forEach(function (_ref126) {
+			var _ref127 = _slicedToArray(_ref126, 2),
+			    value = _ref127[0],
+			    expected = _ref127[1];
 
-						case 2:
-						case 'end':
-							return _context53.stop();
-					}
-				}
-			}, _callee53, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(sign(value), expected);
+			});
+		});
 	});
 }
 
@@ -8509,29 +8072,15 @@ function test$105(sin) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee54() {
-			return regeneratorRuntime.wrap(function _callee54$(_context54) {
-				while (1) {
-					switch (_context54.prev = _context54.next) {
-						case 0:
-							_context54.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/sin/sin.png',
-								fn: sin,
-								xRange: [0, 2 * Math.PI],
-								yRange: [-1, 1],
-								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
-								yGrid: [-0.5, 0, 0.5]
-							});
+		[[Math.PI / -2, -1], [Math.PI / -4, Math.sqrt(2) / -2], [0, 0], [Math.PI / 4, Math.sqrt(2) / 2], [Math.PI / 2, 1]].forEach(function (_ref128) {
+			var _ref129 = _slicedToArray(_ref128, 2),
+			    value = _ref129[0],
+			    expected = _ref129[1];
 
-						case 2:
-						case 'end':
-							return _context54.stop();
-					}
-				}
-			}, _callee54, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(sin(value), expected);
+			});
+		});
 	});
 }
 
@@ -8542,35 +8091,32 @@ function test$107(sinh) {
 
 
 	describe(name, function () {
+		var _loop7 = function _loop7(_x101) {
+			var expected = (Math.exp(_x101) - 1 / Math.exp(_x101)) / 2;
+			it(name + '(' + _x101.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee29() {
+				return regeneratorRuntime.wrap(function _callee29$(_context29) {
+					while (1) {
+						switch (_context29.prev = _context29.next) {
+							case 0:
+								assert.approxEqual(sinh(_x101), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee55() {
-			return regeneratorRuntime.wrap(function _callee55$(_context55) {
-				while (1) {
-					switch (_context55.prev = _context55.next) {
-						case 0:
-							_context55.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/sinh/sinh.png',
-								fn: sinh,
-								xRange: [-12, 12],
-								yRange: [-5000, 5000],
-								xGrid: [-10, -5, 0, 5, 10],
-								yGrid: [-4000, -2000, 0, 2000, 4000]
-							});
-
-						case 2:
-						case 'end':
-							return _context55.stop();
+							case 1:
+							case 'end':
+								return _context29.stop();
+						}
 					}
-				}
-			}, _callee55, this);
-		})));
+				}, _callee29, this);
+			})));
+		};
+
+		for (var _x101 = -5; _x101 < 5; _x101 += 1) {
+			_loop7(_x101);
+		}
 	});
 }
 
 function sinh(x) {
-	var y = x$41.exp(x);
+	var y = x$40.exp(x);
 	return (y - 1 / y) / 2;
 }
 
@@ -8584,29 +8130,15 @@ function test$109(sqrt) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee56() {
-			return regeneratorRuntime.wrap(function _callee56$(_context56) {
-				while (1) {
-					switch (_context56.prev = _context56.next) {
-						case 0:
-							_context56.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/sqrt/sqrt.png',
-								fn: sqrt,
-								xRange: [0, 10],
-								yRange: [0, 4],
-								xGrid: [1, 4, 9],
-								yGrid: [1, 2, 3]
-							});
+		[[Math.PI * Math.PI, Math.PI], [9, 3], [0.01, 0.1]].forEach(function (_ref131) {
+			var _ref132 = _slicedToArray(_ref131, 2),
+			    value = _ref132[0],
+			    expected = _ref132[1];
 
-						case 2:
-						case 'end':
-							return _context56.stop();
-					}
-				}
-			}, _callee56, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(sqrt(value), expected);
+			});
+		});
 	});
 }
 
@@ -8648,29 +8180,15 @@ function test$115(tan) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee57() {
-			return regeneratorRuntime.wrap(function _callee57$(_context57) {
-				while (1) {
-					switch (_context57.prev = _context57.next) {
-						case 0:
-							_context57.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/tan/tan.png',
-								fn: tan,
-								xRange: [0, 2 * Math.PI],
-								yRange: [-5, 5],
-								xGrid: [0.5 * Math.PI, 1.0 * Math.PI, 1.5 * Math.PI],
-								yGrid: [-2, -1, 0, 1, 2]
-							});
+		[[Math.PI / -3, -Math.sqrt(3)], [Math.PI / -4, -1], [0, 0], [Math.PI / 4, 1], [Math.PI / 3, Math.sqrt(3)]].forEach(function (_ref133) {
+			var _ref134 = _slicedToArray(_ref133, 2),
+			    value = _ref134[0],
+			    expected = _ref134[1];
 
-						case 2:
-						case 'end':
-							return _context57.stop();
-					}
-				}
-			}, _callee57, this);
-		})));
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(tan(value), expected);
+			});
+		});
 	});
 }
 
@@ -8681,30 +8199,27 @@ function test$117(tanh) {
 
 
 	describe(name, function () {
+		var _loop8 = function _loop8(_x107) {
+			var expected = (Math.exp(2 * _x107) - 1) / (Math.exp(2 * _x107) + 1);
+			it(name + '(' + _x107.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator(regeneratorRuntime.mark(function _callee30() {
+				return regeneratorRuntime.wrap(function _callee30$(_context30) {
+					while (1) {
+						switch (_context30.prev = _context30.next) {
+							case 0:
+								assert.approxEqual(tanh(_x107), expected);
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee58() {
-			return regeneratorRuntime.wrap(function _callee58$(_context58) {
-				while (1) {
-					switch (_context58.prev = _context58.next) {
-						case 0:
-							_context58.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/tanh/tanh.png',
-								fn: tanh,
-								xRange: [-6, 6],
-								yRange: [-1, 1],
-								xGrid: [-4, -2, 0, 2, 4],
-								yGrid: [-0.5, 0, 0.5]
-							});
-
-						case 2:
-						case 'end':
-							return _context58.stop();
+							case 1:
+							case 'end':
+								return _context30.stop();
+						}
 					}
-				}
-			}, _callee58, this);
-		})));
+				}, _callee30, this);
+			})));
+		};
+
+		for (var _x107 = -5; _x107 < 5; _x107 += 1) {
+			_loop8(_x107);
+		}
 	});
 }
 
@@ -8714,7 +8229,7 @@ function tanh(x) {
 	} else if (x === -Infinity) {
 		return -1;
 	}
-	var y = x$41.exp(2 * x);
+	var y = x$40.exp(2 * x);
 	return (y - 1) / (y + 1);
 }
 
@@ -8728,60 +8243,14 @@ function test$119(trunc) {
 
 	describe(name, function () {
 
-		it('[id:' + name + '] should draw expected graph', _asyncToGenerator(regeneratorRuntime.mark(function _callee59() {
-			return regeneratorRuntime.wrap(function _callee59$(_context59) {
-				while (1) {
-					switch (_context59.prev = _context59.next) {
-						case 0:
-							_context59.next = 2;
-							return assert.graphicalEqual({
-								name: name,
-								url: x$30.root + '/Math/trunc/trunc.png',
-								fn: trunc,
-								xRange: [-10, 10],
-								yRange: [-10, 10],
-								xGrid: [0],
-								yGrid: [0]
-							});
+		[[13.37, 13], [42.84, 42], [0.123, 0], [-0.123, -0], ['-1.123', -1]].forEach(function (_ref136) {
+			var _ref137 = _slicedToArray(_ref136, 2),
+			    value = _ref137[0],
+			    expected = _ref137[1];
 
-						case 2:
-						case 'end':
-							return _context59.stop();
-					}
-				}
-			}, _callee59, this);
-		})));
-
-		it('trunc(13.37) should be 13', function () {
-			assert.equal(trunc(13.37), 13);
-		});
-
-		it('trunc(42.84) should be 42', function () {
-			assert.equal(trunc(42.84), 42);
-		});
-
-		it('trunc(0.123) should be 0', function () {
-			assert.equal(trunc(0.123), 0);
-		});
-
-		it('trunc(-0.123) should be -0', function () {
-			assert.equal(trunc(-0.123), -0);
-		});
-
-		it('trunc(\'-1.123\') should be -1', function () {
-			assert.equal(trunc('-1.123'), -1);
-		});
-
-		it('trunc(NaN) should be NaN', function () {
-			assert.equal(isNaN(trunc(NaN)), true);
-		});
-
-		it('trunc(\'foo\') should be NaN', function () {
-			assert.equal(isNaN(trunc('foo')), true);
-		});
-
-		it('trunc() should be NaN', function () {
-			assert.equal(isNaN(trunc()), true);
+			it(name + '(' + value + ') \u2192 ' + expected, function () {
+				assert.approxEqual(trunc(value), expected);
+			});
 		});
 	});
 }
@@ -8890,20 +8359,20 @@ describe('N.prototype.attributes', function () {
 		var element = new N({
 			a: [[key1, value2], [key1, value1], [key2, value2]]
 		});
-		assert.deepEqual(Array.from(element.attributes).sort(function (_ref106, _ref107) {
-			var _ref109 = _slicedToArray(_ref106, 1),
-			    a = _ref109[0];
+		assert.deepEqual(Array.from(element.attributes).sort(function (_ref138, _ref139) {
+			var _ref141 = _slicedToArray(_ref138, 1),
+			    a = _ref141[0];
 
-			var _ref108 = _slicedToArray(_ref107, 1),
-			    b = _ref108[0];
+			var _ref140 = _slicedToArray(_ref139, 1),
+			    b = _ref140[0];
 
 			return a < b ? -1 : 1;
-		}), [[key1, value1], [key2, value2]].sort(function (_ref110, _ref111) {
-			var _ref113 = _slicedToArray(_ref110, 1),
-			    a = _ref113[0];
+		}), [[key1, value1], [key2, value2]].sort(function (_ref142, _ref143) {
+			var _ref145 = _slicedToArray(_ref142, 1),
+			    a = _ref145[0];
 
-			var _ref112 = _slicedToArray(_ref111, 1),
-			    b = _ref112[0];
+			var _ref144 = _slicedToArray(_ref143, 1),
+			    b = _ref144[0];
 
 			return a < b ? -1 : 1;
 		}));
@@ -9169,8 +8638,8 @@ describe('N.eventFilter', function () {
 	it('should set a filter', function () {
 		var actual = [];
 		N.eventFilter = function () {
-			for (var _len42 = arguments.length, args = Array(_len42), _key42 = 0; _key42 < _len42; _key42++) {
-				args[_key42] = arguments[_key42];
+			for (var _len46 = arguments.length, args = Array(_len46), _key46 = 0; _key46 < _len46; _key46++) {
+				args[_key46] = arguments[_key46];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -9189,8 +8658,8 @@ describe('N.eventFilter', function () {
 	it('should set a filter and skip addEventListener', function () {
 		var actual = [];
 		N.eventFilter = function () {
-			for (var _len43 = arguments.length, args = Array(_len43), _key43 = 0; _key43 < _len43; _key43++) {
-				args[_key43] = arguments[_key43];
+			for (var _len47 = arguments.length, args = Array(_len47), _key47 = 0; _key47 < _len47; _key47++) {
+				args[_key47] = arguments[_key47];
 			}
 
 			actual.push.apply(actual, [this].concat(args));
@@ -9243,11 +8712,11 @@ describe('N.prototype.on', function () {
 		}), [[key1, fn1], [key2, fn2]]);
 	});
 
-	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee60() {
+	it('should call a method', _asyncToGenerator(regeneratorRuntime.mark(function _callee31() {
 		var results, data1, data2, E, element;
-		return regeneratorRuntime.wrap(function _callee60$(_context60) {
+		return regeneratorRuntime.wrap(function _callee31$(_context31) {
 			while (1) {
-				switch (_context60.prev = _context60.next) {
+				switch (_context31.prev = _context31.next) {
 					case 0:
 						results = [];
 						data1 = new Date();
@@ -9277,7 +8746,7 @@ describe('N.prototype.on', function () {
 						});
 
 						element.emit('click', data1).emit('_click', data1).emit('click', data2);
-						_context60.next = 8;
+						_context31.next = 8;
 						return wait();
 
 					case 8:
@@ -9285,17 +8754,17 @@ describe('N.prototype.on', function () {
 
 					case 9:
 					case 'end':
-						return _context60.stop();
+						return _context31.stop();
 				}
 			}
-		}, _callee60, this);
+		}, _callee31, this);
 	})));
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee61() {
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee32() {
 		var E, element;
-		return regeneratorRuntime.wrap(function _callee61$(_context61) {
+		return regeneratorRuntime.wrap(function _callee32$(_context32) {
 			while (1) {
-				switch (_context61.prev = _context61.next) {
+				switch (_context32.prev = _context32.next) {
 					case 0:
 						E = function (_N2) {
 							_inherits(E, _N2);
@@ -9317,10 +8786,10 @@ describe('N.prototype.on', function () {
 
 					case 3:
 					case 'end':
-						return _context61.stop();
+						return _context32.stop();
 				}
 			}
-		}, _callee61, this);
+		}, _callee32, this);
 	})));
 });
 
@@ -9363,41 +8832,41 @@ describe('N.prototype.off', function () {
 
 describe('N.prototype.emit', function () {
 
-	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee62() {
+	it('should call a listener', _asyncToGenerator(regeneratorRuntime.mark(function _callee33() {
 		var element, key, data, event;
-		return regeneratorRuntime.wrap(function _callee62$(_context62) {
+		return regeneratorRuntime.wrap(function _callee33$(_context33) {
 			while (1) {
-				switch (_context62.prev = _context62.next) {
+				switch (_context33.prev = _context33.next) {
 					case 0:
 						element = new N();
 						key = 'event-' + Date.now();
 						data = new Date();
-						_context62.next = 5;
+						_context33.next = 5;
 						return new x$3(function (resolve) {
 							element.on(key, resolve).emit(key, data);
 						});
 
 					case 5:
-						event = _context62.sent;
+						event = _context33.sent;
 
 						assert.equal(event.detail, data);
 
 					case 7:
 					case 'end':
-						return _context62.stop();
+						return _context33.stop();
 				}
 			}
-		}, _callee62, this);
+		}, _callee33, this);
 	})));
 
-	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee63() {
+	it('should call listeners', _asyncToGenerator(regeneratorRuntime.mark(function _callee34() {
 		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee63$(_context63) {
+		return regeneratorRuntime.wrap(function _callee34$(_context34) {
 			while (1) {
-				switch (_context63.prev = _context63.next) {
+				switch (_context34.prev = _context34.next) {
 					case 0:
-						onCall = function onCall(_ref118) {
-							var detail = _ref118.detail;
+						onCall = function onCall(_ref150) {
+							var detail = _ref150.detail;
 
 							results.push(detail);
 						};
@@ -9409,7 +8878,7 @@ describe('N.prototype.emit', function () {
 						results = [];
 
 						element.on(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context63.next = 9;
+						_context34.next = 9;
 						return wait();
 
 					case 9:
@@ -9417,23 +8886,23 @@ describe('N.prototype.emit', function () {
 
 					case 10:
 					case 'end':
-						return _context63.stop();
+						return _context34.stop();
 				}
 			}
-		}, _callee63, this);
+		}, _callee34, this);
 	})));
 });
 
 describe('N.prototype.once', function () {
 
-	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee64() {
+	it('should call a listener only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee35() {
 		var element, key, data1, data2, results, onCall;
-		return regeneratorRuntime.wrap(function _callee64$(_context64) {
+		return regeneratorRuntime.wrap(function _callee35$(_context35) {
 			while (1) {
-				switch (_context64.prev = _context64.next) {
+				switch (_context35.prev = _context35.next) {
 					case 0:
-						onCall = function onCall(_ref120) {
-							var detail = _ref120.detail;
+						onCall = function onCall(_ref152) {
+							var detail = _ref152.detail;
 
 							results.push(detail);
 						};
@@ -9445,7 +8914,7 @@ describe('N.prototype.once', function () {
 						results = [];
 
 						element.once(key, onCall).on(key, onCall).emit(key, data1).emit(key, data2);
-						_context64.next = 9;
+						_context35.next = 9;
 						return wait();
 
 					case 9:
@@ -9453,17 +8922,17 @@ describe('N.prototype.once', function () {
 
 					case 10:
 					case 'end':
-						return _context64.stop();
+						return _context35.stop();
 				}
 			}
-		}, _callee64, this);
+		}, _callee35, this);
 	})));
 
-	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee65() {
+	it('should call a method only once', _asyncToGenerator(regeneratorRuntime.mark(function _callee36() {
 		var results, data1, data2, E, element;
-		return regeneratorRuntime.wrap(function _callee65$(_context65) {
+		return regeneratorRuntime.wrap(function _callee36$(_context36) {
 			while (1) {
-				switch (_context65.prev = _context65.next) {
+				switch (_context36.prev = _context36.next) {
 					case 0:
 						results = [];
 						data1 = new Date();
@@ -9491,7 +8960,7 @@ describe('N.prototype.once', function () {
 						element = new E({});
 
 						element.once('click').emit('click', data1).emit('_click', data1).emit('click', data2);
-						_context65.next = 8;
+						_context36.next = 8;
 						return wait();
 
 					case 8:
@@ -9499,17 +8968,17 @@ describe('N.prototype.once', function () {
 
 					case 9:
 					case 'end':
-						return _context65.stop();
+						return _context36.stop();
 				}
 			}
-		}, _callee65, this);
+		}, _callee36, this);
 	})));
 
-	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee66() {
+	it('should throw an error if the object has no method', _asyncToGenerator(regeneratorRuntime.mark(function _callee37() {
 		var E, element;
-		return regeneratorRuntime.wrap(function _callee66$(_context66) {
+		return regeneratorRuntime.wrap(function _callee37$(_context37) {
 			while (1) {
-				switch (_context66.prev = _context66.next) {
+				switch (_context37.prev = _context37.next) {
 					case 0:
 						E = function (_N4) {
 							_inherits(E, _N4);
@@ -9531,10 +9000,10 @@ describe('N.prototype.once', function () {
 
 					case 3:
 					case 'end':
-						return _context66.stop();
+						return _context37.stop();
 				}
 			}
-		}, _callee66, this);
+		}, _callee37, this);
 	})));
 });
 
@@ -9624,24 +9093,24 @@ describe('N.prototype.firstChild', function () {
 
 describe('N.prototype.focused', function () {
 
-	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee67() {
+	it('should return true if it is focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee38() {
 		var body, element;
-		return regeneratorRuntime.wrap(function _callee67$(_context67) {
+		return regeneratorRuntime.wrap(function _callee38$(_context38) {
 			while (1) {
-				switch (_context67.prev = _context67.next) {
+				switch (_context38.prev = _context38.next) {
 					case 0:
-						_context67.next = 2;
+						_context38.next = 2;
 						return new N.ready();
 
 					case 2:
-						body = _context67.sent;
+						body = _context38.sent;
 						element = new N({
 							t: 'input',
 							a: [['type', 'text']]
 						});
 
 						body.append(element);
-						_context67.next = 7;
+						_context38.next = 7;
 						return new x$3(function (resolve, reject) {
 							var count = 0;
 							function check() {
@@ -9664,23 +9133,23 @@ describe('N.prototype.focused', function () {
 
 					case 9:
 					case 'end':
-						return _context67.stop();
+						return _context38.stop();
 				}
 			}
-		}, _callee67, this);
+		}, _callee38, this);
 	})));
 
-	it('should return true if it is not focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee68() {
+	it('should return true if it is not focused', _asyncToGenerator(regeneratorRuntime.mark(function _callee39() {
 		var body, element;
-		return regeneratorRuntime.wrap(function _callee68$(_context68) {
+		return regeneratorRuntime.wrap(function _callee39$(_context39) {
 			while (1) {
-				switch (_context68.prev = _context68.next) {
+				switch (_context39.prev = _context39.next) {
 					case 0:
-						_context68.next = 2;
+						_context39.next = 2;
 						return N.ready();
 
 					case 2:
-						body = _context68.sent;
+						body = _context39.sent;
 						element = new N({
 							t: 'input'
 						});
@@ -9691,10 +9160,10 @@ describe('N.prototype.focused', function () {
 
 					case 7:
 					case 'end':
-						return _context68.stop();
+						return _context39.stop();
 				}
 			}
-		}, _callee68, this);
+		}, _callee39, this);
 	})));
 });
 
@@ -9900,12 +9369,12 @@ describe('N.prototype.nodeType', function () {
 
 	it('should return ELEMENT_NODE', function () {
 		var element = new N({});
-		assert.equal(element.nodeType, x$36.ELEMENT_NODE);
+		assert.equal(element.nodeType, x$35.ELEMENT_NODE);
 	});
 
 	it('should return TEXT_NODE', function () {
 		var element = new N('' + Date.now());
-		assert.equal(element.nodeType, x$36.TEXT_NODE);
+		assert.equal(element.nodeType, x$35.TEXT_NODE);
 	});
 });
 
@@ -10141,8 +9610,8 @@ describe('N.prototype.text', function () {
 var x$48 = location;
 
 function compileCSS() {
-	for (var _len44 = arguments.length, declarations = Array(_len44), _key44 = 0; _key44 < _len44; _key44++) {
-		declarations[_key44] = arguments[_key44];
+	for (var _len48 = arguments.length, declarations = Array(_len48), _key48 = 0; _key48 < _len48; _key48++) {
+		declarations[_key48] = arguments[_key48];
 	}
 
 	return declarations.map(function (declaration) {
@@ -10153,11 +9622,11 @@ function compileCSS() {
 var commonStyle = ['position:fixed;', 'left:0;', 'right:0;', 'bottom:0;', 'opacity:0.6;', 'font-family:Courier,monospace;', 'white-space:pre;', 'pointer-events:none;'].join('');
 
 function forEachDirections$2(fn) {
-	[['lrtb', compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']), ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref125) {
-		var _ref126 = _slicedToArray(_ref125, 3),
-		    textDirectionType = _ref126[0],
-		    style = _ref126[1],
-		    visualDirections = _ref126[2];
+	[['lrtb', compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']), ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref157) {
+		var _ref158 = _slicedToArray(_ref157, 3),
+		    textDirectionType = _ref158[0],
+		    style = _ref158[1],
+		    visualDirections = _ref158[2];
 
 		fn(textDirectionType, style, visualDirections.map(function (visualDirection, index) {
 			return [['left', 'right', 'top', 'bottom'][index], visualDirection];
@@ -11237,8 +10706,8 @@ describe('noop', function () {
 });
 
 function assign$1(target) {
-	for (var _len45 = arguments.length, objects = Array(_len45 > 1 ? _len45 - 1 : 0), _key45 = 1; _key45 < _len45; _key45++) {
-		objects[_key45 - 1] = arguments[_key45];
+	for (var _len49 = arguments.length, objects = Array(_len49 > 1 ? _len49 - 1 : 0), _key49 = 1; _key49 < _len49; _key49++) {
+		objects[_key49 - 1] = arguments[_key49];
 	}
 
 	objects.forEach(function (obj) {
@@ -11302,11 +10771,11 @@ describe('passThrough', function () {
 	});
 });
 
-if (!x$30.immediateId) {
-	x$30.immediateId = 0;
+if (!x$45.immediateId) {
+	x$45.immediateId = 0;
 }
-x$30.immediateId += 1;
-var setImmediateNative = x$30.setImmediate;
+x$45.immediateId += 1;
+var setImmediateNative = x$45.setImmediate;
 
 var setImmediateAvailable = void 0;
 // let firstImmediate = true;
@@ -11742,26 +11211,26 @@ tests$10(x$51, 'Request');
 
 describe('requestAnimationFrame', function () {
 
-	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee69() {
+	it('should call the given function with timeStamp', _asyncToGenerator(regeneratorRuntime.mark(function _callee40() {
 		var timeStamp;
-		return regeneratorRuntime.wrap(function _callee69$(_context69) {
+		return regeneratorRuntime.wrap(function _callee40$(_context40) {
 			while (1) {
-				switch (_context69.prev = _context69.next) {
+				switch (_context40.prev = _context40.next) {
 					case 0:
-						_context69.next = 2;
+						_context40.next = 2;
 						return new x$3(x$29);
 
 					case 2:
-						timeStamp = _context69.sent;
+						timeStamp = _context40.sent;
 
 						assert(0 < timeStamp, true);
 
 					case 4:
 					case 'end':
-						return _context69.stop();
+						return _context40.stop();
 				}
 			}
-		}, _callee69, this);
+		}, _callee40, this);
 	})));
 });
 
@@ -11830,10 +11299,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.get', function () {
 
-		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref128) {
-			var _ref129 = _slicedToArray(_ref128, 2),
-			    index = _ref129[0],
-			    expected = _ref129[1];
+		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref160) {
+			var _ref161 = _slicedToArray(_ref160, 2),
+			    index = _ref161[0],
+			    expected = _ref161[1];
 
 			it('should return element at ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -11844,10 +11313,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.rotate', function () {
 
-		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref130) {
-			var _ref131 = _slicedToArray(_ref130, 2),
-			    index = _ref131[0],
-			    expected = _ref131[1];
+		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref162) {
+			var _ref163 = _slicedToArray(_ref162, 2),
+			    index = _ref163[0],
+			    expected = _ref163[1];
 
 			it('should return rotate by ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -11858,7 +11327,7 @@ describe('Ring', function () {
 });
 
 function scrollX() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$30;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$45;
 
 	return element.scrollLeft || element.pageXOffset || 0;
 }
@@ -11870,7 +11339,7 @@ describe('scrollX', function () {
 });
 
 function scrollY() {
-	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$30;
+	var element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x$45;
 
 	return element.scrollTop || element.pageYOffset || 0;
 }
@@ -11890,7 +11359,7 @@ function test$126(generator) {
 
 		it('should return an iterator', function () {
 			var data = [1, 2];
-			var set = new x$37(data);
+			var set = new x$36(data);
 			var iterator = generator.call(set);
 			var results = [];
 			while (1) {
@@ -11914,7 +11383,7 @@ function generator$12() {
 
 test$126(generator$12, 'Set.prototype[Symbol.iterator]#j0');
 
-test$126(x$37.prototype[x.iterator]);
+test$126(x$36.prototype[x.iterator]);
 
 var Set$2 = function () {
 	function Set$2(iterable) {
@@ -12090,8 +11559,8 @@ function tests$14(Set, name) {
 			var results = [];
 			var context = {};
 			set.forEach(function () {
-				for (var _len46 = arguments.length, args = Array(_len46), _key46 = 0; _key46 < _len46; _key46++) {
-					args[_key46] = arguments[_key46];
+				for (var _len50 = arguments.length, args = Array(_len50), _key50 = 0; _key50 < _len50; _key50++) {
+					args[_key50] = arguments[_key50];
 				}
 
 				args[3] = this;
@@ -12157,7 +11626,7 @@ function tests$14(Set, name) {
 
 tests$14(Set$2, 'J0Set');
 
-tests$14(x$37, 'Set');
+tests$14(x$36, 'Set');
 
 describe('setImmediate', function () {
 
@@ -12187,8 +11656,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref132, name, expression, offset, source) {
-				var length = _ref132.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref164, name, expression, offset, source) {
+				var length = _ref164.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -12255,8 +11724,8 @@ var State = function () {
 
 			var params = null;
 			href.replace(this.matcher, function (match) {
-				for (var _len47 = arguments.length, args = Array(_len47 > 1 ? _len47 - 1 : 0), _key47 = 1; _key47 < _len47; _key47++) {
-					args[_key47 - 1] = arguments[_key47];
+				for (var _len51 = arguments.length, args = Array(_len51 > 1 ? _len51 - 1 : 0), _key51 = 1; _key51 < _len51; _key51++) {
+					args[_key51 - 1] = arguments[_key51];
 				}
 
 				var index = 0;
@@ -12452,7 +11921,7 @@ var StateManager = function (_EventEmitter) {
 		var _this38 = _possibleConstructorReturn(this, (StateManager.__proto__ || Object.getPrototypeOf(StateManager)).call(this));
 
 		assign(_this38, { prefix: '#' }, config, {
-			states: new x$38(),
+			states: new x$37(),
 			listeners: []
 		});
 		if (!_this38.parser) {
@@ -12485,11 +11954,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator49 = this.states[Symbol.iterator](), _step49; !(_iteratorNormalCompletion49 = (_step49 = _iterator49.next()).done); _iteratorNormalCompletion49 = true) {
-					var _ref133 = _step49.value;
+					var _ref165 = _step49.value;
 
-					var _ref134 = _slicedToArray(_ref133, 2);
+					var _ref166 = _slicedToArray(_ref165, 2);
 
-					var state = _ref134[1];
+					var state = _ref166[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -12528,9 +11997,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref135 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref135.name,
-			    params = _ref135.params;
+			var _ref167 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref167.name,
+			    params = _ref167.params;
 
 			var noFallback = arguments[1];
 
@@ -12611,9 +12080,9 @@ var StateManager = function (_EventEmitter) {
 			var onStateChange = debounce(function () {
 				_this39.replace(_this39.parseURL());
 			}, debounceDuration);
-			x$40('hashchange', onStateChange);
-			x$40('pushstate', onStateChange);
-			x$40('popstate', onStateChange);
+			x$39('hashchange', onStateChange);
+			x$39('pushstate', onStateChange);
+			x$39('popstate', onStateChange);
 			onStateChange();
 		}
 	}]);
@@ -12654,11 +12123,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator50 = states.states[Symbol.iterator](), _step50; !(_iteratorNormalCompletion50 = (_step50 = _iterator50.next()).done); _iteratorNormalCompletion50 = true) {
-				var _ref136 = _step50.value;
+				var _ref168 = _step50.value;
 
-				var _ref137 = _slicedToArray(_ref136, 2);
+				var _ref169 = _slicedToArray(_ref168, 2);
 
-				var state = _ref137[1];
+				var state = _ref169[1];
 
 				results.push(state);
 			}
@@ -12732,12 +12201,12 @@ describe('StateManager', function () {
 		assert.equal(states.href({ name: name2 }), '' + prefix + name0);
 	});
 
-	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee70() {
-		var states, name0, name1, name2, _ref139, _ref140, toState, fromState;
+	it('should start management', _asyncToGenerator(regeneratorRuntime.mark(function _callee41() {
+		var states, name0, name1, name2, _ref171, _ref172, toState, fromState;
 
-		return regeneratorRuntime.wrap(function _callee70$(_context70) {
+		return regeneratorRuntime.wrap(function _callee41$(_context41) {
 			while (1) {
-				switch (_context70.prev = _context70.next) {
+				switch (_context41.prev = _context41.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -12754,11 +12223,11 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context70.next = 7;
+						_context41.next = 7;
 						return new x$3(function (resolve) {
 							states.on('change', function () {
-								for (var _len48 = arguments.length, data = Array(_len48), _key48 = 0; _key48 < _len48; _key48++) {
-									data[_key48] = arguments[_key48];
+								for (var _len52 = arguments.length, data = Array(_len52), _key52 = 0; _key52 < _len52; _key52++) {
+									data[_key52] = arguments[_key52];
 								}
 
 								resolve(data);
@@ -12766,27 +12235,27 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref139 = _context70.sent;
-						_ref140 = _slicedToArray(_ref139, 2);
-						toState = _ref140[0];
-						fromState = _ref140[1];
+						_ref171 = _context41.sent;
+						_ref172 = _slicedToArray(_ref171, 2);
+						toState = _ref172[0];
+						fromState = _ref172[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
 
 					case 13:
 					case 'end':
-						return _context70.stop();
+						return _context41.stop();
 				}
 			}
-		}, _callee70, this);
+		}, _callee41, this);
 	})));
 
-	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee71() {
+	it('should return whether the current state is the given state or not', _asyncToGenerator(regeneratorRuntime.mark(function _callee42() {
 		var states, name0, name1, name2;
-		return regeneratorRuntime.wrap(function _callee71$(_context71) {
+		return regeneratorRuntime.wrap(function _callee42$(_context42) {
 			while (1) {
-				switch (_context71.prev = _context71.next) {
+				switch (_context42.prev = _context42.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -12803,7 +12272,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 }).start();
-						_context71.next = 7;
+						_context42.next = 7;
 						return new x$3(function (resolve) {
 							states.once('change', resolve);
 						});
@@ -12814,17 +12283,17 @@ describe('StateManager', function () {
 
 					case 9:
 					case 'end':
-						return _context71.stop();
+						return _context42.stop();
 				}
 			}
-		}, _callee71, this);
+		}, _callee42, this);
 	})));
 
-	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee72() {
+	it('should go to the other state', _asyncToGenerator(regeneratorRuntime.mark(function _callee43() {
 		var states, name0, name1, name2, param1, params;
-		return regeneratorRuntime.wrap(function _callee72$(_context72) {
+		return regeneratorRuntime.wrap(function _callee43$(_context43) {
 			while (1) {
-				switch (_context72.prev = _context72.next) {
+				switch (_context43.prev = _context43.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -12841,7 +12310,7 @@ describe('StateManager', function () {
 							name: name2,
 							path: 'stateB/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context72.next = 7;
+						_context43.next = 7;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).start();
 						});
@@ -12849,7 +12318,7 @@ describe('StateManager', function () {
 					case 7:
 						param1 = '' + Date.now();
 						params = { param1: param1 };
-						_context72.next = 11;
+						_context43.next = 11;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).go({
 								name: name1,
@@ -12862,17 +12331,17 @@ describe('StateManager', function () {
 
 					case 12:
 					case 'end':
-						return _context72.stop();
+						return _context43.stop();
 				}
 			}
-		}, _callee72, this);
+		}, _callee43, this);
 	})));
 
-	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee73() {
+	it('should return whether the current state is one of the given states', _asyncToGenerator(regeneratorRuntime.mark(function _callee44() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1;
-		return regeneratorRuntime.wrap(function _callee73$(_context73) {
+		return regeneratorRuntime.wrap(function _callee44$(_context44) {
 			while (1) {
-				switch (_context73.prev = _context73.next) {
+				switch (_context44.prev = _context44.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -12889,13 +12358,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context73.next = 7;
+						_context44.next = 7;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context73.sent;
+						toState0 = _context44.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -12904,7 +12373,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context73.next = 14;
+						_context44.next = 14;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -12913,7 +12382,7 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context73.sent;
+						toState1 = _context44.sent;
 
 						assert.equal(toState1.name, name2);
 						assert.equal(states.is({
@@ -12927,17 +12396,17 @@ describe('StateManager', function () {
 
 					case 18:
 					case 'end':
-						return _context73.stop();
+						return _context44.stop();
 				}
 			}
-		}, _callee73, this);
+		}, _callee44, this);
 	})));
 
-	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee74() {
+	it('should detect history.back()', _asyncToGenerator(regeneratorRuntime.mark(function _callee45() {
 		var states, name0, name1, name2, toState0, param1, param2, params, toState1, toState2;
-		return regeneratorRuntime.wrap(function _callee74$(_context74) {
+		return regeneratorRuntime.wrap(function _callee45$(_context45) {
 			while (1) {
-				switch (_context74.prev = _context74.next) {
+				switch (_context45.prev = _context45.next) {
 					case 0:
 						states = new StateManager();
 						name0 = Date.now() + '-defaultState';
@@ -12954,13 +12423,13 @@ describe('StateManager', function () {
 							name: name2,
 							path: '/{param1:\\d+}/{param2:\\w+}'
 						}).otherwise({ name: name0 });
-						_context74.next = 7;
+						_context45.next = 7;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).start();
 						});
 
 					case 7:
-						toState0 = _context74.sent;
+						toState0 = _context45.sent;
 
 						assert.equal(toState0.name, name0);
 						param1 = '' + Date.now();
@@ -12969,7 +12438,7 @@ describe('StateManager', function () {
 							param1: param1,
 							param2: param2
 						};
-						_context74.next = 14;
+						_context45.next = 14;
 						return new x$3(function (resolve) {
 							states.once('change', resolve).go({
 								name: name2,
@@ -12978,26 +12447,26 @@ describe('StateManager', function () {
 						});
 
 					case 14:
-						toState1 = _context74.sent;
+						toState1 = _context45.sent;
 
 						assert.equal(toState1.name, name2);
-						_context74.next = 18;
+						_context45.next = 18;
 						return new x$3(function (resolve) {
 							states.once('change', resolve);
 							x$54.back();
 						});
 
 					case 18:
-						toState2 = _context74.sent;
+						toState2 = _context45.sent;
 
 						assert.equal(toState2.name, name0);
 
 					case 20:
 					case 'end':
-						return _context74.stop();
+						return _context45.stop();
 				}
 			}
-		}, _callee74, this);
+		}, _callee45, this);
 	})));
 });
 
@@ -13085,11 +12554,11 @@ function test$130(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref145) {
-			var _ref146 = _slicedToArray(_ref145, 3),
-			    string = _ref146[0],
-			    from = _ref146[1],
-			    to = _ref146[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref177) {
+			var _ref178 = _slicedToArray(_ref177, 3),
+			    string = _ref178[0],
+			    from = _ref178[1],
+			    to = _ref178[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -13165,11 +12634,11 @@ function test$134(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref147) {
-			var _ref148 = _slicedToArray(_ref147, 3),
-			    expected = _ref148[0],
-			    from = _ref148[1],
-			    to = _ref148[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref179) {
+			var _ref180 = _slicedToArray(_ref179, 3),
+			    expected = _ref180[0],
+			    from = _ref180[1],
+			    to = _ref180[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -13192,8 +12661,8 @@ function fromCodePoint() {
 	var chars = [];
 	var fromCharCode = String.fromCharCode;
 
-	for (var _len49 = arguments.length, args = Array(_len49), _key49 = 0; _key49 < _len49; _key49++) {
-		args[_key49] = arguments[_key49];
+	for (var _len53 = arguments.length, args = Array(_len53), _key53 = 0; _key53 < _len53; _key53++) {
+		args[_key53] = arguments[_key53];
 	}
 
 	for (var i = 0, length = args.length; i < length; i++) {
@@ -13708,31 +13177,31 @@ function test$138(normalize) {
 
 		var tests = void 0;
 
-		before(_asyncToGenerator(regeneratorRuntime.mark(function _callee75() {
+		before(_asyncToGenerator(regeneratorRuntime.mark(function _callee46() {
 			var root, response;
-			return regeneratorRuntime.wrap(function _callee75$(_context75) {
+			return regeneratorRuntime.wrap(function _callee46$(_context46) {
 				while (1) {
-					switch (_context75.prev = _context75.next) {
+					switch (_context46.prev = _context46.next) {
 						case 0:
 							this.timeout(10000);
 							root = x$4.getElementById('root').textContent;
-							_context75.next = 4;
+							_context46.next = 4;
 							return x$6(root + '/String/normalize/tests.json');
 
 						case 4:
-							response = _context75.sent;
-							_context75.next = 7;
+							response = _context46.sent;
+							_context46.next = 7;
 							return response.json();
 
 						case 7:
-							tests = _context75.sent;
+							tests = _context46.sent;
 
 						case 8:
 						case 'end':
-							return _context75.stop();
+							return _context46.stop();
 					}
 				}
-			}, _callee75, this);
+			}, _callee46, this);
 		})));
 
 		it('should normalize texts', function () {
@@ -13742,7 +13211,7 @@ function test$138(normalize) {
 
 			this.timeout(10000);
 
-			var _loop2 = function _loop2() {
+			var _loop9 = function _loop9() {
 				var _tests$pop = tests.pop(),
 				    _tests$pop2 = _toArray(_tests$pop),
 				    source = _tests$pop2[0],
@@ -13756,7 +13225,7 @@ function test$138(normalize) {
 			};
 
 			while (0 < tests.length) {
-				_loop2();
+				_loop9();
 			}
 			if (0 < failed.length) {
 				x$25.error(new Error(failed.length + ' of ' + length + ' failed'));
@@ -14048,11 +13517,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref150) {
-		var _ref151 = _slicedToArray(_ref150, 3),
-		    string = _ref151[0],
-		    from = _ref151[1],
-		    to = _ref151[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref182) {
+		var _ref183 = _slicedToArray(_ref182, 3),
+		    string = _ref183[0],
+		    from = _ref183[1],
+		    to = _ref183[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -14393,12 +13862,22 @@ function thermalRGB(value) {
 }
 function css(value) {
 	return 'rgb(' + thermalRGB(value).map(function (v) {
-		return x$41.floor(clamp(256 * v, 0, 255));
+		return x$40.floor(clamp(256 * v, 0, 255));
 	}).join(',') + ')';
 }
 thermalRGB.css = css;
 
 describe('thermalRGB', function () {
+
+	[[0.00, [0, 0, 1]], [0.50, [0, 0.8, 0]], [1.00, [1, 0, 0]]].forEach(function (_ref184) {
+		var _ref185 = _slicedToArray(_ref184, 2),
+		    value = _ref185[0],
+		    expected = _ref185[1];
+
+		it('thermalRGB(' + value + ') \u2192 [' + expected.join(', ') + ']', function () {
+			assert.deepEqual(thermalRGB(value), expected);
+		});
+	});
 
 	it('should return an array of numbers', function () {
 		assert.deepEqual(thermalRGB(0), [0, 0, 1]);
@@ -14407,38 +13886,15 @@ describe('thermalRGB', function () {
 
 	describe('thermalRGB.css', function () {
 
-		it('should return a string', function () {
-			assert.deepEqual(thermalRGB.css(0), 'rgb(0,0,255)');
-			assert.deepEqual(thermalRGB.css(1), 'rgb(255,0,0)');
+		[[0.00, 'rgb(0,0,255)'], [0.25, 'rgb(0,76,128)'], [0.50, 'rgb(0,204,0)'], [0.75, 'rgb(128,76,0)'], [1.00, 'rgb(255,0,0)']].forEach(function (_ref186) {
+			var _ref187 = _slicedToArray(_ref186, 2),
+			    value = _ref187[0],
+			    expected = _ref187[1];
+
+			it('thermalRGB.css(' + value + ') \u2192 ' + expected, function () {
+				assert.equal(thermalRGB.css(value), expected);
+			});
 		});
-
-		it('[id:thermalRGB] should draw an expected map', _asyncToGenerator(regeneratorRuntime.mark(function _callee76() {
-			return regeneratorRuntime.wrap(function _callee76$(_context76) {
-				while (1) {
-					switch (_context76.prev = _context76.next) {
-						case 0:
-							this.timeout(30000);
-							_context76.next = 3;
-							return assert.graphicalEqual({
-								name: 'thermalRGB',
-								url: x$30.root + '/thermalRGB/thermalRGB.png',
-								fn: function fn(x, y) {
-									return y;
-								},
-								xRange: [0, 1],
-								yRange: [0, 1],
-								zRange: [0, 1],
-								xGrid: [],
-								yGrid: []
-							});
-
-						case 3:
-						case 'end':
-							return _context76.stop();
-					}
-				}
-			}, _callee76, this);
-		})));
 	});
 });
 
@@ -14452,8 +13908,8 @@ function throttle(fn) {
 	function call() {
 		var thisArg = isUndefined(context) ? this : context;
 
-		for (var _len50 = arguments.length, args = Array(_len50), _key50 = 0; _key50 < _len50; _key50++) {
-			args[_key50] = arguments[_key50];
+		for (var _len54 = arguments.length, args = Array(_len54), _key54 = 0; _key54 < _len54; _key54++) {
+			args[_key54] = arguments[_key54];
 		}
 
 		lastArgs = args;
@@ -14676,18 +14132,18 @@ function test$150(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref153, index) {
-			var _ref154 = _slicedToArray(_ref153, 2),
-			    input = _ref154[0],
-			    tests = _ref154[1];
+		].forEach(function (_ref188, index) {
+			var _ref189 = _slicedToArray(_ref188, 2),
+			    input = _ref189[0],
+			    tests = _ref189[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref155) {
-						var _ref156 = _slicedToArray(_ref155, 2),
-						    key = _ref156[0],
-						    expected = _ref156[1];
+					tests.forEach(function (_ref190) {
+						var _ref191 = _slicedToArray(_ref190, 2),
+						    key = _ref191[0],
+						    expected = _ref191[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -15346,11 +14802,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref157) {
-				var _ref158 = _slicedToArray(_ref157, 2),
-				    name = _ref158[0],
-				    _ref158$ = _ref158[1],
-				    value = _ref158$ === undefined ? '' : _ref158$;
+			return this.data.map(function (_ref192) {
+				var _ref193 = _slicedToArray(_ref192, 2),
+				    name = _ref193[0],
+				    _ref193$ = _ref193[1],
+				    value = _ref193$ === undefined ? '' : _ref193$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -15505,8 +14961,8 @@ var Vector = function () {
 	}, {
 		key: 'add',
 		value: function add() {
-			for (var _len51 = arguments.length, vectors = Array(_len51), _key51 = 0; _key51 < _len51; _key51++) {
-				vectors[_key51] = arguments[_key51];
+			for (var _len55 = arguments.length, vectors = Array(_len55), _key55 = 0; _key55 < _len55; _key55++) {
+				vectors[_key55] = arguments[_key55];
 			}
 
 			return new Vector(this.array.map(function (component, index) {
@@ -15518,8 +14974,8 @@ var Vector = function () {
 	}, {
 		key: 'subtract',
 		value: function subtract() {
-			for (var _len52 = arguments.length, vectors = Array(_len52), _key52 = 0; _key52 < _len52; _key52++) {
-				vectors[_key52] = arguments[_key52];
+			for (var _len56 = arguments.length, vectors = Array(_len56), _key56 = 0; _key56 < _len56; _key56++) {
+				vectors[_key56] = arguments[_key56];
 			}
 
 			return new Vector(this.array.map(function (component, index) {
@@ -15553,7 +15009,7 @@ var Vector = function () {
 	}, {
 		key: 'norm',
 		get: function get() {
-			return x$41.hypot.apply(null, this.array);
+			return x$40.hypot.apply(null, this.array);
 		},
 		set: function set(norm) {
 			this.array = this.scale(norm / this.norm).array;
@@ -15576,10 +15032,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.get', function () {
 		var components = [1, 2, 3];
-		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref159) {
-			var _ref160 = _slicedToArray(_ref159, 2),
-			    index = _ref160[0],
-			    expected = _ref160[1];
+		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref194) {
+			var _ref195 = _slicedToArray(_ref194, 2),
+			    index = _ref195[0],
+			    expected = _ref195[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15590,10 +15046,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.set', function () {
 		var components = [0, 1, 2];
-		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref161) {
-			var _ref162 = _slicedToArray(_ref161, 2),
-			    index = _ref162[0],
-			    expected = _ref162[1];
+		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref196) {
+			var _ref197 = _slicedToArray(_ref196, 2),
+			    index = _ref197[0],
+			    expected = _ref197[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15604,10 +15060,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.dim', function () {
-		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref163) {
-			var _ref164 = _slicedToArray(_ref163, 2),
-			    components = _ref164[0],
-			    expected = _ref164[1];
+		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref198) {
+			var _ref199 = _slicedToArray(_ref198, 2),
+			    components = _ref199[0],
+			    expected = _ref199[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15618,10 +15074,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.add', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref165) {
-			var _ref166 = _slicedToArray(_ref165, 2),
-			    components2 = _ref166[0],
-			    expected = _ref166[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref200) {
+			var _ref201 = _slicedToArray(_ref200, 2),
+			    components2 = _ref201[0],
+			    expected = _ref201[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -15633,10 +15089,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.subtract', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref167) {
-			var _ref168 = _slicedToArray(_ref167, 2),
-			    components2 = _ref168[0],
-			    expected = _ref168[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref202) {
+			var _ref203 = _slicedToArray(_ref202, 2),
+			    components2 = _ref203[0],
+			    expected = _ref203[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -15648,10 +15104,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.scale', function () {
 		var components = [0, 1, 2];
-		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref169) {
-			var _ref170 = _slicedToArray(_ref169, 2),
-			    scalar = _ref170[0],
-			    expected = _ref170[1];
+		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref204) {
+			var _ref205 = _slicedToArray(_ref204, 2),
+			    scalar = _ref205[0],
+			    expected = _ref205[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v = new Vector(components);
@@ -15661,10 +15117,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (getter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref171) {
-			var _ref172 = _slicedToArray(_ref171, 2),
-			    components = _ref172[0],
-			    expected = _ref172[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref206) {
+			var _ref207 = _slicedToArray(_ref206, 2),
+			    components = _ref207[0],
+			    expected = _ref207[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15674,10 +15130,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (setter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref173) {
-			var _ref174 = _slicedToArray(_ref173, 2),
-			    components = _ref174[0],
-			    norm = _ref174[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref208) {
+			var _ref209 = _slicedToArray(_ref208, 2),
+			    components = _ref209[0],
+			    norm = _ref209[1];
 
 			it('should return [' + components.join(', ') + ']', function () {
 				var v = new Vector(components).scale(100);
@@ -15691,12 +15147,12 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.toString', function () {
-		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref175) {
-			var _ref176 = _slicedToArray(_ref175, 4),
-			    components = _ref176[0],
-			    digits = _ref176[1],
-			    separator = _ref176[2],
-			    expected = _ref176[3];
+		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref210) {
+			var _ref211 = _slicedToArray(_ref210, 4),
+			    components = _ref211[0],
+			    digits = _ref211[1],
+			    separator = _ref211[2],
+			    expected = _ref211[3];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15707,31 +15163,31 @@ describe('Vector', function () {
 });
 
 describe('wait', function () {
-	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee77() {
+	it('should return a promise and it should resolved with given data', _asyncToGenerator(regeneratorRuntime.mark(function _callee47() {
 		var start, data, duration, margin, actual;
-		return regeneratorRuntime.wrap(function _callee77$(_context77) {
+		return regeneratorRuntime.wrap(function _callee47$(_context47) {
 			while (1) {
-				switch (_context77.prev = _context77.next) {
+				switch (_context47.prev = _context47.next) {
 					case 0:
 						start = Date.now();
 						data = start;
 						duration = 100;
 						margin = 0.8;
-						_context77.next = 6;
+						_context47.next = 6;
 						return wait(duration, data);
 
 					case 6:
-						actual = _context77.sent;
+						actual = _context47.sent;
 
 						assert.equal(actual, data);
 						assert.equal(margin * duration < Date.now() - start, true);
 
 					case 9:
 					case 'end':
-						return _context77.stop();
+						return _context47.stop();
 				}
 			}
-		}, _callee77, this);
+		}, _callee47, this);
 	})));
 });
 
@@ -15744,7 +15200,7 @@ mocha.run().once('end', function () {
 	var tests = x$4.querySelectorAll('.test');
 	var testList = [];
 
-	var _loop3 = function _loop3(i) {
+	var _loop10 = function _loop10(i) {
 		var testElement = tests[i];
 		testElement.querySelector('h2').textContent.replace(/^\s*\[\s*id\s*:\s*(.*?)\s*\]/, function (match, name) {
 			testElement.setAttribute('data-graph', name);
@@ -15753,7 +15209,7 @@ mocha.run().once('end', function () {
 	};
 
 	for (var i = tests.length; i--;) {
-		_loop3(i);
+		_loop10(i);
 	}
 	var canvasList = x$4.querySelectorAll('.' + x$59);
 	var list = [];

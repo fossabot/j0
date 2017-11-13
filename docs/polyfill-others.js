@@ -70,10 +70,7 @@ if (!x$1.cbrt) {
 
 /* eslint no-magic-numbers: ["warn", {ignore: [-1, 0, 1, 31, 32]}], no-bitwise: "off" */
 function clz32(x) {
-	if (x <= -1) {
-		return 0;
-	}
-	if (x === null || x <= 1) {
+	if (x === null || x === 0) {
 		return 32;
 	}
 	return 31 - x$1.floor(x$1.log(x >>> 0) * x$1.LOG2E);
