@@ -3044,11 +3044,12 @@ var x$40 = Math;
 var x$41 = getSelection;
 
 var J0Range = function () {
-	function J0Range(range, container) {
+	function J0Range(range, container, textDirection) {
 		_classCallCheck(this, J0Range);
 
 		this.range = range || x$4.createRange();
 		this.container = new N(container || new N(x$4.body));
+		this.textDirection = textDirection;
 	}
 
 	_createClass(J0Range, [{
@@ -3120,8 +3121,9 @@ var J0Range = function () {
 	}, {
 		key: 'getCollapsedBB',
 		value: function getCollapsedBB(toStart) {
-			var _textDirection = _slicedToArray(this.textDirection, 1),
-			    mainDirection = _textDirection[0];
+			var _ref33 = this.textDirection || this.container.textDirection,
+			    _ref34 = _slicedToArray(_ref33, 1),
+			    mainDirection = _ref34[0];
 
 			var bb = this._bb;
 			switch (mainDirection) {
@@ -3179,7 +3181,7 @@ var J0Range = function () {
 	}, {
 		key: 'product',
 		value: function product(direction, crossDirection) {
-			var textDirection = this.textDirection[crossDirection ? 1 : 0];
+			var textDirection = (this.textDirection || this.container.textDirection)[crossDirection ? 1 : 0];
 			if (textDirection.slice(-1) === direction[0]) {
 				return 1;
 			} else if (textDirection[0] === direction[0]) {
@@ -3189,7 +3191,9 @@ var J0Range = function () {
 		}
 	}, {
 		key: 'modify',
-		value: function modify(alter, direction, anchorBB) {
+		value: function modify(alter, direction) {
+			var anchorBB = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.bb;
+
 			var mainProduct = this.product(direction);
 			var forward = void 0;
 			if (mainProduct === 1) {
@@ -3275,8 +3279,9 @@ var J0Range = function () {
 			    targetY = _getTarget.y,
 			    threshold = _getTarget.d;
 
-			var _textDirection2 = _slicedToArray(this.textDirection, 1),
-			    mainDirection = _textDirection2[0];
+			var _ref35 = this.textDirection || this.container.textDirection,
+			    _ref36 = _slicedToArray(_ref35, 1),
+			    mainDirection = _ref36[0];
 
 			var vertical = /^[bt]/.test(mainDirection);
 			var candidates = [];
@@ -3335,12 +3340,12 @@ var J0Range = function () {
 					break;
 			}
 			function selectNearest(candidates) {
-				return candidates.sort(function (_ref33, _ref34) {
-					var _ref36 = _slicedToArray(_ref33, 1),
-					    a = _ref36[0];
+				return candidates.sort(function (_ref37, _ref38) {
+					var _ref40 = _slicedToArray(_ref37, 1),
+					    a = _ref40[0];
 
-					var _ref35 = _slicedToArray(_ref34, 1),
-					    b = _ref35[0];
+					var _ref39 = _slicedToArray(_ref38, 1),
+					    b = _ref39[0];
 
 					return a < b ? -1 : 1;
 				}).shift().slice(1, 3);
@@ -3416,11 +3421,6 @@ var J0Range = function () {
 			} else {
 				this.container.emit('range:firstline', check.anchorBB);
 			}
-		}
-	}, {
-		key: 'textDirection',
-		get: function get() {
-			return this.container.textDirection;
 		}
 	}, {
 		key: 'collapsed',
@@ -3583,13 +3583,13 @@ var N = function () {
 		} else if (isNode(source)) {
 			this[nodeKey] = source;
 		} else {
-			var _ref37 = source || {},
-			    t = _ref37.t,
-			    a = _ref37.a,
-			    c = _ref37.c,
-			    e = _ref37.e,
-			    n = _ref37.n,
-			    o = _ref37.o;
+			var _ref41 = source || {},
+			    t = _ref41.t,
+			    a = _ref41.a,
+			    c = _ref41.c,
+			    e = _ref41.e,
+			    n = _ref41.n,
+			    o = _ref41.o;
 
 			this[nodeKey] = wrap(n ? x$4.createElementNS(n, t, o) : x$4.createElement(t || 'div')).node;
 			if (c) {
@@ -4125,9 +4125,9 @@ var N = function () {
 		}
 	}, {
 		key: 'modifySelection',
-		value: function modifySelection(expand, direction, anchorBB) {
+		value: function modifySelection(expand, direction, anchorBB, textDirection) {
 			var selection = x$41();
-			var range = new J0Range(selection.getRangeAt(0), this);
+			var range = new J0Range(selection.getRangeAt(0), this, textDirection);
 			selection.removeAllRanges();
 			range.modify(expand ? 'expand' : 'move', direction, anchorBB);
 			selection.addRange(range.range);
@@ -4226,9 +4226,9 @@ var N = function () {
 
 				try {
 					for (var _iterator25 = attributes[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
-						var _ref38 = _step25.value;
-						var name = _ref38.name;
-						var _value = _ref38.value;
+						var _ref42 = _step25.value;
+						var name = _ref42.name;
+						var _value = _ref42.value;
 
 						result.set(name, _value);
 					}
@@ -4334,10 +4334,10 @@ var N = function () {
 				if (!contenteditable) {
 					this.removeAttribute('contenteditable');
 				}
-				node._textDirection = [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref39) {
-					var _ref40 = _slicedToArray(_ref39, 2),
-					    y = _ref40[0],
-					    x$$1 = _ref40[1];
+				node._textDirection = [[y2 - y1, x2 - x1], [y4 - y3, x4 - x3]].map(function (_ref43) {
+					var _ref44 = _slicedToArray(_ref43, 2),
+					    y = _ref44[0],
+					    x$$1 = _ref44[1];
 
 					var arg = x$40.atan2(y, x$$1) / x$40.PI;
 					var absArg = arg < 0 ? -arg : arg;
@@ -4357,7 +4357,7 @@ var N = function () {
 	}], [{
 		key: 'ready',
 		value: function () {
-			var _ref41 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(fn) {
+			var _ref45 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18(fn) {
 				var body;
 				return regeneratorRuntime.wrap(function _callee18$(_context18) {
 					while (1) {
@@ -4382,8 +4382,8 @@ var N = function () {
 				}, _callee18, this);
 			}));
 
-			function ready(_x50) {
-				return _ref41.apply(this, arguments);
+			function ready(_x51) {
+				return _ref45.apply(this, arguments);
 			}
 
 			return ready;
@@ -4482,10 +4482,10 @@ describe('emitAll', function () {
 		emitAll(eventName, eventData, '.' + className, element);
 		var expected = [element1, element2, element5, element3, element4];
 		assert.equal(results.length, expected.length);
-		results.forEach(function (_ref42, index) {
-			var _ref43 = _slicedToArray(_ref42, 2),
-			    element = _ref43[0],
-			    data = _ref43[1];
+		results.forEach(function (_ref46, index) {
+			var _ref47 = _slicedToArray(_ref46, 2),
+			    element = _ref47[0],
+			    data = _ref47[1];
 
 			assert.equal(data, eventData);
 			assert.equal(element.equals(expected[index]), true);
@@ -4700,12 +4700,12 @@ var StringList = function () {
 
 			try {
 				for (var _iterator26 = iterable[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
-					var _ref44 = _step26.value;
+					var _ref48 = _step26.value;
 
-					var _ref45 = _slicedToArray(_ref44, 2);
+					var _ref49 = _slicedToArray(_ref48, 2);
 
-					var key = _ref45[0];
-					var value = _ref45[1];
+					var key = _ref49[0];
+					var value = _ref49[1];
 
 					this.append(key, value);
 				}
@@ -4734,9 +4734,9 @@ var StringList = function () {
 	}, {
 		key: 'indexOf',
 		value: function indexOf(name) {
-			return this.data.findIndex(function (_ref46) {
-				var _ref47 = _slicedToArray(_ref46, 1),
-				    itemName = _ref47[0];
+			return this.data.findIndex(function (_ref50) {
+				var _ref51 = _slicedToArray(_ref50, 1),
+				    itemName = _ref51[0];
 
 				return itemName === name;
 			});
@@ -4764,9 +4764,9 @@ var StringList = function () {
 	}, {
 		key: 'delete',
 		value: function _delete(name) {
-			this.data = this.data.filter(function (_ref48) {
-				var _ref49 = _slicedToArray(_ref48, 1),
-				    itemName = _ref49[0];
+			this.data = this.data.filter(function (_ref52) {
+				var _ref53 = _slicedToArray(_ref52, 1),
+				    itemName = _ref53[0];
 
 				return itemName !== name;
 			});
@@ -4774,9 +4774,9 @@ var StringList = function () {
 	}, {
 		key: 'get',
 		value: function get(name) {
-			var found = this.data.find(function (_ref50) {
-				var _ref51 = _slicedToArray(_ref50, 1),
-				    itemName = _ref51[0];
+			var found = this.data.find(function (_ref54) {
+				var _ref55 = _slicedToArray(_ref54, 1),
+				    itemName = _ref55[0];
 
 				return itemName === name;
 			});
@@ -4786,10 +4786,10 @@ var StringList = function () {
 		key: 'getAll',
 		value: function getAll(name) {
 			var result = [];
-			this.data.forEach(function (_ref52) {
-				var _ref53 = _slicedToArray(_ref52, 2),
-				    itemName = _ref53[0],
-				    value = _ref53[1];
+			this.data.forEach(function (_ref56) {
+				var _ref57 = _slicedToArray(_ref56, 2),
+				    itemName = _ref57[0],
+				    value = _ref57[1];
 
 				if (itemName === name) {
 					result.push(value);
@@ -4800,11 +4800,11 @@ var StringList = function () {
 	}, {
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref54) {
-				var _ref55 = _slicedToArray(_ref54, 2),
-				    name = _ref55[0],
-				    _ref55$ = _ref55[1],
-				    value = _ref55$ === undefined ? '' : _ref55$;
+			return this.data.map(function (_ref58) {
+				var _ref59 = _slicedToArray(_ref58, 2),
+				    name = _ref59[0],
+				    _ref59$ = _ref59[1],
+				    value = _ref59$ === undefined ? '' : _ref59$;
 
 				return name + ':' + value;
 			}).join(',');
@@ -4967,8 +4967,8 @@ var Request$1 = function (_Body$) {
 
 	_createClass(Request$1, [{
 		key: 'inheritFrom',
-		value: function inheritFrom(input, body, _ref56) {
-			var headers = _ref56.headers;
+		value: function inheritFrom(input, body, _ref60) {
+			var headers = _ref60.headers;
 
 			if (input.bodyUsed) {
 				throw new TypeError('Already read');
@@ -5112,12 +5112,12 @@ function fetch$2(input, init, cb) {
 
 		try {
 			for (var _iterator27 = request.headers.entries()[Symbol.iterator](), _step27; !(_iteratorNormalCompletion27 = (_step27 = _iterator27.next()).done); _iteratorNormalCompletion27 = true) {
-				var _ref57 = _step27.value;
+				var _ref61 = _step27.value;
 
-				var _ref58 = _slicedToArray(_ref57, 2);
+				var _ref62 = _slicedToArray(_ref61, 2);
 
-				var name = _ref58[0];
-				var value = _ref58[1];
+				var name = _ref62[0];
+				var value = _ref62[1];
 
 				xhr.setRequestHeader(name, value);
 			}
@@ -5243,13 +5243,13 @@ describe('formatDate', function () {
 	try {
 
 		for (var _iterator28 = tests$4[Symbol.iterator](), _step28; !(_iteratorNormalCompletion28 = (_step28 = _iterator28.next()).done); _iteratorNormalCompletion28 = true) {
-			var _ref59 = _step28.value;
+			var _ref63 = _step28.value;
 
-			var _ref60 = _slicedToArray(_ref59, 3);
+			var _ref64 = _slicedToArray(_ref63, 3);
 
-			var src = _ref60[0];
-			var _template = _ref60[1];
-			var expected = _ref60[2];
+			var src = _ref64[0];
+			var _template = _ref64[1];
+			var expected = _ref64[2];
 
 			_loop(src, expected, _template);
 		}
@@ -5900,11 +5900,11 @@ describe('Iterator', function () {
 });
 
 function forEachDirections(fn, thisArg) {
-	[['lrtb', [['direction', 'ltr'], ['unicode-bidi', 'normal']], ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', [['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', [['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', [['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', [['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', [['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref61) {
-		var _ref62 = _slicedToArray(_ref61, 3),
-		    textDirectionType = _ref62[0],
-		    styleDeclarations = _ref62[1],
-		    visualDirections = _ref62[2];
+	[['lrtb', [['direction', 'ltr'], ['unicode-bidi', 'normal']], ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', [['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', [['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', [['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']], ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', [['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', [['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']], ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref65) {
+		var _ref66 = _slicedToArray(_ref65, 3),
+		    textDirectionType = _ref66[0],
+		    styleDeclarations = _ref66[1],
+		    visualDirections = _ref66[2];
 
 		fn.call(thisArg, textDirectionType, styleDeclarations.map(function (declaration) {
 			return declaration.join(':') + ';';
@@ -6152,10 +6152,10 @@ function test_modify(textDirectionType, visualDirections) {
 			return;
 		}
 
-		visualDirections.forEach(function (_ref63) {
-			var _ref64 = _slicedToArray(_ref63, 2),
-			    visualDirection = _ref64[0],
-			    textDirection = _ref64[1];
+		visualDirections.forEach(function (_ref67) {
+			var _ref68 = _slicedToArray(_ref67, 2),
+			    visualDirection = _ref68[0],
+			    textDirection = _ref68[1];
 
 			switch (textDirection) {
 				case 'mainF':
@@ -6991,12 +6991,12 @@ var Map$2 = function () {
 
 			try {
 				for (var _iterator41 = iterable[Symbol.iterator](), _step41; !(_iteratorNormalCompletion41 = (_step41 = _iterator41.next()).done); _iteratorNormalCompletion41 = true) {
-					var _ref69 = _step41.value;
+					var _ref73 = _step41.value;
 
-					var _ref70 = _slicedToArray(_ref69, 2);
+					var _ref74 = _slicedToArray(_ref73, 2);
 
-					var key = _ref70[0];
-					var value = _ref70[1];
+					var key = _ref74[0];
+					var value = _ref74[1];
 
 					this.set(key, value);
 				}
@@ -7025,9 +7025,9 @@ var Map$2 = function () {
 	}, {
 		key: 'indexOfKey',
 		value: function indexOfKey(key) {
-			return this.data.findIndex(function (_ref71) {
-				var _ref72 = _slicedToArray(_ref71, 1),
-				    itemKey = _ref72[0];
+			return this.data.findIndex(function (_ref75) {
+				var _ref76 = _slicedToArray(_ref75, 1),
+				    itemKey = _ref76[0];
 
 				return itemKey === key;
 			});
@@ -7051,9 +7051,9 @@ var Map$2 = function () {
 	}, {
 		key: 'get',
 		value: function get(key) {
-			var found = this.data.find(function (_ref73) {
-				var _ref74 = _slicedToArray(_ref73, 1),
-				    itemKey = _ref74[0];
+			var found = this.data.find(function (_ref77) {
+				var _ref78 = _slicedToArray(_ref77, 1),
+				    itemKey = _ref78[0];
 
 				return itemKey === key;
 			});
@@ -7081,10 +7081,10 @@ var Map$2 = function () {
 		value: function forEach(fn, thisArg) {
 			var _this25 = this;
 
-			this.data.slice().forEach(function (_ref75) {
-				var _ref76 = _slicedToArray(_ref75, 2),
-				    key = _ref76[0],
-				    value = _ref76[1];
+			this.data.slice().forEach(function (_ref79) {
+				var _ref80 = _slicedToArray(_ref79, 2),
+				    key = _ref80[0],
+				    value = _ref80[1];
 
 				fn.call(thisArg, value, key, _this25);
 			});
@@ -7234,10 +7234,10 @@ function test$35(abs) {
 
 	describe(name, function () {
 
-		[[-Math.PI, Math.PI], [-0, 0], [0.1, 0.1]].forEach(function (_ref77) {
-			var _ref78 = _slicedToArray(_ref77, 2),
-			    value = _ref78[0],
-			    expected = _ref78[1];
+		[[-Math.PI, Math.PI], [-0, 0], [0.1, 0.1]].forEach(function (_ref81) {
+			var _ref82 = _slicedToArray(_ref81, 2),
+			    value = _ref82[0],
+			    expected = _ref82[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.equal(abs(value), expected);
@@ -7254,10 +7254,10 @@ function test$37(acos) {
 
 	describe(name, function () {
 
-		[[-1, Math.PI], [-0.5, Math.PI * 2 / 3], [0, Math.PI / 2], [0.5, Math.PI / 3], [1, 0]].forEach(function (_ref79) {
-			var _ref80 = _slicedToArray(_ref79, 2),
-			    value = _ref80[0],
-			    expected = _ref80[1];
+		[[-1, Math.PI], [-0.5, Math.PI * 2 / 3], [0, Math.PI / 2], [0.5, Math.PI / 3], [1, 0]].forEach(function (_ref83) {
+			var _ref84 = _slicedToArray(_ref83, 2),
+			    value = _ref84[0],
+			    expected = _ref84[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(acos(value), expected);
@@ -7311,10 +7311,10 @@ function test$41(asin) {
 
 	describe(name, function () {
 
-		[[-1, Math.PI / -2], [-0.5, Math.PI / -6], [0, 0], [0.5, Math.PI / 6], [1, Math.PI / 2]].forEach(function (_ref82) {
-			var _ref83 = _slicedToArray(_ref82, 2),
-			    value = _ref83[0],
-			    expected = _ref83[1];
+		[[-1, Math.PI / -2], [-0.5, Math.PI / -6], [0, 0], [0.5, Math.PI / 6], [1, Math.PI / 2]].forEach(function (_ref86) {
+			var _ref87 = _slicedToArray(_ref86, 2),
+			    value = _ref87[0],
+			    expected = _ref87[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(asin(value), expected);
@@ -7371,10 +7371,10 @@ function test$45(atan) {
 
 	describe(name, function () {
 
-		[[-Math.sqrt(3), Math.PI / -3], [-1, Math.PI / -4], [-1 / Math.sqrt(3), Math.PI / -6], [0, 0], [1 / Math.sqrt(3), Math.PI / 6], [1, Math.PI / 4], [Math.sqrt(3), Math.PI / 3]].forEach(function (_ref85) {
-			var _ref86 = _slicedToArray(_ref85, 2),
-			    value = _ref86[0],
-			    expected = _ref86[1];
+		[[-Math.sqrt(3), Math.PI / -3], [-1, Math.PI / -4], [-1 / Math.sqrt(3), Math.PI / -6], [0, 0], [1 / Math.sqrt(3), Math.PI / 6], [1, Math.PI / 4], [Math.sqrt(3), Math.PI / 3]].forEach(function (_ref89) {
+			var _ref90 = _slicedToArray(_ref89, 2),
+			    value = _ref90[0],
+			    expected = _ref90[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(atan(value), expected);
@@ -7391,11 +7391,11 @@ function test$47(atan2) {
 
 	describe(name, function () {
 
-		[[-Math.sqrt(3), 1, Math.PI / -3], [-1, 1, Math.PI / -4], [-1 / Math.sqrt(3), 1, Math.PI / -6], [0, 1, 0], [1 / Math.sqrt(3), 1, Math.PI / 6], [1, 1, Math.PI / 4], [Math.sqrt(3), 1, Math.PI / 3], [-Math.sqrt(3), -1, Math.PI * 2 / -3], [-1, -1, Math.PI * -3 / 4], [-1 / Math.sqrt(3), -1, Math.PI * -5 / 6], [0, -1, Math.PI], [1 / Math.sqrt(3), -1, Math.PI * 5 / 6], [1, -1, Math.PI * 3 / 4], [Math.sqrt(3), -1, Math.PI * 2 / 3]].forEach(function (_ref87) {
-			var _ref88 = _slicedToArray(_ref87, 3),
-			    x = _ref88[0],
-			    y = _ref88[1],
-			    expected = _ref88[2];
+		[[-Math.sqrt(3), 1, Math.PI / -3], [-1, 1, Math.PI / -4], [-1 / Math.sqrt(3), 1, Math.PI / -6], [0, 1, 0], [1 / Math.sqrt(3), 1, Math.PI / 6], [1, 1, Math.PI / 4], [Math.sqrt(3), 1, Math.PI / 3], [-Math.sqrt(3), -1, Math.PI * 2 / -3], [-1, -1, Math.PI * -3 / 4], [-1 / Math.sqrt(3), -1, Math.PI * -5 / 6], [0, -1, Math.PI], [1 / Math.sqrt(3), -1, Math.PI * 5 / 6], [1, -1, Math.PI * 3 / 4], [Math.sqrt(3), -1, Math.PI * 2 / 3]].forEach(function (_ref91) {
+			var _ref92 = _slicedToArray(_ref91, 3),
+			    x = _ref92[0],
+			    y = _ref92[1],
+			    expected = _ref92[2];
 
 			it(name + '(' + x + ', ' + y + ') \u2192 ' + expected, function () {
 				assert.approxEqual(atan2(x, y), expected);
@@ -7448,14 +7448,14 @@ function test$51(cbrt) {
 
 
 	describe(name, function () {
-		var _loop5 = function _loop5(_x70) {
-			var expected = Math.sign(_x70) * Math.pow(Math.abs(_x70), 1 / 3);
-			it(name + '(' + _x70.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27() {
+		var _loop5 = function _loop5(_x71) {
+			var expected = Math.sign(_x71) * Math.pow(Math.abs(_x71), 1 / 3);
+			it(name + '(' + _x71.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27() {
 				return regeneratorRuntime.wrap(function _callee27$(_context27) {
 					while (1) {
 						switch (_context27.prev = _context27.next) {
 							case 0:
-								assert.approxEqual(cbrt(_x70), expected);
+								assert.approxEqual(cbrt(_x71), expected);
 
 							case 1:
 							case 'end':
@@ -7466,8 +7466,8 @@ function test$51(cbrt) {
 			})));
 		};
 
-		for (var _x70 = -5; _x70 < 5; _x70 += 0.5) {
-			_loop5(_x70);
+		for (var _x71 = -5; _x71 < 5; _x71 += 0.5) {
+			_loop5(_x71);
 		}
 	});
 }
@@ -7488,10 +7488,10 @@ function test$53(ceil) {
 
 	describe(name, function () {
 
-		[[-1.1, -1], [-0.1, 0], [0, 0], [0.1, 1], [1.1, 2]].forEach(function (_ref91) {
-			var _ref92 = _slicedToArray(_ref91, 2),
-			    value = _ref92[0],
-			    expected = _ref92[1];
+		[[-1.1, -1], [-0.1, 0], [0, 0], [0.1, 1], [1.1, 2]].forEach(function (_ref95) {
+			var _ref96 = _slicedToArray(_ref95, 2),
+			    value = _ref96[0],
+			    expected = _ref96[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(ceil(value), expected);
@@ -7508,10 +7508,10 @@ function test$55(clz32) {
 
 	describe(name, function () {
 
-		[[1, 31], [1000, 22], [0, 32], [3.5, 30]].forEach(function (_ref93) {
-			var _ref94 = _slicedToArray(_ref93, 2),
-			    value = _ref94[0],
-			    expected = _ref94[1];
+		[[1, 31], [1000, 22], [0, 32], [3.5, 30]].forEach(function (_ref97) {
+			var _ref98 = _slicedToArray(_ref97, 2),
+			    value = _ref98[0],
+			    expected = _ref98[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.equal(clz32(value), expected);
@@ -7538,10 +7538,10 @@ function test$57(cos) {
 
 	describe(name, function () {
 
-		[[-Math.PI, -1], [-Math.PI / 2, 0], [0, 1], [Math.PI / 2, 0], [Math.PI, -1]].forEach(function (_ref95) {
-			var _ref96 = _slicedToArray(_ref95, 2),
-			    value = _ref96[0],
-			    expected = _ref96[1];
+		[[-Math.PI, -1], [-Math.PI / 2, 0], [0, 1], [Math.PI / 2, 0], [Math.PI, -1]].forEach(function (_ref99) {
+			var _ref100 = _slicedToArray(_ref99, 2),
+			    value = _ref100[0],
+			    expected = _ref100[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(cos(value), expected);
@@ -7557,14 +7557,14 @@ function test$59(cosh) {
 
 
 	describe(name, function () {
-		var _loop6 = function _loop6(_x75) {
-			var expected = (Math.exp(_x75) + 1 / Math.exp(_x75)) / 2;
-			it(name + '(' + _x75.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28() {
+		var _loop6 = function _loop6(_x76) {
+			var expected = (Math.exp(_x76) + 1 / Math.exp(_x76)) / 2;
+			it(name + '(' + _x76.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28() {
 				return regeneratorRuntime.wrap(function _callee28$(_context28) {
 					while (1) {
 						switch (_context28.prev = _context28.next) {
 							case 0:
-								assert.approxEqual(cosh(_x75), expected);
+								assert.approxEqual(cosh(_x76), expected);
 
 							case 1:
 							case 'end':
@@ -7575,8 +7575,8 @@ function test$59(cosh) {
 			})));
 		};
 
-		for (var _x75 = -5; _x75 < 5; _x75 += 1) {
-			_loop6(_x75);
+		for (var _x76 = -5; _x76 < 5; _x76 += 1) {
+			_loop6(_x76);
 		}
 	});
 }
@@ -7611,10 +7611,10 @@ function test$63(exp) {
 
 	describe(name, function () {
 
-		[[2, Math.E * Math.E], [-2, 1 / (Math.E * Math.E)], [0, 1]].forEach(function (_ref98) {
-			var _ref99 = _slicedToArray(_ref98, 2),
-			    value = _ref99[0],
-			    expected = _ref99[1];
+		[[2, Math.E * Math.E], [-2, 1 / (Math.E * Math.E)], [0, 1]].forEach(function (_ref102) {
+			var _ref103 = _slicedToArray(_ref102, 2),
+			    value = _ref103[0],
+			    expected = _ref103[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(exp(value), expected);
@@ -7631,10 +7631,10 @@ function test$65(expm1) {
 
 	describe(name, function () {
 
-		[[2, Math.E * Math.E - 1], [-2, 1 / (Math.E * Math.E) - 1], [0, 0]].forEach(function (_ref100) {
-			var _ref101 = _slicedToArray(_ref100, 2),
-			    value = _ref101[0],
-			    expected = _ref101[1];
+		[[2, Math.E * Math.E - 1], [-2, 1 / (Math.E * Math.E) - 1], [0, 0]].forEach(function (_ref104) {
+			var _ref105 = _slicedToArray(_ref104, 2),
+			    value = _ref105[0],
+			    expected = _ref105[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(expm1(value), expected);
@@ -7657,10 +7657,10 @@ function test$67(floor) {
 
 	describe(name, function () {
 
-		[[-0.1, -1], [0.1, 0], [1.1, 1]].forEach(function (_ref102) {
-			var _ref103 = _slicedToArray(_ref102, 2),
-			    value = _ref103[0],
-			    expected = _ref103[1];
+		[[-0.1, -1], [0.1, 0], [1.1, 1]].forEach(function (_ref106) {
+			var _ref107 = _slicedToArray(_ref106, 2),
+			    value = _ref107[0],
+			    expected = _ref107[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(floor(value), expected);
@@ -7677,10 +7677,10 @@ function test$69(fround) {
 
 	describe(name, function () {
 
-		[[1.337, 1.3370000123977661]].forEach(function (_ref104) {
-			var _ref105 = _slicedToArray(_ref104, 2),
-			    value = _ref105[0],
-			    expected = _ref105[1];
+		[[1.337, 1.3370000123977661]].forEach(function (_ref108) {
+			var _ref109 = _slicedToArray(_ref108, 2),
+			    value = _ref109[0],
+			    expected = _ref109[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(fround(value), expected);
@@ -7703,10 +7703,10 @@ function test$71(hypot) {
 
 	describe(name, function () {
 
-		[[[3, 4], 5], [[1, 1, 1, 1], 2]].forEach(function (_ref106) {
-			var _ref107 = _slicedToArray(_ref106, 2),
-			    args = _ref107[0],
-			    expected = _ref107[1];
+		[[[3, 4], 5], [[1, 1, 1, 1], 2]].forEach(function (_ref110) {
+			var _ref111 = _slicedToArray(_ref110, 2),
+			    args = _ref111[0],
+			    expected = _ref111[1];
 
 			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
 				assert.approxEqual(hypot.apply(undefined, _toConsumableArray(args)), expected);
@@ -7739,10 +7739,10 @@ function test$73(imul) {
 
 	describe(name, function () {
 
-		[[[2, 4], 8], [[-1, 8], -8], [[-2, -2], 4]].forEach(function (_ref108) {
-			var _ref109 = _slicedToArray(_ref108, 2),
-			    args = _ref109[0],
-			    expected = _ref109[1];
+		[[[2, 4], 8], [[-1, 8], -8], [[-2, -2], 4]].forEach(function (_ref112) {
+			var _ref113 = _slicedToArray(_ref112, 2),
+			    args = _ref113[0],
+			    expected = _ref113[1];
 
 			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
 				assert.approxEqual(imul.apply(undefined, _toConsumableArray(args)), expected);
@@ -7800,10 +7800,10 @@ function test$79(log) {
 
 	describe(name, function () {
 
-		[[Math.E, 1], [1, 0], [Math.E * Math.E, 2]].forEach(function (_ref110) {
-			var _ref111 = _slicedToArray(_ref110, 2),
-			    value = _ref111[0],
-			    expected = _ref111[1];
+		[[Math.E, 1], [1, 0], [Math.E * Math.E, 2]].forEach(function (_ref114) {
+			var _ref115 = _slicedToArray(_ref114, 2),
+			    value = _ref115[0],
+			    expected = _ref115[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(log(value), expected);
@@ -7820,10 +7820,10 @@ function test$81(log10) {
 
 	describe(name, function () {
 
-		[[0.1, -1], [10, 1], [1, 0], [100, 2]].forEach(function (_ref112) {
-			var _ref113 = _slicedToArray(_ref112, 2),
-			    value = _ref113[0],
-			    expected = _ref113[1];
+		[[0.1, -1], [10, 1], [1, 0], [100, 2]].forEach(function (_ref116) {
+			var _ref117 = _slicedToArray(_ref116, 2),
+			    value = _ref117[0],
+			    expected = _ref117[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(log10(value), expected);
@@ -7861,10 +7861,10 @@ function test$85(log1p) {
 
 	describe(name, function () {
 
-		[[Math.E - 1, 1], [0, 0], [Math.E * Math.E - 1, 2]].forEach(function (_ref114) {
-			var _ref115 = _slicedToArray(_ref114, 2),
-			    value = _ref115[0],
-			    expected = _ref115[1];
+		[[Math.E - 1, 1], [0, 0], [Math.E * Math.E - 1, 2]].forEach(function (_ref118) {
+			var _ref119 = _slicedToArray(_ref118, 2),
+			    value = _ref119[0],
+			    expected = _ref119[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(log1p(value), expected);
@@ -7887,10 +7887,10 @@ function test$87(log2) {
 
 	describe(name, function () {
 
-		[[1 / 2, -1], [1, 0], [2, 1], [4, 2], [8, 3]].forEach(function (_ref116) {
-			var _ref117 = _slicedToArray(_ref116, 2),
-			    value = _ref117[0],
-			    expected = _ref117[1];
+		[[1 / 2, -1], [1, 0], [2, 1], [4, 2], [8, 3]].forEach(function (_ref120) {
+			var _ref121 = _slicedToArray(_ref120, 2),
+			    value = _ref121[0],
+			    expected = _ref121[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(log2(value), expected);
@@ -7928,10 +7928,10 @@ function test$91(max) {
 
 	describe(name, function () {
 
-		[[[3, 4], 4], [[1, 1, 1, 2], 2]].forEach(function (_ref118) {
-			var _ref119 = _slicedToArray(_ref118, 2),
-			    args = _ref119[0],
-			    expected = _ref119[1];
+		[[[3, 4], 4], [[1, 1, 1, 2], 2]].forEach(function (_ref122) {
+			var _ref123 = _slicedToArray(_ref122, 2),
+			    args = _ref123[0],
+			    expected = _ref123[1];
 
 			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
 				assert.approxEqual(max.apply(undefined, _toConsumableArray(args)), expected);
@@ -7948,10 +7948,10 @@ function test$93(min) {
 
 	describe(name, function () {
 
-		[[[3, 4], 3], [[1, 1, 1, 2], 1]].forEach(function (_ref120) {
-			var _ref121 = _slicedToArray(_ref120, 2),
-			    args = _ref121[0],
-			    expected = _ref121[1];
+		[[[3, 4], 3], [[1, 1, 1, 2], 1]].forEach(function (_ref124) {
+			var _ref125 = _slicedToArray(_ref124, 2),
+			    args = _ref125[0],
+			    expected = _ref125[1];
 
 			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
 				assert.approxEqual(min.apply(undefined, _toConsumableArray(args)), expected);
@@ -7983,10 +7983,10 @@ function test$97(pow) {
 
 	describe(name, function () {
 
-		[[[1, 10], 1], [[2, 10], 1024]].forEach(function (_ref122) {
-			var _ref123 = _slicedToArray(_ref122, 2),
-			    args = _ref123[0],
-			    expected = _ref123[1];
+		[[[1, 10], 1], [[2, 10], 1024]].forEach(function (_ref126) {
+			var _ref127 = _slicedToArray(_ref126, 2),
+			    args = _ref127[0],
+			    expected = _ref127[1];
 
 			it(name + '(' + args.join(', ') + ') \u2192 ' + expected, function () {
 				assert.approxEqual(pow.apply(undefined, _toConsumableArray(args)), expected);
@@ -8005,8 +8005,8 @@ function test$99(random) {
 
 		it('returns a number in [0, 1)', function () {
 			for (var i = 0; i < 100; i++) {
-				var _x96 = random();
-				assert(0 <= _x96 && _x96 < 1);
+				var _x97 = random();
+				assert(0 <= _x97 && _x97 < 1);
 			}
 		});
 	});
@@ -8020,10 +8020,10 @@ function test$101(round) {
 
 	describe(name, function () {
 
-		[[-0.6, -1], [-0.2, 0], [0.2, 0], [0.6, 1]].forEach(function (_ref124) {
-			var _ref125 = _slicedToArray(_ref124, 2),
-			    value = _ref125[0],
-			    expected = _ref125[1];
+		[[-0.6, -1], [-0.2, 0], [0.2, 0], [0.6, 1]].forEach(function (_ref128) {
+			var _ref129 = _slicedToArray(_ref128, 2),
+			    value = _ref129[0],
+			    expected = _ref129[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(round(value), expected);
@@ -8040,10 +8040,10 @@ function test$103(sign) {
 
 	describe(name, function () {
 
-		[[-0.6, -1], [-0.2, -1], [0, 0], [0.2, 1], [0.6, 1]].forEach(function (_ref126) {
-			var _ref127 = _slicedToArray(_ref126, 2),
-			    value = _ref127[0],
-			    expected = _ref127[1];
+		[[-0.6, -1], [-0.2, -1], [0, 0], [0.2, 1], [0.6, 1]].forEach(function (_ref130) {
+			var _ref131 = _slicedToArray(_ref130, 2),
+			    value = _ref131[0],
+			    expected = _ref131[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(sign(value), expected);
@@ -8072,10 +8072,10 @@ function test$105(sin) {
 
 	describe(name, function () {
 
-		[[Math.PI / -2, -1], [Math.PI / -4, Math.sqrt(2) / -2], [0, 0], [Math.PI / 4, Math.sqrt(2) / 2], [Math.PI / 2, 1]].forEach(function (_ref128) {
-			var _ref129 = _slicedToArray(_ref128, 2),
-			    value = _ref129[0],
-			    expected = _ref129[1];
+		[[Math.PI / -2, -1], [Math.PI / -4, Math.sqrt(2) / -2], [0, 0], [Math.PI / 4, Math.sqrt(2) / 2], [Math.PI / 2, 1]].forEach(function (_ref132) {
+			var _ref133 = _slicedToArray(_ref132, 2),
+			    value = _ref133[0],
+			    expected = _ref133[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(sin(value), expected);
@@ -8091,14 +8091,14 @@ function test$107(sinh) {
 
 
 	describe(name, function () {
-		var _loop7 = function _loop7(_x101) {
-			var expected = (Math.exp(_x101) - 1 / Math.exp(_x101)) / 2;
-			it(name + '(' + _x101.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
+		var _loop7 = function _loop7(_x102) {
+			var expected = (Math.exp(_x102) - 1 / Math.exp(_x102)) / 2;
+			it(name + '(' + _x102.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
 				return regeneratorRuntime.wrap(function _callee29$(_context29) {
 					while (1) {
 						switch (_context29.prev = _context29.next) {
 							case 0:
-								assert.approxEqual(sinh(_x101), expected);
+								assert.approxEqual(sinh(_x102), expected);
 
 							case 1:
 							case 'end':
@@ -8109,8 +8109,8 @@ function test$107(sinh) {
 			})));
 		};
 
-		for (var _x101 = -5; _x101 < 5; _x101 += 1) {
-			_loop7(_x101);
+		for (var _x102 = -5; _x102 < 5; _x102 += 1) {
+			_loop7(_x102);
 		}
 	});
 }
@@ -8130,10 +8130,10 @@ function test$109(sqrt) {
 
 	describe(name, function () {
 
-		[[Math.PI * Math.PI, Math.PI], [9, 3], [0.01, 0.1]].forEach(function (_ref131) {
-			var _ref132 = _slicedToArray(_ref131, 2),
-			    value = _ref132[0],
-			    expected = _ref132[1];
+		[[Math.PI * Math.PI, Math.PI], [9, 3], [0.01, 0.1]].forEach(function (_ref135) {
+			var _ref136 = _slicedToArray(_ref135, 2),
+			    value = _ref136[0],
+			    expected = _ref136[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(sqrt(value), expected);
@@ -8180,10 +8180,10 @@ function test$115(tan) {
 
 	describe(name, function () {
 
-		[[Math.PI / -3, -Math.sqrt(3)], [Math.PI / -4, -1], [0, 0], [Math.PI / 4, 1], [Math.PI / 3, Math.sqrt(3)]].forEach(function (_ref133) {
-			var _ref134 = _slicedToArray(_ref133, 2),
-			    value = _ref134[0],
-			    expected = _ref134[1];
+		[[Math.PI / -3, -Math.sqrt(3)], [Math.PI / -4, -1], [0, 0], [Math.PI / 4, 1], [Math.PI / 3, Math.sqrt(3)]].forEach(function (_ref137) {
+			var _ref138 = _slicedToArray(_ref137, 2),
+			    value = _ref138[0],
+			    expected = _ref138[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(tan(value), expected);
@@ -8199,14 +8199,14 @@ function test$117(tanh) {
 
 
 	describe(name, function () {
-		var _loop8 = function _loop8(_x107) {
-			var expected = (Math.exp(2 * _x107) - 1) / (Math.exp(2 * _x107) + 1);
-			it(name + '(' + _x107.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
+		var _loop8 = function _loop8(_x108) {
+			var expected = (Math.exp(2 * _x108) - 1) / (Math.exp(2 * _x108) + 1);
+			it(name + '(' + _x108.toFixed(1) + ') \u2192 ' + expected, _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
 				return regeneratorRuntime.wrap(function _callee30$(_context30) {
 					while (1) {
 						switch (_context30.prev = _context30.next) {
 							case 0:
-								assert.approxEqual(tanh(_x107), expected);
+								assert.approxEqual(tanh(_x108), expected);
 
 							case 1:
 							case 'end':
@@ -8217,8 +8217,8 @@ function test$117(tanh) {
 			})));
 		};
 
-		for (var _x107 = -5; _x107 < 5; _x107 += 1) {
-			_loop8(_x107);
+		for (var _x108 = -5; _x108 < 5; _x108 += 1) {
+			_loop8(_x108);
 		}
 	});
 }
@@ -8243,10 +8243,10 @@ function test$119(trunc) {
 
 	describe(name, function () {
 
-		[[13.37, 13], [42.84, 42], [0.123, 0], [-0.123, -0], ['-1.123', -1]].forEach(function (_ref136) {
-			var _ref137 = _slicedToArray(_ref136, 2),
-			    value = _ref137[0],
-			    expected = _ref137[1];
+		[[13.37, 13], [42.84, 42], [0.123, 0], [-0.123, -0], ['-1.123', -1]].forEach(function (_ref140) {
+			var _ref141 = _slicedToArray(_ref140, 2),
+			    value = _ref141[0],
+			    expected = _ref141[1];
 
 			it(name + '(' + value + ') \u2192 ' + expected, function () {
 				assert.approxEqual(trunc(value), expected);
@@ -8359,20 +8359,20 @@ describe('N.prototype.attributes', function () {
 		var element = new N({
 			a: [[key1, value2], [key1, value1], [key2, value2]]
 		});
-		assert.deepEqual(Array.from(element.attributes).sort(function (_ref138, _ref139) {
-			var _ref141 = _slicedToArray(_ref138, 1),
-			    a = _ref141[0];
-
-			var _ref140 = _slicedToArray(_ref139, 1),
-			    b = _ref140[0];
-
-			return a < b ? -1 : 1;
-		}), [[key1, value1], [key2, value2]].sort(function (_ref142, _ref143) {
+		assert.deepEqual(Array.from(element.attributes).sort(function (_ref142, _ref143) {
 			var _ref145 = _slicedToArray(_ref142, 1),
 			    a = _ref145[0];
 
 			var _ref144 = _slicedToArray(_ref143, 1),
 			    b = _ref144[0];
+
+			return a < b ? -1 : 1;
+		}), [[key1, value1], [key2, value2]].sort(function (_ref146, _ref147) {
+			var _ref149 = _slicedToArray(_ref146, 1),
+			    a = _ref149[0];
+
+			var _ref148 = _slicedToArray(_ref147, 1),
+			    b = _ref148[0];
 
 			return a < b ? -1 : 1;
 		}));
@@ -8865,8 +8865,8 @@ describe('N.prototype.emit', function () {
 			while (1) {
 				switch (_context34.prev = _context34.next) {
 					case 0:
-						onCall = function onCall(_ref150) {
-							var detail = _ref150.detail;
+						onCall = function onCall(_ref154) {
+							var detail = _ref154.detail;
 
 							results.push(detail);
 						};
@@ -8901,8 +8901,8 @@ describe('N.prototype.once', function () {
 			while (1) {
 				switch (_context35.prev = _context35.next) {
 					case 0:
-						onCall = function onCall(_ref152) {
-							var detail = _ref152.detail;
+						onCall = function onCall(_ref156) {
+							var detail = _ref156.detail;
 
 							results.push(detail);
 						};
@@ -9622,11 +9622,11 @@ function compileCSS() {
 var commonStyle = ['position:fixed;', 'left:0;', 'right:0;', 'bottom:0;', 'opacity:0.6;', 'font-family:Courier,monospace;', 'white-space:pre;', 'pointer-events:none;'].join('');
 
 function forEachDirections$2(fn) {
-	[['lrtb', compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']), ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref157) {
-		var _ref158 = _slicedToArray(_ref157, 3),
-		    textDirectionType = _ref158[0],
-		    style = _ref158[1],
-		    visualDirections = _ref158[2];
+	[['lrtb', compileCSS(['direction', 'ltr'], ['unicode-bidi', 'normal']), ['mainB', 'mainF', 'crossB', 'crossF']], ['rltb', compileCSS(['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['mainF', 'mainB', 'crossB', 'crossF']], ['tbrl', compileCSS(['-ms-writing-mode', 'tb-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossF', 'crossB', 'mainB', 'mainF']], ['tblr', compileCSS(['-ms-writing-mode', 'tb-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'ltr'], ['unicode-bidi', 'normal']), ['crossB', 'crossF', 'mainB', 'mainF']], ['btrl', compileCSS(['-ms-writing-mode', 'bt-rl'], ['-webkit-writing-mode', 'vertical-rl'], ['writing-mode', 'vertical-rl'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossF', 'crossB', 'mainF', 'mainB']], ['btlr', compileCSS(['-ms-writing-mode', 'bt-lr'], ['-webkit-writing-mode', 'vertical-lr'], ['writing-mode', 'vertical-lr'], ['direction', 'rtl'], ['unicode-bidi', 'bidi-override']), ['crossB', 'crossF', 'mainF', 'mainB']]].forEach(function (_ref161) {
+		var _ref162 = _slicedToArray(_ref161, 3),
+		    textDirectionType = _ref162[0],
+		    style = _ref162[1],
+		    visualDirections = _ref162[2];
 
 		fn(textDirectionType, style, visualDirections.map(function (visualDirection, index) {
 			return [['left', 'right', 'top', 'bottom'][index], visualDirection];
@@ -11299,10 +11299,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.get', function () {
 
-		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref160) {
-			var _ref161 = _slicedToArray(_ref160, 2),
-			    index = _ref161[0],
-			    expected = _ref161[1];
+		[[-6, 0], [-5, 1], [-4, 2], [-3, 0], [-2, 1], [-1, 2], [0, 0], [1, 1], [2, 2], [3, 0], [4, 1], [5, 2]].forEach(function (_ref164) {
+			var _ref165 = _slicedToArray(_ref164, 2),
+			    index = _ref165[0],
+			    expected = _ref165[1];
 
 			it('should return element at ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -11313,10 +11313,10 @@ describe('Ring', function () {
 
 	describe('Ring.prototype.rotate', function () {
 
-		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref162) {
-			var _ref163 = _slicedToArray(_ref162, 2),
-			    index = _ref163[0],
-			    expected = _ref163[1];
+		[[-6, [0, 1, 2]], [-5, [1, 2, 0]], [-4, [2, 0, 1]], [-3, [0, 1, 2]], [-2, [1, 2, 0]], [-1, [2, 0, 1]], [0, [0, 1, 2]], [1, [1, 2, 0]], [2, [2, 0, 1]], [3, [0, 1, 2]], [4, [1, 2, 0]], [5, [2, 0, 1]]].forEach(function (_ref166) {
+			var _ref167 = _slicedToArray(_ref166, 2),
+			    index = _ref167[0],
+			    expected = _ref167[1];
 
 			it('should return rotate by ' + index, function () {
 				var ring = new Ring([0, 1, 2]);
@@ -11656,8 +11656,8 @@ var State = function () {
 
 			var parts = [];
 			var pos = 0;
-			path.replace(/\{(\w+):(.*?)\}/g, function (_ref164, name, expression, offset, source) {
-				var length = _ref164.length;
+			path.replace(/\{(\w+):(.*?)\}/g, function (_ref168, name, expression, offset, source) {
+				var length = _ref168.length;
 
 				if (pos < offset) {
 					parts.push(source.slice(pos, offset));
@@ -11954,11 +11954,11 @@ var StateManager = function (_EventEmitter) {
 
 			try {
 				for (var _iterator49 = this.states[Symbol.iterator](), _step49; !(_iteratorNormalCompletion49 = (_step49 = _iterator49.next()).done); _iteratorNormalCompletion49 = true) {
-					var _ref165 = _step49.value;
+					var _ref169 = _step49.value;
 
-					var _ref166 = _slicedToArray(_ref165, 2);
+					var _ref170 = _slicedToArray(_ref169, 2);
 
-					var state = _ref166[1];
+					var state = _ref170[1];
 
 					var params = state.parse(stateString);
 					if (params) {
@@ -11997,9 +11997,9 @@ var StateManager = function (_EventEmitter) {
 	}, {
 		key: 'get',
 		value: function get() {
-			var _ref167 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-			    name = _ref167.name,
-			    params = _ref167.params;
+			var _ref171 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    name = _ref171.name,
+			    params = _ref171.params;
 
 			var noFallback = arguments[1];
 
@@ -12123,11 +12123,11 @@ describe('StateManager', function () {
 
 		try {
 			for (var _iterator50 = states.states[Symbol.iterator](), _step50; !(_iteratorNormalCompletion50 = (_step50 = _iterator50.next()).done); _iteratorNormalCompletion50 = true) {
-				var _ref168 = _step50.value;
+				var _ref172 = _step50.value;
 
-				var _ref169 = _slicedToArray(_ref168, 2);
+				var _ref173 = _slicedToArray(_ref172, 2);
 
-				var state = _ref169[1];
+				var state = _ref173[1];
 
 				results.push(state);
 			}
@@ -12202,7 +12202,7 @@ describe('StateManager', function () {
 	});
 
 	it('should start management', _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee41() {
-		var states, name0, name1, name2, _ref171, _ref172, toState, fromState;
+		var states, name0, name1, name2, _ref175, _ref176, toState, fromState;
 
 		return regeneratorRuntime.wrap(function _callee41$(_context41) {
 			while (1) {
@@ -12235,10 +12235,10 @@ describe('StateManager', function () {
 						});
 
 					case 7:
-						_ref171 = _context41.sent;
-						_ref172 = _slicedToArray(_ref171, 2);
-						toState = _ref172[0];
-						fromState = _ref172[1];
+						_ref175 = _context41.sent;
+						_ref176 = _slicedToArray(_ref175, 2);
+						toState = _ref176[0];
+						fromState = _ref176[1];
 
 						assert.deepEqual(toState, states.fallback);
 						assert.equal(!fromState, true);
@@ -12554,11 +12554,11 @@ function test$130(codePointAt) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref177) {
-			var _ref178 = _slicedToArray(_ref177, 3),
-			    string = _ref178[0],
-			    from = _ref178[1],
-			    to = _ref178[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref181) {
+			var _ref182 = _slicedToArray(_ref181, 3),
+			    string = _ref182[0],
+			    from = _ref182[1],
+			    to = _ref182[2];
 
 			it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -12634,11 +12634,11 @@ function test$134(fromCodePoint) {
 
 	describe(name, function () {
 
-		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref179) {
-			var _ref180 = _slicedToArray(_ref179, 3),
-			    expected = _ref180[0],
-			    from = _ref180[1],
-			    to = _ref180[2];
+		[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref183) {
+			var _ref184 = _slicedToArray(_ref183, 3),
+			    expected = _ref184[0],
+			    from = _ref184[1],
+			    to = _ref184[2];
 
 			it('should be return a string made from [' + from.toString(16) + '-' + to.toString(16) + ']', function () {
 				var codePoints = [];
@@ -13517,11 +13517,11 @@ function stringToCodePoints(string) {
 /* eslint-disable no-magic-numbers */
 describe('stringToCodePoints', function () {
 
-	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref182) {
-		var _ref183 = _slicedToArray(_ref182, 3),
-		    string = _ref183[0],
-		    from = _ref183[1],
-		    to = _ref183[2];
+	[['abc', 0x61, 0x63], ['𐀀𐀁𐀂𐀃𐀄𐀅𐀆𐀇𐀈𐀉𐀊𐀋𐀌𐀍𐀎𐀏', 0x10000, 0x1000F], ['𐰀𐰁𐰂𐰃𐰄𐰅𐰆𐰇𐰈𐰉𐰊𐰋𐰌𐰍𐰎𐰏𐰐𐰑𐰒𐰓𐰔𐰕𐰖𐰗𐰘𐰙𐰚𐰛𐰜𐰝𐰞𐰟𐰠', 0x10c00, 0x10c20], ['􏿰􏿱􏿲􏿳􏿴􏿵􏿶􏿷􏿸􏿹􏿺􏿻􏿼􏿽􏿾􏿿', 0x10FFF0, 0x10FFFF]].forEach(function (_ref186) {
+		var _ref187 = _slicedToArray(_ref186, 3),
+		    string = _ref187[0],
+		    from = _ref187[1],
+		    to = _ref187[2];
 
 		it('should be return [' + from.toString(16) + ', ..., ' + to.toString(16) + ']', function () {
 			var codePoints = stringToCodePoints(string);
@@ -13869,10 +13869,10 @@ thermalRGB.css = css;
 
 describe('thermalRGB', function () {
 
-	[[0.00, [0, 0, 1]], [0.50, [0, 0.8, 0]], [1.00, [1, 0, 0]]].forEach(function (_ref184) {
-		var _ref185 = _slicedToArray(_ref184, 2),
-		    value = _ref185[0],
-		    expected = _ref185[1];
+	[[0.00, [0, 0, 1]], [0.50, [0, 0.8, 0]], [1.00, [1, 0, 0]]].forEach(function (_ref188) {
+		var _ref189 = _slicedToArray(_ref188, 2),
+		    value = _ref189[0],
+		    expected = _ref189[1];
 
 		it('thermalRGB(' + value + ') \u2192 [' + expected.join(', ') + ']', function () {
 			assert.deepEqual(thermalRGB(value), expected);
@@ -13886,10 +13886,10 @@ describe('thermalRGB', function () {
 
 	describe('thermalRGB.css', function () {
 
-		[[0.00, 'rgb(0,0,255)'], [0.25, 'rgb(0,76,128)'], [0.50, 'rgb(0,204,0)'], [0.75, 'rgb(128,76,0)'], [1.00, 'rgb(255,0,0)']].forEach(function (_ref186) {
-			var _ref187 = _slicedToArray(_ref186, 2),
-			    value = _ref187[0],
-			    expected = _ref187[1];
+		[[0.00, 'rgb(0,0,255)'], [0.25, 'rgb(0,76,128)'], [0.50, 'rgb(0,204,0)'], [0.75, 'rgb(128,76,0)'], [1.00, 'rgb(255,0,0)']].forEach(function (_ref190) {
+			var _ref191 = _slicedToArray(_ref190, 2),
+			    value = _ref191[0],
+			    expected = _ref191[1];
 
 			it('thermalRGB.css(' + value + ') \u2192 ' + expected, function () {
 				assert.equal(thermalRGB.css(value), expected);
@@ -14132,18 +14132,18 @@ function test$150(URL) {
 		// 		['hash', '']
 		// 	]
 		// ]
-		].forEach(function (_ref188, index) {
-			var _ref189 = _slicedToArray(_ref188, 2),
-			    input = _ref189[0],
-			    tests = _ref189[1];
+		].forEach(function (_ref192, index) {
+			var _ref193 = _slicedToArray(_ref192, 2),
+			    input = _ref193[0],
+			    tests = _ref193[1];
 
 			if (tests) {
 				it('#' + index + ' should construct a new URL ' + input, function () {
 					var url = new URL(input[0], input[1]);
-					tests.forEach(function (_ref190) {
-						var _ref191 = _slicedToArray(_ref190, 2),
-						    key = _ref191[0],
-						    expected = _ref191[1];
+					tests.forEach(function (_ref194) {
+						var _ref195 = _slicedToArray(_ref194, 2),
+						    key = _ref195[0],
+						    expected = _ref195[1];
 
 						var actual = typeof key === 'function' ? key(url) : url[key];
 						assert.equal(actual, expected, input + ':' + key);
@@ -14802,11 +14802,11 @@ var URLSearchParams$2 = function (_StringList2) {
 	_createClass(URLSearchParams$2, [{
 		key: 'toString',
 		value: function toString() {
-			return this.data.map(function (_ref192) {
-				var _ref193 = _slicedToArray(_ref192, 2),
-				    name = _ref193[0],
-				    _ref193$ = _ref193[1],
-				    value = _ref193$ === undefined ? '' : _ref193$;
+			return this.data.map(function (_ref196) {
+				var _ref197 = _slicedToArray(_ref196, 2),
+				    name = _ref197[0],
+				    _ref197$ = _ref197[1],
+				    value = _ref197$ === undefined ? '' : _ref197$;
 
 				return name + '=' + value;
 			}).join('&');
@@ -15032,10 +15032,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.get', function () {
 		var components = [1, 2, 3];
-		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref194) {
-			var _ref195 = _slicedToArray(_ref194, 2),
-			    index = _ref195[0],
-			    expected = _ref195[1];
+		[[0, 1], [1, 2], [2, 3]].forEach(function (_ref198) {
+			var _ref199 = _slicedToArray(_ref198, 2),
+			    index = _ref199[0],
+			    expected = _ref199[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15046,10 +15046,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.set', function () {
 		var components = [0, 1, 2];
-		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref196) {
-			var _ref197 = _slicedToArray(_ref196, 2),
-			    index = _ref197[0],
-			    expected = _ref197[1];
+		[[0, 7], [1, 8], [2, 9]].forEach(function (_ref200) {
+			var _ref201 = _slicedToArray(_ref200, 2),
+			    index = _ref201[0],
+			    expected = _ref201[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15060,10 +15060,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.dim', function () {
-		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref198) {
-			var _ref199 = _slicedToArray(_ref198, 2),
-			    components = _ref199[0],
-			    expected = _ref199[1];
+		[[[0], 1], [[0, 0], 2], [[0, 0, 0], 3]].forEach(function (_ref202) {
+			var _ref203 = _slicedToArray(_ref202, 2),
+			    components = _ref203[0],
+			    expected = _ref203[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15074,10 +15074,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.add', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref200) {
-			var _ref201 = _slicedToArray(_ref200, 2),
-			    components2 = _ref201[0],
-			    expected = _ref201[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [3, 5, 7]]].forEach(function (_ref204) {
+			var _ref205 = _slicedToArray(_ref204, 2),
+			    components2 = _ref205[0],
+			    expected = _ref205[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -15089,10 +15089,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.subtract', function () {
 		var components1 = [0, 1, 2];
-		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref202) {
-			var _ref203 = _slicedToArray(_ref202, 2),
-			    components2 = _ref203[0],
-			    expected = _ref203[1];
+		[[[0, 0, 0], [0, 1, 2]], [[3, 4, 5], [-3, -3, -3]]].forEach(function (_ref206) {
+			var _ref207 = _slicedToArray(_ref206, 2),
+			    components2 = _ref207[0],
+			    expected = _ref207[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v1 = new Vector(components1);
@@ -15104,10 +15104,10 @@ describe('Vector', function () {
 
 	describe('Vector.prototype.scale', function () {
 		var components = [0, 1, 2];
-		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref204) {
-			var _ref205 = _slicedToArray(_ref204, 2),
-			    scalar = _ref205[0],
-			    expected = _ref205[1];
+		[[0, [0, 0, 0]], [1, [0, 1, 2]], [3, [0, 3, 6]]].forEach(function (_ref208) {
+			var _ref209 = _slicedToArray(_ref208, 2),
+			    scalar = _ref209[0],
+			    expected = _ref209[1];
 
 			it('should return [' + expected.join(', ') + ']', function () {
 				var v = new Vector(components);
@@ -15117,10 +15117,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (getter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref206) {
-			var _ref207 = _slicedToArray(_ref206, 2),
-			    components = _ref207[0],
-			    expected = _ref207[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref210) {
+			var _ref211 = _slicedToArray(_ref210, 2),
+			    components = _ref211[0],
+			    expected = _ref211[1];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
@@ -15130,10 +15130,10 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.norm (setter)', function () {
-		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref208) {
-			var _ref209 = _slicedToArray(_ref208, 2),
-			    components = _ref209[0],
-			    norm = _ref209[1];
+		[[[1], 1], [[3, 4], 5], [[5, 12], 13], [[1, 2, 8, 10], 13], [[1, 2, 2, 4, 12], 13]].forEach(function (_ref212) {
+			var _ref213 = _slicedToArray(_ref212, 2),
+			    components = _ref213[0],
+			    norm = _ref213[1];
 
 			it('should return [' + components.join(', ') + ']', function () {
 				var v = new Vector(components).scale(100);
@@ -15147,12 +15147,12 @@ describe('Vector', function () {
 	});
 
 	describe('Vector.prototype.toString', function () {
-		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref210) {
-			var _ref211 = _slicedToArray(_ref210, 4),
-			    components = _ref211[0],
-			    digits = _ref211[1],
-			    separator = _ref211[2],
-			    expected = _ref211[3];
+		[[[1], 2, '', '1.00'], [[3, 4], 1, '-', '3.0-4.0'], [[5, 12], 0, ', ', '5, 12']].forEach(function (_ref214) {
+			var _ref215 = _slicedToArray(_ref214, 4),
+			    components = _ref215[0],
+			    digits = _ref215[1],
+			    separator = _ref215[2],
+			    expected = _ref215[3];
 
 			it('should return ' + expected, function () {
 				var v = new Vector(components);
